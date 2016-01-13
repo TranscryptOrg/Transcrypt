@@ -1,6 +1,8 @@
 import os
 import argparse
 
+debug = True
+
 class CommandArgs:		
 	def parse (self):
 		self.argParser = argparse.ArgumentParser ()

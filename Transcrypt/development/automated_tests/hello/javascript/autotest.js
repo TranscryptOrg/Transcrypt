@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-13 14:16:58
+// Transcrypt'ed from Python, 2016-01-13 14:10:23
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -292,58 +292,6 @@ function autotest () {
 
 	__nest__ (
 		__all__,
-		'classes', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var run = function (autoTester) {
-						var A = __class__ ('A', [object], {
-							get __init__ () {return __get__ (this, function (self, x) {
-								self.x = x;
-							});},
-							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('A.show', label, self.x);
-							});}
-						});
-						var B = __class__ ('B', [object], {
-							get __init__ () {return __get__ (this, function (self, y) {
-								autoTester.store ('In B constructor');
-								self.y = y;
-							});},
-							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('B.show', label, self.y);
-							});}
-						});
-						var C = __class__ ('C', [A, B], {
-							get __init__ () {return __get__ (this, function (self, x, y) {
-								autoTester.store ('In C constructor');
-								A.__init__ (self, x);
-								B.__init__ (self, y);
-							});},
-							get show () {return __get__ (this, function (self, label) {
-								A.show (self, label);
-								B.show (self, label);
-								autoTester.store ('C.show', label, self.x, self.y);
-							});}
-						});
-						var a = A (1001);
-						a.show ('america');
-						var b = B (2002);
-						b.show ('russia');
-						var c = C (3003, 4004);
-						c.show ('netherlands');
-						var show2 = c.show;
-						show2 ('copy');
-					};
-					//<all>
-					__all__.run = run;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
 		'itertools', {
 			__all__: {
 				__inited__: false,
@@ -358,180 +306,6 @@ function autotest () {
 					}
 					//<all>
 					__all__.chain = chain;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var modules = {};
-					__nest__ (modules, 'mod1.mod11.mod111', __init__ (__world__.modules.mod1.mod11.mod111));
-					__nest__ (modules, 'mod3', __init__ (__world__.modules.mod3));
-					__nest__ (modules, 'mod1.mod11.mod112', __init__ (__world__.modules.mod1.mod11.mod112));
-					__nest__ (modules, 'mod1', __init__ (__world__.modules.mod1));
-					__nest__ (modules, 'mod1.mod11', __init__ (__world__.modules.mod1.mod11));
-					__nest__ (modules, 'mod2', __init__ (__world__.modules.mod2));
-					__nest__ (modules, 'mod2.mod21', __init__ (__world__.modules.mod2.mod21));
-					__nest__ (modules, 'mod2.mod22', __init__ (__world__.modules.mod2.mod22));
-					var a = modules.mod1.mod11.mod111.A (12345);
-					var pi = modules.mod1.pi;
-					var f = modules.mod2.f;
-					var run = function (autoTester) {
-						autoTester.store ('modules');
-						autoTester.store (a.f ());
-						autoTester.store (modules.mod1.mod11.mod112.f ());
-						autoTester.store (modules.mod1.mod11.e);
-						autoTester.store (pi);
-						autoTester.store (f (102030));
-						autoTester.store (modules.mod2.mod21.f ());
-						var B = modules.mod22.B;
-						var b = B ();
-						autoTester.store (b.x);
-						autoTester.store (modules.mod3.x);
-					};
-					//<all>
-					__all__.a = a;
-					__all__.f = f;
-					__all__.pi = pi;
-					__all__.run = run;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod1', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var pi = 3.1415693588;
-					//<all>
-					__all__.pi = pi;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod1.mod11', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var e = 2.74;
-					//<all>
-					__all__.e = e;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod1.mod11.mod111', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var A = __class__ ('A', [object], {
-						get __init__ () {return __get__ (this, function (self, x) {
-							self.x = x;
-						});},
-						get f () {return __get__ (this, function (self) {
-							return self.x;
-							;
-						});}
-					});
-					//<all>
-					__all__.A = A;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod1.mod11.mod112', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var f = function () {
-						return "Paris, c'est la vie\n";
-						;
-					};
-					//<all>
-					__all__.f = f;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod2', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var f = function (p) {
-						return 2 * p;
-						;
-					};
-					//<all>
-					__all__.f = f;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod2.mod21', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var f = function () {
-						return 'London is the town for me\n';
-						;
-					};
-					//<all>
-					__all__.f = f;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod2.mod22', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var B = __class__ ('B', [object], {
-						get __init__ () {return __get__ (this, function (self) {
-							self.x = 'Geef mij maar Amsterdam\n';
-						});}
-					});
-					//<all>
-					__all__.B = B;
-					//</all>
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'modules.mod3', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var x = 'Toen wij uit Rotterdam vertrokken, vertrokken wij uit Rotterdam\n';
-					//<all>
-					__all__.x = x;
 					//</all>
 				}
 			}
@@ -620,16 +394,50 @@ function autotest () {
 			}
 		}
 	);
+	__nest__ (
+		__all__,
+		'testlet0', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						autoTester.store ('hello');
+						autoTester.store ('world');
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'testlet1', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						autoTester.store ('goodbye');
+						autoTester.store ('moon');
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
 	(function () {
-		var classes = {};
-		var modules = {};
 		var org = {};
+		var testlet0 = {};
+		var testlet1 = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
-		__nest__ (classes, '', __init__ (__world__.classes));
-		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (testlet0, '', __init__ (__world__.testlet0));
+		__nest__ (testlet1, '', __init__ (__world__.testlet1));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
-		classes.run (autoTester);
-		modules.run (autoTester);
+		testlet0.run (autoTester);
+		testlet1.run (autoTester);
 		autoTester.done ();
 		//<all>
 		__all__.autoTester = autoTester;

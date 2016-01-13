@@ -694,6 +694,61 @@ class Generator (ast.NodeVisitor):
 			self.visit (elt)
 		self.emit (']')
 		
+	def visit_ListComp (self, node):
+		def nestLoops (generators):
+			comprehension = generators.pop (0)
+			self.emit ('var {} = ', self.nextTemp ('iter'))
+			self.visit (comprehension.iter)
+			self.emit (';\n')
+			
+			self.emit (												# A target for is generated for each source for
+				'for (var {0} = 0; {0} < {1}.length; {0}++){{\n',
+				self.nextTemp ('index'),
+				self.getTemp ('iter')
+			)
+			self.indent ()
+			
+			self.visit (comprehension.target)
+			self.emit ('var = {} [{}];\n', self.getTemp ('iter'), self.getTemp ('index'))
+			
+			if len (comprehension.ifs):
+				self.emit ('if (')									# One target if is generated with multiple source ifs anded
+				for index, expr in enumerate (comprehension.ifs):
+					if index:
+						self.emit (' && ')
+					if len (comprehension.ifs) > 1:					# if (a if b else c) if (d if e else f)  (braces implicit in ast) should generate
+						self.emit ('(')								# if (b ? a : c) && (e ? d : f)   rather than   if b ? a : c && e ? d : f   (&& has higher prio than ?:)
+					self.visit (expr)
+					if len (comprehension.ifs) > 1:
+						self.emit (')')
+				self.emit (') {{\n')
+				self.indent ()
+				
+				if len (generators):
+					nestLoops (generators)
+				else:
+					self.emit ('{} .push (', self.getTemp ('accu'))
+					self.visit (node.elt)
+					self.emit (');\n')
+					
+				self.dedent ()
+				self.emit ('}}\n')									# Close target if
+			
+			self.dedent ()
+			self.emit ('}}\n')										# Close target for
+			
+			self.prevTemp ('index')
+			self.prevTemp ('iter')
+			
+		self.emit ('function () {{\n')
+		self.indent ()
+		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
+		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
+		self.emit ('return {};\n'.format (self.getTemp ('accu')))
+		self.prevTemp ('accu')	
+		self.dedent ()
+		self.emit ('}} ()')
+		
 	def visit_Module (self, node):
 		self.indent ()
 		if self.module.metadata.name == self.module.program.rootModuleName:

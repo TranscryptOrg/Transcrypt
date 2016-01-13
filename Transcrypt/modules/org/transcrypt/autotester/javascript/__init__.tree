@@ -1,14 +1,14 @@
 file: Module 
 	body: list 
 		element: ImportFrom 
-			module: str = modules.org.transcrypt.__base__
+			module: str = org.transcrypt.__base__
 			names: list 
 				element: alias 
 					name: str = __envir__
 					asname: NoneType = None
 			level: int = 0
 		element: ImportFrom 
-			module: str = modules.org.transcrypt.stubs.browser
+			module: str = org.transcrypt.stubs.browser
 			names: list 
 				element: alias 
 					name: str = *
@@ -118,15 +118,25 @@ file: Module
 									attr: str = join
 									ctx: Load 
 								args: list 
-									element: Call 
-										func: Name 
-											id: str = str
-											ctx: Load 
-										args: list 
-											element: Name 
-												id: str = args
+									element: ListComp 
+										elt: Call 
+											func: Name 
+												id: str = str
 												ctx: Load 
-										keywords: list 
+											args: list 
+												element: Name 
+													id: str = arg
+													ctx: Load 
+											keywords: list 
+										generators: list 
+											element: comprehension 
+												target: Name 
+													id: str = arg
+													ctx: Store 
+												iter: Name 
+													id: str = args
+													ctx: Load 
+												ifs: list 
 								keywords: list 
 						element: If 
 							test: Compare 

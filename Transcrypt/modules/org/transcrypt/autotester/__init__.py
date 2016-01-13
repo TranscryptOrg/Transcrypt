@@ -5,8 +5,8 @@
 # This will compare the output of the script running in the browswer to the output in the DIV.
 # If those two match, the test reports OK, else it reports failure.
 
-from modules.org.transcrypt.__base__ import __envir__
-from modules.org.transcrypt.stubs.browser import *
+from org.transcrypt.__base__ import __envir__
+from org.transcrypt.stubs.browser import *
 
 import itertools
 
@@ -19,7 +19,7 @@ class AutoTester:
 		self.testDivId = 'transcrypt'
 		
 	def store (self, *args):
-		item = ' '.join (str (args))
+		item = ' '.join ([str (arg) for arg in args])
 		if __envir__.executorName == __envir__.transpilerName:
 			self.testBuffer.append (item)
 		else:

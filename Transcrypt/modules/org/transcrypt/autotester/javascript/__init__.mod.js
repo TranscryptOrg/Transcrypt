@@ -5,8 +5,7 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var itertools = {};
-					;
-					;
+					var __envir__ = transcrypt.org.transcrypt.__base__.__envir__;
 					__nest__ (itertools, '', __init__ (__world__.itertools));
 					var AutoTester = __class__ ('AutoTester', [object], {
 						get __init__ () {return __get__ (this, function (self) {
