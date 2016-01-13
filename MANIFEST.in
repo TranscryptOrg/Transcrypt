@@ -1,0 +1,2 @@
+global-include *.py *.js *.html *.lyx *.pdf *.png *.txt *.jar
+global-exclude *.pyc

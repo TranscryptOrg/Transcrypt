@@ -1,0 +1,222 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = a
+					ctx: Store 
+			value: Num 
+				n: int = 3
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = a
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = b
+					ctx: Store 
+			value: Num 
+				n: int = 4
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = b
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = c
+					ctx: Store 
+			value: BinOp 
+				left: Name 
+					id: str = a
+					ctx: Load 
+				op: Add 
+				right: Name 
+					id: str = b
+					ctx: Load 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = c
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Num 
+							n: int = 2
+						op: Mult 
+						right: Name 
+							id: str = c
+							ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Num 
+							n: int = 5
+						op: FloorDiv 
+						right: Num 
+							n: int = 2
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Num 
+							n: int = 5
+						op: Mod 
+						right: Num 
+							n: int = 2
+				keywords: list 
+		element: FunctionDef 
+			name: str = __matmul__
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = m0
+						annotation: NoneType = None
+					element: arg 
+						arg: str = m
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Str 
+						s: str = m0 * m1
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Name 
+							id: str = a
+							ctx: Load 
+						op: MatMult 
+						right: Name 
+							id: str = b
+							ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = p
+					ctx: Store 
+			value: UnaryOp 
+				op: USub 
+				operand: Name 
+					id: str = a
+					ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = q
+					ctx: Store 
+			value: UnaryOp 
+				op: UAdd 
+				operand: Num 
+					n: int = 5
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = aLittleBitTrue
+					ctx: Store 
+			value: UnaryOp 
+				op: Not 
+				operand: NameConstant 
+					value: bool = False
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = aInv
+					ctx: Store 
+			value: UnaryOp 
+				op: Invert 
+				operand: Name 
+					id: str = a
+					ctx: Load 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: NameConstant 
+						value: bool = False
+					element: NameConstant 
+						value: bool = True
+					element: NameConstant 
+						value: NoneType = None
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Compare 
+						left: Num 
+							n: int = 1
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 2
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Compare 
+						left: Num 
+							n: int = 1
+						ops: list 
+							element: Lt 
+							element: Lt 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 3
+							element: Num 
+								n: int = 4
+				keywords: list 

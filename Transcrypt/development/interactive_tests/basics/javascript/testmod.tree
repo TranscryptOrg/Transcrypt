@@ -1,0 +1,42 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = f
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = console
+								ctx: Load 
+							attr: str = log
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = testmod.f called
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Initializing testmod
+				keywords: list 

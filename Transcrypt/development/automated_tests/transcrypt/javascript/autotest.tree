@@ -1,0 +1,118 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = org.transcrypt.autotester
+					asname: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 7777777777
+				keywords: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = sys
+					asname: NoneType = None
+		element: For 
+			target: Name 
+				id: str = item
+				ctx: Store 
+			iter: Attribute 
+				value: Name 
+					id: str = sys
+					ctx: Load 
+				attr: str = path
+				ctx: Load 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = item
+								ctx: Load 
+						keywords: list 
+			orelse: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 8888888888
+				keywords: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = classes
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = modules
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = autoTester
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Attribute 
+						value: Attribute 
+							value: Name 
+								id: str = org
+								ctx: Load 
+							attr: str = transcrypt
+							ctx: Load 
+						attr: str = autotester
+						ctx: Load 
+					attr: str = AutoTester
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = classes
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = autoTester
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = modules
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = autoTester
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 
