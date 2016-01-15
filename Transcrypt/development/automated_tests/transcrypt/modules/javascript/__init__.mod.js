@@ -24,7 +24,7 @@
 						autoTester.store (pi);
 						autoTester.store (f (102030));
 						autoTester.store (modules.mod2.mod21.f ());
-						var B = modules.mod22.B;
+						var B = modules.mod2.mod22.B;
 						var b = B ();
 						autoTester.store (b.x);
 						autoTester.store (modules.mod3.x);

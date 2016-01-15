@@ -250,8 +250,11 @@ file: Module
 							ctx: Store 
 					value: Attribute 
 						value: Attribute 
-							value: Name 
-								id: str = modules
+							value: Attribute 
+								value: Name 
+									id: str = modules
+									ctx: Load 
+								attr: str = mod2
 								ctx: Load 
 							attr: str = mod22
 							ctx: Load 

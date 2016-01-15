@@ -98,7 +98,7 @@ class Program:
 		self.coreModuleName = '{}.{}'.format (prefix, '__core__')
 		self.baseModuleName = '{}.{}'.format (prefix, '__base__')
 		self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
-		self.rootModuleName = self.sourceFileName [ : -3]
+		self.mainModuleName = self.sourceFileName [ : -3]
 
 		# Module compilation
 		Module (self, ModuleMetadata (self, self.coreModuleName))
@@ -106,7 +106,7 @@ class Program:
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
 					
 		try:
-			Module (self, ModuleMetadata (self, self.rootModuleName))	# Will trigger recursive compilation
+			Module (self, ModuleMetadata (self, self.mainModuleName))	# Will trigger recursive compilation
 		except Exception as exception:
 			utils.enhanceException (exception, message = 'Error: can\'t compile {}\n'.format (self.sourcePath))
 			
@@ -114,33 +114,36 @@ class Program:
 		normallyImportedTargetCode = ''.join ([
 			self.moduleDict [moduleName] .targetCode
 			for moduleName in sorted (self.moduleDict)
-			if not moduleName in (self.coreModuleName, self.baseModuleName, self.builtinModuleName, self.rootModuleName)
+			if not moduleName in (self.coreModuleName, self.baseModuleName, self.builtinModuleName, self.mainModuleName)
 		])
 		
 		# And sandwich them between the in-line modules
 		targetCode = (
 			self.header +
-			'function {} () {{\n'.format (self.rootModuleName) +
+			'function {} () {{\n'.format (self.mainModuleName) +
 			self.moduleDict [self.coreModuleName].targetCode +
 			self.moduleDict [self.baseModuleName] .targetCode +
 			self.moduleDict [self.builtinModuleName].targetCode +
 			normallyImportedTargetCode +
-			self.moduleDict [self.rootModuleName].targetCode +
+			self.moduleDict [self.mainModuleName].targetCode +
 			'	return __all__;\n' +
 			'}\n' +
-			'window [\'{0}\'] = {0};\n'.format (self.rootModuleName)
+			'window [\'{0}\'] = {0};\n'.format (self.mainModuleName)
 		)	
 		
-		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, self.outSubdir), self.rootModuleName)
+		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, self.outSubdir), self.mainModuleName)
 		utils.log (False, 'Saving result in: {}\n', targetFileName)
 		with utils.create (targetFileName) as aFile:
 			aFile.write (targetCode)
 
-		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, self.outSubdir, self.rootModuleName)
+		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, self.outSubdir, self.mainModuleName)
 		utils.log (False, 'Saving minified result in: {}\n', miniFileName)
 		minify.run (targetFileName, miniFileName)
 		
 	def provide (self, moduleName):
+		if moduleName == '__main__':
+			moduleName = self.mainModuleName
+	
 		moduleMetadata = ModuleMetadata (self, moduleName)
 		
 		if moduleMetadata.name in self.moduleDict:	# Find out if module is already provided
@@ -294,7 +297,10 @@ class Generator (ast.NodeVisitor):
 			ast.NotIn: None		# Dealt with separately
 		}
 		
-		self.visit (module.parseTree)
+		try:
+			self.visit (module.parseTree)
+		except Exception as exception:
+			utils.enhanceException (exception, moduleName = self.module.metadata.name)
 		
 	def tabs (self, indentLevel = None):
 		if indentLevel == None:
@@ -565,11 +571,11 @@ class Generator (ast.NodeVisitor):
 		self.prevTemp ('iter')
 		
 	def visit_FunctionDef (self, node):
-		if not self.scopes or self.scopes [-1] == self.functionScope:
+		if not self.scopes or self.scopes [-1] == self.functionScope:	# Global or function scope, so it's no method
 			if not self.scopes:
 				self.all.add (node.name)
 			self.emit ('var {} = function (', node.name)
-		else:
+		else:															# Class scope, so it's a method and needs the currying mechanism
 			self.emit ('\nget {} () {{return __get__ (this, function (', node.name)
 			
 		self.inscope (self.functionScope)
@@ -611,7 +617,6 @@ class Generator (ast.NodeVisitor):
 		self.dedent ()
 		
 		self.emit ('}}\n')
-		self.statementSkipped = True
 		
 		if node.orelse:
 			self.emit ('else {{\n')
@@ -626,7 +631,8 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 
 			self.emit ('}}\n')
-			self.statementSkipped = True
+			
+		self.statementSkipped = True
 		
 	def visit_Import (self, node):
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
@@ -702,15 +708,17 @@ class Generator (ast.NodeVisitor):
 			self.emit (';\n')
 			
 			self.emit (												# A target for is generated for each source for
-				'for (var {0} = 0; {0} < {1}.length; {0}++){{\n',
+				'for (var {0} = 0; {0} < {1}.length; {0}++) {{\n',
 				self.nextTemp ('index'),
 				self.getTemp ('iter')
 			)
 			self.indent ()
 			
+			self.emit ('var ')
 			self.visit (comprehension.target)
-			self.emit ('var = {} [{}];\n', self.getTemp ('iter'), self.getTemp ('index'))
+			self.emit (' = {} [{}];\n', self.getTemp ('iter'), self.getTemp ('index'))
 			
+			# Start of optional if-prologue, multiple ifs are condensed into one
 			if len (comprehension.ifs):
 				self.emit ('if (')									# One target if is generated with multiple source ifs anded
 				for index, expr in enumerate (comprehension.ifs):
@@ -723,16 +731,20 @@ class Generator (ast.NodeVisitor):
 						self.emit (')')
 				self.emit (') {{\n')
 				self.indent ()
+			# End of optional if-prologue
 				
-				if len (generators):
-					nestLoops (generators)
-				else:
-					self.emit ('{} .push (', self.getTemp ('accu'))
-					self.visit (node.elt)
-					self.emit (');\n')
+			if len (generators):
+				nestLoops (generators)
+			else:
+				self.emit ('{} .push (', self.getTemp ('accu'))
+				self.visit (node.elt)
+				self.emit (');\n')
 					
+			# Start of optional if-epilogue
+			if len (comprehension.ifs):
 				self.dedent ()
 				self.emit ('}}\n')									# Close target if
+			# End of optional if-epilogue
 			
 			self.dedent ()
 			self.emit ('}}\n')										# Close target for
@@ -751,7 +763,7 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_Module (self, node):
 		self.indent ()
-		if self.module.metadata.name == self.module.program.rootModuleName:
+		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
 		else:
 			self.emit ('__nest__ (\n')
@@ -770,7 +782,7 @@ class Generator (ast.NodeVisitor):
 		importHeadsLevel = self.indentLevel
 		
 		for stmt in node.body:
-			self.visit (stmt)	
+			self.visit (stmt)
 			if self.statementSkipped:
 				self.statementSkipped = False
 			else:
@@ -784,7 +796,7 @@ class Generator (ast.NodeVisitor):
 		
 		self.dedent ()
 
-		if self.module.metadata.name == self.module.program.rootModuleName:
+		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('}}) ();\n')
 		else:	
 			self.emit ('}}\n')
@@ -817,17 +829,19 @@ class Generator (ast.NodeVisitor):
 	def visit_Return (self, node):
 		self.emit ('return ')
 		self.visit (node.value)
-		self.emit (';\n')
 		
 	def visit_Set (self, node):
-		self.emit ('new Set ([')
+		self.emit ('new set ([')
 		for index, elt in enumerate (node.elts):
 			self.emitComma (index)
 			self.visit (elt)
 		self.emit ('])')		
 		
 	def visit_Slice (self, node):
-		self.emit ('.slice (')
+		if node.step == None:
+			self.emit ('.slice (')
+		else:
+			self.emit ('.__pyslice__ (')
 		
 		if node.lower == None:
 			self.emit ('0')
@@ -836,12 +850,13 @@ class Generator (ast.NodeVisitor):
 			
 		if node.upper != None:
 			self.emit (', ')
-			self.visit (node.upper)
-			
-		self.emit (')')
+			self.visit (node.upper)		
 			
 		if node.step != None:
-			raise Error ('Stepsize not allowed in slice')
+			self.emit (', ')
+			self.visit (node.step)		
+
+		self.emit (')')
 		
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
@@ -851,10 +866,12 @@ class Generator (ast.NodeVisitor):
 		try:
 			self.visit (node.slice)
 		except Exception as exception:
-			utils.enhanceException (exception, 'Invalid subscript')
+			utils.enhanceException (exception, lineNr = node.lineno, message = 'Invalid subscript')
 		
 	def visit_Tuple (self, node):
+		self.emit ('tuple (')
 		self.visit_List (node)
+		self.emit (')')
 			
 	def visit_UnaryOp (self, node):
 		self.emit (self.unOps [type (node.op)])			

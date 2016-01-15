@@ -1,9 +1,14 @@
 import builtins
 
-from org.transcrypt import __base__ 
+from org.transcrypt.__base__ import __envir__
+from org.transcrypt import utils
 
 # Complete __envir__ for the stub mode
-__base__.__envir__.executorName = 'python'
+__envir__.executorName = 'python'
+
+# Set main to commandArgs.source rather than transcrypt
+class __main__:
+	__file__ = utils.commandArgs.source
 
 # Browser root singleton
 class window:

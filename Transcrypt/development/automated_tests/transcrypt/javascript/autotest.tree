@@ -15,6 +15,11 @@ file: Module
 				element: alias 
 					name: str = modules
 					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = datastructures
+					asname: NoneType = None
 		element: Assign 
 			targets: list 
 				element: Name 
@@ -53,6 +58,19 @@ file: Module
 				func: Attribute 
 					value: Name 
 						id: str = modules
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = autoTester
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = datastructures
 						ctx: Load 
 					attr: str = run
 					ctx: Load 

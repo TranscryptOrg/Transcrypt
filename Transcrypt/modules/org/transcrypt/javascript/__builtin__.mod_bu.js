@@ -38,7 +38,7 @@
 	};
 	__all__.len = len;
 	
-	// Repr function uses __repr__ method, then __str__ then toString
+	// Repr function uses __repr__ method, defaults to toString
 	var repr = function (anObject) {
 		try {
 			return anObject.__repr__ ();
@@ -47,47 +47,35 @@
 			try {
 				return anObject.__str__ ();
 			}
-			catch (exception) {	// It was a dict in Python, so an Object in JavaScript
+			catch (exception) {
 				try {
-					if (anObject.constructor == Object) {
-						var result = '{';
-						var comma = false;
-						for (var attrib in anObject) {
-							if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
-								var attribRepr = attrib;
-							}
-							else {
-								var attribRepr = '\'' + attrib + '\'';
-							}
-							
-							if (comma) {
-								result += ', ';
-							}
-							else {
-								comma = true;
-							}
-							try {
-								result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
-							}
-							catch (exception) {
-								result += attribRepr + ': ' + anObject [attrib] .toString ();
-							}
-						}
-						result += '}';
-						return result;					
-					}
-					else {
-						return anObject.toString ();
+					for (attribute in anObject) {
+						return repr (attribute);
 					}
 				}
 				catch (exception) {
-					console.log (exception);
-					return '???';
+					try {
+						return anObject.toString ();
+					}
+					catch (exception) {
+						return '???';
+					}
 				}
 			}
 		}
 	}
 	__all__.repr = repr;
+	
+	// Str function uses __repr__ method, defaults to str
+	var str = function (anObject) {
+		try {
+			return anObject.__str__ ();
+		}
+		catch (exception) {
+			return repr (anObject);
+		}
+	}
+	__all__.str = str;
 	
 	// Zip method for arrays
 	var zip = function () {
@@ -130,47 +118,26 @@
 	};
 	
 	// Enumerate method, returning a zipped list
-	function enumerate (iterable) {
-		return zip (range (len (iterable)), iterable);
+	function enumerate (aList) {
+		return zip (range (len (aList)), aList);
 	}
-		
-	// List, tuple and set extensions to Array
 	
-	function list (iterable) {										// All such creators should be callable without new
-		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
-		instance.__class__ = list;
-		return instance;
+	// --- Set methods
+	
+	var set = function (iterable) {
+		return new Set (iterable);
+	};
+	__all__.set = set;
+		
+	// --- List methods
+	
+	var list = function  (iterable) {
+		return Array.apply (null, iterable);
 	}
 	__all__.list = list;
 	
-	function tuple (iterable) {
-		var instance = iterable ? [] .slice.apply (iterable) : [];
-		instance.__class__ = tuple;
-		return instance;
-	}
-	__all__.tuple = tuple;
-		
-	function set (iterable) {
-		var instance = [];
-		if (iterable) {
-			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {
-					instance.push (iterable [index]);
-				}
-			}
-		}
-		instance.__class__ = set;
-		return instance;
-	}
-	__all__.set = set;
-		
 	Array.prototype.__repr__ = function () {
-		if (this.__class__ == set && !this.length) {
-			return 'set()';
-		}
-		
-		var result = !this.__class__ || this.__class__ == list ? '[' : this.__class__ == tuple ? '(' : '{';
-		
+		var result = '[';
 		for (var index = 0; index < this.length; index++) {
 			if (index) {
 				result += ', ';
@@ -182,17 +149,27 @@
 				result += this [index] .toString ();
 			}
 		}
-		
-		if (this.__class__ == tuple && this.length == 1) {
-			result += ',';
-		}
-		
-		result += !this.__class__ || this.__class__ == list ? ']' : this.__class__ == tuple ? ')' : '}';;
+		result += ']';
 		return result;
 	};
 	
-	Array.prototype.__str__ = Array.prototype.__repr__;
-	
+	Array.prototype.__str__ = function () {
+		var result = '[';
+		for (var index = 0; index < this.length; index++) {
+			if (index) {
+				result += ', ';
+			}
+			try {
+				result += this [index] .__str__ ();
+			}
+			catch (exception) {
+				result += this [index] .toString ();
+			}
+		}
+		result += ']';
+		return result;
+	};
+
 	Array.prototype.append = function (element) {
 		this.push (element);
 	};
@@ -220,20 +197,8 @@
 		}
 		return result;
 	}
-		
-	// String extensions
-		
-	function str (stringable) {
-		return new String (stringable);
-	}
-	__all__.str = str;	
 	
-	String.prototype.toString = function () {
-		return this
-	}
-
-	String.prototype.valueOf = function () {
-	}
+	// --- String methods
 	
 	String.prototype.__str__ = function () {
 		return this
@@ -273,10 +238,6 @@
 		return this.replace (/\s*$/g, '');
 	};
 	
-	String.prototype.isnumeric = function () {
-		return !isNaN (parseFloat (this)) && isFinite (this);
-	};
-	
 	String.prototype.format = function () {
 		var args = arguments;
 		var autoIndex = 0;
@@ -298,10 +259,5 @@
 			}
 		});
 	};
-	
-	__all__.str = str
-	
-	
-	
 	
 

@@ -6,7 +6,6 @@
 				__init__: function (__all__) {
 					var f = function () {
 						return 'London is the town for me\n';
-						;
 					};
 					//<all>
 					__all__.f = f;

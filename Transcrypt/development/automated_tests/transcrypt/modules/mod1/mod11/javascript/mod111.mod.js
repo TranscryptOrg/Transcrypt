@@ -10,7 +10,6 @@
 						});},
 						get f () {return __get__ (this, function (self) {
 							return self.x;
-							;
 						});}
 					});
 					//<all>

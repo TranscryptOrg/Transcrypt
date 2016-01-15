@@ -1,9 +1,7 @@
 	(function () {
-		;
 		var aList = [1, 2, 3, 'sun', 'moon', 'stars'];
-		;
 		print (aList);
-		print (aList.slice (2, 4));
+		print (aList.__pyslice__ (2, 4, 1));
 		print (aList.slice (0));
 		print (aList.slice (2));
 		print (len (aList));
@@ -12,28 +10,21 @@
 		aList.extend (['m1', 'm31']);
 		print (aList);
 		var anotherList = list (['a', 'b', 'c']);
-		;
 		print (anotherList);
 		var aDict = {1: 'plant', 'animal': 2};
-		;
 		print (aDict);
 		print (aDict [1] , aDict ['animal'] );
 		var aTuple = [1, 2, 3, 4, 5];
-		;
 		print (aTuple);
 		print (len (aTuple));
 		var anotherTuple = [1];
-		;
 		print (anotherTuple);
 		var aSet = new Set ([1, 2, 2, 3]);
-		;
 		console.log (aSet);
 		print (len (aSet));
 		var anotherSet = set ([4, 5, 5, 6]);
-		;
 		console.log (anotherSet);
 		var emptySet = set ();
-		;
 		console.log (emptySet);
 		print (len (emptySet));
 		//<all>

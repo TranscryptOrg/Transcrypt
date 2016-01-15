@@ -1,7 +1,7 @@
 import os
 import argparse
 
-debug = True
+debug = False
 
 class CommandArgs:		
 	def parse (self):
@@ -72,5 +72,4 @@ def enhanceException (exception, **kwargs):
 		raise exception
 	else:
 		raise Error (**kwargs)
-		
 		

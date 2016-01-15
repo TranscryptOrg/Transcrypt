@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-12 19:51:11
+// Transcrypt'ed from Python, 2016-01-14 09:38:16
 function test () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -146,6 +146,8 @@ function test () {
 	// Complete __envir__ for non-stub mode
 	__envir__.executorName = __envir__.transpilerName;
 
+	var __main__ = {__file__: ''}; // !!! May need some reorganisation
+	
 	// Console message
 	var print = function () {
 		console.log ([] .slice.apply (arguments) .join (' '));

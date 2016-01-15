@@ -50,7 +50,7 @@
 			if (self.hasOwnProperty ('__class__')) {			// Object before the dot
 				return function (args) {						// Return bound function
 					var args = [] .slice.apply (arguments);
-					func.apply (null, [self] .concat (args));
+					return func.apply (null, [self] .concat (args));
 				}
 			}
 			else {												// Class before the dot

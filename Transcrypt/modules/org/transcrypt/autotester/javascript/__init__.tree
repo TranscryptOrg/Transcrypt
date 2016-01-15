@@ -1,17 +1,20 @@
 file: Module 
 	body: list 
 		element: ImportFrom 
-			module: str = org.transcrypt.__base__
+			module: str = org.transcrypt.stubs.browser
 			names: list 
 				element: alias 
-					name: str = __envir__
+					name: str = *
 					asname: NoneType = None
 			level: int = 0
 		element: ImportFrom 
 			module: str = org.transcrypt.stubs.browser
 			names: list 
 				element: alias 
-					name: str = *
+					name: str = __main__
+					asname: NoneType = None
+				element: alias 
+					name: str = __envir__
 					asname: NoneType = None
 			level: int = 0
 		element: Import 
@@ -19,6 +22,27 @@ file: Module
 				element: alias 
 					name: str = itertools
 					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = okColor
+					ctx: Store 
+			value: Str 
+				s: str = green
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = errorColor
+					ctx: Store 
+			value: Str 
+				s: str = red
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = highlightColor
+					ctx: Store 
+			value: Str 
+				s: str = yellow
 		element: ClassDef 
 			name: str = AutoTester
 			bases: list 
@@ -121,7 +145,7 @@ file: Module
 									element: ListComp 
 										elt: Call 
 											func: Name 
-												id: str = str
+												id: str = repr
 												ctx: Load 
 											args: list 
 												element: Name 
@@ -198,6 +222,9 @@ file: Module
 							element: arg 
 								arg: str = self
 								annotation: NoneType = None
+							element: arg 
+								arg: str = filePrename
+								annotation: NoneType = None
 						vararg: NoneType = None
 						kwonlyargs: list 
 						kw_defaults: list 
@@ -212,8 +239,17 @@ file: Module
 											id: str = open
 											ctx: Load 
 										args: list 
-											element: Str 
-												s: str = test.html
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = {}.html
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = filePrename
+														ctx: Load 
+												keywords: list 
 											element: Str 
 												s: str = w
 										keywords: list 
@@ -230,10 +266,19 @@ file: Module
 											attr: str = write
 											ctx: Load 
 										args: list 
-											element: Str 
-												s: str = <script src="javascript/test.js"></script>
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <script src="javascript/{}.js"></script>
 
 
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = filePrename
+														ctx: Load 
+												keywords: list 
 										keywords: list 
 								element: Expr 
 									value: Call 
@@ -314,7 +359,7 @@ file: Module
 													element: Call 
 														func: Attribute 
 															value: Str 
-																s: str = 	
+																s: str =  | 
 															attr: str = join
 															ctx: Load 
 														args: list 
@@ -375,9 +420,18 @@ file: Module
 											attr: str = write
 											ctx: Load 
 										args: list 
-											element: Str 
-												s: str = <script>test ();</script>
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <script>{} ();</script>
 
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = filePrename
+														ctx: Load 
+												keywords: list 
 										keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
@@ -426,7 +480,7 @@ file: Module
 									ctx: Load 
 								args: list 
 									element: Str 
-										s: str = 	
+										s: str =  | 
 								keywords: list 
 						element: For 
 							target: Tuple 
@@ -501,8 +555,17 @@ file: Module
 														keywords: list 
 													attr: str = innerHTML
 													ctx: Store 
-											value: Str 
-												s: str = Test failed
+											value: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <div style="color: {}"><b>Test failed</b></div>
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = errorColor
+														ctx: Load 
+												keywords: list 
 										element: Assign 
 											targets: list 
 												element: Name 
@@ -553,6 +616,9 @@ file: Module
 													element: Name 
 														id: str = divId
 														ctx: Store 
+													element: Name 
+														id: str = accentColor
+														ctx: Store 
 												ctx: Store 
 											iter: Tuple 
 												elts: list 
@@ -570,6 +636,9 @@ file: Module
 																	ctx: Load 
 																attr: str = referenceDivId
 																ctx: Load 
+															element: Name 
+																id: str = okColor
+																ctx: Load 
 														ctx: Load 
 													element: Tuple 
 														elts: list 
@@ -584,6 +653,9 @@ file: Module
 																	id: str = self
 																	ctx: Load 
 																attr: str = testDivId
+																ctx: Load 
+															element: Name 
+																id: str = errorColor
 																ctx: Load 
 														ctx: Load 
 												ctx: Load 
@@ -614,17 +686,42 @@ file: Module
 																ctx: Load 
 															element: List 
 																elts: list 
-																	element: Str 
-																		s: str = *** ERROR ***
+																	element: Call 
+																		func: Attribute 
+																			value: Str 
+																				s: str = !!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>
+																			attr: str = format
+																			ctx: Load 
+																		args: list 
+																			element: Name 
+																				id: str = accentColor
+																				ctx: Load 
+																			element: Name 
+																				id: str = highlightColor
+																				ctx: Load 
+																			element: Subscript 
+																				value: Name 
+																					id: str = buffer
+																					ctx: Load 
+																				slice: Index 
+																					value: Name 
+																						id: str = index
+																						ctx: Load 
+																				ctx: Load 
+																		keywords: list 
 																ctx: Load 
 															element: Subscript 
 																value: Name 
 																	id: str = buffer
 																	ctx: Load 
 																slice: Slice 
-																	lower: Name 
-																		id: str = index
-																		ctx: Load 
+																	lower: BinOp 
+																		left: Name 
+																			id: str = index
+																			ctx: Load 
+																		op: Add 
+																		right: Num 
+																			n: int = 1
 																	upper: NoneType = None
 																	step: NoneType = None
 																ctx: Load 
@@ -681,8 +778,17 @@ file: Module
 												keywords: list 
 											attr: str = innerHTML
 											ctx: Store 
-									value: Str 
-										s: str = Test succeeded
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="color: {}">Test succeeded</div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = okColor
+												ctx: Load 
+										keywords: list 
 								element: Assign 
 									targets: list 
 										element: Attribute 
@@ -694,8 +800,11 @@ file: Module
 													attr: str = getElementById
 													ctx: Load 
 												args: list 
-													element: Name 
-														id: str = testDivId
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = testDivId
 														ctx: Load 
 												keywords: list 
 											attr: str = innerHTML
@@ -767,6 +876,48 @@ file: Module
 											attr: str = dump
 											ctx: Load 
 										args: list 
+											element: Subscript 
+												value: Call 
+													func: Attribute 
+														value: Call 
+															func: Attribute 
+																value: Subscript 
+																	value: Attribute 
+																		value: Name 
+																			id: str = __main__
+																			ctx: Load 
+																		attr: str = __file__
+																		ctx: Load 
+																	slice: Slice 
+																		lower: NoneType = None
+																		upper: UnaryOp 
+																			op: USub 
+																			operand: Num 
+																				n: int = 3
+																		step: NoneType = None
+																	ctx: Load 
+																attr: str = replace
+																ctx: Load 
+															args: list 
+																element: Str 
+																	s: str = \
+																element: Str 
+																	s: str = /
+															keywords: list 
+														attr: str = rsplit
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = /
+														element: Num 
+															n: int = 1
+													keywords: list 
+												slice: Index 
+													value: UnaryOp 
+														op: USub 
+														operand: Num 
+															n: int = 1
+												ctx: Load 
 										keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
