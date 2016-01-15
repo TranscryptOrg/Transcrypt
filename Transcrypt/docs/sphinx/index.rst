@@ -11,8 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-
-
 Indices and tables
 ==================
 
@@ -31,6 +29,7 @@ Transcrypt is a tool to compile a Small Sane Subset of Python into compact, read
 1. It's lightweight, in accordance Pareto’s rule adapted for IT: 99% of the result can be achieved with 1% of the effort.
 2. It offers the semantic essence of Python along with the clean, highly readable syntax that the language is famous for
 3. It cooperates flawlessly with the JavaScript universe of web-oriented libraries
+4. It translates Python into highly readable, easy to debug JavaScript
 
 In two words: it's *lean* and *mean*.
 
@@ -113,11 +112,49 @@ An example of two testlets combined into an autotest is below:
 |        :caption: autotest.py                                               |         :caption: testlet0.py                                              |        :caption: testlet1.py                                               |
 +----------------------------------------------------------------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
-Transcrypt autotest and demo suite
-==================================
+What language constructs are currently supported
+================================================
 
-The Transcrypt autotest and demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There's no formal definition of Transcrypt's semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what's in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.
+Transcrypt can handle a growing set of language constructs. The Transcrypt autotest and demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There's no formal definition of Transcrypt's semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what's in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.
 
-Classes and modules
--------------------
+Transcrypt demo suite
+---------------------
 
+	.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
+		:tab-width: 4
+		:caption: Autotest: Transcrypt demo suite
+
+Classes, multiple inheritance and assignment of bound functions
+---------------------------------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/classes/__init__.py
+		:tab-width: 4
+		:caption: Testlet: classes
+
+Datastructures: tuple, list, dict, set
+--------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/datastructures/__init__.py
+		:tab-width: 4
+		:caption: Testlet: datastructures
+
+List comprehensions, multi-loop and nested with multiple if's
+-------------------------------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/list_comprehensions/__init__.py
+		:tab-width: 4
+		:caption: Testlet: list_comprehensions
+
+Hierarchical modules, both local to the project and global url-based
+--------------------------------------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
+		:tab-width: 4
+		:caption: Testlet: modules
+
+Tuple assignment, recursive and in for-headers using enumerate
+--------------------------------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/tuple_assignment/__init__.py
+		:tab-width: 4
+		:caption: Testlet: tuple_assignment

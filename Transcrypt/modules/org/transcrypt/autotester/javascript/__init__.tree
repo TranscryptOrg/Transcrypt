@@ -43,6 +43,13 @@ file: Module
 					ctx: Store 
 			value: Str 
 				s: str = yellow
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = testletNameColor
+					ctx: Store 
+			value: Str 
+				s: str = blue
 		element: ClassDef 
 			name: str = AutoTester
 			bases: list 
@@ -823,6 +830,76 @@ file: Module
 												attr: str = testBuffer
 												ctx: Load 
 										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = run
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testlet
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testletName
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = store
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = testletNameColor
+												ctx: Load 
+											element: Name 
+												id: str = testletName
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = testlet
+										ctx: Load 
+									attr: str = run
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = self
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = store
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = <br><br>
+								keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 

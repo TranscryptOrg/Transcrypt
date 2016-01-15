@@ -9,6 +9,7 @@
 					var okColor = 'green';
 					var errorColor = 'red';
 					var highlightColor = 'yellow';
+					var testletNameColor = 'blue';
 					var AutoTester = __class__ ('AutoTester', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.referenceBuffer = [];
@@ -78,6 +79,11 @@
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
 						});},
+						get run () {return __get__ (this, function (self, testlet, testletName) {
+							self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
+							testlet.run (self);
+							self.store ('<br><br>');
+						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -92,6 +98,7 @@
 					__all__.errorColor = errorColor;
 					__all__.highlightColor = highlightColor;
 					__all__.okColor = okColor;
+					__all__.testletNameColor = testletNameColor;
 					//</all>
 				}
 			}

@@ -13,6 +13,7 @@ import itertools
 okColor = 'green'
 errorColor = 'red'
 highlightColor = 'yellow'
+testletNameColor = 'blue'
 
 class AutoTester:
 
@@ -24,7 +25,7 @@ class AutoTester:
 		self.testDivId = 'transcrypt'
 		
 	def store (self, *args):
-		item = ' '.join ([repr (arg) for arg in args])
+		item = ' '.join ([repr (arg) for arg in args])	# N.B. stubs.browser provides a special sorting repr
 		if __envir__.executorName == __envir__.transpilerName:
 			self.testBuffer.append (item)
 		else:
@@ -60,6 +61,11 @@ class AutoTester:
 		else:		
 			document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor)
 			document.getElementById (self.testDivId) .innerHTML = ' | '.join (self.testBuffer)
+			
+	def run (self, testlet, testletName):
+		self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName))
+		testlet.run (self)
+		self.store ('<br><br>')
 			
 	def done (self):
 		if __envir__.executorName == __envir__.transpilerName:

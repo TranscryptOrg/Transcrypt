@@ -134,7 +134,7 @@
 		return zip (range (len (iterable)), iterable);
 	}
 		
-	// List, tuple and set extensions to Array
+	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
@@ -143,26 +143,21 @@
 	}
 	__all__.list = list;
 	
-	function tuple (iterable) {
-		var instance = iterable ? [] .slice.apply (iterable) : [];
-		instance.__class__ = tuple;
-		return instance;
-	}
-	__all__.tuple = tuple;
-		
-	function set (iterable) {
-		var instance = [];
-		if (iterable) {
-			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {
-					instance.push (iterable [index]);
-				}
-			}
+	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
+		if (start < 0) {
+			start = this.length + 1 - start;
 		}
-		instance.__class__ = set;
-		return instance;
+			
+		if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+			
+		var result = []
+		for (var index = start; index < stop; index += step) {
+			result.push (this [index]);
+		}
+		return result;
 	}
-	__all__.set = set;
 		
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
@@ -197,30 +192,39 @@
 		this.push (element);
 	};
 
-	Array.prototype.extend = function (aList) {
-		this.push.apply (this, aList);
-	};
-	
 	Array.prototype.clear = function (aList) {
 		aList.splice (0, aList.length);
 	};
 	
-	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
-		if (start < 0) {
-			start = this.length + 1 - start;
-		}
-			
-		if (stop < 0) {
-			stop = this.length + 1 - stop;
-		}
-			
-		var result = []
-		for (var index = start; index < stop; index += step) {
-			result.push (this [index]);
-		}
-		return result;
+	Array.prototype.extend = function (aList) {
+		this.push.apply (this, aList);
+	};
+
+	// Tuple extensions to Array
+	
+	function tuple (iterable) {
+		var instance = iterable ? [] .slice.apply (iterable) : [];
+		instance.__class__ = tuple;
+		return instance;
 	}
+	__all__.tuple = tuple;
 		
+	// Set extensions to Array
+		
+	function set (iterable) {
+		var instance = [];
+		if (iterable) {
+			for (var index = 0; index < iterable.length; index++) {
+				if (instance.indexOf (iterable [index]) == -1) {
+					instance.push (iterable [index]);
+				}
+			}
+		}
+		instance.__class__ = set;
+		return instance;
+	}
+	__all__.set = set;
+	
 	// String extensions
 		
 	function str (stringable) {
@@ -228,53 +232,24 @@
 	}
 	__all__.str = str;	
 	
-	String.prototype.toString = function () {
-		return this
-	}
-
-	String.prototype.valueOf = function () {
-	}
-	
-	String.prototype.__str__ = function () {
-		return this
-	}
-	
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
-	}
-	
-	String.prototype.join = function (aList) {
-		return aList.join (this);
 	};
 	
-	String.prototype.jsSplit = String.prototype.split;
-	
-	String.prototype.split = function (sep, maxsplit) {
-		if (!sep) {
-			sep = ' ';
-		}
-		return this.jsSplit (sep || /s+/, maxsplit);
+	String.prototype.__str__ = function () {
+		return this;
 	};
 	
-	String.prototype.rsplit = function (sep, maxsplit) {
-		var split = this.split (sep || /s+/);
-		return maxsplit ? [ split.slice (0, -maxsplit) .join (sep) ].concat (split.slice (-maxsplit)) : split;
+	String.prototype.capitalize () = function () {
+		return this.charAt (0).toUpperCase () + this.slice (1);
 	};
 	
-	String.prototype.strip = function () {
-		return this.replace (/^\s*|\s*$/g, '');
-	};
-		
-	String.prototype.lstrip = function () {
-		return this.replace (/^\s*/g, '');
+	String.prototype.endswith = function (suffix) {
+		return this.indexOf (suffix) == this.length - suffix.length;
 	};
 	
-	String.prototype.rstrip = function () {
-		return this.replace (/\s*$/g, '');
-	};
-	
-	String.prototype.isnumeric = function () {
-		return !isNaN (parseFloat (this)) && isFinite (this);
+	String.prototype.find (sub, start) = function () {
+		return this.indexOf (sub, start);
 	};
 	
 	String.prototype.format = function () {
@@ -297,6 +272,56 @@
 				return match;
 			}
 		});
+	};
+	
+	String.prototype.isnumeric = function () {
+		return !isNaN (parseFloat (this)) && isFinite (this);
+	};
+	
+	String.prototype.join = function (aList) {
+		return aList.join (this);
+	};
+	
+	String.prototype.jsSplit = String.prototype.split;
+	
+	String.prototype.lower () {
+		return this.toLowerCase ();
+	};
+	
+	String.prototype.lstrip = function () {
+		return this.replace (/^\s*/g, '');
+	};
+	
+	String.prototype.rfind (sub, start) = function () {
+		return this.lastIndexOf (sub, start);
+	};
+	
+	String.prototype.rsplit = function (sep, maxsplit) {
+		var split = this.split (sep || /s+/);
+		return maxsplit ? [ split.slice (0, -maxsplit) .join (sep) ].concat (split.slice (-maxsplit)) : split;
+	};
+	
+	String.prototype.rstrip = function () {
+		return this.replace (/\s*$/g, '');
+	};
+	
+	String.prototype.split = function (sep, maxsplit) {
+		if (!sep) {
+			sep = ' ';
+		}
+		return this.jsSplit (sep || /s+/, maxsplit);
+	};
+	
+	String.prototype.startswith = function (prefix) {
+		return this.indexOf (prefix) == 0;
+	};
+	
+	String.prototype.strip = function () {
+		return this.trim ();
+	};
+		
+	String.prototype.upper	() {
+		return this.toUpperCase ();
 	};
 	
 	__all__.str = str

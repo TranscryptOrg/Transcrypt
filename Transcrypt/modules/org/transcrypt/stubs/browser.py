@@ -25,4 +25,25 @@ for attributeName in window.__dict__:
 	
 def print (*args):
 	console.log (*args)
+
+# Define sortedRepr for command prompt, insert in order in browser.
+def repr (any):
+	def getNumAlphaKey (key):
+		if type (key) == str:
+			return key
+		else:
+			return str (1e10 + key)
+			
+	if type (any) == dict:	
+		return '{' + ', '.join ([
+			'{}: {}'.format (builtins.repr (key), builtins.repr (any [key]))
+			for index, key in enumerate (sorted (any, key = getNumAlphaKey))
+		]) + '}'
+	elif type (any) == set:
+		if any:
+			return '{' + ', '.join ([str (item) for item in sorted (list (any))]) + '}'
+		else:
+			return builtins.repr (any)
+	else:
+		return builtins.repr (any)
 	

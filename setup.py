@@ -1,8 +1,8 @@
 import os
 import sys
 
-sys.path.append ('Transcrypt')
-import transcrypt
+sys.path.append ('Transcrypt/modules/org/transcrypt')
+import __base__
 
 from setuptools import setup
 
@@ -12,7 +12,7 @@ def read (*paths):
 
 setup (
 	name = 'Transcrypt',
-	version = transcrypt.programVersion,
+	version = __base__.__envir__.transpilerVersion,
 	description = 'SSS (Small Sane Subset) Python to JavaScript transpiler',
 	long_description = (
 		read ('README.rst') + '\n\n' +

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-15 13:46:40
+// Transcrypt'ed from Python, 2016-01-15 20:03:44
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -126,7 +126,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.15';
+							self.transpilerVersion = '0.0.16';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -274,7 +274,7 @@ function autotest () {
 		return zip (range (len (iterable)), iterable);
 	}
 		
-	// List, tuple and set extensions to Array
+	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
@@ -283,26 +283,21 @@ function autotest () {
 	}
 	__all__.list = list;
 	
-	function tuple (iterable) {
-		var instance = iterable ? [] .slice.apply (iterable) : [];
-		instance.__class__ = tuple;
-		return instance;
-	}
-	__all__.tuple = tuple;
-		
-	function set (iterable) {
-		var instance = [];
-		if (iterable) {
-			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {
-					instance.push (iterable [index]);
-				}
-			}
+	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
+		if (start < 0) {
+			start = this.length + 1 - start;
 		}
-		instance.__class__ = set;
-		return instance;
+			
+		if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+			
+		var result = []
+		for (var index = start; index < stop; index += step) {
+			result.push (this [index]);
+		}
+		return result;
 	}
-	__all__.set = set;
 		
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
@@ -337,30 +332,39 @@ function autotest () {
 		this.push (element);
 	};
 
-	Array.prototype.extend = function (aList) {
-		this.push.apply (this, aList);
-	};
-	
 	Array.prototype.clear = function (aList) {
 		aList.splice (0, aList.length);
 	};
 	
-	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
-		if (start < 0) {
-			start = this.length + 1 - start;
-		}
-			
-		if (stop < 0) {
-			stop = this.length + 1 - stop;
-		}
-			
-		var result = []
-		for (var index = start; index < stop; index += step) {
-			result.push (this [index]);
-		}
-		return result;
+	Array.prototype.extend = function (aList) {
+		this.push.apply (this, aList);
+	};
+
+	// Tuple extensions to Array
+	
+	function tuple (iterable) {
+		var instance = iterable ? [] .slice.apply (iterable) : [];
+		instance.__class__ = tuple;
+		return instance;
 	}
+	__all__.tuple = tuple;
 		
+	// Set extensions to Array
+		
+	function set (iterable) {
+		var instance = [];
+		if (iterable) {
+			for (var index = 0; index < iterable.length; index++) {
+				if (instance.indexOf (iterable [index]) == -1) {
+					instance.push (iterable [index]);
+				}
+			}
+		}
+		instance.__class__ = set;
+		return instance;
+	}
+	__all__.set = set;
+	
 	// String extensions
 		
 	function str (stringable) {
@@ -375,47 +379,13 @@ function autotest () {
 	String.prototype.valueOf = function () {
 	}
 	
-	String.prototype.__str__ = function () {
-		return this
-	}
-	
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
 	}
 	
-	String.prototype.join = function (aList) {
-		return aList.join (this);
-	};
-	
-	String.prototype.jsSplit = String.prototype.split;
-	
-	String.prototype.split = function (sep, maxsplit) {
-		if (!sep) {
-			sep = ' ';
-		}
-		return this.jsSplit (sep || /s+/, maxsplit);
-	};
-	
-	String.prototype.rsplit = function (sep, maxsplit) {
-		var split = this.split (sep || /s+/);
-		return maxsplit ? [ split.slice (0, -maxsplit) .join (sep) ].concat (split.slice (-maxsplit)) : split;
-	};
-	
-	String.prototype.strip = function () {
-		return this.replace (/^\s*|\s*$/g, '');
-	};
-		
-	String.prototype.lstrip = function () {
-		return this.replace (/^\s*/g, '');
-	};
-	
-	String.prototype.rstrip = function () {
-		return this.replace (/\s*$/g, '');
-	};
-	
-	String.prototype.isnumeric = function () {
-		return !isNaN (parseFloat (this)) && isFinite (this);
-	};
+	String.prototype.__str__ = function () {
+		return this
+	}
 	
 	String.prototype.format = function () {
 		var args = arguments;
@@ -439,6 +409,40 @@ function autotest () {
 		});
 	};
 	
+	String.prototype.isnumeric = function () {
+		return !isNaN (parseFloat (this)) && isFinite (this);
+	};
+	
+	String.prototype.join = function (aList) {
+		return aList.join (this);
+	};
+	
+	String.prototype.jsSplit = String.prototype.split;
+	
+	String.prototype.split = function (sep, maxsplit) {
+		if (!sep) {
+			sep = ' ';
+		}
+		return this.jsSplit (sep || /s+/, maxsplit);
+	};
+	
+	String.prototype.lstrip = function () {
+		return this.replace (/^\s*/g, '');
+	};
+	
+	String.prototype.rsplit = function (sep, maxsplit) {
+		var split = this.split (sep || /s+/);
+		return maxsplit ? [ split.slice (0, -maxsplit) .join (sep) ].concat (split.slice (-maxsplit)) : split;
+	};
+	
+	String.prototype.rstrip = function () {
+		return this.replace (/\s*$/g, '');
+	};
+	
+	String.prototype.strip = function () {
+		return this.replace (/^\s*|\s*$/g, '');
+	};
+		
 	__all__.str = str
 	
 	
@@ -556,6 +560,86 @@ function autotest () {
 					}
 					//<all>
 					__all__.chain = chain;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'list_comprehensions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var squares = function () {
+							var __accu0__ = [];
+							var __iter0__ = range (10);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var i = __iter0__ [__index0__];
+								if (i % 2) {
+									__accu0__ .push (i * i);
+								}
+							}
+							return __accu0__;
+						} ();
+						autoTester.store (squares);
+						var tuples = function () {
+							var __accu0__ = [];
+							var __iter0__ = tuple ([100, 200, 300, 400, 500, 600, 700]);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var x = __iter0__ [__index0__];
+								var __iter1__ = tuple ([10, 20, 30, 40, 50, 60, 70]);
+								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+									var y = __iter1__ [__index1__];
+									if ((20 < y && y < 60)) {
+										var __iter2__ = tuple ([1, 2, 3, 4, 5, 6, 7]);
+										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
+											var z = __iter2__ [__index2__];
+											if (((200 < x && x < 600)) && ((2 < z && z < 6))) {
+												__accu0__ .push (tuple ([x, y, z]));
+											}
+										}
+									}
+								}
+							}
+							return __accu0__;
+						} ();
+						autoTester.store (tuples);
+						var nested = function () {
+							var __accu0__ = [];
+							var __iter0__ = function () {
+								var __accu1__ = [];
+								var __iter1__ = range (3);
+								for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
+									var x = __iter1__ [__index0__];
+									__accu1__ .push (x * x);
+								}
+								return __accu1__;
+							} ();
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var x = __iter0__ [__index0__];
+								__accu0__ .push (2 * x);
+							}
+							return __accu0__;
+						} ();
+						autoTester.store (nested);
+						var a = 100;
+						var x = 5;
+						var scopeTest = function () {
+							var __accu0__ = [];
+							var __iter0__ = range (5);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var x = __iter0__ [__index0__];
+								__accu0__ .push (x + a);
+							}
+							return __accu0__;
+						} ();
+						autoTester.store (x);
+						autoTester.store (scopeTest);
+					};
+					//<all>
+					__all__.run = run;
 					//</all>
 				}
 			}
@@ -742,6 +826,7 @@ function autotest () {
 					var okColor = 'green';
 					var errorColor = 'red';
 					var highlightColor = 'yellow';
+					var testletNameColor = 'blue';
 					var AutoTester = __class__ ('AutoTester', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.referenceBuffer = [];
@@ -811,6 +896,11 @@ function autotest () {
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
 						});},
+						get run () {return __get__ (this, function (self, testlet, testletName) {
+							self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
+							testlet.run (self);
+							self.store ('<br><br>');
+						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -825,6 +915,45 @@ function autotest () {
 					__all__.errorColor = errorColor;
 					__all__.highlightColor = highlightColor;
 					__all__.okColor = okColor;
+					__all__.testletNameColor = testletNameColor;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'tuple_assignment', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var __left0__ = tuple ([tuple ([1, 2]), 'santa-claus', new set ([3, 4]), 5]);
+						var a = __left0__ [0][0];
+						var b = __left0__ [0][1];
+						var santa = __left0__ [1];
+						var c = __left0__ [2][0];
+						var d = __left0__ [2][1];
+						var e = __left0__ [3];
+						autoTester.store (a, b, c, d, e, santa);
+						var __iter0__ = enumerate (tuple ([0.5, 1.5, 2.5, 3.5]));
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var __left0__ = __iter0__ [__index0__] ;
+							var i = __left0__ [0];
+							var x = __left0__ [1];
+							autoTester.store (i, x);
+						}
+						;
+						var __left0__ = tuple ([3.14, 2.74]);
+						var e = __left0__ [0];
+						var pi = __left0__ [1];
+						var __left0__ = tuple ([pi, e]);
+						var e = __left0__ [0];
+						var pi = __left0__ [1];
+						autoTester.store (e, pi);
+					};
+					//<all>
+					__all__.run = run;
 					//</all>
 				}
 			}
@@ -833,16 +962,22 @@ function autotest () {
 	(function () {
 		var classes = {};
 		var datastructures = {};
+		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
+		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (classes, '', __init__ (__world__.classes));
-		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (datastructures, '', __init__ (__world__.datastructures));
+		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
+		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
-		classes.run (autoTester);
-		modules.run (autoTester);
-		datastructures.run (autoTester);
+		autoTester.run (classes, 'classes');
+		autoTester.run (datastructures, 'datastructures');
+		autoTester.run (list_comprehensions, 'list_comprehensions');
+		autoTester.run (modules, 'modules');
+		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
 		//<all>
 		__all__.autoTester = autoTester;
