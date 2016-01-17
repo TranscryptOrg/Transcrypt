@@ -13,12 +13,12 @@ def read (*paths):
 setup (
 	name = 'Transcrypt',
 	version = __base__.__envir__.transpilerVersion,
-	description = 'SSS (Small Sane Subset) Python to JavaScript transpiler',
+	description = 'SSS (-not so- Small Sane Subset) Python to JavaScript transpiler supporting multiple inheritance',
 	long_description = (
 		read ('README.rst') + '\n\n' +
 		read ('license_reference.txt')
 	),
-	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance'],
+	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt'],
 	url = 'https://github.com/JdeH/Transcrypt',	
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',

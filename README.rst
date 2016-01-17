@@ -1,20 +1,20 @@
-Project goal is to build a Python to Javascript transpiler with the following characteristics
+Transcrypt is a tool to compile a -not so- Small Sane Subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance*
+- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
+- Hierarchical URL based module system to prevent name conflicts
 - Simple relation between Python source and generated JavaScript code for easy debugging
-- Seamless integration with the universe of high-quality JavaScript libraries
-- Hierarchical URL based module system to prevent conflicts
 - Compact downloads
 
-Transcrypt already properly handles
+Documentation with code examples
+================================
 
-- Multiple inheritance
-- Recursive tuple assignment
-- LHS and RHS slices, basic and extended
-- Multi-loop and nested list comprehensions
-- Assignment of bound function pointers
+Rather than duplicate info here, you're invited to read the growing *documentation* at http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/
 
-But it is still incomplete, although rapidly growing. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
+Status
+======
+
+Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
 
 What's new
 ==========
@@ -34,10 +34,6 @@ What's new
 - A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
 - Transpiler core
 
-Documentation
-=============
-
-Rather than duplicate info here, you're invited to read the growing *DOCS WITH CODE EXAMPLES* at http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/
 
 Readability
 ===========
