@@ -19,7 +19,7 @@ setup (
 		read ('license_reference.txt')
 	),
 	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance'],
-	url = 'http://www.transcrypt.org/',	
+	url = 'https://github.com/JdeH/Transcrypt',	
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',
 	author_email = 'jacques.de.hooge@qquick.org',

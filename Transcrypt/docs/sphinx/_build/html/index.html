@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.16 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.19 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.16',
+        VERSION:     '0.0.19',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.16 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.19 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.16 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.19 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -268,9 +268,7 @@ show2 (&#39;copy&#39;);
 </div>
 <div class="section" id="what-language-constructs-are-currently-supported">
 <h1>What language constructs are currently supported<a class="headerlink" href="#what-language-constructs-are-currently-supported" title="Permalink to this headline">¶</a></h1>
-<p>Transcrypt can handle a growing set of language constructs. The Transcrypt autotest and demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There&#8217;s no formal definition of Transcrypt&#8217;s semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what&#8217;s in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.</p>
-<div class="section" id="transcrypt-demo-suite">
-<h2>Transcrypt demo suite<a class="headerlink" href="#transcrypt-demo-suite" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt can handle a growing set of language constructs. The Transcrypt demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There&#8217;s no formal definition of Transcrypt&#8217;s semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what&#8217;s in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.</p>
 <blockquote>
 <div><div class="literal-block-wrapper container" id="autotest-transcrypt-demo-suite">
 <div class="code-block-caption"><span class="caption-text">Autotest: Transcrypt demo suite</span><a class="headerlink" href="#autotest-transcrypt-demo-suite" title="Permalink to this code">¶</a></div>
@@ -278,6 +276,7 @@ show2 (&#39;copy&#39;);
 
 <span class="kn">import</span> <span class="nn">classes</span>
 <span class="kn">import</span> <span class="nn">datastructures</span>
+<span class="kn">import</span> <span class="nn">indices_and_slices</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">modules</span>
 <span class="kn">import</span> <span class="nn">tuple_assignment</span>
@@ -286,6 +285,7 @@ show2 (&#39;copy&#39;);
 
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="s">&#39;classes&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">datastructures</span><span class="p">,</span> <span class="s">&#39;datastructures&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">indices_and_slices</span><span class="p">,</span> <span class="s">&#39;indices_and_slices&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="s">&#39;modules&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">tuple_assignment</span><span class="p">,</span> <span class="s">&#39;tuple_assignemt&#39;</span><span class="p">)</span>
@@ -295,7 +295,6 @@ show2 (&#39;copy&#39;);
 </div>
 </div>
 </div></blockquote>
-</div>
 <div class="section" id="classes-multiple-inheritance-and-assignment-of-bound-functions">
 <h2>Classes, multiple inheritance and assignment of bound functions<a class="headerlink" href="#classes-multiple-inheritance-and-assignment-of-bound-functions" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -385,6 +384,40 @@ show2 (&#39;copy&#39;);
     <span class="n">emptySet</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">()</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">emptySet</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">emptySet</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="indices-and-slices-lhs-rhs-basic-and-extended">
+<h2>Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper container" id="testlet-indices-and-slices">
+<div class="code-block-caption"><span class="caption-text">Testlet: indices_and_slices</span><a class="headerlink" href="#testlet-indices-and-slices" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="c"># Right hand side slices</span>
+    <span class="nb">all</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span><span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span> <span class="p">:</span> <span class="mi">2</span><span class="p">])</span> 
+    
+    <span class="c"># Left hand side slices</span>
+    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">4</span> <span class="p">:</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">2</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span> <span class="p">:</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
 </pre></div>
 </div>
 </div>
@@ -505,9 +538,9 @@ show2 (&#39;copy&#39;);
 </ul>
 </li>
 <li><a class="reference internal" href="#what-language-constructs-are-currently-supported">What language constructs are currently supported</a><ul>
-<li><a class="reference internal" href="#transcrypt-demo-suite">Transcrypt demo suite</a></li>
 <li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">Classes, multiple inheritance and assignment of bound functions</a></li>
 <li><a class="reference internal" href="#datastructures-tuple-list-dict-set">Datastructures: tuple, list, dict, set</a></li>
+<li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">Indices and slices: LHS, RHS, basic and extended</a></li>
 <li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">List comprehensions, multi-loop and nested with multiple if&#8217;s</a></li>
 <li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">Hierarchical modules, both local to the project and global url-based</a></li>
 <li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">Tuple assignment, recursive and in for-headers using enumerate</a></li>
@@ -545,7 +578,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.16 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.19 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -1,17 +1,27 @@
-This project started out as a mere hobby, acting on an impulse.
-But it's becoming quite serious now.
+Project goal is to build a Python to Javascript transpiler with the following characteristics
 
-Project goal is to build a Python to Javascript transpiler that:
+- Allows for classical OO programming with *multiple inheritance*
+- Simple relation between Python source and generated JavaScript code for easy debugging
+- Seamless integration with the universe of high-quality JavaScript libraries
+- Hierarchical URL based module system to prevent conflicts
+- Compact downloads
 
-- Allows for "classic" OO programming for the web with minimal overhead, using a (not so) small, but relevant subset of Python
-- Offers acces to the JavaScript rather than the Python ecosystem: different batteries
+Transcrypt already properly handles
 
-If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
+- Multiple inheritance
+- Recursive tuple assignment
+- LHS and RHS slices, basic and extended
+- Multi-loop and nested list comprehensions
+- Assignment of bound function pointers
+
+But it is still incomplete, although rapidly growing. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
 
 What's new
 ==========
 
-- Autotests added for listcomps and nested tuple assignement
+- Basic and extended slices, both LHS (pfff...) and RHS + testlet for those, docs adapted
+- Many string methods added
+- Autotests added for listcomps and nested tuple assignment
 - Autotester slightly improved
 - Nested multi-loop list comprehensions
 - Working autotester + first start of regression test set
@@ -22,12 +32,12 @@ What's new
 - Recursive tuple assignment (pfff...)
 - Manual tests added in interactive_tests  subdir
 - A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
-- VERY VERY BASIC transpiler, transpiling only a minute, completely unusable subset of Python. Try the basic test if you like to experiment.
+- Transpiler core
 
 Documentation
 =============
 
-Rather than duplicate info here, you're invited to read the growing docs with code examples at http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/
+Rather than duplicate info here, you're invited to read the growing *DOCS WITH CODE EXAMPLES* at http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/
 
 Readability
 ===========
@@ -52,9 +62,10 @@ What will never be in:
 
 - Eval, exec
 
-And the rest:
+Miscellaneous
+=============
 
-- No idea
+- The Transcrypt website is under construction at http://www.transcrypt.org
 
 Other packages you might like
 =============================

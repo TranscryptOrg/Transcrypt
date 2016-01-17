@@ -7,7 +7,7 @@
 					var run = function (autoTester) {
 						var aList = [1, 2, 3, 'sun', 'moon', 'stars'];
 						autoTester.store (aList);
-						autoTester.store (aList.__pyslice__ (2, 4, 1));
+						autoTester.store (aList.__getslice__ (2, 4, 1));
 						autoTester.store (aList.slice (0));
 						autoTester.store (aList.slice (2));
 						autoTester.store (len (aList));

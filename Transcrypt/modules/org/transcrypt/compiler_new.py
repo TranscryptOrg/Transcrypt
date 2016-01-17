@@ -300,6 +300,7 @@ class Generator (ast.NodeVisitor):
 		try:
 			self.visit (module.parseTree)
 		except Exception as exception:
+			print (111, exception, 222)
 			utils.enhanceException (exception, moduleName = self.module.metadata.name)
 		
 	def tabs (self, indentLevel = None):
@@ -358,12 +359,13 @@ class Generator (ast.NodeVisitor):
 				
 	def visit_Assign (self, node):
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
-		
+
+		# Actual single target assignment, deals with LHS slices
 		def assignTarget (target, value):
 			# Special case for target slice (as opposed to target index)
+			self.visit (target.value)
+			
 			if type (target) == ast.Subscript and type (target.slice) == ast.Slice:
-				self.visit (target.value)
-				
 				try:
 					self.emit ('.__setslice__ (')
 					
@@ -373,7 +375,7 @@ class Generator (ast.NodeVisitor):
 						self.visit (target.slice.lower)
 						
 					self.emit (', ')
-					if target.slice.upper == None:
+					if target.upper == None:
 						self.emit ('null')
 					else:
 						self.visit (target.slice.upper)
@@ -396,8 +398,8 @@ class Generator (ast.NodeVisitor):
 				
 				self.visit (target)
 				self.emit (' = ')
-				self.visit (value)		
-
+				self.visit (value)
+				
 		# Tuple assignment LHS tree walker
 		# The target (LHS) guides the walk, so it determines the source indices
 		# However if a target leaf is an LHS slice,
@@ -408,7 +410,7 @@ class Generator (ast.NodeVisitor):
 			if type (expr) in targetLeafs:			# It's an LValue, matching an RHS leaf source
 				self.emit (';\n')
 				
-				# Create and visit RHS node on the fly, to benefit from assignTarget
+				# Create and visit RHS target on the fly, to benefit from assignTarget
 				assignTarget (expr, ast.Name (id = self.getTemp ('left'), ctx = ast.Load))
 				
 				for pathIndex in pathIndices:
@@ -420,62 +422,62 @@ class Generator (ast.NodeVisitor):
 					walkTarget (elt, pathIndices)	# Walk deeper until finally pathIndices is used in emitting an RHS leaf
 				pathIndices.pop ()					# Remove the indexing level since we're done with that sequence
 				
-		if len (node.targets) == 1 and type (node.targets [0]) in targetLeafs:
+		if len (target.targets) == 1 and type (target.targets [0]) in targetLeafs:
 			# Fast shortcut for the most frequent and simple case
-			assignTarget (node.targets [0], node.value)			
+			assignTarget (target.targets [0], target.value)			
 		else:
 			# Multiple RHS or tuple assignment, we need __tmp__
 			self.emit ('var ')
 			self.emit (self.nextTemp ('left'))
 			self.emit (' = ')
-			self.visit (node.value)
+			self.visit (target.value)
 
-			for expr in node.targets:
+			for expr in target.targets:
 				walkTarget (expr, [])
 				
 			self.prevTemp ('left')
 				
-	def visit_Attribute (self, node):
-		self.visit (node.value)
-		self.emit ('.{}', node.attr)
+	def visit_Attribute (self, target):
+		self.visit (target.value)
+		self.emit ('.{}', target.attr)
 	
-	def visit_BinOp (self, node):
-		opType = type (node.op)
+	def visit_BinOp (self, target):
+		opType = type (target.op)
 		if opType == ast.FloorDiv:
 			self.emit ('Math.floor (')
-			self.visit (node.left)
+			self.visit (target.left)
 			self.emit (') / ')
 			self.emit ('Math.floor (')
-			self.visit (node.right)
+			self.visit (target.right)
 			self.emit (')')
 		elif opType == ast.MatMult:
 			self.emit ('__matmul__ (')
-			self.visit (node.left)
+			self.visit (target.left)
 			self.emit (', ')
-			self.visit (node.right)
+			self.visit (target.right)
 			self.emit (')')			
 		else:
-			self.visit (node.left)
+			self.visit (target.left)
 			self.emit (' {} '.format (self.binOps [opType]))			
-			self.visit (node.right)
+			self.visit (target.right)
 			
-	def visit_BoolOp (self, node):
-		for index, value in enumerate (node.values):
+	def visit_BoolOp (self, target):
+		for index, value in enumerate (target.values):
 			if index:
-				self.emit (' {} '.format (self.boolOps [type (node.op)]))
+				self.emit (' {} '.format (self.boolOps [type (target.op)]))
 			self.visit (value)	
 	
-	def visit_Break (self, node):
+	def visit_Break (self, target):
 		self.emit ('{} = true;\n', self.getTemp ('break'))
 		self.emit ('break')
 	
-	def visit_Call (self, node):
-		self.visit (node.func)
+	def visit_Call (self, target):
+		self.visit (target.func)
 		
-		for index, expr in enumerate (node.args):
+		for index, expr in enumerate (target.args):
 			if type (expr) == ast.Starred:
 				self.emit ('.apply (null, ')	# Note that in generated a.b.f (), a.b.f is a bound function already
-				for index, expr in enumerate (node.args):
+				for index, expr in enumerate (target.args):
 					if index:
 						self.emit ('.concat (')
 					if type (expr) == ast.Starred:
@@ -490,31 +492,31 @@ class Generator (ast.NodeVisitor):
 				break;
 		else:	
 			self.emit (' (')
-			for index, expr in enumerate (node.args):
+			for index, expr in enumerate (target.args):
 				self.emitComma (index)
 				self.visit (expr)
 			self.emit (')')
 		
-	def visit_ClassDef (self, node):
+	def visit_ClassDef (self, target):
 		if not self.scopes:
-			self.all.add (node.name)
+			self.all.add (target.name)
 		
-		self.emit ('var {0} = __class__ (\'{0}\', [', node.name)
+		self.emit ('var {0} = __class__ (\'{0}\', [', target.name)
 		self.inscope (self.classScope)
 		
-		if node.bases:
-			for index, expr in enumerate (node.bases):
+		if target.bases:
+			for index, expr in enumerate (target.bases):
 				try:
 					self.emitComma (index)
 					self.visit_Name (expr)
 				except Exception as exception:
-					utils.enhanceException (moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Invalid base class')
+					utils.enhanceException (moduleName = self.module.metadata.name, lineNr = target.lineno, message = 'Invalid base class')
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
 		
 		self.indent ()
-		for index, stmt in enumerate (node.body):
+		for index, stmt in enumerate (target.body):
 			self.emitComma (index, False)
 			self.visit (stmt)
 		self.dedent ()
@@ -522,12 +524,12 @@ class Generator (ast.NodeVisitor):
 		self.descope ()
 		self.emit ('\n}})')
 		
-	def visit_Compare (self, node):
-		if len (node.comparators) > 1:
+	def visit_Compare (self, target):
+		if len (target.comparators) > 1:
 			self.emit ('(')
 			
-		left = node.left
-		for index, (operand, right) in enumerate (zip (node.ops, node.comparators)):
+		left = target.left
+		for index, (operand, right) in enumerate (zip (target.ops, target.comparators)):
 			if index:
 				self.emit (' && ')
 				
@@ -544,36 +546,36 @@ class Generator (ast.NodeVisitor):
 				
 			left = right
 			
-		if len (node.comparators) > 1:
+		if len (target.comparators) > 1:
 			self.emit(')')
 			
-	def visit_Dict (self, node):
+	def visit_Dict (self, target):
 		self.emit ('{{')
-		for index, (key, value) in enumerate (zip (node.keys, node.values)):
+		for index, (key, value) in enumerate (zip (target.keys, target.values)):
 			self.emitComma (index)
 			self.visit (key)
 			self.emit (': ')
 			self.visit (value)
 		self.emit ('}}')
 			
-	def visit_Expr (self, node):
-		self.visit (node.value)
+	def visit_Expr (self, target):
+		self.visit (target.value)
 		
-	def visit_For (self, node):
+	def visit_For (self, target):
 		self.emit ('var {} = ', self.nextTemp ('iter'))
-		self.visit (node.iter)
+		self.visit (target.iter)
 		self.emit (';\n')
 		
-		if node.orelse:
+		if target.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		
 		self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
 		
 		self.indent ()
 		
-		# Create and visit assignment node on the fly to benefit from tupple assignment
+		# Create and visit assignment target on the fly to benefit from tupple assignment
 		self.visit (ast.Assign (
-			[node.target],
+			[target.target],
 			ast.Subscript (
 				value = ast.Name (id = self.getTemp ('iter'), ctx = ast.Load),
 				slice = ast.Index (ast.Num (n = self.getTemp ('index'))),
@@ -582,7 +584,7 @@ class Generator (ast.NodeVisitor):
 		))
 		self.emit (';\n')
 		
-		for stmt in node.body:		
+		for stmt in target.body:		
 			self.visit (stmt)
 			if self.statementSkipped:	# No imports here, but just to be sure for the future
 				self.statementSkipped = False
@@ -592,12 +594,12 @@ class Generator (ast.NodeVisitor):
 		
 		self.emit ('}}\n')
 		
-		if node.orelse:
+		if target.orelse:
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
 			
 			self.indent ()
-			for stmt in node.orelse:
+			for stmt in target.orelse:
 				self.visit (stmt)
 				if self.statementSkipped:
 					self.statementSkipped = False
@@ -611,24 +613,24 @@ class Generator (ast.NodeVisitor):
 		self.prevTemp ('index')
 		self.prevTemp ('iter')
 		
-	def visit_FunctionDef (self, node):
+	def visit_FunctionDef (self, target):
 		if not self.scopes or self.scopes [-1] == self.functionScope:	# Global or function scope, so it's no method
 			if not self.scopes:
-				self.all.add (node.name)
-			self.emit ('var {} = function (', node.name)
+				self.all.add (target.name)
+			self.emit ('var {} = function (', target.name)
 		else:															# Class scope, so it's a method and needs the currying mechanism
-			self.emit ('\nget {} () {{return __get__ (this, function (', node.name)
+			self.emit ('\nget {} () {{return __get__ (this, function (', target.name)
 			
 		self.inscope (self.functionScope)
 		
-		self.visit (node.args)
+		self.visit (target.args)
 		self.emit (') {{\n')
 		
 		self.indent ()
-		if node.args.vararg:	# If there's a vararg, assign an array containing the remainder of the actual parameters to it
-			self.emit ('var {} = [] .slice.apply (arguments) .slice ({});\n', node.args.vararg.arg, len (node.args.args))
+		if target.args.vararg:	# If there's a vararg, assign an array containing the remainder of the actual parameters to it
+			self.emit ('var {} = [] .slice.apply (arguments) .slice ({});\n', target.args.vararg.arg, len (target.args.args))
 			
-		for stmt in node.body:
+		for stmt in target.body:
 			self.visit (stmt)
 			if self.statementSkipped:
 				self.statementSkipped = False
@@ -643,13 +645,13 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.emit ('}});}}')
 		
-	def visit_If (self, node):
+	def visit_If (self, target):
 		self.emit ('if (')
-		self.visit (node.test)
+		self.visit (target.test)
 		self.emit (') {{\n')
 		
 		self.indent ()
-		for stmt in node.body:
+		for stmt in target.body:
 			self.visit (stmt)
 			if self.statementSkipped:
 				self.statementSkipped = False
@@ -659,11 +661,11 @@ class Generator (ast.NodeVisitor):
 		
 		self.emit ('}}\n')
 		
-		if node.orelse:
+		if target.orelse:
 			self.emit ('else {{\n')
 			
 			self.indent ()
-			for stmt in node.orelse:
+			for stmt in target.orelse:
 				self.visit (stmt)
 				if self.statementSkipped:
 					self.statementSkipped = False
@@ -675,8 +677,8 @@ class Generator (ast.NodeVisitor):
 			
 		self.statementSkipped = True
 		
-	def visit_Import (self, node):
-		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
+	def visit_Import (self, target):
+		names = [alias for alias in target.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
 			self.statementSkipped = True
@@ -687,7 +689,7 @@ class Generator (ast.NodeVisitor):
 				self.module.program.provide (alias.name)
 
 			except Exception as exception:			
-				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
+				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = target.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 			
 			if alias.asname:
 				self.emit ('var {} = {}.{}', alias.asname, __base__.__envir__.transpilerName, alias.name)
@@ -702,46 +704,46 @@ class Generator (ast.NodeVisitor):
 			if index < len (names) - 1:
 				self.emit (';\n')
 				
-	def visit_ImportFrom (self, node):
-		if node.module.startswith (self.stubsName):
+	def visit_ImportFrom (self, target):
+		if target.module.startswith (self.stubsName):
 			self.statementSkipped = True 
 			return
 		
 		try:
-			module = self.module.program.provide (node.module)
+			module = self.module.program.provide (target.module)
 			
-			for index, alias in enumerate (node.names):
+			for index, alias in enumerate (target.names):
 				if alias.name == '*':
-					if len (node.names) > 1:
-						raise Error (moduleName = module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
+					if len (target.names) > 1:
+						raise Error (moduleName = module.metadata.name, lineNr = target.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 
 					for index, name in enumerate (module.all):
-						self.emit ('var {0} = {1}.{2}.{0}', name, __base__.__envir__.transpilerName, node.module)
+						self.emit ('var {0} = {1}.{2}.{0}', name, __base__.__envir__.transpilerName, target.module)
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 				else:
 					if alias.asname:
-						self.emit ('var {} = {}.{}.{}', alias.asname, __base__.__envir__.transpilerName, node.module, alias.name)
+						self.emit ('var {} = {}.{}.{}', alias.asname, __base__.__envir__.transpilerName, target.module, alias.name)
 					else:
-						self.emit ('var {0} = {1}.{2}.{0}', alias.name, __base__.__envir__.transpilerName, node.module)
-					if index < len (node.names) - 1:
+						self.emit ('var {0} = {1}.{2}.{0}', alias.name, __base__.__envir__.transpilerName, target.module)
+					if index < len (target.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:
-			utils.enhanceException (exception, lineNr = node.lineno, message = 'Can\'t import from module \'{}\''.format (node.module))
+			utils.enhanceException (exception, lineNr = target.lineno, message = 'Can\'t import from module \'{}\''.format (target.module))
 			
-	def visit_Index (self, node):
+	def visit_Index (self, target):
 		self.emit (' [')
-		self.visit (node.value)
+		self.visit (target.value)
 		self.emit ('] ')
 			
-	def visit_List (self, node):
+	def visit_List (self, target):
 		self.emit ('[')
-		for index, elt in enumerate (node.elts):
+		for index, elt in enumerate (target.elts):
 			self.emitComma (index)
 			self.visit (elt)
 		self.emit (']')
 		
-	def visit_ListComp (self, node):
+	def visit_ListComp (self, target):
 		def nestLoops (generators):
 			comprehension = generators.pop (0)
 			self.emit ('var {} = ', self.nextTemp ('iter'))
@@ -778,7 +780,7 @@ class Generator (ast.NodeVisitor):
 				nestLoops (generators)
 			else:
 				self.emit ('{} .push (', self.getTemp ('accu'))
-				self.visit (node.elt)
+				self.visit (target.elt)
 				self.emit (');\n')
 					
 			# Start of optional if-epilogue
@@ -796,13 +798,13 @@ class Generator (ast.NodeVisitor):
 		self.emit ('function () {{\n')
 		self.indent ()
 		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
-		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
+		nestLoops (target.generators [:])	# Leave original in intact, just for neatness
 		self.emit ('return {};\n'.format (self.getTemp ('accu')))
 		self.prevTemp ('accu')	
 		self.dedent ()
 		self.emit ('}} ()')
 		
-	def visit_Module (self, node):
+	def visit_Module (self, target):
 		self.indent ()
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
@@ -822,7 +824,7 @@ class Generator (ast.NodeVisitor):
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
 		
-		for stmt in node.body:
+		for stmt in target.body:
 			self.visit (stmt)
 			if self.statementSkipped:
 				self.statementSkipped = False
@@ -854,95 +856,95 @@ class Generator (ast.NodeVisitor):
 			for head in sorted (self.importHeads)
 		]))
 		
-	def visit_Name (self, node):
-		if type (node.ctx) == ast.Store:
+	def visit_Name (self, target):
+		if type (target.ctx) == ast.Store:
 			if not self.scopes:
-				self.all.add (node.id)
+				self.all.add (target.id)
 				
-		self.emit (node.id)
+		self.emit (target.id)
 		
-	def visit_NameConstant (self, node):
-		self.emit (self.nameConsts [node.value])
+	def visit_NameConstant (self, target):
+		self.emit (self.nameConsts [target.value])
 		
-	def visit_Num (self, node):
-		self.emit ('{}', node.n)
+	def visit_Num (self, target):
+		self.emit ('{}', target.n)
 		
-	def visit_Return (self, node):
+	def visit_Return (self, target):
 		self.emit ('return ')
-		self.visit (node.value)
+		self.visit (target.value)
 		
-	def visit_Set (self, node):
+	def visit_Set (self, target):
 		self.emit ('new set ([')
-		for index, elt in enumerate (node.elts):
+		for index, elt in enumerate (target.elts):
 			self.emitComma (index)
 			self.visit (elt)
 		self.emit ('])')		
-				
-	def visit_Str (self, node):
-		self.emit ('{}', repr (node.s))
 		
-	# Visited for RHS index, RHS slice and LHS index but not for LHS slice
-	# LHS slices are dealth with directy in visit_Assign, since the RHS is needed for it also
-	def visit_Subscript (self, node):
-		self.visit (node.value)
+	def visit_Str (self, target):
+		self.emit ('{}', repr (target.s))
 		
-		if type (node.slice) == ast.Slice:	# Then we're sure node.ctx == ast.Load	
+	# Visited for source index, source slice and target index but not for target slice
+	# Target slices are dealth with directy in visit_Assign, since the RHS is needed for it
+	def visit_Subscript (self, target):
+		self.visit (target.value)
+		
+		if type (target.slice) == ast.Slice:	# Then we're sure target.ctx == ast.Load	
 			try:
-				if node.slice.step == None:
+				if target.slice.step == None:
 					self.emit ('.slice (')
 					
-					if node.slice.lower == None:
+					if target.slice.lower == None:
 						self.emit ('0')
 					else:
-						self.visit (node.slice.lower)
+						self.visit (target.slice.lower)
 						
-					if node.slice.upper != None:
+					if target.upper != None:
 						self.emit (', ')
-						self.visit (node.slice.upper)
+						self.visit (target.slice.upper)
 				else:
 					self.emit ('.__getslice__ (')
 					
-					if node.slice.lower == None:
+					if target.slice.lower == None:
 						self.emit ('0')
 					else:
-						self.visit (node.slice.lower)
+						self.visit (target.slice.lower)
 						
 					self.emit (', ')
-					if node.slice.upper == None:
+					if target.upper == None:
 						self.emit ('null')
 					else:
-						self.visit (node.slice.upper)
+						self.visit (target.slice.upper)
 				
 					self.emit (', ')
-					self.visit (node.slice.step)
+					self.visit (target.slice.step)
 					
 				self.emit (')')
 			except Exception as exception:
-				utils.enhanceException (exception, lineNr = node.lineno, message = 'Invalid RHS slice')	
+				utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid RHS slice')	
 		else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)
-			self.visit (node.slice)		
-			
-	def visit_Tuple (self, node):
+			target.visit (target.slice)
+				
+	def visit_Tuple (self, target):
 		self.emit ('tuple (')
-		self.visit_List (node)
+		self.visit_List (target)
 		self.emit (')')
 			
-	def visit_UnaryOp (self, node):
-		self.emit (self.unOps [type (node.op)])			
-		self.visit (node.operand)
+	def visit_UnaryOp (self, target):
+		self.emit (self.unOps [type (target.op)])			
+		self.visit (target.operand)
 		
-	def visit_With (self, node):	
-		for withitem in node.items:
+	def visit_With (self, target):	
+		for withitem in target.items:
 			self.visit (withitem.optional_vars)
 			self.emit (' = ')
 			self.visit (withitem.context_expr)
 			self.emit (';\n')
 			
-		for stmt in node.body:
+		for stmt in target.body:
 			self.visit (stmt)
 			self.emit (';\n')
 			
-		for withitem in node.items:
+		for withitem in target.items:
 			self.visit (withitem.optional_vars)
 			self.emit ('.close ()')
 			

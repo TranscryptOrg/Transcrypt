@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-15 20:03:44
+// Transcrypt'ed from Python, 2016-01-17 15:41:18
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -126,7 +126,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.16';
+							self.transpilerVersion = '0.0.18';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -283,19 +283,23 @@ function autotest () {
 	}
 	__all__.list = list;
 	
-	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
+	Array.prototype.__getslice__ = function (start, stop, step) {	// Only called if step is not null, else slice is called
 		if (start < 0) {
 			start = this.length + 1 - start;
 		}
-			
-		if (stop < 0) {
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
 			stop = this.length + 1 - stop;
 		}
-			
-		var result = []
+		
+		var result = [];
 		for (var index = start; index < stop; index += step) {
 			result.push (this [index]);
 		}
+		
 		return result;
 	}
 		
@@ -326,6 +330,29 @@ function autotest () {
 		return result;
 	};
 	
+	Array.prototype.__setslice__ = function (start, stop, step, source) {
+		if (start < 0) {
+			start = this.length + 1 - start;
+		}
+			
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+			
+		if (step == null) {	// Assign to 'ordinary' slice, replace subsequence
+			Array.prototype.splice.apply (this, [start, stop - start] .concat (source)) 
+		}
+		else {				// Assign to extended slice, replace designated items one by one
+			var sourceIndex = 0;
+			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+				this [targetIndex] = source [sourceIndex++];
+			}
+		}
+	}
+		
 	Array.prototype.__str__ = Array.prototype.__repr__;
 	
 	Array.prototype.append = function (element) {
@@ -372,20 +399,25 @@ function autotest () {
 	}
 	__all__.str = str;	
 	
-	String.prototype.toString = function () {
-		return this
-	}
-
-	String.prototype.valueOf = function () {
-	}
-	
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
-	}
+	};
 	
 	String.prototype.__str__ = function () {
-		return this
-	}
+		return this;
+	};
+	
+	String.prototype.capitalize = function () {
+		return this.charAt (0).toUpperCase () + this.slice (1);
+	};
+	
+	String.prototype.endswith = function (suffix) {
+		return this.indexOf (suffix) == this.length - suffix.length;
+	};
+	
+	String.prototype.find  = function (sub, start) {
+		return this.indexOf (sub, start);
+	};
 	
 	String.prototype.format = function () {
 		var args = arguments;
@@ -419,15 +451,16 @@ function autotest () {
 	
 	String.prototype.jsSplit = String.prototype.split;
 	
-	String.prototype.split = function (sep, maxsplit) {
-		if (!sep) {
-			sep = ' ';
-		}
-		return this.jsSplit (sep || /s+/, maxsplit);
+	String.prototype.lower = function () {
+		return this.toLowerCase ();
 	};
 	
 	String.prototype.lstrip = function () {
 		return this.replace (/^\s*/g, '');
+	};
+	
+	String.prototype.rfind = function (sub, start) {
+		return this.lastIndexOf (sub, start);
 	};
 	
 	String.prototype.rsplit = function (sep, maxsplit) {
@@ -439,10 +472,25 @@ function autotest () {
 		return this.replace (/\s*$/g, '');
 	};
 	
+	String.prototype.split = function (sep, maxsplit) {
+		if (!sep) {
+			sep = ' ';
+		}
+		return this.jsSplit (sep || /s+/, maxsplit);
+	};
+	
+	String.prototype.startswith = function (prefix) {
+		return this.indexOf (prefix) == 0;
+	};
+	
 	String.prototype.strip = function () {
-		return this.replace (/^\s*|\s*$/g, '');
+		return this.trim ();
 	};
 		
+	String.prototype.upper = function () {
+		return this.toUpperCase ();
+	};
+	
 	__all__.str = str
 	
 	
@@ -510,7 +558,7 @@ function autotest () {
 					var run = function (autoTester) {
 						var aList = [1, 2, 3, 'sun', 'moon', 'stars'];
 						autoTester.store (aList);
-						autoTester.store (aList.__pyslice__ (2, 4, 1));
+						autoTester.store (aList.__getslice__ (2, 4, 1));
 						autoTester.store (aList.slice (0));
 						autoTester.store (aList.slice (2));
 						autoTester.store (len (aList));
@@ -536,6 +584,45 @@ function autotest () {
 						var emptySet = set ();
 						autoTester.store (emptySet);
 						autoTester.store (len (emptySet));
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'indices_and_slices', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var all = range (32);
+						autoTester.store (all);
+						autoTester.store (all.slice (8, 24));
+						autoTester.store (all.__getslice__ (8, 24, 2));
+						var aList = [3, 4, 7, 8];
+						autoTester.store (aList);
+						aList.__setslice__ (4, 4, null, [9, 10]);
+						autoTester.store (aList);
+						aList.__setslice__ (2, 2, null, [5, 6]);
+						autoTester.store (aList);
+						aList.__setslice__ (0, 0, null, [1, 2]);
+						autoTester.store (aList);
+						aList.__setslice__ (0, null, 2, function () {
+							var __accu0__ = [];
+							var __iter0__ = range (10);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var x = __iter0__ [__index0__];
+								if (x % 2) {
+									__accu0__ .push (x + 0.001);
+								}
+							}
+							return __accu0__;
+						} ());
+						autoTester.store (aList);
 					};
 					//<all>
 					__all__.run = run;
@@ -871,18 +958,18 @@ function autotest () {
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__] ;
-								var index = __left0__ [0];
-								var testItem = __left0__ [1][0];
-								var referenceItem = __left0__ [1][1];
+								var index = __left0__[0];
+								var testItem = __left0__[1][0];
+								var referenceItem = __left0__[1][1];
 								if (testItem != referenceItem) {
 									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
 									var test = zip (tuple ([self.referenceBuffer, self.referenceDivId]), tuple ([self.testBuffer, self.testDivId]));
 									var __iter1__ = tuple ([tuple ([self.referenceBuffer, self.referenceDivId, okColor]), tuple ([self.testBuffer, self.testDivId, errorColor])]);
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 										var __left0__ = __iter1__ [__index1__] ;
-										var buffer = __left0__ [0];
-										var divId = __left0__ [1];
-										var accentColor = __left0__ [2];
+										var buffer = __left0__[0];
+										var divId = __left0__[1];
+										var accentColor = __left0__[2];
 										var buffer = itertools.chain (buffer.slice (0, index), ['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )], buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
@@ -929,27 +1016,27 @@ function autotest () {
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var __left0__ = tuple ([tuple ([1, 2]), 'santa-claus', new set ([3, 4]), 5]);
-						var a = __left0__ [0][0];
-						var b = __left0__ [0][1];
-						var santa = __left0__ [1];
-						var c = __left0__ [2][0];
-						var d = __left0__ [2][1];
-						var e = __left0__ [3];
+						var a = __left0__[0][0];
+						var b = __left0__[0][1];
+						var santa = __left0__[1];
+						var c = __left0__[2][0];
+						var d = __left0__[2][1];
+						var e = __left0__[3];
 						autoTester.store (a, b, c, d, e, santa);
 						var __iter0__ = enumerate (tuple ([0.5, 1.5, 2.5, 3.5]));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__] ;
-							var i = __left0__ [0];
-							var x = __left0__ [1];
+							var i = __left0__[0];
+							var x = __left0__[1];
 							autoTester.store (i, x);
 						}
 						;
 						var __left0__ = tuple ([3.14, 2.74]);
-						var e = __left0__ [0];
-						var pi = __left0__ [1];
+						var e = __left0__[0];
+						var pi = __left0__[1];
 						var __left0__ = tuple ([pi, e]);
-						var e = __left0__ [0];
-						var pi = __left0__ [1];
+						var e = __left0__[0];
+						var pi = __left0__[1];
 						autoTester.store (e, pi);
 					};
 					//<all>
@@ -962,6 +1049,7 @@ function autotest () {
 	(function () {
 		var classes = {};
 		var datastructures = {};
+		var indices_and_slices = {};
 		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
@@ -969,12 +1057,14 @@ function autotest () {
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (datastructures, '', __init__ (__world__.datastructures));
+		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
 		autoTester.run (classes, 'classes');
 		autoTester.run (datastructures, 'datastructures');
+		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');

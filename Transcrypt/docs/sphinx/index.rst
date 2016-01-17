@@ -115,10 +115,7 @@ An example of two testlets combined into an autotest is below:
 What language constructs are currently supported
 ================================================
 
-Transcrypt can handle a growing set of language constructs. The Transcrypt autotest and demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There's no formal definition of Transcrypt's semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what's in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.
-
-Transcrypt demo suite
----------------------
+Transcrypt can handle a growing set of language constructs. The Transcrypt demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There's no formal definition of Transcrypt's semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what's in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.
 
 	.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
 		:tab-width: 4
@@ -137,6 +134,13 @@ Datastructures: tuple, list, dict, set
 	.. literalinclude:: ../../development/automated_tests/transcrypt/datastructures/__init__.py
 		:tab-width: 4
 		:caption: Testlet: datastructures
+
+Indices and slices: LHS, RHS, basic and extended
+------------------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/indices_and_slices/__init__.py
+		:tab-width: 4
+		:caption: Testlet: indices_and_slices
 
 List comprehensions, multi-loop and nested with multiple if's
 -------------------------------------------------------------

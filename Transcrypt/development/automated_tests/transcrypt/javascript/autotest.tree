@@ -18,6 +18,11 @@ file: Module
 		element: Import 
 			names: list 
 				element: alias 
+					name: str = indices_and_slices
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
 					name: str = list_comprehensions
 					asname: NoneType = None
 		element: Import 
@@ -79,6 +84,21 @@ file: Module
 						ctx: Load 
 					element: Str 
 						s: str = datastructures
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = indices_and_slices
+						ctx: Load 
+					element: Str 
+						s: str = indices_and_slices
 				keywords: list 
 		element: Expr 
 			value: Call 

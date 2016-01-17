@@ -143,19 +143,23 @@
 	}
 	__all__.list = list;
 	
-	Array.prototype.__pyslice__ = function (start, stop, step) {	// Only called if step is defined
+	Array.prototype.__getslice__ = function (start, stop, step) {	// Only called if step is not null, else slice is called
 		if (start < 0) {
 			start = this.length + 1 - start;
 		}
-			
-		if (stop < 0) {
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
 			stop = this.length + 1 - stop;
 		}
-			
-		var result = []
+		
+		var result = [];
 		for (var index = start; index < stop; index += step) {
 			result.push (this [index]);
 		}
+		
 		return result;
 	}
 		
@@ -186,6 +190,29 @@
 		return result;
 	};
 	
+	Array.prototype.__setslice__ = function (start, stop, step, source) {
+		if (start < 0) {
+			start = this.length + 1 - start;
+		}
+			
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+			
+		if (step == null) {	// Assign to 'ordinary' slice, replace subsequence
+			Array.prototype.splice.apply (this, [start, stop - start] .concat (source)) 
+		}
+		else {				// Assign to extended slice, replace designated items one by one
+			var sourceIndex = 0;
+			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+				this [targetIndex] = source [sourceIndex++];
+			}
+		}
+	}
+		
 	Array.prototype.__str__ = Array.prototype.__repr__;
 	
 	Array.prototype.append = function (element) {
@@ -240,7 +267,7 @@
 		return this;
 	};
 	
-	String.prototype.capitalize () = function () {
+	String.prototype.capitalize = function () {
 		return this.charAt (0).toUpperCase () + this.slice (1);
 	};
 	
@@ -248,7 +275,7 @@
 		return this.indexOf (suffix) == this.length - suffix.length;
 	};
 	
-	String.prototype.find (sub, start) = function () {
+	String.prototype.find  = function (sub, start) {
 		return this.indexOf (sub, start);
 	};
 	
@@ -284,7 +311,7 @@
 	
 	String.prototype.jsSplit = String.prototype.split;
 	
-	String.prototype.lower () {
+	String.prototype.lower = function () {
 		return this.toLowerCase ();
 	};
 	
@@ -292,7 +319,7 @@
 		return this.replace (/^\s*/g, '');
 	};
 	
-	String.prototype.rfind (sub, start) = function () {
+	String.prototype.rfind = function (sub, start) {
 		return this.lastIndexOf (sub, start);
 	};
 	
@@ -320,7 +347,7 @@
 		return this.trim ();
 	};
 		
-	String.prototype.upper	() {
+	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
 	

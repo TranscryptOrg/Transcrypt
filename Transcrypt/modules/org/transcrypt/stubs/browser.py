@@ -26,7 +26,8 @@ for attributeName in window.__dict__:
 def print (*args):
 	console.log (*args)
 
-# Define sortedRepr for command prompt, insert in order in browser.
+# Define repr for autotester
+# N.B. When using sets or dicts, use elemens or keys of one type, in sort order
 def repr (any):
 	def getNumAlphaKey (key):
 		if type (key) == str:
@@ -44,6 +45,8 @@ def repr (any):
 			return '{' + ', '.join ([str (item) for item in sorted (list (any))]) + '}'
 		else:
 			return builtins.repr (any)
+	elif type (any) == range:
+		return builtins.repr (list (any))
 	else:
 		return builtins.repr (any)
 	
