@@ -675,7 +675,7 @@ class Generator (ast.NodeVisitor):
 			
 		self.statementSkipped = True
 		
-	def visit_Import (self, node):
+	def visit_Import (self, node):	# Import ... can only import modules
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
@@ -690,7 +690,7 @@ class Generator (ast.NodeVisitor):
 				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 			
 			if alias.asname:
-				self.emit ('var {} = {}.{}', alias.asname, __base__.__envir__.transpilerName, alias.name)
+				self.emit ('var {} =  __init__ (__world__.{})', alias.asname, alias.name)
 			else:
 				aliasSplit = alias.name.split ('.', 1)
 				head = aliasSplit [0]
@@ -702,31 +702,42 @@ class Generator (ast.NodeVisitor):
 			if index < len (names) - 1:
 				self.emit (';\n')
 				
-	def visit_ImportFrom (self, node):
+	def visit_ImportFrom (self, node):	# From ... import can import modules or entities in modules
 		if node.module.startswith (self.stubsName):
 			self.statementSkipped = True 
 			return
 		
-		try:
-			module = self.module.program.provide (node.module)
-			
+		try:			
+			# N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
 			for index, alias in enumerate (node.names):
-				if alias.name == '*':
+				if alias.name == '*':								# * Never refers to modules, only to entities in modules
 					if len (node.names) > 1:
 						raise Error (moduleName = module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
-
-					for index, name in enumerate (module.all):
-						self.emit ('var {0} = {1}.{2}.{0}', name, __base__.__envir__.transpilerName, node.module)
+						
+					module = self.module.program.provide (node.module)
+					for index, name in enumerate (module.all):				
+						self.emit ('var {0} = __init__ (__world__.{1}).{0}', name, node.module)
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 				else:
-					if alias.asname:
-						self.emit ('var {} = {}.{}.{}', alias.asname, __base__.__envir__.transpilerName, node.module, alias.name)
-					else:
-						self.emit ('var {0} = {1}.{2}.{0}', alias.name, __base__.__envir__.transpilerName, node.module)
+					try:											# Try if alias.name denotes a module				
+						self.module.program.provide ('{}.{}'.format (node.module, alias.name))
+												
+						if alias.asname:
+							self.emit ('var {} = __init__ (__world__.{}.{})', alias.asname, node.module, alias.name)
+						else:
+							self.emit ('var {0} = __init__ (__world__.{1}.{0})', alias.name, node.module)						
+					except:											# If it doesn't it denotes an entity inside a module
+						self.module.program.provide (node.module)
+				
+						if alias.asname:
+							self.emit ('var {} = __init__ (__world__.{}).{}', alias.asname, node.module, alias.name)
+						else:
+							self.emit ('var {0} = __init__ (__world__.{1}).{0}', alias.name, node.module)						
 					if index < len (node.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:
+			print (111, exception, 222)
 			utils.enhanceException (exception, lineNr = node.lineno, message = 'Can\'t import from module \'{}\''.format (node.module))
 			
 	def visit_Index (self, node):

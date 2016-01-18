@@ -1,24 +1,31 @@
-Transcrypt is a tool to compile a -not so- Small Sane Subset of Python into compact, readable Javascript. It has the following characteristics:
+Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance*
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
 - Simple relation between Python source and generated JavaScript code for easy debugging
-- Compact downloads
+- Compact downloads, kB's rather than MB's
+
+.. figure:: http://www.transcrypt.org/illustrations/incunable.jpg
+	:alt: Copernicus' famous book
+	
+	**Transcription used to be manual labour once**
 
 Documentation with code examples
 ================================
 
-Rather than duplicate info here, you're invited to read the growing *documentation* at http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/
+Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org/
 
 Status
 ======
 
-Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
+Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds. N.B. The minification facility is still under construction, in other words: don't use it yet.
 
 What's new
 ==========
 
+- Import ... as, from ... import and from ... import as ... added + autotests
+- Transcript.org website dressed up a little
 - Basic and extended slices, both LHS (pfff...) and RHS + testlet for those, docs adapted
 - Many string methods added
 - Autotests added for listcomps and nested tuple assignment
@@ -33,7 +40,6 @@ What's new
 - Manual tests added in interactive_tests  subdir
 - A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
 - Transpiler core
-
 
 Readability
 ===========
@@ -57,11 +63,6 @@ What should be in eventually to call this project a success:
 What will never be in:
 
 - Eval, exec
-
-Miscellaneous
-=============
-
-- The Transcrypt website is under construction at http://www.transcrypt.org
 
 Other packages you might like
 =============================

@@ -40,6 +40,50 @@ file: Module
 				element: alias 
 					name: str = modules.mod2.mod22
 					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = modules.mod1.mod11.mod111
+					asname: str = aliasMod111
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = modules.mod1
+					asname: str = aMod1
+		element: ImportFrom 
+			module: str = modules.mod1.mod11
+			names: list 
+				element: alias 
+					name: str = mod111
+					asname: NoneType = None
+				element: alias 
+					name: str = mod112
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = modules.mod2
+			names: list 
+				element: alias 
+					name: str = mod21
+					asname: str = aMod21
+				element: alias 
+					name: str = mod22
+					asname: str = aMod22
+			level: int = 0
+		element: ImportFrom 
+			module: str = modules.mod3
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = modules.mod1.mod11.mod111
+			names: list 
+				element: alias 
+					name: str = A
+					asname: NoneType = None
+			level: int = 0
 		element: Assign 
 			targets: list 
 				element: Name 
@@ -305,6 +349,205 @@ file: Module
 									ctx: Load 
 								attr: str = x
 								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a2
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = aliasMod111
+								ctx: Load 
+							attr: str = A
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 6789101112
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = a2
+										ctx: Load 
+									attr: str = f
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = aMod1
+									ctx: Load 
+								attr: str = pi
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a3
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = mod111
+								ctx: Load 
+							attr: str = A
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: float = 100.001
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = a3
+										ctx: Load 
+									attr: str = f
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = mod112
+										ctx: Load 
+									attr: str = f
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = aMod21
+										ctx: Load 
+									attr: str = f
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Call 
+									func: Attribute 
+										value: Name 
+											id: str = aMod22
+											ctx: Load 
+										attr: str = B
+										ctx: Load 
+									args: list 
+									keywords: list 
+								attr: str = x
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = mod3Hundred
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = mod3GetTwoHundred
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = store
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Name 
+											id: str = A
+											ctx: Load 
+										args: list 
+											element: Num 
+												n: float = 123.321
+										keywords: list 
+									attr: str = f
+									ctx: Load 
+								args: list 
+								keywords: list 
 						keywords: list 
 			decorator_list: list 
 			returns: NoneType = None

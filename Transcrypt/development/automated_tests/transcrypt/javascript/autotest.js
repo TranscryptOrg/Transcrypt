@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-17 15:41:18
+// Transcrypt'ed from Python, 2016-01-18 20:28:27
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -126,7 +126,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.18';
+							self.transpilerVersion = '0.0.21';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -747,6 +747,16 @@ function autotest () {
 					__nest__ (modules, 'mod2', __init__ (__world__.modules.mod2));
 					__nest__ (modules, 'mod2.mod21', __init__ (__world__.modules.mod2.mod21));
 					__nest__ (modules, 'mod2.mod22', __init__ (__world__.modules.mod2.mod22));
+					var aliasMod111 =  __init__ (__world__.modules.mod1.mod11.mod111);
+					var aMod1 =  __init__ (__world__.modules.mod1);
+					var mod111 = __init__ (__world__.modules.mod1.mod11.mod111);
+					var mod112 = __init__ (__world__.modules.mod1.mod11.mod112);
+					var aMod21 = __init__ (__world__.modules.mod2.mod21);
+					var aMod22 = __init__ (__world__.modules.mod2.mod22);
+					var mod3GetTwoHundred = __init__ (__world__.modules.mod3).mod3GetTwoHundred;
+					var mod3Hundred = __init__ (__world__.modules.mod3).mod3Hundred;
+					var x = __init__ (__world__.modules.mod3).x;
+					var A = __init__ (__world__.modules.mod1.mod11.mod111).A;
 					var a = modules.mod1.mod11.mod111.A (12345);
 					var pi = modules.mod1.pi;
 					var f = modules.mod2.f;
@@ -762,6 +772,17 @@ function autotest () {
 						var b = B ();
 						autoTester.store (b.x);
 						autoTester.store (modules.mod3.x);
+						var a2 = aliasMod111.A (6789101112);
+						autoTester.store (a2.f ());
+						autoTester.store (aMod1.pi);
+						var a3 = mod111.A (100.001);
+						autoTester.store (a3.f ());
+						autoTester.store (mod112.f ());
+						autoTester.store (aMod21.f ());
+						autoTester.store (aMod22.B ().x);
+						autoTester.store (mod3Hundred);
+						autoTester.store (mod3GetTwoHundred ());
+						autoTester.store (A (123.321).f ());
 					};
 					//<all>
 					__all__.a = a;
@@ -895,7 +916,13 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var x = 'Toen wij uit Rotterdam vertrokken, vertrokken wij uit Rotterdam\n';
+					var mod3Hundred = 100;
+					var mod3GetTwoHundred = function () {
+						return 200;
+					};
 					//<all>
+					__all__.mod3GetTwoHundred = mod3GetTwoHundred;
+					__all__.mod3Hundred = mod3Hundred;
 					__all__.x = x;
 					//</all>
 				}

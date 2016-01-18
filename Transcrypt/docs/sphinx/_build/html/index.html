@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.20 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.22 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.20',
+        VERSION:     '0.0.22',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.20 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.22 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.20 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.22 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -468,11 +468,23 @@ show2 (&#39;copy&#39;);
 <span class="kn">import</span> <span class="nn">modules.mod2.mod21</span>
 <span class="kn">import</span> <span class="nn">modules.mod2.mod22</span>
 
+<span class="kn">import</span> <span class="nn">modules.mod1.mod11.mod111</span> <span class="kn">as</span> <span class="nn">aliasMod111</span>
+<span class="kn">import</span> <span class="nn">modules.mod1</span> <span class="kn">as</span> <span class="nn">aMod1</span>
+
+<span class="kn">from</span> <span class="nn">modules.mod1.mod11</span> <span class="kn">import</span> <span class="n">mod111</span><span class="p">,</span> <span class="n">mod112</span>
+
+<span class="kn">from</span> <span class="nn">modules.mod2</span> <span class="kn">import</span> <span class="n">mod21</span> <span class="k">as</span> <span class="n">aMod21</span><span class="p">,</span> <span class="n">mod22</span> <span class="k">as</span> <span class="n">aMod22</span>
+
+<span class="kn">from</span> <span class="nn">modules.mod3</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">modules.mod1.mod11.mod111</span> <span class="kn">import</span> <span class="n">A</span>
+
 <span class="n">a</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">mod1</span><span class="o">.</span><span class="n">mod11</span><span class="o">.</span><span class="n">mod111</span><span class="o">.</span><span class="n">A</span> <span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
 <span class="n">pi</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">mod1</span><span class="o">.</span><span class="n">pi</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">modules</span><span class="o">.</span><span class="n">mod2</span><span class="o">.</span><span class="n">f</span>
 
 <span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="c"># Import without &#39;as&#39;</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="s">&#39;modules&#39;</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">mod1</span><span class="o">.</span><span class="n">mod11</span><span class="o">.</span><span class="n">mod112</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
@@ -484,7 +496,27 @@ show2 (&#39;copy&#39;);
     <span class="n">b</span> <span class="o">=</span> <span class="n">B</span> <span class="p">()</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">modules</span><span class="o">.</span><span class="n">mod3</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-
+    
+    <span class="c"># Import with &#39;as&#39;</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">aliasMod111</span><span class="o">.</span><span class="n">A</span> <span class="p">(</span><span class="mi">6789101112</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">a2</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aMod1</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="c"># From ... import without &#39;as&#39;</span>
+    <span class="n">a3</span> <span class="o">=</span> <span class="n">mod111</span><span class="o">.</span><span class="n">A</span> <span class="p">(</span><span class="mf">100.001</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">mod112</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+    
+    <span class="c"># From ... import with &#39;as&#39;</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aMod21</span><span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">aMod22</span><span class="o">.</span><span class="n">B</span> <span class="p">()</span> <span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="c"># From ... import *</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">mod3Hundred</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">mod3GetTwoHundred</span> <span class="p">())</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">store</span> <span class="p">(</span><span class="n">A</span> <span class="p">(</span><span class="mf">123.321</span><span class="p">)</span> <span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+    
+    
     
 </pre></div>
 </div>
@@ -578,7 +610,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.20 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.22 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
