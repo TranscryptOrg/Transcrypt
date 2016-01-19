@@ -39,7 +39,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -52,7 +52,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Subscript 
@@ -74,7 +74,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Subscript 
@@ -93,7 +93,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Subscript 
@@ -113,7 +113,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Call 
@@ -144,7 +144,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -174,7 +174,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -207,7 +207,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -236,7 +236,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -249,7 +249,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Subscript 
@@ -293,7 +293,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -306,7 +306,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Call 
@@ -335,7 +335,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -363,7 +363,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -376,7 +376,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Call 
@@ -417,7 +417,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -441,7 +441,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Name 
@@ -454,7 +454,7 @@ file: Module
 							value: Name 
 								id: str = autoTester
 								ctx: Load 
-							attr: str = store
+							attr: str = check
 							ctx: Load 
 						args: list 
 							element: Call 

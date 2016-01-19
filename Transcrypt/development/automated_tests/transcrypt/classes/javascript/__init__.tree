@@ -69,7 +69,7 @@ file: Module
 											value: Name 
 												id: str = autoTester
 												ctx: Load 
-											attr: str = store
+											attr: str = check
 											ctx: Load 
 										args: list 
 											element: Str 
@@ -114,7 +114,7 @@ file: Module
 											value: Name 
 												id: str = autoTester
 												ctx: Load 
-											attr: str = store
+											attr: str = check
 											ctx: Load 
 										args: list 
 											element: Str 
@@ -155,7 +155,7 @@ file: Module
 											value: Name 
 												id: str = autoTester
 												ctx: Load 
-											attr: str = store
+											attr: str = check
 											ctx: Load 
 										args: list 
 											element: Str 
@@ -209,7 +209,7 @@ file: Module
 											value: Name 
 												id: str = autoTester
 												ctx: Load 
-											attr: str = store
+											attr: str = check
 											ctx: Load 
 										args: list 
 											element: Str 
@@ -303,7 +303,7 @@ file: Module
 											value: Name 
 												id: str = autoTester
 												ctx: Load 
-											attr: str = store
+											attr: str = check
 											ctx: Load 
 										args: list 
 											element: Str 

@@ -6,8 +6,8 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Simple relation between Python source and generated JavaScript code for easy debugging
 - Compact downloads, kB's rather than MB's
 
-.. figure:: http://www.transcrypt.org/illustrations/incunable.jpg
-	:alt: Copernicus' famous book
+.. figure:: http://www.transcrypt.org/illustrations/monk_transcribing.png
+	:alt: Monk transcribing
 	
 	**Transcription used to be manual labour once**
 
@@ -24,9 +24,12 @@ Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, Rapy
 What's new
 ==========
 
-- Import ... as, from ... import and from ... import as ... added + autotests
+- Docs adapted
+- +=, -=, \*= etc., optimize towards ++ and --, autotest added
+- For...else, while...else..., break, continue completed, autotest added
+- Import ... as, from ... import and from ... import as ... added, autotest augmented
 - Transcript.org website dressed up a little
-- Basic and extended slices, both LHS (pfff...) and RHS + testlet for those, docs adapted
+- Basic and extended slices, both LHS (pfff...) and RHS, testlet for those, docs adapted
 - Many string methods added
 - Autotests added for listcomps and nested tuple assignment
 - Autotester slightly improved

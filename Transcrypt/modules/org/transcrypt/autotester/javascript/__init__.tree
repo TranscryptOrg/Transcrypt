@@ -123,7 +123,7 @@ file: Module
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
-					name: str = store
+					name: str = check
 					args: arguments 
 						args: list 
 							element: arg 
@@ -857,7 +857,7 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = store
+									attr: str = check
 									ctx: Load 
 								args: list 
 									element: Call 
@@ -894,7 +894,7 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = store
+									attr: str = check
 									ctx: Load 
 								args: list 
 									element: Str 

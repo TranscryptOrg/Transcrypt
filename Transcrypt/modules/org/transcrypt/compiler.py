@@ -242,7 +242,7 @@ class Generator (ast.NodeVisitor):
 		self.module = module
 		
 		self.targetFragments = []		
-		self.statementSkipped = False
+		self.skipSemiNew = False
 		self.indentLevel = 0
 		self.scopes = []
 		self.all = set ()
@@ -333,6 +333,14 @@ class Generator (ast.NodeVisitor):
 		if index:
 			self.emit (', ' if blank else ',')
 			
+	def emitBody (self, body):
+		for stmt in body:		
+			self.visit (stmt)
+			if self.skipSemiNew:	# No imports here, but just to be sure for the future
+				self.skipSemiNew = False
+			else:
+				self.emit (';\n')
+				
 	def nextTemp (self, name):
 		if name in self.tempIndices:
 			self.tempIndices [name] += 1
@@ -438,17 +446,46 @@ class Generator (ast.NodeVisitor):
 	def visit_Attribute (self, node):
 		self.visit (node.value)
 		self.emit ('.{}', node.attr)
+		
+	def visit_AugAssign (self, node):
+		self.visit (node.target)	# No need to emit var first, it has to exist already
+		
+		# Optimize for ++ and --
+		if type (node.value) == ast.Num and node.value.n == 1:
+			if type (node.op) == ast.Add:
+				self.emit ('++')
+				return
+			elif type (node.op) == ast.Sub:
+				self.emit ('--')
+				return
+		elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Num and node.value.operand.n == 1:
+			if type (node.op) == ast.Add:
+				if type (node.value.op) == ast.UAdd:
+					self.emit ('++')
+					return
+				elif type (node.value.op) == ast.USub:
+					self.emit ('--')
+					return
+			elif type (node.op) == ast.Sub:
+				if type (node.value.op) == ast.UAdd:
+					self.emit ('--')
+					return
+				elif type (node.value.op) == ast.USub:
+					self.emit ('++')
+					return				
+				
+		self.emit (' {}= ', self.binOps [type (node.op)])
+		self.visit (node.value)
 	
 	def visit_BinOp (self, node):
-		opType = type (node.op)
-		if opType == ast.FloorDiv:
+		if type (node.op) == ast.FloorDiv:
 			self.emit ('Math.floor (')
 			self.visit (node.left)
 			self.emit (') / ')
 			self.emit ('Math.floor (')
 			self.visit (node.right)
 			self.emit (')')
-		elif opType == ast.MatMult:
+		elif type (node.op) == ast.MatMult:
 			self.emit ('__matmul__ (')
 			self.visit (node.left)
 			self.emit (', ')
@@ -456,7 +493,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')			
 		else:
 			self.visit (node.left)
-			self.emit (' {} '.format (self.binOps [opType]))			
+			self.emit (' {} '.format (self.binOps [type (node.op)]))			
 			self.visit (node.right)
 			
 	def visit_BoolOp (self, node):
@@ -547,6 +584,9 @@ class Generator (ast.NodeVisitor):
 		if len (node.comparators) > 1:
 			self.emit(')')
 			
+	def visit_Continue (self, node):
+		self.emit ('continue')
+	
 	def visit_Dict (self, node):
 		self.emit ('{{')
 		for index, (key, value) in enumerate (zip (node.keys, node.values)):
@@ -568,9 +608,7 @@ class Generator (ast.NodeVisitor):
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		
 		self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
-		
 		self.indent ()
-		
 		# Create and visit assignment node on the fly to benefit from tupple assignment
 		self.visit (ast.Assign (
 			[node.target],
@@ -580,16 +618,10 @@ class Generator (ast.NodeVisitor):
 				ctx = ast.Load
 			)
 		))
+		
 		self.emit (';\n')
-		
-		for stmt in node.body:		
-			self.visit (stmt)
-			if self.statementSkipped:	# No imports here, but just to be sure for the future
-				self.statementSkipped = False
-			else:
-				self.emit (';\n')	
+		self.emitBody (node.body)
 		self.dedent ()
-		
 		self.emit ('}}\n')
 		
 		if node.orelse:
@@ -597,16 +629,12 @@ class Generator (ast.NodeVisitor):
 			self.prevTemp ('break')
 			
 			self.indent ()
-			for stmt in node.orelse:
-				self.visit (stmt)
-				if self.statementSkipped:
-					self.statementSkipped = False
-				else:
-					self.emit (';\n')	
+			self.emitBody (node.orelse)
 			self.dedent ()
 			
 			self.emit ('}}\n')
-			self.statementSkipped = True
+			
+		self.skipSemiNew = True
 			
 		self.prevTemp ('index')
 		self.prevTemp ('iter')
@@ -626,14 +654,8 @@ class Generator (ast.NodeVisitor):
 		
 		self.indent ()
 		if node.args.vararg:	# If there's a vararg, assign an array containing the remainder of the actual parameters to it
-			self.emit ('var {} = [] .slice.apply (arguments) .slice ({});\n', node.args.vararg.arg, len (node.args.args))
-			
-		for stmt in node.body:
-			self.visit (stmt)
-			if self.statementSkipped:
-				self.statementSkipped = False
-			else:
-				self.emit (';\n')
+			self.emit ('var {} = [] .slice.apply (arguments) .slice ({});\n', node.args.vararg.arg, len (node.args.args))			
+		self.emitBody (node.body)
 		self.dedent ()
 		
 		self.descope ()
@@ -649,44 +671,32 @@ class Generator (ast.NodeVisitor):
 		self.emit (') {{\n')
 		
 		self.indent ()
-		for stmt in node.body:
-			self.visit (stmt)
-			if self.statementSkipped:
-				self.statementSkipped = False
-			else:
-				self.emit (';\n')	
+		self.emitBody (node.body)
 		self.dedent ()
 		
 		self.emit ('}}\n')
 		
 		if node.orelse:
 			self.emit ('else {{\n')
-			
 			self.indent ()
-			for stmt in node.orelse:
-				self.visit (stmt)
-				if self.statementSkipped:
-					self.statementSkipped = False
-				else:
-					self.emit (';\n')	
+			self.emitBody (node.orelse)
 			self.dedent ()
-
 			self.emit ('}}\n')
 			
-		self.statementSkipped = True
+		self.skipSemiNew = True
 		
 	def visit_Import (self, node):	# Import ... can only import modules
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
-			self.statementSkipped = True
+			self.skipSemiNew = True
 			return
 		
 		for index, alias in enumerate (names):
 			try:
 				self.module.program.provide (alias.name)
 
-			except Exception as exception:			
+			except Exception as exception:
 				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 			
 			if alias.asname:
@@ -704,7 +714,7 @@ class Generator (ast.NodeVisitor):
 				
 	def visit_ImportFrom (self, node):	# From ... import can import modules or entities in modules
 		if node.module.startswith (self.stubsName):
-			self.statementSkipped = True 
+			self.skipSemiNew = True 
 			return
 		
 		try:			
@@ -737,7 +747,6 @@ class Generator (ast.NodeVisitor):
 					if index < len (node.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:
-			print (111, exception, 222)
 			utils.enhanceException (exception, lineNr = node.lineno, message = 'Can\'t import from module \'{}\''.format (node.module))
 			
 	def visit_Index (self, node):
@@ -833,12 +842,7 @@ class Generator (ast.NodeVisitor):
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
 		
-		for stmt in node.body:
-			self.visit (stmt)
-			if self.statementSkipped:
-				self.statementSkipped = False
-			else:
-				self.emit (';\n')		
+		self.emitBody (node.body)
 		
 		self.all = sorted (self.all)
 		self.emit ('//<all>\n')	# Only the last occurence of <all> and </all> are special.
@@ -931,8 +935,42 @@ class Generator (ast.NodeVisitor):
 			except Exception as exception:
 				utils.enhanceException (exception, lineNr = node.lineno, message = 'Invalid RHS slice')	
 		else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)
-			self.visit (node.slice)		
+			self.visit (node.slice)
 			
+	def visit_Try (self, node):
+		self.emit ('try {{')
+		self.indent ()	
+		self.emitBody (node.body)
+		self.dedent ()
+		self.emit ('}}')
+		
+		self.emit ('catch ({}) {{', self.nextTemp ('excep'))
+		self.indent ()
+		for index, excepthandler in enumerate (handlers):
+			if excepthandler.type:
+				if index:
+					self.emit ('else if ({} instanceof {}) {{\n', self.getTemp ('excep'), excepthandler.type)
+				else:
+					self.emit ('if ({} instanceof {}) {{\n', self.getTemp ('excep'), excepthandler.type)
+			else:
+				self.emit ('else {{\n')
+				
+			self.indent ()
+			if excepthandler.identifier:
+				self.emit ('{} = {};\n', excepthandler.identifier, self.getTemp ('except'))				
+			self.emitBody (node.body)
+			self.dedent ()			
+			self.emit ('}}\n')
+		self.dedent ()
+		self.emit ('}}')
+		
+		if node.finalbody:
+			self.emit ('finally {{')
+			self.emitBody (finalbody)
+			self.emit ('}}')
+			
+		self.skipSemiEnd = True
+		
 	def visit_Tuple (self, node):
 		self.emit ('tuple (')
 		self.visit_List (node)
@@ -942,6 +980,32 @@ class Generator (ast.NodeVisitor):
 		self.emit (self.unOps [type (node.op)])			
 		self.visit (node.operand)
 		
+	def visit_While (self, node):
+		if node.orelse:
+			self.emit ('var {} = false;\n', self.nextTemp ('break'))
+		
+		self.emit ('while (')
+		self.visit (node.test)
+		self.emit (') {{\n')
+		
+		self.indent ()	
+		self.emitBody (node.body)
+		self.dedent ()
+		
+		self.emit ('}}\n')
+		
+		if node.orelse:
+			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
+			self.prevTemp ('break')
+			
+			self.indent ()
+			self.emitBody (node.orelse)
+			self.dedent ()
+			
+			self.emit ('}}\n')
+			
+		self.skipSemiNew = True
+		
 	def visit_With (self, node):	
 		for withitem in node.items:
 			self.visit (withitem.optional_vars)
@@ -949,9 +1013,7 @@ class Generator (ast.NodeVisitor):
 			self.visit (withitem.context_expr)
 			self.emit (';\n')
 			
-		for stmt in node.body:
-			self.visit (stmt)
-			self.emit (';\n')
+		self.emitBody (node.body)
 			
 		for withitem in node.items:
 			self.visit (withitem.optional_vars)

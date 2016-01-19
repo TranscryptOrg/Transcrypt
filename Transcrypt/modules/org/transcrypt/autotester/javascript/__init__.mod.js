@@ -18,7 +18,7 @@
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
 						});},
-						get store () {return __get__ (this, function (self) {
+						get check () {return __get__ (this, function (self) {
 							var args = [] .slice.apply (arguments) .slice (1);
 							var item = ' '.join (function () {
 								var __accu0__ = [];
@@ -69,7 +69,6 @@
 										var buffer = itertools.chain (buffer.slice (0, index), ['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )], buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
-									;
 									__break0__ = true;
 									break;
 								}
@@ -80,9 +79,9 @@
 							}
 						});},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
-							self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
+							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
-							self.store ('<br><br>');
+							self.check ('<br><br>');
 						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {

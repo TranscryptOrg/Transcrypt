@@ -13,7 +13,12 @@ file: Module
 		element: Import 
 			names: list 
 				element: alias 
-					name: str = datastructures
+					name: str = control_structures
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = data_structures
 					asname: NoneType = None
 		element: Import 
 			names: list 
@@ -29,6 +34,11 @@ file: Module
 			names: list 
 				element: alias 
 					name: str = modules
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = simple_and_augmented_assignment
 					asname: NoneType = None
 		element: Import 
 			names: list 
@@ -80,10 +90,25 @@ file: Module
 					ctx: Load 
 				args: list 
 					element: Name 
-						id: str = datastructures
+						id: str = control_structures
 						ctx: Load 
 					element: Str 
-						s: str = datastructures
+						s: str = control_structures
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = data_structures
+						ctx: Load 
+					element: Str 
+						s: str = data_structures
 				keywords: list 
 		element: Expr 
 			value: Call 
@@ -129,6 +154,21 @@ file: Module
 						ctx: Load 
 					element: Str 
 						s: str = modules
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = simple_and_augmented_assignment
+						ctx: Load 
+					element: Str 
+						s: str = simple_and_augmented_assignment
 				keywords: list 
 		element: Expr 
 			value: Call 

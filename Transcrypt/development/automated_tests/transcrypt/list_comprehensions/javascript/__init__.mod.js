@@ -16,7 +16,7 @@
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (squares);
+						autoTester.check (squares);
 						var tuples = function () {
 							var __accu0__ = [];
 							var __iter0__ = tuple ([100, 200, 300, 400, 500, 600, 700]);
@@ -38,7 +38,7 @@
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (tuples);
+						autoTester.check (tuples);
 						var nested = function () {
 							var __accu0__ = [];
 							var __iter0__ = function () {
@@ -56,7 +56,7 @@
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (nested);
+						autoTester.check (nested);
 						var a = 100;
 						var x = 5;
 						var scopeTest = function () {
@@ -68,8 +68,8 @@
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (x);
-						autoTester.store (scopeTest);
+						autoTester.check (x);
+						autoTester.check (scopeTest);
 					};
 					//<all>
 					__all__.run = run;

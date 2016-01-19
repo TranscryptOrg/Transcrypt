@@ -10,28 +10,28 @@
 								self.x = x;
 							});},
 							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('A.show', label, self.x);
+								autoTester.check ('A.show', label, self.x);
 							});}
 						});
 						var B = __class__ ('B', [object], {
 							get __init__ () {return __get__ (this, function (self, y) {
-								autoTester.store ('In B constructor');
+								autoTester.check ('In B constructor');
 								self.y = y;
 							});},
 							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('B.show', label, self.y);
+								autoTester.check ('B.show', label, self.y);
 							});}
 						});
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
-								autoTester.store ('In C constructor');
+								autoTester.check ('In C constructor');
 								A.__init__ (self, x);
 								B.__init__ (self, y);
 							});},
 							get show () {return __get__ (this, function (self, label) {
 								A.show (self, label);
 								B.show (self, label);
-								autoTester.store ('C.show', label, self.x, self.y);
+								autoTester.check ('C.show', label, self.x, self.y);
 							});}
 						});
 						var a = A (1001);

@@ -6,17 +6,17 @@
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var all = range (32);
-						autoTester.store (all);
-						autoTester.store (all.slice (8, 24));
-						autoTester.store (all.__getslice__ (8, 24, 2));
+						autoTester.check (all);
+						autoTester.check (all.slice (8, 24));
+						autoTester.check (all.__getslice__ (8, 24, 2));
 						var aList = [3, 4, 7, 8];
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (4, 4, null, [9, 10]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (2, 2, null, [5, 6]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (0, 0, null, [1, 2]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (0, null, 2, function () {
 							var __accu0__ = [];
 							var __iter0__ = range (10);
@@ -28,7 +28,7 @@
 							}
 							return __accu0__;
 						} ());
-						autoTester.store (aList);
+						autoTester.check (aList);
 					};
 					//<all>
 					__all__.run = run;

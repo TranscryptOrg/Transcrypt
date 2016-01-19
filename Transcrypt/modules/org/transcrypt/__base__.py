@@ -5,7 +5,7 @@
 class __Envir__:
 	def __init__ (self):
 		self.transpilerName = 'transcrypt'
-		self.transpilerVersion = '0.0.30'
+		self.transpilerVersion = '0.0.34'
 		
 __envir__ = __Envir__ ()
 

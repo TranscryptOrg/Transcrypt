@@ -1,3 +1,3 @@
 def run (autoTester):
-	autoTester.store ('hello')
-	autoTester.store ('world')
+	autoTester.check ('hello')
+	autoTester.check ('world')

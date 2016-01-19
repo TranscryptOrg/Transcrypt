@@ -24,7 +24,7 @@ class AutoTester:
 		self.referenceDivId = 'python'
 		self.testDivId = 'transcrypt'
 		
-	def store (self, *args):
+	def check (self, *args):
 		item = ' '.join ([repr (arg) for arg in args])	# N.B. stubs.browser provides a special sorting repr
 		if __envir__.executorName == __envir__.transpilerName:
 			self.testBuffer.append (item)
@@ -63,9 +63,9 @@ class AutoTester:
 			document.getElementById (self.testDivId) .innerHTML = ' | '.join (self.testBuffer)
 			
 	def run (self, testlet, testletName):
-		self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName))
+		self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName))
 		testlet.run (self)
-		self.store ('<br><br>')
+		self.check ('<br><br>')
 			
 	def done (self):
 		if __envir__.executorName == __envir__.transpilerName:

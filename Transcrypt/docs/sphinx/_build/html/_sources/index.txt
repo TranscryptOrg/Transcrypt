@@ -24,7 +24,7 @@ Transcrypt: what and why
 What is Transcrypt
 ------------------
 
-Transcrypt is a tool to compile a -not so- Small Sane Subset of Python into compact, readable JavaScript. It has the following characteristics:
+Transcrypt is a tool to compile a fairly extensive subset of Python into compact, readable JavaScript. It has the following characteristics:
 
 1. It's lightweight, in accordance Pareto’s rule adapted for IT: 99% of the result can be achieved with 1% of the effort.
 2. It offers the semantic essence of Python along with the clean, highly readable syntax that the language is famous for
@@ -55,7 +55,7 @@ At the basis of Transcrypt lies the following shopping list:
 
 At the advent of Transcrypt there were many Python to JavaScript transpiler projects around, some of them quite mature. Neither of them fitted the above shopping list. Either the downloads were too large, or some of must have features were missing. To some, the shopping list may seem weird. Multiple inheritance? The whole Java world is doing without it. Exactly. And that's one of the reasons why a large category of developers shunned Java from the start. To them multiple inheritance has proven a powerful tool ever since it was introduced in C++.
 
-So if it's all that subjective, why should *you* use it?. Well, *only if and when you like it*. That's all. In IT everything grows until it becomes unusable. One of the main goals of Transcrypt is to keep things simple, preventing it from disolution into an ocean of feature creep and conflicting demands. At its core it will stay a Small, Sane, Subset of Python. For the rest: it's open. There's a hierarchical module system included right from the start, featuring Java-esque URL based unique package names. So, once the core of Transcrypt has stabilized, you're invited to help its ecosystem grow.
+So if it's all that subjective, why should *you* use it?. Well, *only if and when you like it*. That's all. In IT everything grows until it becomes unusable. One of the main goals of Transcrypt is to keep things simple, preventing it from disolution into an ocean of feature creep and conflicting demands. At its core it will stay lean and mean. For the rest: it's open. There's a hierarchical module system included right from the start, featuring Java-esque URL based unique package names. So, once the core of Transcrypt has stabilized, you're invited to help its ecosystem grow.
 
 The ecosystem: different batteries
 ----------------------------------
@@ -69,8 +69,8 @@ Code structure
 
 In the JavaScript world, components are gathered from everywhere on the web during a page load, and small fragments of code may be anywhere in a web page. Transcrypt takes a different approach. The concept of a static webpage is secundary and may even be absent. Typically there's one and only one Transcrypt application attachted to a certain URL or page. This application has it's own namespace and may feature many entrypoints or callbacks attached to DOM components. Although traditional web pages can be made without restrictions using Transcrypt, the focus is on complex stateful web applications rather than on static pages interspersed with code fragments. Typically such a web application will rely on the server to store and retrieve data and program state. Although at some point 'pythonic' libraries may come into existence to facilitate this, direct use of JavaScript AJAX or e.g. of a JQuery AJAX wrapper, will do the job fine.
 
-Debugability
-------------
+Debuggability
+-------------
 
 In order to debug a transpiled web app, it helps a lot if there's a simple correspondence between the Python source code and the generated JavaScript. In Transcrypt this is the case, as is illustrated by the following code fragments:
 
@@ -83,14 +83,14 @@ In order to debug a transpiled web app, it helps a lot if there's a simple corre
 Autotesting Transcrypt code
 ===========================
 
-Wy it's needed
---------------
+Why it's needed
+---------------
 
 An simple autotest feature has been added to Transcrypt right from the start for the following reasons:
 
 1. Any programming language compiler has to be reliable, since a large investment in code may come to depend upon it. Languages and libraries should be able to evolve without regression bugs being introduced. In a rich language many constructs are possible which all should be tested with each new release. This can only be done if testing is automated.
 
-2. Since Transcrypt compiles not all of Python but a Small, Sane Subset, it has to be rigorously clear what can be compiled and what not. The sourcecode of a set of automated tests can be an effective means of laying down what is possible in the language. Whereas code examples and documents may lag back or deviate from reality, test code has to cover the essential features of the language and is, by nature, constantly exercised to match the latest status of the language.
+2. Since Transcrypt compiles not all of Python but a fairly extensive subset, it has to be rigorously clear what can be compiled and what not. The sourcecode of a set of automated tests can be an effective means of laying down what is possible in the language. Whereas code examples and documents may lag back or deviate from reality, test code has to cover the essential features of the language and is, by nature, constantly exercised to match the latest status of the language.
 
 How it works
 ------------
@@ -115,7 +115,7 @@ An example of two testlets combined into an autotest is below:
 What language constructs are currently supported
 ================================================
 
-Transcrypt can handle a growing set of language constructs. The Transcrypt demo suite is a series of testlets that, while primarily created for regression test purposes, are also very suitable to get an overview of the possibilities of Transcrypt. There's no formal definition of Transcrypt's semantics, neither is there a formal definition of what exactly is a Small Sane Subset. Still a developer contemplating its use will want to know what's in that Small Sane Subset. Reading through the autotest and demo suite will make that clear.
+Transcrypt can handle a fast growing set of language constructs. Read through the autotest and demo suite to get an idea of what is currently supported.
 
 	.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
 		:tab-width: 4
@@ -128,12 +128,19 @@ Classes, multiple inheritance and assignment of bound functions
 		:tab-width: 4
 		:caption: Testlet: classes
 
-Datastructures: tuple, list, dict, set
---------------------------------------
+Control structures: for...else, while...else, if...elif...else, break, continue
+-------------------------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/datastructures/__init__.py
+	.. literalinclude:: ../../development/automated_tests/transcrypt/control_structures/__init__.py
 		:tab-width: 4
-		:caption: Testlet: datastructures
+		:caption: Testlet: control_structures
+
+Data structures: tuple, list, dict, set
+---------------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/data_structures/__init__.py
+		:tab-width: 4
+		:caption: Testlet: data_structures
 
 Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
@@ -156,6 +163,13 @@ Hierarchical modules, both local to the project and global url-based
 		:tab-width: 4
 		:caption: Testlet: modules
 
+Simple and augmented assignment
+-------------------------------
+
+	.. literalinclude:: ../../development/automated_tests/transcrypt/simple_and_augmented_assignment/__init__.py
+		:tab-width: 4
+		:caption: Testlet: simple_and_augmented_assignment
+		
 Tuple assignment, recursive and in for-headers using enumerate
 --------------------------------------------------------------
 

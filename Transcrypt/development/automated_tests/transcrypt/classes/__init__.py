@@ -4,26 +4,26 @@ def run (autoTester):
 			self.x = x
 
 		def show (self, label):
-			autoTester.store ('A.show', label, self.x)
+			autoTester.check ('A.show', label, self.x)
 		
 	class B:
 		def __init__ (self, y):
-			autoTester.store ('In B constructor')
+			autoTester.check ('In B constructor')
 			self.y = y
 			
 		def show (self, label):
-			autoTester.store ('B.show', label, self.y)
+			autoTester.check ('B.show', label, self.y)
 			
 	class C (A, B):
 		def __init__ (self, x, y):
-			autoTester.store ('In C constructor')
+			autoTester.check ('In C constructor')
 			A.__init__ (self, x)
 			B.__init__ (self, y)
 			
 		def show (self, label):
 			A.show (self, label)
 			B.show (self, label)
-			autoTester.store ('C.show', label, self.x, self.y)
+			autoTester.check ('C.show', label, self.x, self.y)
 		
 	a = A (1001)
 	a.show ('america')

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-18 20:28:27
+// Transcrypt'ed from Python, 2016-01-19 14:47:49
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -126,7 +126,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.21';
+							self.transpilerVersion = '0.0.30';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -492,11 +492,6 @@ function autotest () {
 	};
 	
 	__all__.str = str
-	
-	
-	
-	
-
 	__nest__ (
 		__all__,
 		'classes', {
@@ -509,28 +504,28 @@ function autotest () {
 								self.x = x;
 							});},
 							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('A.show', label, self.x);
+								autoTester.check ('A.show', label, self.x);
 							});}
 						});
 						var B = __class__ ('B', [object], {
 							get __init__ () {return __get__ (this, function (self, y) {
-								autoTester.store ('In B constructor');
+								autoTester.check ('In B constructor');
 								self.y = y;
 							});},
 							get show () {return __get__ (this, function (self, label) {
-								autoTester.store ('B.show', label, self.y);
+								autoTester.check ('B.show', label, self.y);
 							});}
 						});
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
-								autoTester.store ('In C constructor');
+								autoTester.check ('In C constructor');
 								A.__init__ (self, x);
 								B.__init__ (self, y);
 							});},
 							get show () {return __get__ (this, function (self, label) {
 								A.show (self, label);
 								B.show (self, label);
-								autoTester.store ('C.show', label, self.x, self.y);
+								autoTester.check ('C.show', label, self.x, self.y);
 							});}
 						});
 						var a = A (1001);
@@ -551,39 +546,161 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
-		'datastructures', {
+		'control_structures', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var __iter0__ = enumerate (function () {
+							var __accu0__ = [];
+							var __iter1__ = range (10);
+							for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
+								var x = __iter1__ [__index0__];
+								if (x % 2) {
+									__accu0__ .push (x * x);
+								}
+							}
+							return __accu0__;
+						} ());
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var __left0__ = __iter0__ [__index0__] ;
+							var index = __left0__[0];
+							var square = __left0__[1];
+							var __iter1__ = range (1, 2, 3);
+							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+								var y = __iter1__ [__index1__] ;
+								var __iter2__ = range (10, 20, 30);
+								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
+									var z = __iter2__ [__index2__] ;
+									autoTester.check (square + y, z);
+								}
+							}
+						}
+						var vehicles = ['bike', 'train', 'boat', 'car', 'plane', 'bus'];
+						var __iter0__ = tuple ([false, true]);
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var doBreak = __iter0__ [__index0__] ;
+							var __iter1__ = tuple ([false, true]);
+							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+								var doContinue = __iter1__ [__index1__] ;
+								var __iter2__ = range (10);
+								var __break0__ = false;
+								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
+									var index = __iter2__ [__index2__] ;
+									var __iter3__ = range (0, 100, 10);
+									var __break1__ = false;
+									for (var __index3__ = 0; __index3__ < __iter3__.length; __index3__++) {
+										var index2 = __iter3__ [__index3__] ;
+										if (doBreak && index2 == 50) {
+											autoTester.check ('break2');
+											__break1__ = true;
+											break;
+										}
+										if (doContinue && index2 == 50) {
+											autoTester.check ('continue2');
+											continue;
+										}
+									}
+									if (!__break1__) {
+										autoTester.check ('noBreak2');
+									}
+									if (doBreak && index == 5) {
+										autoTester.check ('break');
+										__break0__ = true;
+										break;
+									}
+									if (doContinue && index == 5) {
+										autoTester.check ('continue');
+										continue;
+									}
+								}
+								if (!__break0__) {
+									autoTester.check ('noBreak');
+								}
+								var index = 0;
+								var __break0__ = false;
+								while (index < len (vehicles) && vehicles [index]  != 'bus') {
+									autoTester.check (index, vehicles [index] );
+									if (doBreak && vehicles [index]  == 'car') {
+										autoTester.check ('breakWhile');
+										__break0__ = true;
+										break;
+									}
+									if (doContinue && vehicles [index]  == 'car') {
+										autoTester.check ('continueWhile');
+										index++;
+										continue;
+									}
+									index++;
+								}
+								if (!__break0__) {
+									autoTester.check ('noBreakWhile');
+								}
+							}
+							var __iter1__ = vehicles;
+							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+								var vehicle = __iter1__ [__index1__] ;
+								if (vehicle == 'bike') {
+									autoTester.check ('netherlands');
+								}
+								else {
+									if (vehicle == 'car') {
+										autoTester.check ('america');
+									}
+									else {
+										if (vehicle == 'boat') {
+											autoTester.check ('oceania');
+										}
+										else {
+											autoTester.check ('anywhere');
+										}
+									}
+								}
+							}
+						}
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'data_structures', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var aList = [1, 2, 3, 'sun', 'moon', 'stars'];
-						autoTester.store (aList);
-						autoTester.store (aList.__getslice__ (2, 4, 1));
-						autoTester.store (aList.slice (0));
-						autoTester.store (aList.slice (2));
-						autoTester.store (len (aList));
+						autoTester.check (aList);
+						autoTester.check (aList.__getslice__ (2, 4, 1));
+						autoTester.check (aList.slice (0));
+						autoTester.check (aList.slice (2));
+						autoTester.check (len (aList));
 						aList.append ('milkyway');
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.extend (['m1', 'm31']);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						var anotherList = list (tuple (['a', 'b', 'c']));
-						autoTester.store (anotherList);
+						autoTester.check (anotherList);
 						var aDict = {1: 'plant', 'animal': 2};
-						autoTester.store (aDict);
-						autoTester.store (aDict [1] , aDict ['animal'] );
+						autoTester.check (aDict);
+						autoTester.check (aDict [1] , aDict ['animal'] );
 						var aTuple = tuple ([1, 2, 3, 4, 5]);
-						autoTester.store (aTuple);
-						autoTester.store (len (aTuple));
+						autoTester.check (aTuple);
+						autoTester.check (len (aTuple));
 						var anotherTuple = tuple ([1]);
-						autoTester.store (anotherTuple);
+						autoTester.check (anotherTuple);
 						var aSet = new set ([1, 2, 2, 3]);
-						autoTester.store (aSet);
-						autoTester.store (len (aSet));
+						autoTester.check (aSet);
+						autoTester.check (len (aSet));
 						var anotherSet = set (tuple ([4, 5, 5, 6]));
-						autoTester.store (anotherSet);
+						autoTester.check (anotherSet);
 						var emptySet = set ();
-						autoTester.store (emptySet);
-						autoTester.store (len (emptySet));
+						autoTester.check (emptySet);
+						autoTester.check (len (emptySet));
 					};
 					//<all>
 					__all__.run = run;
@@ -600,17 +717,17 @@ function autotest () {
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var all = range (32);
-						autoTester.store (all);
-						autoTester.store (all.slice (8, 24));
-						autoTester.store (all.__getslice__ (8, 24, 2));
+						autoTester.check (all);
+						autoTester.check (all.slice (8, 24));
+						autoTester.check (all.__getslice__ (8, 24, 2));
 						var aList = [3, 4, 7, 8];
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (4, 4, null, [9, 10]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (2, 2, null, [5, 6]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (0, 0, null, [1, 2]);
-						autoTester.store (aList);
+						autoTester.check (aList);
 						aList.__setslice__ (0, null, 2, function () {
 							var __accu0__ = [];
 							var __iter0__ = range (10);
@@ -622,7 +739,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ());
-						autoTester.store (aList);
+						autoTester.check (aList);
 					};
 					//<all>
 					__all__.run = run;
@@ -670,7 +787,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (squares);
+						autoTester.check (squares);
 						var tuples = function () {
 							var __accu0__ = [];
 							var __iter0__ = tuple ([100, 200, 300, 400, 500, 600, 700]);
@@ -692,7 +809,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (tuples);
+						autoTester.check (tuples);
 						var nested = function () {
 							var __accu0__ = [];
 							var __iter0__ = function () {
@@ -710,7 +827,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (nested);
+						autoTester.check (nested);
 						var a = 100;
 						var x = 5;
 						var scopeTest = function () {
@@ -722,8 +839,8 @@ function autotest () {
 							}
 							return __accu0__;
 						} ();
-						autoTester.store (x);
-						autoTester.store (scopeTest);
+						autoTester.check (x);
+						autoTester.check (scopeTest);
 					};
 					//<all>
 					__all__.run = run;
@@ -761,28 +878,28 @@ function autotest () {
 					var pi = modules.mod1.pi;
 					var f = modules.mod2.f;
 					var run = function (autoTester) {
-						autoTester.store ('modules');
-						autoTester.store (a.f ());
-						autoTester.store (modules.mod1.mod11.mod112.f ());
-						autoTester.store (modules.mod1.mod11.e);
-						autoTester.store (pi);
-						autoTester.store (f (102030));
-						autoTester.store (modules.mod2.mod21.f ());
+						autoTester.check ('modules');
+						autoTester.check (a.f ());
+						autoTester.check (modules.mod1.mod11.mod112.f ());
+						autoTester.check (modules.mod1.mod11.e);
+						autoTester.check (pi);
+						autoTester.check (f (102030));
+						autoTester.check (modules.mod2.mod21.f ());
 						var B = modules.mod2.mod22.B;
 						var b = B ();
-						autoTester.store (b.x);
-						autoTester.store (modules.mod3.x);
+						autoTester.check (b.x);
+						autoTester.check (modules.mod3.x);
 						var a2 = aliasMod111.A (6789101112);
-						autoTester.store (a2.f ());
-						autoTester.store (aMod1.pi);
+						autoTester.check (a2.f ());
+						autoTester.check (aMod1.pi);
 						var a3 = mod111.A (100.001);
-						autoTester.store (a3.f ());
-						autoTester.store (mod112.f ());
-						autoTester.store (aMod21.f ());
-						autoTester.store (aMod22.B ().x);
-						autoTester.store (mod3Hundred);
-						autoTester.store (mod3GetTwoHundred ());
-						autoTester.store (A (123.321).f ());
+						autoTester.check (a3.f ());
+						autoTester.check (mod112.f ());
+						autoTester.check (aMod21.f ());
+						autoTester.check (aMod22.B ().x);
+						autoTester.check (mod3Hundred);
+						autoTester.check (mod3GetTwoHundred ());
+						autoTester.check (A (123.321).f ());
 					};
 					//<all>
 					__all__.a = a;
@@ -949,7 +1066,7 @@ function autotest () {
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
 						});},
-						get store () {return __get__ (this, function (self) {
+						get check () {return __get__ (this, function (self) {
 							var args = [] .slice.apply (arguments) .slice (1);
 							var item = ' '.join (function () {
 								var __accu0__ = [];
@@ -1000,7 +1117,6 @@ function autotest () {
 										var buffer = itertools.chain (buffer.slice (0, index), ['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )], buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
-									;
 									__break0__ = true;
 									break;
 								}
@@ -1011,9 +1127,9 @@ function autotest () {
 							}
 						});},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
-							self.store ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
+							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
-							self.store ('<br><br>');
+							self.check ('<br><br>');
 						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
@@ -1037,6 +1153,69 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
+		'simple_and_augmented_assignment', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var A = __class__ ('A', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							self.i = 0;
+						});},
+						get f () {return __get__ (this, function (self) {
+							return self.i;
+						});}
+					});
+					var a = A ();
+					var run = function (autoTester) {
+						var x = 3;
+						var y = 5;
+						var z = x + y;
+						autoTester.check (z);
+						var l = [1, 2, 3];
+						l [1]  = l [2] ;
+						autoTester.check (l);
+						x++;
+						autoTester.check (x);
+						x++;
+						autoTester.check (x);
+						x++;
+						autoTester.check (x);
+						y--;
+						autoTester.check (y);
+						y--;
+						autoTester.check (y);
+						y--;
+						autoTester.check (y);
+						x += -3;
+						autoTester.check (x);
+						x += 6;
+						autoTester.check (x);
+						y -= 3;
+						autoTester.check (y);
+						l [1]  += l [1] ;
+						autoTester.check (l);
+						x += y;
+						y += x;
+						autoTester.check (x, y);
+						var f = a.f;
+						a.i++;
+						autoTester.check (f ());
+						a.i += 10;
+						autoTester.check (f ());
+						a.i += a.i;
+						autoTester.check (f ());
+					};
+					//<all>
+					__all__.A = A;
+					__all__.a = a;
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'tuple_assignment', {
 			__all__: {
 				__inited__: false,
@@ -1049,22 +1228,21 @@ function autotest () {
 						var c = __left0__[2][0];
 						var d = __left0__[2][1];
 						var e = __left0__[3];
-						autoTester.store (a, b, c, d, e, santa);
+						autoTester.check (a, b, c, d, e, santa);
 						var __iter0__ = enumerate (tuple ([0.5, 1.5, 2.5, 3.5]));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__] ;
 							var i = __left0__[0];
 							var x = __left0__[1];
-							autoTester.store (i, x);
+							autoTester.check (i, x);
 						}
-						;
 						var __left0__ = tuple ([3.14, 2.74]);
 						var e = __left0__[0];
 						var pi = __left0__[1];
 						var __left0__ = tuple ([pi, e]);
 						var e = __left0__[0];
 						var pi = __left0__[1];
-						autoTester.store (e, pi);
+						autoTester.check (e, pi);
 					};
 					//<all>
 					__all__.run = run;
@@ -1075,25 +1253,31 @@ function autotest () {
 	);
 	(function () {
 		var classes = {};
-		var datastructures = {};
+		var control_structures = {};
+		var data_structures = {};
 		var indices_and_slices = {};
 		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
+		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (classes, '', __init__ (__world__.classes));
-		__nest__ (datastructures, '', __init__ (__world__.datastructures));
+		__nest__ (control_structures, '', __init__ (__world__.control_structures));
+		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
 		autoTester.run (classes, 'classes');
-		autoTester.run (datastructures, 'datastructures');
+		autoTester.run (control_structures, 'control_structures');
+		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
 		//<all>

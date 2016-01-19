@@ -1,3 +1,3 @@
 def run (autoTester):
-	autoTester.store ('goodbye')
-	autoTester.store ('moon')
+	autoTester.check ('goodbye')
+	autoTester.check ('moon')
