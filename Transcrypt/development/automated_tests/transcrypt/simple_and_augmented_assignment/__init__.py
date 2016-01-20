@@ -60,4 +60,3 @@ def run (autoTester):
 	
 	a.i += a.i
 	autoTester.check (f ())
-	

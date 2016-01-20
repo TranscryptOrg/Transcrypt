@@ -5,6 +5,9 @@ def run (autoTester):
 
 		def show (self, label):
 			autoTester.check ('A.show', label, self.x)
+			
+		def show2 (self, label):
+			autoTester.check ('A.show2', label, self.x)
 		
 	class B:
 		def __init__ (self, y):
@@ -33,6 +36,8 @@ def run (autoTester):
 
 	c = C (3003, 4004)
 	c.show ('netherlands')
+	c.show2 ('amsterdam')
+	A.show2 (c, 'rotterdam')
 
-	show2 = c.show
-	show2 ('copy')
+	show3 = c.show
+	show3 ('copy')

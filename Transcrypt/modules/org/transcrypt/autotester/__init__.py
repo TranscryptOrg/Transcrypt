@@ -6,7 +6,11 @@
 # If those two match, the test reports OK, else it reports failure.
 
 from org.transcrypt.stubs.browser import *
+
 from org.transcrypt.stubs.browser import __main__, __envir__
+# Don't import __envir__ from __base__ since it will overwrite __buildin__.__envir__ in the browser
+# Import from stubs will be skipped in the browser
+# ... The ice is a bit thin here
 
 import itertools
 
@@ -16,7 +20,6 @@ highlightColor = 'yellow'
 testletNameColor = 'blue'
 
 class AutoTester:
-
 	def __init__ (self):
 		self.referenceBuffer = []
 		self.testBuffer = []
@@ -33,7 +36,7 @@ class AutoTester:
 		
 	def dump (self, filePrename):
 		with open ('{}.html'.format (filePrename), 'w') as aFile:
-			aFile.write ('<script src="javascript/{}.js"></script>\n\n'.format (filePrename))
+			aFile.write ('<script src="{}/{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename))
 			
 			aFile.write ('<b>Status:</b>\n')
 			aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId))

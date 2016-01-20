@@ -18,4 +18,3 @@ def run (autoTester):
 	scopeTest = [x + a for x in range (5)]
 	autoTester.check (x)
 	autoTester.check (scopeTest)
-	

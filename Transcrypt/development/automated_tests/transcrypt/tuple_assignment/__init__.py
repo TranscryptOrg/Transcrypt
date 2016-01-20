@@ -8,4 +8,3 @@ def run (autoTester):
 	e, pi = 3.14, 2.74
 	e, pi = pi, e
 	autoTester.check (e, pi)
-	

@@ -1,3 +1,6 @@
+.. figure:: http://www.transcrypt.org/illustrations/logo.png
+	:alt: Logo
+
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance*
@@ -9,7 +12,7 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 .. figure:: http://www.transcrypt.org/illustrations/monk_transcribing.png
 	:alt: Monk transcribing
 	
-	**Transcription used to be manual labour once**
+	**Transcription once used to be manual labour**
 
 Documentation with code examples
 ================================
@@ -24,8 +27,11 @@ Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, Rapy
 What's new
 ==========
 
+- Exceptions added + autotest + docs
+- Function inheritance bug fixed (ooops...)
+- Autotest output example added to docs
 - Docs adapted
-- +=, -=, \*= etc., optimize towards ++ and --, autotest added
+- +=, -=, \*= etc., optimized towards ++ and --, autotest added
 - For...else, while...else..., break, continue completed, autotest added
 - Import ... as, from ... import and from ... import as ... added, autotest augmented
 - Transcript.org website dressed up a little

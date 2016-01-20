@@ -51,10 +51,3 @@ def run (autoTester):
 				autoTester.check ('oceania')
 			else:
 				autoTester.check ('anywhere')
-				
-				
-			
-				
-				
-	
-	

@@ -37,7 +37,7 @@ class ModuleMetadata:
 				self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
 							
 			# Target dir should be the JavaScript subdir of the sourceDir
-			self.targetDir = '{}/{}'.format (self.sourceDir, program.outSubdir)
+			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.targetSubDir)
 			
 			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
@@ -86,8 +86,6 @@ class Program:
 		self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
 		self.sourceFileName = self.sourcePath.split ('/') [-1]
 		
-		self.outSubdir = 'javascript'
-		
 		self.moduleDict = {}
 		self.fragments = {}
 		self.compile ()
@@ -97,12 +95,14 @@ class Program:
 		prefix = 'org.{}'.format (__base__.__envir__.transpilerName)
 		self.coreModuleName = '{}.{}'.format (prefix, '__core__')
 		self.baseModuleName = '{}.{}'.format (prefix, '__base__')
+		self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
 		self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
 		self.mainModuleName = self.sourceFileName [ : -3]
 
 		# Module compilation
 		Module (self, ModuleMetadata (self, self.coreModuleName))
 		Module (self, ModuleMetadata (self, self.baseModuleName))
+		Module (self, ModuleMetadata (self, self.standardModuleName))
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
 					
 		try:
@@ -114,7 +114,7 @@ class Program:
 		normallyImportedTargetCode = ''.join ([
 			self.moduleDict [moduleName] .targetCode
 			for moduleName in sorted (self.moduleDict)
-			if not moduleName in (self.coreModuleName, self.baseModuleName, self.builtinModuleName, self.mainModuleName)
+			if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
 		])
 		
 		# And sandwich them between the in-line modules
@@ -123,6 +123,7 @@ class Program:
 			'function {} () {{\n'.format (self.mainModuleName) +
 			self.moduleDict [self.coreModuleName].targetCode +
 			self.moduleDict [self.baseModuleName] .targetCode +
+			self.moduleDict [self.standardModuleName] .targetCode +
 			self.moduleDict [self.builtinModuleName].targetCode +
 			normallyImportedTargetCode +
 			self.moduleDict [self.mainModuleName].targetCode +
@@ -131,12 +132,12 @@ class Program:
 			'window [\'{0}\'] = {0};\n'.format (self.mainModuleName)
 		)	
 		
-		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, self.outSubdir), self.mainModuleName)
+		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, __base__.__envir__.targetSubDir), self.mainModuleName)
 		utils.log (False, 'Saving result in: {}\n', targetFileName)
 		with utils.create (targetFileName) as aFile:
 			aFile.write (targetCode)
 
-		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, self.outSubdir, self.mainModuleName)
+		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, __base__.__envir__.targetSubDir, self.mainModuleName)
 		utils.log (False, 'Saving minified result in: {}\n', miniFileName)
 		minify.run (targetFileName, miniFileName)
 		
@@ -882,6 +883,18 @@ class Generator (ast.NodeVisitor):
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)
 		
+	def visit_Raise (self, node):
+		self.emit ('__except__ = ') 
+		self.visit (node.exc)
+		self.emit (';\n')
+		self.emit ('__except__.__cause__ = ')
+		if node.cause:
+			self.visit (node.cause)
+		else:
+			self.emit ('null')
+		self.emit (';\n')
+		self.emit ('throw __except__')
+		
 	def visit_Return (self, node):
 		self.emit ('return ')
 		self.visit (node.value)
@@ -938,38 +951,39 @@ class Generator (ast.NodeVisitor):
 			self.visit (node.slice)
 			
 	def visit_Try (self, node):
-		self.emit ('try {{')
+		self.emit ('try {{\n')
 		self.indent ()	
 		self.emitBody (node.body)
 		self.dedent ()
-		self.emit ('}}')
+		self.emit ('}}\n')
 		
-		self.emit ('catch ({}) {{', self.nextTemp ('excep'))
+		self.emit ('catch (__except__) {{\n')
 		self.indent ()
-		for index, excepthandler in enumerate (handlers):
+		for index, excepthandler in enumerate (node.handlers):
 			if excepthandler.type:
 				if index:
-					self.emit ('else if ({} instanceof {}) {{\n', self.getTemp ('excep'), excepthandler.type)
-				else:
-					self.emit ('if ({} instanceof {}) {{\n', self.getTemp ('excep'), excepthandler.type)
+					self.emit ('else ')
+				self.emit ('if (isinstance (__except__, ')
+				self.visit (excepthandler.type)
+				self.emit (')) {{\n')
 			else:
 				self.emit ('else {{\n')
 				
 			self.indent ()
-			if excepthandler.identifier:
-				self.emit ('{} = {};\n', excepthandler.identifier, self.getTemp ('except'))				
-			self.emitBody (node.body)
-			self.dedent ()			
+			if excepthandler.name:
+				self.emit ('var {} = __except__;\n', excepthandler.name)				
+			self.emitBody (excepthandler.body)
+			self.dedent ()	
 			self.emit ('}}\n')
 		self.dedent ()
-		self.emit ('}}')
+		self.emit ('}}\n')
 		
 		if node.finalbody:
 			self.emit ('finally {{')
-			self.emitBody (finalbody)
-			self.emit ('}}')
+			self.emitBody (node.finalbody)
+			self.emit ('}}\n')
 			
-		self.skipSemiEnd = True
+		self.skipSemiNew = True
 		
 	def visit_Tuple (self, node):
 		self.emit ('tuple (')

@@ -54,6 +54,3 @@ def run (autoTester):
 	autoTester.check (mod3Hundred)
 	autoTester.check (mod3GetTwoHundred ())
 	autoTester.check (A (123.321) .f ())
-	
-	
-	

@@ -104,7 +104,7 @@ When code is being tested, a reference is needed of what is considered to be cor
 5. Click on *autotest.html* to load the autotest into the browser and run *autotest.js*. This will generate the *test data sequence*, now using the Transcrypt runtime.
 6. After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.
 
-An example of two testlets combined into an autotest is below:
+An example of two testlets combined into the 'hello' autotest, that is part of the distribution:
 
 +----------------------------------------------------------------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+		
 |    .. literalinclude:: ../../development/automated_tests/hello/autotest.py |    .. literalinclude:: ../../development/automated_tests/hello/testlet0.py |    .. literalinclude:: ../../development/automated_tests/hello/testlet1.py | 
@@ -112,67 +112,79 @@ An example of two testlets combined into an autotest is below:
 |        :caption: autotest.py                                               |         :caption: testlet0.py                                              |        :caption: testlet1.py                                               |
 +----------------------------------------------------------------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
+Output of the 'hello' autotest with a deliberate error:
+
+.. figure:: ../images/autotest_hello.png
+	:alt: Output of 'hello autotest' 
+
 What language constructs are currently supported
 ================================================
 
 Transcrypt can handle a fast growing set of language constructs. Read through the autotest and demo suite to get an idea of what is currently supported.
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
-		:tab-width: 4
-		:caption: Autotest: Transcrypt demo suite
+.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
+	:tab-width: 4
+	:caption: Autotest: Transcrypt demo suite
 
 Classes, multiple inheritance and assignment of bound functions
 ---------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/classes/__init__.py
-		:tab-width: 4
-		:caption: Testlet: classes
+.. literalinclude:: ../../development/automated_tests/transcrypt/classes/__init__.py
+	:tab-width: 4
+	:caption: Testlet: classes
 
 Control structures: for...else, while...else, if...elif...else, break, continue
 -------------------------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/control_structures/__init__.py
-		:tab-width: 4
-		:caption: Testlet: control_structures
+.. literalinclude:: ../../development/automated_tests/transcrypt/control_structures/__init__.py
+	:tab-width: 4
+	:caption: Testlet: control_structures
 
 Data structures: tuple, list, dict, set
 ---------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/data_structures/__init__.py
-		:tab-width: 4
-		:caption: Testlet: data_structures
+.. literalinclude:: ../../development/automated_tests/transcrypt/data_structures/__init__.py
+	:tab-width: 4
+	:caption: Testlet: data_structures
+
+Exceptions
+----------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/exceptions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: exceptions
 
 Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/indices_and_slices/__init__.py
-		:tab-width: 4
-		:caption: Testlet: indices_and_slices
+.. literalinclude:: ../../development/automated_tests/transcrypt/indices_and_slices/__init__.py
+	:tab-width: 4
+	:caption: Testlet: indices_and_slices
 
 List comprehensions, multi-loop and nested with multiple if's
 -------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/list_comprehensions/__init__.py
-		:tab-width: 4
-		:caption: Testlet: list_comprehensions
+.. literalinclude:: ../../development/automated_tests/transcrypt/list_comprehensions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: list_comprehensions
 
 Hierarchical modules, both local to the project and global url-based
 --------------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
-		:tab-width: 4
-		:caption: Testlet: modules
+.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
+	:tab-width: 4
+	:caption: Testlet: modules
 
 Simple and augmented assignment
 -------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/simple_and_augmented_assignment/__init__.py
-		:tab-width: 4
-		:caption: Testlet: simple_and_augmented_assignment
+.. literalinclude:: ../../development/automated_tests/transcrypt/simple_and_augmented_assignment/__init__.py
+	:tab-width: 4
+	:caption: Testlet: simple_and_augmented_assignment
 		
 Tuple assignment, recursive and in for-headers using enumerate
 --------------------------------------------------------------
 
-	.. literalinclude:: ../../development/automated_tests/transcrypt/tuple_assignment/__init__.py
-		:tab-width: 4
-		:caption: Testlet: tuple_assignment
+.. literalinclude:: ../../development/automated_tests/transcrypt/tuple_assignment/__init__.py
+	:tab-width: 4
+	:caption: Testlet: tuple_assignment

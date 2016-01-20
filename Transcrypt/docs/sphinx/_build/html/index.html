@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.34 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.38 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.34',
+        VERSION:     '0.0.38',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.34 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.38 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.34 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.38 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -221,7 +221,7 @@ show2 (&#39;copy&#39;);
 <li>Click on <em>autotest.html</em> to load the autotest into the browser and run <em>autotest.js</em>. This will generate the <em>test data sequence</em>, now using the Transcrypt runtime.</li>
 <li>After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.</li>
 </ol>
-<p>An example of two testlets combined into an autotest is below:</p>
+<p>An example of two testlets combined into the &#8216;hello&#8217; autotest, that is part of the distribution:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -232,12 +232,15 @@ show2 (&#39;copy&#39;);
 <tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="autotest-py">
 <div class="code-block-caption"><span class="caption-text">autotest.py</span><a class="headerlink" href="#autotest-py" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
+
 <span class="kn">import</span> <span class="nn">testlet0</span>
 <span class="kn">import</span> <span class="nn">testlet1</span>
 
 <span class="n">autoTester</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">transcrypt</span><span class="o">.</span><span class="n">autotester</span><span class="o">.</span><span class="n">AutoTester</span> <span class="p">()</span>
-<span class="n">testlet0</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">)</span>
-<span class="n">testlet1</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">)</span>
+
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">testlet0</span><span class="p">,</span> <span class="s">&#39;testlet0&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">testlet1</span><span class="p">,</span> <span class="s">&#39;testlet1&#39;</span><span class="p">)</span>
+
 <span class="n">autoTester</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
 </pre></div>
 </div>
@@ -264,19 +267,23 @@ show2 (&#39;copy&#39;);
 </tr>
 </tbody>
 </table>
+<p>Output of the &#8216;hello&#8217; autotest with a deliberate error:</p>
+<div class="figure">
+<img alt="Output of 'hello autotest'" src="_images/autotest_hello.png" />
+</div>
 </div>
 </div>
 <div class="section" id="what-language-constructs-are-currently-supported">
 <h1>What language constructs are currently supported<a class="headerlink" href="#what-language-constructs-are-currently-supported" title="Permalink to this headline">¶</a></h1>
 <p>Transcrypt can handle a fast growing set of language constructs. Read through the autotest and demo suite to get an idea of what is currently supported.</p>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="autotest-transcrypt-demo-suite">
+<div class="literal-block-wrapper container" id="autotest-transcrypt-demo-suite">
 <div class="code-block-caption"><span class="caption-text">Autotest: Transcrypt demo suite</span><a class="headerlink" href="#autotest-transcrypt-demo-suite" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
 
 <span class="kn">import</span> <span class="nn">classes</span>
 <span class="kn">import</span> <span class="nn">control_structures</span>
 <span class="kn">import</span> <span class="nn">data_structures</span>
+<span class="kn">import</span> <span class="nn">exceptions</span>
 <span class="kn">import</span> <span class="nn">indices_and_slices</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">modules</span>
@@ -288,6 +295,7 @@ show2 (&#39;copy&#39;);
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="s">&#39;classes&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">control_structures</span><span class="p">,</span> <span class="s">&#39;control_structures&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">data_structures</span><span class="p">,</span> <span class="s">&#39;data_structures&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="s">&#39;exceptions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">indices_and_slices</span><span class="p">,</span> <span class="s">&#39;indices_and_slices&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="s">&#39;modules&#39;</span><span class="p">)</span>
@@ -298,11 +306,9 @@ show2 (&#39;copy&#39;);
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 <div class="section" id="classes-multiple-inheritance-and-assignment-of-bound-functions">
 <h2>Classes, multiple inheritance and assignment of bound functions<a class="headerlink" href="#classes-multiple-inheritance-and-assignment-of-bound-functions" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-classes">
+<div class="literal-block-wrapper container" id="testlet-classes">
 <div class="code-block-caption"><span class="caption-text">Testlet: classes</span><a class="headerlink" href="#testlet-classes" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -311,6 +317,9 @@ show2 (&#39;copy&#39;);
 
         <span class="k">def</span> <span class="nf">show</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
             <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;A.show&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            
+        <span class="k">def</span> <span class="nf">show2</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;A.show2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         
     <span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
         <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -339,18 +348,18 @@ show2 (&#39;copy&#39;);
 
     <span class="n">c</span> <span class="o">=</span> <span class="n">C</span> <span class="p">(</span><span class="mi">3003</span><span class="p">,</span> <span class="mi">4004</span><span class="p">)</span>
     <span class="n">c</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;netherlands&#39;</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">show2</span> <span class="p">(</span><span class="s">&#39;amsterdam&#39;</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">show2</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s">&#39;rotterdam&#39;</span><span class="p">)</span>
 
-    <span class="n">show2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">show</span>
-    <span class="n">show2</span> <span class="p">(</span><span class="s">&#39;copy&#39;</span><span class="p">)</span>
+    <span class="n">show3</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">show</span>
+    <span class="n">show3</span> <span class="p">(</span><span class="s">&#39;copy&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="control-structures-for-else-while-else-if-elif-else-break-continue">
 <h2>Control structures: for...else, while...else, if...elif...else, break, continue<a class="headerlink" href="#control-structures-for-else-while-else-if-elif-else-break-continue" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-control-structures">
+<div class="literal-block-wrapper container" id="testlet-control-structures">
 <div class="code-block-caption"><span class="caption-text">Testlet: control_structures</span><a class="headerlink" href="#testlet-control-structures" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">square</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">([</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]):</span>
@@ -405,22 +414,13 @@ show2 (&#39;copy&#39;);
                 <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;oceania&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;anywhere&#39;</span><span class="p">)</span>
-                
-                
-            
-                
-                
-    
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="data-structures-tuple-list-dict-set">
 <h2>Data structures: tuple, list, dict, set<a class="headerlink" href="#data-structures-tuple-list-dict-set" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-data-structures">
+<div class="literal-block-wrapper container" id="testlet-data-structures">
 <div class="code-block-caption"><span class="caption-text">Testlet: data_structures</span><a class="headerlink" href="#testlet-data-structures" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;sun&#39;</span><span class="p">,</span> <span class="s">&#39;moon&#39;</span><span class="p">,</span> <span class="s">&#39;stars&#39;</span><span class="p">]</span>
@@ -461,12 +461,86 @@ show2 (&#39;copy&#39;);
 </pre></div>
 </div>
 </div>
-</div></blockquote>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-exceptions">
+<div class="code-block-caption"><span class="caption-text">Testlet: exceptions</span><a class="headerlink" href="#testlet-exceptions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Ex1</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+        
+<span class="k">class</span> <span class="nc">Ex2</span> <span class="p">(</span><span class="n">Ex1</span><span class="p">):</span>
+    <span class="k">pass</span>
+    
+<span class="k">class</span> <span class="nc">Ex3</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+    
+<span class="k">def</span> <span class="nf">test1</span> <span class="p">():</span>
+    <span class="k">raise</span> <span class="p">(</span><span class="ne">Exception</span> <span class="p">(</span><span class="s">&#39;mary&#39;</span><span class="p">))</span>
+    
+<span class="k">def</span> <span class="nf">test2</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">test1</span> <span class="p">()</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">test2</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Ex2</span> <span class="p">(</span><span class="s">&#39;had&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;little&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">333</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Ex1</span> <span class="p">(</span><span class="s">&#39;lamb&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex2</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;his&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;fleece&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;was&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;white&#39;</span><span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">444</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test3</span> <span class="p">():</span>
+        <span class="k">raise</span> <span class="n">Ex3</span> <span class="p">(</span><span class="s">&#39;as&#39;</span><span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">555</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">test3</span> <span class="p">()</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;snow&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;and&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;everywhere&#39;</span><span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">666</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="indices-and-slices-lhs-rhs-basic-and-extended">
 <h2>Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-indices-and-slices">
+<div class="literal-block-wrapper container" id="testlet-indices-and-slices">
 <div class="code-block-caption"><span class="caption-text">Testlet: indices_and_slices</span><a class="headerlink" href="#testlet-indices-and-slices" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="c"># Right hand side slices</span>
@@ -491,16 +565,13 @@ show2 (&#39;copy&#39;);
     
     <span class="n">aList</span> <span class="p">[</span> <span class="p">:</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="list-comprehensions-multi-loop-and-nested-with-multiple-if-s">
 <h2>List comprehensions, multi-loop and nested with multiple if&#8217;s<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-list-comprehensions">
+<div class="literal-block-wrapper container" id="testlet-list-comprehensions">
 <div class="code-block-caption"><span class="caption-text">Testlet: list_comprehensions</span><a class="headerlink" href="#testlet-list-comprehensions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
@@ -522,16 +593,13 @@ show2 (&#39;copy&#39;);
     <span class="n">scopeTest</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">scopeTest</span><span class="p">)</span>
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="hierarchical-modules-both-local-to-the-project-and-global-url-based">
 <h2>Hierarchical modules, both local to the project and global url-based<a class="headerlink" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-modules">
+<div class="literal-block-wrapper container" id="testlet-modules">
 <div class="code-block-caption"><span class="caption-text">Testlet: modules</span><a class="headerlink" href="#testlet-modules" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">modules.mod1.mod11.mod111</span>
 <span class="kn">import</span> <span class="nn">modules.mod3</span>
@@ -589,18 +657,13 @@ show2 (&#39;copy&#39;);
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">mod3Hundred</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">mod3GetTwoHundred</span> <span class="p">())</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">A</span> <span class="p">(</span><span class="mf">123.321</span><span class="p">)</span> <span class="o">.</span><span class="n">f</span> <span class="p">())</span>
-    
-    
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="simple-and-augmented-assignment">
 <h2>Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-simple-and-augmented-assignment">
+<div class="literal-block-wrapper container" id="testlet-simple-and-augmented-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: simple_and_augmented_assignment</span><a class="headerlink" href="#testlet-simple-and-augmented-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -664,16 +727,13 @@ show2 (&#39;copy&#39;);
     
     <span class="n">a</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="n">a</span><span class="o">.</span><span class="n">i</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">())</span>
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="tuple-assignment-recursive-and-in-for-headers-using-enumerate">
 <h2>Tuple assignment, recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="literal-block-wrapper container" id="testlet-tuple-assignment">
+<div class="literal-block-wrapper container" id="testlet-tuple-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: tuple_assignment</span><a class="headerlink" href="#testlet-tuple-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">santa</span><span class="p">,</span> <span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">],</span> <span class="n">e</span><span class="p">)</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s">&#39;santa-claus&#39;</span><span class="p">,</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="mi">5</span><span class="p">)</span>
@@ -685,11 +745,9 @@ show2 (&#39;copy&#39;);
     <span class="n">e</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">,</span> <span class="mf">2.74</span>
     <span class="n">e</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">pi</span><span class="p">,</span> <span class="n">e</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
-    
 </pre></div>
 </div>
 </div>
-</div></blockquote>
 </div>
 </div>
 
@@ -720,6 +778,7 @@ show2 (&#39;copy&#39;);
 <li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">Classes, multiple inheritance and assignment of bound functions</a></li>
 <li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
 <li><a class="reference internal" href="#data-structures-tuple-list-dict-set">Data structures: tuple, list, dict, set</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">Indices and slices: LHS, RHS, basic and extended</a></li>
 <li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">List comprehensions, multi-loop and nested with multiple if&#8217;s</a></li>
 <li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">Hierarchical modules, both local to the project and global url-based</a></li>
@@ -759,7 +818,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.34 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.38 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

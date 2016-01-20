@@ -21,4 +21,3 @@ def run (autoTester):
 	
 	aList [ : : 2] = [x + 0.001 for x in range (10) if x % 2]
 	autoTester.check (aList)
-	
