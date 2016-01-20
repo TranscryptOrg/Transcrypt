@@ -214,11 +214,11 @@ show2 (&#39;copy&#39;);
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>When code is being tested, a reference is needed of what is considered to be correct. With Transcrypt that reference is CPython. Autotesting Transcrypt code is simple and boils down to the following.</p>
 <ol class="arabic simple">
-<li>Along with developing production code, a growing set of <em>testlets</em> is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method <em>org.transcrypt.autotester.AutoTester.store (self, aString)</em> to store a well defined sequence of output data.</li>
+<li>Along with developing production code, a growing set of <em>testlets</em> is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method <em>org.transcrypt.autotester.AutoTester.check (self, *args)</em> to build a well defined sequence of output data.</li>
 <li>A series of testlets are imported into an application called an <em>autotest</em>.</li>
-<li>The autotest is first run from the command line: <em>python transcrypt -r autotest.py</em>. This will generate a file <em>autotest.html</em> in the working directory, containing the <em>reference data sequence</em> in a HTML DIV using CPython.</li>
-<li>After that, the autotest is compiled to JavaScript: <em>python transcryp -b autotest.py</em>. This will generate file <em>autotest.js</em> in the corresponding JavaScript directory.</li>
-<li>Click on <em>autotest.html</em> to load the autotest into the browser and run <em>autotest.js</em>. This will generate the <em>test data sequence</em>, now using the Transcrypt runtime.</li>
+<li>The autotest is first run from the command line: <em>python transcrypt -r autotest.py</em>. This will generate files <em>autotest.html</em> (using prettyfied code) and <em>autotest.min.html</em> (using minified code) in the working directory, both containing the <em>reference data sequence</em> in a HTML DIV using CPython.</li>
+<li>After that, the autotest is compiled to JavaScript: <em>python transcryp -b autotest.py</em>. This will generate files <em>autotest.js</em> and <em>autotest.min.js</em> in the corresponding JavaScript directory.</li>
+<li>Click on <em>autotest.html</em> or <em>autotest.min.html</em> to load the autotest into the browser and run <em>autotest.js</em> or <em>autotest.min.js</em> respectively. This will generate the <em>test data sequence</em>, now using the Transcrypt runtime.</li>
 <li>After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.</li>
 </ol>
 <p>An example of two testlets combined into the &#8216;hello&#8217; autotest, that is part of the distribution:</p>

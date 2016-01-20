@@ -238,214 +238,246 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
-						element: With 
-							items: list 
-								element: withitem 
-									context_expr: Call 
-										func: Name 
-											id: str = open
-											ctx: Load 
-										args: list 
-											element: Call 
-												func: Attribute 
-													value: Str 
-														s: str = {}.html
-													attr: str = format
-													ctx: Load 
-												args: list 
-													element: Name 
-														id: str = filePrename
-														ctx: Load 
-												keywords: list 
-											element: Str 
-												s: str = w
-										keywords: list 
-									optional_vars: Name 
-										id: str = aFile
-										ctx: Store 
+						element: For 
+							target: Name 
+								id: str = minified
+								ctx: Store 
+							iter: Tuple 
+								elts: list 
+									element: NameConstant 
+										value: bool = False
+									element: NameConstant 
+										value: bool = True
+								ctx: Load 
 							body: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = miniInfix
+											ctx: Store 
+									value: IfExp 
+										test: Name 
+											id: str = minified
 											ctx: Load 
-										args: list 
-											element: Call 
-												func: Attribute 
-													value: Str 
-														s: str = <script src="{}/{}.js"></script>
-
-
-													attr: str = format
+										body: Str 
+											s: str = .min
+										orelse: Str 
+											s: str = 
+								element: With 
+									items: list 
+										element: withitem 
+											context_expr: Call 
+												func: Name 
+													id: str = open
 													ctx: Load 
 												args: list 
-													element: Attribute 
-														value: Name 
-															id: str = __envir__
-															ctx: Load 
-														attr: str = targetSubDir
-														ctx: Load 
-													element: Name 
-														id: str = filePrename
-														ctx: Load 
-												keywords: list 
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Str 
-												s: str = <b>Status:</b>
-
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Call 
-												func: Attribute 
-													value: Str 
-														s: str = <div id="{}"></div><br><br>
-
-
-													attr: str = format
-													ctx: Load 
-												args: list 
-													element: Attribute 
-														value: Name 
-															id: str = self
-															ctx: Load 
-														attr: str = messageDivId
-														ctx: Load 
-												keywords: list 
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Str 
-												s: str = <b>Reference output:</b>
-
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Call 
-												func: Attribute 
-													value: Str 
-														s: str = <div id="{}">{}</div><br><br>
-
-
-													attr: str = format
-													ctx: Load 
-												args: list 
-													element: Attribute 
-														value: Name 
-															id: str = self
-															ctx: Load 
-														attr: str = referenceDivId
-														ctx: Load 
 													element: Call 
 														func: Attribute 
 															value: Str 
-																s: str =  | 
-															attr: str = join
+																s: str = {}{}.html
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = filePrename
+																ctx: Load 
+															element: Name 
+																id: str = miniInfix
+																ctx: Load 
+														keywords: list 
+													element: Str 
+														s: str = w
+												keywords: list 
+											optional_vars: Name 
+												id: str = aFile
+												ctx: Store 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <script src="{}/{}{}.js"></script>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = __envir__
+																	ctx: Load 
+																attr: str = targetSubDir
+																ctx: Load 
+															element: Name 
+																id: str = filePrename
+																ctx: Load 
+															element: Name 
+																id: str = miniInfix
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = <b>Status:</b>
+
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}"></div><br><br>
+
+
+															attr: str = format
 															ctx: Load 
 														args: list 
 															element: Attribute 
 																value: Name 
 																	id: str = self
 																	ctx: Load 
-																attr: str = referenceBuffer
+																attr: str = messageDivId
 																ctx: Load 
 														keywords: list 
 												keywords: list 
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Str 
-												s: str = <b>Test output:</b>
-
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Call 
+										element: Expr 
+											value: Call 
 												func: Attribute 
-													value: Str 
-														s: str = <div id="{}"></div>
-
-
-													attr: str = format
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
 													ctx: Load 
 												args: list 
-													element: Attribute 
-														value: Name 
-															id: str = self
+													element: Str 
+														s: str = <b>Reference output:</b>
+
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}">{}</div><br><br>
+
+
+															attr: str = format
 															ctx: Load 
-														attr: str = testDivId
-														ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = referenceDivId
+																ctx: Load 
+															element: Call 
+																func: Attribute 
+																	value: Str 
+																		s: str =  | 
+																	attr: str = join
+																	ctx: Load 
+																args: list 
+																	element: Attribute 
+																		value: Name 
+																			id: str = self
+																			ctx: Load 
+																		attr: str = referenceBuffer
+																		ctx: Load 
+																keywords: list 
+														keywords: list 
 												keywords: list 
-										keywords: list 
-								element: Expr 
-									value: Call 
-										func: Attribute 
-											value: Name 
-												id: str = aFile
-												ctx: Load 
-											attr: str = write
-											ctx: Load 
-										args: list 
-											element: Call 
+										element: Expr 
+											value: Call 
 												func: Attribute 
-													value: Str 
-														s: str = <script>{} ();</script>
-
-													attr: str = format
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
 													ctx: Load 
 												args: list 
-													element: Name 
-														id: str = filePrename
-														ctx: Load 
+													element: Str 
+														s: str = <b>Test output:</b>
+
 												keywords: list 
-										keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}"></div>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = testDivId
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <script>{} ();</script>
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = filePrename
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+							orelse: list 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 

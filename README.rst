@@ -22,11 +22,12 @@ Take a look at the growing documentation with code examples at the Transcrypt we
 Status
 ======
 
-Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds. N.B. The minification facility is still under construction, in other words: don't use it yet.
+Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
 
 What's new
 ==========
 
+- Minification added using Google's closure compiler, included in distro and run automatically
 - Exceptions added + autotest + docs
 - Function inheritance bug fixed (ooops...)
 - Autotest output example added to docs

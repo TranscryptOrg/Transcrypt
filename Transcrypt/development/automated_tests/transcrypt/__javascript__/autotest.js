@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-20 20:56:06
+// Transcrypt'ed from Python, 2016-01-20 22:00:33
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -130,7 +130,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.38';
+							self.transpilerVersion = '0.0.39';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -1277,16 +1277,21 @@ function autotest () {
 							}
 						});},
 						get dump () {return __get__ (this, function (self, filePrename) {
-							aFile = open ('{}.html'.format (filePrename), 'w');
-							aFile.write ('<script src="{}/{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename));
-							aFile.write ('<b>Status:</b>\n');
-							aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
-							aFile.write ('<b>Reference output:</b>\n');
-							aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
-							aFile.write ('<b>Test output:</b>\n');
-							aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-							aFile.write ('<script>{} ();</script>\n'.format (filePrename));
-							aFile.close ();
+							var __iter0__ = tuple ([false, true]);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var minified = __iter0__ [__index0__] ;
+								var miniInfix = minified ? '.min' : '';
+								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
+								aFile.write ('<b>Status:</b>\n');
+								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
+								aFile.write ('<b>Reference output:</b>\n');
+								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
+								aFile.write ('<b>Test output:</b>\n');
+								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
+								aFile.write ('<script>{} ();</script>\n'.format (filePrename));
+								aFile.close ();
+							}
 						});},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.split (' | ');
