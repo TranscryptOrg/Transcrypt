@@ -133,6 +133,13 @@ Classes, multiple inheritance and assignment of bound functions
 	:tab-width: 4
 	:caption: Testlet: classes
 
+Conditional expressions, simple and nested
+-------------------------------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/conditional_expressions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: conditional_expressions
+
 Control structures: for...else, while...else, if...elif...else, break, continue
 -------------------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-20 22:00:33
+// Transcrypt'ed from Python, 2016-01-21 10:08:30
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -130,7 +130,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.39';
+							self.transpilerVersion = '0.0.40';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -289,7 +289,7 @@ function autotest () {
 						return result;					
 					}
 					else {
-						return anObject.toString ();
+						return typeof anObject == 'boolean' ? anObject.toString () .capitalize () : anObject.toString ();
 					}
 				}
 				catch (exception) {
@@ -615,6 +615,64 @@ function autotest () {
 						show3 ('copy');
 					};
 					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'conditional_expressions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var f = function (x, b) {
+						return (b ? x * x : x + x);
+					};
+					var run = function (autoTester) {
+						var bools = tuple ([false, true]);
+						var __iter0__ = bools;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var a = __iter0__ [__index0__] ;
+							var __iter1__ = bools;
+							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+								var b = __iter1__ [__index1__] ;
+								autoTester.check (f ((a ? 10 : 100), b));
+							}
+						}
+						var __iter0__ = bools;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var p = __iter0__ [__index0__] ;
+							var __iter1__ = bools;
+							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+								var q = __iter1__ [__index1__] ;
+								var __iter2__ = bools;
+								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
+									var r = __iter2__ [__index2__] ;
+									autoTester.check ((p ? 'a' : (q ? 'b' : (r ? 'c' : 'd'))));
+									var a = (r ? (q ? (p ? 'e' : 'f') : 'g') : 'h');
+									var b = (p ? 'i' : (q ? 'j' : (r ? 'k' : 'l')));
+									var c = ((q ? p : r) ? 'm' : 'n');
+									var d = ((p < q && q <= r) ? 'o' : 'p');
+									autoTester.check (a, b, c, d);
+								}
+							}
+						}
+						var odd = function () {
+							var __accu0__ = [];
+							var __iter0__ = range (10);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var x = __iter0__ [__index0__];
+								__accu0__ .push ((x % 2 ? x : x + 1));
+							}
+							return __accu0__;
+						} ();
+						var noDuplicates = set (odd);
+						autoTester.check (odd, noDuplicates);
+					};
+					//<all>
+					__all__.f = f;
 					__all__.run = run;
 					//</all>
 				}
@@ -1280,7 +1338,7 @@ function autotest () {
 							var __iter0__ = tuple ([false, true]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var minified = __iter0__ [__index0__] ;
-								var miniInfix = minified ? '.min' : '';
+								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.write ('<b>Status:</b>\n');
@@ -1450,6 +1508,7 @@ function autotest () {
 	);
 	(function () {
 		var classes = {};
+		var conditional_expressions = {};
 		var control_structures = {};
 		var data_structures = {};
 		var exceptions = {};
@@ -1461,6 +1520,7 @@ function autotest () {
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (classes, '', __init__ (__world__.classes));
+		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
@@ -1471,6 +1531,7 @@ function autotest () {
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
 		autoTester.run (classes, 'classes');
+		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (exceptions, 'exceptions');

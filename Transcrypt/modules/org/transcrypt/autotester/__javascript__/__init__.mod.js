@@ -40,7 +40,7 @@
 							var __iter0__ = tuple ([false, true]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var minified = __iter0__ [__index0__] ;
-								var miniInfix = minified ? '.min' : '';
+								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.write ('<b>Status:</b>\n');

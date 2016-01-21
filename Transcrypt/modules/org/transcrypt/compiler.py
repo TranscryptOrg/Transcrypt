@@ -687,11 +687,13 @@ class Generator (ast.NodeVisitor):
 		self.skipSemiNew = True
 		
 	def visit_IfExp (self, node):
+		self.emit ('(')
 		self.visit (node.test)
 		self.emit (' ? ')
 		self.visit (node.body)
 		self.emit (' : ')
 		self.visit (node.orelse)
+		self.emit (')')
 		
 	def visit_Import (self, node):	# Import ... can only import modules
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]

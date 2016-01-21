@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.38 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.40 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.38',
+        VERSION:     '0.0.40',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.38 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.40 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.38 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.40 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -281,6 +281,7 @@ show2 (&#39;copy&#39;);
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
 
 <span class="kn">import</span> <span class="nn">classes</span>
+<span class="kn">import</span> <span class="nn">conditional_expressions</span>
 <span class="kn">import</span> <span class="nn">control_structures</span>
 <span class="kn">import</span> <span class="nn">data_structures</span>
 <span class="kn">import</span> <span class="nn">exceptions</span>
@@ -293,6 +294,7 @@ show2 (&#39;copy&#39;);
 <span class="n">autoTester</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">transcrypt</span><span class="o">.</span><span class="n">autotester</span><span class="o">.</span><span class="n">AutoTester</span> <span class="p">()</span>
 
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="s">&#39;classes&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">conditional_expressions</span><span class="p">,</span> <span class="s">&#39;conditional_expressions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">control_structures</span><span class="p">,</span> <span class="s">&#39;control_structures&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">data_structures</span><span class="p">,</span> <span class="s">&#39;data_structures&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="s">&#39;exceptions&#39;</span><span class="p">)</span>
@@ -353,6 +355,45 @@ show2 (&#39;copy&#39;);
 
     <span class="n">show3</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">show</span>
     <span class="n">show3</span> <span class="p">(</span><span class="s">&#39;copy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conditional-expressions-simple-and-nested">
+<h2>Conditional expressions, simple and nested<a class="headerlink" href="#conditional-expressions-simple-and-nested" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-conditional-expressions">
+<div class="code-block-caption"><span class="caption-text">Testlet: conditional_expressions</span><a class="headerlink" href="#testlet-conditional-expressions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">if</span> <span class="n">b</span> <span class="k">else</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">bools</span> <span class="o">=</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bools</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bools</span><span class="p">:</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="mi">10</span> <span class="k">if</span> <span class="n">a</span> <span class="k">else</span> <span class="mi">100</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+            
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">bools</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">bools</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">bools</span><span class="p">:</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span>
+                    <span class="s">&#39;a&#39;</span> <span class="k">if</span> <span class="n">p</span> <span class="k">else</span> <span class="s">&#39;b&#39;</span> <span class="k">if</span> <span class="n">q</span> <span class="k">else</span> <span class="s">&#39;c&#39;</span> <span class="k">if</span> <span class="n">r</span> <span class="k">else</span> <span class="s">&#39;d&#39;</span>
+                <span class="p">)</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">((</span><span class="s">&#39;e&#39;</span> <span class="k">if</span> <span class="n">p</span> <span class="k">else</span> <span class="s">&#39;f&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">q</span> <span class="k">else</span> <span class="s">&#39;g&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span> <span class="k">else</span> <span class="s">&#39;h&#39;</span>
+                <span class="p">)</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s">&#39;i&#39;</span> <span class="k">if</span> <span class="n">p</span> <span class="k">else</span> <span class="p">(</span><span class="s">&#39;j&#39;</span> <span class="k">if</span> <span class="n">q</span> <span class="k">else</span> <span class="p">(</span><span class="s">&#39;k&#39;</span> <span class="k">if</span> <span class="n">r</span> <span class="k">else</span> <span class="s">&#39;l&#39;</span><span class="p">))</span>
+                <span class="p">)</span>
+                                
+                <span class="n">c</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="k">if</span> <span class="n">q</span> <span class="k">else</span> <span class="n">r</span><span class="p">)</span> <span class="k">else</span> <span class="s">&#39;n&#39;</span>
+
+                <span class="n">d</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="k">else</span> <span class="s">&#39;p&#39;</span>
+                
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+                
+    <span class="n">odd</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+    <span class="n">noDuplicates</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">(</span><span class="n">odd</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">odd</span><span class="p">,</span> <span class="n">noDuplicates</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -776,6 +817,7 @@ show2 (&#39;copy&#39;);
 </li>
 <li><a class="reference internal" href="#what-language-constructs-are-currently-supported">What language constructs are currently supported</a><ul>
 <li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">Classes, multiple inheritance and assignment of bound functions</a></li>
+<li><a class="reference internal" href="#conditional-expressions-simple-and-nested">Conditional expressions, simple and nested</a></li>
 <li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
 <li><a class="reference internal" href="#data-structures-tuple-list-dict-set">Data structures: tuple, list, dict, set</a></li>
 <li><a class="reference internal" href="#exceptions">Exceptions</a></li>
@@ -818,7 +860,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.38 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.40 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

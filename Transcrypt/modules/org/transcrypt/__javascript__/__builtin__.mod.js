@@ -104,7 +104,7 @@
 						return result;					
 					}
 					else {
-						return anObject.toString ();
+						return typeof anObject == 'boolean' ? anObject.toString () .capitalize () : anObject.toString ();
 					}
 				}
 				catch (exception) {
