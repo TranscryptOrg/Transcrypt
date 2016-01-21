@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.40 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.44 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.40',
+        VERSION:     '0.0.44',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.40 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.44 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.40 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.44 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -286,6 +286,7 @@ show2 (&#39;copy&#39;);
 <span class="kn">import</span> <span class="nn">data_structures</span>
 <span class="kn">import</span> <span class="nn">exceptions</span>
 <span class="kn">import</span> <span class="nn">indices_and_slices</span>
+<span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">modules</span>
 <span class="kn">import</span> <span class="nn">simple_and_augmented_assignment</span>
@@ -299,6 +300,7 @@ show2 (&#39;copy&#39;);
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">data_structures</span><span class="p">,</span> <span class="s">&#39;data_structures&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="s">&#39;exceptions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">indices_and_slices</span><span class="p">,</span> <span class="s">&#39;indices_and_slices&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="s">&#39;modules&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">simple_and_augmented_assignment</span><span class="p">,</span> <span class="s">&#39;simple_and_augmented_assignment&#39;</span><span class="p">)</span>
@@ -610,6 +612,26 @@ show2 (&#39;copy&#39;);
 </div>
 </div>
 </div>
+<div class="section" id="lambda-functions-with-normal-args-and-args">
+<h2>Lambda functions with normal args and *args<a class="headerlink" href="#lambda-functions-with-normal-args-and-args" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-lambda-functions">
+<div class="code-block-caption"><span class="caption-text">Testlet: lambda_functions</span><a class="headerlink" href="#testlet-lambda-functions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">((</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">,</span> <span class="n">aFunc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">aFunc</span> <span class="p">(</span><span class="o">*</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">)]</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">args</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="list-comprehensions-multi-loop-and-nested-with-multiple-if-s">
 <h2>List comprehensions, multi-loop and nested with multiple if&#8217;s<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-list-comprehensions">
@@ -822,6 +844,7 @@ show2 (&#39;copy&#39;);
 <li><a class="reference internal" href="#data-structures-tuple-list-dict-set">Data structures: tuple, list, dict, set</a></li>
 <li><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">Indices and slices: LHS, RHS, basic and extended</a></li>
+<li><a class="reference internal" href="#lambda-functions-with-normal-args-and-args">Lambda functions with normal args and *args</a></li>
 <li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">List comprehensions, multi-loop and nested with multiple if&#8217;s</a></li>
 <li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">Hierarchical modules, both local to the project and global url-based</a></li>
 <li><a class="reference internal" href="#simple-and-augmented-assignment">Simple and augmented assignment</a></li>
@@ -860,7 +883,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.40 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.44 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

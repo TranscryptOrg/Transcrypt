@@ -27,6 +27,8 @@ Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, Rapy
 What's new
 ==========
 
+- Lambda functions + testcase + docs
+- Conditional expressions finished + testcase + docs
 - Minification added using Google's closure compiler, included in distro and run automatically
 - Exceptions added + autotest + docs
 - Function inheritance bug fixed (ooops...)

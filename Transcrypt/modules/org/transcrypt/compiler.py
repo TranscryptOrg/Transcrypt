@@ -763,7 +763,17 @@ class Generator (ast.NodeVisitor):
 		self.emit (' [')
 		self.visit (node.value)
 		self.emit ('] ')
-			
+		
+	def visit_Lambda (self, node):
+		self.emit ('function (',)
+		self.visit (node.args)
+		self.emit (') {{')
+		if node.args.vararg:	# If there's a vararg, assign an array containing the remainder of the actual parameters to it
+			self.emit ('var {} = [] .slice.apply (arguments) .slice ({}); ', node.args.vararg.arg, len (node.args.args))	
+		self.emit ('return ')
+		self.visit (node.body)
+		self.emit (';}}')
+	
 	def visit_List (self, node):
 		self.emit ('[')
 		for index, elt in enumerate (node.elts):

@@ -5,6 +5,7 @@
 		var data_structures = {};
 		var exceptions = {};
 		var indices_and_slices = {};
+		var lambda_functions = {};
 		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
@@ -17,6 +18,7 @@
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
+		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
@@ -28,6 +30,7 @@
 		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
+		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');

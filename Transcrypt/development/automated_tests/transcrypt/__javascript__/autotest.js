@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-21 10:08:30
+// Transcrypt'ed from Python, 2016-01-21 11:41:40
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -130,7 +130,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.40';
+							self.transpilerVersion = '0.0.44';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -1021,6 +1021,38 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
+		'lambda_functions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var z = 1000;
+						autoTester.check (function (x, y) {return x + y + z;} (111, 222));
+						var f = function (list0, list1, aFunc) {
+							return function () {
+								var __accu0__ = [];
+								var __iter0__ = zip (list0, list1);
+								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+									var elem = __iter0__ [__index0__];
+									__accu0__ .push (aFunc.apply (null, elem));
+								}
+								return __accu0__;
+							} ();
+						};
+						var x = f (range (10), range (0, 100, 10), function (x, y) {return x + y + z;});
+						autoTester.check (x);
+						autoTester.check (f (range (10, 20), range (100, 200, 10), function (x, y) {return x * y + 100 * z;}));
+						autoTester.check (f (range (10, 20), range (100, 200, 10), function () {var args = [] .slice.apply (arguments) .slice (0); return args [0]  * args [1]  + 100 * z;}));
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'list_comprehensions', {
 			__all__: {
 				__inited__: false,
@@ -1513,6 +1545,7 @@ function autotest () {
 		var data_structures = {};
 		var exceptions = {};
 		var indices_and_slices = {};
+		var lambda_functions = {};
 		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
@@ -1525,6 +1558,7 @@ function autotest () {
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
+		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
@@ -1536,6 +1570,7 @@ function autotest () {
 		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
+		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');

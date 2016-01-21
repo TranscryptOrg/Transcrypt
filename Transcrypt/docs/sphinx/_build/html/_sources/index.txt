@@ -168,6 +168,13 @@ Indices and slices: LHS, RHS, basic and extended
 	:tab-width: 4
 	:caption: Testlet: indices_and_slices
 
+Lambda functions with normal args and \*args
+-------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/lambda_functions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: lambda_functions
+
 List comprehensions, multi-loop and nested with multiple if's
 -------------------------------------------------------------
 
