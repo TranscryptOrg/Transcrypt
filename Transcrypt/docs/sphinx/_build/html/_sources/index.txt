@@ -126,6 +126,13 @@ Transcrypt can handle a fast growing set of language constructs. Read through th
 	:tab-width: 4
 	:caption: Autotest: Transcrypt demo suite
 
+Arguments: \*\*kwargs, \*args, defaults (partially ready)
+---------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/arguments/__init__.py
+	:tab-width: 4
+	:caption: Testlet: arguments
+
 Classes, multiple inheritance and assignment of bound functions
 ---------------------------------------------------------------
 
@@ -134,7 +141,7 @@ Classes, multiple inheritance and assignment of bound functions
 	:caption: Testlet: classes
 
 Conditional expressions, simple and nested
--------------------------------------------------------------------------------
+------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/conditional_expressions/__init__.py
 	:tab-width: 4
@@ -169,7 +176,7 @@ Indices and slices: LHS, RHS, basic and extended
 	:caption: Testlet: indices_and_slices
 
 Lambda functions with normal args and \*args
--------------------------------------------
+--------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/lambda_functions/__init__.py
 	:tab-width: 4

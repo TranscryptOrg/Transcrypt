@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.44 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.45 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.44',
+        VERSION:     '0.0.45',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.44 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.45 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.44 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.45 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -280,6 +280,7 @@ show2 (&#39;copy&#39;);
 <div class="code-block-caption"><span class="caption-text">Autotest: Transcrypt demo suite</span><a class="headerlink" href="#autotest-transcrypt-demo-suite" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
 
+<span class="kn">import</span> <span class="nn">arguments</span>
 <span class="kn">import</span> <span class="nn">classes</span>
 <span class="kn">import</span> <span class="nn">conditional_expressions</span>
 <span class="kn">import</span> <span class="nn">control_structures</span>
@@ -294,6 +295,7 @@ show2 (&#39;copy&#39;);
 
 <span class="n">autoTester</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">transcrypt</span><span class="o">.</span><span class="n">autotester</span><span class="o">.</span><span class="n">AutoTester</span> <span class="p">()</span>
 
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="s">&#39;arguments&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="s">&#39;classes&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">conditional_expressions</span><span class="p">,</span> <span class="s">&#39;conditional_expressions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">control_structures</span><span class="p">,</span> <span class="s">&#39;control_structures&#39;</span><span class="p">)</span>
@@ -308,6 +310,39 @@ show2 (&#39;copy&#39;);
 
 <span class="n">autoTester</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="arguments-kwargs-args-defaults-partially-ready">
+<h2>Arguments: **kwargs, *args, defaults (partially ready)<a class="headerlink" href="#arguments-kwargs-args-defaults-partially-ready" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-arguments">
+<div class="code-block-caption"><span class="caption-text">Testlet: arguments</span><a class="headerlink" href="#testlet-arguments" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># class A:</span>
+    <span class="c"># def __init__ (self, x = 123, y = 456, *args, m, n = 456, **kwargs):</span>
+        <span class="c"># self.x = x</span>
+        <span class="c"># self.y = y</span>
+        <span class="c"># self.args = args</span>
+        <span class="c"># self.m = m</span>
+        <span class="c"># self.n = n</span>
+        <span class="c"># self.kwargs = kwargs</span>
+        <span class="c"># self.extra = &#39;hello&#39;</span>
+
+<span class="c"># class B (A):</span>
+    <span class="c"># def __init__ (self, x, y = -1, *args, m = -2, n, **kwargs):</span>
+        <span class="c"># A.__init__ (self, x, y, *args, m = m, n = n, **kwargs)</span>
+        
+    <span class="c"># def f (self):</span>
+        <span class="c"># print (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra)</span>
+    
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        
+    <span class="n">f</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span>
+    
+<span class="c">#   b = B (3, 4, 30, 40, m = 300, n = 400, p = 3000, q = 4000)</span>
+<span class="c">#   b.f ()</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="classes-multiple-inheritance-and-assignment-of-bound-functions">
@@ -838,6 +873,7 @@ show2 (&#39;copy&#39;);
 </ul>
 </li>
 <li><a class="reference internal" href="#what-language-constructs-are-currently-supported">What language constructs are currently supported</a><ul>
+<li><a class="reference internal" href="#arguments-kwargs-args-defaults-partially-ready">Arguments: **kwargs, *args, defaults (partially ready)</a></li>
 <li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">Classes, multiple inheritance and assignment of bound functions</a></li>
 <li><a class="reference internal" href="#conditional-expressions-simple-and-nested">Conditional expressions, simple and nested</a></li>
 <li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
@@ -883,7 +919,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.44 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.45 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
