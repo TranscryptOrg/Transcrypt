@@ -297,11 +297,16 @@ class Generator (ast.NodeVisitor):
 			ast.In:	None,		# Dealt with separately
 			ast.NotIn: None		# Dealt with separately
 		}
+
+		self.filterIds = ('arguments',)
 		
 		try:
 			self.visit (module.parseTree)
 		except Exception as exception:
 			utils.enhanceException (exception, moduleName = self.module.metadata.name)
+		
+	def filterId (self, qualifiedId):
+		return '.'.join (['__${}__'.format (id) if id in self.filterIds else id for id in qualifiedId.split ('.')])	# $ to avoid magics like __init__
 		
 	def tabs (self, indentLevel = None):
 		if indentLevel == None:
@@ -358,12 +363,13 @@ class Generator (ast.NodeVisitor):
 	def visit_arg (self, node):
 		self.emit (node.arg)
 		
-	def visit_arguments (self, node):
+	def visit_arguments (self, node):	# Visited for def's, not for calls
 		for index, arg in enumerate (node.args):
 			self.emitComma (index)
 			self.visit (arg)
 			
-		# If there's a vararg, no formal parameter is emitted for it, it's just retrieved in the body
+		# If there's a vararg or a kwarg, no formal parameter is emitted for it, it's just retrieved in the body
+		# so f (a, b=3, *x, c, d=4, **y, e, f = 5) generates f (a, b, c, d, e, f), since x and y are never passed in positionally
 				
 	def visit_Assign (self, node):
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
@@ -508,11 +514,25 @@ class Generator (ast.NodeVisitor):
 		self.emit ('break')
 	
 	def visit_Call (self, node):
+		def emitKwargDict ():
+			self.emit ('__kwargdict__ ({{')
+			for keywordIndex, keyword in enumerate (node.keywords):
+				if keyword.arg:
+					self.emitComma (keywordIndex)
+					self.emit ('\'{}\': ', keyword.arg)
+					self.visit (keyword.value)
+				else:
+					for keyIndex, key in enumerate (keyword.value):	# Could be empty but
+						self.emitComma (keywordIndex + keyIndex)	# **kwargs is always last arg
+						self.emit ('\'{}\': {}', key, keyword.value [key])
+			self.emit ('}})')
+
 		self.visit (node.func)
 		
 		for index, expr in enumerate (node.args):
 			if type (expr) == ast.Starred:
 				self.emit ('.apply (null, ')	# Note that in generated a.b.f (), a.b.f is a bound function already
+				
 				for index, expr in enumerate (node.args):
 					if index:
 						self.emit ('.concat (')
@@ -524,6 +544,12 @@ class Generator (ast.NodeVisitor):
 						self.emit (']')
 					if index:
 						self.emit (')')
+						
+				if node.keywords:
+					self.emit ('.concat ([')	# At least *args was present before this point
+					emitKwargDict ()
+					self.emit ('])')
+					
 				self.emit (')')			
 				break;
 		else:	
@@ -531,6 +557,11 @@ class Generator (ast.NodeVisitor):
 			for index, expr in enumerate (node.args):
 				self.emitComma (index)
 				self.visit (expr)
+				
+			if node.keywords:
+				self.emitComma (len (node.args))
+				emitKwargDict ()
+				
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
@@ -654,8 +685,77 @@ class Generator (ast.NodeVisitor):
 		self.emit (') {{\n')
 		
 		self.indent ()
-		if node.args.vararg:	# If there's a vararg, assign an array containing the remainder of the actual parameters to it
-			self.emit ('var {} = [] .slice.apply (arguments) .slice ({});\n', node.args.vararg.arg, len (node.args.args))			
+		
+		# Defaults for positional args (before *), only if not passed normally before this point
+		for arg, expr in zip (node.args.args, node.args.defaults):
+			if expr:
+				self.emit ('if (typeof {} == \'undefined\') {{;\n', arg.arg)
+				self.indent ()
+				self.emit ('var {} = ', arg.arg)
+				self.visit (expr)
+				self.emit (';\n')
+				self.dedent ()
+				self.emit ('}};\n')
+			
+		# Defaults for kwonly args (after *), unconditionally, since they will be passed only after this point
+		for arg, expr in zip (node.args.kwonlyargs, node.args.kw_defaults):
+			if expr:
+				self.emit ('var {} = ', arg.arg)
+				self.visit (expr)
+				self.emit (';\n')
+			
+		# If there's anything other than explicit positional args (which have been passed and dealth with already)
+		if node.args.vararg or node.args.kwarg or node.args.kwonlyargs:
+			# We'll to work with parts of the calltime args, so we have to convert arguments to an array to allow for slicing			
+			self.emit ('var __args__ = [].slice.apply (arguments);\n')
+			
+			# Store index of last actual param 
+			self.emit ('var __ilastarg__ = __args__.length - 1;\n')
+			
+			# Any calltime keyword args are passed in a JavaScript-only object of type __kwargdict__
+			# If it's there, copy the __kwargdict__ into local var __allkwargs__
+			# And lower __ilastarg__ by 1, since the last calltime arg wasn't a normal (Python) one
+			self.emit ('if (type (__args__ [__ilastarg__]) == __kwargdict__) {{\n')
+			self.indent ()
+			self.emit ('var __allkwargs__ = __args__ [__ilastarg__--];\n')
+
+			# If there is a **kwargs arg, make a local to hold its calltime contents
+			if node.args.kwarg:
+				self.emit ('var {} = {{}};\n', node.args.kwarg.arg)
+				
+			# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
+			self.emit ('for (var __attrib__ in __allkwargs__) {{\n')
+			self.indent ()
+			
+			# We'll make the distinction between normal keyword args and **kwargs keyword args in a switch
+			self.emit ('switch (__attrib__) {{\n')
+			self.indent ()
+						
+			# First generate a case for each normal keyword arg, generating a local for it
+			for arg in node.args.args + node.args.kwonlyargs:
+				self.emit ('case \'{0}\': var {0} = __allkwargs__ [__attrib__]; break;\n', arg.arg)
+				
+			# Then put the rest into the **kwargs local
+			if node.args.kwarg:
+				self.emit ('default: {} [__attrib__] = __allkwargs__ [__attrib__];\n', node.args.kwarg.arg)
+			self.dedent ()
+			self.emit ('}}\n')
+			
+			self.dedent ()
+			self.emit ('}}\n')	# for (__attrib__...
+			
+			# Take out the kwargdict marker
+			if node.args.kwarg:
+				self.emit ('{}.__class__ = null;\n', node.args.kwarg.arg)
+
+			self.dedent ()
+			self.emit ('}}\n')	# if (type...
+						
+			# If there's a vararg, assign an array containing the remainder of the actual non keyword only params, except for the __kwargdict__
+			if node.args.vararg:
+				# Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
+				self.emit ('var {} = tuple (__args__.slice ({}, __ilastarg__ + 1));\n', node.args.vararg.arg, len (node.args.args))
+			
 		self.emitBody (node.body)
 		self.dedent ()
 		
@@ -710,14 +810,14 @@ class Generator (ast.NodeVisitor):
 				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 			
 			if alias.asname:
-				self.emit ('var {} =  __init__ (__world__.{})', alias.asname, alias.name)
+				self.emit ('var {} =  __init__ (__world__.{})', self.filterId (alias.asname), self.filterId (alias.name))
 			else:
 				aliasSplit = alias.name.split ('.', 1)
 				head = aliasSplit [0]
 				tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
 				
 				self.importHeads.add (head)
-				self.emit ('__nest__ ({}, \'{}\', __init__ (__world__.{}))', head, tail, alias.name)
+				self.emit ('__nest__ ({}, \'{}\', __init__ (__world__.{}))', self.filterId (head), self.filterId (tail), self.filterId (alias.name))
 			
 			if index < len (names) - 1:
 				self.emit (';\n')
@@ -736,24 +836,24 @@ class Generator (ast.NodeVisitor):
 						
 					module = self.module.program.provide (node.module)
 					for index, name in enumerate (module.all):				
-						self.emit ('var {0} = __init__ (__world__.{1}).{0}', name, node.module)
+						self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (name), self.filterId (node.module))
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 				else:
 					try:											# Try if alias.name denotes a module				
-						self.module.program.provide ('{}.{}'.format (node.module, alias.name))
+						self.module.program.provide ('{}.{}'.format (self.filterId (node.module), self.filterId (alias.name)))
 												
 						if alias.asname:
-							self.emit ('var {} = __init__ (__world__.{}.{})', alias.asname, node.module, alias.name)
+							self.emit ('var {} = __init__ (__world__.{}.{})', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
 						else:
-							self.emit ('var {0} = __init__ (__world__.{1}.{0})', alias.name, node.module)						
+							self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))						
 					except:											# If it doesn't it denotes an entity inside a module
 						self.module.program.provide (node.module)
 				
 						if alias.asname:
-							self.emit ('var {} = __init__ (__world__.{}).{}', alias.asname, node.module, alias.name)
+							self.emit ('var {} = __init__ (__world__.{}).{}', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
 						else:
-							self.emit ('var {0} = __init__ (__world__.{1}).{0}', alias.name, node.module)						
+							self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))						
 					if index < len (node.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:
@@ -850,7 +950,7 @@ class Generator (ast.NodeVisitor):
 			self.emit ('__nest__ (\n')
 			self.indent ()
 			self.emit ('__all__,\n')
-			self.emit ('\'{}\', {{\n', self.module.metadata.name)			
+			self.emit ('\'{}\', {{\n', self.filterId (self.module.metadata.name))			
 			self.indent ()
 			self.emit ('__all__: {{\n')
 			self.indent ()
@@ -885,7 +985,7 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 		
 		self.targetFragments.insert (importHeadsIndex, ''.join ([
-			'{}var {} = {{}};\n'.format (self.tabs (importHeadsLevel), head)
+			'{}var {} = {{}};\n'.format (self.tabs (importHeadsLevel), self.filterId (head))
 			for head in sorted (self.importHeads)
 		]))
 		
@@ -894,7 +994,7 @@ class Generator (ast.NodeVisitor):
 			if not self.scopes:
 				self.all.add (node.id)
 				
-		self.emit (node.id)
+		self.emit (self.filterId (node.id))
 		
 	def visit_NameConstant (self, node):
 		self.emit (self.nameConsts [node.value])

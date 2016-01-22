@@ -1,4 +1,5 @@
 	(function () {
+		var __$arguments__ = {};
 		var classes = {};
 		var conditional_expressions = {};
 		var control_structures = {};
@@ -12,6 +13,7 @@
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
+		__nest__ (__$arguments__, '', __init__ (__world__.__$arguments__));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
@@ -24,6 +26,7 @@
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
+		autoTester.run (__$arguments__, 'arguments');
 		autoTester.run (classes, 'classes');
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');

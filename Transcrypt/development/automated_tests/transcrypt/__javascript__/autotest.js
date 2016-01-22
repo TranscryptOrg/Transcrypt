@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-21 11:41:40
+// Transcrypt'ed from Python, 2016-01-22 19:33:39
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -151,7 +151,17 @@ function autotest () {
 				__init__: function (__all__) {
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							var args = [] .slice.apply (arguments) .slice (1);
+							var __args__ = [].slice.apply (arguments);
+							var __ilastarg__ = __args__.length - 1;
+							if (type (__args__ [__ilastarg__]) == __kwargdict__) {
+								var __allkwargs__ = __args__ [__ilastarg__--];
+								for (var __attrib__ in __allkwargs__) {
+									switch (__attrib__) {
+										case 'self': var self = __allkwargs__ [__attrib__]; break;
+									}
+								}
+							}
+							var args = tuple (__args__.slice (1, __ilastarg__ + 1));
 							self.args = args;
 						});},
 						get __repr__ () {return __get__ (this, function (self) {
@@ -202,9 +212,20 @@ function autotest () {
 	
 	// Make make __main__ available in browser
 	var __main__ = {__file__: ''}; // !!! May need some reorganisation
+	__all__.main = __main__;
 	
 	// Define current exception, there's at most one exception in the air at any time
 	var __except__ = null;
+	__all__.__except__ = __except__;
+	
+	// Define recognizable dictionary for **kwargs parameter
+	var __kwargdict__ = function (anObject) {
+		__kwargdict__.__name__ = '__kwargdict__';
+		anObject.__class__ = __kwargdict__;
+		anObject.constructor = Object;
+		return anObject;
+	}
+	__all__.___kwargdict__ = __kwargdict__;
 	
 	// Console message
 	var print = function () {
@@ -233,6 +254,38 @@ function autotest () {
 		}
 	};
 	__all__.len = len;
+	
+	var bool = {__name__: 'bool'}
+	__all__.bool = bool;
+	
+	var int = {__name__: 'int'}
+	__all__.int = int;
+	
+	var float = {__name__:'float'}
+	__all__.float = float;
+	
+	var type = function (anObject) {
+		try {
+			return anObject.__class__;
+		}
+		catch (exception) {
+			var aType = typeof anObject;
+			if (aType == 'boolean') {
+				return bool;
+			}
+			else if (aType == 'number') {
+				if (anObject % 1 == 0) {
+					return int;
+				}
+				else {
+					return float;
+				}				
+			}
+			else {
+				return aType;
+			}
+		}
+	}
 	
 	var isinstance = function (anObject, classinfo) {
 		function isA (queryClass) {
@@ -265,24 +318,26 @@ function autotest () {
 						var result = '{';
 						var comma = false;
 						for (var attrib in anObject) {
-							if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
-								var attribRepr = attrib;
-							}
-							else {
-								var attribRepr = '\'' + attrib + '\'';
-							}
-							
-							if (comma) {
-								result += ', ';
-							}
-							else {
-								comma = true;
-							}
-							try {
-								result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
-							}
-							catch (exception) {
-								result += attribRepr + ': ' + anObject [attrib] .toString ();
+							if (attrib != '__class__' && attrib != 'constructor') {	// !!! Ugly
+								if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
+									var attribRepr = attrib;	// !!! anObject [attrib]
+								}
+								else {
+									var attribRepr = '\'' + attrib + '\'';
+								}
+								
+								if (comma) {
+									result += ', ';
+								}
+								else {
+									comma = true;
+								}
+								try {
+									result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
+								}
+								catch (exception) {
+									result += attribRepr + ': ' + anObject [attrib] .toString ();
+								}
 							}
 						}
 						result += '}';
@@ -354,6 +409,8 @@ function autotest () {
 		return instance;
 	}
 	__all__.list = list;
+	Array.prototype.__class__ = list;	// Arrays are lists, unless constructed otherwise
+	list.__name__ = 'list';
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {	// Only called if step is not null, else slice is called
 		if (start < 0) {
@@ -443,11 +500,12 @@ function autotest () {
 	
 	function tuple (iterable) {
 		var instance = iterable ? [] .slice.apply (iterable) : [];
-		instance.__class__ = tuple;
+		instance.__class__ = tuple;	// Not all arrays are tuples
 		return instance;
 	}
 	__all__.tuple = tuple;
-		
+	tuple.__name__ = 'tuple';
+	
 	// Set extensions to Array
 		
 	function set (iterable) {
@@ -459,10 +517,11 @@ function autotest () {
 				}
 			}
 		}
-		instance.__class__ = set;
+		instance.__class__ = set;	// Not all arrays are sets
 		return instance;
 	}
 	__all__.set = set;
+	set.__name__ = 'set';
 	
 	// String extensions
 		
@@ -470,6 +529,8 @@ function autotest () {
 		return new String (stringable);
 	}
 	__all__.str = str;	
+	String.prototype.__class__ = str;	// All strings are str
+	str.__name__ = 'str';
 	
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
@@ -564,6 +625,46 @@ function autotest () {
 	};
 	
 	__all__.str = str
+	__nest__ (
+		__all__,
+		'__$arguments__', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var f = function (x, y) {
+							if (typeof x == 'undefined') {;
+								var x = -1;
+							};
+							var m = -2;
+							var __args__ = [].slice.apply (arguments);
+							var __ilastarg__ = __args__.length - 1;
+							if (type (__args__ [__ilastarg__]) == __kwargdict__) {
+								var __allkwargs__ = __args__ [__ilastarg__--];
+								var kwargs = {};
+								for (var __attrib__ in __allkwargs__) {
+									switch (__attrib__) {
+										case 'x': var x = __allkwargs__ [__attrib__]; break;
+										case 'y': var y = __allkwargs__ [__attrib__]; break;
+										case 'm': var m = __allkwargs__ [__attrib__]; break;
+										case 'n': var n = __allkwargs__ [__attrib__]; break;
+										default: kwargs [__attrib__] = __allkwargs__ [__attrib__];
+									}
+								}
+								kwargs.__class__ = null;
+							}
+							var args = tuple (__args__.slice (2, __ilastarg__ + 1));
+							autoTester.check (x, y, args, m, n, kwargs);
+						};
+						f (1, 2, 10, 20, __kwargdict__ ({'m': 100, 'n': 200, 'p': 1000, 'q': 2000}));
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
 	__nest__ (
 		__all__,
 		'classes', {
@@ -1349,7 +1450,17 @@ function autotest () {
 							self.testDivId = 'transcrypt';
 						});},
 						get check () {return __get__ (this, function (self) {
-							var args = [] .slice.apply (arguments) .slice (1);
+							var __args__ = [].slice.apply (arguments);
+							var __ilastarg__ = __args__.length - 1;
+							if (type (__args__ [__ilastarg__]) == __kwargdict__) {
+								var __allkwargs__ = __args__ [__ilastarg__--];
+								for (var __attrib__ in __allkwargs__) {
+									switch (__attrib__) {
+										case 'self': var self = __allkwargs__ [__attrib__]; break;
+									}
+								}
+							}
+							var args = tuple (__args__.slice (1, __ilastarg__ + 1));
 							var item = ' '.join (function () {
 								var __accu0__ = [];
 								var __iter0__ = args;
@@ -1539,6 +1650,7 @@ function autotest () {
 		}
 	);
 	(function () {
+		var __$arguments__ = {};
 		var classes = {};
 		var conditional_expressions = {};
 		var control_structures = {};
@@ -1552,6 +1664,7 @@ function autotest () {
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
+		__nest__ (__$arguments__, '', __init__ (__world__.__$arguments__));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
@@ -1564,6 +1677,7 @@ function autotest () {
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
+		autoTester.run (__$arguments__, 'arguments');
 		autoTester.run (classes, 'classes');
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');

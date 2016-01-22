@@ -17,9 +17,20 @@
 	
 	// Make make __main__ available in browser
 	var __main__ = {__file__: ''}; // !!! May need some reorganisation
+	__all__.main = __main__;
 	
 	// Define current exception, there's at most one exception in the air at any time
 	var __except__ = null;
+	__all__.__except__ = __except__;
+	
+	// Define recognizable dictionary for **kwargs parameter
+	var __kwargdict__ = function (anObject) {
+		__kwargdict__.__name__ = '__kwargdict__';
+		anObject.__class__ = __kwargdict__;
+		anObject.constructor = Object;
+		return anObject;
+	}
+	__all__.___kwargdict__ = __kwargdict__;
 	
 	// Console message
 	var print = function () {
@@ -48,6 +59,38 @@
 		}
 	};
 	__all__.len = len;
+	
+	var bool = {__name__: 'bool'}
+	__all__.bool = bool;
+	
+	var int = {__name__: 'int'}
+	__all__.int = int;
+	
+	var float = {__name__:'float'}
+	__all__.float = float;
+	
+	var type = function (anObject) {
+		try {
+			return anObject.__class__;
+		}
+		catch (exception) {
+			var aType = typeof anObject;
+			if (aType == 'boolean') {
+				return bool;
+			}
+			else if (aType == 'number') {
+				if (anObject % 1 == 0) {
+					return int;
+				}
+				else {
+					return float;
+				}				
+			}
+			else {
+				return aType;
+			}
+		}
+	}
 	
 	var isinstance = function (anObject, classinfo) {
 		function isA (queryClass) {
@@ -80,24 +123,26 @@
 						var result = '{';
 						var comma = false;
 						for (var attrib in anObject) {
-							if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
-								var attribRepr = attrib;
-							}
-							else {
-								var attribRepr = '\'' + attrib + '\'';
-							}
-							
-							if (comma) {
-								result += ', ';
-							}
-							else {
-								comma = true;
-							}
-							try {
-								result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
-							}
-							catch (exception) {
-								result += attribRepr + ': ' + anObject [attrib] .toString ();
+							if (attrib != '__class__' && attrib != 'constructor') {	// !!! Ugly
+								if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
+									var attribRepr = attrib;	// !!! anObject [attrib]
+								}
+								else {
+									var attribRepr = '\'' + attrib + '\'';
+								}
+								
+								if (comma) {
+									result += ', ';
+								}
+								else {
+									comma = true;
+								}
+								try {
+									result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
+								}
+								catch (exception) {
+									result += attribRepr + ': ' + anObject [attrib] .toString ();
+								}
 							}
 						}
 						result += '}';
@@ -169,6 +214,8 @@
 		return instance;
 	}
 	__all__.list = list;
+	Array.prototype.__class__ = list;	// Arrays are lists, unless constructed otherwise
+	list.__name__ = 'list';
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {	// Only called if step is not null, else slice is called
 		if (start < 0) {
@@ -258,11 +305,12 @@
 	
 	function tuple (iterable) {
 		var instance = iterable ? [] .slice.apply (iterable) : [];
-		instance.__class__ = tuple;
+		instance.__class__ = tuple;	// Not all arrays are tuples
 		return instance;
 	}
 	__all__.tuple = tuple;
-		
+	tuple.__name__ = 'tuple';
+	
 	// Set extensions to Array
 		
 	function set (iterable) {
@@ -274,10 +322,11 @@
 				}
 			}
 		}
-		instance.__class__ = set;
+		instance.__class__ = set;	// Not all arrays are sets
 		return instance;
 	}
 	__all__.set = set;
+	set.__name__ = 'set';
 	
 	// String extensions
 		
@@ -285,6 +334,8 @@
 		return new String (stringable);
 	}
 	__all__.str = str;	
+	String.prototype.__class__ = str;	// All strings are str
+	str.__name__ = 'str';
 	
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
