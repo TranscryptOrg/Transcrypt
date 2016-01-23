@@ -32,6 +32,18 @@
 	}
 	__all__.___kwargdict__ = __kwargdict__;
 	
+	var __merge__ = function (object0, object1) {
+		var result = {};
+		for (var attrib in object0) {
+			result [attrib] = object0 [attrib];
+		}
+		for (var attrib in object1) {
+			result [attrib] = object1 [attrib];
+		}
+		return result;
+	}
+	__all__.__merge__ = __merge__;
+	
 	// Console message
 	var print = function () {
 		console.log ([] .slice.apply (arguments) .join (' '));

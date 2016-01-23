@@ -19,17 +19,17 @@
 							self.testDivId = 'transcrypt';
 						});},
 						get check () {return __get__ (this, function (self) {
-							var __args__ = [].slice.apply (arguments);
-							var __ilastarg__ = __args__.length - 1;
-							if (type (__args__ [__ilastarg__]) == __kwargdict__) {
-								var __allkwargs__ = __args__ [__ilastarg__--];
-								for (var __attrib__ in __allkwargs__) {
-									switch (__attrib__) {
-										case 'self': var self = __allkwargs__ [__attrib__]; break;
+							var __args0__ = [].slice.apply (arguments);
+							var __ilastarg0__ = __args0__.length - 1;
+							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
+								var __allkwargs0__ = __args0__ [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'self': var self = __allkwargs0__ [__attrib0__]; break;
 									}
 								}
 							}
-							var args = tuple (__args__.slice (1, __ilastarg__ + 1));
+							var args = tuple (__args0__.slice (1, __ilastarg0__ + 1));
 							var item = ' '.join (function () {
 								var __accu0__ = [];
 								var __iter0__ = args;

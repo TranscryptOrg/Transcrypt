@@ -27,7 +27,7 @@ Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, Rapy
 What's new
 ==========
 
-- Args, kwargs, default values a la Python 3.5, partially finishes + testcase + docs
+- Args, kwargs, default values a la Python 3.5, partially finished + testcase + docs
 - Lambda functions + testcase + docs
 - Conditional expressions finished + testcase + docs
 - Minification added using Google's closure compiler, included in distro and run automatically

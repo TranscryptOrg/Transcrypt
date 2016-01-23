@@ -10,20 +10,12 @@ def run (autoTester):
 	for p in bools:
 		for q in bools:
 			for r in bools:
-				autoTester.check (
-					'a' if p else 'b' if q else 'c' if r else 'd'
-				)
-				a = (
-					(('e' if p else 'f') if q else 'g') if r else 'h'
-				)
-				b = (
-					'i' if p else ('j' if q else ('k' if r else 'l'))
-				)
-								
-				c = 'm' if (p if q else r) else 'n'
-
-				d = 'o' if p < q <= r else 'p'
+				autoTester.check ('a' if p else 'b' if q else 'c' if r else 'd')
 				
+				a = ((('e' if p else 'f') if q else 'g') if r else 'h')
+				b = ('i' if p else ('j' if q else ('k' if r else 'l')))
+				c = 'm' if (p if q else r) else 'n'
+				d = 'o' if p < q <= r else 'p'
 				autoTester.check (a, b, c, d)
 				
 	odd = [x if x % 2 else x + 1 for x in range (10)]
