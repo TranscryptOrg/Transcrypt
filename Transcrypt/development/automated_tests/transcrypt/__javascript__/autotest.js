@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-23 14:55:32
+// Transcrypt'ed from Python, 2016-01-23 16:34:32
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -152,16 +152,7 @@ function autotest () {
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-									}
-								}
-							}
-							var args = tuple (__args0__.slice (1, __ilastarg0__ + 1));
+							var args = tuple (__args0__.slice (1));
 							self.args = args;
 						});},
 						get __repr__ () {return __get__ (this, function (self) {
@@ -732,6 +723,31 @@ function autotest () {
 								kwargs.__class__ = null;
 							}
 							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+							var f2 = function (x, y) {
+								if (typeof x == 'undefined') {;
+									var x = -3;
+								};
+								var m = -4;
+								var __args0__ = [].slice.apply (arguments);
+								var __ilastarg0__ = __args0__.length - 1;
+								if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
+									var __allkwargs0__ = __args0__ [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
+									}
+									kwargs.__class__ = null;
+								}
+								var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+								autoTester.check (x, y, args, m, n, kwargs);
+							};
+							f2 (11, 22, 1010, 2020, __kwargdict__ ({m: 100100, n: 200200, p: 10001000, q: 20002000}));
 							autoTester.check (x, y, args, m, n, kwargs);
 						};
 						f (1, 2, 10, 20, __kwargdict__ ({m: 100, n: 200, p: 1000, q: 2000}));
@@ -754,6 +770,29 @@ function autotest () {
 							autoTester.check (args, kwargs);
 						};
 						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
+						(function __lambda__ (x, y) {
+							if (typeof x == 'undefined') {;
+								var x = -1;
+							};
+							var m = -2;
+							var __args0__ = [].slice.apply (arguments);
+							var __ilastarg0__ = __args0__.length - 1;
+							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
+								var __allkwargs0__ = __args0__ [__ilastarg0__--];
+								var kwargs = {};
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+									}
+								}
+								kwargs.__class__ = null;
+							}
+							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
 					//<all>
 					__all__.A = A;
@@ -1227,7 +1266,8 @@ function autotest () {
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var z = 1000;
-						autoTester.check (function (x, y) {return x + y + z;} (111, 222));
+						autoTester.check ((function __lambda__ (x, y) {
+							return x + y + z;}) (111, 222));
 						var f = function (list0, list1, aFunc) {
 							return function () {
 								var __accu0__ = [];
@@ -1239,10 +1279,14 @@ function autotest () {
 								return __accu0__;
 							} ();
 						};
-						var x = f (range (10), range (0, 100, 10), function (x, y) {return x + y + z;});
+						var x = f (range (10), range (0, 100, 10), (function __lambda__ (x, y) {
+							return x + y + z;}));
 						autoTester.check (x);
-						autoTester.check (f (range (10, 20), range (100, 200, 10), function (x, y) {return x * y + 100 * z;}));
-						autoTester.check (f (range (10, 20), range (100, 200, 10), function () {var args = [] .slice.apply (arguments) .slice (0); return args [0]  * args [1]  + 100 * z;}));
+						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ (x, y) {
+							return x * y + 100 * z;})));
+						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
+							var args = tuple (arguments);
+							return args [0]  * args [1]  + 100 * z;})));
 					};
 					//<all>
 					__all__.run = run;
@@ -1550,16 +1594,7 @@ function autotest () {
 						});},
 						get check () {return __get__ (this, function (self) {
 							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-									}
-								}
-							}
-							var args = tuple (__args0__.slice (1, __ilastarg0__ + 1));
+							var args = tuple (__args0__.slice (1));
 							var item = ' '.join (function () {
 								var __accu0__ = [];
 								var __iter0__ = args;

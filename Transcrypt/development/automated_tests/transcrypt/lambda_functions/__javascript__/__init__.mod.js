@@ -6,7 +6,8 @@
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var z = 1000;
-						autoTester.check (function (x, y) {return x + y + z;} (111, 222));
+						autoTester.check ((function __lambda__ (x, y) {
+							return x + y + z;}) (111, 222));
 						var f = function (list0, list1, aFunc) {
 							return function () {
 								var __accu0__ = [];
@@ -18,10 +19,14 @@
 								return __accu0__;
 							} ();
 						};
-						var x = f (range (10), range (0, 100, 10), function (x, y) {return x + y + z;});
+						var x = f (range (10), range (0, 100, 10), (function __lambda__ (x, y) {
+							return x + y + z;}));
 						autoTester.check (x);
-						autoTester.check (f (range (10, 20), range (100, 200, 10), function (x, y) {return x * y + 100 * z;}));
-						autoTester.check (f (range (10, 20), range (100, 200, 10), function () {var args = [] .slice.apply (arguments) .slice (0); return args [0]  * args [1]  + 100 * z;}));
+						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ (x, y) {
+							return x * y + 100 * z;})));
+						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
+							var args = tuple (arguments);
+							return args [0]  * args [1]  + 100 * z;})));
 					};
 					//<all>
 					__all__.run = run;

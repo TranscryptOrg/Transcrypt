@@ -326,6 +326,102 @@ file: Module
 								operand: Num 
 									n: int = 1
 					body: list 
+						element: FunctionDef 
+							name: str = f2
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = x
+										annotation: NoneType = None
+									element: arg 
+										arg: str = y
+										annotation: NoneType = None
+								vararg: arg 
+									arg: str = args
+									annotation: NoneType = None
+								kwonlyargs: list 
+									element: arg 
+										arg: str = m
+										annotation: NoneType = None
+									element: arg 
+										arg: str = n
+										annotation: NoneType = None
+								kw_defaults: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 4
+									element: NoneType = None
+								kwarg: arg 
+									arg: str = kwargs
+									annotation: NoneType = None
+								defaults: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 3
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = x
+												ctx: Load 
+											element: Name 
+												id: str = y
+												ctx: Load 
+											element: Name 
+												id: str = args
+												ctx: Load 
+											element: Name 
+												id: str = m
+												ctx: Load 
+											element: Name 
+												id: str = n
+												ctx: Load 
+											element: Name 
+												id: str = kwargs
+												ctx: Load 
+										keywords: list 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = f2
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 11
+									element: Num 
+										n: int = 22
+									element: Num 
+										n: int = 1010
+									element: Num 
+										n: int = 2020
+								keywords: list 
+									element: keyword 
+										arg: str = m
+										value: Num 
+											n: int = 100100
+									element: keyword 
+										arg: str = n
+										value: Num 
+											n: int = 200200
+									element: keyword 
+										arg: str = p
+										value: Num 
+											n: int = 10001000
+									element: keyword 
+										arg: str = q
+										value: Num 
+											n: int = 20002000
 						element: Expr 
 							value: Call 
 								func: Attribute 
@@ -502,5 +598,93 @@ file: Module
 											s: str = aQ
 										element: Str 
 											s: str = anR
+				element: Expr 
+					value: Call 
+						func: Lambda 
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = x
+										annotation: NoneType = None
+									element: arg 
+										arg: str = y
+										annotation: NoneType = None
+								vararg: arg 
+									arg: str = args
+									annotation: NoneType = None
+								kwonlyargs: list 
+									element: arg 
+										arg: str = m
+										annotation: NoneType = None
+									element: arg 
+										arg: str = n
+										annotation: NoneType = None
+								kw_defaults: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 2
+									element: NoneType = None
+								kwarg: arg 
+									arg: str = kwargs
+									annotation: NoneType = None
+								defaults: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 1
+							body: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = x
+										ctx: Load 
+									element: Name 
+										id: str = y
+										ctx: Load 
+									element: Name 
+										id: str = args
+										ctx: Load 
+									element: Name 
+										id: str = m
+										ctx: Load 
+									element: Name 
+										id: str = n
+										ctx: Load 
+									element: Name 
+										id: str = kwargs
+										ctx: Load 
+								keywords: list 
+						args: list 
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 8
+							element: Num 
+								n: int = 16
+						keywords: list 
+							element: keyword 
+								arg: str = m
+								value: Num 
+									n: int = 128
+							element: keyword 
+								arg: str = n
+								value: Num 
+									n: float = 256.3
+							element: keyword 
+								arg: str = p
+								value: Num 
+									n: float = 1024.3
+							element: keyword 
+								arg: str = q
+								value: Num 
+									n: float = 2048.3
 			decorator_list: list 
 			returns: NoneType = None

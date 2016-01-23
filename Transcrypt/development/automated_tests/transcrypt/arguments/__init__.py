@@ -17,6 +17,9 @@ class B (A):
 	
 def run (autoTester):
 	def f (x, y = -1, *args, m = -2, n, **kwargs):
+		def f2 (x, y = -3, *args, m = -4, n, **kwargs):
+			autoTester.check (x, y, args, m, n, kwargs)
+		f2 (11, 22, 1010, 2020, m = 100100, n = 200200, p = 10001000, q = 20002000)
 		autoTester.check (x, y, args, m, n, kwargs)
 		
 	f (1, 2, 10, 20, m = 100, n = 200, p = 1000, q = 2000)
@@ -28,3 +31,5 @@ def run (autoTester):
 		autoTester.check (args, kwargs)
 		
 	g (*(1, 2, 3), **{'p': 'aP', 'q': 'aQ', 'r': 'anR'})
+	
+	(lambda x, y = -1, *args, m = -2, n, **kwargs: autoTester.check (x, y, args, m, n, kwargs)) (1, 2, 8, 16, m = 128, n = 256.3, p = 1024.3, q = 2048.3)

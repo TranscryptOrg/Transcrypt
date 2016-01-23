@@ -93,6 +93,31 @@
 								kwargs.__class__ = null;
 							}
 							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+							var f2 = function (x, y) {
+								if (typeof x == 'undefined') {;
+									var x = -3;
+								};
+								var m = -4;
+								var __args0__ = [].slice.apply (arguments);
+								var __ilastarg0__ = __args0__.length - 1;
+								if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
+									var __allkwargs0__ = __args0__ [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
+									}
+									kwargs.__class__ = null;
+								}
+								var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+								autoTester.check (x, y, args, m, n, kwargs);
+							};
+							f2 (11, 22, 1010, 2020, __kwargdict__ ({m: 100100, n: 200200, p: 10001000, q: 20002000}));
 							autoTester.check (x, y, args, m, n, kwargs);
 						};
 						f (1, 2, 10, 20, __kwargdict__ ({m: 100, n: 200, p: 1000, q: 2000}));
@@ -115,6 +140,29 @@
 							autoTester.check (args, kwargs);
 						};
 						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
+						(function __lambda__ (x, y) {
+							if (typeof x == 'undefined') {;
+								var x = -1;
+							};
+							var m = -2;
+							var __args0__ = [].slice.apply (arguments);
+							var __ilastarg0__ = __args0__.length - 1;
+							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
+								var __allkwargs0__ = __args0__ [__ilastarg0__--];
+								var kwargs = {};
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+									}
+								}
+								kwargs.__class__ = null;
+							}
+							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
 					//<all>
 					__all__.A = A;
