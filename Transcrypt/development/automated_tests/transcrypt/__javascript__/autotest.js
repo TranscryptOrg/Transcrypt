@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-23 16:34:32
+// Transcrypt'ed from Python, 2016-01-25 19:03:35
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -130,7 +130,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.46';
+							self.transpilerVersion = '0.0.48';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -149,10 +149,10 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							var __args0__ = [].slice.apply (arguments);
-							var args = tuple (__args0__.slice (1));
+							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
 						});},
 						get __repr__ () {return __get__ (this, function (self) {
@@ -177,15 +177,83 @@ function autotest () {
 							}
 						});}
 					});
+					;
+					var sort = function (iterable, key, reverse) {
+						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
+							var iterable = null;
+						};
+						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
+							var key = false;
+						};
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+										case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+										case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						if (key) {
+							iterable.sort ((function __lambda__ (a, b) {
+								if (arguments.length) {
+									var __ilastarg0__ = arguments.length - 1;
+									if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+										var __allkwargs0__ = arguments [__ilastarg0__--];
+										for (var __attrib0__ in __allkwargs0__) {
+											switch (__attrib0__) {
+												case 'a': var a = __allkwargs0__ [__attrib0__]; break;
+												case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+											}
+										}
+									}
+								}
+								return key (a) > key (b);}));
+						}
+						else {
+							iterable.sort ();
+						}
+						if (reverse) {
+							iterable.reverse ();
+						}
+					};
+					var sorted = function (iterable, key, reverse) {
+						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
+							var iterable = null;
+						};
+						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
+							var key = false;
+						};
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+										case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+										case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						var result = copy (iterable);
+						sort (result, key, reverse);
+						return result;
+					};
 					//<all>
 					__all__.Exception = Exception;
+					__all__.sort = sort;
+					__all__.sorted = sorted;
 					//</all>
 				}
 			}
 		}
 	);
-	var __count__ = 0;
-
 
 	// Initialize non-nested modules __base__ and __standard__ and make its names available directly and via __all__
 	// It can't do that itself, because it is a regular Python module
@@ -197,12 +265,14 @@ function autotest () {
 
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
+	var sort = __all__.sort;
+	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executorName = __envir__.transpilerName;
 	
 	// Make make __main__ available in browser
-	var __main__ = {__file__: ''}; // !!! May need some reorganisation
+	var __main__ = {__file__: ''};
 	__all__.main = __main__;
 	
 	// Define current exception, there's at most one exception in the air at any time
@@ -247,13 +317,25 @@ function autotest () {
 	}
 	__all__.__in__ = __in__;
 	
-	// Len function for collections
-	var len = function (collection) {
+	// Find out if an attribute is special
+	var __specialattrib__ = function (attrib) {
+		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor';
+	}
+	__all__.__specialattrib__ = __specialattrib__;
+		
+	// Len function for any object
+	var len = function (anObject) {
 		try {
-			return collection.length;
+			return anObject.length;
 		}
 		catch (exception) {
-			return collection.size;
+			result = 0;
+			for (attrib in anObject) {
+				if (!__specialattrib__ (attrib)) {
+					result++;
+				}
+			}
+			return result;
 		}
 	};
 	__all__.len = len;
@@ -289,6 +371,7 @@ function autotest () {
 			}
 		}
 	}
+	__all__.type = type;
 	
 	var isinstance = function (anObject, classinfo) {
 		function isA (queryClass) {
@@ -321,12 +404,12 @@ function autotest () {
 						var result = '{';
 						var comma = false;
 						for (var attrib in anObject) {
-							if (attrib != '__class__' && attrib != 'constructor') {	// !!! Ugly
-								if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
-									var attribRepr = attrib;	// !!! anObject [attrib]
-								}
+							if (!__specialattrib__ (attrib)) {
+								if (attrib.isnumeric ()) {
+									var attribRepr = attrib;				// Numerical key in dict 
+								}											// So e.g. '1' is misrepresented as 1
 								else {
-									var attribRepr = '\'' + attrib + '\'';
+									var attribRepr = '\'' + attrib + '\'';	// Alpha key in dict
 								}
 								
 								if (comma) {
@@ -398,17 +481,54 @@ function autotest () {
 		}
 		return result;
 	};
+	__all__.range = range;
 	
 	// Enumerate method, returning a zipped list
 	function enumerate (iterable) {
 		return zip (range (len (iterable)), iterable);
 	}
+	__all__.enumerate = enumerate;
+		
+	// Shallow and deepcopy
+	
+	function copy (anObject) {
+		if (anObject == null || typeof anObject == "object") {
+			return anObject;
+		}
+		else {
+			var result = {}
+			for (var attrib in obj) {
+				if (anObject.hasOwnProperty (attrib)) {
+					result [attrib] = anObject [attrib];
+				}
+			}
+			return result;
+		}
+	}
+	__all__.copy = copy;
+	
+	function deepcopy (anObject) {
+		if (anObject == null || typeof anObject == "object") {
+			return anObject;
+		}
+		else {
+			var result = {}
+			for (var attrib in obj) {
+				if (anObject.hasOwnProperty (attrib)) {
+					result [attrib] = deepcopy (anObject [attrib]);
+				}
+			}
+			return result;
+		}
+	}
+	__all__.deepcopy = deepcopy;
 		
 	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
 		instance.__class__ = list;
+		// Sort is the normal JavaScript sort, Python sort is a non-member function
 		return instance;
 	}
 	__all__.list = list;
@@ -512,10 +632,10 @@ function autotest () {
 	// Set extensions to Array
 		
 	function set (iterable) {
-		var instance = [];
+		var instance = list ();
 		if (iterable) {
 			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {
+				if (instance.indexOf (iterable [index]) == -1) {	// Avoid duplicates in set
 					instance.push (iterable [index]);
 				}
 			}
@@ -526,12 +646,40 @@ function autotest () {
 	__all__.set = set;
 	set.__name__ = 'set';
 	
+	// Dict extensions to object
+
+	function __keys__ () {
+		keys = []
+		for (attrib in this) {
+			if (__normalattrib__ (attrib)) {
+				keys.push (key);
+			}
+		}
+		return keys;
+	}
+	__all__.__keys__ = __keys__;
+		
+	function dict (pairs) {
+		var instance = {};
+		if (pairs) {
+			for (var index = 0; index < pairs.length; index++) {
+				instance [pair [0]] = pair [1];
+			}
+		}
+		instance.__class__ = dict;	// Not all arrays are sets
+		instance.keys = __keys__;	// Defined externally, so only once
+		return instance;
+	}
+	__all__.dict = dict;
+	dict.__name__ = 'dict';
+	
 	// String extensions
 		
 	function str (stringable) {
 		return new String (stringable);
 	}
 	__all__.str = str;	
+	
 	String.prototype.__class__ = str;	// All strings are str
 	str.__name__ = 'str';
 	
@@ -548,7 +696,7 @@ function autotest () {
 	};
 	
 	String.prototype.endswith = function (suffix) {
-		return this.indexOf (suffix) == this.length - suffix.length;
+		return suffix == '' || this.slice (-suffix.length) == suffix;
 	};
 	
 	String.prototype.find  = function (sub, start) {
@@ -634,33 +782,35 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					;
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined') {;
+							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
 								var self = 123;
 							};
-							if (typeof x == 'undefined') {;
+							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
 								var x = 456;
 							};
 							var n = 456;
-							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								var kwargs = {};
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
-										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
-										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
-										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
-										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
 									}
+									kwargs.__class__ = null;
 								}
-								kwargs.__class__ = null;
+								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
-							var args = tuple (__args0__.slice (3, __ilastarg0__ + 1));
 							self.x = x;
 							self.y = y;
 							self.args = args;
@@ -670,68 +820,70 @@ function autotest () {
 							self.extra = 'hello';
 						});},
 						get f () {return __get__ (this, function (self, autoTester) {
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'autoTester': var autoTester = __allkwargs0__ [__attrib0__]; break;
+										}
+									}
+								}
+							}
 							autoTester.check (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra);
 						});}
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined') {;
+							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
 								var self = -1;
 							};
 							var m = -2;
-							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								var kwargs = {};
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
-										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
-										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
-										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
-										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
 									}
+									kwargs.__class__ = null;
 								}
-								kwargs.__class__ = null;
+								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
-							var args = tuple (__args0__.slice (3, __ilastarg0__ + 1));
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
 						});}
 					});
 					var run = function (autoTester) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'autoTester': var autoTester = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
 						var f = function (x, y) {
-							if (typeof x == 'undefined') {;
+							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
 								var x = -1;
 							};
 							var m = -2;
-							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								var kwargs = {};
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
-										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
-										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
-										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
-										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
-									}
-								}
-								kwargs.__class__ = null;
-							}
-							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
-							var f2 = function (x, y) {
-								if (typeof x == 'undefined') {;
-									var x = -3;
-								};
-								var m = -4;
-								var __args0__ = [].slice.apply (arguments);
-								var __ilastarg0__ = __args0__.length - 1;
-								if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-									var __allkwargs0__ = __args0__ [__ilastarg0__--];
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
 									var kwargs = {};
 									for (var __attrib0__ in __allkwargs0__) {
 										switch (__attrib0__) {
@@ -744,7 +896,31 @@ function autotest () {
 									}
 									kwargs.__class__ = null;
 								}
-								var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
+								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
+							}
+							var f2 = function (x, y) {
+								if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
+									var x = -3;
+								};
+								var m = -4;
+								if (arguments.length) {
+									var __ilastarg0__ = arguments.length - 1;
+									if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+										var __allkwargs0__ = arguments [__ilastarg0__--];
+										var kwargs = {};
+										for (var __attrib0__ in __allkwargs0__) {
+											switch (__attrib0__) {
+												case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+												case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+												case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+												case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+												default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+											}
+										}
+										kwargs.__class__ = null;
+									}
+									var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
+								}
 								autoTester.check (x, y, args, m, n, kwargs);
 							};
 							f2 (11, 22, 1010, 2020, __kwargdict__ ({m: 100100, n: 200200, p: 10001000, q: 20002000}));
@@ -754,44 +930,46 @@ function autotest () {
 						var b = B (3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000}));
 						b.f (autoTester);
 						var g = function () {
-							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								var kwargs = {};
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
 									}
+									kwargs.__class__ = null;
 								}
-								kwargs.__class__ = null;
+								var args = tuple ([].slice.apply (arguments).slice (0, __ilastarg0__ + 1));
 							}
-							var args = tuple (__args0__.slice (0, __ilastarg0__ + 1));
 							autoTester.check (args, kwargs);
 						};
-						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
+						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
 						(function __lambda__ (x, y) {
-							if (typeof x == 'undefined') {;
+							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
 								var x = -1;
 							};
 							var m = -2;
-							var __args0__ = [].slice.apply (arguments);
-							var __ilastarg0__ = __args0__.length - 1;
-							if (type (__args0__ [__ilastarg0__]) == __kwargdict__) {
-								var __allkwargs0__ = __args0__ [__ilastarg0__--];
-								var kwargs = {};
-								for (var __attrib0__ in __allkwargs0__) {
-									switch (__attrib0__) {
-										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
-										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
-										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
-										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
-										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
 									}
+									kwargs.__class__ = null;
 								}
-								kwargs.__class__ = null;
+								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 							}
-							var args = tuple (__args0__.slice (2, __ilastarg0__ + 1));
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
 					//<all>
@@ -870,7 +1048,7 @@ function autotest () {
 						return (b ? x * x : x + x);
 					};
 					var run = function (autoTester) {
-						var bools = tuple ([false, true]);
+						var bools = tuple (list ([false, true]));
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var a = __iter0__ [__index0__] ;
@@ -950,11 +1128,11 @@ function autotest () {
 								}
 							}
 						}
-						var vehicles = ['bike', 'train', 'boat', 'car', 'plane', 'bus'];
-						var __iter0__ = tuple ([false, true]);
+						var vehicles = list (['bike', 'train', 'boat', 'car', 'plane', 'bus']);
+						var __iter0__ = tuple (list ([false, true]));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var doBreak = __iter0__ [__index0__] ;
-							var __iter1__ = tuple ([false, true]);
+							var __iter1__ = tuple (list ([false, true]));
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var doContinue = __iter1__ [__index1__] ;
 								var __iter2__ = range (10);
@@ -1047,7 +1225,7 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
-						var aList = [1, 2, 3, 'sun', 'moon', 'stars'];
+						var aList = list ([1, 2, 3, 'sun', 'moon', 'stars']);
 						autoTester.check (aList);
 						autoTester.check (aList.__getslice__ (2, 4, 1));
 						autoTester.check (aList.slice (0));
@@ -1055,22 +1233,22 @@ function autotest () {
 						autoTester.check (len (aList));
 						aList.append ('milkyway');
 						autoTester.check (aList);
-						aList.extend (['m1', 'm31']);
+						aList.extend (list (['m1', 'm31']));
 						autoTester.check (aList);
-						var anotherList = list (tuple (['a', 'b', 'c']));
+						var anotherList = list (tuple (list (['a', 'b', 'c'])));
 						autoTester.check (anotherList);
 						var aDict = {1: 'plant', 'animal': 2};
 						autoTester.check (aDict);
 						autoTester.check (aDict [1] , aDict ['animal'] );
-						var aTuple = tuple ([1, 2, 3, 4, 5]);
+						var aTuple = tuple (list ([1, 2, 3, 4, 5]));
 						autoTester.check (aTuple);
 						autoTester.check (len (aTuple));
-						var anotherTuple = tuple ([1]);
+						var anotherTuple = tuple (list ([1]));
 						autoTester.check (anotherTuple);
 						var aSet = new set ([1, 2, 2, 3]);
 						autoTester.check (aSet);
 						autoTester.check (len (aSet));
-						var anotherSet = set (tuple ([4, 5, 5, 6]));
+						var anotherSet = set (tuple (list ([4, 5, 5, 6])));
 						autoTester.check (anotherSet);
 						var emptySet = set ();
 						autoTester.check (emptySet);
@@ -1200,6 +1378,41 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
+		'general_functions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var a = list ([1, 5, 3, 2, -1]);
+						var b = list (['sun', 'earth', 'moon']);
+						autoTester.check (sorted (a));
+						autoTester.check (sorted (b));
+						sort (a);
+						autoTester.check (a);
+						sort (b);
+						autoTester.check (b);
+						autoTester.check (sorted (a, __kwargdict__ ({reverse: true})));
+						autoTester.check (sorted (b, __kwargdict__ ({reverse: true})));
+						sort (a, __kwargdict__ ({reverse: true}));
+						autoTester.check (a);
+						sort (b, __kwargdict__ ({reverse: true}));
+						autoTester.check (b);
+						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+							return len (x);})}));
+						autoTester.check (b);
+						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+							return len (x);}), reverse: true}));
+						autoTester.check (b);
+					};
+					//<all>
+					__all__.run = run;
+					//</all>
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'indices_and_slices', {
 			__all__: {
 				__inited__: false,
@@ -1209,13 +1422,13 @@ function autotest () {
 						autoTester.check (all);
 						autoTester.check (all.slice (8, 24));
 						autoTester.check (all.__getslice__ (8, 24, 2));
-						var aList = [3, 4, 7, 8];
+						var aList = list ([3, 4, 7, 8]);
 						autoTester.check (aList);
-						aList.__setslice__ (4, 4, null, [9, 10]);
+						aList.__setslice__ (4, 4, null, list ([9, 10]));
 						autoTester.check (aList);
-						aList.__setslice__ (2, 2, null, [5, 6]);
+						aList.__setslice__ (2, 2, null, list ([5, 6]));
 						autoTester.check (aList);
-						aList.__setslice__ (0, 0, null, [1, 2]);
+						aList.__setslice__ (0, 0, null, list ([1, 2]));
 						autoTester.check (aList);
 						aList.__setslice__ (0, null, 2, function () {
 							var __accu0__ = [];
@@ -1285,7 +1498,7 @@ function autotest () {
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ (x, y) {
 							return x * y + 100 * z;})));
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
-							var args = tuple (arguments);
+							var args = tuple ([].slice.apply (arguments).slice (0));
 							return args [0]  * args [1]  + 100 * z;})));
 					};
 					//<all>
@@ -1316,18 +1529,18 @@ function autotest () {
 						autoTester.check (squares);
 						var tuples = function () {
 							var __accu0__ = [];
-							var __iter0__ = tuple ([100, 200, 300, 400, 500, 600, 700]);
+							var __iter0__ = tuple (list ([100, 200, 300, 400, 500, 600, 700]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								var __iter1__ = tuple ([10, 20, 30, 40, 50, 60, 70]);
+								var __iter1__ = tuple (list ([10, 20, 30, 40, 50, 60, 70]));
 								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 									var y = __iter1__ [__index1__];
 									if ((20 < y && y < 60)) {
-										var __iter2__ = tuple ([1, 2, 3, 4, 5, 6, 7]);
+										var __iter2__ = tuple (list ([1, 2, 3, 4, 5, 6, 7]));
 										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
 											var z = __iter2__ [__index2__];
 											if (((200 < x && x < 600)) && ((2 < z && z < 6))) {
-												__accu0__ .push (tuple ([x, y, z]));
+												__accu0__ .push (tuple (list ([x, y, z])));
 											}
 										}
 									}
@@ -1579,6 +1792,7 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var itertools = {};
+					;
 					__nest__ (itertools, '', __init__ (__world__.itertools));
 					var okColor = 'green';
 					var errorColor = 'red';
@@ -1586,15 +1800,14 @@ function autotest () {
 					var testletNameColor = 'blue';
 					var AutoTester = __class__ ('AutoTester', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							self.referenceBuffer = [];
-							self.testBuffer = [];
+							self.referenceBuffer = list ([]);
+							self.testBuffer = list ([]);
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
 						});},
 						get check () {return __get__ (this, function (self) {
-							var __args0__ = [].slice.apply (arguments);
-							var args = tuple (__args0__.slice (1));
+							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
 								var __accu0__ = [];
 								var __iter0__ = args;
@@ -1612,7 +1825,7 @@ function autotest () {
 							}
 						});},
 						get dump () {return __get__ (this, function (self, filePrename) {
-							var __iter0__ = tuple ([false, true]);
+							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var minified = __iter0__ [__index0__] ;
 								var miniInfix = (minified ? '.min' : '');
@@ -1639,14 +1852,14 @@ function autotest () {
 								var referenceItem = __left0__[1][1];
 								if (testItem != referenceItem) {
 									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
-									var test = zip (tuple ([self.referenceBuffer, self.referenceDivId]), tuple ([self.testBuffer, self.testDivId]));
-									var __iter1__ = tuple ([tuple ([self.referenceBuffer, self.referenceDivId, okColor]), tuple ([self.testBuffer, self.testDivId, errorColor])]);
+									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
+									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 										var __left0__ = __iter1__ [__index1__] ;
 										var buffer = __left0__[0];
 										var divId = __left0__[1];
 										var accentColor = __left0__[2];
-										var buffer = itertools.chain (buffer.slice (0, index), ['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )], buffer.slice (index + 1));
+										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )]), buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
 									__break0__ = true;
@@ -1703,7 +1916,7 @@ function autotest () {
 						var y = 5;
 						var z = x + y;
 						autoTester.check (z);
-						var l = [1, 2, 3];
+						var l = list ([1, 2, 3]);
 						l [1]  = l [2] ;
 						autoTester.check (l);
 						x++;
@@ -1753,7 +1966,7 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
-						var __left0__ = tuple ([tuple ([1, 2]), 'santa-claus', new set ([3, 4]), 5]);
+						var __left0__ = tuple (list ([tuple (list ([1, 2])), 'santa-claus', new set ([3, 4]), 5]));
 						var a = __left0__[0][0];
 						var b = __left0__[0][1];
 						var santa = __left0__[1];
@@ -1761,17 +1974,17 @@ function autotest () {
 						var d = __left0__[2][1];
 						var e = __left0__[3];
 						autoTester.check (a, b, c, d, e, santa);
-						var __iter0__ = enumerate (tuple ([0.5, 1.5, 2.5, 3.5]));
+						var __iter0__ = enumerate (tuple (list ([0.5, 1.5, 2.5, 3.5])));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__] ;
 							var i = __left0__[0];
 							var x = __left0__[1];
 							autoTester.check (i, x);
 						}
-						var __left0__ = tuple ([3.14, 2.74]);
+						var __left0__ = tuple (list ([3.14, 2.74]));
 						var e = __left0__[0];
 						var pi = __left0__[1];
-						var __left0__ = tuple ([pi, e]);
+						var __left0__ = tuple (list ([pi, e]));
 						var e = __left0__[0];
 						var pi = __left0__[1];
 						autoTester.check (e, pi);
@@ -1790,6 +2003,7 @@ function autotest () {
 		var control_structures = {};
 		var data_structures = {};
 		var exceptions = {};
+		var general_functions = {};
 		var indices_and_slices = {};
 		var lambda_functions = {};
 		var list_comprehensions = {};
@@ -1804,6 +2018,7 @@ function autotest () {
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
+		__nest__ (general_functions, '', __init__ (__world__.general_functions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
@@ -1817,6 +2032,7 @@ function autotest () {
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (exceptions, 'exceptions');
+		autoTester.run (general_functions, 'general_functions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');

@@ -1,5 +1,3 @@
-	var __count__ = 0;
-
 
 	// Initialize non-nested modules __base__ and __standard__ and make its names available directly and via __all__
 	// It can't do that itself, because it is a regular Python module
@@ -11,12 +9,14 @@
 
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
+	var sort = __all__.sort;
+	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executorName = __envir__.transpilerName;
 	
 	// Make make __main__ available in browser
-	var __main__ = {__file__: ''}; // !!! May need some reorganisation
+	var __main__ = {__file__: ''};
 	__all__.main = __main__;
 	
 	// Define current exception, there's at most one exception in the air at any time
@@ -61,13 +61,25 @@
 	}
 	__all__.__in__ = __in__;
 	
-	// Len function for collections
-	var len = function (collection) {
+	// Find out if an attribute is special
+	var __specialattrib__ = function (attrib) {
+		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor';
+	}
+	__all__.__specialattrib__ = __specialattrib__;
+		
+	// Len function for any object
+	var len = function (anObject) {
 		try {
-			return collection.length;
+			return anObject.length;
 		}
 		catch (exception) {
-			return collection.size;
+			result = 0;
+			for (attrib in anObject) {
+				if (!__specialattrib__ (attrib)) {
+					result++;
+				}
+			}
+			return result;
 		}
 	};
 	__all__.len = len;
@@ -103,6 +115,7 @@
 			}
 		}
 	}
+	__all__.type = type;
 	
 	var isinstance = function (anObject, classinfo) {
 		function isA (queryClass) {
@@ -135,12 +148,12 @@
 						var result = '{';
 						var comma = false;
 						for (var attrib in anObject) {
-							if (attrib != '__class__' && attrib != 'constructor') {	// !!! Ugly
-								if (attrib.isnumeric ()) {	// ... Representation of '<number>' as a Python key deviates
-									var attribRepr = attrib;	// !!! anObject [attrib]
-								}
+							if (!__specialattrib__ (attrib)) {
+								if (attrib.isnumeric ()) {
+									var attribRepr = attrib;				// Numerical key in dict 
+								}											// So e.g. '1' is misrepresented as 1
 								else {
-									var attribRepr = '\'' + attrib + '\'';
+									var attribRepr = '\'' + attrib + '\'';	// Alpha key in dict
 								}
 								
 								if (comma) {
@@ -212,17 +225,54 @@
 		}
 		return result;
 	};
+	__all__.range = range;
 	
 	// Enumerate method, returning a zipped list
 	function enumerate (iterable) {
 		return zip (range (len (iterable)), iterable);
 	}
+	__all__.enumerate = enumerate;
+		
+	// Shallow and deepcopy
+	
+	function copy (anObject) {
+		if (anObject == null || typeof anObject == "object") {
+			return anObject;
+		}
+		else {
+			var result = {}
+			for (var attrib in obj) {
+				if (anObject.hasOwnProperty (attrib)) {
+					result [attrib] = anObject [attrib];
+				}
+			}
+			return result;
+		}
+	}
+	__all__.copy = copy;
+	
+	function deepcopy (anObject) {
+		if (anObject == null || typeof anObject == "object") {
+			return anObject;
+		}
+		else {
+			var result = {}
+			for (var attrib in obj) {
+				if (anObject.hasOwnProperty (attrib)) {
+					result [attrib] = deepcopy (anObject [attrib]);
+				}
+			}
+			return result;
+		}
+	}
+	__all__.deepcopy = deepcopy;
 		
 	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
 		instance.__class__ = list;
+		// Sort is the normal JavaScript sort, Python sort is a non-member function
 		return instance;
 	}
 	__all__.list = list;
@@ -326,10 +376,10 @@
 	// Set extensions to Array
 		
 	function set (iterable) {
-		var instance = [];
+		var instance = list ();
 		if (iterable) {
 			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {
+				if (instance.indexOf (iterable [index]) == -1) {	// Avoid duplicates in set
 					instance.push (iterable [index]);
 				}
 			}
@@ -340,12 +390,40 @@
 	__all__.set = set;
 	set.__name__ = 'set';
 	
+	// Dict extensions to object
+
+	function __keys__ () {
+		keys = []
+		for (attrib in this) {
+			if (__normalattrib__ (attrib)) {
+				keys.push (key);
+			}
+		}
+		return keys;
+	}
+	__all__.__keys__ = __keys__;
+		
+	function dict (pairs) {
+		var instance = {};
+		if (pairs) {
+			for (var index = 0; index < pairs.length; index++) {
+				instance [pair [0]] = pair [1];
+			}
+		}
+		instance.__class__ = dict;	// Not all arrays are sets
+		instance.keys = __keys__;	// Defined externally, so only once
+		return instance;
+	}
+	__all__.dict = dict;
+	dict.__name__ = 'dict';
+	
 	// String extensions
 		
 	function str (stringable) {
 		return new String (stringable);
 	}
 	__all__.str = str;	
+	
 	String.prototype.__class__ = str;	// All strings are str
 	str.__name__ = 'str';
 	
@@ -362,7 +440,7 @@
 	};
 	
 	String.prototype.endswith = function (suffix) {
-		return this.indexOf (suffix) == this.length - suffix.length;
+		return suffix == '' || this.slice (-suffix.length) == suffix;
 	};
 	
 	String.prototype.find  = function (sub, start) {

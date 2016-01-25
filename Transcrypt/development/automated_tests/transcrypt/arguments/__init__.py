@@ -1,3 +1,7 @@
+from org.transcrypt.stubs.browser import __pragma__
+
+__pragma__ ('kwargs')
+
 class A:
 	def __init__ (self, x = 123, y = 456, *args, m, n = 456, **kwargs):
 		self.x = x

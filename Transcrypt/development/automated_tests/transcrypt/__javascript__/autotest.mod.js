@@ -5,6 +5,7 @@
 		var control_structures = {};
 		var data_structures = {};
 		var exceptions = {};
+		var general_functions = {};
 		var indices_and_slices = {};
 		var lambda_functions = {};
 		var list_comprehensions = {};
@@ -19,6 +20,7 @@
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
+		__nest__ (general_functions, '', __init__ (__world__.general_functions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
@@ -32,6 +34,7 @@
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
 		autoTester.run (exceptions, 'exceptions');
+		autoTester.run (general_functions, 'general_functions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');

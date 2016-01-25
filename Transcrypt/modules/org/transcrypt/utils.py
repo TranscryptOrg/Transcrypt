@@ -7,9 +7,9 @@ class CommandArgs:
 	def parse (self):
 		self.argParser = argparse.ArgumentParser ()
 		self.argParser.add_argument ('source', nargs='?', help = '.py file containing source code of main module')
+		self.argParser.add_argument ('-k', '--kwargs', help = 'enable keyword arguments by default. DISADVISED. Use __pragma__ (\'kwargs\') and __pragma__(\'kwargoff\') instead to prevent bloat', action = 'store_true')
 		self.argParser.add_argument ('-b', '--build', help = 'rebuild all target files from scratch', action = 'store_true')
 		self.argParser.add_argument ('-l', '--license', help = 'show license', action = 'store_true')
-		self.argParser.add_argument ('-m', '--minify', help = 'minify .js files', action = 'store_true')
 		self.argParser.add_argument ('-r', '--run', help = 'run source file rather than compiling it', action = 'store_true')
 		self.argParser.add_argument ('-v', '--verbose', help = 'show all messages', action = 'store_true')
 		

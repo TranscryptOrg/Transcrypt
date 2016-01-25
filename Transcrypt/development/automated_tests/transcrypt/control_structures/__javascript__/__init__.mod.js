@@ -30,11 +30,11 @@
 								}
 							}
 						}
-						var vehicles = ['bike', 'train', 'boat', 'car', 'plane', 'bus'];
-						var __iter0__ = tuple ([false, true]);
+						var vehicles = list (['bike', 'train', 'boat', 'car', 'plane', 'bus']);
+						var __iter0__ = tuple (list ([false, true]));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var doBreak = __iter0__ [__index0__] ;
-							var __iter1__ = tuple ([false, true]);
+							var __iter1__ = tuple (list ([false, true]));
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var doContinue = __iter1__ [__index1__] ;
 								var __iter2__ = range (10);

@@ -25,7 +25,7 @@
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ (x, y) {
 							return x * y + 100 * z;})));
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
-							var args = tuple (arguments);
+							var args = tuple ([].slice.apply (arguments).slice (0));
 							return args [0]  * args [1]  + 100 * z;})));
 					};
 					//<all>

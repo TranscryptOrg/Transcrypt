@@ -1,5 +1,21 @@
 file: Module 
 	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nokwargs
+				keywords: list 
 		element: ClassDef 
 			name: str = Exception
 			bases: list 
@@ -194,3 +210,174 @@ file: Module
 					decorator_list: list 
 					returns: NoneType = None
 			decorator_list: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = kwargs
+				keywords: list 
+		element: FunctionDef 
+			name: str = sort
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = iterable
+						annotation: NoneType = None
+					element: arg 
+						arg: str = key
+						annotation: NoneType = None
+					element: arg 
+						arg: str = reverse
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+					element: NameConstant 
+						value: bool = False
+			body: list 
+				element: If 
+					test: Name 
+						id: str = key
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = iterable
+										ctx: Load 
+									attr: str = sort
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = a
+													annotation: NoneType = None
+												element: arg 
+													arg: str = b
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Compare 
+											left: Call 
+												func: Name 
+													id: str = key
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = a
+														ctx: Load 
+												keywords: list 
+											ops: list 
+												element: Gt 
+											comparators: list 
+												element: Call 
+													func: Name 
+														id: str = key
+														ctx: Load 
+													args: list 
+														element: Name 
+															id: str = b
+															ctx: Load 
+													keywords: list 
+								keywords: list 
+					orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = iterable
+										ctx: Load 
+									attr: str = sort
+									ctx: Load 
+								args: list 
+								keywords: list 
+				element: If 
+					test: Name 
+						id: str = reverse
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = iterable
+										ctx: Load 
+									attr: str = reverse
+									ctx: Load 
+								args: list 
+								keywords: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = sorted
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = iterable
+						annotation: NoneType = None
+					element: arg 
+						arg: str = key
+						annotation: NoneType = None
+					element: arg 
+						arg: str = reverse
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+					element: NameConstant 
+						value: bool = False
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = result
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = copy
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = iterable
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = sort
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = result
+								ctx: Load 
+							element: Name 
+								id: str = key
+								ctx: Load 
+							element: Name 
+								id: str = reverse
+								ctx: Load 
+						keywords: list 
+				element: Return 
+					value: Name 
+						id: str = result
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None

@@ -9,13 +9,13 @@
 						autoTester.check (all);
 						autoTester.check (all.slice (8, 24));
 						autoTester.check (all.__getslice__ (8, 24, 2));
-						var aList = [3, 4, 7, 8];
+						var aList = list ([3, 4, 7, 8]);
 						autoTester.check (aList);
-						aList.__setslice__ (4, 4, null, [9, 10]);
+						aList.__setslice__ (4, 4, null, list ([9, 10]));
 						autoTester.check (aList);
-						aList.__setslice__ (2, 2, null, [5, 6]);
+						aList.__setslice__ (2, 2, null, list ([5, 6]));
 						autoTester.check (aList);
-						aList.__setslice__ (0, 0, null, [1, 2]);
+						aList.__setslice__ (0, 0, null, list ([1, 2]));
 						autoTester.check (aList);
 						aList.__setslice__ (0, null, 2, function () {
 							var __accu0__ = [];

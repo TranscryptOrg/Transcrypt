@@ -16,7 +16,19 @@ file: Module
 				element: alias 
 					name: str = __envir__
 					asname: NoneType = None
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
 			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nokwargs
+				keywords: list 
 		element: Import 
 			names: list 
 				element: alias 

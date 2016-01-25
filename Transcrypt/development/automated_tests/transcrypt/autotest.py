@@ -6,6 +6,7 @@ import conditional_expressions
 import control_structures
 import data_structures
 import exceptions
+import general_functions
 import indices_and_slices
 import lambda_functions
 import list_comprehensions
@@ -21,6 +22,7 @@ autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')
 autoTester.run (data_structures, 'data_structures')
 autoTester.run (exceptions, 'exceptions')
+autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')

@@ -6,11 +6,12 @@
 # If those two match, the test reports OK, else it reports failure.
 
 from org.transcrypt.stubs.browser import *
-
-from org.transcrypt.stubs.browser import __main__, __envir__
+from org.transcrypt.stubs.browser import __main__, __envir__, __pragma__
 # Don't import __envir__ from __base__ since it will overwrite __buildin__.__envir__ in the browser
 # Import from stubs will be skipped in the browser
 # ... The ice is a bit thin here
+
+__pragma__ ('nokwargs')
 
 import itertools
 

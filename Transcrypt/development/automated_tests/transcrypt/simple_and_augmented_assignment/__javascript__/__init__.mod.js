@@ -18,7 +18,7 @@
 						var y = 5;
 						var z = x + y;
 						autoTester.check (z);
-						var l = [1, 2, 3];
+						var l = list ([1, 2, 3]);
 						l [1]  = l [2] ;
 						autoTester.check (l);
 						x++;

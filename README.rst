@@ -22,12 +22,15 @@ Take a look at the growing documentation with code examples at the Transcrypt we
 Status
 ======
 
-Transcrypt is still incomplete. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is going much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
+ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, dicts, sets, modules. But there's a lot more (see docs). What's mainly missing are some handy members of the string, list, dict and set classes. Also the interoperability with JavaScript has to be tested. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is has gone faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
 
 What's new
 ==========
 
-- Args, kwargs, default values a la Python 3.5, partially finished + testcase + docs
+- __pragma__ ('kwargs') and __pragma__ ('nokwargs') added + -kwargs command line argument
+- \*\*kwargs bug fixed
+- \*args, \*\*kwargs, default values both def time and call time completed + testcase + docs
+- \*args, \*\*kwargs, default values a la Python 3.5, partially finished + testcase + docs
 - Lambda functions + testcase + docs
 - Conditional expressions finished + testcase + docs
 - Minification added using Google's closure compiler, included in distro and run automatically
@@ -54,6 +57,21 @@ What's new
 - A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
 - Transpiler core
 
+Known limitations
+=================
+
+- GENERALLY PRE-ALPHA, SO IN FLUX AND PROBABLY WITH SOME HOLES
+- No standard libs, use or encapsulate the JS ones, that's part of the concept. Some may be ported though.
+- Builtin library incomplete (e.g. methods of builtin types)
+- No set or dict comprehensions yet. Should be easy but low priority.
+- No eval and exec (will stay that way, with minor exceptions)
+- No threading of any kind. Will probably stay that way as long as JS doesn't properly support that.
+- No operator overloading. May be added for [] and (), but low priority
+- _name doesn't mean private in any way
+- No iterator, generator, xrange stuff. Maybe in the future if JS becomes better at that kind of things
+- JavaScript interoperation undocumented and largely untested, will change, high priority
+- No good elaborated example. As a first I'll try to make pong for the browser or something like that.
+
 Readability
 ===========
 
@@ -65,17 +83,6 @@ Also, code can be tested from the command prompt using stubs.
 	:alt: Screenshot of Python versus JavaScript code
 	
 	**Classic OO with multiple inheritance in JavaScript**
-
-Where it's heading
-==================
-
-What should be in eventually to call this project a success:
-
-- Functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, dicts, sets, modules
-
-What will never be in:
-
-- Eval, exec
 
 Other packages you might like
 =============================

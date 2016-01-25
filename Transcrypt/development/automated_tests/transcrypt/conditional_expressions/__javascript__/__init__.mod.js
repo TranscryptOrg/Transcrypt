@@ -8,7 +8,7 @@
 						return (b ? x * x : x + x);
 					};
 					var run = function (autoTester) {
-						var bools = tuple ([false, true]);
+						var bools = tuple (list ([false, true]));
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var a = __iter0__ [__index0__] ;

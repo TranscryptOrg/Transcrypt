@@ -300,8 +300,6 @@ class Generator (ast.NodeVisitor):
 
 		self.filterIds = ('arguments',)
 		
-		self.allowKeywordArgs = utils.commandArgs.kwargs
-		
 		try:
 			self.visit (module.parseTree)
 		except Exception as exception:
@@ -380,17 +378,17 @@ class Generator (ast.NodeVisitor):
 			self.visit (arg)
 				
 		# If there's a vararg or a kwarg, no formal parameter is emitted for it, it's just retrieved in the body
-		# so def f (a, b=3, *x, c, d=4, **y, e, f = 5) generates function f (a, b, c, d, e, f), since x and y are never passed in positionally
+		# so f (a, b=3, *x, c, d=4, **y, e, f = 5) generates f (a, b, c, d, e, f), since x and y are never passed in positionally
 			
 		self.emit (') {{\n')
 		
-		self.indent ()	# Start of function body, the end is not in visit_arguments
+		self.indent ()
 		
 		# Defaults for positional args (before *), only if not passed normally before this point
 		# They can also be passed in as keyword args
 		for arg, expr in zip (node.args, node.defaults):
 			if expr:
-				self.emit ('if (typeof {0} == \'undefined\' || {0} .__class__ == __kwargdict__) {{;\n', arg.arg)
+				self.emit ('if (typeof {} == \'undefined\') {{;\n', arg.arg)
 				self.indent ()
 				self.emit ('var {} = ', arg.arg)
 				self.visit (expr)
@@ -398,38 +396,40 @@ class Generator (ast.NodeVisitor):
 				self.dedent ()
 				self.emit ('}};\n')
 			
-		# Defaults for kwonly args (after *), unconditionally, since they will be passed only after this point
+		# Defaults for keyword args unconditionally, since they will be passed only after this point
 		for arg, expr in zip (node.kwonlyargs, node.kw_defaults):
 			if expr:
 				self.emit ('var {} = ', arg.arg)
 				self.visit (expr)
-				self.emit (';\n')		
-				
-		if self.allowKeywordArgs:
-			self.emit ('if (arguments.length) {{\n')
-			self.indent ()
-		
-			# Store index of last actual param 
-			self.emit ('var {} = arguments.length - 1;\n', self.nextTemp ('ilastarg'))
-		
-			# Any calltime keyword args are passed in a JavaScript-only object of type __kwargdict__
-			# If it's there, copy the __kwargdict__ into local var __allkwargs__
-			# And lower __ilastarg__ by 1, since the last calltime arg wasn't a normal (Python) one
-			# It's only known at call time if there are keyword arguments, unless there are no arguments at all, so allways have to generate this code
-			self.emit ('if (arguments [{0}] && arguments [{0}].__class__ == __kwargdict__) {{\n', self.getTemp ('ilastarg'))
-			self.indent ()
-			self.emit ('var {} = arguments [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('ilastarg'))
+				self.emit (';\n')
 			
-			# If there is a **kwargs arg, make a local to hold its calltime contents
-			if node.kwarg:
-				self.emit ('var {} = {{}};\n', node.kwarg.arg)
-				
-			# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
-			self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
-			self.indent ()
+		# If there's anything other than explicit positional args (which have been passed and dealth with already)
+		if node.args or node.vararg or node.kwarg or node.kwonlyargs:		
+			# We'll to work with parts of the calltime args, so we have to convert arguments to an array to allow for slicing
+			nrOfArgs = len (node.args) + len (node.kwonlyargs) + (1 if node.vararg else 0) + (1 if node.kwarg else 0)
+
+			self.emit ('var {} = [].slice.apply (arguments);\n', self.nextTemp ('args'))
 			
-			# We'll make the distinction between normal keyword args and **kwargs keyword args in a switch
-			if node.args + node.kwonlyargs or node.kwarg:
+			if node.args or node.kwarg or node.kwonlyargs:			
+				# Store index of last actual param 
+				self.emit ('var {} = {}.length - 1;\n', self.nextTemp ('ilastarg'), self.getTemp ('args'))
+			
+				# Any calltime keyword args are passed in a JavaScript-only object of type __kwargdict__
+				# If it's there, copy the __kwargdict__ into local var __allkwargs__
+				# And lower __ilastarg__ by 1, since the last calltime arg wasn't a normal (Python) one
+				self.emit ('if (typeof {} [{}] == __kwargdict__) {{\n', self.getTemp ('args'), self.getTemp ('ilastarg'))
+				self.indent ()
+				self.emit ('var {} = {} [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('args'), self.getTemp ('ilastarg'))
+
+				# If there is a **kwargs arg, make a local to hold its calltime contents
+				if node.kwarg:
+					self.emit ('var {} = {{}};\n', node.kwarg.arg)
+					
+				# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
+				self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
+				self.indent ()
+				
+				# We'll make the distinction between normal keyword args and **kwargs keyword args in a switch
 				self.emit ('switch ({}) {{\n', self.getTemp ('attrib'))
 				self.indent ()
 							
@@ -440,44 +440,44 @@ class Generator (ast.NodeVisitor):
 				# Then put the rest into the **kwargs local
 				if node.kwarg:
 					self.emit ('default: {0} [{1}] = {2} [{1}];\n', node.kwarg.arg, self.getTemp ('attrib'), self.getTemp ('allkwargs'))
-									
+					
+				self.prevTemp ('allkwargs')
+				self.prevTemp ('attrib')
+					
 				self.dedent ()
-				self.emit ('}}\n')	# switch..
-			
-			self.prevTemp ('allkwargs')
-			self.prevTemp ('attrib')
-			
-			self.dedent ()
-			self.emit ('}}\n')	# for (__attrib__..
-			
-			# Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there
-			if node.kwarg:
-				self.emit ('{}.__class__ = null;\n', node.kwarg.arg)
-			
-			self.dedent ()
-			self.emit ('}}\n')	# if (arguments [{0}]..		
-
-			# If there's a vararg, assign an array containing the remainder of the actual non keyword only params, except for the __kwargdict__
-			if node.vararg:
-				# Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
-				self.emit (
-					'var {} = tuple ([].slice.apply (arguments).slice ({}, {} + 1));\n',
-					node.vararg.arg,
-					len (node.args),
-					self.getTemp ('ilastarg')
-				)
+				self.emit ('}}\n')
 				
-			self.prevTemp ('ilastarg')
+				self.dedent ()
+				self.emit ('}}\n')	# for (__attrib__..
+				
+				# Take out the kwargdict marker
+				if node.kwarg:
+					self.emit ('{}.__class__ = null;\n', node.kwarg.arg)
+
+				self.dedent ()
+				self.emit ('}}\n')	# if (type..
+				
+				
+				# If there's a vararg, assign an array containing the remainder of the actual non keyword only params, except for the __kwargdict__
+				if node.vararg:
+					# Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
+					self.emit (
+						'var {} = tuple ({}.slice ({}, {} + 1));\n',
+						node.vararg.arg,
+						self.getTemp ('args') if nrOfArgs > 1 else 'arguments',
+						len (node.args),
+						self.getTemp ('ilastarg')
+					)
+					
+				self.prevTemp ('ilastarg')			
+			else:
+				if node.vararg:
+					if nrOfArgs > 1:
+						self.emit ('var {} = tuple ({}.slice ({}));\n', node.vararg.arg, self.getTemp ('args'), len (node.args))
+					else:
+						self.emit ('var {} = tuple (arguments);\n', node.vararg.arg)
 			
-			self.dedent ()
-			self.emit ('}}\n')	# if (arguments.length..
-		else:
-			if node.vararg:	# See above
-				self.emit (
-					'var {} = tuple ([].slice.apply (arguments).slice ({}));\n',
-					node.vararg.arg,
-					len (node.args),
-				)
+			self.prevTemp ('args')							
 				
 	def visit_Assign (self, node):
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
@@ -660,14 +660,6 @@ class Generator (ast.NodeVisitor):
 				
 			self.emit (')')
 
-		if type (node.func) == ast.Name and node.func.id == '__pragma__':
-			if node.args [0] .s == 'kwargs':
-				self.allowKeywordArgs = True
-				return
-			elif node.args [0] .s == 'nokwargs':
-				self.allowKeywordArgs = False
-				return
-	
 		self.visit (node.func)
 		
 		for index, expr in enumerate (node.args):
@@ -1052,7 +1044,7 @@ class Generator (ast.NodeVisitor):
 			for head in sorted (self.importHeads)
 		]))
 		
-	def visit_Name (self, node):	
+	def visit_Name (self, node):
 		if type (node.ctx) == ast.Store:
 			if not self.scopes:
 				self.all.add (node.id)
