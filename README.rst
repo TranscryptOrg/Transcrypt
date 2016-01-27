@@ -27,6 +27,7 @@ ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's
 What's new
 ==========
 
+- Autotest output (active, using autotest.js) added to www.transcrypt.org
 - __pragma__ ('kwargs') and __pragma__ ('nokwargs') added + -kwargs command line argument
 - \*\*kwargs bug fixed
 - \*args, \*\*kwargs, default values both def time and call time completed + testcase + docs

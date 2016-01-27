@@ -72,7 +72,7 @@
 		};
 		
 		// Copy methods and static attributes to class object
-		for (var index = 0; index < bases.length; index++) {
+		for (var index = bases.length - 1; index >= 0; index--) {	// Reversed order, since class vars of first base should win
 			var base = bases [index];
 			for (var attrib in base) {
 				var descrip = Object.getOwnPropertyDescriptor (base, attrib);

@@ -257,45 +257,36 @@ class Generator (ast.NodeVisitor):
 			False: 'false'
 		}
 		
-		self.unOps = {
-			ast.Invert: '~',
-			ast.Not: '!',
-			ast.UAdd: '+',
-			ast.USub: '-'
-		}
-		
-		self.binOps = {
-			ast.Add: '+',
-			ast.Sub: '-',
-			ast.Mult: '*',
-			ast.Div: '/',
-			ast.MatMult: None,	# Dealt with separately
-			ast.Mod: '%', 
-			ast.Pow: '**',
-			ast.LShift: '<<',
-            ast.RShift: '>>',
-			ast.BitOr: '|',
-			ast.BitXor: '^',
-			ast.BitAnd: '&',
-			ast.FloorDiv: None	# Dealt with separately
-		}
-		
-		self.boolOps = {
-			ast.And: '&&',
-			ast.Or: '||'
-		}
-		
-		self.compOps = {
-			ast.Eq: '==',
-			ast.NotEq: '!=',
-			ast.Lt: '<',
-			ast.LtE: '<=',
-			ast.Gt: '>',
-			ast.GtE: '>=',
-			ast.Is: '===',		# Not really, but closest for now
-			ast.IsNot: '!==',	# Not really, but closest for now
-			ast.In:	None,		# Dealt with separately
-			ast.NotIn: None		# Dealt with separately
+		self.operators = {
+			ast.Invert: ('~', 100),
+			ast.UAdd: ('+', 100),
+			ast.USub: ('-', 100),
+			ast.Pow: (None, 110),		# Dealt with separately
+			ast.Mult: ('*', 90),
+			ast.MatMult: (None,	90),	# Dealt with separately
+			ast.Div: ('/', 90),
+			ast.FloorDiv: (None, 90),	# Dealt with separately
+			ast.Mod: ('%', 90), 
+			ast.Add: ('+', 80),
+			ast.Sub: ('-', 80),
+			ast.LShift: ('<<', 70),
+            ast.RShift: ('>>', 70),
+			ast.BitAnd: ('&', 60),
+			ast.BitXor: ('^', 50),
+			ast.BitOr: ('|', 40),
+			ast.Eq: ('==', 30),
+			ast.NotEq: ('!=', 30),
+			ast.Lt: ('<', 30),
+			ast.LtE: ('<=', 30),
+			ast.Gt: ('>', 30),
+			ast.GtE: ('>=', 30),
+			ast.Is: ('===', 30),		# Not really, but closest for now
+			ast.IsNot: ('!==', 30),		# Not really, but closest for now
+			ast.In:	(None, 30),			# Dealt with separately
+			ast.NotIn: (None, 30),		# Dealt with separately
+			ast.Not: ('!', 20), 
+			ast.And: ('&&', 10),
+			ast.Or: ('||', 0)
 		}
 
 		self.filterIds = ('arguments',)
@@ -311,7 +302,23 @@ class Generator (ast.NodeVisitor):
 			raise utils.Error (
 				message = '\n\tTemporary variables leak in code generator: {}'.format (self.tempIndices)
 			)
-		
+			
+	def visitSubExpr (self, node, child):
+		def getPriority (exprNode):
+			if type (exprNode) in (ast.BinOp, ast.BoolOp):
+				return self.operators [type (exprNode.op)][1]
+			elif type (exprNode) == ast.Compare:
+				return self.operators [type (exprNode.ops [0])][1]	# All ops have same priority
+			else:
+				return 1000000	# No need for parenthesis
+				
+		if getPriority (child) < getPriority (node):
+			self.emit ('(')
+			self.visit (child)
+			self.emit (')')
+		else:
+			self.visit (child)
+			
 	def filterId (self, qualifiedId):
 		return '.'.join (['__${}__'.format (id) if id in self.filterIds else id for id in qualifiedId.split ('.')])	# $ to avoid magics like __init__
 		
@@ -368,6 +375,18 @@ class Generator (ast.NodeVisitor):
 		self.tempIndices [name] -= 1
 		if self.tempIndices [name] < 0:
 			del self.tempIndices [name]
+			
+	def pragmaJs (self, code, includes):
+		includeCodes = []
+		for include in includes:
+			for searchDir in self.module.program.moduleSearchDirs:
+				fileName = '{}/{}'.format (searchDir, include)
+				if os.path.isfile (fileName):
+					includeCodes.append (open (fileName) .read ())
+					break
+					
+		codeWithIncludes = code.format (*includeCodes)
+		self.emit ('\n{}\n', codeWithIncludes)
 		
 	def visit_arg (self, node):
 		self.emit (node.arg)
@@ -514,7 +533,8 @@ class Generator (ast.NodeVisitor):
 				except Exception as exception:
 					utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid LHS slice')	
 			else:
-				if type (target) == ast.Name:
+				if not (self.scopes and self.scopes [-1] == self.classScope) and type (target) == ast.Name:
+					# No class var so <className>. not already emitted
 					self.emit ('var ')
 				
 				self.visit (target)
@@ -589,9 +609,9 @@ class Generator (ast.NodeVisitor):
 					self.emit ('++')
 					return				
 				
-		self.emit (' {}= ', self.binOps [type (node.op)])
+		self.emit (' {}= ', self.operators [type (node.op)][0])
 		self.visit (node.value)
-	
+		
 	def visit_BinOp (self, node):
 		if type (node.op) == ast.FloorDiv:
 			self.emit ('Math.floor (')
@@ -606,16 +626,22 @@ class Generator (ast.NodeVisitor):
 			self.emit (', ')
 			self.visit (node.right)
 			self.emit (')')			
-		else:
+		elif type (node.op) == ast.Pow:
+			self.emit ('Math.pow (')
 			self.visit (node.left)
-			self.emit (' {} '.format (self.binOps [type (node.op)]))			
+			self.emit (', ')
 			self.visit (node.right)
+			self.emit (')')			
+		else:
+			self.visitSubExpr (node, node.left)
+			self.emit (' {} '.format (self.operators [type (node.op)][0]))			
+			self.visitSubExpr (node, node.right)
 			
 	def visit_BoolOp (self, node):
 		for index, value in enumerate (node.values):
 			if index:
-				self.emit (' {} '.format (self.boolOps [type (node.op)]))
-			self.visit (value)	
+				self.emit (' {} '.format (self.operators [type (node.op)][0]))
+			self.visitSubExpr (node, value)	
 	
 	def visit_Break (self, node):
 		self.emit ('{} = true;\n', self.getTemp ('break'))
@@ -660,14 +686,23 @@ class Generator (ast.NodeVisitor):
 				
 			self.emit (')')
 
-		if type (node.func) == ast.Name and node.func.id == '__pragma__':
-			if node.args [0] .s == 'kwargs':
-				self.allowKeywordArgs = True
+		if type (node.func) == ast.Name:
+			if node.func.id == '__pragma__':
+				if node.args [0] .s == 'kwargs':
+					self.allowKeywordArgs = True
+				elif node.args [0] .s == 'nokwargs':
+					self.allowKeywordArgs = False
+				elif node.args [0] .s == 'js':
+					for keyword in node.keywords:
+						if keyword.arg == 'includes':
+							includes = [elt.s for elt in keyword.value.elts]
+					self.pragmaJs (node.args [1] .s, includes)
 				return
-			elif node.args [0] .s == 'nokwargs':
-				self.allowKeywordArgs = False
+			elif node.func.id == '__new__':
+				self.emit ('new ')
+				self.visit (node.args [0])
 				return
-	
+			
 		self.visit (node.func)
 		
 		for index, expr in enumerate (node.args):
@@ -708,10 +743,8 @@ class Generator (ast.NodeVisitor):
 	def visit_ClassDef (self, node):
 		if not self.scopes:
 			self.all.add (node.name)
-		
+
 		self.emit ('var {0} = __class__ (\'{0}\', [', node.name)
-		self.inscope (self.classScope)
-		
 		if node.bases:
 			for index, expr in enumerate (node.bases):
 				try:
@@ -722,15 +755,28 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
+		self.inscope (self.classScope)			
 		
 		self.indent ()
-		for index, stmt in enumerate (node.body):
-			self.emitComma (index, False)
-			self.visit (stmt)
+		classVarAssigns = []
+		index = 0
+		for stmt in node.body:
+			if type (stmt) == ast.FunctionDef:
+				self.emitComma (index, False)
+				self.visit (stmt)
+				index += 1
+			elif type (stmt) == ast.Assign:
+				classVarAssigns.append (stmt)				
 		self.dedent ()
-		
-		self.descope ()
+				
 		self.emit ('\n}})')
+
+		for index, classVarAssign in enumerate (classVarAssigns):
+			self.emit (';\n')
+			self.emit ('{}.', node.name)
+			self.visit (classVarAssign)
+
+		self.descope ()	# No earlier, class vars need it
 		
 	def visit_Compare (self, node):
 		if len (node.comparators) > 1:
@@ -743,14 +789,14 @@ class Generator (ast.NodeVisitor):
 				
 			if type (operand) in (ast.In, ast.NotIn):
 				self.emit ('{}__in__ (', '!' if type (operand) == ast.NotIn else '')
-				self.visit (left)
+				self.visitSubExpr (node, left)
 				self.emit (', ')
-				self.visit (right)
+				self.visitSubExpr (node, right)
 				self.emit (')')
 			else:						
-				self.visit (left)
-				self.emit (' {0} '.format (self.compOps [type (operand)]))
-				self.visit (right)
+				self.visitSubExpr (node, left)
+				self.emit (' {0} '.format (self.operators [type (operand)][0]))
+				self.visitSubExpr (node, right)
 				
 			left = right
 			
@@ -914,7 +960,7 @@ class Generator (ast.NodeVisitor):
 							self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))						
 					except:											# If it doesn't it denotes an entity inside a module
 						self.module.program.provide (node.module)
-				
+						
 						if alias.asname:
 							self.emit ('var {} = __init__ (__world__.{}).{}', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
 						else:
@@ -1173,8 +1219,8 @@ class Generator (ast.NodeVisitor):
 		self.emit (')')
 			
 	def visit_UnaryOp (self, node):
-		self.emit (self.unOps [type (node.op)])			
-		self.visit (node.operand)
+		self.emit (self.operators [type (node.op)][0])			
+		self.visitSubExpr (node, node.operand)
 		
 	def visit_While (self, node):
 		if node.orelse:

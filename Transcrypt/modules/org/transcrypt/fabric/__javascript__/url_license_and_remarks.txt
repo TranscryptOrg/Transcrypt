@@ -1,0 +1,5 @@
+Site: http://www.fabricjs.com
+License at: https://github.com/kangax/fabric.js/blob/master/LICENSE
+
+Interaction needs to be included in the (dev) download, otherwise canvas will be missing.
+Look for !!! in this modified copy of fabric.js to find a fix for a warning from Google's closure compiler.

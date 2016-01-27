@@ -37,7 +37,7 @@ file: Module
 									attr: str = transpilerVersion
 									ctx: Store 
 							value: Str 
-								s: str = 0.0.48
+								s: str = 0.0.49
 						element: Assign 
 							targets: list 
 								element: Attribute 
