@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-27 19:40:51
+// Transcrypt'ed from Python, 2016-01-29 16:54:22
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -120,7 +120,10 @@ function autotest () {
 		}	
 	});
 	__all__.object = object;
-
+	
+	// Define __pragma__ to preserve '<all>' and '</all>', since it's never generated as a function, must be done early, so here
+	var __pragma__ = function () {};
+	__all__.__pragma__ = __pragma__;
 	__nest__ (
 		__all__,
 		'org.transcrypt.__base__', {
@@ -135,10 +138,10 @@ function autotest () {
 						});}
 					});
 					var __envir__ = __Envir__ ();
-					//<all>
+					__pragma__ ('<all>')
 					__all__.__Envir__ = __Envir__;
 					__all__.__envir__ = __envir__;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -169,7 +172,7 @@ function autotest () {
 							}
 							else {
 								if (len (self.args)) {
-									return str (self.args [0] );
+									return str (self.args [0]);
 								}
 								else {
 									return '???';
@@ -179,11 +182,11 @@ function autotest () {
 					});
 					;
 					var sort = function (iterable, key, reverse) {
-						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
-							var iterable = null;
+						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
+							var key = null;
 						};
-						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
-							var key = false;
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .__class__ == __kwargdict__)) {;
+							var reverse = false;
 						};
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -198,6 +201,7 @@ function autotest () {
 								}
 							}
 						}
+						console.log (111, reverse);
 						if (key) {
 							iterable.sort ((function __lambda__ (a, b) {
 								if (arguments.length) {
@@ -222,11 +226,11 @@ function autotest () {
 						}
 					};
 					var sorted = function (iterable, key, reverse) {
-						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
-							var iterable = null;
+						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
+							var key = null;
 						};
-						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
-							var key = false;
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .__class__ == __kwargdict__)) {;
+							var reverse = false;
 						};
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -245,11 +249,11 @@ function autotest () {
 						sort (result, key, reverse);
 						return result;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.Exception = Exception;
 					__all__.sort = sort;
 					__all__.sorted = sorted;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -278,7 +282,7 @@ function autotest () {
 	// Define current exception, there's at most one exception in the air at any time
 	var __except__ = null;
 	__all__.__except__ = __except__;
-	
+		
 	// Define recognizable dictionary for **kwargs parameter
 	var __kwargdict__ = function (anObject) {
 		__kwargdict__.__name__ = '__kwargdict__';
@@ -441,6 +445,20 @@ function autotest () {
 		}
 	}
 	__all__.repr = repr;
+	
+	// Char from Unicode or ASCII
+	
+	var chr = function (charCode) {
+		return String.fromCharCode (charCode);
+	}
+	__all__.chr = chr;
+
+	// Unicode or ASCII from char
+	
+	var ord = function (aChar) {
+		return aChar.charCodeAt (0);
+	}
+	__all__.org = ord;
 	
 	// Zip method for arrays
 	var zip = function () {
@@ -629,15 +647,14 @@ function autotest () {
 	__all__.tuple = tuple;
 	tuple.__name__ = 'tuple';
 	
+	
 	// Set extensions to Array
 		
 	function set (iterable) {
-		var instance = list ();
+		var instance = [];
 		if (iterable) {
 			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {	// Avoid duplicates in set
-					instance.push (iterable [index]);
-				}
+				instance.add (iterable [index]);
 			}
 		}
 		instance.__class__ = set;	// Not all arrays are sets
@@ -646,6 +663,19 @@ function autotest () {
 	__all__.set = set;
 	set.__name__ = 'set';
 	
+	Array.prototype.add = function (element) {
+		if (this.indexOf (element) == -1) {	// Avoid duplicates in set
+			this.push (element);
+		}
+	}
+	
+	Array.prototype.remove = function (element) {
+		var index = this.indexOf (element);
+		if (index != -1) {
+			this.splice (index, 1);
+		}
+	}
+	
 	// Dict extensions to object
 
 	function __keys__ () {
@@ -653,7 +683,7 @@ function autotest () {
 		for (attrib in this) {
 			if (__normalattrib__ (attrib)) {
 				keys.push (key);
-			}
+			}     
 		}
 		return keys;
 	}
@@ -774,8 +804,6 @@ function autotest () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	
-	__all__.str = str
 	__nest__ (
 		__all__,
 		'__$arguments__', {
@@ -785,11 +813,11 @@ function autotest () {
 					;
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
-								var self = 123;
+							if (typeof x == 'undefined' || (x != null && x .__class__ == __kwargdict__)) {;
+								var x = 123;
 							};
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = 456;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = 456;
 							};
 							var n = 456;
 							if (arguments.length) {
@@ -837,8 +865,8 @@ function autotest () {
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
-								var self = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -876,8 +904,8 @@ function autotest () {
 							}
 						}
 						var f = function (x, y) {
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -899,8 +927,8 @@ function autotest () {
 								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 							}
 							var f2 = function (x, y) {
-								if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-									var x = -3;
+								if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+									var y = -3;
 								};
 								var m = -4;
 								if (arguments.length) {
@@ -948,8 +976,8 @@ function autotest () {
 						};
 						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
 						(function __lambda__ (x, y) {
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -972,11 +1000,11 @@ function autotest () {
 							}
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
 					__all__.B = B;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1041,9 +1069,9 @@ function autotest () {
 						var show3 = c.show;
 						show3 ('copy');
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1061,22 +1089,22 @@ function autotest () {
 						var bools = tuple (list ([false, true]));
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var a = __iter0__ [__index0__] ;
+							var a = __iter0__ [__index0__];
 							var __iter1__ = bools;
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var b = __iter1__ [__index1__] ;
+								var b = __iter1__ [__index1__];
 								autoTester.check (f ((a ? 10 : 100), b));
 							}
 						}
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var p = __iter0__ [__index0__] ;
+							var p = __iter0__ [__index0__];
 							var __iter1__ = bools;
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var q = __iter1__ [__index1__] ;
+								var q = __iter1__ [__index1__];
 								var __iter2__ = bools;
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var r = __iter2__ [__index2__] ;
+									var r = __iter2__ [__index2__];
 									autoTester.check ((p ? 'a' : (q ? 'b' : (r ? 'c' : 'd'))));
 									var a = (r ? (q ? (p ? 'e' : 'f') : 'g') : 'h');
 									var b = (p ? 'i' : (q ? 'j' : (r ? 'k' : 'l')));
@@ -1091,17 +1119,17 @@ function autotest () {
 							var __iter0__ = range (10);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								__accu0__ .push ((x % 2 ? x : x + 1));
+								__accu0__.append ((x % 2 ? x : x + 1));
 							}
 							return __accu0__;
 						} ();
 						var noDuplicates = set (odd);
 						autoTester.check (odd, noDuplicates);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1119,21 +1147,21 @@ function autotest () {
 							for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
 								var x = __iter1__ [__index0__];
 								if (x % 2) {
-									__accu0__ .push (x * x);
+									__accu0__.append (x * x);
 								}
 							}
 							return __accu0__;
 						} ());
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var __left0__ = __iter0__ [__index0__] ;
+							var __left0__ = __iter0__ [__index0__];
 							var index = __left0__[0];
 							var square = __left0__[1];
 							var __iter1__ = range (1, 2, 3);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var y = __iter1__ [__index1__] ;
+								var y = __iter1__ [__index1__];
 								var __iter2__ = range (10, 20, 30);
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var z = __iter2__ [__index2__] ;
+									var z = __iter2__ [__index2__];
 									autoTester.check (square + y, z);
 								}
 							}
@@ -1141,18 +1169,18 @@ function autotest () {
 						var vehicles = list (['bike', 'train', 'boat', 'car', 'plane', 'bus']);
 						var __iter0__ = tuple (list ([false, true]));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var doBreak = __iter0__ [__index0__] ;
+							var doBreak = __iter0__ [__index0__];
 							var __iter1__ = tuple (list ([false, true]));
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var doContinue = __iter1__ [__index1__] ;
+								var doContinue = __iter1__ [__index1__];
 								var __iter2__ = range (10);
 								var __break0__ = false;
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var index = __iter2__ [__index2__] ;
+									var index = __iter2__ [__index2__];
 									var __iter3__ = range (0, 100, 10);
 									var __break1__ = false;
 									for (var __index3__ = 0; __index3__ < __iter3__.length; __index3__++) {
-										var index2 = __iter3__ [__index3__] ;
+										var index2 = __iter3__ [__index3__];
 										if (doBreak && index2 == 50) {
 											autoTester.check ('break2');
 											__break1__ = true;
@@ -1181,14 +1209,14 @@ function autotest () {
 								}
 								var index = 0;
 								var __break0__ = false;
-								while (index < len (vehicles) && vehicles [index]  != 'bus') {
-									autoTester.check (index, vehicles [index] );
-									if (doBreak && vehicles [index]  == 'car') {
+								while (index < len (vehicles) && vehicles [index] != 'bus') {
+									autoTester.check (index, vehicles [index]);
+									if (doBreak && vehicles [index] == 'car') {
 										autoTester.check ('breakWhile');
 										__break0__ = true;
 										break;
 									}
-									if (doContinue && vehicles [index]  == 'car') {
+									if (doContinue && vehicles [index] == 'car') {
 										autoTester.check ('continueWhile');
 										index++;
 										continue;
@@ -1201,7 +1229,7 @@ function autotest () {
 							}
 							var __iter1__ = vehicles;
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var vehicle = __iter1__ [__index1__] ;
+								var vehicle = __iter1__ [__index1__];
 								if (vehicle == 'bike') {
 									autoTester.check ('netherlands');
 								}
@@ -1221,9 +1249,9 @@ function autotest () {
 							}
 						}
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1249,7 +1277,7 @@ function autotest () {
 						autoTester.check (anotherList);
 						var aDict = {1: 'plant', 'animal': 2};
 						autoTester.check (aDict);
-						autoTester.check (aDict [1] , aDict ['animal'] );
+						autoTester.check (aDict [1], aDict ['animal']);
 						var aTuple = tuple (list ([1, 2, 3, 4, 5]));
 						autoTester.check (aTuple);
 						autoTester.check (len (aTuple));
@@ -1264,9 +1292,9 @@ function autotest () {
 						autoTester.check (emptySet);
 						autoTester.check (len (emptySet));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1374,14 +1402,14 @@ function autotest () {
 						}
 						autoTester.check (666);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.Ex1 = Ex1;
 					__all__.Ex2 = Ex2;
 					__all__.Ex3 = Ex3;
 					__all__.run = run;
 					__all__.test1 = test1;
 					__all__.test2 = test2;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1414,9 +1442,9 @@ function autotest () {
 							return len (x);}), reverse: true}));
 						autoTester.check (b);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1446,16 +1474,16 @@ function autotest () {
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
 								if (x % 2) {
-									__accu0__ .push (x + 0.001);
+									__accu0__.append (x + 0.001);
 								}
 							}
 							return __accu0__;
 						} ());
 						autoTester.check (aList);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1497,7 +1525,7 @@ function autotest () {
 								var __iter0__ = zip (list0, list1);
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var elem = __iter0__ [__index0__];
-									__accu0__ .push (aFunc.apply (null, elem));
+									__accu0__.append (aFunc.apply (null, elem));
 								}
 								return __accu0__;
 							} ();
@@ -1509,11 +1537,11 @@ function autotest () {
 							return x * y + 100 * z;})));
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
 							var args = tuple ([].slice.apply (arguments).slice (0));
-							return args [0]  * args [1]  + 100 * z;})));
+							return args [0] * args [1] + 100 * z;})));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1531,7 +1559,7 @@ function autotest () {
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var i = __iter0__ [__index0__];
 								if (i % 2) {
-									__accu0__ .push (i * i);
+									__accu0__.append (i * i);
 								}
 							}
 							return __accu0__;
@@ -1549,8 +1577,10 @@ function autotest () {
 										var __iter2__ = tuple (list ([1, 2, 3, 4, 5, 6, 7]));
 										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
 											var z = __iter2__ [__index2__];
-											if (((200 < x && x < 600)) && ((2 < z && z < 6))) {
-												__accu0__ .push (tuple (list ([x, y, z])));
+											if ((200 < x && x < 600)) {
+												if ((2 < z && z < 6)) {
+													__accu0__.append (tuple (list ([x, y, z])));
+												}
 											}
 										}
 									}
@@ -1559,6 +1589,17 @@ function autotest () {
 							return __accu0__;
 						} ();
 						autoTester.check (tuples);
+						var tricky = function () {
+							var __accu0__ = [];
+							var __iter0__ = tuple (list ([tuple (list ([10, 11])), tuple (list ([20, 21]))]));
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var __left0__ = __iter0__ [__index0__];
+								var x = __left0__[0];
+								var y = __left0__[1];
+								__accu0__.append (tuple (list ([2 * x, 3 * y])));
+							}
+							return __accu0__;
+						} ();
 						var nested = function () {
 							var __accu0__ = [];
 							var __iter0__ = function () {
@@ -1566,13 +1607,13 @@ function autotest () {
 								var __iter1__ = range (3);
 								for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
 									var x = __iter1__ [__index0__];
-									__accu1__ .push (x * x);
+									__accu1__.append (x * x);
 								}
 								return __accu1__;
 							} ();
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								__accu0__ .push (2 * x);
+								__accu0__.append (2 * x);
 							}
 							return __accu0__;
 						} ();
@@ -1584,16 +1625,16 @@ function autotest () {
 							var __iter0__ = range (5);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								__accu0__ .push (x + a);
+								__accu0__.append (x + a);
 							}
 							return __accu0__;
 						} ();
 						autoTester.check (x);
 						autoTester.check (scopeTest);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1650,12 +1691,12 @@ function autotest () {
 						autoTester.check (mod3GetTwoHundred ());
 						autoTester.check (A (123.321).f ());
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.a = a;
 					__all__.f = f;
 					__all__.pi = pi;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1667,9 +1708,9 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var pi = 3.1415693588;
-					//<all>
+					__pragma__ ('<all>')
 					__all__.pi = pi;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1681,9 +1722,9 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var e = 2.74;
-					//<all>
+					__pragma__ ('<all>')
 					__all__.e = e;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1702,9 +1743,9 @@ function autotest () {
 							return self.x;
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1718,9 +1759,9 @@ function autotest () {
 					var f = function () {
 						return "Paris, c'est la vie\n";
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1734,9 +1775,9 @@ function autotest () {
 					var f = function (p) {
 						return 2 * p;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1750,9 +1791,9 @@ function autotest () {
 					var f = function () {
 						return 'London is the town for me\n';
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1768,9 +1809,9 @@ function autotest () {
 							self.x = 'Geef mij maar Amsterdam\n';
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.B = B;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1786,11 +1827,11 @@ function autotest () {
 					var mod3GetTwoHundred = function () {
 						return 200;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.mod3GetTwoHundred = mod3GetTwoHundred;
 					__all__.mod3Hundred = mod3Hundred;
 					__all__.x = x;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1823,7 +1864,7 @@ function autotest () {
 								var __iter0__ = args;
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var arg = __iter0__ [__index0__];
-									__accu0__ .push (repr (arg));
+									__accu0__.append (repr (arg));
 								}
 								return __accu0__;
 							} ());
@@ -1837,7 +1878,7 @@ function autotest () {
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var minified = __iter0__ [__index0__] ;
+								var minified = __iter0__ [__index0__];
 								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
@@ -1856,7 +1897,7 @@ function autotest () {
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var __left0__ = __iter0__ [__index0__] ;
+								var __left0__ = __iter0__ [__index0__];
 								var index = __left0__[0];
 								var testItem = __left0__[1][0];
 								var referenceItem = __left0__[1][1];
@@ -1865,11 +1906,11 @@ function autotest () {
 									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
 									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var __left0__ = __iter1__ [__index1__] ;
+										var __left0__ = __iter1__ [__index1__];
 										var buffer = __left0__[0];
 										var divId = __left0__[1];
 										var accentColor = __left0__[2];
-										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )]), buffer.slice (index + 1));
+										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
 									__break0__ = true;
@@ -1891,17 +1932,17 @@ function autotest () {
 								self.compare ();
 							}
 							else {
-								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1] );
+								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.AutoTester = AutoTester;
 					__all__.errorColor = errorColor;
 					__all__.highlightColor = highlightColor;
 					__all__.okColor = okColor;
 					__all__.testletNameColor = testletNameColor;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1927,7 +1968,7 @@ function autotest () {
 						var z = x + y;
 						autoTester.check (z);
 						var l = list ([1, 2, 3]);
-						l [1]  = l [2] ;
+						l [1] = l [2];
 						autoTester.check (l);
 						x++;
 						autoTester.check (x);
@@ -1947,7 +1988,7 @@ function autotest () {
 						autoTester.check (x);
 						y -= 3;
 						autoTester.check (y);
-						l [1]  += l [1] ;
+						l [1] += l [1];
 						autoTester.check (l);
 						x += y;
 						y += x;
@@ -1960,11 +2001,11 @@ function autotest () {
 						a.i += a.i;
 						autoTester.check (f ());
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
 					__all__.a = a;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -1986,7 +2027,7 @@ function autotest () {
 						autoTester.check (a, b, c, d, e, santa);
 						var __iter0__ = enumerate (tuple (list ([0.5, 1.5, 2.5, 3.5])));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var __left0__ = __iter0__ [__index0__] ;
+							var __left0__ = __iter0__ [__index0__];
 							var i = __left0__[0];
 							var x = __left0__[1];
 							autoTester.check (i, x);
@@ -1999,9 +2040,9 @@ function autotest () {
 						var pi = __left0__[1];
 						autoTester.check (e, pi);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}
@@ -2050,9 +2091,9 @@ function autotest () {
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
-		//<all>
+		__pragma__ ('<all>')
 		__all__.autoTester = autoTester;
-		//</all>
+		__pragma__ ('</all>')
 	}) ();
 	return __all__;
 }

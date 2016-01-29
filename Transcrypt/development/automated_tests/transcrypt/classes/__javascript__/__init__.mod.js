@@ -58,9 +58,9 @@
 						var show3 = c.show;
 						show3 ('copy');
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

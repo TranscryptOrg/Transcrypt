@@ -19,7 +19,7 @@
 						autoTester.check (anotherList);
 						var aDict = {1: 'plant', 'animal': 2};
 						autoTester.check (aDict);
-						autoTester.check (aDict [1] , aDict ['animal'] );
+						autoTester.check (aDict [1], aDict ['animal']);
 						var aTuple = tuple (list ([1, 2, 3, 4, 5]));
 						autoTester.check (aTuple);
 						autoTester.check (len (aTuple));
@@ -34,9 +34,9 @@
 						autoTester.check (emptySet);
 						autoTester.check (len (emptySet));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

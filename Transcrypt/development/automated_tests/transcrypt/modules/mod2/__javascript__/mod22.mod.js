@@ -9,9 +9,9 @@
 							self.x = 'Geef mij maar Amsterdam\n';
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.B = B;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

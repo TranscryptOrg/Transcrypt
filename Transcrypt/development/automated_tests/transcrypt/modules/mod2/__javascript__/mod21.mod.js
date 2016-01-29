@@ -7,9 +7,9 @@
 					var f = function () {
 						return 'London is the town for me\n';
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

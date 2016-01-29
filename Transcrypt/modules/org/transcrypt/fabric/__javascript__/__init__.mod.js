@@ -14968,15 +14968,14 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
   fabric.util.createAccessors(fabric.Text);
 
 })(typeof exports !== 'undefined' ? exports : this);	// Puts fabric in exports and in global window, fabric also refers to global window and document
-			console.dir (fabric);
 			delete window.fabric;
 			return exports;
 		}) () .fabric;
 	
 					;
-					//<all>
+					__pragma__ ('<all>')
 					__all__.fabric = fabric;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -26,7 +26,7 @@
 								var __iter0__ = args;
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var arg = __iter0__ [__index0__];
-									__accu0__ .push (repr (arg));
+									__accu0__.append (repr (arg));
 								}
 								return __accu0__;
 							} ());
@@ -40,7 +40,7 @@
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var minified = __iter0__ [__index0__] ;
+								var minified = __iter0__ [__index0__];
 								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
@@ -59,7 +59,7 @@
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var __left0__ = __iter0__ [__index0__] ;
+								var __left0__ = __iter0__ [__index0__];
 								var index = __left0__[0];
 								var testItem = __left0__[1][0];
 								var referenceItem = __left0__[1][1];
@@ -68,11 +68,11 @@
 									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
 									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var __left0__ = __iter1__ [__index1__] ;
+										var __left0__ = __iter1__ [__index1__];
 										var buffer = __left0__[0];
 										var divId = __left0__[1];
 										var accentColor = __left0__[2];
-										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index] )]), buffer.slice (index + 1));
+										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
 									__break0__ = true;
@@ -94,17 +94,17 @@
 								self.compare ();
 							}
 							else {
-								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1] );
+								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.AutoTester = AutoTester;
 					__all__.errorColor = errorColor;
 					__all__.highlightColor = highlightColor;
 					__all__.okColor = okColor;
 					__all__.testletNameColor = testletNameColor;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

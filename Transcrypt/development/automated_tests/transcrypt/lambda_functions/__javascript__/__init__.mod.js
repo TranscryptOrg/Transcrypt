@@ -14,7 +14,7 @@
 								var __iter0__ = zip (list0, list1);
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var elem = __iter0__ [__index0__];
-									__accu0__ .push (aFunc.apply (null, elem));
+									__accu0__.append (aFunc.apply (null, elem));
 								}
 								return __accu0__;
 							} ();
@@ -26,11 +26,11 @@
 							return x * y + 100 * z;})));
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
 							var args = tuple ([].slice.apply (arguments).slice (0));
-							return args [0]  * args [1]  + 100 * z;})));
+							return args [0] * args [1] + 100 * z;})));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -19,7 +19,7 @@
 						var z = x + y;
 						autoTester.check (z);
 						var l = list ([1, 2, 3]);
-						l [1]  = l [2] ;
+						l [1] = l [2];
 						autoTester.check (l);
 						x++;
 						autoTester.check (x);
@@ -39,7 +39,7 @@
 						autoTester.check (x);
 						y -= 3;
 						autoTester.check (y);
-						l [1]  += l [1] ;
+						l [1] += l [1];
 						autoTester.check (l);
 						x += y;
 						y += x;
@@ -52,11 +52,11 @@
 						a.i += a.i;
 						autoTester.check (f ());
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
 					__all__.a = a;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

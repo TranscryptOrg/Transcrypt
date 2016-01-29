@@ -117,4 +117,7 @@
 		}	
 	});
 	__all__.object = object;
-
+	
+	// Define __pragma__ to preserve '<all>' and '</all>', since it's never generated as a function, must be done early, so here
+	var __pragma__ = function () {};
+	__all__.__pragma__ = __pragma__;

@@ -27,11 +27,12 @@ class Exception:
 __pragma__ ('kwargs')
 			
 def sort (iterable, key = None, reverse = False):
+	console.log (111, reverse)
 	if key:
 		iterable.sort (lambda a, b: key (a) > key (b))
 	else:
 		iterable.sort ()
-
+		
 	if reverse:
 		iterable.reverse ()
 		

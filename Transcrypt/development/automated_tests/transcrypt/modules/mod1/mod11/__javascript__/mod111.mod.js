@@ -12,9 +12,9 @@
 							return self.x;
 						});}
 					});
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

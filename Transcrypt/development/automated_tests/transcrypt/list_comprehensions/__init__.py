@@ -10,6 +10,8 @@ def run (autoTester):
 	]
 	autoTester.check (tuples)
 	
+	tricky = [(2 * x, 3 * y) for x, y in ((10, 11), (20, 21))]
+	
 	nested = [2 * x for x in [x * x for x in range (3)]]
 	autoTester.check (nested)
 	

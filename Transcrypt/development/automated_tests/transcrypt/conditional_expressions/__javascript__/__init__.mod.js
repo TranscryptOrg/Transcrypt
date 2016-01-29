@@ -11,22 +11,22 @@
 						var bools = tuple (list ([false, true]));
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var a = __iter0__ [__index0__] ;
+							var a = __iter0__ [__index0__];
 							var __iter1__ = bools;
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var b = __iter1__ [__index1__] ;
+								var b = __iter1__ [__index1__];
 								autoTester.check (f ((a ? 10 : 100), b));
 							}
 						}
 						var __iter0__ = bools;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var p = __iter0__ [__index0__] ;
+							var p = __iter0__ [__index0__];
 							var __iter1__ = bools;
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-								var q = __iter1__ [__index1__] ;
+								var q = __iter1__ [__index1__];
 								var __iter2__ = bools;
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var r = __iter2__ [__index2__] ;
+									var r = __iter2__ [__index2__];
 									autoTester.check ((p ? 'a' : (q ? 'b' : (r ? 'c' : 'd'))));
 									var a = (r ? (q ? (p ? 'e' : 'f') : 'g') : 'h');
 									var b = (p ? 'i' : (q ? 'j' : (r ? 'k' : 'l')));
@@ -41,17 +41,17 @@
 							var __iter0__ = range (10);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								__accu0__ .push ((x % 2 ? x : x + 1));
+								__accu0__.append ((x % 2 ? x : x + 1));
 							}
 							return __accu0__;
 						} ();
 						var noDuplicates = set (odd);
 						autoTester.check (odd, noDuplicates);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

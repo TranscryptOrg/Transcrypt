@@ -10,89 +10,6 @@ file: Module
 		element: Assign 
 			targets: list 
 				element: Name 
-					id: str = canvas
-					ctx: Store 
-			value: Call 
-				func: Name 
-					id: str = __new__
-					ctx: Load 
-				args: list 
-					element: Call 
-						func: Attribute 
-							value: Name 
-								id: str = fabric
-								ctx: Load 
-							attr: str = Canvas
-							ctx: Load 
-						args: list 
-							element: Str 
-								s: str = canvas
-						keywords: list 
-				keywords: list 
-		element: Assign 
-			targets: list 
-				element: Name 
-					id: str = rect
-					ctx: Store 
-			value: Call 
-				func: Name 
-					id: str = __new__
-					ctx: Load 
-				args: list 
-					element: Call 
-						func: Attribute 
-							value: Name 
-								id: str = fabric
-								ctx: Load 
-							attr: str = Rect
-							ctx: Load 
-						args: list 
-							element: Dict 
-								keys: list 
-									element: Name 
-										id: str = left
-										ctx: Load 
-									element: Name 
-										id: str = top
-										ctx: Load 
-									element: Name 
-										id: str = fill
-										ctx: Load 
-									element: Name 
-										id: str = width
-										ctx: Load 
-									element: Name 
-										id: str = height
-										ctx: Load 
-								values: list 
-									element: Num 
-										n: int = 100
-									element: Num 
-										n: int = 100
-									element: Str 
-										s: str = red
-									element: Num 
-										n: int = 20
-									element: Num 
-										n: int = 20
-						keywords: list 
-				keywords: list 
-		element: Expr 
-			value: Call 
-				func: Attribute 
-					value: Name 
-						id: str = canvas
-						ctx: Load 
-					attr: str = add
-					ctx: Load 
-				args: list 
-					element: Name 
-						id: str = rect
-						ctx: Load 
-				keywords: list 
-		element: Assign 
-			targets: list 
-				element: Name 
 					id: str = orthoWidth
 					ctx: Store 
 			value: Num 
@@ -111,6 +28,29 @@ file: Module
 					ctx: Store 
 			value: Num 
 				n: int = 650
+		element: Assign 
+			targets: list 
+				element: Tuple 
+					elts: list 
+						element: Name 
+							id: str = enter
+							ctx: Store 
+						element: Name 
+							id: str = esc
+							ctx: Store 
+						element: Name 
+							id: str = space
+							ctx: Store 
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Num 
+						n: int = 13
+					element: Num 
+						n: int = 27
+					element: Num 
+						n: int = 32
+				ctx: Load 
 		element: ClassDef 
 			name: str = Attribute
 			bases: list 
@@ -380,18 +320,42 @@ file: Module
 														id: str = fill
 														ctx: Load 
 												values: list 
-													element: Attribute 
-														value: Name 
-															id: str = self
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = scaleX
 															ctx: Load 
-														attr: str = width
-														ctx: Load 
-													element: Attribute 
-														value: Name 
-															id: str = self
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = width
+																ctx: Load 
+														keywords: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = scaleY
 															ctx: Load 
-														attr: str = height
-														ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = height
+																ctx: Load 
+														keywords: list 
 													element: Str 
 														s: str = center
 													element: Str 
@@ -402,6 +366,15 @@ file: Module
 								keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = kwargs
+						keywords: list 
 				element: FunctionDef 
 					name: str = reset
 					args: arguments 
@@ -494,6 +467,15 @@ file: Module
 								keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = nokwargs
+						keywords: list 
 				element: FunctionDef 
 					name: str = predict
 					args: arguments 
@@ -507,26 +489,56 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
-						element: Assign 
-							targets: list 
-								element: Attribute 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = x
+								ctx: Store 
+							op: Add 
+							value: BinOp 
+								left: Attribute 
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = x
-									ctx: Store 
-							value: Num 
-								n: int = 0
-						element: Assign 
-							targets: list 
-								element: Attribute 
+									attr: str = vX
+									ctx: Load 
+								op: Mult 
+								right: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = game
+										ctx: Load 
+									attr: str = deltaT
+									ctx: Load 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = y
+								ctx: Store 
+							op: Add 
+							value: BinOp 
+								left: Attribute 
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = y
-									ctx: Store 
-							value: Num 
-								n: int = 0
+									attr: str = vY
+									ctx: Load 
+								op: Mult 
+								right: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = game
+										ctx: Load 
+									attr: str = deltaT
+									ctx: Load 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
@@ -544,26 +556,14 @@ file: Module
 					body: list 
 						element: Assign 
 							targets: list 
-								element: Tuple 
-									elts: list 
-										element: Attribute 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = image
-												ctx: Load 
-											attr: str = left
-											ctx: Store 
-										element: Attribute 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = image
-												ctx: Load 
-											attr: str = top
-											ctx: Store 
+								element: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = image
+										ctx: Load 
+									attr: str = left
 									ctx: Store 
 							value: Call 
 								func: Attribute 
@@ -573,7 +573,7 @@ file: Module
 											ctx: Load 
 										attr: str = game
 										ctx: Load 
-									attr: str = ortho
+									attr: str = orthoX
 									ctx: Load 
 								args: list 
 									element: Attribute 
@@ -582,6 +582,29 @@ file: Module
 											ctx: Load 
 										attr: str = x
 										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = image
+										ctx: Load 
+									attr: str = top
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = game
+										ctx: Load 
+									attr: str = orthoY
+									ctx: Load 
+								args: list 
 									element: Attribute 
 										value: Name 
 											id: str = self
@@ -761,12 +784,14 @@ file: Module
 												attr: str = index
 												ctx: Load 
 											body: BinOp 
-												left: UnaryOp 
-													op: USub 
-													operand: Name 
+												left: BinOp 
+													left: Name 
 														id: str = orthoWidth
 														ctx: Load 
-												op: Add 
+													op: FloorDiv 
+													right: Num 
+														n: int = 2
+												op: Sub 
 												right: Attribute 
 													value: Name 
 														id: str = self
@@ -775,9 +800,11 @@ file: Module
 													ctx: Load 
 											orelse: BinOp 
 												left: BinOp 
-													left: Name 
-														id: str = orthoWidth
-														ctx: Load 
+													left: UnaryOp 
+														op: USub 
+														operand: Name 
+															id: str = orthoWidth
+															ctx: Load 
 													op: FloorDiv 
 													right: Num 
 														n: int = 2
@@ -817,6 +844,171 @@ file: Module
 									ctx: Store 
 							value: Num 
 								n: int = 0
+						element: If 
+							test: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = index
+								ctx: Load 
+							body: list 
+								element: If 
+									test: Compare 
+										left: Call 
+											func: Name 
+												id: str = ord
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = K
+											keywords: list 
+										ops: list 
+											element: In 
+										comparators: list 
+											element: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
+													ctx: Load 
+												attr: str = keySet
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = vY
+													ctx: Store 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = speed
+												ctx: Load 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Call 
+													func: Name 
+														id: str = ord
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = M
+													keywords: list 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = game
+															ctx: Load 
+														attr: str = keySet
+														ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = vY
+															ctx: Store 
+													value: UnaryOp 
+														op: USub 
+														operand: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = speed
+															ctx: Load 
+											orelse: list 
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Call 
+											func: Name 
+												id: str = ord
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = A
+											keywords: list 
+										ops: list 
+											element: In 
+										comparators: list 
+											element: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
+													ctx: Load 
+												attr: str = keySet
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = vY
+													ctx: Store 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = speed
+												ctx: Load 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Call 
+													func: Name 
+														id: str = ord
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = Z
+													keywords: list 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = game
+															ctx: Load 
+														attr: str = keySet
+														ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = vY
+															ctx: Store 
+													value: UnaryOp 
+														op: USub 
+														operand: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = speed
+															ctx: Load 
+											orelse: list 
 						element: Expr 
 							value: Call 
 								func: Attribute 
@@ -862,15 +1054,24 @@ file: Module
 									ctx: Load 
 								args: list 
 									element: BinOp 
-										left: Attribute 
-											value: Name 
-												id: str = self
+										left: BinOp 
+											left: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = height
 												ctx: Load 
-											attr: str = height
-											ctx: Load 
-										op: Div 
-										right: Num 
-											n: int = 2
+											op: FloorDiv 
+											right: Num 
+												n: int = 2
+										op: Sub 
+										right: BinOp 
+											left: Name 
+												id: str = fieldHeight
+												ctx: Load 
+											op: FloorDiv 
+											right: Num 
+												n: int = 2
 									element: Call 
 										func: Attribute 
 											value: Name 
@@ -886,9 +1087,13 @@ file: Module
 												attr: str = y
 												ctx: Load 
 											element: BinOp 
-												left: Name 
-													id: str = fieldHeight
-													ctx: Load 
+												left: BinOp 
+													left: Name 
+														id: str = fieldHeight
+														ctx: Load 
+													op: FloorDiv 
+													right: Num 
+														n: int = 2
 												op: Sub 
 												right: BinOp 
 													left: Attribute 
@@ -897,7 +1102,7 @@ file: Module
 															ctx: Load 
 														attr: str = height
 														ctx: Load 
-													op: Div 
+													op: FloorDiv 
 													right: Num 
 														n: int = 2
 										keywords: list 
@@ -1085,99 +1290,25 @@ file: Module
 												ctx: Load 
 											attr: str = vX
 											ctx: Load 
-								element: Assign 
-									targets: list 
-										element: Name 
-											id: str = speedUp
-											ctx: Store 
-									value: BinOp 
-										left: Num 
-											n: int = 1
-										op: Add 
-										right: BinOp 
-											left: Num 
-												n: float = 0.5
-											op: Mult 
-											right: BinOp 
-												left: BinOp 
-													left: Num 
-														n: int = 1
-													op: Sub 
-													right: BinOp 
-														left: Call 
-															func: Name 
-																id: str = abs
-																ctx: Load 
-															args: list 
-																element: BinOp 
-																	left: Attribute 
-																		value: Attribute 
-																			value: Attribute 
-																				value: Name 
-																					id: str = self
-																					ctx: Load 
-																				attr: str = game
-																				ctx: Load 
-																			attr: str = ball
-																			ctx: Load 
-																		attr: str = y
-																		ctx: Load 
-																	op: Sub 
-																	right: Attribute 
-																		value: Name 
-																			id: str = self
-																			ctx: Load 
-																		attr: str = y
-																		ctx: Load 
-															keywords: list 
-														op: Div 
-														right: BinOp 
-															left: Attribute 
-																value: Name 
-																	id: str = self
-																	ctx: Load 
-																attr: str = height
-																ctx: Load 
-															op: FloorDiv 
-															right: Num 
-																n: int = 2
-												op: Pow 
-												right: Num 
-													n: int = 2
-								element: AugAssign 
-									target: Attribute 
-										value: Attribute 
+								element: Expr 
+									value: Call 
+										func: Attribute 
 											value: Attribute 
-												value: Name 
-													id: str = self
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
 													ctx: Load 
-												attr: str = game
+												attr: str = ball
 												ctx: Load 
-											attr: str = ball
+											attr: str = speedUp
 											ctx: Load 
-										attr: str = vX
-										ctx: Store 
-									op: Mult 
-									value: Name 
-										id: str = speedUp
-										ctx: Load 
-								element: AugAssign 
-									target: Attribute 
-										value: Attribute 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = game
+										args: list 
+											element: Name 
+												id: str = self
 												ctx: Load 
-											attr: str = ball
-											ctx: Load 
-										attr: str = vY
-										ctx: Store 
-									op: Mult 
-									value: Name 
-										id: str = speedUp
-										ctx: Load 
+										keywords: list 
 							orelse: list 
 					decorator_list: list 
 					returns: NoneType = None
@@ -1435,8 +1566,15 @@ file: Module
 								ops: list 
 									element: Lt 
 								comparators: list 
-									element: Num 
-										n: int = 0
+									element: BinOp 
+										left: UnaryOp 
+											op: USub 
+											operand: Name 
+												id: str = orthoWidth
+												ctx: Load 
+										op: FloorDiv 
+										right: Num 
+											n: int = 2
 							body: list 
 								element: Expr 
 									value: Call 
@@ -1465,9 +1603,13 @@ file: Module
 										ops: list 
 											element: Gt 
 										comparators: list 
-											element: Name 
-												id: str = orthoWidth
-												ctx: Load 
+											element: BinOp 
+												left: Name 
+													id: str = orthoWidth
+													ctx: Load 
+												op: FloorDiv 
+												right: Num 
+													n: int = 2
 									body: list 
 										element: Expr 
 											value: Call 
@@ -1496,9 +1638,13 @@ file: Module
 								ops: list 
 									element: Gt 
 								comparators: list 
-									element: Name 
-										id: str = fieldHeight
-										ctx: Load 
+									element: BinOp 
+										left: Name 
+											id: str = fieldHeight
+											ctx: Load 
+										op: FloorDiv 
+										right: Num 
+											n: int = 2
 							body: list 
 								element: Assign 
 									targets: list 
@@ -1508,9 +1654,13 @@ file: Module
 												ctx: Load 
 											attr: str = y
 											ctx: Store 
-									value: Name 
-										id: str = fieldHeight
-										ctx: Load 
+									value: BinOp 
+										left: Name 
+											id: str = fieldHeight
+											ctx: Load 
+										op: FloorDiv 
+										right: Num 
+											n: int = 2
 								element: Assign 
 									targets: list 
 										element: Attribute 
@@ -1539,8 +1689,15 @@ file: Module
 										ops: list 
 											element: Lt 
 										comparators: list 
-											element: Num 
-												n: int = 0
+											element: BinOp 
+												left: UnaryOp 
+													op: USub 
+													operand: Name 
+														id: str = fieldHeight
+														ctx: Load 
+												op: FloorDiv 
+												right: Num 
+													n: int = 2
 									body: list 
 										element: Assign 
 											targets: list 
@@ -1550,8 +1707,15 @@ file: Module
 														ctx: Load 
 													attr: str = y
 													ctx: Store 
-											value: Num 
-												n: int = 0
+											value: BinOp 
+												left: UnaryOp 
+													op: USub 
+													operand: Name 
+														id: str = fieldHeight
+														ctx: Load 
+												op: FloorDiv 
+												right: Num 
+													n: int = 2
 										element: Assign 
 											targets: list 
 												element: Attribute 
@@ -1569,6 +1733,134 @@ file: Module
 													attr: str = vY
 													ctx: Load 
 									orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = speedUp
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = bat
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = factor
+									ctx: Store 
+							value: BinOp 
+								left: Num 
+									n: int = 1
+								op: Add 
+								right: BinOp 
+									left: Num 
+										n: float = 0.15
+									op: Mult 
+									right: BinOp 
+										left: BinOp 
+											left: Num 
+												n: int = 1
+											op: Sub 
+											right: BinOp 
+												left: Call 
+													func: Attribute 
+														value: Name 
+															id: str = Math
+															ctx: Load 
+														attr: str = abs
+														ctx: Load 
+													args: list 
+														element: BinOp 
+															left: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = y
+																ctx: Load 
+															op: Sub 
+															right: Attribute 
+																value: Name 
+																	id: str = bat
+																	ctx: Load 
+																attr: str = y
+																ctx: Load 
+													keywords: list 
+												op: Div 
+												right: BinOp 
+													left: Attribute 
+														value: Name 
+															id: str = bat
+															ctx: Load 
+														attr: str = height
+														ctx: Load 
+													op: FloorDiv 
+													right: Num 
+														n: int = 2
+										op: Pow 
+										right: Num 
+											n: int = 2
+						element: If 
+							test: Compare 
+								left: Call 
+									func: Attribute 
+										value: Name 
+											id: str = Math
+											ctx: Load 
+										attr: str = abs
+										ctx: Load 
+									args: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = vX
+											ctx: Load 
+									keywords: list 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: BinOp 
+										left: Num 
+											n: int = 3
+										op: Mult 
+										right: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = speed
+											ctx: Load 
+							body: list 
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = vX
+										ctx: Store 
+									op: Mult 
+									value: Name 
+										id: str = factor
+										ctx: Load 
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = vY
+										ctx: Store 
+									op: Mult 
+									value: Name 
+										id: str = factor
+										ctx: Load 
+							orelse: list 
 					decorator_list: list 
 					returns: NoneType = None
 			decorator_list: list 
@@ -1590,7 +1882,7 @@ file: Module
 				element: Assign 
 					targets: list 
 						element: Name 
-							id: str = scoreShift
+							id: str = hintShift
 							ctx: Store 
 					value: Num 
 						n: int = 25
@@ -1613,6 +1905,252 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
+									attr: str = playerLabels
+									ctx: Store 
+							value: ListComp 
+								elt: Call 
+									func: Name 
+										id: str = __new__
+										ctx: Load 
+									args: list 
+										element: Call 
+											func: Attribute 
+												value: Name 
+													id: str = fabric
+													ctx: Load 
+												attr: str = Text
+												ctx: Load 
+											args: list 
+												element: Call 
+													func: Attribute 
+														value: Str 
+															s: str = Player {}
+														attr: str = format
+														ctx: Load 
+													args: list 
+														element: Name 
+															id: str = name
+															ctx: Load 
+													keywords: list 
+												element: Dict 
+													keys: list 
+														element: Name 
+															id: str = fill
+															ctx: Load 
+														element: Name 
+															id: str = fontFamily
+															ctx: Load 
+														element: Name 
+															id: str = fontSize
+															ctx: Load 
+														element: Name 
+															id: str = left
+															ctx: Load 
+														element: Name 
+															id: str = top
+															ctx: Load 
+													values: list 
+														element: Str 
+															s: str = white
+														element: Str 
+															s: str = monospace
+														element: Str 
+															s: str = 30
+														element: Call 
+															func: Attribute 
+																value: Attribute 
+																	value: Name 
+																		id: str = self
+																		ctx: Load 
+																	attr: str = game
+																	ctx: Load 
+																attr: str = orthoX
+																ctx: Load 
+															args: list 
+																element: BinOp 
+																	left: Name 
+																		id: str = position
+																		ctx: Load 
+																	op: Mult 
+																	right: Name 
+																		id: str = orthoWidth
+																		ctx: Load 
+															keywords: list 
+														element: Call 
+															func: Attribute 
+																value: Attribute 
+																	value: Name 
+																		id: str = self
+																		ctx: Load 
+																	attr: str = game
+																	ctx: Load 
+																attr: str = orthoY
+																ctx: Load 
+															args: list 
+																element: BinOp 
+																	left: BinOp 
+																		left: Name 
+																			id: str = fieldHeight
+																			ctx: Load 
+																		op: FloorDiv 
+																		right: Num 
+																			n: int = 2
+																	op: Add 
+																	right: Attribute 
+																		value: Name 
+																			id: str = self
+																			ctx: Load 
+																		attr: str = nameShift
+																		ctx: Load 
+															keywords: list 
+											keywords: list 
+									keywords: list 
+								generators: list 
+									element: comprehension 
+										target: Tuple 
+											elts: list 
+												element: Name 
+													id: str = name
+													ctx: Store 
+												element: Name 
+													id: str = position
+													ctx: Store 
+											ctx: Store 
+										iter: Tuple 
+											elts: list 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = AZ keys:
+														element: BinOp 
+															left: UnaryOp 
+																op: USub 
+																operand: Num 
+																	n: int = 7
+															op: Div 
+															right: Num 
+																n: int = 16
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = KM keys:
+														element: BinOp 
+															left: Num 
+																n: int = 1
+															op: Div 
+															right: Num 
+																n: int = 16
+													ctx: Load 
+											ctx: Load 
+										ifs: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = hintLabel
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = __new__
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = fabric
+												ctx: Load 
+											attr: str = Text
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = [spacebar] starts game, [enter] resets score
+											element: Dict 
+												keys: list 
+													element: Name 
+														id: str = fill
+														ctx: Load 
+													element: Name 
+														id: str = fontFamily
+														ctx: Load 
+													element: Name 
+														id: str = fontSize
+														ctx: Load 
+													element: Name 
+														id: str = left
+														ctx: Load 
+													element: Name 
+														id: str = top
+														ctx: Load 
+												values: list 
+													element: Str 
+														s: str = white
+													element: Str 
+														s: str = monospace
+													element: Str 
+														s: str = 12
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoX
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: BinOp 
+																	left: UnaryOp 
+																		op: USub 
+																		operand: Num 
+																			n: int = 7
+																	op: Div 
+																	right: Num 
+																		n: int = 16
+																op: Mult 
+																right: Name 
+																	id: str = orthoWidth
+																	ctx: Load 
+														keywords: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoY
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: BinOp 
+																	left: Name 
+																		id: str = fieldHeight
+																		ctx: Load 
+																	op: FloorDiv 
+																	right: Num 
+																		n: int = 2
+																op: Add 
+																right: Attribute 
+																	value: Name 
+																		id: str = self
+																		ctx: Load 
+																	attr: str = hintShift
+																	ctx: Load 
+														keywords: list 
+										keywords: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
 									attr: str = image
 									ctx: Store 
 							value: Call 
@@ -1628,91 +2166,97 @@ file: Module
 											attr: str = Line
 											ctx: Load 
 										args: list 
+											element: List 
+												elts: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoX
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: UnaryOp 
+																	op: USub 
+																	operand: Name 
+																		id: str = orthoWidth
+																		ctx: Load 
+																op: FloorDiv 
+																right: Num 
+																	n: int = 2
+														keywords: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoY
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: Name 
+																	id: str = fieldHeight
+																	ctx: Load 
+																op: FloorDiv 
+																right: Num 
+																	n: int = 2
+														keywords: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoX
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: Name 
+																	id: str = orthoWidth
+																	ctx: Load 
+																op: FloorDiv 
+																right: Num 
+																	n: int = 2
+														keywords: list 
+													element: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = game
+																ctx: Load 
+															attr: str = orthoY
+															ctx: Load 
+														args: list 
+															element: BinOp 
+																left: Name 
+																	id: str = fieldHeight
+																	ctx: Load 
+																op: FloorDiv 
+																right: Num 
+																	n: int = 2
+														keywords: list 
+												ctx: Load 
 											element: Dict 
 												keys: list 
 													element: Name 
-														id: str = x1
-														ctx: Load 
-													element: Name 
-														id: str = y1
-														ctx: Load 
-													element: Name 
-														id: str = x2
-														ctx: Load 
-													element: Name 
-														id: str = y2
-														ctx: Load 
-													element: Name 
-														id: str = fill
-														ctx: Load 
-													element: Name 
 														id: str = stroke
 														ctx: Load 
-													element: Name 
-														id: str = strokeWidth
-														ctx: Load 
 												values: list 
-													element: Num 
-														n: int = 0
-													element: Name 
-														id: str = fieldHeight
-														ctx: Load 
-													element: Name 
-														id: str = orthoWidth
-														ctx: Load 
-													element: Name 
-														id: str = fieldHeight
-														ctx: Load 
 													element: Str 
 														s: str = white
-													element: Str 
-														s: str = white
-													element: Str 
-														s: str = 5
 										keywords: list 
 								keywords: list 
-						element: Assign 
-							targets: list 
-								element: Attribute 
-									value: Attribute 
-										value: Name 
-											id: str = self
-											ctx: Load 
-										attr: str = image
-										ctx: Load 
-									attr: str = left
-									ctx: Store 
-							value: BinOp 
-								left: Attribute 
-									value: Name 
-										id: str = self
-										ctx: Load 
-									attr: str = width
-									ctx: Load 
-								op: FloorDiv 
-								right: Num 
-									n: int = 2
-						element: Assign 
-							targets: list 
-								element: Attribute 
-									value: Attribute 
-										value: Name 
-											id: str = self
-											ctx: Load 
-										attr: str = image
-										ctx: Load 
-									attr: str = top
-									ctx: Store 
-							value: BinOp 
-								left: Attribute 
-									value: Name 
-										id: str = self
-										ctx: Load 
-									attr: str = height
-									ctx: Load 
-								op: FloorDiv 
-								right: Num 
-									n: int = 2
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
@@ -1805,7 +2349,153 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
-						element: Pass 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = scoreLabels
+									ctx: Store 
+							value: ListComp 
+								elt: Call 
+									func: Name 
+										id: str = __new__
+										ctx: Load 
+									args: list 
+										element: Call 
+											func: Attribute 
+												value: Name 
+													id: str = fabric
+													ctx: Load 
+												attr: str = Text
+												ctx: Load 
+											args: list 
+												element: Call 
+													func: Attribute 
+														value: Str 
+															s: str = {}
+														attr: str = format
+														ctx: Load 
+													args: list 
+														element: Name 
+															id: str = score
+															ctx: Load 
+													keywords: list 
+												element: Dict 
+													keys: list 
+														element: Name 
+															id: str = fill
+															ctx: Load 
+														element: Name 
+															id: str = fontFamily
+															ctx: Load 
+														element: Name 
+															id: str = fontSize
+															ctx: Load 
+														element: Name 
+															id: str = left
+															ctx: Load 
+														element: Name 
+															id: str = top
+															ctx: Load 
+													values: list 
+														element: Str 
+															s: str = white
+														element: Str 
+															s: str = arial
+														element: Str 
+															s: str = 30
+														element: Call 
+															func: Attribute 
+																value: Attribute 
+																	value: Name 
+																		id: str = self
+																		ctx: Load 
+																	attr: str = game
+																	ctx: Load 
+																attr: str = orthoX
+																ctx: Load 
+															args: list 
+																element: BinOp 
+																	left: Name 
+																		id: str = position
+																		ctx: Load 
+																	op: Mult 
+																	right: Name 
+																		id: str = orthoWidth
+																		ctx: Load 
+															keywords: list 
+														element: Call 
+															func: Attribute 
+																value: Attribute 
+																	value: Name 
+																		id: str = self
+																		ctx: Load 
+																	attr: str = game
+																	ctx: Load 
+																attr: str = orthoY
+																ctx: Load 
+															args: list 
+																element: BinOp 
+																	left: BinOp 
+																		left: Name 
+																			id: str = fieldHeight
+																			ctx: Load 
+																		op: FloorDiv 
+																		right: Num 
+																			n: int = 2
+																	op: Add 
+																	right: Attribute 
+																		value: Name 
+																			id: str = self
+																			ctx: Load 
+																		attr: str = nameShift
+																		ctx: Load 
+															keywords: list 
+											keywords: list 
+									keywords: list 
+								generators: list 
+									element: comprehension 
+										target: Tuple 
+											elts: list 
+												element: Name 
+													id: str = score
+													ctx: Store 
+												element: Name 
+													id: str = position
+													ctx: Store 
+											ctx: Store 
+										iter: Call 
+											func: Name 
+												id: str = zip
+												ctx: Load 
+											args: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = scores
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: BinOp 
+															left: UnaryOp 
+																op: USub 
+																operand: Num 
+																	n: int = 2
+															op: Div 
+															right: Num 
+																n: int = 16
+														element: BinOp 
+															left: Num 
+																n: int = 6
+															op: Div 
+															right: Num 
+																n: int = 16
+													ctx: Load 
+											keywords: list 
+										ifs: list 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
@@ -1821,6 +2511,96 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
+						element: For 
+							target: Tuple 
+								elts: list 
+									element: Name 
+										id: str = playerLabel
+										ctx: Store 
+									element: Name 
+										id: str = scoreLabel
+										ctx: Store 
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = zip
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = playerLabels
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = scoreLabels
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
+													ctx: Load 
+												attr: str = canvas
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = playerLabel
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
+													ctx: Load 
+												attr: str = canvas
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = scoreLabel
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = game
+													ctx: Load 
+												attr: str = canvas
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = hintLabel
+												ctx: Load 
+										keywords: list 
+							orelse: list 
 						element: Expr 
 							value: Call 
 								func: Attribute 
@@ -1870,16 +2650,6 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = deltaT
-									ctx: Store 
-							value: Num 
-								n: int = 0
-						element: Assign 
-							targets: list 
-								element: Attribute 
-									value: Name 
-										id: str = self
-										ctx: Load 
 									attr: str = serviceIndex
 									ctx: Store 
 							value: IfExp 
@@ -1912,6 +2682,20 @@ file: Module
 									ctx: Store 
 							value: NameConstant 
 								value: bool = True
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = keySet
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = set
+									ctx: Load 
+								args: list 
+								keywords: list 
 						element: Assign 
 							targets: list 
 								element: Attribute 
@@ -2032,6 +2816,41 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
+									attr: str = paddles
+									ctx: Store 
+							value: ListComp 
+								elt: Call 
+									func: Name 
+										id: str = Paddle
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = self
+											ctx: Load 
+										element: Name 
+											id: str = index
+											ctx: Load 
+									keywords: list 
+								generators: list 
+									element: comprehension 
+										target: Name 
+											id: str = index
+											ctx: Store 
+										iter: Call 
+											func: Name 
+												id: str = range
+												ctx: Load 
+											args: list 
+												element: Num 
+													n: int = 2
+											keywords: list 
+										ifs: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
 									attr: str = ball
 									ctx: Store 
 							value: Call 
@@ -2060,20 +2879,6 @@ file: Module
 										id: str = self
 										ctx: Load 
 								keywords: list 
-						element: Assign 
-							targets: list 
-								element: Attribute 
-									value: Name 
-										id: str = self
-										ctx: Load 
-									attr: str = deltaT
-									ctx: Store 
-							value: BinOp 
-								left: Num 
-									n: int = 1
-								op: Div 
-								right: Num 
-									n: float = 60.0
 						element: Expr 
 							value: Call 
 								func: Attribute 
@@ -2089,12 +2894,8 @@ file: Module
 											ctx: Load 
 										attr: str = update
 										ctx: Load 
-									element: Attribute 
-										value: Name 
-											id: str = self
-											ctx: Load 
-										attr: str = deltaT
-										ctx: Load 
+									element: Num 
+										n: int = 10
 								keywords: list 
 						element: Expr 
 							value: Call 
@@ -2111,13 +2912,64 @@ file: Module
 											ctx: Load 
 										attr: str = draw
 										ctx: Load 
-									element: BinOp 
-										left: Num 
-											n: int = 1
-										op: Div 
-										right: Num 
-											n: float = 20.0
+									element: Num 
+										n: int = 20
 								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = window
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = keydown
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keydown
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = window
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = keyup
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keyup
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = time
+									ctx: Store 
+							value: UnaryOp 
+								op: UAdd 
+								operand: Call 
+									func: Name 
+										id: str = __new__
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = Date
+											ctx: Load 
+									keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
@@ -2133,11 +2985,122 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = oldTime
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = time
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = time
+									ctx: Store 
+							value: UnaryOp 
+								op: UAdd 
+								operand: Call 
+									func: Name 
+										id: str = __new__
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = Date
+											ctx: Load 
+									keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = deltaT
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = time
+										ctx: Load 
+									op: Sub 
+									right: Name 
+										id: str = oldTime
+										ctx: Load 
+								op: Div 
+								right: Num 
+									n: float = 1000.0
 						element: If 
-							test: NameConstant 
-								value: bool = False
+							test: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = pause
+								ctx: Load 
 							body: list 
-								element: Pass 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = space
+											ctx: Load 
+										ops: list 
+											element: In 
+										comparators: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = keySet
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pause
+													ctx: Store 
+											value: NameConstant 
+												value: bool = False
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Name 
+													id: str = enter
+													ctx: Load 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = keySet
+														ctx: Load 
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = scoreboard
+																ctx: Load 
+															attr: str = reset
+															ctx: Load 
+														args: list 
+														keywords: list 
+											orelse: list 
 							orelse: list 
 								element: For 
 									target: Name 
@@ -2370,39 +3333,11 @@ file: Module
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
-						element: Expr 
-							value: Call 
-								func: Attribute 
-									value: Attribute 
-										value: Name 
-											id: str = self
-											ctx: Load 
-										attr: str = canvas
-										ctx: Load 
-									attr: str = scale
-									ctx: Load 
-								args: list 
-									element: BinOp 
-										left: Name 
-											id: str = width
-											ctx: Load 
-										op: Div 
-										right: Name 
-											id: str = orthoWidth
-											ctx: Load 
-									element: BinOp 
-										left: Name 
-											id: str = height
-											ctx: Load 
-										op: Div 
-										right: Name 
-											id: str = orthoHeight
-											ctx: Load 
-								keywords: list 
+						element: Pass 
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
-					name: str = ortho
+					name: str = scaleX
 					args: arguments 
 						args: list 
 							element: arg 
@@ -2410,6 +3345,41 @@ file: Module
 								annotation: NoneType = None
 							element: arg 
 								arg: str = x
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: BinOp 
+								left: Name 
+									id: str = x
+									ctx: Load 
+								op: Mult 
+								right: BinOp 
+									left: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = canvas
+											ctx: Load 
+										attr: str = width
+										ctx: Load 
+									op: Div 
+									right: Name 
+										id: str = orthoWidth
+										ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = scaleY
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
 								annotation: NoneType = None
 							element: arg 
 								arg: str = y
@@ -2421,76 +3391,184 @@ file: Module
 						defaults: list 
 					body: list 
 						element: Return 
-							value: Tuple 
-								elts: list 
+							value: BinOp 
+								left: Name 
+									id: str = y
+									ctx: Load 
+								op: Mult 
+								right: BinOp 
+									left: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = canvas
+											ctx: Load 
+										attr: str = height
+										ctx: Load 
+									op: Div 
+									right: Name 
+										id: str = orthoHeight
+										ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = orthoX
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = x
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = scaleX
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Name 
+											id: str = x
+											ctx: Load 
+										op: Add 
+										right: BinOp 
+											left: Name 
+												id: str = orthoWidth
+												ctx: Load 
+											op: FloorDiv 
+											right: Num 
+												n: int = 2
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = orthoY
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = y
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = scaleY
+									ctx: Load 
+								args: list 
 									element: BinOp 
 										left: BinOp 
 											left: Name 
-												id: str = x
+												id: str = orthoHeight
 												ctx: Load 
-											op: Add 
+											op: Sub 
 											right: BinOp 
 												left: Name 
-													id: str = orthoWidth
+													id: str = fieldHeight
 													ctx: Load 
 												op: FloorDiv 
 												right: Num 
 													n: int = 2
-										op: Mult 
-										right: BinOp 
-											left: Attribute 
-												value: Attribute 
-													value: Name 
-														id: str = self
-														ctx: Load 
-													attr: str = canvas
-													ctx: Load 
-												attr: str = width
-												ctx: Load 
-											op: Div 
-											right: Name 
-												id: str = orthoWidth
-												ctx: Load 
-									element: BinOp 
-										left: BinOp 
-											left: BinOp 
-												left: Name 
-													id: str = orthoHeight
-													ctx: Load 
-												op: Sub 
-												right: BinOp 
-													left: Name 
-														id: str = fieldHeight
-														ctx: Load 
-													op: FloorDiv 
-													right: Num 
-														n: int = 2
-											op: Sub 
-											right: BinOp 
-												left: UnaryOp 
-													op: USub 
-													operand: Name 
-														id: str = fieldHeight
-														ctx: Load 
-												op: Div 
-												right: Num 
-													n: int = 2
-										op: Mult 
-										right: BinOp 
-											left: Attribute 
-												value: Attribute 
-													value: Name 
-														id: str = self
-														ctx: Load 
-													attr: str = canvas
-													ctx: Load 
-												attr: str = height
-												ctx: Load 
-											op: Div 
-											right: Name 
-												id: str = orthoHeight
-												ctx: Load 
-								ctx: Load 
+										op: Sub 
+										right: Name 
+											id: str = y
+											ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = keydown
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = event
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keySet
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = event
+											ctx: Load 
+										attr: str = keyCode
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = keyup
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = event
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keySet
+										ctx: Load 
+									attr: str = remove
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = event
+											ctx: Load 
+										attr: str = keyCode
+										ctx: Load 
+								keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
 			decorator_list: list 

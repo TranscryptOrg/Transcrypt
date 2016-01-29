@@ -42,7 +42,7 @@
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
-		//<all>
+		__pragma__ ('<all>')
 		__all__.autoTester = autoTester;
-		//</all>
+		__pragma__ ('</all>')
 	}) ();

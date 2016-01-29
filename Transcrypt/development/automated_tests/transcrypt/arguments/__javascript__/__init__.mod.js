@@ -7,11 +7,11 @@
 					;
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
-								var self = 123;
+							if (typeof x == 'undefined' || (x != null && x .__class__ == __kwargdict__)) {;
+								var x = 123;
 							};
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = 456;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = 456;
 							};
 							var n = 456;
 							if (arguments.length) {
@@ -59,8 +59,8 @@
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
-							if (typeof self == 'undefined' || self .__class__ == __kwargdict__) {;
-								var self = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -98,8 +98,8 @@
 							}
 						}
 						var f = function (x, y) {
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -121,8 +121,8 @@
 								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 							}
 							var f2 = function (x, y) {
-								if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-									var x = -3;
+								if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+									var y = -3;
 								};
 								var m = -4;
 								if (arguments.length) {
@@ -170,8 +170,8 @@
 						};
 						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
 						(function __lambda__ (x, y) {
-							if (typeof x == 'undefined' || x .__class__ == __kwargdict__) {;
-								var x = -1;
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
 							};
 							var m = -2;
 							if (arguments.length) {
@@ -194,11 +194,11 @@
 							}
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.A = A;
 					__all__.B = B;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -5,9 +5,9 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var pi = 3.1415693588;
-					//<all>
+					__pragma__ ('<all>')
 					__all__.pi = pi;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

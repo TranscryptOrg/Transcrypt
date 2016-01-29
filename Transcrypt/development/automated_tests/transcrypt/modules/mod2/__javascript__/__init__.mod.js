@@ -7,9 +7,9 @@
 					var f = function (p) {
 						return 2 * p;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

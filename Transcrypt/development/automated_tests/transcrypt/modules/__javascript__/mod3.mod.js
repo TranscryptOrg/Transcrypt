@@ -9,11 +9,11 @@
 					var mod3GetTwoHundred = function () {
 						return 200;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.mod3GetTwoHundred = mod3GetTwoHundred;
 					__all__.mod3Hundred = mod3Hundred;
 					__all__.x = x;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

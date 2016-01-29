@@ -5,9 +5,9 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var e = 2.74;
-					//<all>
+					__pragma__ ('<all>')
 					__all__.e = e;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

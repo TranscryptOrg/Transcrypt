@@ -15,7 +15,7 @@
 						autoTester.check (a, b, c, d, e, santa);
 						var __iter0__ = enumerate (tuple (list ([0.5, 1.5, 2.5, 3.5])));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-							var __left0__ = __iter0__ [__index0__] ;
+							var __left0__ = __iter0__ [__index0__];
 							var i = __left0__[0];
 							var x = __left0__[1];
 							autoTester.check (i, x);
@@ -28,9 +28,9 @@
 						var pi = __left0__[1];
 						autoTester.check (e, pi);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -24,7 +24,7 @@
 							}
 							else {
 								if (len (self.args)) {
-									return str (self.args [0] );
+									return str (self.args [0]);
 								}
 								else {
 									return '???';
@@ -34,11 +34,11 @@
 					});
 					;
 					var sort = function (iterable, key, reverse) {
-						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
-							var iterable = null;
+						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
+							var key = null;
 						};
-						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
-							var key = false;
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .__class__ == __kwargdict__)) {;
+							var reverse = false;
 						};
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -53,6 +53,7 @@
 								}
 							}
 						}
+						console.log (111, reverse);
 						if (key) {
 							iterable.sort ((function __lambda__ (a, b) {
 								if (arguments.length) {
@@ -77,11 +78,11 @@
 						}
 					};
 					var sorted = function (iterable, key, reverse) {
-						if (typeof iterable == 'undefined' || iterable .__class__ == __kwargdict__) {;
-							var iterable = null;
+						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
+							var key = null;
 						};
-						if (typeof key == 'undefined' || key .__class__ == __kwargdict__) {;
-							var key = false;
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .__class__ == __kwargdict__)) {;
+							var reverse = false;
 						};
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -100,11 +101,11 @@
 						sort (result, key, reverse);
 						return result;
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.Exception = Exception;
 					__all__.sort = sort;
 					__all__.sorted = sorted;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

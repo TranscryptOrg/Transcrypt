@@ -198,6 +198,58 @@ file: Module
 				element: Assign 
 					targets: list 
 						element: Name 
+							id: str = tricky
+							ctx: Store 
+					value: ListComp 
+						elt: Tuple 
+							elts: list 
+								element: BinOp 
+									left: Num 
+										n: int = 2
+									op: Mult 
+									right: Name 
+										id: str = x
+										ctx: Load 
+								element: BinOp 
+									left: Num 
+										n: int = 3
+									op: Mult 
+									right: Name 
+										id: str = y
+										ctx: Load 
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Tuple 
+									elts: list 
+										element: Name 
+											id: str = x
+											ctx: Store 
+										element: Name 
+											id: str = y
+											ctx: Store 
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Tuple 
+											elts: list 
+												element: Num 
+													n: int = 10
+												element: Num 
+													n: int = 11
+											ctx: Load 
+										element: Tuple 
+											elts: list 
+												element: Num 
+													n: int = 20
+												element: Num 
+													n: int = 21
+											ctx: Load 
+									ctx: Load 
+								ifs: list 
+				element: Assign 
+					targets: list 
+						element: Name 
 							id: str = nested
 							ctx: Store 
 					value: ListComp 

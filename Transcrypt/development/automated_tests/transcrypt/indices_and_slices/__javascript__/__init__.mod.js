@@ -23,16 +23,16 @@
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
 								if (x % 2) {
-									__accu0__ .push (x + 0.001);
+									__accu0__.append (x + 0.001);
 								}
 							}
 							return __accu0__;
 						} ());
 						autoTester.check (aList);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

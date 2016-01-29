@@ -50,12 +50,12 @@
 						autoTester.check (mod3GetTwoHundred ());
 						autoTester.check (A (123.321).f ());
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.a = a;
 					__all__.f = f;
 					__all__.pi = pi;
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

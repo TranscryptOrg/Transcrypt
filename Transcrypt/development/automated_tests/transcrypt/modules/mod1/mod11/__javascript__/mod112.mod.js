@@ -7,9 +7,9 @@
 					var f = function () {
 						return "Paris, c'est la vie\n";
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.f = f;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

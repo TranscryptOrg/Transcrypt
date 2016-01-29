@@ -837,8 +837,7 @@ class Generator (ast.NodeVisitor):
 		
 		self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
 		self.indent ()
-		
-		# Create and visit Assign node on the fly to benefit from tupple assignment
+		# Create and visit assignment node on the fly to benefit from tupple assignment
 		self.visit (ast.Assign (
 			[node.target],
 			ast.Subscript (
@@ -1001,57 +1000,61 @@ class Generator (ast.NodeVisitor):
 		self.emit ('])')
 		
 	def visit_ListComp (self, node):
-		elts = []
-		bodies = [[]]
-		
-		# Create and visit For node on the fly to benefit from tupple assignment
-		# The For node creates an Assign node on the fly, to get this done
-		def nestLoops (generators):
-			for comprehension in generators:
-				target = comprehension.target
-				iter = comprehension.iter
-				
-				# Make room for body of this for
-				bodies.append ([])
-				# Append this for to previous body
-				bodies [-2].append (ast.For (target, iter, bodies [-1], []))
-				
-				for expr in comprehension.ifs:
-					test = expr
-					
-					# Make room for body of this if
-					bodies.append ([])
-					# Append this if to previous body
-					bodies [-2].append (ast.If (test, bodies [-1], []))
-					
-			bodies [-1].append (
-				# Nodes to generate __accu<i>__.append (<elt>)
-				ast.Call (
-					ast.Attribute (
-						ast.Name (
-							self.getTemp ('accu'),
-							ast.Load),
-						'append',
-						ast.Load
-					),
-					[node.elt],
-					[]
-				)
-			)
+		try:
+			elts = []
+			bodies = [[]]
 			
-			self.visit (
-				bodies [0][0]
-			)
+			def nestLoops (generators):
+				for comprehension in generators:
+					target = comprehension.target
+					iter = comprehension.iter
+					
+					# Make room for body of this for
+					bodies.append ([])
+					for expr in comprehension.ifs:
+						test = expr
+						
+						# Make room for body of this if
+						bodies.append ([])
+						print  (555, bodies, 666)
+						
+						# Append this if to previous body
+						bodies [-2].append (ast.If (test, bodies [-1], []))
+						
+					# Append this for to previous body
+					bodies [-2].append (ast.For (target, iter, bodies [-1], []))
+					
+				bodies [-1].append (
+					# Nodes to generate __accu<i>__.append (<elt>)
+					ast.Call (
+						ast.Attribute (
+							ast.Name (
+								self.getTemp ('accu'),
+								ast.Load),
+							'append',
+							ast.Load
+						),
+						[node.elt],
+						[]
+					)
+				)
+				
+				print (333, bodies, 444)
+				
+				return bodies [0][0]
 
-		self.emit ('function () {{\n')
-		self.indent ()
-		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
-		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
-		self.emit ('return {};\n'.format (self.getTemp ('accu')))
-		self.prevTemp ('accu')
-		self.dedent ()
-		self.skipSemiNew = False	# Was still True since the outer for wasn't visited as part of a Body 
-		self.emit ('}} ()')
+			self.emit ('function () {{\n')
+			self.indent ()
+			self.emit ('var {} = [];\n', self.nextTemp ('accu'))
+			self.visit (nestLoops (node.generators [:]))	# Leave original in intact, just for neatness
+			self.emit ('return {};\n'.format (self.getTemp ('accu')))
+			self.prevTemp ('accu')	
+			self.dedent ()
+			self.emit ('}} ()')
+		except Exception as e:
+			print (11111)
+			print (traceback.format_exc ())
+			print (22222)
 		
 	def visit_Module (self, node):
 		self.indent ()
@@ -1076,10 +1079,10 @@ class Generator (ast.NodeVisitor):
 		self.emitBody (node.body)
 		
 		self.all = sorted (self.all)
-		self.emit ('__pragma__ (\'<all>\')\n')	# Only the last occurence of <all> and </all> are special.
+		self.emit ('//<all>\n')	# Only the last occurence of <all> and </all> are special.
 		for name in self.all:
 			self.emit ('__all__.{0} = {0};\n', name)
-		self.emit ('__pragma__ (\'</all>\')\n')
+		self.emit ('//</all>\n')
 		
 		self.dedent ()
 

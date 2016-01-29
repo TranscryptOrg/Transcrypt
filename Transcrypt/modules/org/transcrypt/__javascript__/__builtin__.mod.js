@@ -22,7 +22,7 @@
 	// Define current exception, there's at most one exception in the air at any time
 	var __except__ = null;
 	__all__.__except__ = __except__;
-	
+		
 	// Define recognizable dictionary for **kwargs parameter
 	var __kwargdict__ = function (anObject) {
 		__kwargdict__.__name__ = '__kwargdict__';
@@ -185,6 +185,20 @@
 		}
 	}
 	__all__.repr = repr;
+	
+	// Char from Unicode or ASCII
+	
+	var chr = function (charCode) {
+		return String.fromCharCode (charCode);
+	}
+	__all__.chr = chr;
+
+	// Unicode or ASCII from char
+	
+	var ord = function (aChar) {
+		return aChar.charCodeAt (0);
+	}
+	__all__.org = ord;
 	
 	// Zip method for arrays
 	var zip = function () {
@@ -373,15 +387,14 @@
 	__all__.tuple = tuple;
 	tuple.__name__ = 'tuple';
 	
+	
 	// Set extensions to Array
 		
 	function set (iterable) {
-		var instance = list ();
+		var instance = [];
 		if (iterable) {
 			for (var index = 0; index < iterable.length; index++) {
-				if (instance.indexOf (iterable [index]) == -1) {	// Avoid duplicates in set
-					instance.push (iterable [index]);
-				}
+				instance.add (iterable [index]);
 			}
 		}
 		instance.__class__ = set;	// Not all arrays are sets
@@ -390,6 +403,19 @@
 	__all__.set = set;
 	set.__name__ = 'set';
 	
+	Array.prototype.add = function (element) {
+		if (this.indexOf (element) == -1) {	// Avoid duplicates in set
+			this.push (element);
+		}
+	}
+	
+	Array.prototype.remove = function (element) {
+		var index = this.indexOf (element);
+		if (index != -1) {
+			this.splice (index, 1);
+		}
+	}
+	
 	// Dict extensions to object
 
 	function __keys__ () {
@@ -397,7 +423,7 @@
 		for (attrib in this) {
 			if (__normalattrib__ (attrib)) {
 				keys.push (key);
-			}
+			}     
 		}
 		return keys;
 	}
@@ -518,5 +544,3 @@
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	
-	__all__.str = str

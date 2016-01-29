@@ -26,9 +26,9 @@
 							return len (x);}), reverse: true}));
 						autoTester.check (b);
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

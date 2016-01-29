@@ -12,10 +12,10 @@
 						});}
 					});
 					var __envir__ = __Envir__ ();
-					//<all>
+					__pragma__ ('<all>')
 					__all__.__Envir__ = __Envir__;
 					__all__.__envir__ = __envir__;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -242,6 +242,21 @@ file: Module
 					element: NameConstant 
 						value: bool = False
 			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = console
+								ctx: Load 
+							attr: str = log
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 111
+							element: Name 
+								id: str = reverse
+								ctx: Load 
+						keywords: list 
 				element: If 
 					test: Name 
 						id: str = key
