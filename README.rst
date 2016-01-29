@@ -29,11 +29,12 @@ Status
 What's new
 ==========
 
-- Dos adapted
+- Docs adapted
 - Pong example added
 - Minification fixed
 - List comprehension tuple assignment bug fixed (pfff ** 2)
 - fabric.js graphis module added
+- Many bug fixes
 - Autotest output (active, using autotest.js) added to www.transcrypt.org
 - __pragma__ ('kwargs') and __pragma__ ('nokwargs') added + -kwargs command line argument
 - \*\*kwargs bug fixed
