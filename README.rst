@@ -22,11 +22,18 @@ Take a look at the growing documentation with code examples at the Transcrypt we
 Status
 ======
 
-ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, dicts, sets, modules. But there's a lot more (see docs). What's mainly missing are some handy members of the string, list, dict and set classes. Also the interoperability with JavaScript has to be tested. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is has gone faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
+- The fabric.js library has been encapsulated as a Transcrypt module! Seamless JavaScript integration is a fact now.
+- Working Pong example added to www.transcrypt.org and to the distribution.
+- ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, dicts, sets, modules. But there's a lot more (see docs). What's mainly missing are some handy members of the string, list, dict and set classes. Also the interoperability with JavaScript has to be tested. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is has gone faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
 
 What's new
 ==========
 
+- Dos adapted
+- Pong example added
+- Minification fixed
+- List comprehension tuple assignment bug fixed (pfff ** 2)
+- fabric.js graphis module added
 - Autotest output (active, using autotest.js) added to www.transcrypt.org
 - __pragma__ ('kwargs') and __pragma__ ('nokwargs') added + -kwargs command line argument
 - \*\*kwargs bug fixed
