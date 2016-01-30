@@ -247,6 +247,19 @@ file: Module
 											ctx: Load 
 									ctx: Load 
 								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tricky
+								ctx: Load 
+						keywords: list 
 				element: Assign 
 					targets: list 
 						element: Name 

@@ -175,11 +175,11 @@
 						var __left0__ = __iter0__ [__index0__];
 						var name = __left0__[0];
 						var position = __left0__[1];
-						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'monospace', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
 				} ();
-				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {fill: 'white', fontFamily: 'monospace', fontSize: '12', left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
+				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {fill: 'white', fontFamily: 'arial', fontSize: '12', left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
 				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {stroke: 'white'});
 			});},
 			get increment () {return __get__ (this, function (self, playerIndex) {

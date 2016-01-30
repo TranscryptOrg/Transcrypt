@@ -157,12 +157,12 @@ class Scoreboard (Attribute):
 			
 	def install (self): # Graphical representation of scoreboard are four labels and a separator line	
 		self.playerLabels = [__new__ (fabric.Text ('Player {}'.format (name), {
-				fill: 'white', fontFamily: 'monospace', fontSize: '30',
+				fill: 'white', fontFamily: 'arial', fontSize: '30',
 				left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (fieldHeight // 2 + self.nameShift)
 		})) for name, position in (('AZ keys:', -7/16), ('KM keys:', 1/16))]
  		
 		self.hintLabel = __new__ (fabric.Text ('[spacebar] starts game, [enter] resets score', {
-				fill: 'white', fontFamily: 'monospace', fontSize: '12',
+				fill: 'white', fontFamily: 'arial', fontSize: '12',
 				left: self.game.orthoX (-7/16 * orthoWidth), top: self.game.orthoY (fieldHeight // 2 + self.hintShift)
 		}))
 		

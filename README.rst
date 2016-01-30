@@ -1,3 +1,5 @@
+THE TRANSCRYPT FORUM IS NOW ONLINE, CLICK THE FORUM LINK AT http://www.transcrypt.org
+
 .. figure:: http://www.transcrypt.org/illustrations/logo.png
 	:alt: Logo
 
@@ -13,11 +15,11 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 	:alt: Monk transcribing
 	
 	**Transcription once used to be manual labour**
-
+	
 Documentation with code examples
 ================================
 
-Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org/
+Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org
 
 Status
 ======
@@ -29,6 +31,7 @@ Status
 What's new
 ==========
 
+- Forum online
 - Docs adapted
 - Pong example added
 - Minification fixed

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-29 16:54:22
+// Transcrypt'ed from Python, 2016-01-29 20:57:25
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.49';
+							self.transpilerVersion = '0.0.53';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -1600,6 +1600,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ();
+						autoTester.check (tricky);
 						var nested = function () {
 							var __accu0__ = [];
 							var __iter0__ = function () {

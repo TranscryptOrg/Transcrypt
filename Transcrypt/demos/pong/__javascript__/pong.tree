@@ -1953,7 +1953,7 @@ file: Module
 														element: Str 
 															s: str = white
 														element: Str 
-															s: str = monospace
+															s: str = arial
 														element: Str 
 															s: str = 30
 														element: Call 
@@ -2088,7 +2088,7 @@ file: Module
 													element: Str 
 														s: str = white
 													element: Str 
-														s: str = monospace
+														s: str = arial
 													element: Str 
 														s: str = 12
 													element: Call 

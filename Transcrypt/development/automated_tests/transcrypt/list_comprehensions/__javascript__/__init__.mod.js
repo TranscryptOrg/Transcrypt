@@ -52,6 +52,7 @@
 							}
 							return __accu0__;
 						} ();
+						autoTester.check (tricky);
 						var nested = function () {
 							var __accu0__ = [];
 							var __iter0__ = function () {

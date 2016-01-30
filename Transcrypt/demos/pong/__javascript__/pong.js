@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-29 17:55:09
+// Transcrypt'ed from Python, 2016-01-29 19:57:13
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.49';
+							self.transpilerVersion = '0.0.53';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -15963,11 +15963,11 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 						var __left0__ = __iter0__ [__index0__];
 						var name = __left0__[0];
 						var position = __left0__[1];
-						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'monospace', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
 				} ();
-				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {fill: 'white', fontFamily: 'monospace', fontSize: '12', left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
+				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {fill: 'white', fontFamily: 'arial', fontSize: '12', left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
 				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {stroke: 'white'});
 			});},
 			get increment () {return __get__ (this, function (self, playerIndex) {
