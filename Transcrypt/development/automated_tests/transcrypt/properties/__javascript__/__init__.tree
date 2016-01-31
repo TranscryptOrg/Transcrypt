@@ -11,7 +11,7 @@ file: Module
 							id: str = p
 							ctx: Store 
 					value: Num 
-						n: int = 123
+						n: int = 1234
 				element: FunctionDef 
 					name: str = getX
 					args: arguments 
@@ -114,6 +114,110 @@ file: Module
 								ctx: Load 
 					decorator_list: list 
 					returns: NoneType = None
+				element: FunctionDef 
+					name: str = getY2
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = _y
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = setY2
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _y
+									ctx: Store 
+							value: Name 
+								id: str = value
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = x
+									ctx: Store 
+								element: Name 
+									id: str = y
+									ctx: Store 
+								element: Name 
+									id: str = y2
+									ctx: Store 
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: Call 
+								func: Name 
+									id: str = property
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = getX
+										ctx: Load 
+									element: Name 
+										id: str = setX
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = property
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = getY
+										ctx: Load 
+									element: Name 
+										id: str = setY
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = property
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = getY2
+										ctx: Load 
+									element: Name 
+										id: str = setY2
+										ctx: Load 
+								keywords: list 
+						ctx: Load 
 			decorator_list: list 
 		element: Assign 
 			targets: list 
@@ -124,7 +228,7 @@ file: Module
 					attr: str = q
 					ctx: Store 
 			value: Num 
-				n: int = 456
+				n: int = 5678
 		element: FunctionDef 
 			name: str = run
 			args: arguments 
@@ -223,6 +327,12 @@ file: Module
 								ctx: Load 
 							element: Attribute 
 								value: Name 
+									id: str = a1
+									ctx: Load 
+								attr: str = y2
+								ctx: Load 
+							element: Attribute 
+								value: Name 
 									id: str = a2
 									ctx: Load 
 								attr: str = x
@@ -232,6 +342,12 @@ file: Module
 									id: str = a2
 									ctx: Load 
 								attr: str = y
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = a2
+									ctx: Load 
+								attr: str = y2
 								ctx: Load 
 							element: Attribute 
 								value: Name 

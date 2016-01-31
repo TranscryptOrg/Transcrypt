@@ -156,11 +156,22 @@ file: Module
 					body: list 
 						element: Assign 
 							targets: list 
-								element: Name 
-									id: str = p
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = p
+											ctx: Store 
+										element: Name 
+											id: str = q
+											ctx: Store 
 									ctx: Store 
-							value: Num 
-								n: int = 456
+							value: Tuple 
+								elts: list 
+									element: Num 
+										n: int = 456
+									element: Num 
+										n: int = 789
+								ctx: Load 
 						element: FunctionDef 
 							name: str = __init__
 							args: arguments 
@@ -505,6 +516,54 @@ file: Module
 						args: list 
 							element: Attribute 
 								value: Name 
+									id: str = B
+									ctx: Load 
+								attr: str = p
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = b
+									ctx: Load 
+								attr: str = p
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = b
+									ctx: Load 
+								attr: str = q
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
 									id: str = A
 									ctx: Load 
 								attr: str = p
@@ -583,6 +642,22 @@ file: Module
 									id: str = c
 									ctx: Load 
 								attr: str = p
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = c
+									ctx: Load 
+								attr: str = q
 								ctx: Load 
 						keywords: list 
 				element: Expr 

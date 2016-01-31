@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-31 17:07:47
+// Transcrypt'ed from Python, 2016-01-31 18:21:13
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -1046,7 +1046,9 @@ function autotest () {
 								autoTester.check ('B.show', label, self.y);
 							});}
 						});
-						B.p = 456;
+						var __left0__ = tuple (list ([456, 789]));
+						B.p = __left0__[0];
+						B.q = __left0__[1];
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
 								autoTester.check ('In C constructor');
@@ -1065,12 +1067,16 @@ function autotest () {
 						autoTester.check (a.p);
 						var b = B (2002);
 						b.show ('russia');
+						autoTester.check (B.p);
+						autoTester.check (b.p);
+						autoTester.check (b.q);
 						autoTester.check (A.p);
 						autoTester.check (a.p);
 						var c = C (3003, 4004);
 						c.show ('netherlands');
 						autoTester.check (C.p);
 						autoTester.check (c.p);
+						autoTester.check (c.q);
 						c.show2 ('amsterdam');
 						A.show2 (c, 'rotterdam');
 						var show3 = c.show;
@@ -1973,10 +1979,20 @@ function autotest () {
 						});},
 						get setY () {return __get__ (this, function (self, value) {
 							self._y = value;
+						});},
+						get getY2 () {return __get__ (this, function (self) {
+							return self._y;
+						});},
+						get setY2 () {return __get__ (this, function (self, value) {
+							self._y = value;
 						});}
 					});
-					A.p = 123;
-					A.q = 456;
+					A.p = 1234;
+					var __left0__ = tuple (list ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]));
+					A.x = __left0__[0];
+					A.y = __left0__[1];
+					A.y2 = __left0__[2];
+					A.q = 5678;
 					var run = function (autoTester) {
 						var a1 = A ();
 						var a2 = A ();
@@ -1984,7 +2000,7 @@ function autotest () {
 						a1.y = 6;
 						a2.x = 7;
 						a2.y = 8;
-						autoTester.check (a1.x, a1.y, a2.x, a2.y, a1.p, a2.p, a1.q, a2.q);
+						autoTester.check (a1.x, a1.y, a1.y2, a2.x, a2.y, a2.y2, a1.p, a2.p, a1.q, a2.q);
 					};
 					__pragma__ ('<all>')
 					__all__.A = A;

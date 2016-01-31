@@ -12,9 +12,7 @@ def run (autoTester):
 			autoTester.check ('A.show2', label, self.x)
 		
 	class B:
-		#p, q = 456, 789
-		p = 456
-		#q = 789
+		p, q = 456, 789
 		def __init__ (self, y):
 			autoTester.check ('In B constructor')
 			self.y = y
@@ -41,6 +39,10 @@ def run (autoTester):
 
 	b = B (2002)
 	b.show ('russia')
+	autoTester.check (B.p)
+	autoTester.check (b.p)
+	autoTester.check (b.q)
+
 	autoTester.check (A.p)
 	autoTester.check (a.p)
 
@@ -48,6 +50,7 @@ def run (autoTester):
 	c.show ('netherlands')
 	autoTester.check (C.p)
 	autoTester.check (c.p)
+	autoTester.check (c.q)
 
 	c.show2 ('amsterdam')
 	A.show2 (c, 'rotterdam')

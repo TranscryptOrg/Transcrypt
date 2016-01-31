@@ -377,7 +377,10 @@ class Generator (ast.NodeVisitor):
 		return self.getTemp (name)
 		
 	def getTemp (self, name):
-		return '__{}{}__'.format (name, self.tempIndices [name])
+		if name in self.tempIndices:
+			return '__{}{}__'.format (name, self.tempIndices [name])
+		else:
+			return None
 	
 	def prevTemp (self, name):
 		self.tempIndices [name] -= 1
@@ -545,13 +548,26 @@ class Generator (ast.NodeVisitor):
 				except Exception as exception:
 					utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid LHS slice')	
 			else:
-				if type (self.getscope ()) != ast.ClassDef and type (target) == ast.Name:
-					# No class var so <className>. not already emitted
-					self.emit ('var ')
-				
-				self.visit (target)
-				self.emit (' = ')
-				self.visit (value)		
+				if type (target) == ast.Name:
+					if type (self.getscope ()) == ast.ClassDef and target.id != self.getTemp ('left'):
+						self.emit ('{}.'.format (self.getscope () .name))
+					else:
+						self.emit ('var ')
+						
+				if (
+					type (self.getscope ()) == ast.Class and type (value) == ast.Call and
+					type (value.func) == ast.Name and value.func.id == 'property'
+				):
+					self.emit ('Object.defineProperty ({}, \'{}\', );')
+				else:
+					self.visit (target)
+					self.emit (' = ')
+					self.visit (value)
+					
+					# Assignment must be lean, no runtime checks.
+					# But it's unclear what will be assigned from the __temp0__ to the RHS
+					# Compile-time we can store the bound property function in __temp0__ (but not it's result (the prop descr)
+					# And compile time we know when we encounter it and generate special code.
 
 		# Tuple assignment LHS tree walker
 		# The target (LHS) guides the walk, so it determines the source indices
@@ -579,15 +595,9 @@ class Generator (ast.NodeVisitor):
 			# Fast shortcut for the most frequent and simple case
 			assignTarget (node.targets [0], node.value)			
 		else:
-			# Multiple RHS or tuple assignment, we need __tmp__
-			if type (self.getscope ()) != ast.ClassDef:
-				# No class var so <className>. not already emitted
-				self.emit ('var ')
-			#$$$self.emit ('//***//')
-			self.emit (self.nextTemp ('left'))
-			self.emit (' = ')
-			self.visit (node.value)
-
+			# Multiple RHS or tuple assignment, we need __tmp__, create assignment node on the fly and visit it
+			self.visit (ast.Assign ([ast.Name (self.nextTemp ('left'), ast.Store)], node.value))
+			
 			for expr in node.targets:
 				walkTarget (expr, [])
 				
@@ -799,7 +809,6 @@ class Generator (ast.NodeVisitor):
 
 		for index, classVarAssign in enumerate (classVarAssigns):
 			self.emit (';\n')
-			self.emit ('{}.', node.name)
 			self.visit (classVarAssign)
 
 		self.descope ()	# No earlier, class vars need it

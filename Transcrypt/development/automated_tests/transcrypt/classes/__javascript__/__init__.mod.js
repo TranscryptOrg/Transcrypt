@@ -28,7 +28,9 @@
 								autoTester.check ('B.show', label, self.y);
 							});}
 						});
-						B.p = 456;
+						var __left0__ = tuple (list ([456, 789]));
+						B.p = __left0__[0];
+						B.q = __left0__[1];
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
 								autoTester.check ('In C constructor');
@@ -47,12 +49,16 @@
 						autoTester.check (a.p);
 						var b = B (2002);
 						b.show ('russia');
+						autoTester.check (B.p);
+						autoTester.check (b.p);
+						autoTester.check (b.q);
 						autoTester.check (A.p);
 						autoTester.check (a.p);
 						var c = C (3003, 4004);
 						c.show ('netherlands');
 						autoTester.check (C.p);
 						autoTester.check (c.p);
+						autoTester.check (c.q);
 						c.show2 ('amsterdam');
 						A.show2 (c, 'rotterdam');
 						var show3 = c.show;
