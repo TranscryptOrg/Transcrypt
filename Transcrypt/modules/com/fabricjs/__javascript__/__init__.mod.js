@@ -1,6 +1,6 @@
 	__nest__ (
 		__all__,
-		'org.transcrypt.fabric', {
+		'com.fabricjs', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
@@ -14967,7 +14967,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 
   fabric.util.createAccessors(fabric.Text);
 
-})(typeof exports !== 'undefined' ? exports : this);	// Puts fabric in exports and in global window, fabric also refers to global window and document
+})(typeof exports !== 'undefined' ? exports : this);	// Puts fabric in exports and in global window
 			delete window.fabric;
 			return exports;
 		}) () .fabric;

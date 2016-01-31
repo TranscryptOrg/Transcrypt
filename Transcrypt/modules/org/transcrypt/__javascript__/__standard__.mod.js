@@ -53,7 +53,6 @@
 								}
 							}
 						}
-						console.log (111, reverse);
 						if (key) {
 							iterable.sort ((function __lambda__ (a, b) {
 								if (arguments.length) {

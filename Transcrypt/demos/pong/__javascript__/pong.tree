@@ -1,7 +1,7 @@
 file: Module 
 	body: list 
 		element: ImportFrom 
-			module: str = org.transcrypt.fabric
+			module: str = com.fabricjs
 			names: list 
 				element: alias 
 					name: str = fabric

@@ -25,12 +25,20 @@
 		
 	// Define recognizable dictionary for **kwargs parameter
 	var __kwargdict__ = function (anObject) {
-		__kwargdict__.__name__ = '__kwargdict__';
-		anObject.__class__ = __kwargdict__;
+		anObject.__class__ = __kwargdict__;	// This class needs no __name__
 		anObject.constructor = Object;
 		return anObject;
 	}
 	__all__.___kwargdict__ = __kwargdict__;
+	
+	// Property installer function, no member since that would bloat classes
+	var __propdesc__ = null;
+	__all__.propdesc = null;
+	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
+		var self = this;	// The class that calls the property function
+		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
+	}
+	__all__.property = property;
 	
 	var __merge__ = function (object0, object1) {
 		var result = {};

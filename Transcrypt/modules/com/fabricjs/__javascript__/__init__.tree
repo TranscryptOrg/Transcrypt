@@ -16,7 +16,7 @@ file: Module
 						s: str = 
 		(function () {{
 			var exports = {{}};
-			{}	// Puts fabric in exports and in global window, fabric also refers to global window and document
+			{}	// Puts fabric in exports and in global window
 			delete window.fabric;
 			return exports;
 		}}) () .fabric;
@@ -27,5 +27,5 @@ file: Module
 						value: List 
 							elts: list 
 								element: Str 
-									s: str = org/transcrypt/fabric/__javascript__/fabric.js
+									s: str = com/fabricjs/__javascript__/fabric.js
 							ctx: Load 

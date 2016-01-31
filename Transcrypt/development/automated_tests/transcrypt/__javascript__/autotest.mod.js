@@ -11,6 +11,7 @@
 		var list_comprehensions = {};
 		var modules = {};
 		var org = {};
+		var properties = {};
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
@@ -25,6 +26,7 @@
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (properties, '', __init__ (__world__.properties));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
@@ -39,6 +41,7 @@
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (properties, 'properties');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();

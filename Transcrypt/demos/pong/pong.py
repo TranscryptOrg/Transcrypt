@@ -1,4 +1,4 @@
-from org.transcrypt.fabric import fabric
+from com.fabricjs import fabric
 
 orthoWidth = 1000
 orthoHeight = 750

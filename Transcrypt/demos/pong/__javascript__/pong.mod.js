@@ -1,5 +1,5 @@
 	(function () {
-		var fabric = __init__ (__world__.org.transcrypt.fabric).fabric;
+		var fabric = __init__ (__world__.com.fabricjs).fabric;
 		var orthoWidth = 1000;
 		var orthoHeight = 750;
 		var fieldHeight = 650;

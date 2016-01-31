@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-31 17:07:47
+// Transcrypt'ed from Python, 2016-01-31 11:12:23
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -105,7 +105,7 @@ function autotest () {
 		__name__: 'object',
 		__bases__: [],
 			
-		// Object creator function is inherited by all classes (??? Make global?)
+		// Object creator function is inherited by all classes
 		__new__: function (args) {	// Args are just the constructor args		
 			// In JavaScript the Python class is the prototype of the Python object
 			// In this way methods and static attributes will be available both with a class and an object before the dot
@@ -284,20 +284,18 @@ function autotest () {
 		
 	// Define recognizable dictionary for **kwargs parameter
 	var __kwargdict__ = function (anObject) {
-		anObject.__class__ = __kwargdict__;	// This class needs no __name__
+		__kwargdict__.__name__ = '__kwargdict__';
+		anObject.__class__ = __kwargdict__;
 		anObject.constructor = Object;
 		return anObject;
 	}
 	__all__.___kwargdict__ = __kwargdict__;
 	
-	// Property installer function, no member since that would bloat classes
-	var __propdesc__ = null;
-	__all__.propdesc = null;
+	//$1
 	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
-		var self = this;	// The class that calls the property function
+		self = this;	// The class that calls the property function
 		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
-	}
-	__all__.property = property;
+	}	
 	
 	var __merge__ = function (object0, object1) {
 		var result = {};
@@ -1966,21 +1964,45 @@ function autotest () {
 							return self._x;
 						});},
 						get setX () {return __get__ (this, function (self, value) {
+							console.log (111);
+							console.dir (this);
+							console.dir (self);
+							console.dir (value);
+							console.log (222);
 							self._x = value;
 						});},
 						get getY () {return __get__ (this, function (self) {
-							return self._y;
+							return self._x;
 						});},
 						get setY () {return __get__ (this, function (self, value) {
-							self._y = value;
+							self._x = value;
 						});}
 					});
 					A.p = 123;
 					A.q = 456;
+					//A.x = A.property (A.getX, A.setX)
+
+					//Object.defineProperty (A, 'x', A.property (A.getX, A.setX))
+					
+					Object.defineProperty (A, 'x', {
+						get: function () {return A.getX (this)},
+						set: function (value) {A.setX (this, value)},
+						enumerable: true,
+						configurable: true
+					})					
+					
 					var run = function (autoTester) {
 						var a1 = A ();
 						var a2 = A ();
-						a1.x = 5;
+						console.log (444)
+						console.dir (a1);
+						
+						console.dir (Object.getOwnPropertyDescriptor (A, 'x'));
+						// get: function (self)
+						// set: function (self, value)	# Should have been function (value), so it will pas 5 in self
+						
+						a1.x = 555666;
+						console.log (555, a1.x)
 						a1.y = 6;
 						a2.x = 7;
 						a2.y = 8;

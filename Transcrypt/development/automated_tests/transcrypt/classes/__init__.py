@@ -12,7 +12,9 @@ def run (autoTester):
 			autoTester.check ('A.show2', label, self.x)
 		
 	class B:
+		#p, q = 456, 789
 		p = 456
+		#q = 789
 		def __init__ (self, y):
 			autoTester.check ('In B constructor')
 			self.y = y

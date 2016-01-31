@@ -234,9 +234,8 @@ class Module:
 		
 		with utils.create (self.metadata.targetPath) as targetFile:
 			targetFile.write (self.targetCode)
-					
+			
 class Generator (ast.NodeVisitor):
-	classScope, functionScope = range (2)
 	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 
 	def __init__ (self, module):
@@ -348,6 +347,15 @@ class Generator (ast.NodeVisitor):
 		
 	def descope (self):
 		self.scopes.pop ()
+		
+	def getscope (self, scopeType = None):
+		if scopeType:
+			for scope in reversed (self.scopes):
+				if type (scope) == scopeType:
+					return scope
+		else:
+			return self.scopes [-1]
+
 		
 	def emitComma (self, index, blank = True):
 		if index:
@@ -537,7 +545,7 @@ class Generator (ast.NodeVisitor):
 				except Exception as exception:
 					utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid LHS slice')	
 			else:
-				if not (self.scopes and self.scopes [-1] == self.classScope) and type (target) == ast.Name:
+				if type (self.getscope ()) != ast.ClassDef and type (target) == ast.Name:
 					# No class var so <className>. not already emitted
 					self.emit ('var ')
 				
@@ -572,7 +580,10 @@ class Generator (ast.NodeVisitor):
 			assignTarget (node.targets [0], node.value)			
 		else:
 			# Multiple RHS or tuple assignment, we need __tmp__
-			self.emit ('var ')
+			if type (self.getscope ()) != ast.ClassDef:
+				# No class var so <className>. not already emitted
+				self.emit ('var ')
+			#$$$self.emit ('//***//')
 			self.emit (self.nextTemp ('left'))
 			self.emit (' = ')
 			self.visit (node.value)
@@ -691,7 +702,13 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 
 		if type (node.func) == ast.Name:
-			if node.func.id == '__pragma__':
+			if node.func.id == 'property':
+				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getscope (ast.ClassDef) .name, node.args [0].id))
+				if len (node.args) > 1:
+					self.emit (', {}.{}'.format (self.getscope (ast.ClassDef) .name, node.args [1].id))
+				self.emit (')')
+				return
+			elif node.func.id == '__pragma__':
 				if node.args [0] .s == 'kwargs':
 					self.allowKeywordArgs = True
 				elif node.args [0] .s == 'nokwargs':
@@ -745,7 +762,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
-		if not self.scopes:
+		if type (self.getscope ()) == ast.Module:
 			self.all.add (node.name)
 
 		self.emit ('var {0} = __class__ (\'{0}\', [', node.name)
@@ -759,7 +776,7 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
-		self.inscope (self.classScope)			
+		self.inscope (node)			
 		
 		self.indent ()
 		classVarAssigns = []
@@ -770,7 +787,7 @@ class Generator (ast.NodeVisitor):
 				self.visit (stmt)
 				index += 1
 			elif type (stmt) == ast.Assign:
-				classVarAssigns.append (stmt)
+				classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
 			elif (
 				type (stmt) == ast.Expr and type (stmt.value) == ast.Call and
 				type (stmt.value.func) == ast.Name and stmt.value.func.id == '__pragma__'
@@ -869,20 +886,20 @@ class Generator (ast.NodeVisitor):
 		self.prevTemp ('iter')
 		
 	def visit_FunctionDef (self, node):
-		if not self.scopes or self.scopes [-1] == self.functionScope:	# Global or function scope, so it's no method
-			if not self.scopes:
+		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
+			if type (self.getscope ()) == ast.Module:
 				self.all.add (node.name)
 			self.emit ('var {} = function ', node.name)
 		else:															# Class scope, so it's a method and needs the currying mechanism
 			self.emit ('\nget {} () {{return __get__ (this, function ', node.name)
 			
-		self.inscope (self.functionScope)		
+		self.inscope (node)		
 		self.visit (node.args)
 		self.emitBody (node.body)
 		self.dedent ()
 		self.descope ()
 		
-		if not self.scopes or self.scopes [-1] == self.functionScope:
+		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):
 			self.emit ('}}')
 		else:
 			self.emit ('}});}}')
@@ -1054,6 +1071,7 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}} ()')
 		
 	def visit_Module (self, node):
+		self.inscope (node)
 		self.indent ()
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
@@ -1099,10 +1117,11 @@ class Generator (ast.NodeVisitor):
 			'{}var {} = {{}};\n'.format (self.tabs (importHeadsLevel), self.filterId (head))
 			for head in sorted (self.importHeads)
 		]))
+		self.descope ()
 		
 	def visit_Name (self, node):	
 		if type (node.ctx) == ast.Store:
-			if not self.scopes:
+			if type (self.getscope ()) == ast.Module:
 				self.all.add (node.id)
 				
 		self.emit (self.filterId (node.id))

@@ -71,7 +71,7 @@
 			return cls.__new__ (args);
 		};
 		
-		// Copy methods and static attributes to class object
+		// Copy methods, properties and static attributes from base classes to new class object
 		for (var index = bases.length - 1; index >= 0; index--) {	// Reversed order, since class vars of first base should win
 			var base = bases [index];
 			for (var attrib in base) {
@@ -84,7 +84,7 @@
 		cls.__name__ = name;
 		cls.__bases__ = bases;
 		
-		// Add own methods and static attributes to class object
+		// Add own methods, properties and static attributes to class object
 		for (var attrib in extra) {
 			var descrip = Object.getOwnPropertyDescriptor (extra, attrib);
 			Object.defineProperty (cls, attrib, descrip);
@@ -102,10 +102,10 @@
 		__name__: 'object',
 		__bases__: [],
 			
-		// Object creator function is inherited by all classes
+		// Object creator function is inherited by all classes (??? Make global?)
 		__new__: function (args) {	// Args are just the constructor args		
-			// Create instance, by 'inheriting' from this (the class), never more than 1 deep
-			// In this way methods will be available both with a class and an object before the dot
+			// In JavaScript the Python class is the prototype of the Python object
+			// In this way methods and static attributes will be available both with a class and an object before the dot
 			// The descriptor produced by __get__ will return the right method flavor
 			var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
 			

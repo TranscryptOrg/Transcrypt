@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-29 19:57:13
+// Transcrypt'ed from Python, 2016-01-31 16:23:54
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -74,7 +74,7 @@ function pong () {
 			return cls.__new__ (args);
 		};
 		
-		// Copy methods and static attributes to class object
+		// Copy methods, properties and static attributes from base classes to new class object
 		for (var index = bases.length - 1; index >= 0; index--) {	// Reversed order, since class vars of first base should win
 			var base = bases [index];
 			for (var attrib in base) {
@@ -87,7 +87,7 @@ function pong () {
 		cls.__name__ = name;
 		cls.__bases__ = bases;
 		
-		// Add own methods and static attributes to class object
+		// Add own methods, properties and static attributes to class object
 		for (var attrib in extra) {
 			var descrip = Object.getOwnPropertyDescriptor (extra, attrib);
 			Object.defineProperty (cls, attrib, descrip);
@@ -105,10 +105,10 @@ function pong () {
 		__name__: 'object',
 		__bases__: [],
 			
-		// Object creator function is inherited by all classes
+		// Object creator function is inherited by all classes (??? Make global?)
 		__new__: function (args) {	// Args are just the constructor args		
-			// Create instance, by 'inheriting' from this (the class), never more than 1 deep
-			// In this way methods will be available both with a class and an object before the dot
+			// In JavaScript the Python class is the prototype of the Python object
+			// In this way methods and static attributes will be available both with a class and an object before the dot
 			// The descriptor produced by __get__ will return the right method flavor
 			var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
 			
@@ -133,7 +133,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.53';
+							self.transpilerVersion = '0.0.56';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -201,7 +201,6 @@ function pong () {
 								}
 							}
 						}
-						console.log (111, reverse);
 						if (key) {
 							iterable.sort ((function __lambda__ (a, b) {
 								if (arguments.length) {
@@ -285,12 +284,20 @@ function pong () {
 		
 	// Define recognizable dictionary for **kwargs parameter
 	var __kwargdict__ = function (anObject) {
-		__kwargdict__.__name__ = '__kwargdict__';
-		anObject.__class__ = __kwargdict__;
+		anObject.__class__ = __kwargdict__;	// This class needs no __name__
 		anObject.constructor = Object;
 		return anObject;
 	}
 	__all__.___kwargdict__ = __kwargdict__;
+	
+	// Property installer function, no member since that would bloat classes
+	var __propdesc__ = null;
+	__all__.propdesc = null;
+	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
+		var self = this;	// The class that calls the property function
+		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
+	}
+	__all__.property = property;
 	
 	var __merge__ = function (object0, object1) {
 		var result = {};
@@ -806,7 +813,7 @@ function pong () {
 	};
 	__nest__ (
 		__all__,
-		'org.transcrypt.fabric', {
+		'com.fabricjs', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
@@ -15773,7 +15780,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 
   fabric.util.createAccessors(fabric.Text);
 
-})(typeof exports !== 'undefined' ? exports : this);	// Puts fabric in exports and in global window, fabric also refers to global window and document
+})(typeof exports !== 'undefined' ? exports : this);	// Puts fabric in exports and in global window
 			delete window.fabric;
 			return exports;
 		}) () .fabric;
@@ -15787,7 +15794,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 		}
 	);
 	(function () {
-		var fabric = __init__ (__world__.org.transcrypt.fabric).fabric;
+		var fabric = __init__ (__world__.com.fabricjs).fabric;
 		var orthoWidth = 1000;
 		var orthoHeight = 750;
 		var fieldHeight = 650;
