@@ -31,7 +31,7 @@ Status
 What's new
 ==========
 
-- Properties, inclusive tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
+- Properties, including tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
 - Forum online
 - Docs adapted
 - Pong example added
@@ -82,8 +82,6 @@ Known limitations
 - No operator overloading. May be added for [] and (), but low priority
 - _name doesn't mean private in any way
 - No iterator, generator, xrange stuff. Maybe in the future if JS becomes better at that kind of things
-- JavaScript interoperation undocumented and largely untested, will change, high priority
-- No good elaborated example. As a first I'll try to make pong for the browser or something like that.
 
 Readability
 ===========

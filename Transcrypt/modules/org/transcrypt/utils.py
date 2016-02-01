@@ -1,7 +1,7 @@
 import os
 import argparse
 
-debug = True
+debug = False
 
 class CommandArgs:		
 	def parse (self):
