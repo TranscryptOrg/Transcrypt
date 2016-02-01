@@ -8,3 +8,13 @@ def run (autoTester):
 	e, pi = 3.14, 2.74
 	e, pi = pi, e
 	autoTester.check (e, pi)
+	
+	def f ():
+		return [(i, 2 * i) for i in range (7000, 10000, 1000)]
+		
+	def g ():
+		return f
+		
+	[k, l], [m, n], (o, p) = g () ()
+	
+	autoTester.check (k, l, m, n, o, p)

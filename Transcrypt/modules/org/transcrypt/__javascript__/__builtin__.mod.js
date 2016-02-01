@@ -32,11 +32,8 @@
 	__all__.___kwargdict__ = __kwargdict__;
 	
 	// Property installer function, no member since that would bloat classes
-	var __propdesc__ = null;
-	__all__.propdesc = null;
 	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
-		var self = this;	// The class that calls the property function
-		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
+		return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
 	}
 	__all__.property = property;
 	

@@ -135,7 +135,7 @@ There are three ways to integrate Transcrypt applications with existing JavaScri
 
 In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
 
-.. literalinclude:: ../../modules/org/transcrypt/fabric/__init__.py
+.. literalinclude:: ../../modules/com/fabricjs/__init__.py
 	:tab-width: 4
 	:caption: The encapsulation layer for fabric.js
 	
@@ -279,6 +279,13 @@ Hierarchical modules: both local to the project and global url-based
 	:tab-width: 4
 	:caption: Testlet: modules
 
+Properties
+----------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/properties/__init__.py
+	:tab-width: 4
+	:caption: Testlet: properties
+		
 Simple and augmented assignment
 -------------------------------
 

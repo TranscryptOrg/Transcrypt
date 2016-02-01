@@ -4,9 +4,9 @@
 		var orthoHeight = 750;
 		var fieldHeight = 650;
 		var __left0__ = tuple (list ([13, 27, 32]));
-		var enter = __left0__[0];
-		var esc = __left0__[1];
-		var space = __left0__[2];
+		var enter = __left0__ [0];
+		var esc = __left0__ [1];
+		var space = __left0__ [2];
 		var Attribute = __class__ ('Attribute', [object], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				self.game = game;
@@ -173,8 +173,8 @@
 					var __iter0__ = tuple (list ([tuple (list (['AZ keys:', -7 / 16])), tuple (list (['KM keys:', 1 / 16]))]));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
-						var name = __left0__[0];
-						var position = __left0__[1];
+						var name = __left0__ [0];
+						var position = __left0__ [1];
 						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
@@ -195,8 +195,8 @@
 					var __iter0__ = zip (self.scores, tuple (list ([-2 / 16, 6 / 16])));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
-						var score = __left0__[0];
-						var position = __left0__[1];
+						var score = __left0__ [0];
+						var position = __left0__ [1];
 						__accu0__.append (new fabric.Text ('{}'.format (score), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
@@ -206,8 +206,8 @@
 				var __iter0__ = zip (self.playerLabels, self.scoreLabels);
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 					var __left0__ = __iter0__ [__index0__];
-					var playerLabel = __left0__[0];
-					var scoreLabel = __left0__[1];
+					var playerLabel = __left0__ [0];
+					var scoreLabel = __left0__ [1];
 					self.game.canvas.add (playerLabel);
 					self.game.canvas.add (scoreLabel);
 					self.game.canvas.add (self.hintLabel);

@@ -18,8 +18,8 @@
 						} ());
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__];
-							var index = __left0__[0];
-							var square = __left0__[1];
+							var index = __left0__ [0];
+							var square = __left0__ [1];
 							var __iter1__ = range (1, 2, 3);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var y = __iter1__ [__index1__];

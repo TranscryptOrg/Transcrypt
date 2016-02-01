@@ -516,7 +516,15 @@ class Generator (ast.NodeVisitor):
 	def visit_Assign (self, node):
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
 		
-		def assignTarget (target, value):
+		def assignTarget (target, value, pathIndices = []):
+			def emitPathIndices ():
+				if pathIndices:
+					self.emit (' ')
+					for pathIndex in pathIndices:
+						self.emit ('[{}]'.format (pathIndex))
+				else:	# Most frequent and simple case, only one atomary LHS
+					pass
+					
 			# Special case for target slice (as opposed to target index)
 			if type (target) == ast.Subscript and type (target.slice) == ast.Slice:
 				self.visit (target.value)
@@ -548,26 +556,22 @@ class Generator (ast.NodeVisitor):
 				except Exception as exception:
 					utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid LHS slice')	
 			else:
-				if type (target) == ast.Name:
-					if type (self.getscope ()) == ast.ClassDef and target.id != self.getTemp ('left'):
-						self.emit ('{}.'.format (self.getscope () .name))
-					else:
-						self.emit ('var ')
-						
-				if (
-					type (self.getscope ()) == ast.Class and type (value) == ast.Call and
-					type (value.func) == ast.Name and value.func.id == 'property'
-				):
-					self.emit ('Object.defineProperty ({}, \'{}\', );')
+				if isPropertyAssign and not target.id == self.getTemp ('left'):
+					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .name, target.id))
+					self.visit (value)
+					emitPathIndices ()
+					self.emit (');')
 				else:
+					if type (target) == ast.Name:
+						if type (self.getscope ()) == ast.ClassDef and target.id != self.getTemp ('left'):
+							self.emit ('{}.'.format (self.getscope () .name))
+						else:
+							self.emit ('var ')
+							
 					self.visit (target)
 					self.emit (' = ')
 					self.visit (value)
-					
-					# Assignment must be lean, no runtime checks.
-					# But it's unclear what will be assigned from the __temp0__ to the RHS
-					# Compile-time we can store the bound property function in __temp0__ (but not it's result (the prop descr)
-					# And compile time we know when we encounter it and generate special code.
+					emitPathIndices ()
 
 		# Tuple assignment LHS tree walker
 		# The target (LHS) guides the walk, so it determines the source indices
@@ -580,16 +584,31 @@ class Generator (ast.NodeVisitor):
 				self.emit (';\n')
 				
 				# Create and visit RHS node on the fly, to benefit from assignTarget
-				assignTarget (expr, ast.Name (id = self.getTemp ('left'), ctx = ast.Load))
-				
-				for pathIndex in pathIndices:
-					self.emit ('[{}]'.format (pathIndex))
+				assignTarget (expr, ast.Name (id = self.getTemp ('left'), ctx = ast.Load), pathIndices)
 			else:									# It's a sequence
 				pathIndices.append (None)			# Add indexing level for that sequence
 				for index, elt in enumerate (expr.elts):
 					pathIndices [-1] = index
 					walkTarget (elt, pathIndices)	# Walk deeper until finally pathIndices is used in emitting an RHS leaf
 				pathIndices.pop ()					# Remove the indexing level since we're done with that sequence
+				
+		def getIsPropertyAssign (value):
+			if type (value) == ast.Call and type (value.func) == ast.Name and value.func.id == 'property':
+				return True
+			else:
+				try:	# Assume it's a tuple or a list of properties (and so recursively)
+					return getIsPropertyAssign (value.elts [0])
+					
+				except:	# At this point it wasn't a property and also not a tuple or a list of properties
+					return False
+
+		isPropertyAssign = type (self.getscope ()) == ast.ClassDef and getIsPropertyAssign (node.value)
+		# In transpiling to efficient JavaScript, we need a special, simplified case for properties
+		# In JavaScript generating '=' for properties won't do, it has to be 'Object.defineProperty'
+		# We can't look out for property installation at runtime, that would make all assignments slow
+		# So we introduce the restriction that an assignment involves no properties at all or only properties
+		# Also these properties have to use the 'property' function 'literally'
+		# With these restrictions we can recognize property installation at compile time
 				
 		if len (node.targets) == 1 and type (node.targets [0]) in targetLeafs:
 			# Fast shortcut for the most frequent and simple case
@@ -601,8 +620,8 @@ class Generator (ast.NodeVisitor):
 			for expr in node.targets:
 				walkTarget (expr, [])
 				
-			self.prevTemp ('left')
-				
+			self.prevTemp ('left')			
+			
 	def visit_Attribute (self, node):
 		self.visit (node.value)
 		self.emit ('.{}', node.attr)

@@ -31,6 +31,7 @@ Status
 What's new
 ==========
 
+- Properties, inclusive tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
 - Forum online
 - Docs adapted
 - Pong example added

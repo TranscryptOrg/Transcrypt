@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-31 18:21:13
+// Transcrypt'ed from Python, 2016-02-01 11:58:39
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -291,11 +291,8 @@ function autotest () {
 	__all__.___kwargdict__ = __kwargdict__;
 	
 	// Property installer function, no member since that would bloat classes
-	var __propdesc__ = null;
-	__all__.propdesc = null;
 	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
-		var self = this;	// The class that calls the property function
-		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
+		return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
 	}
 	__all__.property = property;
 	
@@ -1047,8 +1044,8 @@ function autotest () {
 							});}
 						});
 						var __left0__ = tuple (list ([456, 789]));
-						B.p = __left0__[0];
-						B.q = __left0__[1];
+						B.p = __left0__ [0];
+						B.q = __left0__ [1];
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
 								autoTester.check ('In C constructor');
@@ -1167,8 +1164,8 @@ function autotest () {
 						} ());
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__];
-							var index = __left0__[0];
-							var square = __left0__[1];
+							var index = __left0__ [0];
+							var square = __left0__ [1];
 							var __iter1__ = range (1, 2, 3);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var y = __iter1__ [__index1__];
@@ -1607,8 +1604,8 @@ function autotest () {
 							var __iter0__ = tuple (list ([tuple (list ([10, 11])), tuple (list ([20, 21]))]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__];
-								var x = __left0__[0];
-								var y = __left0__[1];
+								var x = __left0__ [0];
+								var y = __left0__ [1];
 								__accu0__.append (tuple (list ([2 * x, 3 * y])));
 							}
 							return __accu0__;
@@ -1912,18 +1909,18 @@ function autotest () {
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__];
-								var index = __left0__[0];
-								var testItem = __left0__[1][0];
-								var referenceItem = __left0__[1][1];
+								var index = __left0__ [0];
+								var testItem = __left0__ [1][0];
+								var referenceItem = __left0__ [1][1];
 								if (testItem != referenceItem) {
 									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
 									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
 									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 										var __left0__ = __iter1__ [__index1__];
-										var buffer = __left0__[0];
-										var divId = __left0__[1];
-										var accentColor = __left0__[2];
+										var buffer = __left0__ [0];
+										var divId = __left0__ [1];
+										var accentColor = __left0__ [2];
 										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.slice (index + 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
@@ -1978,32 +1975,86 @@ function autotest () {
 							return self._y;
 						});},
 						get setY () {return __get__ (this, function (self, value) {
-							self._y = value;
+							self._y = 1000 + value;
 						});},
 						get getY2 () {return __get__ (this, function (self) {
 							return self._y;
 						});},
 						get setY2 () {return __get__ (this, function (self, value) {
 							self._y = value;
+						});},
+						get getT () {return __get__ (this, function (self) {
+							return self._t;
+						});},
+						get setT () {return __get__ (this, function (self, value) {
+							self._t = value;
+						});},
+						get getU () {return __get__ (this, function (self) {
+							return self._u + 10000;
+						});},
+						get setU () {return __get__ (this, function (self, value) {
+							self._u = value - 5000;
 						});}
 					});
 					A.p = 1234;
 					var __left0__ = tuple (list ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]));
-					A.x = __left0__[0];
-					A.y = __left0__[1];
-					A.y2 = __left0__[2];
+					Object.defineProperty (A, 'x', __left0__ [0]);;
+					Object.defineProperty (A, 'y', __left0__ [1]);;
+					Object.defineProperty (A, 'y2', __left0__ [2]);;
+					Object.defineProperty (A, 't', property.call (A, A.getT, A.setT));;
+					Object.defineProperty (A, 'u', property.call (A, A.getU, A.setU));;
 					A.q = 5678;
+					var B = __class__ ('B', [object], {
+						get getZ () {return __get__ (this, function (self) {
+							return self.z_;
+						});},
+						get setZ () {return __get__ (this, function (self, value) {
+							self.z_ = value;
+						});}
+					});
+					Object.defineProperty (B, 'z', property.call (B, B.getZ, B.setZ));;
+					var C = __class__ ('C', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							self.offset = 1234;
+						});},
+						get getW () {return __get__ (this, function (self) {
+							return self.w_ + self.offset;
+						});},
+						get setW () {return __get__ (this, function (self, value) {
+							self.w_ = value - self.offset;
+						});}
+					});
+					Object.defineProperty (C, 'w', property.call (C, C.getW, C.setW));;
 					var run = function (autoTester) {
 						var a1 = A ();
 						var a2 = A ();
+						a1.y2 = 1000;
+						a2.y2 = 2000;
 						a1.x = 5;
 						a1.y = 6;
 						a2.x = 7;
 						a2.y = 8;
-						autoTester.check (a1.x, a1.y, a1.y2, a2.x, a2.y, a2.y2, a1.p, a2.p, a1.q, a2.q);
+						a1.t = 77;
+						a1.u = 88;
+						autoTester.check (a1.x, a1.y, a1.y2);
+						autoTester.check (a2.x, a2.y, a2.y2);
+						autoTester.check (a1.p, a2.p, a1.q, a2.q);
+						autoTester.check (a1.t, a1.u);
+						var b = B ();
+						var c = C ();
+						b.z = 100100;
+						c.z = 200200;
+						c.w = 300300;
+						autoTester.check (a1.x, b.z, c.z, c.w);
+						c.w = 400400;
+						c.z = 500500;
+						b.z = 600600;
+						autoTester.check (a1.x, b.z, c.z, c.w);
 					};
 					__pragma__ ('<all>')
 					__all__.A = A;
+					__all__.B = B;
+					__all__.C = C;
 					__all__.run = run;
 					__pragma__ ('</all>')
 				}
@@ -2081,27 +2132,49 @@ function autotest () {
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						var __left0__ = tuple (list ([tuple (list ([1, 2])), 'santa-claus', new set ([3, 4]), 5]));
-						var a = __left0__[0][0];
-						var b = __left0__[0][1];
-						var santa = __left0__[1];
-						var c = __left0__[2][0];
-						var d = __left0__[2][1];
-						var e = __left0__[3];
+						var a = __left0__ [0][0];
+						var b = __left0__ [0][1];
+						var santa = __left0__ [1];
+						var c = __left0__ [2][0];
+						var d = __left0__ [2][1];
+						var e = __left0__ [3];
 						autoTester.check (a, b, c, d, e, santa);
 						var __iter0__ = enumerate (tuple (list ([0.5, 1.5, 2.5, 3.5])));
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__];
-							var i = __left0__[0];
-							var x = __left0__[1];
+							var i = __left0__ [0];
+							var x = __left0__ [1];
 							autoTester.check (i, x);
 						}
 						var __left0__ = tuple (list ([3.14, 2.74]));
-						var e = __left0__[0];
-						var pi = __left0__[1];
+						var e = __left0__ [0];
+						var pi = __left0__ [1];
 						var __left0__ = tuple (list ([pi, e]));
-						var e = __left0__[0];
-						var pi = __left0__[1];
+						var e = __left0__ [0];
+						var pi = __left0__ [1];
 						autoTester.check (e, pi);
+						var f = function () {
+							return function () {
+								var __accu0__ = [];
+								var __iter0__ = range (7000, 10000, 1000);
+								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+									var i = __iter0__ [__index0__];
+									__accu0__.append (tuple (list ([i, 2 * i])));
+								}
+								return __accu0__;
+							} ();
+						};
+						var g = function () {
+							return f;
+						};
+						var __left0__ = g () ();
+						var k = __left0__ [0][0];
+						var l = __left0__ [0][1];
+						var m = __left0__ [1][0];
+						var n = __left0__ [1][1];
+						var o = __left0__ [2][0];
+						var p = __left0__ [2][1];
+						autoTester.check (k, l, m, n, o, p);
 					};
 					__pragma__ ('<all>')
 					__all__.run = run;

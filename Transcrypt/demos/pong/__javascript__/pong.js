@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-01-31 16:23:54
+// Transcrypt'ed from Python, 2016-02-01 12:10:03
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -291,11 +291,8 @@ function pong () {
 	__all__.___kwargdict__ = __kwargdict__;
 	
 	// Property installer function, no member since that would bloat classes
-	var __propdesc__ = null;
-	__all__.propdesc = null;
 	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
-		var self = this;	// The class that calls the property function
-		return {__class__: __propdesc__, get: function () {return cls.getter (self)}, set: function (value) {cls.setter (self, value)}, enumerable: true};
+		return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
 	}
 	__all__.property = property;
 	
@@ -15799,9 +15796,9 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 		var orthoHeight = 750;
 		var fieldHeight = 650;
 		var __left0__ = tuple (list ([13, 27, 32]));
-		var enter = __left0__[0];
-		var esc = __left0__[1];
-		var space = __left0__[2];
+		var enter = __left0__ [0];
+		var esc = __left0__ [1];
+		var space = __left0__ [2];
 		var Attribute = __class__ ('Attribute', [object], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				self.game = game;
@@ -15968,8 +15965,8 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					var __iter0__ = tuple (list ([tuple (list (['AZ keys:', -7 / 16])), tuple (list (['KM keys:', 1 / 16]))]));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
-						var name = __left0__[0];
-						var position = __left0__[1];
+						var name = __left0__ [0];
+						var position = __left0__ [1];
 						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
@@ -15990,8 +15987,8 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					var __iter0__ = zip (self.scores, tuple (list ([-2 / 16, 6 / 16])));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
-						var score = __left0__[0];
-						var position = __left0__[1];
+						var score = __left0__ [0];
+						var position = __left0__ [1];
 						__accu0__.append (new fabric.Text ('{}'.format (score), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
@@ -16001,8 +15998,8 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				var __iter0__ = zip (self.playerLabels, self.scoreLabels);
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 					var __left0__ = __iter0__ [__index0__];
-					var playerLabel = __left0__[0];
-					var scoreLabel = __left0__[1];
+					var playerLabel = __left0__ [0];
+					var scoreLabel = __left0__ [1];
 					self.game.canvas.add (playerLabel);
 					self.game.canvas.add (scoreLabel);
 					self.game.canvas.add (self.hintLabel);

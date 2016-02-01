@@ -29,8 +29,8 @@
 							});}
 						});
 						var __left0__ = tuple (list ([456, 789]));
-						B.p = __left0__[0];
-						B.q = __left0__[1];
+						B.p = __left0__ [0];
+						B.q = __left0__ [1];
 						var C = __class__ ('C', [A, B], {
 							get __init__ () {return __get__ (this, function (self, x, y) {
 								autoTester.check ('In C constructor');

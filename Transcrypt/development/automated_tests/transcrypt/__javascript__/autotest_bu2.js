@@ -1982,7 +1982,7 @@ function autotest () {
 					A.p = 123;
 					A.q = 456;
 					
-					temp = property.call (A, A.getX, A.setX) // And lots of other things
+					temp = function __prop__ (return property.call (A, A.getX, A.setX)) // And lots of other things
 					// Temp contains a property descriptor, not a property
 					// This is done at once with tuples, assigning the whole LHS
 					// Only the call has to be special, adding the A parameter

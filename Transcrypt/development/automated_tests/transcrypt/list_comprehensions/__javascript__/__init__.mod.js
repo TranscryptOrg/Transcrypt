@@ -46,8 +46,8 @@
 							var __iter0__ = tuple (list ([tuple (list ([10, 11])), tuple (list ([20, 21]))]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__];
-								var x = __left0__[0];
-								var y = __left0__[1];
+								var x = __left0__ [0];
+								var y = __left0__ [1];
 								__accu0__.append (tuple (list ([2 * x, 3 * y])));
 							}
 							return __accu0__;

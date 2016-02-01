@@ -135,7 +135,7 @@ There are three ways to integrate Transcrypt applications with existing JavaScri
 
 In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
 
-.. literalinclude:: ../../modules/org/transcrypt/fabric/__init__.py
+.. literalinclude:: ../../modules/com/fabricjs/__init__.py
 	:tab-width: 4
 	:caption: The encapsulation layer for fabric.js
 	
@@ -157,7 +157,7 @@ Joined minification
 
 Minification is currently performed by the Google closure compiler, that's also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working *strict* code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.
 
-As can be seen from the listings, *pong.py* and *pong.mod.js* roughly have the same size without counting any libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified version is about half this size. The Transcrypt library itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from *fabric.js*.
+As can be seen from the listings, *pong.mod.js* without libraries is only slightly longer than *pong.py* without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified version is about half this size. The Transcrypt library itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from *fabric.js*.
 
 From this example it becomes clear that Transcrypt is extremely lightWeight. At the same time the source code closely matches CPython, while integration with JavaScript is trivial.
 
@@ -279,6 +279,13 @@ Hierarchical modules: both local to the project and global url-based
 	:tab-width: 4
 	:caption: Testlet: modules
 
+Properties
+----------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/properties/__init__.py
+	:tab-width: 4
+	:caption: Testlet: properties
+		
 Simple and augmented assignment
 -------------------------------
 

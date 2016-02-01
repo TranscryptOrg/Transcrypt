@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.49 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 0.0.56 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.49',
+        VERSION:     '0.0.56',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 0.0.49 documentation" href="#" /> 
+    <link rel="top" title="Transcrypt 0.0.56 documentation" href="#" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,7 +32,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.49 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.56 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -256,12 +256,12 @@ show2 (&#39;copy&#39;);
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        (function () {{</span>
 <span class="sd">            var exports = {{}};</span>
-<span class="sd">            {}  // Puts fabric in exports and in global window, fabric also refers to global window and document</span>
+<span class="sd">            {}  // Puts fabric in exports and in global window</span>
 <span class="sd">            delete window.fabric;</span>
 <span class="sd">            return exports;</span>
 <span class="sd">        }}) () .fabric;</span>
 <span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
-    <span class="n">includes</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;org/transcrypt/fabric/__javascript__/fabric.js&#39;</span><span class="p">]</span>
+    <span class="n">includes</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -908,7 +908,7 @@ show2 (&#39;copy&#39;);
 <div class="section" id="joined-minification">
 <h2>Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
 <p>Minification is currently performed by the Google closure compiler, that&#8217;s also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
-<p>As can be seen from the listings, <em>pong.py</em> and <em>pong.mod.js</em> roughly have the same size without counting any libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt library itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>.</p>
+<p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt library itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>.</p>
 <p>From this example it becomes clear that Transcrypt is extremely lightWeight. At the same time the source code closely matches CPython, while integration with JavaScript is trivial.</p>
 </div>
 </div>
@@ -1003,6 +1003,7 @@ show2 (&#39;copy&#39;);
 <span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">modules</span>
+<span class="kn">import</span> <span class="nn">properties</span>
 <span class="kn">import</span> <span class="nn">simple_and_augmented_assignment</span>
 <span class="kn">import</span> <span class="nn">tuple_assignment</span>
 
@@ -1019,6 +1020,7 @@ show2 (&#39;copy&#39;);
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="s">&#39;modules&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="s">&#39;properties&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">simple_and_augmented_assignment</span><span class="p">,</span> <span class="s">&#39;simple_and_augmented_assignment&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">tuple_assignment</span><span class="p">,</span> <span class="s">&#39;tuple_assignemt&#39;</span><span class="p">)</span>
 
@@ -1091,7 +1093,7 @@ show2 (&#39;copy&#39;);
             <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;A.show2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         
     <span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="mi">456</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">456</span><span class="p">,</span> <span class="mi">789</span>
         <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
             <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;In B constructor&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
@@ -1118,6 +1120,10 @@ show2 (&#39;copy&#39;);
 
     <span class="n">b</span> <span class="o">=</span> <span class="n">B</span> <span class="p">(</span><span class="mi">2002</span><span class="p">)</span>
     <span class="n">b</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;russia&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
 
@@ -1125,6 +1131,7 @@ show2 (&#39;copy&#39;);
     <span class="n">c</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;netherlands&#39;</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
 
     <span class="n">c</span><span class="o">.</span><span class="n">show2</span> <span class="p">(</span><span class="s">&#39;amsterdam&#39;</span><span class="p">)</span>
     <span class="n">A</span><span class="o">.</span><span class="n">show2</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s">&#39;rotterdam&#39;</span><span class="p">)</span>
@@ -1415,6 +1422,7 @@ show2 (&#39;copy&#39;);
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tuples</span><span class="p">)</span>
     
     <span class="n">tricky</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">))]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tricky</span><span class="p">)</span>
     
     <span class="n">nested</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]]</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">nested</span><span class="p">)</span>
@@ -1488,6 +1496,109 @@ show2 (&#39;copy&#39;);
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">mod3Hundred</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">mod3GetTwoHundred</span> <span class="p">())</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">A</span> <span class="p">(</span><span class="mf">123.321</span><span class="p">)</span> <span class="o">.</span><span class="n">f</span> <span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-properties">
+<div class="code-block-caption"><span class="caption-text">Testlet: properties</span><a class="headerlink" href="#testlet-properties" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">1234</span>
+    <span class="k">def</span> <span class="nf">getX</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
+
+    <span class="k">def</span> <span class="nf">setX</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">value</span>
+            
+    <span class="k">def</span> <span class="nf">getY</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
+
+    <span class="k">def</span> <span class="nf">setY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">+</span> <span class="n">value</span>  <span class="c"># Weird but should be possible</span>
+        
+    <span class="k">def</span> <span class="nf">getY2</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
+
+    <span class="k">def</span> <span class="nf">setY2</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="k">def</span> <span class="nf">getT</span>    <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span>
+
+    <span class="k">def</span> <span class="nf">setT</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="k">def</span> <span class="nf">getU</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">+</span> <span class="mi">10000</span>
+
+    <span class="k">def</span> <span class="nf">setU</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">=</span> <span class="n">value</span> <span class="o">-</span> <span class="mi">5000</span>
+            
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getX</span><span class="p">,</span> <span class="n">setX</span><span class="p">),</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getY</span><span class="p">,</span> <span class="n">setY</span><span class="p">),</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getY2</span><span class="p">,</span> <span class="n">setY2</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getT</span><span class="p">,</span> <span class="n">setT</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getU</span><span class="p">,</span> <span class="n">setU</span><span class="p">)</span>
+    
+<span class="n">A</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="mi">5678</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">getZ</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_</span>
+    
+    <span class="k">def</span> <span class="nf">setZ</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getZ</span><span class="p">,</span> <span class="n">setZ</span><span class="p">)</span>
+    
+<span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="mi">1234</span>
+
+    <span class="k">def</span> <span class="nf">getW</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        
+    <span class="k">def</span> <span class="nf">setW</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_</span> <span class="o">=</span> <span class="n">value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">property</span> <span class="p">(</span><span class="n">getW</span><span class="p">,</span> <span class="n">setW</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">A</span> <span class="p">()</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">A</span> <span class="p">()</span>
+
+    <span class="n">a1</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">a2</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="mi">2000</span>
+    
+    <span class="n">a1</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">a1</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">6</span>
+    
+    <span class="n">a2</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">a2</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="n">a1</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">77</span>
+    <span class="n">a1</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mi">88</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">a1</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a2</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a2</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">a2</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">a2</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">a1</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">a2</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">a1</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+    
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span> <span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">C</span> <span class="p">()</span>
+    
+    <span class="n">b</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">100100</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">200200</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">300300</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
+    
+    <span class="n">c</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">400400</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">500500</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">600600</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1576,6 +1687,16 @@ show2 (&#39;copy&#39;);
     <span class="n">e</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">,</span> <span class="mf">2.74</span>
     <span class="n">e</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">pi</span><span class="p">,</span> <span class="n">e</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">7000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)]</span>
+        
+    <span class="k">def</span> <span class="nf">g</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="n">f</span>
+        
+    <span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">],</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span> <span class="p">()</span> <span class="p">()</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1631,6 +1752,7 @@ show2 (&#39;copy&#39;);
 <li><a class="reference internal" href="#lambda-functions-with-all-types-of-args">Lambda functions with all types of args</a></li>
 <li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">List comprehensions: multi-loop and nested with multiple if&#8217;s</a></li>
 <li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">Hierarchical modules: both local to the project and global url-based</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
 <li><a class="reference internal" href="#simple-and-augmented-assignment">Simple and augmented assignment</a></li>
 <li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">Tuple assignment: recursive and in for-headers using enumerate</a></li>
 </ul>
@@ -1667,7 +1789,7 @@ show2 (&#39;copy&#39;);
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.49 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 0.0.56 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
