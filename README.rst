@@ -1,8 +1,3 @@
-THE TRANSCRYPT FORUM IS NOW ONLINE, CLICK THE FORUM LINK AT http://www.transcrypt.org
-
-.. figure:: http://www.transcrypt.org/illustrations/logo.png
-	:alt: Logo
-
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance*
@@ -11,26 +6,51 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Simple relation between Python source and generated JavaScript code for easy debugging
 - Compact downloads, kB's rather than MB's
 
+.. figure:: http://www.transcrypt.org/illustrations/logo.png
+	:alt: Logo
+
+Request to early adopters
+=========================
+
+Transcrypt is in Alpha now!
+As you may have already discovered, it is lean, fast, generates higly readable JavaScript, covers most of Python, including stuff like multiple inheritance, properties, tuple assignment, \*\*kwargs and \*args, and it cooperates seamlessly with any JavaScript library.
+The first version will be 3.5, not for marketing reasons, but to make clear what is the matching version of CPython.
+
+While work on Transcrypt will continue, what's most important now for Transcrypt to become a permanent, well-maintained asset for the programmer community is mindshare!
+This can only be achieved with your help.
+Do you think it deserves a lasting place under the sun?
+Do you want it to be at your disposal, evolve and have an active community to answer your questions?
+Then let the world know it exists!
+
+Do you know someone who can blog about it?
+Please ask that person to do so...
+Want to show your discovery to your colleagues, classmates or friends?
+Go ahead... For me this is about having pleasure in ones job. I've enjoyed laying the groundwork for Transcrypt. And I hope many will enjoy using it.
+
+Jacques de Hooge, Rotterdam, Netherlands
+
 .. figure:: http://www.transcrypt.org/illustrations/monk_transcribing.png
 	:alt: Monk transcribing
 	
 	**Transcription once used to be manual labour**
 	
-Documentation with code examples
-================================
+Documentation with code examples and forum
+==========================================
 
 Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org
+Some people have contacted me personally with 'howto' questions and feature requests. While that's quite alright, if you want others to benefit from the answers, use the forum: http://transcrypt.boards.net
 
 Status
 ======
 
-- The fabric.js library has been encapsulated as a Transcrypt module! Seamless JavaScript integration is a fact now.
-- Working Pong example added to www.transcrypt.org and to the distribution.
-- ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, dicts, sets, modules. But there's a lot more (see docs). What's mainly missing are some handy members of the string, list, dict and set classes. Also the interoperability with JavaScript has to be tested. If you need something now, use PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects. However the development of Transcrypt is has gone faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds.
+- The fabric.js library has been encapsulated as a Transcrypt module. Seamless JavaScript integration is a fact now.
+- Working Pong example added to http://www.transcrypt.org and to the distribution.
+- ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, properties, dicts, sets, modules. But there's a lot more (see docs). Development of Transcrypt has gone much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds. This will allow Transcrypt to keep up with developments in the future. While Transcrypt still alpha, it's almost ready to occupy its niche between PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
 
 What's new
 ==========
 
+- Early adopter request added
 - Properties, including tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
 - Forum online
 - Docs adapted
@@ -70,16 +90,15 @@ What's new
 - A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
 - Transpiler core
 
-Known limitations
-=================
+Known restrictions
+==================
 
-- GENERALLY PRE-ALPHA, SO IN FLUX AND PROBABLY WITH SOME HOLES
 - No standard libs, use or encapsulate the JS ones, that's part of the concept. Some may be ported though.
-- Builtin library incomplete (e.g. methods of builtin types)
+- Not all methods of builtin types are there by default. This is deliberately to keep Transcrypt lean. Such things can be distributed in separate libs.
 - No set or dict comprehensions yet. Should be easy but low priority.
 - No eval and exec (will stay that way, with minor exceptions)
 - No threading of any kind. Will probably stay that way as long as JS doesn't properly support that.
-- No operator overloading. May be added for [] and (), but low priority
+- No operator overloading. May be added, but low priority
 - _name doesn't mean private in any way
 - No iterator, generator, xrange stuff. Maybe in the future if JS becomes better at that kind of things
 
