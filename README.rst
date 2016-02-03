@@ -50,6 +50,7 @@ Status
 What's new
 ==========
 
+- Docs improved, 'hello' example added showing HTML - JavaScript - Python cooperation in a nutshell
 - Early adopter request added
 - Properties, including tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
 - Forum online
@@ -101,6 +102,11 @@ Known restrictions
 - No operator overloading. May be added, but low priority
 - _name doesn't mean private in any way
 - No iterator, generator, xrange stuff. Maybe in the future if JS becomes better at that kind of things
+
+Known bugs
+==========
+
+- Syntax error reporting broken, other error reporting confusing. PRIORITY: HIGH
 
 Readability
 ===========
