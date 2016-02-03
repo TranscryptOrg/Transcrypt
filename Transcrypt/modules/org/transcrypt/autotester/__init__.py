@@ -38,9 +38,7 @@ class AutoTester:
 	def dump (self, filePrename):
 		for minified in (False, True):
 			miniInfix = '.min' if minified else ''
-			with open ('{}{}.html'.format (filePrename, miniInfix), 'w') as aFile:
-				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix))
-				
+			with open ('{}{}.html'.format (filePrename, miniInfix), 'w') as aFile:				
 				aFile.write ('<b>Status:</b>\n')
 				aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId))
 				
@@ -50,8 +48,8 @@ class AutoTester:
 				aFile.write ('<b>Test output:</b>\n')
 				aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId))
 
-				aFile.write ('<script>{} ();</script>\n'.format (filePrename))
-		
+				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix))
+				
 	def compare (self):
 		self.referenceBuffer = document.getElementById (self.referenceDivId) .innerHTML.split (' | ')
 		for index, (testItem, referenceItem) in enumerate (zip (self.testBuffer, self.referenceBuffer)):

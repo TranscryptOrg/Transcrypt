@@ -1,0 +1,318 @@
+file: Module 
+	body: list 
+		element: ClassDef 
+			name: str = SolarSystem
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = planets
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Str 
+								s: str = Mercury
+							element: Str 
+								s: str = Venus
+							element: Str 
+								s: str = Earth
+							element: Str 
+								s: str = Mars
+							element: Str 
+								s: str = Jupiter
+							element: Str 
+								s: str = Saturn
+							element: Str 
+								s: str = Uranus
+							element: Str 
+								s: str = Neptune
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = kind
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Str 
+								s: str = hot
+							element: Str 
+								s: str = sulphurous
+							element: Str 
+								s: str = fertile
+							element: Str 
+								s: str = reddish
+							element: Str 
+								s: str = stormy
+							element: Str 
+								s: str = ringed
+							element: Str 
+								s: str = cold
+							element: Str 
+								s: str = very cold
+						ctx: Load 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = planetIndex
+									ctx: Store 
+							value: Num 
+								n: int = 3
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = explainDistance
+									ctx: Store 
+							value: NameConstant 
+								value: bool = True
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = greet
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = planetIndex
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = int
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Call 
+											func: Attribute 
+												value: Name 
+													id: str = Math
+													ctx: Load 
+												attr: str = random
+												ctx: Load 
+											args: list 
+											keywords: list 
+										op: Mult 
+										right: Call 
+											func: Name 
+												id: str = len
+												ctx: Load 
+											args: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = planets
+													ctx: Load 
+											keywords: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = getElementById
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = greet
+										keywords: list 
+									attr: str = innerHTML
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = Hello {}
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Subscript 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = planets
+											ctx: Load 
+										slice: Index 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = planetIndex
+												ctx: Load 
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = explain
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = getElementById
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = explain
+										keywords: list 
+									attr: str = innerHTML
+									ctx: Store 
+							value: IfExp 
+								test: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = explainDistance
+									ctx: Load 
+								body: Call 
+									func: Attribute 
+										value: Str 
+											s: str = {} is planet nr. {} counting from the sun
+										attr: str = format
+										ctx: Load 
+									args: list 
+										element: Subscript 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = planets
+												ctx: Load 
+											slice: Index 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = planetIndex
+													ctx: Load 
+											ctx: Load 
+										element: BinOp 
+											left: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = planetIndex
+												ctx: Load 
+											op: Add 
+											right: Num 
+												n: int = 1
+									keywords: list 
+								orelse: Call 
+									func: Attribute 
+										value: Str 
+											s: str = {} is a {} planet
+										attr: str = format
+										ctx: Load 
+									args: list 
+										element: Subscript 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = planets
+												ctx: Load 
+											slice: Index 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = planetIndex
+													ctx: Load 
+											ctx: Load 
+										element: Subscript 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = kind
+												ctx: Load 
+											slice: Index 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = planetIndex
+													ctx: Load 
+											ctx: Load 
+									keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = explainDistance
+									ctx: Store 
+							value: UnaryOp 
+								op: Not 
+								operand: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = explainDistance
+									ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = solarSystem
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = SolarSystem
+					ctx: Load 
+				args: list 
+				keywords: list 

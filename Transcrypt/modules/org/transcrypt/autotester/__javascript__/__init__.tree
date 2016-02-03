@@ -313,38 +313,6 @@ file: Module
 													attr: str = write
 													ctx: Load 
 												args: list 
-													element: Call 
-														func: Attribute 
-															value: Str 
-																s: str = <script src="{}/{}{}.js"></script>
-
-
-															attr: str = format
-															ctx: Load 
-														args: list 
-															element: Attribute 
-																value: Name 
-																	id: str = __envir__
-																	ctx: Load 
-																attr: str = targetSubDir
-																ctx: Load 
-															element: Name 
-																id: str = filePrename
-																ctx: Load 
-															element: Name 
-																id: str = miniInfix
-																ctx: Load 
-														keywords: list 
-												keywords: list 
-										element: Expr 
-											value: Call 
-												func: Attribute 
-													value: Name 
-														id: str = aFile
-														ctx: Load 
-													attr: str = write
-													ctx: Load 
-												args: list 
 													element: Str 
 														s: str = <b>Status:</b>
 
@@ -479,13 +447,23 @@ file: Module
 													element: Call 
 														func: Attribute 
 															value: Str 
-																s: str = <script>{} ();</script>
+																s: str = <script src="{}/{}{}.js"></script>
+
 
 															attr: str = format
 															ctx: Load 
 														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = __envir__
+																	ctx: Load 
+																attr: str = targetSubDir
+																ctx: Load 
 															element: Name 
 																id: str = filePrename
+																ctx: Load 
+															element: Name 
+																id: str = miniInfix
 																ctx: Load 
 														keywords: list 
 												keywords: list 

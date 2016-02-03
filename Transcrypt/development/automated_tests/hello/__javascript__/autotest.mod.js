@@ -9,7 +9,7 @@
 		autoTester.run (testlet0, 'testlet0');
 		autoTester.run (testlet1, 'testlet1');
 		autoTester.done ();
-		//<all>
+		__pragma__ ('<all>')
 		__all__.autoTester = autoTester;
-		//</all>
+		__pragma__ ('</all>')
 	}) ();

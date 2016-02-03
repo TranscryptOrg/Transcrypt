@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Special facilities &mdash; Transcrypt 3.5.63 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.5.63',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Transcrypt 3.5.63 documentation" href="index.html" />
+    <link rel="next" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" />
+    <link rel="prev" title="2. Installation and command line switches" href="installation_use.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Installation and command line switches"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.63 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="special-facilities">
+<h1>3. Special facilities<a class="headerlink" href="#special-facilities" title="Permalink to this headline">¶</a></h1>
+<p>Transcrypt has some special facilities. To be able to use them on the desktop as well, import them from <em>org.transcrypt.stubs.browser</em>.</p>
+<div class="section" id="pragma-kwargs-and-pragma-nokwargs">
+<h2>3.1. __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)<a class="headerlink" href="#pragma-kwargs-and-pragma-nokwargs" title="Permalink to this headline">¶</a></h2>
+<p>While it&#8217;s possible to compile with the -k switch, allowing keyword arguments in all flavors supported by Python 3.5, this disadvised, as it leads to bloated code. It is better to use the &#8216;kwargs&#8217; and &#8216;nokwargs&#8217; pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You&#8217;ll find an example of how to use these pragma&#8217;s in the <a class="reference internal" href="supported_constructs.html#autotest-arguments"><span>arguments autotest</span></a>. You can see them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma&#8217;s are ignored.</p>
+</div>
+<div class="section" id="console-log-and-window-alert">
+<h2>3.2. console.log and window.alert<a class="headerlink" href="#console-log-and-window-alert" title="Permalink to this headline">¶</a></h2>
+<p>These functions are available of course in the browser, but also from the command prompt, since they are emulated in <em>org.transcrypt.stubs.browser</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Special facilities</a><ul>
+<li><a class="reference internal" href="#pragma-kwargs-and-pragma-nokwargs">3.1. __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)</a></li>
+<li><a class="reference internal" href="#console-log-and-window-alert">3.2. console.log and window.alert</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation_use.html"
+                        title="previous chapter">2. Installation and command line switches</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="supported_constructs.html"
+                        title="next chapter">4. Systematic code examples: a guided tour of Transcrypt</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/special_facilities.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Installation and command line switches"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.63 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

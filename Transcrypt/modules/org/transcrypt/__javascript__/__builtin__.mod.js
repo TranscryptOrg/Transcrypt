@@ -92,7 +92,10 @@
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
 	
-	var int = {__name__: 'int'}
+	var int = function (aNumber) {
+		return aNumber | 0;
+	}
+	int.__name__ = 'int';
 	__all__.int = int;
 	
 	var float = {__name__:'float'}

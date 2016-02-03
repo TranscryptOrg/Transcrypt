@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-01 11:58:39
+// Transcrypt'ed from Python, 2016-02-03 14:04:52
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.56';
+							self.transpilerVersion = '3.5.63';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -1892,14 +1892,13 @@ function autotest () {
 								var minified = __iter0__ [__index0__];
 								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.write ('<b>Status:</b>\n');
 								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
 								aFile.write ('<b>Reference output:</b>\n');
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
 								aFile.write ('<b>Test output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script>{} ();</script>\n'.format (filePrename));
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
 						});},
@@ -2236,4 +2235,4 @@ function autotest () {
 	}) ();
 	return __all__;
 }
-window ['autotest'] = autotest;
+window ['autotest'] = autotest ();

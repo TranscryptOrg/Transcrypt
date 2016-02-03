@@ -129,7 +129,7 @@ class Program:
 			self.moduleDict [self.mainModuleName].targetCode +
 			'	return __all__;\n' +
 			'}\n' +
-			'window [\'{0}\'] = {0};\n'.format (self.mainModuleName)
+			'window [\'{0}\'] = {0} ();\n'.format (self.mainModuleName)
 		)	
 		
 		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, __base__.__envir__.targetSubDir), self.mainModuleName)

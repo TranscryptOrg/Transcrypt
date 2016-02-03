@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-01 12:10:03
+// Transcrypt'ed from Python, 2016-02-03 13:29:07
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '0.0.56';
+							self.transpilerVersion = '3.5.63';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -16129,4 +16129,4 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 	}) ();
 	return __all__;
 }
-window ['pong'] = pong;
+window ['pong'] = pong ();

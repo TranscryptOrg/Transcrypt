@@ -8,9 +8,9 @@
 						autoTester.check ('hello');
 						autoTester.check ('world');
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

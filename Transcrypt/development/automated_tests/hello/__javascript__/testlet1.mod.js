@@ -8,9 +8,9 @@
 						autoTester.check ('goodbye');
 						autoTester.check ('moon');
 					};
-					//<all>
+					__pragma__ ('<all>')
 					__all__.run = run;
-					//</all>
+					__pragma__ ('</all>')
 				}
 			}
 		}

@@ -43,14 +43,13 @@
 								var minified = __iter0__ [__index0__];
 								var miniInfix = (minified ? '.min' : '');
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.write ('<b>Status:</b>\n');
 								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
 								aFile.write ('<b>Reference output:</b>\n');
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
 								aFile.write ('<b>Test output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script>{} ();</script>\n'.format (filePrename));
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
 						});},
