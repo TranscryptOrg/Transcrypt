@@ -29,7 +29,7 @@
 							return args [0] * args [1] + 100 * z;})));
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}

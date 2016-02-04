@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-03 15:51:56
+// Transcrypt'ed from Python, 2016-02-04 17:21:04
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,14 +133,14 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.63';
+							self.transpilerVersion = '3.5.64';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
-					__all__.__Envir__ = __Envir__;
-					__all__.__envir__ = __envir__;
+						__all__.__Envir__ = __Envir__;
+						__all__.__envir__ = __envir__;
 					__pragma__ ('</all>')
 				}
 			}
@@ -249,9 +249,9 @@ function hello () {
 						return result;
 					};
 					__pragma__ ('<all>')
-					__all__.Exception = Exception;
-					__all__.sort = sort;
-					__all__.sorted = sorted;
+						__all__.Exception = Exception;
+						__all__.sort = sort;
+						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
 			}
@@ -811,27 +811,62 @@ function hello () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
+	__nest__ (
+		__all__,
+		'itertools', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var chain = function () {
+						var args = [] .slice.apply (arguments);
+						var result = [];
+						for (var index = 0; index < args.length; index++) {
+							result = result.concat (args [index]);
+						}
+						return result;
+					}
+					//<all>
+					__all__.chain = chain;
+					//</all>
+				}
+			}
+		}
+	);
 	(function () {
+		var chain = __init__ (__world__.itertools).chain;
 		var SolarSystem = __class__ ('SolarSystem', [object], {
 			get __init__ () {return __get__ (this, function (self) {
-				self.planetIndex = 3;
-				self.explainDistance = true;
+				self.lineIndex = 0;
 			});},
 			get greet () {return __get__ (this, function (self) {
-				self.planetIndex = int (Math.random () * len (self.planets));
-				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planets [self.planetIndex]);
+				self.planet = self.planets [int (Math.random () * len (self.planets))];
+				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planet [0]);
+				self.explain ();
 			});},
 			get explain () {return __get__ (this, function (self) {
-				document.getElementById ('explain').innerHTML = (self.explainDistance ? '{} is planet nr. {} counting from the sun'.format (self.planets [self.planetIndex], self.planetIndex + 1) : '{} is a {} planet'.format (self.planets [self.planetIndex], self.kind [self.planetIndex]));
-				self.explainDistance = !self.explainDistance;
+				document.getElementById ('explain').innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
+				self.lineIndex = (self.lineIndex + 1) % 3;
 			});}
 		});
-		SolarSystem.planets = list (['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']);
-		SolarSystem.kind = list (['hot', 'sulphurous', 'fertile', 'reddish', 'stormy', 'ringed', 'cold', 'very cold']);
+		SolarSystem.planets = function () {
+			var __accu0__ = [];
+			var __iter0__ = enumerate (tuple (list ([tuple (list (['Mercury', 'hot', 2240])), tuple (list (['Venus', 'sulphurous', 6052])), tuple (list (['Earth', 'fertile', 6378])), tuple (list (['Mars', 'reddish', 3397])), tuple (list (['Jupiter', 'stormy', 71492])), tuple (list (['Saturn', 'ringed', 60268])), tuple (list (['Uranus', 'cold', 25559])), tuple (list (['Neptune', 'very cold', 24766]))])));
+			for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+				var __left0__ = __iter0__ [__index0__];
+				var index = __left0__ [0];
+				var planet = __left0__ [1];
+				__accu0__.append (chain (planet, tuple (list ([index + 1]))));
+			}
+			return __accu0__;
+		} ();
+		SolarSystem.lines = tuple (list (['{} is a {} planet', 'The radius of {} is {} km', '{} is planet nr. {} counting from the sun']));
 		var solarSystem = SolarSystem ();
+		__pragma__ ('<use> \
+			itertools \
+		</use>')
 		__pragma__ ('<all>')
-		__all__.SolarSystem = SolarSystem;
-		__all__.solarSystem = solarSystem;
+			__all__.SolarSystem = SolarSystem;
+			__all__.solarSystem = solarSystem;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

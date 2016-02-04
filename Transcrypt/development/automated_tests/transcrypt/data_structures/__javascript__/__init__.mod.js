@@ -35,7 +35,7 @@
 						autoTester.check (len (emptySet));
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}

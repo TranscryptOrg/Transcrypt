@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-03 13:29:07
+// Transcrypt'ed from Python, 2016-02-04 17:50:00
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,14 +133,14 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.63';
+							self.transpilerVersion = '3.5.64';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
-					__all__.__Envir__ = __Envir__;
-					__all__.__envir__ = __envir__;
+						__all__.__Envir__ = __Envir__;
+						__all__.__envir__ = __envir__;
 					__pragma__ ('</all>')
 				}
 			}
@@ -249,9 +249,9 @@ function pong () {
 						return result;
 					};
 					__pragma__ ('<all>')
-					__all__.Exception = Exception;
-					__all__.sort = sort;
-					__all__.sorted = sorted;
+						__all__.Exception = Exception;
+						__all__.sort = sort;
+						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
 			}
@@ -351,7 +351,10 @@ function pong () {
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
 	
-	var int = {__name__: 'int'}
+	var int = function (aNumber) {
+		return aNumber | 0;
+	}
+	int.__name__ = 'int';
 	__all__.int = int;
 	
 	var float = {__name__:'float'}
@@ -16111,20 +16114,23 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 			});}
 		});
 		var game = Game ();
+		__pragma__ ('<use> \
+			com.fabricjs \
+		</use>')
 		__pragma__ ('<all>')
-		__all__.Attribute = Attribute;
-		__all__.Ball = Ball;
-		__all__.Game = Game;
-		__all__.Paddle = Paddle;
-		__all__.Scoreboard = Scoreboard;
-		__all__.Sprite = Sprite;
-		__all__.enter = enter;
-		__all__.esc = esc;
-		__all__.fieldHeight = fieldHeight;
-		__all__.game = game;
-		__all__.orthoHeight = orthoHeight;
-		__all__.orthoWidth = orthoWidth;
-		__all__.space = space;
+			__all__.Attribute = Attribute;
+			__all__.Ball = Ball;
+			__all__.Game = Game;
+			__all__.Paddle = Paddle;
+			__all__.Scoreboard = Scoreboard;
+			__all__.Sprite = Sprite;
+			__all__.enter = enter;
+			__all__.esc = esc;
+			__all__.fieldHeight = fieldHeight;
+			__all__.game = game;
+			__all__.orthoHeight = orthoHeight;
+			__all__.orthoWidth = orthoWidth;
+			__all__.space = space;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

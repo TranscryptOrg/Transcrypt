@@ -6,7 +6,7 @@
 				__init__: function (__all__) {
 					var e = 2.74;
 					__pragma__ ('<all>')
-					__all__.e = e;
+						__all__.e = e;
 					__pragma__ ('</all>')
 				}
 			}

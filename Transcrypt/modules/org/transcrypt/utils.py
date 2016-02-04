@@ -1,5 +1,6 @@
 import os
 import argparse
+import inspect
 
 debug = False
 
@@ -39,7 +40,7 @@ class Error (Exception):
 	def __init__ (self, moduleName = '', lineNr = 0, message = ''):
 		self.moduleName = moduleName
 		self.lineNr = lineNr
-		self.message = message		
+		self.message = message	
 
 	# First one encountered counts, for all fields, because it's closest to the error
 	# One error at a time, just like Python, clear and simpole
@@ -69,7 +70,19 @@ class Error (Exception):
 def enhanceException (exception, **kwargs):
 	if isinstance (exception, Error):
 		exception.set (**kwargs)
-		raise exception
+		result = exception
 	else:
-		raise Error (**kwargs)
-		
+		result = Error (**kwargs)
+	
+	if debug:
+		print ('''
+	Exception of class {0} enhanced at:
+		file: {1}
+		function: {3}
+		line: {2}
+		context: {4}
+		kwargs: {5}
+		result: {6}
+	'''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
+
+	raise result

@@ -10,9 +10,9 @@
 						return 200;
 					};
 					__pragma__ ('<all>')
-					__all__.mod3GetTwoHundred = mod3GetTwoHundred;
-					__all__.mod3Hundred = mod3Hundred;
-					__all__.x = x;
+						__all__.mod3GetTwoHundred = mod3GetTwoHundred;
+						__all__.mod3Hundred = mod3Hundred;
+						__all__.x = x;
 					__pragma__ ('</all>')
 				}
 			}

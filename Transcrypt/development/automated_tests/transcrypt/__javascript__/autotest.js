@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-03 14:04:52
+// Transcrypt'ed from Python, 2016-02-04 17:52:53
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,14 +133,14 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.63';
+							self.transpilerVersion = '3.5.64';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
-					__all__.__Envir__ = __Envir__;
-					__all__.__envir__ = __envir__;
+						__all__.__Envir__ = __Envir__;
+						__all__.__envir__ = __envir__;
 					__pragma__ ('</all>')
 				}
 			}
@@ -249,9 +249,9 @@ function autotest () {
 						return result;
 					};
 					__pragma__ ('<all>')
-					__all__.Exception = Exception;
-					__all__.sort = sort;
-					__all__.sorted = sorted;
+						__all__.Exception = Exception;
+						__all__.sort = sort;
+						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
 			}
@@ -351,7 +351,10 @@ function autotest () {
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
 	
-	var int = {__name__: 'int'}
+	var int = function (aNumber) {
+		return aNumber | 0;
+	}
+	int.__name__ = 'int';
 	__all__.int = int;
 	
 	var float = {__name__:'float'}
@@ -1005,9 +1008,9 @@ function autotest () {
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.B = B;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.B = B;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1080,7 +1083,7 @@ function autotest () {
 						show3 ('copy');
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1137,8 +1140,8 @@ function autotest () {
 						autoTester.check (odd, noDuplicates);
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
-					__all__.run = run;
+						__all__.f = f;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1260,7 +1263,7 @@ function autotest () {
 						}
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1303,7 +1306,7 @@ function autotest () {
 						autoTester.check (len (emptySet));
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1413,12 +1416,12 @@ function autotest () {
 						autoTester.check (666);
 					};
 					__pragma__ ('<all>')
-					__all__.Ex1 = Ex1;
-					__all__.Ex2 = Ex2;
-					__all__.Ex3 = Ex3;
-					__all__.run = run;
-					__all__.test1 = test1;
-					__all__.test2 = test2;
+						__all__.Ex1 = Ex1;
+						__all__.Ex2 = Ex2;
+						__all__.Ex3 = Ex3;
+						__all__.run = run;
+						__all__.test1 = test1;
+						__all__.test2 = test2;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1453,7 +1456,7 @@ function autotest () {
 						autoTester.check (b);
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1492,7 +1495,7 @@ function autotest () {
 						autoTester.check (aList);
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1550,7 +1553,7 @@ function autotest () {
 							return args [0] * args [1] + 100 * z;})));
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1644,7 +1647,7 @@ function autotest () {
 						autoTester.check (scopeTest);
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1702,11 +1705,21 @@ function autotest () {
 						autoTester.check (mod3GetTwoHundred ());
 						autoTester.check (A (123.321).f ());
 					};
+					__pragma__ ('<use> \
+						modules.mod1 \
+						modules.mod1.mod11 \
+						modules.mod1.mod11.mod111 \
+						modules.mod1.mod11.mod112 \
+						modules.mod2 \
+						modules.mod2.mod21 \
+						modules.mod2.mod22 \
+						modules.mod3 \
+					</use>')
 					__pragma__ ('<all>')
-					__all__.a = a;
-					__all__.f = f;
-					__all__.pi = pi;
-					__all__.run = run;
+						__all__.a = a;
+						__all__.f = f;
+						__all__.pi = pi;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1720,7 +1733,7 @@ function autotest () {
 				__init__: function (__all__) {
 					var pi = 3.1415693588;
 					__pragma__ ('<all>')
-					__all__.pi = pi;
+						__all__.pi = pi;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1734,7 +1747,7 @@ function autotest () {
 				__init__: function (__all__) {
 					var e = 2.74;
 					__pragma__ ('<all>')
-					__all__.e = e;
+						__all__.e = e;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1755,7 +1768,7 @@ function autotest () {
 						});}
 					});
 					__pragma__ ('<all>')
-					__all__.A = A;
+						__all__.A = A;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1771,7 +1784,7 @@ function autotest () {
 						return "Paris, c'est la vie\n";
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1787,7 +1800,7 @@ function autotest () {
 						return 2 * p;
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1803,7 +1816,7 @@ function autotest () {
 						return 'London is the town for me\n';
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1821,7 +1834,7 @@ function autotest () {
 						});}
 					});
 					__pragma__ ('<all>')
-					__all__.B = B;
+						__all__.B = B;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1839,9 +1852,9 @@ function autotest () {
 						return 200;
 					};
 					__pragma__ ('<all>')
-					__all__.mod3GetTwoHundred = mod3GetTwoHundred;
-					__all__.mod3Hundred = mod3Hundred;
-					__all__.x = x;
+						__all__.mod3GetTwoHundred = mod3GetTwoHundred;
+						__all__.mod3Hundred = mod3Hundred;
+						__all__.x = x;
 					__pragma__ ('</all>')
 				}
 			}
@@ -1946,12 +1959,15 @@ function autotest () {
 							}
 						});}
 					});
+					__pragma__ ('<use> \
+						itertools \
+					</use>')
 					__pragma__ ('<all>')
-					__all__.AutoTester = AutoTester;
-					__all__.errorColor = errorColor;
-					__all__.highlightColor = highlightColor;
-					__all__.okColor = okColor;
-					__all__.testletNameColor = testletNameColor;
+						__all__.AutoTester = AutoTester;
+						__all__.errorColor = errorColor;
+						__all__.highlightColor = highlightColor;
+						__all__.okColor = okColor;
+						__all__.testletNameColor = testletNameColor;
 					__pragma__ ('</all>')
 				}
 			}
@@ -2051,10 +2067,10 @@ function autotest () {
 						autoTester.check (a1.x, b.z, c.z, c.w);
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.B = B;
-					__all__.C = C;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.B = B;
+						__all__.C = C;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -2115,9 +2131,9 @@ function autotest () {
 						autoTester.check (f ());
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.a = a;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.a = a;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -2176,7 +2192,7 @@ function autotest () {
 						autoTester.check (k, l, m, n, o, p);
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -2229,8 +2245,25 @@ function autotest () {
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
+		__pragma__ ('<use> \
+			arguments \
+			classes \
+			conditional_expressions \
+			control_structures \
+			data_structures \
+			exceptions \
+			general_functions \
+			indices_and_slices \
+			lambda_functions \
+			list_comprehensions \
+			modules \
+			org.transcrypt.autotester \
+			properties \
+			simple_and_augmented_assignment \
+			tuple_assignment \
+		</use>')
 		__pragma__ ('<all>')
-		__all__.autoTester = autoTester;
+			__all__.autoTester = autoTester;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

@@ -195,9 +195,9 @@
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.B = B;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.B = B;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}

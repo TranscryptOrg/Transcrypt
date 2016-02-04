@@ -10,7 +10,7 @@
 						});}
 					});
 					__pragma__ ('<all>')
-					__all__.B = B;
+						__all__.B = B;
 					__pragma__ ('</all>')
 				}
 			}

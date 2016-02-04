@@ -319,19 +319,22 @@
 			});}
 		});
 		var game = Game ();
+		__pragma__ ('<use> \
+			com.fabricjs \
+		</use>')
 		__pragma__ ('<all>')
-		__all__.Attribute = Attribute;
-		__all__.Ball = Ball;
-		__all__.Game = Game;
-		__all__.Paddle = Paddle;
-		__all__.Scoreboard = Scoreboard;
-		__all__.Sprite = Sprite;
-		__all__.enter = enter;
-		__all__.esc = esc;
-		__all__.fieldHeight = fieldHeight;
-		__all__.game = game;
-		__all__.orthoHeight = orthoHeight;
-		__all__.orthoWidth = orthoWidth;
-		__all__.space = space;
+			__all__.Attribute = Attribute;
+			__all__.Ball = Ball;
+			__all__.Game = Game;
+			__all__.Paddle = Paddle;
+			__all__.Scoreboard = Scoreboard;
+			__all__.Sprite = Sprite;
+			__all__.enter = enter;
+			__all__.esc = esc;
+			__all__.fieldHeight = fieldHeight;
+			__all__.game = game;
+			__all__.orthoHeight = orthoHeight;
+			__all__.orthoWidth = orthoWidth;
+			__all__.space = space;
 		__pragma__ ('</all>')
 	}) ();

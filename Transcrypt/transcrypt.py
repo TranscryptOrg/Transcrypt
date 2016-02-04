@@ -60,7 +60,7 @@ else:
 	try:
 		compiler.Program ([programDir, modulesDir])
 	except utils.Error as error:
-		utils.log (True, '\n{}'.format (error))
+		utils.log (True, '\n{}\n'.format (error))
 		
 		# Don't log anything else, even in verbose mode, since this would only be confusing
 		if utils.debug:

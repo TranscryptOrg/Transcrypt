@@ -97,12 +97,15 @@
 							}
 						});}
 					});
+					__pragma__ ('<use> \
+						itertools \
+					</use>')
 					__pragma__ ('<all>')
-					__all__.AutoTester = AutoTester;
-					__all__.errorColor = errorColor;
-					__all__.highlightColor = highlightColor;
-					__all__.okColor = okColor;
-					__all__.testletNameColor = testletNameColor;
+						__all__.AutoTester = AutoTester;
+						__all__.errorColor = errorColor;
+						__all__.highlightColor = highlightColor;
+						__all__.okColor = okColor;
+						__all__.testletNameColor = testletNameColor;
 					__pragma__ ('</all>')
 				}
 			}

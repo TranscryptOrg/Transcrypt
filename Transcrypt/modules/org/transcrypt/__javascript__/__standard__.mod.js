@@ -101,9 +101,9 @@
 						return result;
 					};
 					__pragma__ ('<all>')
-					__all__.Exception = Exception;
-					__all__.sort = sort;
-					__all__.sorted = sorted;
+						__all__.Exception = Exception;
+						__all__.sort = sort;
+						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
 			}

@@ -102,12 +102,12 @@
 						autoTester.check (666);
 					};
 					__pragma__ ('<all>')
-					__all__.Ex1 = Ex1;
-					__all__.Ex2 = Ex2;
-					__all__.Ex3 = Ex3;
-					__all__.run = run;
-					__all__.test1 = test1;
-					__all__.test2 = test2;
+						__all__.Ex1 = Ex1;
+						__all__.Ex2 = Ex2;
+						__all__.Ex3 = Ex3;
+						__all__.run = run;
+						__all__.test1 = test1;
+						__all__.test2 = test2;
 					__pragma__ ('</all>')
 				}
 			}

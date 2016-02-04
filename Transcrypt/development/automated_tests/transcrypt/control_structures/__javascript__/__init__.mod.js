@@ -114,7 +114,7 @@
 						}
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}

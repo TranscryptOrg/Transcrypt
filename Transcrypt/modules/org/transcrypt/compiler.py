@@ -15,9 +15,9 @@
 import os
 import sys
 import ast
-import traceback
 import datetime
 import shutil
+import traceback
 
 from org.transcrypt import __base__, utils, minify
 
@@ -106,9 +106,13 @@ class Program:
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
 					
 		try:
-			Module (self, ModuleMetadata (self, self.mainModuleName))	# Will trigger recursive compilation
+			moduleMetadata = ModuleMetadata (self, self.mainModuleName)
+			Module (self, moduleMetadata)	# Will trigger recursive compilation
 		except Exception as exception:
-			utils.enhanceException (exception, message = 'Error: can\'t compile {}\n'.format (self.sourcePath))
+			utils.enhanceException (
+				exception,
+				message = str (exception)
+			)
 			
 		# Join all non-inline modules
 		normallyImportedTargetCode = ''.join ([
@@ -188,24 +192,45 @@ class Module:
 
 	def extract (self):
 		utils.log (False, 'Extracting metadata from: {}\n', self.metadata.targetPath)
-		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
+				
+		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
+		self.use = sorted (set ([
+			word
+			for word in useFragment.replace ('__pragma__', ' ') .replace ('(\'', ' ') .replace ('\')', ' ') .replace ('\\', ' ') .split ()
+			if not word.startswith ('<')
+		]))
+		for moduleName in self.use:
+			self.program.provide (moduleName)
 		
+		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
 		self.all = sorted (set ([
 			word [1 : ]
 			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
 			if word.startswith ('.')
-		])) # So skip the words 'var' and 'return'
-			
+		]))
+		
 	def parse (self):
-		utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
-		
-		with open (self.metadata.sourcePath) as sourceFile:
-			self.sourceCode = sourceFile.read ()
+		try:
+			utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
 			
-		self.parseTree = None
-		
-		if not self.parseTree:
+			with open (self.metadata.sourcePath) as sourceFile:
+				self.sourceCode = sourceFile.read ()
+				
 			self.parseTree = ast.parse (self.sourceCode)
+		except SyntaxError as syntaxError:
+			utils.enhanceException (
+				syntaxError,
+				moduleName = self.metadata.name,
+				lineNr = syntaxError.lineno,
+				message = (
+					'{} <SYNTAX FAULT> {}'.format (
+						syntaxError.text [:syntaxError.offset].lstrip (),
+						syntaxError.text [syntaxError.offset:].rstrip ()
+					)
+					if syntaxError.text else
+					syntaxError.args [0]
+				)
+			)
 		
 	def dump (self):
 		utils.log (False, 'Dumping syntax tree of module: {}\n', self.metadata.sourcePath)
@@ -238,13 +263,14 @@ class Module:
 class Generator (ast.NodeVisitor):
 	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 
-	def __init__ (self, module):
+	def __init__ (self, module):	
 		self.module = module
 		
 		self.targetFragments = []		
 		self.skipSemiNew = False
 		self.indentLevel = 0
 		self.scopes = []
+		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
 		self.tempIndices = {}
@@ -295,7 +321,7 @@ class Generator (ast.NodeVisitor):
 		try:
 			self.visit (module.parseTree)
 		except Exception as exception:
-			utils.enhanceException (exception, moduleName = self.module.metadata.name)
+			utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr)
 			
 		if self.tempIndices:
 			raise utils.Error (
@@ -362,7 +388,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (', ' if blank else ',')
 			
 	def emitBody (self, body):
-		for stmt in body:		
+		for stmt in body:
 			self.visit (stmt)
 			if self.skipSemiNew:	# No imports here, but just to be sure for the future
 				self.skipSemiNew = False
@@ -398,6 +424,18 @@ class Generator (ast.NodeVisitor):
 					
 		codeWithIncludes = code.format (*includeCodes)
 		self.emit ('\n{}\n', codeWithIncludes)
+		
+	def useModule (self, name):
+		result = self.module.program.provide (name)	# Must be done first because it can generate a healthy exception
+		self.use.add (name)							# Must not be done if the healthy exception occurs
+		return result
+		
+	def visit (self, node):
+		try:
+			self.lineNr = node.lineno
+		except:
+			pass
+		ast.NodeVisitor.visit (self, node)
 		
 	def visit_arg (self, node):
 		self.emit (node.arg)
@@ -554,7 +592,7 @@ class Generator (ast.NodeVisitor):
 							
 					self.emit (')')
 				except Exception as exception:
-					utils.enhanceException (exception, lineNr = target.lineno, message = 'Invalid LHS slice')	
+					utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid LHS slice')	
 			else:
 				if isPropertyAssign and not target.id == self.getTemp ('left'):
 					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .name, target.id))
@@ -801,7 +839,7 @@ class Generator (ast.NodeVisitor):
 					self.emitComma (index)
 					self.visit_Name (expr)
 				except Exception as exception:
-					utils.enhanceException (moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Invalid base class')
+					utils.enhanceException (moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Invalid base class')
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
@@ -970,10 +1008,9 @@ class Generator (ast.NodeVisitor):
 		
 		for index, alias in enumerate (names):
 			try:
-				self.module.program.provide (alias.name)
-
+				self.useModule (alias.name)
 			except Exception as exception:
-				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
+				utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Can\'t import module \'{}\''.format (alias.name))
 			
 			if alias.asname:
 				self.emit ('var {} =  __init__ (__world__.{})', self.filterId (alias.asname), self.filterId (alias.name))
@@ -996,25 +1033,26 @@ class Generator (ast.NodeVisitor):
 		try:			
 			# N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
 			for index, alias in enumerate (node.names):
-				if alias.name == '*':								# * Never refers to modules, only to entities in modules
+				if alias.name == '*':											# * Never refers to modules, only to entities in modules
 					if len (node.names) > 1:
 						raise Error (moduleName = module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
 						
-					module = self.module.program.provide (node.module)
+					module = self.useModule (node.module)
+
 					for index, name in enumerate (module.all):				
 						self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (name), self.filterId (node.module))
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 				else:
-					try:											# Try if alias.name denotes a module				
-						self.module.program.provide ('{}.{}'.format (self.filterId (node.module), self.filterId (alias.name)))
+					try:														# Try if alias.name denotes a module
+						self.useModule ('{}.{}'.format (node.module, alias.name))
 												
 						if alias.asname:
 							self.emit ('var {} = __init__ (__world__.{}.{})', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
 						else:
 							self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))						
-					except:											# If it doesn't it denotes an entity inside a module
-						self.module.program.provide (node.module)
+					except:														# If it doesn't it denotes an entity inside a module
+						self.useModule (node.module)
 						
 						if alias.asname:
 							self.emit ('var {} = __init__ (__world__.{}).{}', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
@@ -1023,7 +1061,7 @@ class Generator (ast.NodeVisitor):
 					if index < len (node.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:
-			utils.enhanceException (exception, lineNr = node.lineno, message = 'Can\'t import from module \'{}\''.format (node.module))
+			utils.enhanceException (exception, lineNr = self.lineNr, message = 'Can\'t import from module \'{}\''.format (node.module))
 			
 	def visit_Index (self, node):
 		self.emit (' [')
@@ -1089,6 +1127,7 @@ class Generator (ast.NodeVisitor):
 			)
 
 		self.emit ('function () {{\n')
+		self.inscope (ast.FunctionDef ())
 		self.indent ()
 		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
 		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
@@ -1096,6 +1135,7 @@ class Generator (ast.NodeVisitor):
 		self.prevTemp ('accu')
 		self.dedent ()
 		self.skipSemiNew = False	# Was still True since the outer for wasn't visited as part of a Body 
+		self.descope ()
 		self.emit ('}} ()')
 		
 	def visit_Module (self, node):
@@ -1120,12 +1160,24 @@ class Generator (ast.NodeVisitor):
 		importHeadsLevel = self.indentLevel
 		
 		self.emitBody (node.body)
+			
+		if self.use:
+			self.use = sorted (self.use)
+			self.emit ('__pragma__ (\'<use> \\\n')	# Only the last occurence of <use> and </use> are special.
+			self.indent ()
+			for name in self.use:
+				self.emit ('{} \\\n', name)
+			self.dedent ()
+			self.emit ('</use>\')\n')
 		
-		self.all = sorted (self.all)
-		self.emit ('__pragma__ (\'<all>\')\n')	# Only the last occurence of <all> and </all> are special.
-		for name in self.all:
-			self.emit ('__all__.{0} = {0};\n', name)
-		self.emit ('__pragma__ (\'</all>\')\n')
+		if self.all:
+			self.all = sorted (self.all)
+			self.emit ('__pragma__ (\'<all>\')\n')	# Only the last occurence of <all> and </all> are special.
+			self.indent ()
+			for name in self.all:
+				self.emit ('__all__.{0} = {0};\n', name)
+			self.dedent ()
+			self.emit ('__pragma__ (\'</all>\')\n')
 		
 		self.dedent ()
 
@@ -1224,7 +1276,7 @@ class Generator (ast.NodeVisitor):
 					
 				self.emit (')')
 			except Exception as exception:
-				utils.enhanceException (exception, lineNr = node.lineno, message = 'Invalid RHS slice')	
+				utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid RHS slice')	
 		else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)
 			self.visit (node.slice)
 			

@@ -8,7 +8,7 @@
 						return 'London is the town for me\n';
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}

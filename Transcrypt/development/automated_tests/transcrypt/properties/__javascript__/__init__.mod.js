@@ -92,10 +92,10 @@
 						autoTester.check (a1.x, b.z, c.z, c.w);
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.B = B;
-					__all__.C = C;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.B = B;
+						__all__.C = C;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}

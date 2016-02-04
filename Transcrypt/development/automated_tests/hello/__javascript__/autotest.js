@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-03 14:01:51
+// Transcrypt'ed from Python, 2016-02-04 17:52:26
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,14 +133,14 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.63';
+							self.transpilerVersion = '3.5.64';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
-					__all__.__Envir__ = __Envir__;
-					__all__.__envir__ = __envir__;
+						__all__.__Envir__ = __Envir__;
+						__all__.__envir__ = __envir__;
 					__pragma__ ('</all>')
 				}
 			}
@@ -249,9 +249,9 @@ function autotest () {
 						return result;
 					};
 					__pragma__ ('<all>')
-					__all__.Exception = Exception;
-					__all__.sort = sort;
-					__all__.sorted = sorted;
+						__all__.Exception = Exception;
+						__all__.sort = sort;
+						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
 			}
@@ -351,7 +351,10 @@ function autotest () {
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
 	
-	var int = {__name__: 'int'}
+	var int = function (aNumber) {
+		return aNumber | 0;
+	}
+	int.__name__ = 'int';
 	__all__.int = int;
 	
 	var float = {__name__:'float'}
@@ -928,12 +931,15 @@ function autotest () {
 							}
 						});}
 					});
+					__pragma__ ('<use> \
+						itertools \
+					</use>')
 					__pragma__ ('<all>')
-					__all__.AutoTester = AutoTester;
-					__all__.errorColor = errorColor;
-					__all__.highlightColor = highlightColor;
-					__all__.okColor = okColor;
-					__all__.testletNameColor = testletNameColor;
+						__all__.AutoTester = AutoTester;
+						__all__.errorColor = errorColor;
+						__all__.highlightColor = highlightColor;
+						__all__.okColor = okColor;
+						__all__.testletNameColor = testletNameColor;
 					__pragma__ ('</all>')
 				}
 			}
@@ -950,7 +956,7 @@ function autotest () {
 						autoTester.check ('world');
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -967,7 +973,7 @@ function autotest () {
 						autoTester.check ('moon');
 					};
 					__pragma__ ('<all>')
-					__all__.run = run;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -984,8 +990,13 @@ function autotest () {
 		autoTester.run (testlet0, 'testlet0');
 		autoTester.run (testlet1, 'testlet1');
 		autoTester.done ();
+		__pragma__ ('<use> \
+			org.transcrypt.autotester \
+			testlet0 \
+			testlet1 \
+		</use>')
 		__pragma__ ('<all>')
-		__all__.autoTester = autoTester;
+			__all__.autoTester = autoTester;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

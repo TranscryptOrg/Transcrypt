@@ -8,7 +8,7 @@
 						return 2 * p;
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}

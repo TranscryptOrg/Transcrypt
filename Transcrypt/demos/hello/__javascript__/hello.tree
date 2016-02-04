@@ -1,5 +1,12 @@
 file: Module 
 	body: list 
+		element: ImportFrom 
+			module: str = itertools
+			names: list 
+				element: alias 
+					name: str = chain
+					asname: NoneType = None
+			level: int = 0
 		element: ClassDef 
 			name: str = SolarSystem
 			bases: list 
@@ -10,48 +17,132 @@ file: Module
 						element: Name 
 							id: str = planets
 							ctx: Store 
-					value: List 
-						elts: list 
-							element: Str 
-								s: str = Mercury
-							element: Str 
-								s: str = Venus
-							element: Str 
-								s: str = Earth
-							element: Str 
-								s: str = Mars
-							element: Str 
-								s: str = Jupiter
-							element: Str 
-								s: str = Saturn
-							element: Str 
-								s: str = Uranus
-							element: Str 
-								s: str = Neptune
-						ctx: Load 
+					value: ListComp 
+						elt: Call 
+							func: Name 
+								id: str = chain
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = planet
+									ctx: Load 
+								element: Tuple 
+									elts: list 
+										element: BinOp 
+											left: Name 
+												id: str = index
+												ctx: Load 
+											op: Add 
+											right: Num 
+												n: int = 1
+									ctx: Load 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Tuple 
+									elts: list 
+										element: Name 
+											id: str = index
+											ctx: Store 
+										element: Name 
+											id: str = planet
+											ctx: Store 
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = enumerate
+										ctx: Load 
+									args: list 
+										element: Tuple 
+											elts: list 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Mercury
+														element: Str 
+															s: str = hot
+														element: Num 
+															n: int = 2240
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Venus
+														element: Str 
+															s: str = sulphurous
+														element: Num 
+															n: int = 6052
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Earth
+														element: Str 
+															s: str = fertile
+														element: Num 
+															n: int = 6378
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Mars
+														element: Str 
+															s: str = reddish
+														element: Num 
+															n: int = 3397
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Jupiter
+														element: Str 
+															s: str = stormy
+														element: Num 
+															n: int = 71492
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Saturn
+														element: Str 
+															s: str = ringed
+														element: Num 
+															n: int = 60268
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Uranus
+														element: Str 
+															s: str = cold
+														element: Num 
+															n: int = 25559
+													ctx: Load 
+												element: Tuple 
+													elts: list 
+														element: Str 
+															s: str = Neptune
+														element: Str 
+															s: str = very cold
+														element: Num 
+															n: int = 24766
+													ctx: Load 
+											ctx: Load 
+									keywords: list 
+								ifs: list 
 				element: Assign 
 					targets: list 
 						element: Name 
-							id: str = kind
+							id: str = lines
 							ctx: Store 
-					value: List 
+					value: Tuple 
 						elts: list 
 							element: Str 
-								s: str = hot
+								s: str = {} is a {} planet
 							element: Str 
-								s: str = sulphurous
+								s: str = The radius of {} is {} km
 							element: Str 
-								s: str = fertile
-							element: Str 
-								s: str = reddish
-							element: Str 
-								s: str = stormy
-							element: Str 
-								s: str = ringed
-							element: Str 
-								s: str = cold
-							element: Str 
-								s: str = very cold
+								s: str = {} is planet nr. {} counting from the sun
 						ctx: Load 
 				element: FunctionDef 
 					name: str = __init__
@@ -72,20 +163,10 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = planetIndex
+									attr: str = lineIndex
 									ctx: Store 
 							value: Num 
-								n: int = 3
-						element: Assign 
-							targets: list 
-								element: Attribute 
-									value: Name 
-										id: str = self
-										ctx: Load 
-									attr: str = explainDistance
-									ctx: Store 
-							value: NameConstant 
-								value: bool = True
+								n: int = 0
 					decorator_list: list 
 					returns: NoneType = None
 				element: FunctionDef 
@@ -107,37 +188,46 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = planetIndex
+									attr: str = planet
 									ctx: Store 
-							value: Call 
-								func: Name 
-									id: str = int
+							value: Subscript 
+								value: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = planets
 									ctx: Load 
-								args: list 
-									element: BinOp 
-										left: Call 
-											func: Attribute 
-												value: Name 
-													id: str = Math
-													ctx: Load 
-												attr: str = random
-												ctx: Load 
-											args: list 
-											keywords: list 
-										op: Mult 
-										right: Call 
-											func: Name 
-												id: str = len
-												ctx: Load 
-											args: list 
-												element: Attribute 
-													value: Name 
-														id: str = self
+								slice: Index 
+									value: Call 
+										func: Name 
+											id: str = int
+											ctx: Load 
+										args: list 
+											element: BinOp 
+												left: Call 
+													func: Attribute 
+														value: Name 
+															id: str = Math
+															ctx: Load 
+														attr: str = random
 														ctx: Load 
-													attr: str = planets
-													ctx: Load 
-											keywords: list 
-								keywords: list 
+													args: list 
+													keywords: list 
+												op: Mult 
+												right: Call 
+													func: Name 
+														id: str = len
+														ctx: Load 
+													args: list 
+														element: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = planets
+															ctx: Load 
+													keywords: list 
+										keywords: list 
+								ctx: Load 
 						element: Assign 
 							targets: list 
 								element: Attribute 
@@ -166,16 +256,22 @@ file: Module
 											value: Name 
 												id: str = self
 												ctx: Load 
-											attr: str = planets
+											attr: str = planet
 											ctx: Load 
 										slice: Index 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = planetIndex
-												ctx: Load 
+											value: Num 
+												n: int = 0
 										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = explain
+									ctx: Load 
+								args: list 
 								keywords: list 
 					decorator_list: list 
 					returns: NoneType = None
@@ -208,100 +304,79 @@ file: Module
 										keywords: list 
 									attr: str = innerHTML
 									ctx: Store 
-							value: IfExp 
-								test: Attribute 
-									value: Name 
-										id: str = self
+							value: Call 
+								func: Attribute 
+									value: Subscript 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = lines
+											ctx: Load 
+										slice: Index 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = lineIndex
+												ctx: Load 
 										ctx: Load 
-									attr: str = explainDistance
+									attr: str = format
 									ctx: Load 
-								body: Call 
-									func: Attribute 
-										value: Str 
-											s: str = {} is planet nr. {} counting from the sun
-										attr: str = format
+								args: list 
+									element: Subscript 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = planet
+											ctx: Load 
+										slice: Index 
+											value: Num 
+												n: int = 0
 										ctx: Load 
-									args: list 
-										element: Subscript 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = planets
+									element: Subscript 
+										value: Attribute 
+											value: Name 
+												id: str = self
 												ctx: Load 
-											slice: Index 
-												value: Attribute 
+											attr: str = planet
+											ctx: Load 
+										slice: Index 
+											value: BinOp 
+												left: Attribute 
 													value: Name 
 														id: str = self
 														ctx: Load 
-													attr: str = planetIndex
+													attr: str = lineIndex
 													ctx: Load 
-											ctx: Load 
-										element: BinOp 
-											left: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = planetIndex
-												ctx: Load 
-											op: Add 
-											right: Num 
-												n: int = 1
-									keywords: list 
-								orelse: Call 
-									func: Attribute 
-										value: Str 
-											s: str = {} is a {} planet
-										attr: str = format
+												op: Add 
+												right: Num 
+													n: int = 1
 										ctx: Load 
-									args: list 
-										element: Subscript 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = planets
-												ctx: Load 
-											slice: Index 
-												value: Attribute 
-													value: Name 
-														id: str = self
-														ctx: Load 
-													attr: str = planetIndex
-													ctx: Load 
-											ctx: Load 
-										element: Subscript 
-											value: Attribute 
-												value: Name 
-													id: str = self
-													ctx: Load 
-												attr: str = kind
-												ctx: Load 
-											slice: Index 
-												value: Attribute 
-													value: Name 
-														id: str = self
-														ctx: Load 
-													attr: str = planetIndex
-													ctx: Load 
-											ctx: Load 
-									keywords: list 
+								keywords: list 
 						element: Assign 
 							targets: list 
 								element: Attribute 
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = explainDistance
+									attr: str = lineIndex
 									ctx: Store 
-							value: UnaryOp 
-								op: Not 
-								operand: Attribute 
-									value: Name 
-										id: str = self
+							value: BinOp 
+								left: BinOp 
+									left: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = lineIndex
 										ctx: Load 
-									attr: str = explainDistance
-									ctx: Load 
+									op: Add 
+									right: Num 
+										n: int = 1
+								op: Mod 
+								right: Num 
+									n: int = 3
 					decorator_list: list 
 					returns: NoneType = None
 			decorator_list: list 

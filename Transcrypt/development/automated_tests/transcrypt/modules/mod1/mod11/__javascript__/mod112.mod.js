@@ -8,7 +8,7 @@
 						return "Paris, c'est la vie\n";
 					};
 					__pragma__ ('<all>')
-					__all__.f = f;
+						__all__.f = f;
 					__pragma__ ('</all>')
 				}
 			}

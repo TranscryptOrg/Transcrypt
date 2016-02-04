@@ -53,9 +53,9 @@
 						autoTester.check (f ());
 					};
 					__pragma__ ('<all>')
-					__all__.A = A;
-					__all__.a = a;
-					__all__.run = run;
+						__all__.A = A;
+						__all__.a = a;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
