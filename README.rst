@@ -50,6 +50,7 @@ Status
 What's new
 ==========
 
+- Error reporting improved, module import bug fixed (-b was needed first)
 - Docs improved, 'hello' example added showing HTML - JavaScript - Python cooperation in a nutshell
 - Early adopter request added
 - Properties, including tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
