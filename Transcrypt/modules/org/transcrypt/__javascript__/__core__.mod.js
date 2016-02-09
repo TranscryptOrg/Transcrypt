@@ -47,7 +47,7 @@
 	// Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
 	var __get__ = function (self, func) {
 		if (self) {
-			if (self.hasOwnProperty ('__class__')) {			// Object before the dot
+			if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {			// Object before the dot
 				return function (args) {						// Return bound function
 					var args = [] .slice.apply (arguments);
 					return func.apply (null, [self] .concat (args));

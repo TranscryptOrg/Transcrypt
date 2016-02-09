@@ -14974,7 +14974,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 	
 					;
 					__pragma__ ('<all>')
-					__all__.fabric = fabric;
+						__all__.fabric = fabric;
 					__pragma__ ('</all>')
 				}
 			}

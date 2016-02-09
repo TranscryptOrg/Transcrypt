@@ -60,14 +60,15 @@ else:
 	try:
 		compiler.Program ([programDir, modulesDir])
 	except utils.Error as error:
-		utils.log (True, '\n{}\n'.format (error))
+		utils.log (True, '\n{}\n', error)
 		
 		# Don't log anything else, even in verbose mode, since this would only be confusing
 		if utils.debug:
 			utils.log (True, '{}\n', traceback.format_exc ())
 	except Exception as exception:
-		utils.log (True, '\n{}'.format (exception))
+		utils.log (True, '\n{}', exception)
 		
 		# Have to log something else, because a general exception isn't informative enough
 		utils.log (False, '{}\n', traceback.format_exc ())
+	utils.log (True, 'Ready\n')
 		

@@ -85,6 +85,12 @@
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
 						});}
 					});
+					var C = __class__ ('C', [object], {
+						get tricky () {return __get__ (this, function (self) {
+							var args = tuple ([].slice.apply (arguments).slice (1));
+							return args;
+						});}
+					});
 					var run = function (autoTester) {
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -193,10 +199,14 @@
 								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 							}
 							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
+						autoTester.check (C ().tricky.apply (null, range (4)));
+						autoTester.check ('{}-{}'.format (1, 3, 5, 7, 9));
+						autoTester.check ('{}-{}'.format.apply (null, range (4)));
 					};
 					__pragma__ ('<all>')
 						__all__.A = A;
 						__all__.B = B;
+						__all__.C = C;
 						__all__.run = run;
 					__pragma__ ('</all>')
 				}

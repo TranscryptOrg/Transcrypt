@@ -17,7 +17,13 @@ class A:
 		
 class B (A):
 	def __init__ (self, x, y = -1, *args, m = -2, n, **kwargs):
-		A.__init__ (self, y, x, *args, m = n, n = m, **kwargs)	
+		A.__init__ (self, y, x, *args, m = n, n = m, **kwargs)
+		
+class C:
+	__pragma__ ('nokwargs')
+	def tricky (self, *args):
+		return args
+	__pragma__ ('kwargs')
 	
 def run (autoTester):
 	def f (x, y = -1, *args, m = -2, n, **kwargs):
@@ -37,3 +43,7 @@ def run (autoTester):
 	g (*(1, 2, 3), **{'p': 'aP', 'q': 'aQ', 'r': 'anR'})
 	
 	(lambda x, y = -1, *args, m = -2, n, **kwargs: autoTester.check (x, y, args, m, n, kwargs)) (1, 2, 8, 16, m = 128, n = 256.3, p = 1024.3, q = 2048.3)
+	
+	autoTester.check (C () .tricky (* range (4)))
+	autoTester.check ('{}-{}'.format (1, 3, 5, 7, 9))
+	autoTester.check ('{}-{}'.format (* range (4)))

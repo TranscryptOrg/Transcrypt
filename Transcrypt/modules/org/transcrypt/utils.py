@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 import inspect
 
@@ -7,6 +8,7 @@ debug = False
 class CommandArgs:		
 	def parse (self):
 		self.argParser = argparse.ArgumentParser ()
+		
 		self.argParser.add_argument ('source', nargs='?', help = '.py file containing source code of main module')
 		self.argParser.add_argument ('-k', '--kwargs', help = 'enable keyword arguments by default. DISADVISED. Use __pragma__ (\'kwargs\') and __pragma__(\'kwargoff\') instead to prevent bloat', action = 'store_true')
 		self.argParser.add_argument ('-b', '--build', help = 'rebuild all target files from scratch', action = 'store_true')
@@ -17,8 +19,8 @@ class CommandArgs:
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 		
 		if not (self.license or self.source):
-			self.argParser.print_usage ()
-			exit (1)
+			log (True,  self.argParser.format_usage () .capitalize ())
+			sys.exit (1)
 		
 commandArgs = CommandArgs ()
 	

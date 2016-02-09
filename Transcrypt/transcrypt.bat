@@ -1,1 +1,1 @@
-C:\Python35\python.exe %~dp0\transcrypt.py %*
+C:\Python35\python.exe -S %~dp0transcrypt.py %*

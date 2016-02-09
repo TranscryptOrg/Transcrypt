@@ -22,7 +22,8 @@ class window:
 # Add attributes of window to global namespace as is done in a browser
 for attributeName in window.__dict__:
 	vars () [attributeName] = window.__dict__ [attributeName]
-	
+
+# Make print on the desktop add 'console.log' prefix, to distinguish from alert	
 def print (*args):
 	console.log (*args)
 

@@ -50,16 +50,16 @@
 						autoTester.check (mod3GetTwoHundred ());
 						autoTester.check (A (123.321).f ());
 					};
-					__pragma__ ('<use> \
-						modules.mod1 \
-						modules.mod1.mod11 \
-						modules.mod1.mod11.mod111 \
-						modules.mod1.mod11.mod112 \
-						modules.mod2 \
-						modules.mod2.mod21 \
-						modules.mod2.mod22 \
-						modules.mod3 \
-					</use>')
+					__pragma__ ('<use>' +
+						'modules.mod1' +
+						'modules.mod1.mod11' +
+						'modules.mod1.mod11.mod111' +
+						'modules.mod1.mod11.mod112' +
+						'modules.mod2' +
+						'modules.mod2.mod21' +
+						'modules.mod2.mod22' +
+						'modules.mod3' +
+					'</use>')
 					__pragma__ ('<all>')
 						__all__.a = a;
 						__all__.f = f;

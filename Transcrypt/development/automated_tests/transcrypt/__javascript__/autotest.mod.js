@@ -45,23 +45,23 @@
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
-		__pragma__ ('<use> \
-			arguments \
-			classes \
-			conditional_expressions \
-			control_structures \
-			data_structures \
-			exceptions \
-			general_functions \
-			indices_and_slices \
-			lambda_functions \
-			list_comprehensions \
-			modules \
-			org.transcrypt.autotester \
-			properties \
-			simple_and_augmented_assignment \
-			tuple_assignment \
-		</use>')
+		__pragma__ ('<use>' +
+			'arguments' +
+			'classes' +
+			'conditional_expressions' +
+			'control_structures' +
+			'data_structures' +
+			'exceptions' +
+			'general_functions' +
+			'indices_and_slices' +
+			'lambda_functions' +
+			'list_comprehensions' +
+			'modules' +
+			'org.transcrypt.autotester' +
+			'properties' +
+			'simple_and_augmented_assignment' +
+			'tuple_assignment' +
+		'</use>')
 		__pragma__ ('<all>')
 			__all__.autoTester = autoTester;
 		__pragma__ ('</all>')

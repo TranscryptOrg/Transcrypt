@@ -97,9 +97,9 @@
 							}
 						});}
 					});
-					__pragma__ ('<use> \
-						itertools \
-					</use>')
+					__pragma__ ('<use>' +
+						'itertools' +
+					'</use>')
 					__pragma__ ('<all>')
 						__all__.AutoTester = AutoTester;
 						__all__.errorColor = errorColor;

@@ -319,9 +319,9 @@
 			});}
 		});
 		var game = Game ();
-		__pragma__ ('<use> \
-			com.fabricjs \
-		</use>')
+		__pragma__ ('<use>' +
+			'com.fabricjs' +
+		'</use>')
 		__pragma__ ('<all>')
 			__all__.Attribute = Attribute;
 			__all__.Ball = Ball;

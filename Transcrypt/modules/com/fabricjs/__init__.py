@@ -8,5 +8,5 @@ fabric = __pragma__ (
 			return exports;
 		}}) () .fabric;
 	''',
-	includes = ['com/fabricjs/__javascript__/fabric.js']
+	include ('com/fabricjs/__javascript__/fabric.js')
 )

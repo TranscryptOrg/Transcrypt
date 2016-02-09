@@ -15,6 +15,7 @@
 import os
 import sys
 import ast
+import re
 import datetime
 import shutil
 import traceback
@@ -24,7 +25,7 @@ from org.transcrypt import __base__, utils, minify
 class ModuleMetadata:
 	def __init__ (self, program, name):
 		self.name = name
-		searchList = []
+		searchedModulePaths = []
 		for searchDir in program.moduleSearchDirs:
 			relPrepath = self.name.replace ('.', '/')
 			prepath = '{}/{}'.format (searchDir, relPrepath)			
@@ -42,14 +43,17 @@ class ModuleMetadata:
 			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
 			
-			searchedModulePaths = [self.sourcePath, self.targetPath]
+			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
 			if (os.path.isfile (self.sourcePath) or os.path.isfile (self.targetPath)):
 				break;	
 		else:
 			# If even the target can't be loaded then there's a problem with this module, root or not
 			raise utils.Error (
-				message = '\n\tAttempt to load module: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (self.name, '\n\t\t'. join (searchedModulePaths))
+				moduleName = self.name,
+				message = '\n\tAttempt to load module: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
+					self.name, '\n\t\t'. join (searchedModulePaths)
+				)
 			)
 			
 	def sourceExists (self):
@@ -196,7 +200,7 @@ class Module:
 		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
 		self.use = sorted (set ([
 			word
-			for word in useFragment.replace ('__pragma__', ' ') .replace ('(\'', ' ') .replace ('\')', ' ') .replace ('\\', ' ') .split ()
+			for word in useFragment.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
 			if not word.startswith ('<')
 		]))
 		for moduleName in self.use:
@@ -273,6 +277,7 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
+		self.aliasers = []
 		self.tempIndices = {}
 		self.stubsName = 'org.{}.stubs.'.format (__base__.__envir__.transpilerName)
 		
@@ -345,7 +350,15 @@ class Generator (ast.NodeVisitor):
 			self.visit (child)
 			
 	def filterId (self, qualifiedId):
-		return '.'.join (['__${}__'.format (id) if id in self.filterIds else id for id in qualifiedId.split ('.')])	# $ to avoid magics like __init__
+		def getAlias (id):
+			for aliaser in self.aliasers:
+				id = re.sub (*aliaser, id)
+			return id
+	
+		return '.'.join ([
+			'__${}__'.format (alias) if alias in self.filterIds else alias
+			for alias in [getAlias (id) for id in qualifiedId.split ('.')]
+		]) # Prepend $ to avoid magics like __init__
 		
 	def tabs (self, indentLevel = None):
 		if indentLevel == None:
@@ -361,7 +374,7 @@ class Generator (ast.NodeVisitor):
 			
 		fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
 		self.targetFragments.append (fragment.format (*formatter))
-
+		
 	def indent (self):
 		self.indentLevel += 1
 		
@@ -413,7 +426,7 @@ class Generator (ast.NodeVisitor):
 		if self.tempIndices [name] < 0:
 			del self.tempIndices [name]
 			
-	def pragmaJs (self, code, includes):
+	def pragmaJs (self, code, includes):	
 		includeCodes = []
 		for include in includes:
 			for searchDir in self.module.program.moduleSearchDirs:
@@ -729,7 +742,7 @@ class Generator (ast.NodeVisitor):
 		self.emit ('{} = true;\n', self.getTemp ('break'))
 		self.emit ('break')
 	
-	def visit_Call (self, node):
+	def visit_Call (self, node):	
 		def emitKwargDict ():
 			self.emit ('__kwargdict__ (')
 			
@@ -767,7 +780,24 @@ class Generator (ast.NodeVisitor):
 					self.emit ('}}')	# Only if not terminated already because hasKwargs
 				
 			self.emit (')')
-
+			
+		def include (fileName):
+			searchedIncludePaths = []
+			for searchDir in self.module.program.moduleSearchDirs:
+				filePath = '{}/{}'.format (searchDir, fileName)
+				if os.path.isfile (filePath):
+					return open (filePath) .read ()
+				else:
+					searchedIncludePaths.append (filePath)
+			else:
+				raise utils.Error (
+					moduleName = self.module.metadata.name,
+					lineNr = self.lineNr,
+					message = '\n\tAttempt to include file: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
+						node.args [0], '\n\t\t'. join (searchedIncludePaths)
+					)
+				)
+				
 		if type (node.func) == ast.Name:
 			if node.func.id == 'property':
 				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getscope (ast.ClassDef) .name, node.args [0].id))
@@ -776,21 +806,31 @@ class Generator (ast.NodeVisitor):
 				self.emit (')')
 				return
 			elif node.func.id == '__pragma__':
-				if node.args [0] .s == 'kwargs':
+				if node.args [0] .s == 'kwargs':		# Start emitting kwargs code for FunctionDef's
 					self.allowKeywordArgs = True
-				elif node.args [0] .s == 'nokwargs':
+				elif node.args [0] .s == 'nokwargs':	# Stop emitting kwargs code for FunctionDef's
 					self.allowKeywordArgs = False
-				elif node.args [0] .s == 'js':
-					for keyword in node.keywords:
-						if keyword.arg == 'includes':
-							includes = [elt.s for elt in keyword.value.elts]
-					self.pragmaJs (node.args [1] .s, includes)
+				elif node.args [0] .s == 'js':			# Include JavaScript code literally in the output
+					self.emit ('\n{}\n', node.args [1] .s.format (* [
+						eval (
+							compile (
+								ast.Expression (arg),
+								'<string>',
+								'eval'
+							),
+							{},
+							{'include': include}
+						)
+						for arg in node.args [2:]
+					]))
+				elif node.args [0] .s == 'alias':
+					self.aliasers.append ((re.compile ('(^{0}$)|(^{0}_)|(_{0}$)|(_{0}_)' .format (node.args [1] .s)), node.args [2].s))
 				return
 			elif node.func.id == '__new__':
 				self.emit ('new ')
 				self.visit (node.args [0])
 				return
-			
+				
 		self.visit (node.func)
 		
 		for index, expr in enumerate (node.args):
@@ -832,7 +872,7 @@ class Generator (ast.NodeVisitor):
 		if type (self.getscope ()) == ast.Module:
 			self.all.add (node.name)
 
-		self.emit ('var {0} = __class__ (\'{0}\', [', node.name)
+		self.emit ('var {0} = __class__ (\'{0}\', [', self.filterId (node.name))
 		if node.bases:
 			for index, expr in enumerate (node.bases):
 				try:
@@ -955,9 +995,9 @@ class Generator (ast.NodeVisitor):
 		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 			if type (self.getscope ()) == ast.Module:
 				self.all.add (node.name)
-			self.emit ('var {} = function ', node.name)
+			self.emit ('var {} = function ', self.filterId (node.name))
 		else:															# Class scope, so it's a method and needs the currying mechanism
-			self.emit ('\nget {} () {{return __get__ (this, function ', node.name)
+			self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))
 			
 		self.inscope (node)		
 		self.visit (node.args)
@@ -1163,19 +1203,19 @@ class Generator (ast.NodeVisitor):
 			
 		if self.use:
 			self.use = sorted (self.use)
-			self.emit ('__pragma__ (\'<use> \\\n')	# Only the last occurence of <use> and </use> are special.
+			self.emit ('__pragma__ (\'<use>\' +\n')	# Only the last occurence of <use> and </use> are special.
 			self.indent ()
 			for name in self.use:
-				self.emit ('{} \\\n', name)
+				self.emit ('\'{}\' +\n', name)
 			self.dedent ()
-			self.emit ('</use>\')\n')
+			self.emit ('\'</use>\')\n')
 		
 		if self.all:
 			self.all = sorted (self.all)
 			self.emit ('__pragma__ (\'<all>\')\n')	# Only the last occurence of <all> and </all> are special.
 			self.indent ()
 			for name in self.all:
-				self.emit ('__all__.{0} = {0};\n', name)
+				self.emit ('__all__.{0} = {0};\n', self.filterId (name))
 			self.dedent ()
 			self.emit ('__pragma__ (\'</all>\')\n')
 		

@@ -21,11 +21,12 @@ file: Module
 			return exports;
 		}}) () .fabric;
 	
-				keywords: list 
-					element: keyword 
-						arg: str = includes
-						value: List 
-							elts: list 
-								element: Str 
-									s: str = com/fabricjs/__javascript__/fabric.js
+					element: Call 
+						func: Name 
+							id: str = include
 							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = com/fabricjs/__javascript__/fabric.js
+						keywords: list 
+				keywords: list 

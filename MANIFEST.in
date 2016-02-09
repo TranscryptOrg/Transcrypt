@@ -1,4 +1,4 @@
-global-include *.py *.js *.html *.lyx *.pdf *.png *.txt *.jar
+global-include *.py *.js *.rst *.html *.css *.lyx *.pdf *.png *.gif *.jpg *.txt *.jar
 global-exclude *.pyc
 prune Transcrypt/development/attic
 prune Transcrypt/development/docs

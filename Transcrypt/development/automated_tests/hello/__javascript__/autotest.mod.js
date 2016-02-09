@@ -9,11 +9,11 @@
 		autoTester.run (testlet0, 'testlet0');
 		autoTester.run (testlet1, 'testlet1');
 		autoTester.done ();
-		__pragma__ ('<use> \
-			org.transcrypt.autotester \
-			testlet0 \
-			testlet1 \
-		</use>')
+		__pragma__ ('<use>' +
+			'org.transcrypt.autotester' +
+			'testlet0' +
+			'testlet1' +
+		'</use>')
 		__pragma__ ('<all>')
 			__all__.autoTester = autoTester;
 		__pragma__ ('</all>')

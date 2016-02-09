@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.63 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.67 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.63',
+        VERSION:     '3.5.67',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.63 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.67 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.63 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.67 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,7 +61,7 @@
 </ol>
 <p>In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.</p>
 <div class="literal-block-wrapper container" id="the-encapsulation-layer-for-fabric-js">
-<div class="code-block-caption"><span class="caption-text">The encapsulation layer for fabric.js</span><a class="headerlink" href="#the-encapsulation-layer-for-fabric-js" title="Permalink to this code">¶</a></div>
+<span id="code-encaps-fabric"></span><div class="code-block-caption"><span class="caption-text">The encapsulation layer for fabric.js</span><a class="headerlink" href="#the-encapsulation-layer-for-fabric-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fabric</span> <span class="o">=</span> <span class="n">__pragma__</span> <span class="p">(</span>
     <span class="s">&#39;js&#39;</span><span class="p">,</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -72,7 +72,7 @@
 <span class="sd">            return exports;</span>
 <span class="sd">        }}) () .fabric;</span>
 <span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
-    <span class="n">includes</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">]</span>
+    <span class="n">include</span> <span class="p">(</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -82,15 +82,15 @@
 <div class="section" id="integration-example-pong">
 <h2>5.2. Integration example: Pong<a class="headerlink" href="#integration-example-pong" title="Permalink to this headline">¶</a></h2>
 <p>In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that <em>new &lt;constructor&gt;</em> is replaced by <em>__new__ (&lt;constructor&gt;)</em>.</p>
-<table border="1" class="docutils">
+<table border="1" class="docutils" id="code-pong">
 <colgroup>
-<col width="49%" />
-<col width="51%" />
+<col width="41%" />
+<col width="59%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="pong-py">
-<div class="code-block-caption"><span class="caption-text">pong.py                |</span><a class="headerlink" href="#pong-py" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.fabric</span> <span class="kn">import</span> <span class="n">fabric</span>
+<div class="code-block-caption"><span class="caption-text">pong.py</span><a class="headerlink" href="#pong-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
 
 <span class="n">orthoWidth</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="n">orthoHeight</span> <span class="o">=</span> <span class="mi">750</span>
@@ -249,12 +249,12 @@
             
     <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Graphical representation of scoreboard are four labels and a separator line   </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playerLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;Player {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">{</span>
-                <span class="n">fill</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontFamily</span><span class="p">:</span> <span class="s">&#39;monospace&#39;</span><span class="p">,</span> <span class="n">fontSize</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+                <span class="n">fill</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontFamily</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="n">fontSize</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
                 <span class="n">left</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="n">top</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
         <span class="p">}))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="p">((</span><span class="s">&#39;AZ keys:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;KM keys:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">))]</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">hintLabel</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;[spacebar] starts game, [enter] resets score&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="n">fill</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontFamily</span><span class="p">:</span> <span class="s">&#39;monospace&#39;</span><span class="p">,</span> <span class="n">fontSize</span><span class="p">:</span> <span class="s">&#39;12&#39;</span><span class="p">,</span>
+                <span class="n">fill</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontFamily</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="n">fontSize</span><span class="p">:</span> <span class="s">&#39;12&#39;</span><span class="p">,</span>
                 <span class="n">left</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="n">top</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hintShift</span><span class="p">)</span>
         <span class="p">}))</span>
         
@@ -373,14 +373,14 @@
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var fabric = __init__ (__world__.org.transcrypt.fabric).fabric;
+        var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
         var fieldHeight = 650;
         var __left0__ = tuple (list ([13, 27, 32]));
-        var enter = __left0__[0];
-        var esc = __left0__[1];
-        var space = __left0__[2];
+        var enter = __left0__ [0];
+        var esc = __left0__ [1];
+        var space = __left0__ [2];
         var Attribute = __class__ (&#39;Attribute&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, game) {
                 self.game = game;
@@ -547,13 +547,13 @@
                     var __iter0__ = tuple (list ([tuple (list ([&#39;AZ keys:&#39;, -7 / 16])), tuple (list ([&#39;KM keys:&#39;, 1 / 16]))]));
                     for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
                         var __left0__ = __iter0__ [__index0__];
-                        var name = __left0__[0];
-                        var position = __left0__[1];
-                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), {fill: &#39;white&#39;, fontFamily: &#39;monospace&#39;, fontSize: &#39;30&#39;, left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+                        var name = __left0__ [0];
+                        var position = __left0__ [1];
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), {fill: &#39;white&#39;, fontFamily: &#39;arial&#39;, fontSize: &#39;30&#39;, left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
                     }
                     return __accu0__;
                 } ();
-                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {fill: &#39;white&#39;, fontFamily: &#39;monospace&#39;, fontSize: &#39;12&#39;, left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {fill: &#39;white&#39;, fontFamily: &#39;arial&#39;, fontSize: &#39;12&#39;, left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
                 self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {stroke: &#39;white&#39;});
             });},
             get increment () {return __get__ (this, function (self, playerIndex) {
@@ -569,8 +569,8 @@
                     var __iter0__ = zip (self.scores, tuple (list ([-2 / 16, 6 / 16])));
                     for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
                         var __left0__ = __iter0__ [__index0__];
-                        var score = __left0__[0];
-                        var position = __left0__[1];
+                        var score = __left0__ [0];
+                        var position = __left0__ [1];
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), {fill: &#39;white&#39;, fontFamily: &#39;arial&#39;, fontSize: &#39;30&#39;, left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
                     }
                     return __accu0__;
@@ -580,8 +580,8 @@
                 var __iter0__ = zip (self.playerLabels, self.scoreLabels);
                 for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
                     var __left0__ = __iter0__ [__index0__];
-                    var playerLabel = __left0__[0];
-                    var scoreLabel = __left0__[1];
+                    var playerLabel = __left0__ [0];
+                    var scoreLabel = __left0__ [1];
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -693,20 +693,23 @@
             });}
         });
         var game = Game ();
+        __pragma__ (&#39;&lt;use&gt;&#39; +
+            &#39;com.fabricjs&#39; +
+        &#39;&lt;/use&gt;&#39;)
         __pragma__ (&#39;&lt;all&gt;&#39;)
-        __all__.Attribute = Attribute;
-        __all__.Ball = Ball;
-        __all__.Game = Game;
-        __all__.Paddle = Paddle;
-        __all__.Scoreboard = Scoreboard;
-        __all__.Sprite = Sprite;
-        __all__.enter = enter;
-        __all__.esc = esc;
-        __all__.fieldHeight = fieldHeight;
-        __all__.game = game;
-        __all__.orthoHeight = orthoHeight;
-        __all__.orthoWidth = orthoWidth;
-        __all__.space = space;
+            __all__.Attribute = Attribute;
+            __all__.Ball = Ball;
+            __all__.Game = Game;
+            __all__.Paddle = Paddle;
+            __all__.Scoreboard = Scoreboard;
+            __all__.Sprite = Sprite;
+            __all__.enter = enter;
+            __all__.esc = esc;
+            __all__.fieldHeight = fieldHeight;
+            __all__.game = game;
+            __all__.orthoHeight = orthoHeight;
+            __all__.orthoWidth = orthoWidth;
+            __all__.space = space;
         __pragma__ (&#39;&lt;/all&gt;&#39;)
     }) ();
 </pre></div>
@@ -721,6 +724,69 @@
 <h2>5.3. Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
 <p>Minification is currently performed by the Google closure compiler, that&#8217;s also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
 <p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
+</div>
+<div class="section" id="integration-example-jquery">
+<h2>5.4. Integration example: jQuery<a class="headerlink" href="#integration-example-jquery" title="Permalink to this headline">¶</a></h2>
+<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a Content Delivery Network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="jquery-demo-py">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.py</span><a class="headerlink" href="#jquery-demo-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;alias&#39;</span><span class="p">,</span> <span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;$&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">start</span> <span class="p">():</span>
+    <span class="k">def</span> <span class="nf">changeColors</span> <span class="p">():</span>
+        <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">S_divs</span><span class="p">:</span>
+            <span class="n">S</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="o">.</span><span class="n">css</span> <span class="p">({</span>
+                <span class="s">&#39;color&#39;</span><span class="p">:</span> <span class="s">&#39;rgb({},{},{})&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="o">*</span> <span class="p">[</span><span class="nb">int</span> <span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
+            <span class="p">})</span>
+
+    <span class="n">S_divs</span> <span class="o">=</span> <span class="n">S</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+    <span class="n">changeColors</span> <span class="p">()</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="n">changeColors</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        ;
+        var start = function () {
+            var changeColors = function () {
+                var __iter0__ = $divs;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var div = __iter0__ [__index0__];
+                    $ (div).css ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
+                        var __accu0__ = [];
+                        var __iter1__ = range (3);
+                        for (var __index1__ = 0; __index1__ &lt; __iter1__.length; __index1__++) {
+                            var i = __iter1__ [__index1__];
+                            __accu0__.append (int (256 * Math.random ()));
+                        }
+                        return __accu0__;
+                    } ())});
+                }
+            };
+            var $divs = $ (&#39;div&#39;);
+            changeColors ();
+            window.setInterval (changeColors, 500);
+        };
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.start = start;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -739,6 +805,7 @@
 <li><a class="reference internal" href="#three-ways-of-integration">5.1. Three ways of integration</a></li>
 <li><a class="reference internal" href="#integration-example-pong">5.2. Integration example: Pong</a></li>
 <li><a class="reference internal" href="#joined-minification">5.3. Joined minification</a></li>
+<li><a class="reference internal" href="#integration-example-jquery">5.4. Integration example: jQuery</a></li>
 </ul>
 </li>
 </ul>
@@ -785,7 +852,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.63 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.67 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

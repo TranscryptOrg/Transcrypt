@@ -6,9 +6,6 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Simple relation between Python source and generated JavaScript code for easy debugging
 - Compact downloads, kB's rather than MB's
 
-.. figure:: http://www.transcrypt.org/illustrations/logo.png
-	:alt: Logo
-
 Request to early adopters
 =========================
 
@@ -29,8 +26,8 @@ Go ahead... For me this is about having pleasure in ones job. I've enjoyed layin
 
 Jacques de Hooge, Rotterdam, Netherlands
 
-.. figure:: http://www.transcrypt.org/illustrations/monk_transcribing.png
-	:alt: Monk transcribing
+.. figure:: http://www.transcrypt.org/illustrations/logo_white_small.png
+	:alt: Logo
 	
 	**Transcription once used to be manual labour**
 	
@@ -50,6 +47,15 @@ Status
 What's new
 ==========
 
+- Twitter account opened for notification of new versions (see http://www.transcrypt.org)
+- Documentation improved on several points.
+- Everything tested under Linux as well.
+- Linux support added. Installation and behaviour under Windows and Linux is identical.
+- Several bugs fixed, e.g. <aString>.format (*args)
+- Simple jQuery example added
+- __pragma__ ('alias', ...) added, e.g. to generate $ from S or jq
+- __pragma__ ('js', ...) improved
+- Css files etc. for docu included
 - Error reporting improved, module import bug fixed (-b was needed first)
 - Docs improved, 'hello' example added showing HTML - JavaScript - Python cooperation in a nutshell
 - Early adopter request added
