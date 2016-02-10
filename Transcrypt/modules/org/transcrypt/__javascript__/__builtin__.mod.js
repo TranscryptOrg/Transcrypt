@@ -9,7 +9,7 @@
 
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
-	var sort = __all__.sort;
+	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
@@ -385,6 +385,13 @@
 		this.push.apply (this, aList);
 	};
 
+	Array.prototype.py_sort = function () {
+		__sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));	// Can't work directly with arguments
+		// Python params: (iterable, key = None, reverse = False)
+		// py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
+		// __sort__ is def'ed with the Transcrypt kwargs mechanism
+	};
+	
 	// Tuple extensions to Array
 	
 	function tuple (iterable) {
@@ -394,7 +401,6 @@
 	}
 	__all__.tuple = tuple;
 	tuple.__name__ = 'tuple';
-	
 	
 	// Set extensions to Array
 		
@@ -521,8 +527,6 @@
 		return aList.join (this);
 	};
 	
-	String.prototype.jsSplit = String.prototype.split;
-	
 	String.prototype.lower = function () {
 		return this.toLowerCase ();
 	};
@@ -544,11 +548,11 @@
 		return this.replace (/\s*$/g, '');
 	};
 	
-	String.prototype.split = function (sep, maxsplit) {
+	String.prototype.py_split = function (sep, maxsplit) {
 		if (!sep) {
 			sep = ' ';
 		}
-		return this.jsSplit (sep || /s+/, maxsplit);
+		return this.split (sep || /s+/, maxsplit);
 	};
 	
 	String.prototype.startswith = function (prefix) {

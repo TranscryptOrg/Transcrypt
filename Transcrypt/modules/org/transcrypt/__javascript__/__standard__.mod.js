@@ -5,6 +5,7 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					;
+					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
@@ -33,7 +34,7 @@
 						});}
 					});
 					;
-					var sort = function (iterable, key, reverse) {
+					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
 							var key = null;
 						};
@@ -97,12 +98,12 @@
 							}
 						}
 						var result = copy (iterable);
-						sort (result, key, reverse);
+						__sort__ (result, key, reverse);
 						return result;
 					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
-						__all__.sort = sort;
+						__all__.__sort__ = __sort__;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}

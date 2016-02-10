@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-09 20:23:40
+// Transcrypt'ed from Python, 2016-02-10 11:34:13
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.67';
+							self.transpilerVersion = '3.5.69';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -152,6 +152,7 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					;
 					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
@@ -181,7 +182,7 @@ function autotest () {
 						});}
 					});
 					;
-					var sort = function (iterable, key, reverse) {
+					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
 							var key = null;
 						};
@@ -245,12 +246,12 @@ function autotest () {
 							}
 						}
 						var result = copy (iterable);
-						sort (result, key, reverse);
+						__sort__ (result, key, reverse);
 						return result;
 					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
-						__all__.sort = sort;
+						__all__.__sort__ = __sort__;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
@@ -268,7 +269,7 @@ function autotest () {
 
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
-	var sort = __all__.sort;
+	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
@@ -644,6 +645,13 @@ function autotest () {
 		this.push.apply (this, aList);
 	};
 
+	Array.prototype.py_sort = function () {
+		__sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));	// Can't work directly with arguments
+		// Python params: (iterable, key = None, reverse = False)
+		// py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
+		// __sort__ is def'ed with the Transcrypt kwargs mechanism
+	};
+	
 	// Tuple extensions to Array
 	
 	function tuple (iterable) {
@@ -653,7 +661,6 @@ function autotest () {
 	}
 	__all__.tuple = tuple;
 	tuple.__name__ = 'tuple';
-	
 	
 	// Set extensions to Array
 		
@@ -780,8 +787,6 @@ function autotest () {
 		return aList.join (this);
 	};
 	
-	String.prototype.jsSplit = String.prototype.split;
-	
 	String.prototype.lower = function () {
 		return this.toLowerCase ();
 	};
@@ -803,11 +808,11 @@ function autotest () {
 		return this.replace (/\s*$/g, '');
 	};
 	
-	String.prototype.split = function (sep, maxsplit) {
+	String.prototype.py_split = function (sep, maxsplit) {
 		if (!sep) {
 			sep = ' ';
 		}
-		return this.jsSplit (sep || /s+/, maxsplit);
+		return this.split (sep || /s+/, maxsplit);
 	};
 	
 	String.prototype.startswith = function (prefix) {
@@ -823,7 +828,7 @@ function autotest () {
 	};
 	__nest__ (
 		__all__,
-		'__$arguments__', {
+		'py_arguments', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
@@ -1458,20 +1463,20 @@ function autotest () {
 						var b = list (['sun', 'earth', 'moon']);
 						autoTester.check (sorted (a));
 						autoTester.check (sorted (b));
-						sort (a);
+						a.py_sort ();
 						autoTester.check (a);
-						sort (b);
+						b.py_sort ();
 						autoTester.check (b);
 						autoTester.check (sorted (a, __kwargdict__ ({reverse: true})));
 						autoTester.check (sorted (b, __kwargdict__ ({reverse: true})));
-						sort (a, __kwargdict__ ({reverse: true}));
+						a.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (a);
-						sort (b, __kwargdict__ ({reverse: true}));
+						b.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (b);
-						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
 							return len (x);})}));
 						autoTester.check (b);
-						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
 							return len (x);}), reverse: true}));
 						autoTester.check (b);
 					};
@@ -1936,7 +1941,7 @@ function autotest () {
 							}
 						});},
 						get compare () {return __get__ (this, function (self) {
-							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.split (' | ');
+							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -2219,7 +2224,7 @@ function autotest () {
 		}
 	);
 	(function () {
-		var __$arguments__ = {};
+		var py_arguments = {};
 		var classes = {};
 		var conditional_expressions = {};
 		var control_structures = {};
@@ -2235,7 +2240,7 @@ function autotest () {
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
-		__nest__ (__$arguments__, '', __init__ (__world__.__$arguments__));
+		__nest__ (py_arguments, '', __init__ (__world__.py_arguments));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
@@ -2250,7 +2255,7 @@ function autotest () {
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
-		autoTester.run (__$arguments__, 'arguments');
+		autoTester.run (py_arguments, 'arguments');
 		autoTester.run (classes, 'classes');
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');

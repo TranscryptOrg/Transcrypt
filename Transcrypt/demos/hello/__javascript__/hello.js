@@ -1,6 +1,6 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-10 11:34:09
-function autotest () {
+// Transcrypt'ed from Python, 2016-02-10 11:34:18
+function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
 	
@@ -847,173 +847,43 @@ function autotest () {
 			}
 		}
 	);
-	__nest__ (
-		__all__,
-		'org.transcrypt.autotester', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var itertools = {};
-					;
-					__nest__ (itertools, '', __init__ (__world__.itertools));
-					var okColor = 'green';
-					var errorColor = 'red';
-					var highlightColor = 'yellow';
-					var testletNameColor = 'blue';
-					var AutoTester = __class__ ('AutoTester', [object], {
-						get __init__ () {return __get__ (this, function (self) {
-							self.referenceBuffer = list ([]);
-							self.testBuffer = list ([]);
-							self.messageDivId = 'message';
-							self.referenceDivId = 'python';
-							self.testDivId = 'transcrypt';
-						});},
-						get check () {return __get__ (this, function (self) {
-							var args = tuple ([].slice.apply (arguments).slice (1));
-							var item = ' '.join (function () {
-								var __accu0__ = [];
-								var __iter0__ = args;
-								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-									var arg = __iter0__ [__index0__];
-									__accu0__.append (repr (arg));
-								}
-								return __accu0__;
-							} ());
-							if (__envir__.executorName == __envir__.transpilerName) {
-								self.testBuffer.append (item);
-							}
-							else {
-								self.referenceBuffer.append (item);
-							}
-						});},
-						get dump () {return __get__ (this, function (self, filePrename) {
-							var __iter0__ = tuple (list ([false, true]));
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var minified = __iter0__ [__index0__];
-								var miniInfix = (minified ? '.min' : '');
-								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
-								aFile.write ('<b>Status:</b>\n');
-								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
-								aFile.write ('<b>Reference output:</b>\n');
-								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
-								aFile.write ('<b>Test output:</b>\n');
-								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
-								aFile.close ();
-							}
-						});},
-						get compare () {return __get__ (this, function (self) {
-							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
-							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
-							var __break0__ = false;
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var __left0__ = __iter0__ [__index0__];
-								var index = __left0__ [0];
-								var testItem = __left0__ [1][0];
-								var referenceItem = __left0__ [1][1];
-								if (testItem != referenceItem) {
-									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
-									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
-									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
-									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var __left0__ = __iter1__ [__index1__];
-										var buffer = __left0__ [0];
-										var divId = __left0__ [1];
-										var accentColor = __left0__ [2];
-										var buffer = itertools.chain (buffer.slice (0, index), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.slice (index + 1));
-										document.getElementById (divId).innerHTML = ' | '.join (buffer);
-									}
-									__break0__ = true;
-									break;
-								}
-							}
-							if (!__break0__) {
-								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
-								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
-							}
-						});},
-						get run () {return __get__ (this, function (self, testlet, testletName) {
-							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
-							testlet.run (self);
-							self.check ('<br><br>');
-						});},
-						get done () {return __get__ (this, function (self) {
-							if (__envir__.executorName == __envir__.transpilerName) {
-								self.compare ();
-							}
-							else {
-								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
-							}
-						});}
-					});
-					__pragma__ ('<use>' +
-						'itertools' +
-					'</use>')
-					__pragma__ ('<all>')
-						__all__.AutoTester = AutoTester;
-						__all__.errorColor = errorColor;
-						__all__.highlightColor = highlightColor;
-						__all__.okColor = okColor;
-						__all__.testletNameColor = testletNameColor;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'testlet0', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var run = function (autoTester) {
-						autoTester.check ('hello');
-						autoTester.check ('world');
-					};
-					__pragma__ ('<all>')
-						__all__.run = run;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'testlet1', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var run = function (autoTester) {
-						autoTester.check ('goodbye');
-						autoTester.check ('moon');
-					};
-					__pragma__ ('<all>')
-						__all__.run = run;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
 	(function () {
-		var org = {};
-		var testlet0 = {};
-		var testlet1 = {};
-		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
-		__nest__ (testlet0, '', __init__ (__world__.testlet0));
-		__nest__ (testlet1, '', __init__ (__world__.testlet1));
-		var autoTester = org.transcrypt.autotester.AutoTester ();
-		autoTester.run (testlet0, 'testlet0');
-		autoTester.run (testlet1, 'testlet1');
-		autoTester.done ();
+		var chain = __init__ (__world__.itertools).chain;
+		var SolarSystem = __class__ ('SolarSystem', [object], {
+			get __init__ () {return __get__ (this, function (self) {
+				self.lineIndex = 0;
+			});},
+			get greet () {return __get__ (this, function (self) {
+				self.planet = self.planets [int (Math.random () * len (self.planets))];
+				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planet [0]);
+				self.explain ();
+			});},
+			get explain () {return __get__ (this, function (self) {
+				document.getElementById ('explain').innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
+				self.lineIndex = (self.lineIndex + 1) % 3;
+			});}
+		});
+		SolarSystem.planets = function () {
+			var __accu0__ = [];
+			var __iter0__ = enumerate (tuple (list ([tuple (list (['Mercury', 'hot', 2240])), tuple (list (['Venus', 'sulphurous', 6052])), tuple (list (['Earth', 'fertile', 6378])), tuple (list (['Mars', 'reddish', 3397])), tuple (list (['Jupiter', 'stormy', 71492])), tuple (list (['Saturn', 'ringed', 60268])), tuple (list (['Uranus', 'cold', 25559])), tuple (list (['Neptune', 'very cold', 24766]))])));
+			for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+				var __left0__ = __iter0__ [__index0__];
+				var index = __left0__ [0];
+				var planet = __left0__ [1];
+				__accu0__.append (chain (planet, tuple (list ([index + 1]))));
+			}
+			return __accu0__;
+		} ();
+		SolarSystem.lines = tuple (list (['{} is a {} planet', 'The radius of {} is {} km', '{} is planet nr. {} counting from the sun']));
+		var solarSystem = SolarSystem ();
 		__pragma__ ('<use>' +
-			'org.transcrypt.autotester' +
-			'testlet0' +
-			'testlet1' +
+			'itertools' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.autoTester = autoTester;
+			__all__.SolarSystem = SolarSystem;
+			__all__.solarSystem = solarSystem;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
 }
-window ['autotest'] = autotest ();
+window ['hello'] = hello ();

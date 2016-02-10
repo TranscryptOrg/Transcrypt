@@ -50,10 +50,7 @@ def repr (any):
 		return builtins.repr (list (any))
 	else:
 		return builtins.repr (any)
-		
-def sort (iterable, key = None, reverse = False):	# Spare JavaScript's sort method, has different params
-	iterable.sort (key = key, reverse = reverse)
 	
-def __pragma__ (*args):
+def __pragma__ (*args):	# Ignore all pragma's when running CPython
 	pass
 	

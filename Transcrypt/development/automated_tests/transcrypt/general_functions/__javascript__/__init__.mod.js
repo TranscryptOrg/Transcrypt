@@ -9,20 +9,20 @@
 						var b = list (['sun', 'earth', 'moon']);
 						autoTester.check (sorted (a));
 						autoTester.check (sorted (b));
-						sort (a);
+						a.py_sort ();
 						autoTester.check (a);
-						sort (b);
+						b.py_sort ();
 						autoTester.check (b);
 						autoTester.check (sorted (a, __kwargdict__ ({reverse: true})));
 						autoTester.check (sorted (b, __kwargdict__ ({reverse: true})));
-						sort (a, __kwargdict__ ({reverse: true}));
+						a.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (a);
-						sort (b, __kwargdict__ ({reverse: true}));
+						b.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (b);
-						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
 							return len (x);})}));
 						autoTester.check (b);
-						sort (b, __kwargdict__ ({key: (function __lambda__ (x) {
+						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
 							return len (x);}), reverse: true}));
 						autoTester.check (b);
 					};

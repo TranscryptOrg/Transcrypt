@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.67 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.69 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.67',
+        VERSION:     '3.5.69',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.67 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.69 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.67 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.69 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -740,12 +740,12 @@
 
 <span class="k">def</span> <span class="nf">start</span> <span class="p">():</span>
     <span class="k">def</span> <span class="nf">changeColors</span> <span class="p">():</span>
-        <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">S_divs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">S__divs</span><span class="p">:</span>
             <span class="n">S</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="o">.</span><span class="n">css</span> <span class="p">({</span>
                 <span class="s">&#39;color&#39;</span><span class="p">:</span> <span class="s">&#39;rgb({},{},{})&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="o">*</span> <span class="p">[</span><span class="nb">int</span> <span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
             <span class="p">})</span>
 
-    <span class="n">S_divs</span> <span class="o">=</span> <span class="n">S</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+    <span class="n">S__divs</span> <span class="o">=</span> <span class="n">S</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
     <span class="n">changeColors</span> <span class="p">()</span>
     <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="n">changeColors</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 </pre></div>
@@ -852,7 +852,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.67 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.69 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

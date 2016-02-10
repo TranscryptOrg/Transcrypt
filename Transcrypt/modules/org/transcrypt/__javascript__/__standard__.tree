@@ -14,6 +14,15 @@ file: Module
 					ctx: Load 
 				args: list 
 					element: Str 
+						s: str = noalias
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
 						s: str = nokwargs
 				keywords: list 
 		element: ClassDef 
@@ -220,7 +229,7 @@ file: Module
 						s: str = kwargs
 				keywords: list 
 		element: FunctionDef 
-			name: str = sort
+			name: str = __sort__
 			args: arguments 
 				args: list 
 					element: arg 
@@ -362,7 +371,7 @@ file: Module
 				element: Expr 
 					value: Call 
 						func: Name 
-							id: str = sort
+							id: str = __sort__
 							ctx: Load 
 						args: list 
 							element: Name 

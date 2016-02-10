@@ -47,11 +47,15 @@ Status
 What's new
 ==========
 
+- Simple beginning of a shipment test added, both for Linux and Windows
+- Docs adapted, identifier filtering replaced by identifier aliasing
+- Python sort is now a method as it should be, thanks to id aliasing
+- __pragma__ ('alias') functionality expanded, __pragma__ ('noalias') added. NB: Not backwards compatible
 - Twitter account opened for notification of new versions (see http://www.transcrypt.org)
 - Documentation improved on several points.
 - Everything tested under Linux as well.
 - Linux support added. Installation and behaviour under Windows and Linux is identical.
-- Several bugs fixed, e.g. <aString>.format (*args)
+- Several bugs fixed, e.g. <aString>.format (\*args)
 - Simple jQuery example added
 - __pragma__ ('alias', ...) added, e.g. to generate $ from S or jq
 - __pragma__ ('js', ...) improved

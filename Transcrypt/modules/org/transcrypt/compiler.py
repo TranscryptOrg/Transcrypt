@@ -266,6 +266,8 @@ class Module:
 			
 class Generator (ast.NodeVisitor):
 	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
+	
+
 
 	def __init__ (self, module):	
 		self.module = module
@@ -277,7 +279,18 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
-		self.aliasers = []
+		
+		self.aliasers = [self.getAliaser (*alias) for alias in (
+# START predef_aliases 
+			('js_sort', 'sort'),
+			('sort', 'py_sort'),
+			('js_split', 'split'),
+			('split', 'py_split'),
+			('js_arguments', 'arguments'),
+			('arguments', 'py_arguments')
+# END predef_aliases
+		)]
+		
 		self.tempIndices = {}
 		self.stubsName = 'org.{}.stubs.'.format (__base__.__envir__.transpilerName)
 		
@@ -318,8 +331,6 @@ class Generator (ast.NodeVisitor):
 			ast.And: ('&&', 10),
 			ast.Or: ('||', 0)
 		}
-
-		self.filterIds = ('arguments',)
 		
 		self.allowKeywordArgs = utils.commandArgs.kwargs
 		
@@ -349,16 +360,20 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.visit (child)
 			
+	def getAliaser (self, pyFragment, jsFragment):
+		return (pyFragment, re.compile ('''
+			(^{0}$)|			# Whole word
+			(__{0}__)|			# Contains __<pyFragment>__
+			(^{0}__)|			# Starts with <pyFragment>__
+			(__{0}$)|			# Ends with __<pyFragment>
+			((?<=\.){0}__)|		# Starts with '.<pyFragment>__'
+			(__{0}(?=\.))		# Ends with '__<pyFragment>.'
+		'''.format (pyFragment), re.VERBOSE), jsFragment)
+			
 	def filterId (self, qualifiedId):
-		def getAlias (id):
-			for aliaser in self.aliasers:
-				id = re.sub (*aliaser, id)
-			return id
-	
-		return '.'.join ([
-			'__${}__'.format (alias) if alias in self.filterIds else alias
-			for alias in [getAlias (id) for id in qualifiedId.split ('.')]
-		]) # Prepend $ to avoid magics like __init__
+		for aliaser in self.aliasers:
+			qualifiedId = re.sub (aliaser [1], aliaser [2], qualifiedId)
+		return qualifiedId
 		
 	def tabs (self, indentLevel = None):
 		if indentLevel == None:
@@ -425,18 +440,6 @@ class Generator (ast.NodeVisitor):
 		self.tempIndices [name] -= 1
 		if self.tempIndices [name] < 0:
 			del self.tempIndices [name]
-			
-	def pragmaJs (self, code, includes):	
-		includeCodes = []
-		for include in includes:
-			for searchDir in self.module.program.moduleSearchDirs:
-				fileName = '{}/{}'.format (searchDir, include)
-				if os.path.isfile (fileName):
-					includeCodes.append (open (fileName) .read ())
-					break
-					
-		codeWithIncludes = code.format (*includeCodes)
-		self.emit ('\n{}\n', codeWithIncludes)
 		
 	def useModule (self, name):
 		result = self.module.program.provide (name)	# Must be done first because it can generate a healthy exception
@@ -675,7 +678,7 @@ class Generator (ast.NodeVisitor):
 			
 	def visit_Attribute (self, node):
 		self.visit (node.value)
-		self.emit ('.{}', node.attr)
+		self.emit ('.{}', self.filterId (node.attr))
 		
 	def visit_AugAssign (self, node):
 		self.visit (node.target)	# No need to emit var first, it has to exist already
@@ -824,7 +827,14 @@ class Generator (ast.NodeVisitor):
 						for arg in node.args [2:]
 					]))
 				elif node.args [0] .s == 'alias':
-					self.aliasers.append ((re.compile ('(^{0}$)|(^{0}_)|(_{0}$)|(_{0}_)' .format (node.args [1] .s)), node.args [2].s))
+					self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
+				elif node.args [0] .s == 'noalias':
+					if len (node.args) == 1:
+						self.aliasers = []
+					else:
+						for index in range (len (self.aliasers)) .reverse ():
+							if self.aliasers [index][0] == node.args [1]:
+								self.aliasers.pop (index)
 				return
 			elif node.func.id == '__new__':
 				self.emit ('new ')

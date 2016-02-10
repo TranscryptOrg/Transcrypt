@@ -4,6 +4,7 @@
 
 from org.transcrypt.stubs.browser import __pragma__
 
+__pragma__ ('noalias')
 __pragma__ ('nokwargs')
 
 class Exception:
@@ -26,7 +27,7 @@ class Exception:
 			
 __pragma__ ('kwargs')
 			
-def sort (iterable, key = None, reverse = False):
+def __sort__ (iterable, key = None, reverse = False):	# Used by py_sort, can deal with kwargs
 	if key:
 		iterable.sort (lambda a, b: key (a) > key (b))
 	else:
@@ -37,5 +38,5 @@ def sort (iterable, key = None, reverse = False):
 		
 def sorted (iterable, key = None, reverse = False):
 	result = copy (iterable)
-	sort (result, key, reverse)
+	__sort__ (result, key, reverse)
 	return result

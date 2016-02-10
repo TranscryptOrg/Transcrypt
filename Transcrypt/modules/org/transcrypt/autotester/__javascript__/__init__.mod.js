@@ -54,7 +54,7 @@
 							}
 						});},
 						get compare () {return __get__ (this, function (self) {
-							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.split (' | ');
+							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							var __break0__ = false;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {

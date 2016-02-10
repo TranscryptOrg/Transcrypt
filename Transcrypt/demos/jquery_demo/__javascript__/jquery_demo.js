@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-09 11:02:35
+// Transcrypt'ed from Python, 2016-02-10 11:34:23
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -133,7 +133,7 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.67';
+							self.transpilerVersion = '3.5.69';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -152,6 +152,7 @@ function jquery_demo () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					;
 					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
@@ -181,7 +182,7 @@ function jquery_demo () {
 						});}
 					});
 					;
-					var sort = function (iterable, key, reverse) {
+					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
 							var key = null;
 						};
@@ -245,12 +246,12 @@ function jquery_demo () {
 							}
 						}
 						var result = copy (iterable);
-						sort (result, key, reverse);
+						__sort__ (result, key, reverse);
 						return result;
 					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
-						__all__.sort = sort;
+						__all__.__sort__ = __sort__;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
@@ -268,7 +269,7 @@ function jquery_demo () {
 
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
-	var sort = __all__.sort;
+	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
@@ -644,6 +645,13 @@ function jquery_demo () {
 		this.push.apply (this, aList);
 	};
 
+	Array.prototype.py_sort = function () {
+		__sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));	// Can't work directly with arguments
+		// Python params: (iterable, key = None, reverse = False)
+		// py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
+		// __sort__ is def'ed with the Transcrypt kwargs mechanism
+	};
+	
 	// Tuple extensions to Array
 	
 	function tuple (iterable) {
@@ -653,7 +661,6 @@ function jquery_demo () {
 	}
 	__all__.tuple = tuple;
 	tuple.__name__ = 'tuple';
-	
 	
 	// Set extensions to Array
 		
@@ -780,8 +787,6 @@ function jquery_demo () {
 		return aList.join (this);
 	};
 	
-	String.prototype.jsSplit = String.prototype.split;
-	
 	String.prototype.lower = function () {
 		return this.toLowerCase ();
 	};
@@ -803,11 +808,11 @@ function jquery_demo () {
 		return this.replace (/\s*$/g, '');
 	};
 	
-	String.prototype.split = function (sep, maxsplit) {
+	String.prototype.py_split = function (sep, maxsplit) {
 		if (!sep) {
 			sep = ' ';
 		}
-		return this.jsSplit (sep || /s+/, maxsplit);
+		return this.split (sep || /s+/, maxsplit);
 	};
 	
 	String.prototype.startswith = function (prefix) {

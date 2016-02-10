@@ -38,7 +38,7 @@ file: Module
 								id: str = div
 								ctx: Store 
 							iter: Name 
-								id: str = S_divs
+								id: str = S__divs
 								ctx: Load 
 							body: list 
 								element: Expr 
@@ -112,7 +112,7 @@ file: Module
 				element: Assign 
 					targets: list 
 						element: Name 
-							id: str = S_divs
+							id: str = S__divs
 							ctx: Store 
 					value: Call 
 						func: Name 

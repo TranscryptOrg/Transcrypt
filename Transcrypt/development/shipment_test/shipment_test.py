@@ -1,0 +1,28 @@
+import os
+import webbrowser
+
+testDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
+rootDir = '/'.join  (testDir.split ('/')[ : -2])
+
+def getAbsPath (relPath):
+	return '{}/{}'.format (rootDir, relPath)
+
+def test (relPath, fileNamePrefix, run = False):
+	os.chdir (getAbsPath (relPath))
+	os.system ('transcrypt -b {}.py'.format (fileNamePrefix))	
+
+	if run:
+		os.chdir (getAbsPath (relPath))
+		os.system ('transcrypt -r {}.py'.format (fileNamePrefix))		
+	
+	webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
+	webbrowser.open ('file://{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
+
+def autoTest (*args):
+	test (*args, True)
+	
+autoTest ('development/automated_tests/hello', 'autotest')
+autoTest ('development/automated_tests/transcrypt', 'autotest')
+test ('demos/hello', 'hello')
+test ('demos/jquery_demo', 'jquery_demo')
+test ('demos/pong', 'pong')

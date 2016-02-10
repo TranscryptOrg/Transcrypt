@@ -5,13 +5,13 @@ Transcrypt's module mechanism
 -----------------------------
 
 Transcrypt's module mechanism looks a lot like Python's but there are a few differences.
-Firstly it is good practice to use url-based unique module identifiers, e.g.
+Firstly, in Transcrypt it is good practice to use url-based unique module identifiers, e.g.
 
 - *com.github.<my name>.<my module name>*
 - *org.python.pypi.<my module name>*
 - *com.<myc company name>.<my module name>*
 
-To achieve optimal CPython compatibility, an exeption is made for modules that are part of the CPython distribution, e.g.
+To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g.
 
 - *itertools*
 	
@@ -47,51 +47,61 @@ Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
 -------------------------------------------------------------------------
 While it's possible to compile with the -k switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.
 
-Inserting literal JavaScript: __pragma__ ('js', code, <format parameters>) and include (<relative module path>)
+Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
 ---------------------------------------------------------------------------------------------------------------
-During compilation the 'js' pragma is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
+During compilation the * __pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
 
 An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *include (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
 
 .. _pragma_alias:
 
-Identifier aliasing: __pragma__ ('alias', <Python identifier or fragment>, <JavaScript identifier or fragment>)
----------------------------------------------------------------------------------------------------------------
-Using this pragma at the start of a module will replace identifiers or fragments thereof like in the following examples:
+Identifier aliasing: __pragma__ ('alias', ...) and __pragma__ ('noalias', ...)
+--------------------------------------------------------------------------------------------------------------------------------
+Calling *__pragma__ ('alias', <Python id part>, <JavaScript id part>)* at the start of a module will replace identifiers or parts thereof like in the following examples:
 
 Example 1:
 
-+--------------------------------------------------------------------+
-| Used at the start of the module: *__pragma__ ('alias', 'S', $)*    |
-+-----------------------------------------+--------------------------+
-| Original in Python:                     | Alias in JavaScript:     |
-+-----------------------------------------+--------------------------+
-| *S ('body')*                            | *$ ('body')*             |
-+-----------------------------------------+--------------------------+
-| *S_body*                                | *$body*                  |
-+-----------------------------------------+--------------------------+
-| *S_She_S_Sells_S_Sea_S_Shells_S*        | *$She$Sells$Sea$Shells$* |
-+-----------------------------------------+--------------------------+
++---------------------------------------------------------------------+
+| Used at the start of the module: *__pragma__ ('alias', 'S', $)*     |
++------------------------------------------+--------------------------+
+| Original in Python:                      | Alias in JavaScript:     |
++------------------------------------------+--------------------------+
+| *S ('body')*                             | *$ ('body')*             |
++------------------------------------------+--------------------------+
+| *S__body*                                | *$body*                  |
++------------------------------------------+--------------------------+
+| *S__She__S__Sells__S__Sea__S__Shells__S* | *$She$Sells$Sea$Shells$* |
++------------------------------------------+--------------------------+
+
+Using the above alias, a piece of jQuery code will look like this in Python:
+
+.. literalinclude:: ../../demos/jquery_demo/jquery_demo.py
+   :tab-width: 4
+   :caption: Use of __pragma__ ('alias', 'S', '$') in jquery_demo.py
 
 Example 2:
 
-+--------------------------------------------------------------------+
-| Used at the start of the module *__pragma__ ('alias', 'jq', '$')*  |
-+-----------------------------------------+--------------------------+
-| *jq_body = jq (body)*                   | *$body = $ ('body')*     |
-+-----------------------------------------+--------------------------+
++-------------------------------------------------------------------+
+| Used at the start of the module *__pragma__ ('alias', 'jq', '$')* |
++-----------------------------------------+-------------------------+
+| *jq__body = jq (body)*                  | *$body = $ ('body')*    |
++-----------------------------------------+-------------------------+
 
 Note that the generated JavaScript only the modified identifiers will be present, not the original ones. So the JavaScript identifiers are only aliases for the Python ones, not for any identifier in the JavaScript code itself.
 
-Identifier filtering
---------------------
-Ordinary Python identifiers may have a special meaning in JavaScript. In compilation they are replaced by 'innocent' ones like in the following example:
+A number of aliases are predefined in the source code of Transcrypt as follows:
 
-+---------------------+-------------------------+
-| Original in Python: | Filtered in JavaScript: |
-+---------------------+-------------------------+
-| *arguments*         | *__$arguments__*        |
-+---------------------+-------------------------+
+.. literalinclude:: ../../modules/org/transcrypt/compiler.py
+	:start-after: # START predef_aliases
+	:end-before: # END predef_aliases
+	:tab-width: 4
+	:caption: Transcrypt's predefined aliases
+
+The predefined aliases are used to resolve name conflicts between Python and JavaScript. Calling e.g *<object>.sort (<params>)* from Python will invoke a *sort* method with Python semantics, which in the generated JavaScript is called *py_sort*. Calling *<object>.js_sort <params>* from Python will invoke a *sort* method with JavaScript semantics, which in the generated JavaScript is simply called *sort*, as 3rd party JavaScript libraries will expect.
+
+Calling *__pragma__ ('noalias', <Python id part>)* will remove the alias. Calling *__pragma__ ('noalias')* without second parameter will remove all aliases. WARNING: This will also remove the predefined aliases.
+
+The alias mechanism is vital to both the compactness and speed of code generated by Transcrypt and to its seamless integration with JavaScript. It allows Transcrypt to extend native JavaScript objects without causing name conflicts even when JavaScript gets expanded over the years, but also without any conversions or other overhead. That's why in Transcrypt this approach is favored over wrapping native objects.
 
 Creating JavaScript objects with __new__ (<constructor call>)
 -------------------------------------------------------------

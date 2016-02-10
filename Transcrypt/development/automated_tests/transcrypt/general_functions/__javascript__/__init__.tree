@@ -1,12 +1,5 @@
 file: Module 
 	body: list 
-		element: ImportFrom 
-			module: str = org.transcrypt.stubs.browser
-			names: list 
-				element: alias 
-					name: str = sort
-					asname: NoneType = None
-			level: int = 0
 		element: FunctionDef 
 			name: str = run
 			args: arguments 
@@ -94,13 +87,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = a
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 				element: Expr 
 					value: Call 
@@ -117,13 +110,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = b
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 				element: Expr 
 					value: Call 
@@ -186,13 +179,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = a
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 							element: keyword 
 								arg: str = reverse
@@ -213,13 +206,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = b
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 							element: keyword 
 								arg: str = reverse
@@ -240,13 +233,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = b
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 							element: keyword 
 								arg: str = key
@@ -285,13 +278,13 @@ file: Module
 						keywords: list 
 				element: Expr 
 					value: Call 
-						func: Name 
-							id: str = sort
-							ctx: Load 
-						args: list 
-							element: Name 
+						func: Attribute 
+							value: Name 
 								id: str = b
 								ctx: Load 
+							attr: str = sort
+							ctx: Load 
+						args: list 
 						keywords: list 
 							element: keyword 
 								arg: str = key
