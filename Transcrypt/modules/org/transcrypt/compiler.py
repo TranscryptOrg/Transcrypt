@@ -147,8 +147,10 @@ class Program:
 
 		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, __base__.__envir__.targetSubDir, self.mainModuleName)
 		utils.log (False, 'Saving minified result in: {}\n', miniFileName)
-		minify.run (targetFileName, miniFileName)
 		
+		if not utils.commandArgs.nomin:
+			minify.run (targetFileName, miniFileName)
+			
 	def provide (self, moduleName):
 		if moduleName == '__main__':
 			moduleName = self.mainModuleName

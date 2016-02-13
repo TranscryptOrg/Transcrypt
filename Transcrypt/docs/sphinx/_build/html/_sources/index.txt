@@ -2,7 +2,7 @@ Welcome to Transcrypt's documentation!
 ======================================
 
 Table of Contents:
----------
+------------------
 
 .. toctree::
 	:numbered:

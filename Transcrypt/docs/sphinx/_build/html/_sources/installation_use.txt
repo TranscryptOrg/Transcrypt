@@ -25,6 +25,12 @@ In case after point 3 you want to do something more than autotesting:
 
 You may also want to try the demo's.
 
+Troubleshooting checklist
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Transcrypt was installed using *pip*, but *import transcrypt* fails. Transcrypt isn't a library but a compiler. Install and run it as described in this chapter.
+2. Transcrypt reports an error containing the word 'java'. Transcrypt produces both prettyfied and minified JavaScript output. For the minification it makes use of the Google Closure Compiler, which is included in the distribution and requires Java to run. You can check proper installation of Java by typing the word *java* on the command line. This should give you a list of options: *Usage: java [-options] class []args...]* and so on. If you can't or won't install Java, you can run Transcrypt without minification by using the *-n* command line switch.
+
 Your first Transcrypt program
 -----------------------------
 

@@ -47,6 +47,7 @@ Status
 What's new
 ==========
 
+- Transcrypt can now also run without minification, in case you can't or won't install Java. -n switch, see docs.
 - Simple beginning of a shipment test added, both for Linux and Windows
 - Docs adapted, identifier filtering replaced by identifier aliasing
 - Python sort is now a method as it should be, thanks to id aliasing
