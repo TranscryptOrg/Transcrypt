@@ -47,6 +47,8 @@ Status
 What's new
 ==========
 
+- Linux startup script added (I hope). It doesn't have an extension, but \*. didn't work, I hope \* does...
+- Startup batches / scripts were missing, added to distro.
 - Transcrypt can now also run without minification, in case you can't or won't install Java. -n switch, see docs.
 - Simple beginning of a shipment test added, both for Linux and Windows
 - Docs adapted, identifier filtering replaced by identifier aliasing
