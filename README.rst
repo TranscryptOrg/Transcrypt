@@ -10,7 +10,7 @@ Request to early adopters
 =========================
 
 Transcrypt is in Alpha now!
-As you may have already discovered, it is lean, fast, generates higly readable JavaScript, covers most of Python, including stuff like multiple inheritance, properties, tuple assignment, \*\*kwargs and \*args, and it cooperates seamlessly with any JavaScript library.
+As you may have already discovered, it is lean, fast, generates highly readable JavaScript, covers most of Python, including stuff like multiple inheritance, properties, tuple assignment, \*\*kwargs and \*args, and it cooperates seamlessly with any JavaScript library.
 The first version will be 3.5, not for marketing reasons, but to make clear what is the matching version of CPython.
 
 While work on Transcrypt will continue, what's most important now for Transcrypt to become a permanent, well-maintained asset for the programmer community is mindshare!
