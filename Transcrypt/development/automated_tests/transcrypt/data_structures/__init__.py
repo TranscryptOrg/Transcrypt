@@ -16,7 +16,17 @@ def run (autoTester):
 	aDict = {1: 'plant', 'animal': 2}
 	autoTester.check (aDict)
 	autoTester.check (aDict [1], aDict ['animal'])
+	
 
+	def p ():
+		return 3
+
+	p = 3
+		
+	q = 4
+	
+	autoTester.check ({p: 'three', q: 'four'})
+	
 	aTuple = (1, 2, 3, 4, 5)
 	autoTester.check(aTuple)
 	autoTester.check (len (aTuple))

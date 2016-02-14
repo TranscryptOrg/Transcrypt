@@ -33,8 +33,8 @@ class Sprite (Attribute):	# Here, a sprite is an attribute that can move
 		
 	def install (self):		# The sprite holds an image that fabric can display
 		self.image = __new__ (fabric.Rect ({
-			width: self.game.scaleX (self.width), height: self.game.scaleY (self.height),
-			originX: 'center', originY: 'center', fill: 'white'
+			'width': self.game.scaleX (self.width), 'height': self.game.scaleY (self.height),
+			'originX': 'center', 'originY': 'center', 'fill': 'white'
 		}))
 		
 	__pragma__ ('kwargs')
@@ -157,23 +157,24 @@ class Scoreboard (Attribute):
 			
 	def install (self): # Graphical representation of scoreboard are four labels and a separator line	
 		self.playerLabels = [__new__ (fabric.Text ('Player {}'.format (name), {
-				fill: 'white', fontFamily: 'arial', fontSize: '30',
-				left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (fieldHeight // 2 + self.nameShift)
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30',
+				'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.nameShift)
 		})) for name, position in (('AZ keys:', -7/16), ('KM keys:', 1/16))]
  		
 		self.hintLabel = __new__ (fabric.Text ('[spacebar] starts game, [enter] resets score', {
-				fill: 'white', fontFamily: 'arial', fontSize: '12',
-				left: self.game.orthoX (-7/16 * orthoWidth), top: self.game.orthoY (fieldHeight // 2 + self.hintShift)
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12',
+				'left': self.game.orthoX (-7/16 * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.hintShift)
 		}))
 		
 		self.image = __new__ (fabric.Line ([
 				self.game.orthoX (-orthoWidth // 2), self.game.orthoY (fieldHeight // 2),
 				self.game.orthoX (orthoWidth // 2), self.game.orthoY (fieldHeight // 2)
 			],
-			{stroke: 'white'}
+			{'stroke': 'white'}
 		))
 				
-	def increment (self, playerIndex):
+	def increment (self, playerIndex, fiets):
+		p = q
 		self.scores [playerIndex] += 1
 	
 	def reset (self):
@@ -182,8 +183,8 @@ class Scoreboard (Attribute):
 		
 	def commit (self):			# Committing labels is adapting their texts
 		self.scoreLabels = [__new__ (fabric.Text ('{}'.format (score), {
-				fill: 'white', fontFamily: 'arial', fontSize: '30',
-				left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (fieldHeight // 2 + self.nameShift)
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30',
+				'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.nameShift)
 		})) for score, position in zip (self.scores, (-2/16, 6/16))]
 
 	def draw (self):
@@ -199,7 +200,7 @@ class Game:
 		self.pause = True							# Start game in paused state
 		self.keySet = set ()
 		
-		self.canvas = __new__ (fabric.Canvas ('canvas', {backgroundColor: 'black', originX: 'center', originY: 'center'}))
+		self.canvas = __new__ (fabric.Canvas ('canvas', {'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}))
 		self.canvas.onWindowResise = self.resize	# Install draw callback, will be called asynch
 		self.canvas.onWindowDraw = self.draw		# Install resize callback, will be called if resized
 		self.canvas.lineWidth = 2

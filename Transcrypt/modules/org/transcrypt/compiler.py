@@ -21,7 +21,7 @@ import datetime
 import shutil
 import traceback
 
-from org.transcrypt import __base__, utils, minify
+from org.transcrypt import __base__, utils, minify, static_check
 
 class ModuleMetadata:
 	def __init__ (self, program, name):
@@ -169,8 +169,11 @@ class Module:
 		self.metadata = moduleMetadata	# May contain dots if it's imported
 		self.program.moduleDict [self.metadata.name] = self
 		
+		
 		if self.metadata.dirty ():
 			self.parse ()
+			if utils.commandArgs.check:
+				static_check.run (self.metadata.sourcePath, self.parseTree)
 			self.dump ()
 			self.generate ()
 			self.extract ()
@@ -270,8 +273,6 @@ class Module:
 class Generator (ast.NodeVisitor):
 	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 	
-
-
 	def __init__ (self, module):	
 		self.module = module
 		
@@ -289,6 +290,7 @@ class Generator (ast.NodeVisitor):
 			('sort', 'py_sort'),
 			('js_split', 'split'),
 			('split', 'py_split'),
+			('keys', 'py_keys'),
 			('js_arguments', 'arguments'),
 			('arguments', 'py_arguments')
 # END predef_aliases
@@ -964,10 +966,24 @@ class Generator (ast.NodeVisitor):
 		self.emit ('continue')
 	
 	def visit_Dict (self, node):
+		if not utils.commandArgs.jskeys:
+			for key in node.keys:
+				if not type (key) in (ast.Str, ast.Num):
+					self.emit ('dict ([')
+					for index, (key, value) in enumerate (zip (node.keys, node.values)):
+						self.emitComma (index)
+						self.emit ('[')
+						self.visit (key)	# In a JavaScripg list name is evaluated as variable or function call to produce a key
+						self.emit (', ')
+						self.visit (value)
+						self.emit (']')
+					self.emit ('])')
+					return
+					
 		self.emit ('{{')
 		for index, (key, value) in enumerate (zip (node.keys, node.values)):
 			self.emitComma (index)
-			self.visit (key)
+			self.visit (key)	# In a JavaScript object literal name isn't evaluated but literally taken to be a key ('virtual' quotes added) 
 			self.emit (': ')
 			self.visit (value)
 		self.emit ('}}')

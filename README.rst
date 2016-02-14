@@ -48,6 +48,7 @@ Status
 What's new
 ==========
 
+- -j (--jskeys) option added. Normally in Python {key: 'value'} and {keyfunc (): 'value'} are allowed, and the keys are dynamically evaluated. JS programmers are used to {key, 'value'} being interpreted as {'key': 'value'} and {keyfunc (): 'value'} being forbidden. The Python interpretation is preferred, since its more flexible. If you cherish your JS habits, use the --jskeys switch. Note that this has no influence on compatibility with 3rd party JS libs.
 - FastCall (fcall) command line switch, __pragma__ ('fcall') and __pragma__ ('nofcall') added. When this switch is on, Transcrypt will bind methods directly to objects rather than to prototypes somewhere up in the class hierarchy, surpassing native JavaScript speed in many cases, since no travelling of the prototype chain is needed. Since a reference to the bound method is stored in each object of that class, the most efficient thing to do is to reserve its use for functions that are called in inner loops, achieving for lightning fast code with negligeable space overhead. The fcall mechanism has no semantical or syntactical consequences, the syntax remains pure Python.
 - Linux startup script added (I hope). It doesn't have an extension, but \*. didn't work, I hope \* does...
 - Startup batches / scripts were missing, added to distro.

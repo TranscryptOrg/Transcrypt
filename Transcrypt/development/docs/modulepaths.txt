@@ -1,0 +1,72 @@
+An example of a directory tree appended below.
+Seems that myProg itself has to be treated not like a search root but like a module.
+
+In the modules tree a complete path like myMod5.myMod51.myMod522 always denotes the right python file or a directory.
+If it denotes a directory, the __default__.py file of that directory is appended to the complete path, so that will be imported.
+The first chunk (module root) in a complete path rooted in the modules tree must always be a directory, to prevent jamming all .js files in one directory.
+This is done since top level modules are considered to be the unit of distribution, so must be self contained.
+
+In the myProg tree the situation is almost the same, except for the top level.
+Here the first chunk is allowed to be a file, since the whole myProg directory is the unit of distribution.
+
+myProg
+	myProg.py
+	myMod1.py
+	myMod2.py
+	javascript
+		myProg.js
+		myMod1.js
+		myMod2.js
+	myMod3
+		myMod31.py
+		myMod32.py
+		javascript
+			myMod31.js
+			myMod32.js
+		myMod32
+			myMod321.py
+			myMod322.py
+			javascript
+				myMod321.js
+				myMod322.js
+	myMod4
+		__default__.py
+		javascript
+			__default__js
+			
+modules
+	transcrypt
+		...
+	myMod5
+		myMod51.py
+		myMod52.py
+		javascript
+			myMod51.js
+			myMod52.js
+		myMod52
+			myMod521.py
+			myMod522.py
+			javascript
+				myMod521.js
+				myMod522.js
+	myMod6
+		__default__.py
+		javascript
+			__default__.js
+			
+For simplicity, assume modules are always compiled from an application.
+
+LOCAL SEARCH, EVEN IN GLOBAL TREE
+First the module is searched locally (which may be in the global tree):
+	Append the qualif. name of the importer to the qualif. name of the imported
+	Search for that module first relative to the importer dir, which may be in the global tree
+
+GLOBAL SEARCH, ONLY ABSOLUTE
+Then use only the qualified name of the imported.
+	Search relative to modulesdir
+	
+The module key is either __source__.<dottedPath> or __modules__.<dottedPath>
+	
+	
+
+		

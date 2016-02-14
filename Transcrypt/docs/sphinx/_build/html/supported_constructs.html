@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.79 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.83 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.79',
+        VERSION:     '3.5.83',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.79 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.83 documentation" href="index.html" />
     <link rel="next" title="5. Integration with JavaScript libraries" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.79 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -331,7 +331,17 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">aDict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s">&#39;plant&#39;</span><span class="p">,</span> <span class="s">&#39;animal&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aDict</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aDict</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">aDict</span> <span class="p">[</span><span class="s">&#39;animal&#39;</span><span class="p">])</span>
+    
 
+    <span class="k">def</span> <span class="nf">p</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="mi">3</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">3</span>
+        
+    <span class="n">q</span> <span class="o">=</span> <span class="mi">4</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">({</span><span class="n">p</span><span class="p">:</span> <span class="s">&#39;three&#39;</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="s">&#39;four&#39;</span><span class="p">})</span>
+    
     <span class="n">aTuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">aTuple</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">aTuple</span><span class="p">))</span>
@@ -849,7 +859,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.79 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

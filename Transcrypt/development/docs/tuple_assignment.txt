@@ -1,0 +1,40 @@
+a, b = b, a
+
+__temp__ = [b, a]
+a = __temp__ [0]
+b = __temp__ [1]
+
+(x, y), (p, q) = (1, 2), (3, 4)
+
+__temp__ = [[1, 2], [3, 4]]
+
+x = __temp__ [0][0]
+y = __temp__ [0][1]
+p = __temp__ [1][0]
+q = __temp__ [1][1]
+
+
+__temp__ = None
+for element in targets:
+	if type (element) == ast.Tuple:
+		if __temp__ == None:
+			self.emit ('__temp__ = ')
+			self.visit (value)
+			self.emit (';')
+		
+		'''
+			Traverse LHS, making a nested list of LValues (they all are, the parser will check), namely Subscript, Name, Attribute with ctx == Store.
+			Then traverse that list and use the indices to assign the right parts of
+			the RHS list that's referred to by temp.
+			
+			Traversing the LHS may include evaluation of functions that include other
+			tuple assignments. But they are parsed separately so they don't byte. Never is a parse of a tuple assignment encountered during a parse of another tuple assignment (I sincerely hope).
+		'''
+	else:
+		self.visit (element)
+		self.emit (' = ')
+		
+		if __temp__ == None:
+			self.visit (value)
+		else:						# Prevent double evaluation and side effects
+			self.emit ('__temp__')

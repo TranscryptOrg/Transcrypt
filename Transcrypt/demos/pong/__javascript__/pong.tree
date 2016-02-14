@@ -304,21 +304,16 @@ file: Module
 										args: list 
 											element: Dict 
 												keys: list 
-													element: Name 
-														id: str = width
-														ctx: Load 
-													element: Name 
-														id: str = height
-														ctx: Load 
-													element: Name 
-														id: str = originX
-														ctx: Load 
-													element: Name 
-														id: str = originY
-														ctx: Load 
-													element: Name 
-														id: str = fill
-														ctx: Load 
+													element: Str 
+														s: str = width
+													element: Str 
+														s: str = height
+													element: Str 
+														s: str = originX
+													element: Str 
+														s: str = originY
+													element: Str 
+														s: str = fill
 												values: list 
 													element: Call 
 														func: Attribute 
@@ -1934,21 +1929,16 @@ file: Module
 													keywords: list 
 												element: Dict 
 													keys: list 
-														element: Name 
-															id: str = fill
-															ctx: Load 
-														element: Name 
-															id: str = fontFamily
-															ctx: Load 
-														element: Name 
-															id: str = fontSize
-															ctx: Load 
-														element: Name 
-															id: str = left
-															ctx: Load 
-														element: Name 
-															id: str = top
-															ctx: Load 
+														element: Str 
+															s: str = fill
+														element: Str 
+															s: str = fontFamily
+														element: Str 
+															s: str = fontSize
+														element: Str 
+															s: str = left
+														element: Str 
+															s: str = top
 													values: list 
 														element: Str 
 															s: str = white
@@ -2069,21 +2059,16 @@ file: Module
 												s: str = [spacebar] starts game, [enter] resets score
 											element: Dict 
 												keys: list 
-													element: Name 
-														id: str = fill
-														ctx: Load 
-													element: Name 
-														id: str = fontFamily
-														ctx: Load 
-													element: Name 
-														id: str = fontSize
-														ctx: Load 
-													element: Name 
-														id: str = left
-														ctx: Load 
-													element: Name 
-														id: str = top
-														ctx: Load 
+													element: Str 
+														s: str = fill
+													element: Str 
+														s: str = fontFamily
+													element: Str 
+														s: str = fontSize
+													element: Str 
+														s: str = left
+													element: Str 
+														s: str = top
 												values: list 
 													element: Str 
 														s: str = white
@@ -2249,9 +2234,8 @@ file: Module
 												ctx: Load 
 											element: Dict 
 												keys: list 
-													element: Name 
-														id: str = stroke
-														ctx: Load 
+													element: Str 
+														s: str = stroke
 												values: list 
 													element: Str 
 														s: str = white
@@ -2269,12 +2253,23 @@ file: Module
 							element: arg 
 								arg: str = playerIndex
 								annotation: NoneType = None
+							element: arg 
+								arg: str = fiets
+								annotation: NoneType = None
 						vararg: NoneType = None
 						kwonlyargs: list 
 						kw_defaults: list 
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = p
+									ctx: Store 
+							value: Name 
+								id: str = q
+								ctx: Load 
 						element: AugAssign 
 							target: Subscript 
 								value: Attribute 
@@ -2384,21 +2379,16 @@ file: Module
 													keywords: list 
 												element: Dict 
 													keys: list 
-														element: Name 
-															id: str = fill
-															ctx: Load 
-														element: Name 
-															id: str = fontFamily
-															ctx: Load 
-														element: Name 
-															id: str = fontSize
-															ctx: Load 
-														element: Name 
-															id: str = left
-															ctx: Load 
-														element: Name 
-															id: str = top
-															ctx: Load 
+														element: Str 
+															s: str = fill
+														element: Str 
+															s: str = fontFamily
+														element: Str 
+															s: str = fontSize
+														element: Str 
+															s: str = left
+														element: Str 
+															s: str = top
 													values: list 
 														element: Str 
 															s: str = white
@@ -2721,15 +2711,12 @@ file: Module
 												s: str = canvas
 											element: Dict 
 												keys: list 
-													element: Name 
-														id: str = backgroundColor
-														ctx: Load 
-													element: Name 
-														id: str = originX
-														ctx: Load 
-													element: Name 
-														id: str = originY
-														ctx: Load 
+													element: Str 
+														s: str = backgroundColor
+													element: Str 
+														s: str = originX
+													element: Str 
+														s: str = originY
 												values: list 
 													element: Str 
 														s: str = black

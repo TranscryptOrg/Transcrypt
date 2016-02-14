@@ -68,7 +68,7 @@
 	
 	// Find out if an attribute is special
 	var __specialattrib__ = function (attrib) {
-		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor';
+		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor' || attrib.startswith ('py_');
 	}
 	__all__.__specialattrib__ = __specialattrib__;
 		
@@ -447,11 +447,12 @@
 		var instance = {};
 		if (pairs) {
 			for (var index = 0; index < pairs.length; index++) {
+				var pair = pairs [index];
 				instance [pair [0]] = pair [1];
 			}
 		}
 		instance.__class__ = dict;	// Not all arrays are sets
-		instance.keys = __keys__;	// Defined externally, so only once
+		instance.py_keys = __keys__;	// Defined externally, so only once
 		return instance;
 	}
 	__all__.dict = dict;

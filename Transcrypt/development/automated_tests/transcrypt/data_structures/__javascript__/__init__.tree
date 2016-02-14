@@ -269,6 +269,58 @@ file: Module
 										s: str = animal
 								ctx: Load 
 						keywords: list 
+				element: FunctionDef 
+					name: str = p
+					args: arguments 
+						args: list 
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Num 
+								n: int = 3
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = p
+							ctx: Store 
+					value: Num 
+						n: int = 3
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = q
+							ctx: Store 
+					value: Num 
+						n: int = 4
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = p
+										ctx: Load 
+									element: Name 
+										id: str = q
+										ctx: Load 
+								values: list 
+									element: Str 
+										s: str = three
+									element: Str 
+										s: str = four
+						keywords: list 
 				element: Assign 
 					targets: list 
 						element: Name 

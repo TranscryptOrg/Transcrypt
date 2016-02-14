@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-14 14:55:07
+// Transcrypt'ed from Python, 2016-02-14 21:22:17
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -144,7 +144,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.79';
+							self.transpilerVersion = '3.5.83';
 							self.targetSubDir = '__javascript__';
 						}, '__init__');}
 					});
@@ -339,7 +339,7 @@ function pong () {
 	
 	// Find out if an attribute is special
 	var __specialattrib__ = function (attrib) {
-		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor';
+		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor' || attrib.startswith ('py_');
 	}
 	__all__.__specialattrib__ = __specialattrib__;
 		
@@ -718,11 +718,12 @@ function pong () {
 		var instance = {};
 		if (pairs) {
 			for (var index = 0; index < pairs.length; index++) {
+				var pair = pairs [index];
 				instance [pair [0]] = pair [1];
 			}
 		}
 		instance.__class__ = dict;	// Not all arrays are sets
-		instance.keys = __keys__;	// Defined externally, so only once
+		instance.py_keys = __keys__;	// Defined externally, so only once
 		return instance;
 	}
 	__all__.dict = dict;
@@ -15856,7 +15857,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				Attribute.__init__ (self, game);
 			}, '__init__');},
 			get install () {return __get__ (this, function (self) {
-				self.image = new fabric.Rect ({width: self.game.scaleX (self.width), height: self.game.scaleY (self.height), originX: 'center', originY: 'center', fill: 'white'});
+				self.image = new fabric.Rect ({'width': self.game.scaleX (self.width), 'height': self.game.scaleY (self.height), 'originX': 'center', 'originY': 'center', 'fill': 'white'});
 			}, 'install');},
 			get reset () {return __get__ (this, function (self, vX, vY, x, y) {
 				if (typeof vX == 'undefined' || (vX != null && vX .__class__ == __kwargdict__)) {;
@@ -15997,14 +15998,15 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 						var __left0__ = __iter0__ [__index0__];
 						var name = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('Player {}'.format (name), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+						__accu0__.append (new fabric.Text ('Player {}'.format (name), {'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
 				} ();
-				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {fill: 'white', fontFamily: 'arial', fontSize: '12', left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
-				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {stroke: 'white'});
+				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12', 'left': self.game.orthoX (-7 / 16 * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
+				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {'stroke': 'white'});
 			}, 'install');},
-			get increment () {return __get__ (this, function (self, playerIndex) {
+			get increment () {return __get__ (this, function (self, playerIndex, fiets) {
+				var p = q;
 				self.scores [playerIndex]++;
 			}, 'increment');},
 			get reset () {return __get__ (this, function (self) {
@@ -16019,7 +16021,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 						var __left0__ = __iter0__ [__index0__];
 						var score = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('{}'.format (score), {fill: 'white', fontFamily: 'arial', fontSize: '30', left: self.game.orthoX (position * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+						__accu0__.append (new fabric.Text ('{}'.format (score), {'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
 					}
 					return __accu0__;
 				} ();
@@ -16044,7 +16046,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				self.serviceIndex = (Math.random () > 0.5 ? 1 : 0);
 				self.pause = true;
 				self.keySet = set ();
-				self.canvas = new fabric.Canvas ('canvas', {backgroundColor: 'black', originX: 'center', originY: 'center'});
+				self.canvas = new fabric.Canvas ('canvas', {'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'});
 				self.canvas.onWindowResise = self.resize;
 				self.canvas.onWindowDraw = self.draw;
 				self.canvas.lineWidth = 2;

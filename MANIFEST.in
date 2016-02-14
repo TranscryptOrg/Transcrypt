@@ -1,7 +1,7 @@
 global-include *.py *.js *.rst *.html *.css *.lyx *.pdf *.png *.gif *.jpg *.txt *.jar *.bat *
-global-exclude *.pyc *.git .gitignore *.git
+global-exclude *.pyc .gitignore
 
-prune Transcrypt/development/*.git
+prune .git
 prune Transcrypt/development/attic
 prune Transcrypt/development/docs
 prune Transcrypt/development/experiments

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-14 14:55:05
+// Transcrypt'ed from Python, 2016-02-14 21:22:15
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -144,7 +144,7 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.79';
+							self.transpilerVersion = '3.5.83';
 							self.targetSubDir = '__javascript__';
 						}, '__init__');}
 					});
@@ -339,7 +339,7 @@ function jquery_demo () {
 	
 	// Find out if an attribute is special
 	var __specialattrib__ = function (attrib) {
-		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor';
+		return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor' || attrib.startswith ('py_');
 	}
 	__all__.__specialattrib__ = __specialattrib__;
 		
@@ -718,11 +718,12 @@ function jquery_demo () {
 		var instance = {};
 		if (pairs) {
 			for (var index = 0; index < pairs.length; index++) {
+				var pair = pairs [index];
 				instance [pair [0]] = pair [1];
 			}
 		}
 		instance.__class__ = dict;	// Not all arrays are sets
-		instance.keys = __keys__;	// Defined externally, so only once
+		instance.py_keys = __keys__;	// Defined externally, so only once
 		return instance;
 	}
 	__all__.dict = dict;
