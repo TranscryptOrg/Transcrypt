@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.72 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.79 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.72',
+        VERSION:     '3.5.79',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.72 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.79 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.72 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.79 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -116,7 +116,7 @@
         
     <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
-       
+
 <span class="k">class</span> <span class="nc">Sprite</span> <span class="p">(</span><span class="n">Attribute</span><span class="p">):</span>   <span class="c"># Here, a sprite is an attribute that can move</span>
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
@@ -200,7 +200,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>               <span class="c"># Ball may have gone too far already</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">vX</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">vX</span>  <span class="c"># Bounce on paddle</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">speedUp</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-                
+        
 <span class="k">class</span> <span class="nc">Ball</span> <span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
     <span class="n">side</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="n">speed</span> <span class="o">=</span> <span class="mi">300</span> <span class="c"># / s</span>
@@ -242,7 +242,7 @@
         <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">abs</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vX</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vX</span> <span class="o">*=</span> <span class="n">factor</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">*=</span> <span class="n">factor</span>           
-            
+
 <span class="k">class</span> <span class="nc">Scoreboard</span> <span class="p">(</span><span class="n">Attribute</span><span class="p">):</span>
     <span class="n">nameShift</span> <span class="o">=</span> <span class="mi">75</span>
     <span class="n">hintShift</span> <span class="o">=</span> <span class="mi">25</span>
@@ -284,7 +284,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">scoreLabel</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hintLabel</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
- 
+        
 <span class="k">class</span> <span class="nc">Game</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">serviceIndex</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span>    <span class="c"># Index of player that has initial service</span>
@@ -343,13 +343,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
             <span class="n">attribute</span><span class="o">.</span><span class="n">draw</span> <span class="p">()</span>
-            
+             
     <span class="k">def</span> <span class="nf">resize</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
         <span class="k">pass</span>
         
     <span class="k">def</span> <span class="nf">scaleX</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">orthoWidth</span><span class="p">)</span>
-        
+            
     <span class="k">def</span> <span class="nf">scaleY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">orthoHeight</span><span class="p">)</span>   
         
@@ -358,7 +358,7 @@
         
     <span class="k">def</span> <span class="nf">orthoY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaleY</span> <span class="p">(</span><span class="n">orthoHeight</span> <span class="o">-</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
-        
+                
     <span class="k">def</span> <span class="nf">keydown</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">keyCode</span><span class="p">)</span>
         
@@ -387,29 +387,29 @@
                 self.game.attributes.append (self);
                 self.install ();
                 self.reset ();
-            });},
+            }, &#39;__init__&#39;);},
             get reset () {return __get__ (this, function (self) {
                 self.commit ();
-            });},
+            }, &#39;reset&#39;);},
             get predict () {return __get__ (this, function (self) {
                 ;
-            });},
+            }, &#39;predict&#39;);},
             get interact () {return __get__ (this, function (self) {
                 ;
-            });},
+            }, &#39;interact&#39;);},
             get commit () {return __get__ (this, function (self) {
                 ;
-            });}
+            }, &#39;commit&#39;);}
         });
         var Sprite = __class__ (&#39;Sprite&#39;, [Attribute], {
             get __init__ () {return __get__ (this, function (self, game, width, height) {
                 self.width = width;
                 self.height = height;
                 Attribute.__init__ (self, game);
-            });},
+            }, &#39;__init__&#39;);},
             get install () {return __get__ (this, function (self) {
                 self.image = new fabric.Rect ({width: self.game.scaleX (self.width), height: self.game.scaleY (self.height), originX: &#39;center&#39;, originY: &#39;center&#39;, fill: &#39;white&#39;});
-            });},
+            }, &#39;install&#39;);},
             get reset () {return __get__ (this, function (self, vX, vY, x, y) {
                 if (typeof vX == &#39;undefined&#39; || (vX != null &amp;&amp; vX .__class__ == __kwargdict__)) {;
                     var vX = 0;
@@ -443,27 +443,27 @@
                 self.x = x;
                 self.y = y;
                 Attribute.reset (self);
-            });},
+            }, &#39;reset&#39;);},
             get predict () {return __get__ (this, function (self) {
                 self.x += self.vX * self.game.deltaT;
                 self.y += self.vY * self.game.deltaT;
-            });},
+            }, &#39;predict&#39;);},
             get commit () {return __get__ (this, function (self) {
                 self.image.left = self.game.orthoX (self.x);
                 self.image.top = self.game.orthoY (self.y);
-            });},
+            }, &#39;commit&#39;);},
             get draw () {return __get__ (this, function (self) {
                 self.game.canvas.add (self.image);
-            });}
+            }, &#39;draw&#39;);}
         });
         var Paddle = __class__ (&#39;Paddle&#39;, [Sprite], {
             get __init__ () {return __get__ (this, function (self, game, index) {
                 self.index = index;
                 Sprite.__init__ (self, game, self.width, self.height);
-            });},
+            }, &#39;__init__&#39;);},
             get reset () {return __get__ (this, function (self) {
                 Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth) / Math.floor (2) - self.margin : Math.floor (-orthoWidth) / Math.floor (2) + self.margin), y: 0}));
-            });},
+            }, &#39;reset&#39;);},
             get predict () {return __get__ (this, function (self) {
                 self.vY = 0;
                 if (self.index) {
@@ -487,7 +487,7 @@
                     }
                 }
                 Sprite.predict (self);
-            });},
+            }, &#39;predict&#39;);},
             get interact () {return __get__ (this, function (self) {
                 self.y = Math.max (Math.floor (self.height) / Math.floor (2) - Math.floor (fieldHeight) / Math.floor (2), Math.min (self.y, Math.floor (fieldHeight) / Math.floor (2) - Math.floor (self.height) / Math.floor (2)));
                 if ((self.y - Math.floor (self.height) / Math.floor (2) &lt; self.game.ball.y &amp;&amp; self.game.ball.y &lt; self.y + Math.floor (self.height) / Math.floor (2)) &amp;&amp; (self.index == 0 &amp;&amp; self.game.ball.x &lt; self.x || self.index == 1 &amp;&amp; self.game.ball.x &gt; self.x)) {
@@ -495,7 +495,7 @@
                     self.game.ball.vX = -self.game.ball.vX;
                     self.game.ball.speedUp (self);
                 }
-            });}
+            }, &#39;interact&#39;);}
         });
         Paddle.margin = 30;
         Paddle.width = 10;
@@ -504,11 +504,11 @@
         var Ball = __class__ (&#39;Ball&#39;, [Sprite], {
             get __init__ () {return __get__ (this, function (self, game) {
                 Sprite.__init__ (self, game, self.side, self.side);
-            });},
+            }, &#39;__init__&#39;);},
             get reset () {return __get__ (this, function (self) {
                 var angle = self.game.serviceIndex * Math.PI + (Math.random () &gt; 0.5 ? 1 : -1) * Math.random () * Math.atan (fieldHeight / orthoWidth);
                 Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
-            });},
+            }, &#39;reset&#39;);},
             get predict () {return __get__ (this, function (self) {
                 Sprite.predict (self);
                 if (self.x &lt; Math.floor (-orthoWidth) / Math.floor (2)) {
@@ -529,14 +529,14 @@
                         self.vY = -self.vY;
                     }
                 }
-            });},
+            }, &#39;predict&#39;);},
             get speedUp () {return __get__ (this, function (self, bat) {
                 var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / Math.floor (bat.height) / Math.floor (2), 2);
                 if (Math.abs (self.vX) &lt; 3 * self.speed) {
                     self.vX *= factor;
                     self.vY *= factor;
                 }
-            });}
+            }, &#39;speedUp&#39;);}
         });
         Ball.side = 8;
         Ball.speed = 300;
@@ -555,14 +555,14 @@
                 } ();
                 self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {fill: &#39;white&#39;, fontFamily: &#39;arial&#39;, fontSize: &#39;12&#39;, left: self.game.orthoX (-7 / 16 * orthoWidth), top: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
                 self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {stroke: &#39;white&#39;});
-            });},
+            }, &#39;install&#39;);},
             get increment () {return __get__ (this, function (self, playerIndex) {
                 self.scores [playerIndex]++;
-            });},
+            }, &#39;increment&#39;);},
             get reset () {return __get__ (this, function (self) {
                 self.scores = list ([0, 0]);
                 Attribute.reset (self);
-            });},
+            }, &#39;reset&#39;);},
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
@@ -575,7 +575,7 @@
                     }
                     return __accu0__;
                 } ();
-            });},
+            }, &#39;commit&#39;);},
             get draw () {return __get__ (this, function (self) {
                 var __iter0__ = zip (self.playerLabels, self.scoreLabels);
                 for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
@@ -587,7 +587,7 @@
                     self.game.canvas.add (self.hintLabel);
                 }
                 self.game.canvas.add (self.image);
-            });}
+            }, &#39;draw&#39;);}
         });
         Scoreboard.nameShift = 75;
         Scoreboard.hintShift = 25;
@@ -618,7 +618,7 @@
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.time = +new Date;
-            });},
+            }, &#39;__init__&#39;);},
             get update () {return __get__ (this, function (self) {
                 var oldTime = self.time;
                 self.time = +new Date;
@@ -650,7 +650,7 @@
                         attribute.commit ();
                     }
                 }
-            });},
+            }, &#39;update&#39;);},
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
@@ -661,7 +661,7 @@
                 }
                 self.ball.reset ();
                 self.pause = true;
-            });},
+            }, &#39;scored&#39;);},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
                 var __iter0__ = self.attributes;
@@ -669,28 +669,28 @@
                     var attribute = __iter0__ [__index0__];
                     attribute.draw ();
                 }
-            });},
+            }, &#39;draw&#39;);},
             get resize () {return __get__ (this, function (self, width, height) {
                 ;
-            });},
+            }, &#39;resize&#39;);},
             get scaleX () {return __get__ (this, function (self, x) {
                 return x * self.canvas.width / orthoWidth;
-            });},
+            }, &#39;scaleX&#39;);},
             get scaleY () {return __get__ (this, function (self, y) {
                 return y * self.canvas.height / orthoHeight;
-            });},
+            }, &#39;scaleY&#39;);},
             get orthoX () {return __get__ (this, function (self, x) {
                 return self.scaleX (x + Math.floor (orthoWidth) / Math.floor (2));
-            });},
+            }, &#39;orthoX&#39;);},
             get orthoY () {return __get__ (this, function (self, y) {
                 return self.scaleY (orthoHeight - Math.floor (fieldHeight) / Math.floor (2) - y);
-            });},
+            }, &#39;orthoY&#39;);},
             get keydown () {return __get__ (this, function (self, event) {
                 self.keySet.add (event.keyCode);
-            });},
+            }, &#39;keydown&#39;);},
             get keyup () {return __get__ (this, function (self, event) {
                 self.keySet.remove (event.keyCode);
-            });}
+            }, &#39;keyup&#39;);}
         });
         var game = Game ();
         __pragma__ (&#39;&lt;use&gt;&#39; +
@@ -852,7 +852,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.72 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.79 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -3,7 +3,7 @@ import sys
 import argparse
 import inspect
 
-debug = False
+debug = True
 
 class CommandArgs:		
 	def parse (self):
@@ -11,7 +11,8 @@ class CommandArgs:
 		
 		self.argParser.add_argument ('source', nargs='?', help = '.py file containing source code of main module')
 		self.argParser.add_argument ('-b', '--build', help = 'rebuild all target files from scratch', action = 'store_true')
-		self.argParser.add_argument ('-k', '--kwargs', help = 'enable keyword arguments by default. DISADVISED. Use __pragma__ (\'kwargs\') and __pragma__(\'kwargoff\') instead to prevent bloat', action = 'store_true')
+		self.argParser.add_argument ('-f', '--fcall', help = 'enable fastcall mechanism by default. You can also use __pragma__ (\'fcal\') and __pragma__ (\'nofcall\')', action = 'store_true')		
+		self.argParser.add_argument ('-k', '--kwargs', help = 'enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (\'kwargs\') and __pragma__(\'nokwargs\') instead to generate compact code', action = 'store_true')
 		self.argParser.add_argument ('-l', '--license', help = 'show license', action = 'store_true')
 		self.argParser.add_argument ('-n', '--nomin', help = 'no minification', action = 'store_true')
 		self.argParser.add_argument ('-r', '--run', help = 'run source file rather than compiling it', action = 'store_true')

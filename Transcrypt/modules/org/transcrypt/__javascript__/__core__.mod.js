@@ -45,20 +45,31 @@
 	// So __get__ should be called by a property rather then a function
 	// Factory __get__ creates one of three curried functions for func
 	// Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
-	var __get__ = function (self, func) {
+	var __get__ = function (self, func, quotedFuncName) {
 		if (self) {
 			if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {			// Object before the dot
-				return function (args) {						// Return bound function
-					var args = [] .slice.apply (arguments);
-					return func.apply (null, [self] .concat (args));
+				if (quotedFuncName) {									// Memoize call since fcall is on, by installing bound function in instance
+					Object.defineProperty (self, quotedFuncName, {		// Will override the non-own property, next time it will be called directly
+						value: function () {							// So next time just call curry function that calls function
+							var args = [] .slice.apply (arguments);
+							return func.apply (null, [self] .concat (args));
+						},				
+						writable: true,
+						enumerable: true,
+						configurable: true
+					});
 				}
+				return function () {									// Return bound function, code dupplication for efficiency if no memoizing
+					var args = [] .slice.apply (arguments);				// So multilayer search prototype, apply __get__, call curry func that calls func
+					return func.apply (null, [self] .concat (args));
+				};
 			}
-			else {												// Class before the dot
-				return func;									// Return static method
+			else {														// Class before the dot
+				return func;											// Return static method
 			}
 		}
-		else {													// Nothing before the dot
-			return func;										// Return free function
+		else {															// Nothing before the dot
+			return func;												// Return free function
 		}
 	}
 	__all__.__get__ = __get__;

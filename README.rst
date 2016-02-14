@@ -1,10 +1,11 @@
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
-- Allows for classical OO programming with *multiple inheritance*
+- Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
 - Simple relation between Python source and generated JavaScript code for easy debugging
 - Compact downloads, kB's rather than MB's
+- Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
 
 Request to early adopters
 =========================
@@ -47,6 +48,7 @@ Status
 What's new
 ==========
 
+- FastCall (fcall) command line switch, __pragma__ ('fcall') and __pragma__ ('nofcall') added. When this switch is on, Transcrypt will bind methods directly to objects rather than to prototypes somewhere up in the class hierarchy, surpassing native JavaScript speed in many cases, since no travelling of the prototype chain is needed. Since a reference to the bound method is stored in each object of that class, the most efficient thing to do is to reserve its use for functions that are called in inner loops, achieving for lightning fast code with negligeable space overhead. The fcall mechanism has no semantical or syntactical consequences, the syntax remains pure Python.
 - Linux startup script added (I hope). It doesn't have an extension, but \*. didn't work, I hope \* does...
 - Startup batches / scripts were missing, added to distro.
 - Transcrypt can now also run without minification, in case you can't or won't install Java. -n switch, see docs.

@@ -16,6 +16,7 @@ import os
 import sys
 import ast
 import re
+import copy
 import datetime
 import shutil
 import traceback
@@ -335,6 +336,7 @@ class Generator (ast.NodeVisitor):
 		}
 		
 		self.allowKeywordArgs = utils.commandArgs.kwargs
+		self.memoizeCalls = utils.commandArgs.fcall
 		
 		try:
 			self.visit (module.parseTree)
@@ -837,6 +839,17 @@ class Generator (ast.NodeVisitor):
 						for index in range (len (self.aliasers)) .reverse ():
 							if self.aliasers [index][0] == node.args [1]:
 								self.aliasers.pop (index)
+				elif node.args [0] .s == 'fcall':
+					self.memoizeCalls = True
+				elif node.args [0] .s == 'nofcall':
+					self.memoizeCalls = False
+				else:
+					raise utils.Error (
+						moduleName = self.module.metadata.name,
+						lineNr = self.lineNr,
+						message = 'Unknown __pragma__: {}'.format (node.args [0])
+					)
+					
 				return
 			elif node.func.id == '__new__':
 				self.emit ('new ')
@@ -1004,23 +1017,29 @@ class Generator (ast.NodeVisitor):
 		self.prevTemp ('iter')
 		
 	def visit_FunctionDef (self, node):
+		def emitScopedBody ():
+			self.inscope (node)
+			self.emitBody (node.body)
+			self.dedent ()
+			self.descope ()
+			
 		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 			if type (self.getscope ()) == ast.Module:
 				self.all.add (node.name)
 			self.emit ('var {} = function ', self.filterId (node.name))
-		else:															# Class scope, so it's a method and needs the currying mechanism
-			self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))
-			
-		self.inscope (node)		
-		self.visit (node.args)
-		self.emitBody (node.body)
-		self.dedent ()
-		self.descope ()
-		
-		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):
+			self.visit (node.args)
+			emitScopedBody ()
 			self.emit ('}}')
-		else:
-			self.emit ('}});}}')
+		else:															# Class scope, so it's a method and needs the currying mechanism
+			self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))	
+			self.visit (node.args)
+			emitScopedBody ()
+			self.emit ('}}')
+			
+			if self.memoizeCalls:
+				self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
+				
+			self.emit (');}}')
 		
 	def visit_If (self, node):
 		self.emit ('if (')

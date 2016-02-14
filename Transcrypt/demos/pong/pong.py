@@ -24,7 +24,7 @@ class Attribute:	# Attribute in the gaming sense of the word, rather than of an 
 		
 	def commit (self):
 		pass
-	   
+
 class Sprite (Attribute):	# Here, a sprite is an attribute that can move
 	def __init__ (self, game, width, height):
 		self.width = width
@@ -108,7 +108,7 @@ class Paddle (Sprite):
 			self.game.ball.x = self.x				# Ball may have gone too far already
 			self.game.ball.vX = -self.game.ball.vX	# Bounce on paddle
 			self.game.ball.speedUp (self)
-				
+		
 class Ball (Sprite):
 	side = 8
 	speed = 300 # / s
@@ -150,7 +150,7 @@ class Ball (Sprite):
 		if Math.abs (self.vX) < 3 * self.speed:
 			self.vX *= factor
 			self.vY *= factor			
-			
+
 class Scoreboard (Attribute):
 	nameShift = 75
 	hintShift = 25
@@ -192,7 +192,7 @@ class Scoreboard (Attribute):
 			self.game.canvas.add (scoreLabel)
 			self.game.canvas.add (self.hintLabel)
 		self.game.canvas.add (self.image)
- 
+		
 class Game:
 	def __init__ (self):
 		self.serviceIndex = 1 if Math.random () > 0.5 else 0	# Index of player that has initial service
@@ -251,13 +251,13 @@ class Game:
 		self.canvas.clear ()
 		for attribute in self.attributes:
 			attribute.draw ()
-			
+			 
 	def resize (self, width, height):
 		pass
 		
 	def scaleX (self, x):
 		return x * (self.canvas.width / orthoWidth)
-		
+			
 	def scaleY (self, y):
 		return y * (self.canvas.height / orthoHeight)	
 		
@@ -266,7 +266,7 @@ class Game:
 		
 	def orthoY (self, y):
 		return self.scaleY (orthoHeight - fieldHeight // 2 - y)
-		
+				
 	def keydown (self, event):
 		self.keySet.add (event.keyCode)
 		
