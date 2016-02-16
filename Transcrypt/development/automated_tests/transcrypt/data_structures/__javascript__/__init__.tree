@@ -287,13 +287,6 @@ file: Module
 				element: Assign 
 					targets: list 
 						element: Name 
-							id: str = p
-							ctx: Store 
-					value: Num 
-						n: int = 3
-				element: Assign 
-					targets: list 
-						element: Name 
 							id: str = q
 							ctx: Store 
 					value: Num 
@@ -309,9 +302,12 @@ file: Module
 						args: list 
 							element: Dict 
 								keys: list 
-									element: Name 
-										id: str = p
-										ctx: Load 
+									element: Call 
+										func: Name 
+											id: str = p
+											ctx: Load 
+										args: list 
+										keywords: list 
 									element: Name 
 										id: str = q
 										ctx: Load 

@@ -601,47 +601,6 @@ file: Module
 														id: str = errorColor
 														ctx: Load 
 												keywords: list 
-										element: Assign 
-											targets: list 
-												element: Name 
-													id: str = test
-													ctx: Store 
-											value: Call 
-												func: Name 
-													id: str = zip
-													ctx: Load 
-												args: list 
-													element: Tuple 
-														elts: list 
-															element: Attribute 
-																value: Name 
-																	id: str = self
-																	ctx: Load 
-																attr: str = referenceBuffer
-																ctx: Load 
-															element: Attribute 
-																value: Name 
-																	id: str = self
-																	ctx: Load 
-																attr: str = referenceDivId
-																ctx: Load 
-														ctx: Load 
-													element: Tuple 
-														elts: list 
-															element: Attribute 
-																value: Name 
-																	id: str = self
-																	ctx: Load 
-																attr: str = testBuffer
-																ctx: Load 
-															element: Attribute 
-																value: Name 
-																	id: str = self
-																	ctx: Load 
-																attr: str = testDivId
-																ctx: Load 
-														ctx: Load 
-												keywords: list 
 										element: For 
 											target: Tuple 
 												elts: list 

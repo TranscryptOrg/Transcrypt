@@ -55,7 +55,6 @@ class AutoTester:
 		for index, (testItem, referenceItem) in enumerate (zip (self.testBuffer, self.referenceBuffer)):
 			if testItem != referenceItem:
 				document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor)
-				test = zip ((self.referenceBuffer, self.referenceDivId), (self.testBuffer, self.testDivId))
 				for buffer, divId, accentColor in ((self.referenceBuffer, self.referenceDivId, okColor), (self.testBuffer, self.testDivId, errorColor)):
 					buffer = itertools.chain (buffer [ : index], [
 						'!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])

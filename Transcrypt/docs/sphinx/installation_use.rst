@@ -30,6 +30,7 @@ Troubleshooting checklist
 
 1. Transcrypt was installed using *pip*, but *import transcrypt* fails. Transcrypt isn't a library but a compiler. Install and run it as described in this chapter.
 2. Transcrypt reports an error containing the word 'java'. Transcrypt produces both prettyfied and minified JavaScript output. For the minification it makes use of the Google Closure Compiler, which is included in the distribution and requires Java to run. You can check proper installation of Java by typing the word *java* on the command line. This should give you a list of options: *Usage: java [-options] class []args...]* and so on. If you can't or won't install Java, you can run Transcrypt without minification by using the *-n* command line switch.
+3. The static checker doesn't find all errors it could. The static checks, performed by the PyFlakes package that's part of the distribution, are of a 'light' variety. Style checks and false positives are avoided. The accent is on finding undefined identifiers and unused variables.
 
 Your first Transcrypt program
 -----------------------------
@@ -53,6 +54,8 @@ The minified JavaScript file *including the Transcrypt runtime* is only 10kB. Wi
 	:tab-width: 4
 	:caption: In hello.py, JavaScript function document.getElementById is called directly from Python, using plain Python values
 	
+.. _command_line_switches:
+	
 Command line switches
 ---------------------
 The available command line switches will be shown if you run transcript -h.
@@ -62,4 +65,6 @@ They are specified in the source code of Transcrypt as follows:
 	:pyobject: CommandArgs
 	:tab-width: 4
 	:caption: Transcrypt command line switches as specified in module/orgs/transcrypt/utils.py
+	
+If static checking is enabled, insert :ref:`dummy definitions of global JavaScript variables <skipping_fragments>` to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.
 	

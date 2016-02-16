@@ -1,14 +1,24 @@
 import os
 import sys
 
-sys.path.append ('{}/pyflakes'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')))
+from org.transcrypt import utils
 
+sys.path.append ('{}/pyflakes'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')))
 import pyflakes.checker
 
 def run (sourceFile, parseTree):
-	print ('>>>', sourceFile)
-	for message in pyflakes.checker.Checker (parseTree, sourceFile) .messages:
-		print (message)
-
+	messageHolders = sorted (
+		pyflakes.checker.Checker (parseTree, sourceFile) .messages,
+		key = lambda messageHolder: 10000 * messageHolder.lineno + messageHolder.col
+	)
 	
-	
+	utils.log (messageHolders or utils.commandArgs.verbose, 'Checking: {}'.format (sourceFile))
+	if messageHolders:
+		for messageHolder in messageHolders:
+			utils.log (True, '\n\tLine {}: {}'.format  (
+				messageHolder.lineno - utils.nrOfExtraLines,
+				messageHolder.message % messageHolder.message_args
+			))
+		utils.log (True, '\n')
+	else:
+		utils.log (utils.commandArgs.verbose, ' OK\n')

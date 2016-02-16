@@ -1,3 +1,7 @@
+__pragma__ ('skip')
+window = Math = Date = 0	# Prevent complaints by optional static checker
+__pragma__ ('noskip')
+
 from com.fabricjs import fabric
 
 orthoWidth = 1000
@@ -155,7 +159,7 @@ class Scoreboard (Attribute):
 	nameShift = 75
 	hintShift = 25
 			
-	def install (self): # Graphical representation of scoreboard are four labels and a separator line	
+	def install (self): # Graphical representation of scoreboard are four labels and a separator line
 		self.playerLabels = [__new__ (fabric.Text ('Player {}'.format (name), {
 				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30',
 				'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.nameShift)
@@ -173,10 +177,9 @@ class Scoreboard (Attribute):
 			{'stroke': 'white'}
 		))
 				
-	def increment (self, playerIndex, fiets):
-		p = q
+	def increment (self, playerIndex):
 		self.scores [playerIndex] += 1
-	
+		
 	def reset (self):
 		self.scores = [0, 0]
 		Attribute.reset (self)	# Only does a commit here

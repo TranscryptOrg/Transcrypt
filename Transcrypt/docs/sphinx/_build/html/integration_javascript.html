@@ -72,7 +72,7 @@
 <span class="sd">            return exports;</span>
 <span class="sd">        }}) () .fabric;</span>
 <span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
-    <span class="n">include</span> <span class="p">(</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">)</span>
+    <span class="n">__include__</span> <span class="p">(</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -90,7 +90,11 @@
 <tbody valign="top">
 <tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="pong-py">
 <div class="code-block-caption"><span class="caption-text">pong.py</span><a class="headerlink" href="#pong-py" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">Date</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c"># Prevent complaints by optional static checker</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
 
 <span class="n">orthoWidth</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="n">orthoHeight</span> <span class="o">=</span> <span class="mi">750</span>
@@ -266,10 +270,10 @@
         <span class="p">))</span>
                 
     <span class="k">def</span> <span class="nf">increment</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerIndex</span><span class="p">,</span> <span class="n">fiets</span><span class="p">):</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">q</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="p">[</span><span class="n">playerIndex</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    
+        
     <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">increment</span> <span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">Attribute</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c"># Only does a commit here</span>
         
@@ -374,6 +378,9 @@
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __pragma__ = 0;
+        ;
+        ;
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -407,9 +414,10 @@
                 self.width = width;
                 self.height = height;
                 Attribute.__init__ (self, game);
+                var a = 5;
             });},
             get install () {return __get__ (this, function (self) {
-                self.image = new fabric.Rect (dict ((&#39;width&#39;, self.game.scaleX (self.width), (&#39;height&#39;, self.game.scaleY (self.height), (&#39;originX&#39;, &#39;center&#39;, (&#39;originY&#39;, &#39;center&#39;, (&#39;fill&#39;, &#39;white&#39;));
+                self.image = new fabric.Rect ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;});
             });},
             get reset () {return __get__ (this, function (self, vX, vY, x, y) {
                 if (typeof vX == &#39;undefined&#39; || (vX != null &amp;&amp; vX .__class__ == __kwargdict__)) {;
@@ -550,18 +558,18 @@
                         var __left0__ = __iter0__ [__index0__];
                         var name = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), dict ((&#39;fill&#39;, &#39;white&#39;, (&#39;fontFamily&#39;, &#39;arial&#39;, (&#39;fontSize&#39;, &#39;30&#39;, (&#39;left&#39;, self.game.orthoX (position * orthoWidth), (&#39;top&#39;, self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift))));
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
                     }
                     return __accu0__;
                 } ();
-                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ((&#39;fill&#39;, &#39;white&#39;, (&#39;fontFamily&#39;, &#39;arial&#39;, (&#39;fontSize&#39;, &#39;12&#39;, (&#39;left&#39;, self.game.orthoX (-7 / 16 * orthoWidth), (&#39;top&#39;, self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)));
-                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), dict ((&#39;stroke&#39;, &#39;white&#39;));
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX (-7 / 16 * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
+                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {&#39;stroke&#39;: &#39;white&#39;});
             });},
             get increment () {return __get__ (this, function (self, playerIndex, fiets) {
-                var p = q;
                 self.scores [playerIndex]++;
             });},
             get reset () {return __get__ (this, function (self) {
+                self.increment ();
                 self.scores = list ([0, 0]);
                 Attribute.reset (self);
             });},
@@ -573,7 +581,7 @@
                         var __left0__ = __iter0__ [__index0__];
                         var score = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ((&#39;fill&#39;, &#39;white&#39;, (&#39;fontFamily&#39;, &#39;arial&#39;, (&#39;fontSize&#39;, &#39;30&#39;, (&#39;left&#39;, self.game.orthoX (position * orthoWidth), (&#39;top&#39;, self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift))));
+                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
                     }
                     return __accu0__;
                 } ();
@@ -598,7 +606,7 @@
                 self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
                 self.pause = true;
                 self.keySet = set ();
-                self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ((&#39;backgroundColor&#39;, &#39;black&#39;, (&#39;originX&#39;, &#39;center&#39;, (&#39;originY&#39;, &#39;center&#39;));
+                self.canvas = new fabric.Canvas (&#39;canvas&#39;, {&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;});
                 self.canvas.onWindowResise = self.resize;
                 self.canvas.onWindowDraw = self.draw;
                 self.canvas.lineWidth = 2;
@@ -701,10 +709,15 @@
         __pragma__ (&#39;&lt;all&gt;&#39;)
             __all__.Attribute = Attribute;
             __all__.Ball = Ball;
+            __all__.Date = Date;
             __all__.Game = Game;
+            __all__.Math = Math;
             __all__.Paddle = Paddle;
             __all__.Scoreboard = Scoreboard;
             __all__.Sprite = Sprite;
+            __all__.__include__ = __include__;
+            __all__.__new__ = __new__;
+            __all__.__pragma__ = __pragma__;
             __all__.enter = enter;
             __all__.esc = esc;
             __all__.fieldHeight = fieldHeight;
@@ -712,6 +725,7 @@
             __all__.orthoHeight = orthoHeight;
             __all__.orthoWidth = orthoWidth;
             __all__.space = space;
+            __all__.window = window;
         __pragma__ (&#39;&lt;/all&gt;&#39;)
     }) ();
 </pre></div>

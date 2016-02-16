@@ -1,5 +1,36 @@
 file: Module 
 	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = window
+					ctx: Store 
+				element: Name 
+					id: str = Math
+					ctx: Store 
+				element: Name 
+					id: str = Date
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 
 		element: ImportFrom 
 			module: str = com.fabricjs
 			names: list 
@@ -2253,23 +2284,12 @@ file: Module
 							element: arg 
 								arg: str = playerIndex
 								annotation: NoneType = None
-							element: arg 
-								arg: str = fiets
-								annotation: NoneType = None
 						vararg: NoneType = None
 						kwonlyargs: list 
 						kw_defaults: list 
 						kwarg: NoneType = None
 						defaults: list 
 					body: list 
-						element: Assign 
-							targets: list 
-								element: Name 
-									id: str = p
-									ctx: Store 
-							value: Name 
-								id: str = q
-								ctx: Load 
 						element: AugAssign 
 							target: Subscript 
 								value: Attribute 

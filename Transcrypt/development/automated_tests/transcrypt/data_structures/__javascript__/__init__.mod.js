@@ -23,9 +23,8 @@
 						var p = function () {
 							return 3;
 						};
-						var p = 3;
 						var q = 4;
-						autoTester.check (dict ([[p, 'three'], [q, 'four']]));
+						autoTester.check (dict ([[p (), 'three'], [q, 'four']]));
 						var aTuple = tuple (list ([1, 2, 3, 4, 5]));
 						autoTester.check (aTuple);
 						autoTester.check (len (aTuple));

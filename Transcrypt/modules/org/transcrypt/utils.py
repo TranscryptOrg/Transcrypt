@@ -3,29 +3,41 @@ import sys
 import argparse
 import inspect
 
-debug = False
+debug = True
 
 class CommandArgs:		
 	def parse (self):
 		self.argParser = argparse.ArgumentParser ()
 		
-		self.argParser.add_argument ('source', nargs='?', help = '.py file containing source code of main module')
-		self.argParser.add_argument ('-b', '--build', help = 'rebuild all target files from scratch', action = 'store_true')
-		self.argParser.add_argument ('-f', '--fcall', help = 'enable fastcall mechanism by default. You can also use __pragma__ (\'fcal\') and __pragma__ (\'nofcall\')', action = 'store_true')
-		self.argParser.add_argument ('-j', '--jskeys', help = 'interpret {key: \'value\'} as {\'key\': \'value\'} and forbid {key (): \'value\'}, as JavaScript does. DISADVISED, since it\'s less flexible than the Python interpretation. Use {\'key\': \'value\'} explicitly if you want literal keys', action = 'store_true')		
-		self.argParser.add_argument ('-k', '--kwargs', help = 'enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (\'kwargs\') and __pragma__(\'nokwargs\') instead to generate compact code', action = 'store_true')
-		self.argParser.add_argument ('-l', '--license', help = 'show license', action = 'store_true')
-		self.argParser.add_argument ('-n', '--nomin', help = 'no minification', action = 'store_true')
-		self.argParser.add_argument ('-r', '--run', help = 'run source file rather than compiling it', action = 'store_true')
-		self.argParser.add_argument ('-c', '--check', help = 'perform static check as part of compilation', action = 'store_true')
-		self.argParser.add_argument ('-v', '--verbose', help = 'show all messages', action = 'store_true')
+		self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
+		self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
+		self.argParser.add_argument ('-c', '--check', help = "perform static check as part of compilation", action = 'store_true')
+		self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
+		self.argParser.add_argument ('-j', '--jskeys', help = "interpret {key: 'value'} as {'key': 'value'} and forbid {key (): 'value'}, as JavaScript does. DISADVISED, since it's less flexible than the Python interpretation. Use {'key': 'value'} explicitly if you want literal keys", action = 'store_true')		
+		self.argParser.add_argument ('-k', '--kwargs', help = "enable keyword arguments by default. In general this is DISADVISED, use __pragma__ ('kwargs') and __pragma__('nokwargs') instead to generate compact code", action = 'store_true')
+		self.argParser.add_argument ('-l', '--license', help = "show license", action = 'store_true')
+		self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
+		self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
+		self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 		
 		if not (self.license or self.source):
 			log (True,  self.argParser.format_usage () .capitalize ())
 			sys.exit (1)
-		
+
+		global extraLines
+		extraLines = [
+			'def __pragma__ (): pass',	#  __pragma__ ('<all>') in JavaScript requires it to remain a function
+			'__pragma__ (\'skip\')',	# Here __pragma__ must already be a known name for the static_check
+			'__new__ = __include__ = 0',
+			'__pragma__ (\'noskip\')',
+			''
+		] if commandArgs.check else []
+		global nrOfExtraLines
+		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only to force linefeed
+		extraLines = '\n'.join (extraLines)
+				
 commandArgs = CommandArgs ()
 	
 def create (path):
@@ -45,7 +57,7 @@ def log (always, *args):
 class Error (Exception):
 	def __init__ (self, moduleName = '', lineNr = 0, message = ''):
 		self.moduleName = moduleName
-		self.lineNr = lineNr
+		self.lineNr = lineNr - nrOfExtraLines
 		self.message = message	
 
 	# First one encountered counts, for all fields, because it's closest to the error
@@ -56,7 +68,7 @@ class Error (Exception):
 			self.moduleName = moduleName
 			
 		if not self.lineNr:
-			self.lineNr = lineNr
+			self.lineNr = lineNr - nrOfExtraLines
 			
 		if not self.message:
 			self.message = message

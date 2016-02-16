@@ -54,7 +54,7 @@ if utils.commandArgs.run:
 			'import sys\n' +
 			'sys.path [0] = sys.path [1 : ]\n' +	# "import transcrypt" should refer to library rather than to this file
 			'sys.path.append (\'{}\')\n'.format (modulesDir) +
-			sourceFile.read (),
+			sourceFile.read ()
 		)
 else:
 	try:

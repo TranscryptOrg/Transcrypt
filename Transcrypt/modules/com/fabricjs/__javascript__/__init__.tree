@@ -23,7 +23,7 @@ file: Module
 	
 					element: Call 
 						func: Name 
-							id: str = include
+							id: str = __include__
 							ctx: Load 
 						args: list 
 							element: Str 

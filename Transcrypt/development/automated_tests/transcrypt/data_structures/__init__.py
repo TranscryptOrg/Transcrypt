@@ -20,12 +20,10 @@ def run (autoTester):
 
 	def p ():
 		return 3
-
-	p = 3
 		
 	q = 4
 	
-	autoTester.check ({p: 'three', q: 'four'})
+	autoTester.check ({p (): 'three', q: 'four'})
 	
 	aTuple = (1, 2, 3, 4, 5)
 	autoTester.check(aTuple)

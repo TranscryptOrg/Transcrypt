@@ -18,7 +18,7 @@
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						}, '__init__');},
+						});},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -36,7 +36,7 @@
 							else {
 								self.referenceBuffer.append (item);
 							}
-						}, 'check');},
+						});},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -52,7 +52,7 @@
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						}, 'dump');},
+						});},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -64,7 +64,6 @@
 								var referenceItem = __left0__ [1][1];
 								if (testItem != referenceItem) {
 									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
-									var test = zip (tuple (list ([self.referenceBuffer, self.referenceDivId])), tuple (list ([self.testBuffer, self.testDivId])));
 									var __iter1__ = tuple (list ([tuple (list ([self.referenceBuffer, self.referenceDivId, okColor])), tuple (list ([self.testBuffer, self.testDivId, errorColor]))]));
 									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 										var __left0__ = __iter1__ [__index1__];
@@ -82,12 +81,12 @@
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						}, 'compare');},
+						});},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						}, 'run');},
+						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -95,7 +94,7 @@
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						}, 'done');}
+						});}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +

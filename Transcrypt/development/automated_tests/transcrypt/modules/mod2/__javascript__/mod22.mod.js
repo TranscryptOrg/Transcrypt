@@ -7,7 +7,7 @@
 					var B = __class__ ('B', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.x = 'Geef mij maar Amsterdam\n';
-						}, '__init__');}
+						});}
 					});
 					__pragma__ ('<all>')
 						__all__.B = B;

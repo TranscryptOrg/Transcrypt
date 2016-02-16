@@ -181,14 +181,14 @@ class Module:
 		else:
 			self.loadJavascript ()
 			self.extract ()
-		
+				
 	def loadJavascript (self):
 		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
 		
 		with open (self.metadata.targetPath) as aFile:
 			self.targetCode = aFile.read ()
 			
-		if False and self.metadata.name in (self.coreModuleName, self.program.builtinModuleName):
+		if self.metadata.name in (self.program.coreModuleName, self.program.builtinModuleName):
 			# Remove comment-like line tails and empty lines (so no // inside a string allowed)
 			self.targetCode = '{}\n'.format (
 				'\n'.join ([line for line in [line.split ('//') [0] .rstrip () for line in self.targetCode.split ('\n')] if line])
@@ -218,13 +218,23 @@ class Module:
 			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
 			if word.startswith ('.')
 		]))
+
+		extraLines = [
+			'__pragma__ = 0',			# No code will be emitted for pragma's anyhow
+			'__pragma__ (\'skip\')',	# Here __pragma__ must already be a known name for the static_check
+			'__new__ = __include__ = 0',
+			'__pragma__ (\'noskip\')'
+			''
+		] if utils.commandArgs else []
+		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only to force linefeed
+		extraLines = '\n'.join (extraLines)
 		
 	def parse (self):
 		try:
 			utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
 			
 			with open (self.metadata.sourcePath) as sourceFile:
-				self.sourceCode = sourceFile.read ()
+				self.sourceCode = utils.extraLines + sourceFile.read ()
 				
 			self.parseTree = ast.parse (self.sourceCode)
 		except SyntaxError as syntaxError:
@@ -233,7 +243,7 @@ class Module:
 				moduleName = self.metadata.name,
 				lineNr = syntaxError.lineno,
 				message = (
-					'{} <SYNTAX FAULT> {}'.format (
+					'{} <SYNTAX FAULT] {}'.format (
 						syntaxError.text [:syntaxError.offset].lstrip (),
 						syntaxError.text [syntaxError.offset:].rstrip ()
 					)
@@ -339,6 +349,7 @@ class Generator (ast.NodeVisitor):
 		
 		self.allowKeywordArgs = utils.commandArgs.kwargs
 		self.memoizeCalls = utils.commandArgs.fcall
+		self.codeGeneration = True
 		
 		try:
 			self.visit (module.parseTree)
@@ -449,15 +460,34 @@ class Generator (ast.NodeVisitor):
 		
 	def useModule (self, name):
 		result = self.module.program.provide (name)	# Must be done first because it can generate a healthy exception
-		self.use.add (name)							# Must not be done if the healthy exception occurs
+		self.use.add (name)						# Must not be done if the healthy exception occurs
 		return result
 		
-	def visit (self, node):
+	def getPragmaKindFromExpr (self, node):
+		return (
+			node.value.args [0] .s
+			if (
+				type (node) == ast.Expr and type (node.value) == ast.Call and
+				type (node.value.func) == ast.Name and node.value.func.id == '__pragma__'
+			) else
+			None
+		)			
+		
+	def visit (self, node):	
 		try:
 			self.lineNr = node.lineno
 		except:
 			pass
-		ast.NodeVisitor.visit (self, node)
+			
+		pragmaKind = self.getPragmaKindFromExpr (node)
+		
+		if pragmaKind == 'skip':
+			self.codeGeneration = False
+		elif pragmaKind == 'noskip':
+			self.codeGeneration = True
+		
+		if self.codeGeneration:
+			ast.NodeVisitor.visit (self, node)
 		
 	def visit_arg (self, node):
 		self.emit (node.arg)
@@ -828,7 +858,7 @@ class Generator (ast.NodeVisitor):
 								'eval'
 							),
 							{},
-							{'include': include}
+							{'__include__': include}
 						)
 						for arg in node.args [2:]
 					]))
@@ -845,13 +875,16 @@ class Generator (ast.NodeVisitor):
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
 					self.memoizeCalls = False
+				elif node.args [0] .s in ('skip', 'noskip'):
+					pass						# Easier dealth with on statement / expression level in self.visit
 				else:
 					raise utils.Error (
 						moduleName = self.module.metadata.name,
 						lineNr = self.lineNr,
-						message = 'Unknown __pragma__: {}'.format (node.args [0])
+						message = 'Unknown pragma: {}'.format (
+							node.args [0] .s if type (node.args [0]) == ast.Str else node.args [0]
+						)
 					)
-					
 				return
 			elif node.func.id == '__new__':
 				self.emit ('new ')
@@ -922,10 +955,7 @@ class Generator (ast.NodeVisitor):
 				index += 1
 			elif type (stmt) == ast.Assign:
 				classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
-			elif (
-				type (stmt) == ast.Expr and type (stmt.value) == ast.Call and
-				type (stmt.value.func) == ast.Name and stmt.value.func.id == '__pragma__'
-			):
+			elif self.getPragmaKindFromExpr (stmt):
 				self.visit (stmt)
 		self.dedent ()
 				
@@ -973,7 +1003,7 @@ class Generator (ast.NodeVisitor):
 					for index, (key, value) in enumerate (zip (node.keys, node.values)):
 						self.emitComma (index)
 						self.emit ('[')
-						self.visit (key)	# In a JavaScripg list name is evaluated as variable or function call to produce a key
+						self.visit (key)	# In a JavaScrip list, name is evaluated as variable or function call to produce a key
 						self.emit (', ')
 						self.visit (value)
 						self.emit (']')
@@ -1039,23 +1069,26 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			self.descope ()
 			
-		if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
-			if type (self.getscope ()) == ast.Module:
-				self.all.add (node.name)
-			self.emit ('var {} = function ', self.filterId (node.name))
-			self.visit (node.args)
-			emitScopedBody ()
-			self.emit ('}}')
-		else:															# Class scope, so it's a method and needs the currying mechanism
-			self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))	
-			self.visit (node.args)
-			emitScopedBody ()
-			self.emit ('}}')
-			
-			if self.memoizeCalls:
-				self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
+		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
+											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
+											# The rest of its use is only at compile time at compile time
+			if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
+				if type (self.getscope ()) == ast.Module:
+					self.all.add (node.name)
+				self.emit ('var {} = function ', self.filterId (node.name))
+				self.visit (node.args)
+				emitScopedBody ()
+				self.emit ('}}')
+			else:															# Class scope, so it's a method and needs the currying mechanism
+				self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))	
+				self.visit (node.args)
+				emitScopedBody ()
+				self.emit ('}}')
 				
-			self.emit (');}}')
+				if self.memoizeCalls:
+					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
+					
+				self.emit (');}}')
 		
 	def visit_If (self, node):
 		self.emit ('if (')
@@ -1298,6 +1331,9 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)
+		
+	def visit_Pass (self, node):
+		self.skipSemiNew = True
 		
 	def visit_Raise (self, node):
 		self.emit ('__except__ = ') 
