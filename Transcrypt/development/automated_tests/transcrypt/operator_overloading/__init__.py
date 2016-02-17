@@ -34,7 +34,16 @@ class Matrix:
 			for iCol in range (self.nCols):
 				result._ [iRow][iCol] = self._ [iRow][iCol] + other._ [iRow][iCol]
 		return result
-				
+		
+	def __getitem__ (self, index):
+		return self._ [index]
+
+	def __setitem__ (self, index, value):
+		self.elements_ [index] = value
+		
+	def __repr__ (self):
+		return repr (self._)
+		
 def run (autoTester):
 	m0 = Matrix (3, 3, [
 		[1, 2, 3],
@@ -62,8 +71,8 @@ def run (autoTester):
 	
 	fast2 = 16 * y + 1
 	
-	autoTester.check (m0._, m1._)
+	autoTester.check (m0, m1)
 	autoTester.check (x, y)
-	autoTester.check (m2._)
-	autoTester.check (m3._)
+	autoTester.check (m2)
+	autoTester.check (m3)
 	autoTester.check (fast, slow, fast2)

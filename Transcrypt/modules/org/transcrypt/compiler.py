@@ -617,35 +617,56 @@ class Generator (ast.NodeVisitor):
 					pass
 					
 			# Special case for target slice (as opposed to target index)
-			if type (target) == ast.Subscript and type (target.slice) == ast.Slice:
-				self.visit (target.value)
-				
-				try:
-					self.emit ('.__setslice__ (')
-					
-					if target.slice.lower == None:
-						self.emit ('0')
-					else:
-						self.visit (target.slice.lower)
+			if type (target) == ast.Subscript:
+				if type (target.slice) == ast.Slice:
+					self.visit (target.value)		
+					try:
+						self.emit ('.__setslice__ (')
 						
-					self.emit (', ')
-					if target.slice.upper == None:
-						self.emit ('null')
-					else:
-						self.visit (target.slice.upper)
-				
-					self.emit (', ')
-					if target.slice.step:
-						self.visit (target.slice.step)
-					else:
-						self.emit ('null')
-
-					self.emit (', ')
-					self.visit (value)
+						if target.slice.lower == None:
+							self.emit ('0')
+						else:
+							self.visit (target.slice.lower)
 							
-					self.emit (')')
-				except Exception as exception:
-					utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid LHS slice')	
+						self.emit (', ')
+						if target.slice.upper == None:
+							self.emit ('null')
+						else:
+							self.visit (target.slice.upper)
+					
+						self.emit (', ')
+						if target.slice.step:
+							self.visit (target.slice.step)
+						else:
+							self.emit ('null')
+
+						self.emit (', ')
+						self.visit (value)
+								
+						self.emit (')')
+					except Exception as exception:
+						utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid LHS slice')
+				elif type (target.slice) == ast.Index:
+					if self.allowOperatorOverloading:
+						self.emit ('setitem (')
+						self.visit (target.value)
+						self.visit (', ')
+						self.visit (target.slice.index)
+						self.emit (', ')
+						self.visit (value)
+						emitPathIndices ()
+						self.emit (')')
+					else:
+						self.visit (target)
+						self.emit (' = ')
+						self.visit (value)
+						emitPathIndices ()						
+				else:
+					raise utils.Error (
+						moduleName = self.module.metadata.name,
+						lineNr = self.lineNr,
+						message = 'Extended slices not supported\n'
+					)
 			else:
 				if isPropertyAssign and not target.id == self.getTemp ('left'):
 					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .name, target.id))
@@ -655,7 +676,7 @@ class Generator (ast.NodeVisitor):
 				else:
 					if type (target) == ast.Name:
 						if type (self.getscope ()) == ast.ClassDef and target.id != self.getTemp ('left'):
-							self.emit ('{}.'.format (self.getscope () .name))
+							self.emit ('{}.'.format (self.getscope () .name))	# The target is an attribute
 						else:
 							self.emit ('var ')
 							
@@ -1188,11 +1209,6 @@ class Generator (ast.NodeVisitor):
 						self.emit (';\n')
 		except Exception as exception:
 			utils.enhanceException (exception, lineNr = self.lineNr, message = 'Can\'t import from module \'{}\''.format (node.module))
-			
-	def visit_Index (self, node):
-		self.emit (' [')
-		self.visit (node.value)
-		self.emit (']')
 		
 	def visit_Lambda (self, node):
 		self.emit ('(function __lambda__ ',)	# Extra () needed to make it callable at definition time
@@ -1368,47 +1384,62 @@ class Generator (ast.NodeVisitor):
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
 		
-	# Visited for RHS index, RHS slice and LHS index but not for LHS slice
-	# LHS slices are dealth with directy in visit_Assign, since the RHS is needed for it also
+	# Visited for RHS slice, RHS index and non-overloaded LHS index
+	# LHS slice and overloaded RHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
 	def visit_Subscript (self, node):
-		self.visit (node.value)
-		
-		if type (node.slice) == ast.Slice:	# Then we're sure node.ctx == ast.Load	
-			try:
-				if node.slice.step == None:
-					self.emit ('.slice (')
-					
-					if node.slice.lower == None:
-						self.emit ('0')
-					else:
-						self.visit (node.slice.lower)
-						
-					if node.slice.upper != None:
-						self.emit (', ')
-						self.visit (node.slice.upper)
-				else:
-					self.emit ('.__getslice__ (')
-					
-					if node.slice.lower == None:
-						self.emit ('0')
-					else:
-						self.visit (node.slice.lower)
-						
-					self.emit (', ')
-					if node.slice.upper == None:
-						self.emit ('null')
-					else:
-						self.visit (node.slice.upper)
-				
-					self.emit (', ')
-					self.visit (node.slice.step)
-					
+		if self.allowOperatorOverloading and type (node.slice == ast.Index):
+				self.emit ('__getitem__ (')
+				self.visit (node.value)
+				self.visit (', ')
+				self.visit (node.slice.value)
 				self.emit (')')
-			except Exception as exception:
-				utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid RHS slice')	
-		else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)
-			self.visit (node.slice)
+		else:
+			self.visit (node.value)
 			
+			if type (node.slice) == ast.Slice:	# Then we're sure node.ctx == ast.Load	
+				try:
+					if node.slice.step == None:
+						self.emit ('.slice (')
+						
+						if node.slice.lower == None:
+							self.emit ('0')
+						else:
+							self.visit (node.slice.lower)
+							
+						if node.slice.upper != None:
+							self.emit (', ')
+							self.visit (node.slice.upper)
+					else:
+						self.emit ('.__getslice__ (')
+						
+						if node.slice.lower == None:
+							self.emit ('0')
+						else:
+							self.visit (node.slice.lower)
+							
+						self.emit (', ')
+						if node.slice.upper == None:
+							self.emit ('null')
+						else:
+							self.visit (node.slice.upper)
+					
+						self.emit (', ')
+						self.visit (node.slice.step)
+						
+					self.emit (')')
+				except Exception as exception:
+					utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid RHS slice')
+			elif type (node.slice == ast.Index):	# No operator overloading, see start of this function
+				self.emit (' [')
+				self.visit (node.slice.value)
+				self.emit (']')
+			else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)			
+				raise utils.Error (
+					moduleName = self.module.metadata.name,
+					lineNr = self.lineNr,
+					message = 'Extended slices not supported\n'
+				)
+					
 	def visit_Try (self, node):
 		self.emit ('try {{\n')
 		self.indent ()	

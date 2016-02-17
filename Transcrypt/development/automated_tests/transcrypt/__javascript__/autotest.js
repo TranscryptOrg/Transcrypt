@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-17 05:19:38
+// Transcrypt'ed from Python, 2016-02-17 20:14:10
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.85';
+							self.transpilerVersion = '3.5.87';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -740,6 +740,23 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.sub = sub;
+	var getitem = function (container, key) {
+		if (typeof item == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (key);
+		}
+		else {
+			return container [key];
+		}
+	}
+	__all__.getitem = getitem;
+	var setitem = function (container, key, value) {
+		if (typeof item == 'object' && '__setitem__' in container) {
+			container.__setitem__ (key, value);
+		}
+		else {
+			container [key] = value;
+		}
+	}
 	__nest__ (
 		__all__,
 		'py_arguments', {
@@ -1887,6 +1904,15 @@ function f() { /** ... */ }
 								}
 							}
 							return result;
+						});},
+						get __getitem__ () {return __get__ (this, function (self, index) {
+							return self._ [index];
+						});},
+						get __setitem__ () {return __get__ (this, function (self, index, value) {
+							self.elements_ [index] = value;
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return repr (self._);
 						});}
 					});
 					var run = function (autoTester) {
@@ -1901,10 +1927,10 @@ function f() { /** ... */ }
 						var m3 = mul (mul (2, add (mul (mul (mul (2, m0), 3), m1), mul (m2, 4))), 2);
 						;
 						var fast2 = 16 * y + 1;
-						autoTester.check (m0._, m1._);
+						autoTester.check (m0, m1);
 						autoTester.check (x, y);
-						autoTester.check (m2._);
-						autoTester.check (m3._);
+						autoTester.check (m2);
+						autoTester.check (m3);
 						autoTester.check (fast, slow, fast2);
 					};
 					__pragma__ ('<all>')

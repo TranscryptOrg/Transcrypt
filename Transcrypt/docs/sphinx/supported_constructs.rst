@@ -60,7 +60,14 @@ General functions: sort and sorted
 	:tab-width: 4
 	:caption: Testlet: general_functions
 
-Indices and slices: LHS, RHS, basic and extended
+Hierarchical modules: both local to the project and global url-based
+--------------------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
+	:tab-width: 4
+	:caption: Testlet: modules
+
+ Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/indices_and_slices/__init__.py
@@ -80,13 +87,6 @@ List comprehensions: multi-loop and nested with multiple if's
 .. literalinclude:: ../../development/automated_tests/transcrypt/list_comprehensions/__init__.py
 	:tab-width: 4
 	:caption: Testlet: list_comprehensions
-
-Hierarchical modules: both local to the project and global url-based
---------------------------------------------------------------------
-
-.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
-	:tab-width: 4
-	:caption: Testlet: modules
 
 Operator overloading
 --------------------

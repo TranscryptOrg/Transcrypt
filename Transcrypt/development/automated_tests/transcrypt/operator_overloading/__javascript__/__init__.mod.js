@@ -81,6 +81,15 @@
 								}
 							}
 							return result;
+						});},
+						get __getitem__ () {return __get__ (this, function (self, index) {
+							return self._ [index];
+						});},
+						get __setitem__ () {return __get__ (this, function (self, index, value) {
+							self.elements_ [index] = value;
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return repr (self._);
 						});}
 					});
 					var run = function (autoTester) {
@@ -95,10 +104,10 @@
 						var m3 = mul (mul (2, add (mul (mul (mul (2, m0), 3), m1), mul (m2, 4))), 2);
 						;
 						var fast2 = 16 * y + 1;
-						autoTester.check (m0._, m1._);
+						autoTester.check (m0, m1);
 						autoTester.check (x, y);
-						autoTester.check (m2._);
-						autoTester.check (m3._);
+						autoTester.check (m2);
+						autoTester.check (m3);
 						autoTester.check (fast, slow, fast2);
 					};
 					__pragma__ ('<all>')

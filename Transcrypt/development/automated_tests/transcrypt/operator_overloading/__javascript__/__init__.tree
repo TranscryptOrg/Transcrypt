@@ -578,6 +578,103 @@ file: Module
 								ctx: Load 
 					decorator_list: list 
 					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __getitem__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = index
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Subscript 
+								value: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _
+									ctx: Load 
+								slice: Index 
+									value: Name 
+										id: str = index
+										ctx: Load 
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __setitem__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = index
+								annotation: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = elements_
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = index
+											ctx: Load 
+									ctx: Store 
+							value: Name 
+								id: str = value
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __repr__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = _
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
 			decorator_list: list 
 		element: FunctionDef 
 			name: str = run
@@ -837,17 +934,11 @@ file: Module
 							attr: str = check
 							ctx: Load 
 						args: list 
-							element: Attribute 
-								value: Name 
-									id: str = m0
-									ctx: Load 
-								attr: str = _
+							element: Name 
+								id: str = m0
 								ctx: Load 
-							element: Attribute 
-								value: Name 
-									id: str = m1
-									ctx: Load 
-								attr: str = _
+							element: Name 
+								id: str = m1
 								ctx: Load 
 						keywords: list 
 				element: Expr 
@@ -875,11 +966,8 @@ file: Module
 							attr: str = check
 							ctx: Load 
 						args: list 
-							element: Attribute 
-								value: Name 
-									id: str = m2
-									ctx: Load 
-								attr: str = _
+							element: Name 
+								id: str = m2
 								ctx: Load 
 						keywords: list 
 				element: Expr 
@@ -891,11 +979,8 @@ file: Module
 							attr: str = check
 							ctx: Load 
 						args: list 
-							element: Attribute 
-								value: Name 
-									id: str = m3
-									ctx: Load 
-								attr: str = _
+							element: Name 
+								id: str = m3
 								ctx: Load 
 						keywords: list 
 				element: Expr 

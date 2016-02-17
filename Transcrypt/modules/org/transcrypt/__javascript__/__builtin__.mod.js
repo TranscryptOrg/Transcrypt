@@ -634,3 +634,23 @@ function f() { /** ... */ }
 		}
 	};  
 	__all__.sub = sub;
+	
+	var getitem = function (container, key) {
+		if (typeof item == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (key);
+		}
+		else {
+			return container [key];
+		}
+	}
+	__all__.getitem = getitem;
+
+	var setitem = function (container, key, value) {
+		if (typeof item == 'object' && '__setitem__' in container) {
+			container.__setitem__ (key, value);
+		}
+		else {
+			container [key] = value;
+		}
+	}
+
