@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.85 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.87 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.85',
+        VERSION:     '3.5.87',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.85 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.87 documentation" href="index.html" />
     <link rel="next" title="5. Integration with JavaScript libraries" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.87 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -68,6 +68,7 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">modules</span>
+<span class="kn">import</span> <span class="nn">operator_overloading</span>
 <span class="kn">import</span> <span class="nn">properties</span>
 <span class="kn">import</span> <span class="nn">simple_and_augmented_assignment</span>
 <span class="kn">import</span> <span class="nn">tuple_assignment</span>
@@ -85,6 +86,7 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="s">&#39;modules&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">operator_overloading</span><span class="p">,</span> <span class="s">&#39;operator_overloading&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="s">&#39;properties&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">simple_and_augmented_assignment</span><span class="p">,</span> <span class="s">&#39;simple_and_augmented_assignment&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">tuple_assignment</span><span class="p">,</span> <span class="s">&#39;tuple_assignemt&#39;</span><span class="p">)</span>
@@ -437,8 +439,43 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
+<div class="section" id="general-functions-sort-and-sorted">
+<h2>4.7. General functions: sort and sorted<a class="headerlink" href="#general-functions-sort-and-sorted" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-general-functions">
+<div class="code-block-caption"><span class="caption-text">Testlet: general_functions</span><a class="headerlink" href="#testlet-general-functions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sun&#39;</span><span class="p">,</span> <span class="s">&#39;earth&#39;</span><span class="p">,</span> <span class="s">&#39;moon&#39;</span><span class="p">]</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sorted</span> <span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sorted</span> <span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    
+    <span class="n">a</span><span class="o">.</span><span class="n">sort</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    
+    <span class="n">b</span><span class="o">.</span><span class="n">sort</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sorted</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sorted</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+    
+    <span class="n">a</span><span class="o">.</span><span class="n">sort</span> <span class="p">(</span><span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    
+    <span class="n">b</span><span class="o">.</span><span class="n">sort</span> <span class="p">(</span><span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    
+    <span class="n">b</span><span class="o">.</span><span class="n">sort</span> <span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span> <span class="p">(</span><span class="n">x</span><span class="p">))</span> 
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="n">b</span><span class="o">.</span><span class="n">sort</span> <span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span> <span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> 
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="indices-and-slices-lhs-rhs-basic-and-extended">
-<h2>4.7. Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
+<h2>4.8. Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-indices-and-slices">
 <div class="code-block-caption"><span class="caption-text">Testlet: indices_and_slices</span><a class="headerlink" href="#testlet-indices-and-slices" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -469,7 +506,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="lambda-functions-with-all-types-of-args">
-<h2>4.8. Lambda functions with all types of args<a class="headerlink" href="#lambda-functions-with-all-types-of-args" title="Permalink to this headline">¶</a></h2>
+<h2>4.9. Lambda functions with all types of args<a class="headerlink" href="#lambda-functions-with-all-types-of-args" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-lambda-functions">
 <div class="code-block-caption"><span class="caption-text">Testlet: lambda_functions</span><a class="headerlink" href="#testlet-lambda-functions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -489,7 +526,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="list-comprehensions-multi-loop-and-nested-with-multiple-if-s">
-<h2>4.9. List comprehensions: multi-loop and nested with multiple if&#8217;s<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
+<h2>4.10. List comprehensions: multi-loop and nested with multiple if&#8217;s<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-list-comprehensions">
 <div class="code-block-caption"><span class="caption-text">Testlet: list_comprehensions</span><a class="headerlink" href="#testlet-list-comprehensions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -520,7 +557,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="hierarchical-modules-both-local-to-the-project-and-global-url-based">
-<h2>4.10. Hierarchical modules: both local to the project and global url-based<a class="headerlink" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
+<h2>4.11. Hierarchical modules: both local to the project and global url-based<a class="headerlink" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-modules">
 <div class="code-block-caption"><span class="caption-text">Testlet: modules</span><a class="headerlink" href="#testlet-modules" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">modules.mod1.mod11.mod111</span>
@@ -583,8 +620,85 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
+<div class="section" id="operator-overloading">
+<h2>4.12. Operator overloading<a class="headerlink" href="#operator-overloading" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-operator-overloading">
+<div class="code-block-caption"><span class="caption-text">Testlet: operator_overloading</span><a class="headerlink" href="#testlet-operator-overloading" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
+
+<span class="k">class</span> <span class="nc">Matrix</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nRows</span><span class="p">,</span> <span class="n">nCols</span><span class="p">,</span> <span class="n">elements</span> <span class="o">=</span> <span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nRows</span> <span class="o">=</span> <span class="n">nRows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nCols</span> <span class="o">=</span> <span class="n">nCols</span>
+        
+        <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">nCols</span><span class="p">)]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">nRows</span><span class="p">)]</span>
+        
+    <span class="k">def</span> <span class="nf">__mul__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="n">Matrix</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">Matrix</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nRows</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">nCols</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">iTargetRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">nRows</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">iTargetCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">nCols</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">iTerm</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nCols</span><span class="p">):</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iTargetRow</span><span class="p">][</span><span class="n">iTargetCol</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iTargetRow</span><span class="p">][</span><span class="n">iTerm</span><span class="p">]</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iTerm</span><span class="p">][</span><span class="n">iTargetCol</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># other is a scalar</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rmul__</span> <span class="p">(</span><span class="n">other</span><span class="p">)</span>
+                
+    <span class="k">def</span> <span class="nf">__rmul__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>    <span class="c"># Only called if left operand is scalar, all other cases will call __mul__</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Matrix</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nRows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nCols</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nRows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nCols</span><span class="p">):</span> 
+                <span class="n">result</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iRow</span><span class="p">][</span><span class="n">iCol</span><span class="p">]</span> <span class="o">=</span> <span class="n">scalar</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iRow</span><span class="p">][</span><span class="n">iCol</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+    
+    <span class="k">def</span> <span class="nf">__add__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Matrix</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nRows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nCols</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nRows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nCols</span><span class="p">):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iRow</span><span class="p">][</span><span class="n">iCol</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iRow</span><span class="p">][</span><span class="n">iCol</span><span class="p">]</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_</span> <span class="p">[</span><span class="n">iRow</span><span class="p">][</span><span class="n">iCol</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+                
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">m0</span> <span class="o">=</span> <span class="n">Matrix</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">Matrix</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="n">fast</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+    
+    <span class="n">slow</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="n">m0</span> <span class="o">*</span> <span class="n">m1</span>  <span class="o">+</span> <span class="n">m1</span> <span class="o">*</span> <span class="p">(</span><span class="n">m0</span> <span class="o">+</span> <span class="n">m1</span><span class="p">)</span>
+    <span class="n">m3</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m0</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">m1</span> <span class="o">+</span> <span class="n">m2</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">fast2</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">m0</span><span class="o">.</span><span class="n">_</span><span class="p">,</span> <span class="n">m1</span><span class="o">.</span><span class="n">_</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">m2</span><span class="o">.</span><span class="n">_</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">m3</span><span class="o">.</span><span class="n">_</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">fast</span><span class="p">,</span> <span class="n">slow</span><span class="p">,</span> <span class="n">fast2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="properties">
-<h2>4.11. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<h2>4.13. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-properties">
 <div class="code-block-caption"><span class="caption-text">Testlet: properties</span><a class="headerlink" href="#testlet-properties" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -687,7 +801,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="simple-and-augmented-assignment">
-<h2>4.12. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
+<h2>4.14. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-simple-and-augmented-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: simple_and_augmented_assignment</span><a class="headerlink" href="#testlet-simple-and-augmented-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -757,7 +871,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="tuple-assignment-recursive-and-in-for-headers-using-enumerate">
-<h2>4.13. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
+<h2>4.15. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-tuple-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: tuple_assignment</span><a class="headerlink" href="#testlet-tuple-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -804,13 +918,15 @@ Since they systematically cover all language constructs, they are also very effe
 <li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">4.4. Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
 <li><a class="reference internal" href="#data-structures-tuple-list-dict-set">4.5. Data structures: tuple, list, dict, set</a></li>
 <li><a class="reference internal" href="#exceptions-exception-class-hierarchy-finally">4.6. Exceptions: exception class hierarchy, finally</a></li>
-<li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">4.7. Indices and slices: LHS, RHS, basic and extended</a></li>
-<li><a class="reference internal" href="#lambda-functions-with-all-types-of-args">4.8. Lambda functions with all types of args</a></li>
-<li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.9. List comprehensions: multi-loop and nested with multiple if&#8217;s</a></li>
-<li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">4.10. Hierarchical modules: both local to the project and global url-based</a></li>
-<li><a class="reference internal" href="#properties">4.11. Properties</a></li>
-<li><a class="reference internal" href="#simple-and-augmented-assignment">4.12. Simple and augmented assignment</a></li>
-<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.13. Tuple assignment: recursive and in for-headers using enumerate</a></li>
+<li><a class="reference internal" href="#general-functions-sort-and-sorted">4.7. General functions: sort and sorted</a></li>
+<li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">4.8. Indices and slices: LHS, RHS, basic and extended</a></li>
+<li><a class="reference internal" href="#lambda-functions-with-all-types-of-args">4.9. Lambda functions with all types of args</a></li>
+<li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.10. List comprehensions: multi-loop and nested with multiple if&#8217;s</a></li>
+<li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">4.11. Hierarchical modules: both local to the project and global url-based</a></li>
+<li><a class="reference internal" href="#operator-overloading">4.12. Operator overloading</a></li>
+<li><a class="reference internal" href="#properties">4.13. Properties</a></li>
+<li><a class="reference internal" href="#simple-and-augmented-assignment">4.14. Simple and augmented assignment</a></li>
+<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.15. Tuple assignment: recursive and in for-headers using enumerate</a></li>
 </ul>
 </li>
 </ul>
@@ -857,7 +973,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.87 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

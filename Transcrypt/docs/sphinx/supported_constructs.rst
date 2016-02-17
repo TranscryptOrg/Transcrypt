@@ -53,6 +53,13 @@ Exceptions: exception class hierarchy, finally
 	:tab-width: 4
 	:caption: Testlet: exceptions
 
+General functions: sort and sorted
+----------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/general_functions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: general_functions
+
 Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
 
@@ -81,6 +88,13 @@ Hierarchical modules: both local to the project and global url-based
 	:tab-width: 4
 	:caption: Testlet: modules
 
+Operator overloading
+--------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/operator_overloading/__init__.py
+	:tab-width: 4
+	:caption: Testlet: operator_overloading
+		
 Properties
 ----------
 

@@ -48,6 +48,7 @@ Status
 What's new
 ==========
 
+- Doc update, operator overloading and sort/sorted examples added
 - Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('nopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
 - -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distribution and automatically invoked
 - __pragma__ ('skip') and __pragma__ ('noskip') added to skip code generation for certain fragments
