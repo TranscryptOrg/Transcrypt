@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-16 02:41:16
+// Transcrypt'ed from Python, 2016-02-17 05:19:38
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.84';
+							self.transpilerVersion = '3.5.85';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -231,6 +231,7 @@ function autotest () {
 			}
 		}
 	);
+function f() { /** ... */ }
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
@@ -682,6 +683,63 @@ function autotest () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
+	var matmul = function (a, b) {
+		if (typeof a == 'object' && '__matmul__' in a) {
+			return a.__matmul__ (b);
+		}
+		else {
+			return b.__rmatmul__ (a);
+		}
+	};
+	__all__.matmul = matmul;
+	var mul = function (a, b) {
+		if (typeof a == 'object' && '__mul__' in a) {
+			return a.__mul__ (b);
+		}
+		else if (typeof b == 'object' && '__rmul__' in b) {
+			return b.__rmul__ (a);
+		}
+		else {
+			return a * b;
+		}
+	};
+	__all__.mul = mul;
+	var div = function (a, b) {
+		if (typeof a == 'object' && '__div__' in a) {
+			return a.__div__ (b);
+		}
+		else if (typeof b == 'object' && '__rdiv__' in b) {
+			return b.__rdiv__ (a);
+		}
+		else {
+			return a / b;
+		}
+	};
+	__all__.div = div;
+	var add = function (a, b) {
+		if (typeof a == 'object' && '__add__' in a) {
+			return a.__add__ (b);
+		}
+		else if (typeof b == 'object' && '__radd__' in b) {
+			return b.__radd__ (a);
+		}
+		else {
+			return a + b;
+		}
+	};
+	__all__.add = add;
+	var sub = function (a, b) {
+		if (typeof a == 'object' && '__sub__' in a) {
+			return a.__sub__ (b);
+		}
+		else if (typeof b == 'object' && '__rsub__' in b) {
+			return b.__rsub__ (a);
+		}
+		else {
+			return a - b;
+		}
+	};
+	__all__.sub = sub;
 	__nest__ (
 		__all__,
 		'py_arguments', {
@@ -1748,6 +1806,117 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
+		'operator_overloading', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var Matrix = __class__ ('Matrix', [object], {
+						get __init__ () {return __get__ (this, function (self, nRows, nCols, elements) {
+							if (typeof elements == 'undefined' || (elements != null && elements .__class__ == __kwargdict__)) {;
+								var elements = list ([]);
+							};
+							self.nRows = nRows;
+							self.nCols = nCols;
+							if (len (elements)) {
+								self._ = elements;
+							}
+							else {
+								self._ = function () {
+									var __accu0__ = [];
+									var __iter0__ = range (nRows);
+									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+										var row = __iter0__ [__index0__];
+										__accu0__.append (function () {
+											var __accu1__ = [];
+											var __iter1__ = range (nCols);
+											for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+												var col = __iter1__ [__index1__];
+												__accu1__.append (0);
+											}
+											return __accu1__;
+										} ());
+									}
+									return __accu0__;
+								} ();
+							}
+						});},
+						get __mul__ () {return __get__ (this, function (self, other) {
+							if (type (other) == Matrix) {
+								var result = Matrix (self.nRows, other.nCols);
+								var __iter0__ = range (result.nRows);
+								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+									var iTargetRow = __iter0__ [__index0__];
+									var __iter1__ = range (result.nCols);
+									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+										var iTargetCol = __iter1__ [__index1__];
+										var __iter2__ = range (self.nCols);
+										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
+											var iTerm = __iter2__ [__index2__];
+											result._ [iTargetRow] [iTargetCol] += self._ [iTargetRow] [iTerm] * other._ [iTerm] [iTargetCol];
+										}
+									}
+								}
+								return result;
+							}
+							else {
+								return self.__rmul__ (other);
+							}
+						});},
+						get __rmul__ () {return __get__ (this, function (self, scalar) {
+							var result = Matrix (self.nRows, self.nCols);
+							var __iter0__ = range (self.nRows);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var iRow = __iter0__ [__index0__];
+								var __iter1__ = range (self.nCols);
+								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+									var iCol = __iter1__ [__index1__];
+									result._ [iRow] [iCol] = scalar * self._ [iRow] [iCol];
+								}
+							}
+							return result;
+						});},
+						get __add__ () {return __get__ (this, function (self, other) {
+							var result = Matrix (self.nRows, self.nCols);
+							var __iter0__ = range (self.nRows);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var iRow = __iter0__ [__index0__];
+								var __iter1__ = range (self.nCols);
+								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+									var iCol = __iter1__ [__index1__];
+									result._ [iRow] [iCol] = self._ [iRow] [iCol] + other._ [iRow] [iCol];
+								}
+							}
+							return result;
+						});}
+					});
+					var run = function (autoTester) {
+						var m0 = Matrix (3, 3, list ([list ([1, 2, 3]), list ([4, 5, 6]), list ([7, 8, 10])]));
+						var m1 = Matrix (3, 3, list ([list ([10, 20, 30]), list ([40, 50, 60]), list ([70, 80, 90])]));
+						var x = 3;
+						var y = x * 4 * x;
+						var fast = 2 * 3;
+						;
+						var slow = add (2, 3);
+						var m2 = add (mul (m0, m1), mul (m1, add (m0, m1)));
+						var m3 = mul (mul (2, add (mul (mul (mul (2, m0), 3), m1), mul (m2, 4))), 2);
+						;
+						var fast2 = 16 * y + 1;
+						autoTester.check (m0._, m1._);
+						autoTester.check (x, y);
+						autoTester.check (m2._);
+						autoTester.check (m3._);
+						autoTester.check (fast, slow, fast2);
+					};
+					__pragma__ ('<all>')
+						__all__.Matrix = Matrix;
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'org.transcrypt.autotester', {
 			__all__: {
 				__inited__: false,
@@ -2095,6 +2264,7 @@ function autotest () {
 		var lambda_functions = {};
 		var list_comprehensions = {};
 		var modules = {};
+		var operator_overloading = {};
 		var org = {};
 		var properties = {};
 		var simple_and_augmented_assignment = {};
@@ -2111,6 +2281,7 @@ function autotest () {
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
@@ -2126,6 +2297,7 @@ function autotest () {
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
@@ -2142,6 +2314,7 @@ function autotest () {
 			'lambda_functions' +
 			'list_comprehensions' +
 			'modules' +
+			'operator_overloading' +
 			'org.transcrypt.autotester' +
 			'properties' +
 			'simple_and_augmented_assignment' +

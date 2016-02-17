@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>3. Special facilities &mdash; Transcrypt 3.5.83 documentation</title>
+    <title>3. Special facilities &mdash; Transcrypt 3.5.85 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.83',
+        VERSION:     '3.5.85',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.83 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.85 documentation" href="index.html" />
     <link rel="next" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" />
     <link rel="prev" title="2. Getting started" href="installation_use.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="installation_use.html" title="2. Getting started"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -93,15 +93,19 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 </div>
 <div class="section" id="keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">
 <h2>3.4. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)<a class="headerlink" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs" title="Permalink to this headline">¶</a></h2>
-<p>While it&#8217;s possible to compile with the -k switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the &#8216;kwargs&#8217; and &#8216;nokwargs&#8217; pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You&#8217;ll find an example of how to use these pragma&#8217;s in the <a class="reference internal" href="supported_constructs.html#autotest-arguments"><span>arguments autotest</span></a>. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma&#8217;s are ignored.</p>
+<p>While it&#8217;s possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the &#8216;kwargs&#8217; and &#8216;nokwargs&#8217; pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You&#8217;ll find an example of how to use these pragma&#8217;s in the <a class="reference internal" href="supported_constructs.html#autotest-arguments"><span>arguments autotest</span></a>. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma&#8217;s are ignored.</p>
+</div>
+<div class="section" id="operator-overloading-pragma-opov-and-pragma-noopov">
+<h2>3.5. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)<a class="headerlink" href="#operator-overloading-pragma-opov-and-pragma-noopov" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt currently supports overloading of the following binary operators: * / + - &#64;. These operators have been chosen since they can enhance the readability of computations involving matrices and vectors. Using the -o command line switch will activate operator overloading globally. <em>This is strongly disadvised</em>, since even 1 + 2 will result in two function calls in that case. It&#8217;s better to use <em>__pragma__ (&#8216;opov&#8217;)</em> to switch it on locally and <em>__pragma__ (&#8216;noopov&#8217;)</em> to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations, in which case the overhead is negligeable in most cases. Formula v4 = M * (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way is the JavaScript that will be generated for the expression that uses overloaded + and * operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of <em>__mul__</em>, <em>__rmul__</em>, <em>__div__</em>, <em>__rdiv__</em>, <em>__add__</em>, <em>__radd__</em>, <em>__sub__</em>, <em>__rsub__</em>, <em>__matmul__</em> and <em>__rmatmul__</em>, as described in the CPython documentation.</p>
 </div>
 <div class="section" id="inserting-literal-javascript-pragma-js-and-include">
-<h2>3.5. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)<a class="headerlink" href="#inserting-literal-javascript-pragma-js-and-include" title="Permalink to this headline">¶</a></h2>
+<h2>3.6. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)<a class="headerlink" href="#inserting-literal-javascript-pragma-js-and-include" title="Permalink to this headline">¶</a></h2>
 <p>During compilation the * __pragma__ (&#8216;js&#8217;, code, &lt;format parameters&gt;)* is replaced by the JavaScript code given in the <em>code</em> parameter. This code is formatted using the Python <em>str.format</em> method, using <em>&lt;format parameters&gt;</em>.</p>
 <p>An example of its use is to encapsulate a JavaScript library as a Python module, as is <a class="reference internal" href="integration_javascript.html#code-encaps-fabric"><span>shown  for the fabric.js library</span></a>. In that case there&#8217;s usually one format parameter, namely a call to <em>include (&lt;relative module path&gt;)</em>. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.</p>
 </div>
 <div class="section" id="pragma-alias">
-<span id="identifier-aliasing-pragma-alias-and-pragma-noalias"></span><h2>3.6. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)<a class="headerlink" href="#pragma-alias" title="Permalink to this headline">¶</a></h2>
+<span id="identifier-aliasing-pragma-alias-and-pragma-noalias"></span><h2>3.7. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)<a class="headerlink" href="#pragma-alias" title="Permalink to this headline">¶</a></h2>
 <p>Calling <em>__pragma__ (&#8216;alias&#8217;, &lt;Python id part&gt;, &lt;JavaScript id part&gt;)</em> at the start of a module will replace identifiers or parts thereof like in the following examples:</p>
 <p>Example 1:</p>
 <table border="1" class="docutils">
@@ -177,7 +181,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <p>The alias mechanism is vital to both the compactness and speed of code generated by Transcrypt and to its seamless integration with JavaScript. It allows Transcrypt to extend native JavaScript objects without causing name conflicts even when JavaScript gets expanded over the years, but also without any conversions or other overhead. That&#8217;s why in Transcrypt this approach is favored over wrapping native objects.</p>
 </div>
 <div class="section" id="skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">
-<span id="skipping-fragments"></span><h2>3.7. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)<a class="headerlink" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip" title="Permalink to this headline">¶</a></h2>
+<span id="skipping-fragments"></span><h2>3.8. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)<a class="headerlink" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip" title="Permalink to this headline">¶</a></h2>
 <p>On some occasions it&#8217;s handy to be able to skip code generation for fragments of Python source. The most important use case is when you perform a static check using the <a class="reference internal" href="installation_use.html#command-line-switches"><span>-c or &#8211;check</span></a> command line switch. If you use global JavaScript names without importing them from some encapsulation module, you&#8217;ll have to tell the static checker that these names are not to be flagged as undefined. Insert a line containing dummy definitions of the unknown names for the static checker, surrounded by <em>__pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</em>, to make code generator skip these definitions. The beginning of the source code of the Pong demo, shown below, demonstates how this is done.</p>
 <div class="literal-block-wrapper container" id="preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py">
 <div class="code-block-caption"><span class="caption-text">Preventing complaints of the static checker about unknown global JavaScript names in pong.py</span><a class="headerlink" href="#preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py" title="Permalink to this code">¶</a></div>
@@ -198,7 +202,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 </div>
 </div>
 <div class="section" id="creating-javascript-objects-with-new-constructor-call">
-<h2>3.8. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)<a class="headerlink" href="#creating-javascript-objects-with-new-constructor-call" title="Permalink to this headline">¶</a></h2>
+<h2>3.9. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)<a class="headerlink" href="#creating-javascript-objects-with-new-constructor-call" title="Permalink to this headline">¶</a></h2>
 <p>While creating objects in Transcrypt mostly happens in the plain Python way, e.g. <em>canvas = Canvas (&lt;parameters&gt;)</em>, objects from 3rd party JavaScript libraries often have to be created using <em>new</em>. In Transcrypt such objects are created by calling the  <em>__new__</em> function, e.g. <em>canvas = __new__ (Canvas (&lt;parameters&gt;)</em>, as can be seen in the <a class="reference internal" href="integration_javascript.html#code-pong"><span>Pong example</span></a>. This mechanism is simple, follows Python&#8217;s syntax rules and doesn&#8217;t require updating of an encapsulation layer if a later version of the underlying JavaScript library features additional constructor functions. Therefore in most cases it is the preferred way to create objects who&#8217;s initialization requires calling 3rd party JavaScript constructor functions.</p>
 <p>As an alternative, instantiation and construction can be encapsulated in one function call. Since this in fact creates an alternative API facade for the 3rd party JavaScript library, such an encapsulation should be kept separate from the original library, e.g. by putting it in a separate importable module. The JavaScript code for this encapsulation would e.g. be <em>&lt;facade module name&gt;.Canvas = function (&lt;parameters&gt;) {return new Canvas (&lt;parameters&gt;);};</em>. After importing the facade module, canvas creation is straightforward: <em>canvas = Canvas (&lt;parameters&gt;)</em>.</p>
 <p>As a third alternative, encapsulation can be done in Python rather than JavaScript: <em>def Canvas (&lt;parameters&gt;): return __new__ (&lt;3rd party module name&gt;.Canvas (&lt;parameters&gt;)</em>. Also in this case the creation syntax is simple: <em>canvas = Canvas (&lt;parameters&gt;)</em>.</p>
@@ -221,10 +225,11 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <li><a class="reference internal" href="#using-browser-stubs-to-test-non-gui-code-that-uses-console-log-window-alert-and-sort">3.2. Using browser stubs to test non-GUI code that uses console.log, window.alert and  sort</a></li>
 <li><a class="reference internal" href="#surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall">3.3. Surpassing the speed of native JavaScript: __pragma__ (&#8216;fcall&#8217;) and __pragma (&#8216;nofcall&#8217;)</a></li>
 <li><a class="reference internal" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.4. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)</a></li>
-<li><a class="reference internal" href="#inserting-literal-javascript-pragma-js-and-include">3.5. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
-<li><a class="reference internal" href="#pragma-alias">3.6. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)</a></li>
-<li><a class="reference internal" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.7. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</a></li>
-<li><a class="reference internal" href="#creating-javascript-objects-with-new-constructor-call">3.8. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)</a></li>
+<li><a class="reference internal" href="#operator-overloading-pragma-opov-and-pragma-noopov">3.5. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)</a></li>
+<li><a class="reference internal" href="#inserting-literal-javascript-pragma-js-and-include">3.6. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
+<li><a class="reference internal" href="#pragma-alias">3.7. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)</a></li>
+<li><a class="reference internal" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.8. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</a></li>
+<li><a class="reference internal" href="#creating-javascript-objects-with-new-constructor-call">3.9. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)</a></li>
 </ul>
 </li>
 </ul>
@@ -271,7 +276,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
         <li class="right" >
           <a href="installation_use.html" title="2. Getting started"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

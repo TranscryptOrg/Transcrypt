@@ -348,6 +348,7 @@ class Generator (ast.NodeVisitor):
 		}
 		
 		self.allowKeywordArgs = utils.commandArgs.kwargs
+		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
 		
@@ -754,18 +755,19 @@ class Generator (ast.NodeVisitor):
 			self.emit ('Math.floor (')
 			self.visit (node.right)
 			self.emit (')')
-		elif type (node.op) == ast.MatMult:
-			self.emit ('__matmul__ (')
+		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub)):
+			self.emit ('{} ('.format (self.filterId (
+				'Math.pow' if type (node.op) == ast.Pow else
+				'matmul' if type (node.op) == ast.MatMult else
+				'mul' if type (node.op) == ast.Mult else
+				'div' if type (node.op) == ast.Div else
+				'add' if type (node.op) == ast.Add else
+				'sub' # if type (node.op) == ast.Sub else
+			)))
 			self.visit (node.left)
 			self.emit (', ')
 			self.visit (node.right)
-			self.emit (')')			
-		elif type (node.op) == ast.Pow:
-			self.emit ('Math.pow (')
-			self.visit (node.left)
-			self.emit (', ')
-			self.visit (node.right)
-			self.emit (')')			
+			self.emit (')')						
 		else:
 			self.visitSubExpr (node, node.left)
 			self.emit (' {} '.format (self.operators [type (node.op)][0]))			
@@ -849,6 +851,10 @@ class Generator (ast.NodeVisitor):
 					self.allowKeywordArgs = True
 				elif node.args [0] .s == 'nokwargs':	# Stop emitting kwargs code for FunctionDef's
 					self.allowKeywordArgs = False
+				elif node.args [0] .s == 'opov':		# Overloading of a small sane subset of operators allowed
+					self.allowOperatorOverloading = True
+				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
+					self.allowOperatorOverloading = False
 				elif node.args [0] .s == 'js':			# Include JavaScript code literally in the output
 					self.emit ('\n{}\n', node.args [1] .s.format (* [
 						eval (

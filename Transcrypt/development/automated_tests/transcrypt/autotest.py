@@ -11,6 +11,7 @@ import indices_and_slices
 import lambda_functions
 import list_comprehensions
 import modules
+import operator_overloading
 import properties
 import simple_and_augmented_assignment
 import tuple_assignment
@@ -28,6 +29,7 @@ autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
 autoTester.run (modules, 'modules')
+autoTester.run (operator_overloading, 'operator_overloading')
 autoTester.run (properties, 'properties')
 autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment')
 autoTester.run (tuple_assignment, 'tuple_assignemt')

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.83 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.85 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.83',
+        VERSION:     '3.5.85',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.83 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.85 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -162,9 +162,10 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--check&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--fcall&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable fastcall mechanism by default. You can also use __pragma__ (&#39;fcal&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">nofcall</span><span class="se">\&#39;</span><span class="s">)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-j&#39;</span><span class="p">,</span> <span class="s">&#39;--jskeys&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;interpret {key: &#39;value&#39;} as {&#39;key&#39;: &#39;value&#39;} and forbid {key (): &#39;value&#39;}, as JavaScript does. DISADVISED, since it&#39;s less flexible than the Python interpretation. Use {&#39;key&#39;: &#39;value&#39;} explicitly if you want literal keys&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>        
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="s">&#39;--kwargs&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (&#39;kwargs&#39;) and __pragma__(&#39;nokwargs&#39;) instead to generate compact code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="s">&#39;--kwargs&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (&#39;kwargs&#39;) and __pragma__(&#39;nokwargs&#39;) locally instead to prevent bloated code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;--license&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show license&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="s">&#39;--nomin&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;no minification&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-o&#39;</span><span class="p">,</span> <span class="s">&#39;--opov&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable operator overloading by default. In general this is DISADVISED, use __pragma__ (&#39;opov&#39;) and __pragma__(&#39;noopov&#39;) locally instead to prevent slow code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-r&#39;</span><span class="p">,</span> <span class="s">&#39;--run&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;run source file rather than compiling it&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="s">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show all messages&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         
@@ -176,7 +177,7 @@ They are specified in the source code of Transcrypt as follows:</p>
 
         <span class="k">global</span> <span class="n">extraLines</span>
         <span class="n">extraLines</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s">&#39;__pragma__ = 0&#39;</span><span class="p">,</span>           <span class="c"># No code will be emitted for pragma&#39;s anyhow</span>
+            <span class="s">&#39;def __pragma__ (): pass&#39;</span><span class="p">,</span>  <span class="c">#  __pragma__ (&#39;&lt;all&gt;&#39;) in JavaScript requires it to remain a function</span>
             <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">skip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>    <span class="c"># Here __pragma__ must already be a known name for the static_check</span>
             <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>
             <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">noskip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>
@@ -256,7 +257,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

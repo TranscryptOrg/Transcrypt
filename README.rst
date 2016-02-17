@@ -48,7 +48,8 @@ Status
 What's new
 ==========
 
-- -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distributiona and automatically invoked
+- Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('nopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
+- -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distribution and automatically invoked
 - __pragma__ ('skip') and __pragma__ ('noskip') added to skip code generation for certain fragments
 - -j (--jskeys) option added. Normally in Python {key: 'value'} and {keyfunc (): 'value'} are allowed, and the keys are dynamically evaluated. JS programmers are used to {key, 'value'} being interpreted as {'key': 'value'} and {keyfunc (): 'value'} being forbidden. The Python interpretation is preferred, since its more flexible. If you cherish your JS habits, use the --jskeys switch. Note that this has no influence on compatibility with 3rd party JS libs.
 - FastCall (fcall) command line switch, __pragma__ ('fcall') and __pragma__ ('nofcall') added. When this switch is on, Transcrypt will bind methods directly to objects rather than to prototypes somewhere up in the class hierarchy, surpassing native JavaScript speed in many cases, since no travelling of the prototype chain is needed. Since a reference to the bound method is stored in each object of that class, the most efficient thing to do is to reserve its use for functions that are called in inner loops, achieving for lightning fast code with negligeable space overhead. The fcall mechanism has no semantical or syntactical consequences, the syntax remains pure Python.

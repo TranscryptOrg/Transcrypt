@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.83 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.85 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.83',
+        VERSION:     '3.5.85',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.83 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.85 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -251,7 +251,7 @@
     <span class="n">nameShift</span> <span class="o">=</span> <span class="mi">75</span>
     <span class="n">hintShift</span> <span class="o">=</span> <span class="mi">25</span>
             
-    <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Graphical representation of scoreboard are four labels and a separator line   </span>
+    <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Graphical representation of scoreboard are four labels and a separator line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playerLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;Player {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">{</span>
                 <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
                 <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
@@ -269,11 +269,10 @@
             <span class="p">{</span><span class="s">&#39;stroke&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">}</span>
         <span class="p">))</span>
                 
-    <span class="k">def</span> <span class="nf">increment</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerIndex</span><span class="p">,</span> <span class="n">fiets</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">increment</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerIndex</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="p">[</span><span class="n">playerIndex</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         
     <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">increment</span> <span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">Attribute</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c"># Only does a commit here</span>
         
@@ -378,7 +377,7 @@
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __pragma__ = 0;
+        ;
         ;
         ;
         var fabric = __init__ (__world__.com.fabricjs).fabric;
@@ -400,13 +399,10 @@
                 self.commit ();
             });},
             get predict () {return __get__ (this, function (self) {
-                ;
             });},
             get interact () {return __get__ (this, function (self) {
-                ;
             });},
             get commit () {return __get__ (this, function (self) {
-                ;
             });}
         });
         var Sprite = __class__ (&#39;Sprite&#39;, [Attribute], {
@@ -414,7 +410,6 @@
                 self.width = width;
                 self.height = height;
                 Attribute.__init__ (self, game);
-                var a = 5;
             });},
             get install () {return __get__ (this, function (self) {
                 self.image = new fabric.Rect ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;});
@@ -565,11 +560,10 @@
                 self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX (-7 / 16 * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
                 self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {&#39;stroke&#39;: &#39;white&#39;});
             });},
-            get increment () {return __get__ (this, function (self, playerIndex, fiets) {
+            get increment () {return __get__ (this, function (self, playerIndex) {
                 self.scores [playerIndex]++;
             });},
             get reset () {return __get__ (this, function (self) {
-                self.increment ();
                 self.scores = list ([0, 0]);
                 Attribute.reset (self);
             });},
@@ -681,7 +675,6 @@
                 }
             });},
             get resize () {return __get__ (this, function (self, width, height) {
-                ;
             });},
             get scaleX () {return __get__ (this, function (self, x) {
                 return x * self.canvas.width / orthoWidth;
@@ -709,15 +702,10 @@
         __pragma__ (&#39;&lt;all&gt;&#39;)
             __all__.Attribute = Attribute;
             __all__.Ball = Ball;
-            __all__.Date = Date;
             __all__.Game = Game;
-            __all__.Math = Math;
             __all__.Paddle = Paddle;
             __all__.Scoreboard = Scoreboard;
             __all__.Sprite = Sprite;
-            __all__.__include__ = __include__;
-            __all__.__new__ = __new__;
-            __all__.__pragma__ = __pragma__;
             __all__.enter = enter;
             __all__.esc = esc;
             __all__.fieldHeight = fieldHeight;
@@ -725,7 +713,6 @@
             __all__.orthoHeight = orthoHeight;
             __all__.orthoWidth = orthoWidth;
             __all__.space = space;
-            __all__.window = window;
         __pragma__ (&#39;&lt;/all&gt;&#39;)
     }) ();
 </pre></div>
@@ -868,7 +855,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.83 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.85 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

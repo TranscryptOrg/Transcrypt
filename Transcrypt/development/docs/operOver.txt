@@ -1,0 +1,47 @@
+var binaryOperators = {
+    '+': '__add',
+    '-': '__subtract',
+    '*': '__multiply',
+    '/': '__divide',
+    '%': '__modulo',
+    '==': 'equals',
+    '!=': 'equals'
+};
+ 
+function _$_(left, operator, right) {
+    var handler = binaryOperators[operator];
+    if (left && left[handler]) {
+        var res = left[handler](right);
+        return operator === '!=' ? !res : res;
+    }
+    switch (operator) {
+    case '+': return left + right;
+    case '-': return left - right;
+    case '*': return left * right;
+    case '/': return left / right;
+    case '%': return left % right;
+    case '==': return left == right;
+    case '!=': return left != right;
+    }
+}
+
+y = (3 * 4) * (A_ * (x_ + y_) + b_)
+
+y = _((3 * 4), '*', _( _(A_ '*' x_), '+', b_))
+
+y = calc (3 * 4, '*', A_, '*', '(', x_, '+' y_, ')', '+',  b_)
+
+y = o (3, '*', o(o(A, '*', x) '+' b)
+
+y = mul (mul (p, q), add (mul (A, x), b))
+
+y = 3 * 4 '*' A * x + b
+
+y = p * q * A_ * x_ + b_
+y = p * q * add (mul ((A_, x_), b_)
+
+y = p * q * A * x + b
+
+y = p * q * A ('*', 'x').add (b)
+
+y = __add__ (__mul__ (A, x), b)

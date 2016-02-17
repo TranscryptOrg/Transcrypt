@@ -3,6 +3,8 @@
 	// It can't do that itself, because it is a regular Python module
 	// The compiler recognizes its their namesand generates them inline rather than nesting them
 	// In this way it isn't needed to import them everywhere
+	 
+function f() { /** ... */ }
 	
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
@@ -568,3 +570,67 @@
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
+	
+	// Operator overloading, only the ones that make most sense in matrix operations
+	
+	var matmul = function (a, b) { 
+		if (typeof a == 'object' && '__matmul__' in a) {
+			return a.__matmul__ (b);
+		}
+		else {
+			return b.__rmatmul__ (a);
+		}
+	};  
+	__all__.matmul = matmul;
+	
+	var mul = function (a, b) {
+		if (typeof a == 'object' && '__mul__' in a) {
+			return a.__mul__ (b);
+		}
+		else if (typeof b == 'object' && '__rmul__' in b) {
+			return b.__rmul__ (a);
+		}
+		else {
+			return a * b;
+		}
+	};  
+	__all__.mul = mul;
+	
+	var div = function (a, b) {
+		if (typeof a == 'object' && '__div__' in a) {
+			return a.__div__ (b);
+		}
+		else if (typeof b == 'object' && '__rdiv__' in b) {
+			return b.__rdiv__ (a);
+		}
+		else {
+			return a / b;
+		}
+	};  
+	__all__.div = div;
+	
+	var add = function (a, b) {
+		if (typeof a == 'object' && '__add__' in a) {
+			return a.__add__ (b);
+		}
+		else if (typeof b == 'object' && '__radd__' in b) {
+			return b.__radd__ (a);
+		}
+		else {
+			return a + b;
+		}
+	};  
+	__all__.add = add;
+	
+	var sub = function (a, b) {
+		if (typeof a == 'object' && '__sub__' in a) {
+			return a.__sub__ (b);
+		}
+		else if (typeof b == 'object' && '__rsub__' in b) {
+			return b.__rsub__ (a);
+		}
+		else {
+			return a - b;
+		}
+	};  
+	__all__.sub = sub;

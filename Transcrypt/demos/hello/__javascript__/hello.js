@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-16 02:41:23
+// Transcrypt'ed from Python, 2016-02-17 05:19:45
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.84';
+							self.transpilerVersion = '3.5.85';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -231,6 +231,7 @@ function hello () {
 			}
 		}
 	);
+function f() { /** ... */ }
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
@@ -682,6 +683,63 @@ function hello () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
+	var matmul = function (a, b) {
+		if (typeof a == 'object' && '__matmul__' in a) {
+			return a.__matmul__ (b);
+		}
+		else {
+			return b.__rmatmul__ (a);
+		}
+	};
+	__all__.matmul = matmul;
+	var mul = function (a, b) {
+		if (typeof a == 'object' && '__mul__' in a) {
+			return a.__mul__ (b);
+		}
+		else if (typeof b == 'object' && '__rmul__' in b) {
+			return b.__rmul__ (a);
+		}
+		else {
+			return a * b;
+		}
+	};
+	__all__.mul = mul;
+	var div = function (a, b) {
+		if (typeof a == 'object' && '__div__' in a) {
+			return a.__div__ (b);
+		}
+		else if (typeof b == 'object' && '__rdiv__' in b) {
+			return b.__rdiv__ (a);
+		}
+		else {
+			return a / b;
+		}
+	};
+	__all__.div = div;
+	var add = function (a, b) {
+		if (typeof a == 'object' && '__add__' in a) {
+			return a.__add__ (b);
+		}
+		else if (typeof b == 'object' && '__radd__' in b) {
+			return b.__radd__ (a);
+		}
+		else {
+			return a + b;
+		}
+	};
+	__all__.add = add;
+	var sub = function (a, b) {
+		if (typeof a == 'object' && '__sub__' in a) {
+			return a.__sub__ (b);
+		}
+		else if (typeof b == 'object' && '__rsub__' in b) {
+			return b.__rsub__ (a);
+		}
+		else {
+			return a - b;
+		}
+	};
+	__all__.sub = sub;
 	__nest__ (
 		__all__,
 		'itertools', {
