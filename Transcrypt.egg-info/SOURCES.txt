@@ -136,10 +136,13 @@ Transcrypt/docs/images/hello_doc.png
 Transcrypt/docs/images/logo.png
 Transcrypt/docs/images/logo_sphinx.html
 Transcrypt/docs/images/logo_sphinx.png
+Transcrypt/docs/images/logo_stackoverflow_ad.png
 Transcrypt/docs/images/logo_white.html
 Transcrypt/docs/images/logo_white.png
 Transcrypt/docs/images/logo_white_small.png
 Transcrypt/docs/images/monk_transcribing.png
+Transcrypt/docs/images/monk_transcribing_and_logo_stackoverflow_ad.png
+Transcrypt/docs/images/monk_transcribing_stackoverflow_ad.png
 Transcrypt/docs/sphinx/Makefile
 Transcrypt/docs/sphinx/autotesting_transcrypt.rst
 Transcrypt/docs/sphinx/conf.py
@@ -302,4 +305,3 @@ Transcrypt/modules/org/transcrypt/static_check/pyflakes/pyflakes/test/test_retur
 Transcrypt/modules/org/transcrypt/static_check/pyflakes/pyflakes/test/test_undefined_names.py
 Transcrypt/modules/org/transcrypt/stubs/__init__.py
 Transcrypt/modules/org/transcrypt/stubs/browser.py
-dist/Transcrypt-3.5.87.zip

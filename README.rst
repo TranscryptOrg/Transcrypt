@@ -24,7 +24,11 @@ Then let the world know it exists!
 Do you know someone who can blog about it?
 Please ask that person to do so...
 Want to show your discovery to your colleagues, classmates or friends?
-Go ahead... For me this is about having pleasure in ones job. I've enjoyed laying the groundwork for Transcrypt. And I hope many will enjoy using it.
+Go ahead... 
+Or upvote Transcrypt on Stackoverflow by opening this link in a new tab:
+http://meta.stackoverflow.com/questions/314722/open-source-advertising-1h-2016/317184#317184
+
+For me this is about having pleasure in ones job. I've enjoyed laying the groundwork for Transcrypt. And I hope many will enjoy using it.
 
 Jacques de Hooge, Rotterdam, Netherlands
 
@@ -53,7 +57,7 @@ What's new
 - Overloading of () added + test
 - Optional overloading of [] enabled, doc updated, tests added
 - Doc update, operator overloading and sort/sorted examples added
-- Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('nopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
+- Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('noopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
 - -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distribution and automatically invoked
 - __pragma__ ('skip') and __pragma__ ('noskip') added to skip code generation for certain fragments
 - -j (--jskeys) option added. Normally in Python {key: 'value'} and {keyfunc (): 'value'} are allowed, and the keys are dynamically evaluated. JS programmers are used to {key, 'value'} being interpreted as {'key': 'value'} and {keyfunc (): 'value'} being forbidden. The Python interpretation is preferred, since its more flexible. If you cherish your JS habits, use the --jskeys switch. Note that this has no influence on compatibility with 3rd party JS libs.
