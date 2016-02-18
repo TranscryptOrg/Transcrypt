@@ -655,3 +655,14 @@ function f() { /** ... */ }
 	};
 	__all__.__setitem__ = __setitem__;
 
+	var __call__ = function (/* <callee>, <params>* */) {
+		var args = [] .slice.apply (arguments)
+		if (typeof args [0] == 'object' && '__call__' in args [0]) {
+			return args [0] .__call__ .apply (null,  args.slice (1));
+		}
+		else {
+			return args [0] .apply (null, args.slice (1));
+		}		
+	};
+	__all__.__call__ = __call__;
+

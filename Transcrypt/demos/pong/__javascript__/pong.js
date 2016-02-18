@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-18 02:49:20
+// Transcrypt'ed from Python, 2016-02-18 17:10:42
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.87';
+							self.transpilerVersion = '3.5.89';
 							self.targetSubDir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -131,7 +131,7 @@ function pong () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -139,7 +139,7 @@ function pong () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -152,7 +152,7 @@ function pong () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					;
 					var __sort__ = function (iterable, key, reverse) {
@@ -758,6 +758,16 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+	var __call__ = function (/* <callee>, <params>* */) {
+		var args = [] .slice.apply (arguments)
+		if (typeof args [0] == 'object' && '__call__' in args [0]) {
+			return args [0] .__call__ .apply (null,  args.slice (1));
+		}
+		else {
+			return args [0] .apply (null, args.slice (1));
+		}
+	};
+	__all__.__call__ = __call__;
 	__nest__ (
 		__all__,
 		'com.fabricjs', {
@@ -15758,26 +15768,26 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				self.game.attributes.append (self);
 				self.install ();
 				self.reset ();
-			});},
+			}, '__init__');},
 			get reset () {return __get__ (this, function (self) {
 				self.commit ();
-			});},
+			}, 'reset');},
 			get predict () {return __get__ (this, function (self) {
-			});},
+			}, 'predict');},
 			get interact () {return __get__ (this, function (self) {
-			});},
+			}, 'interact');},
 			get commit () {return __get__ (this, function (self) {
-			});}
+			}, 'commit');}
 		});
 		var Sprite = __class__ ('Sprite', [Attribute], {
 			get __init__ () {return __get__ (this, function (self, game, width, height) {
 				self.width = width;
 				self.height = height;
 				Attribute.__init__ (self, game);
-			});},
+			}, '__init__');},
 			get install () {return __get__ (this, function (self) {
 				self.image = new fabric.Rect ({'width': self.game.scaleX (self.width), 'height': self.game.scaleY (self.height), 'originX': 'center', 'originY': 'center', 'fill': 'white'});
-			});},
+			}, 'install');},
 			get reset () {return __get__ (this, function (self, vX, vY, x, y) {
 				if (typeof vX == 'undefined' || (vX != null && vX .__class__ == __kwargdict__)) {;
 					var vX = 0;
@@ -15811,27 +15821,27 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				self.x = x;
 				self.y = y;
 				Attribute.reset (self);
-			});},
+			}, 'reset');},
 			get predict () {return __get__ (this, function (self) {
 				self.x += self.vX * self.game.deltaT;
 				self.y += self.vY * self.game.deltaT;
-			});},
+			}, 'predict');},
 			get commit () {return __get__ (this, function (self) {
 				self.image.left = self.game.orthoX (self.x);
 				self.image.top = self.game.orthoY (self.y);
-			});},
+			}, 'commit');},
 			get draw () {return __get__ (this, function (self) {
 				self.game.canvas.add (self.image);
-			});}
+			}, 'draw');}
 		});
 		var Paddle = __class__ ('Paddle', [Sprite], {
 			get __init__ () {return __get__ (this, function (self, game, index) {
 				self.index = index;
 				Sprite.__init__ (self, game, self.width, self.height);
-			});},
+			}, '__init__');},
 			get reset () {return __get__ (this, function (self) {
 				Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth) / Math.floor (2) - self.margin : Math.floor (-orthoWidth) / Math.floor (2) + self.margin), y: 0}));
-			});},
+			}, 'reset');},
 			get predict () {return __get__ (this, function (self) {
 				self.vY = 0;
 				if (self.index) {
@@ -15855,7 +15865,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					}
 				}
 				Sprite.predict (self);
-			});},
+			}, 'predict');},
 			get interact () {return __get__ (this, function (self) {
 				self.y = Math.max (Math.floor (self.height) / Math.floor (2) - Math.floor (fieldHeight) / Math.floor (2), Math.min (self.y, Math.floor (fieldHeight) / Math.floor (2) - Math.floor (self.height) / Math.floor (2)));
 				if ((self.y - Math.floor (self.height) / Math.floor (2) < self.game.ball.y && self.game.ball.y < self.y + Math.floor (self.height) / Math.floor (2)) && (self.index == 0 && self.game.ball.x < self.x || self.index == 1 && self.game.ball.x > self.x)) {
@@ -15863,7 +15873,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					self.game.ball.vX = -self.game.ball.vX;
 					self.game.ball.speedUp (self);
 				}
-			});}
+			}, 'interact');}
 		});
 		Paddle.margin = 30;
 		Paddle.width = 10;
@@ -15872,11 +15882,11 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 		var Ball = __class__ ('Ball', [Sprite], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				Sprite.__init__ (self, game, self.side, self.side);
-			});},
+			}, '__init__');},
 			get reset () {return __get__ (this, function (self) {
 				var angle = self.game.serviceIndex * Math.PI + (Math.random () > 0.5 ? 1 : -1) * Math.random () * Math.atan (fieldHeight / orthoWidth);
 				Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
-			});},
+			}, 'reset');},
 			get predict () {return __get__ (this, function (self) {
 				Sprite.predict (self);
 				if (self.x < Math.floor (-orthoWidth) / Math.floor (2)) {
@@ -15897,14 +15907,14 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 						self.vY = -self.vY;
 					}
 				}
-			});},
+			}, 'predict');},
 			get speedUp () {return __get__ (this, function (self, bat) {
 				var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / Math.floor (bat.height) / Math.floor (2), 2);
 				if (Math.abs (self.vX) < 3 * self.speed) {
 					self.vX *= factor;
 					self.vY *= factor;
 				}
-			});}
+			}, 'speedUp');}
 		});
 		Ball.side = 8;
 		Ball.speed = 300;
@@ -15923,14 +15933,14 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				} ();
 				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', {'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12', 'left': self.game.orthoX (-7 / 16 * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
 				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {'stroke': 'white'});
-			});},
+			}, 'install');},
 			get increment () {return __get__ (this, function (self, playerIndex) {
 				self.scores [playerIndex]++;
-			});},
+			}, 'increment');},
 			get reset () {return __get__ (this, function (self) {
 				self.scores = list ([0, 0]);
 				Attribute.reset (self);
-			});},
+			}, 'reset');},
 			get commit () {return __get__ (this, function (self) {
 				self.scoreLabels = function () {
 					var __accu0__ = [];
@@ -15943,7 +15953,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					}
 					return __accu0__;
 				} ();
-			});},
+			}, 'commit');},
 			get draw () {return __get__ (this, function (self) {
 				var __iter0__ = zip (self.playerLabels, self.scoreLabels);
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -15955,7 +15965,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					self.game.canvas.add (self.hintLabel);
 				}
 				self.game.canvas.add (self.image);
-			});}
+			}, 'draw');}
 		});
 		Scoreboard.nameShift = 75;
 		Scoreboard.hintShift = 25;
@@ -15986,7 +15996,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				window.addEventListener ('keydown', self.keydown);
 				window.addEventListener ('keyup', self.keyup);
 				self.time = +new Date;
-			});},
+			}, '__init__');},
 			get update () {return __get__ (this, function (self) {
 				var oldTime = self.time;
 				self.time = +new Date;
@@ -16018,7 +16028,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 						attribute.commit ();
 					}
 				}
-			});},
+			}, 'update');},
 			get scored () {return __get__ (this, function (self, playerIndex) {
 				self.scoreboard.increment (playerIndex);
 				self.serviceIndex = 1 - playerIndex;
@@ -16029,7 +16039,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				}
 				self.ball.reset ();
 				self.pause = true;
-			});},
+			}, 'scored');},
 			get draw () {return __get__ (this, function (self) {
 				self.canvas.clear ();
 				var __iter0__ = self.attributes;
@@ -16037,27 +16047,27 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 					var attribute = __iter0__ [__index0__];
 					attribute.draw ();
 				}
-			});},
+			}, 'draw');},
 			get resize () {return __get__ (this, function (self, width, height) {
-			});},
+			}, 'resize');},
 			get scaleX () {return __get__ (this, function (self, x) {
 				return x * self.canvas.width / orthoWidth;
-			});},
+			}, 'scaleX');},
 			get scaleY () {return __get__ (this, function (self, y) {
 				return y * self.canvas.height / orthoHeight;
-			});},
+			}, 'scaleY');},
 			get orthoX () {return __get__ (this, function (self, x) {
 				return self.scaleX (x + Math.floor (orthoWidth) / Math.floor (2));
-			});},
+			}, 'orthoX');},
 			get orthoY () {return __get__ (this, function (self, y) {
 				return self.scaleY (orthoHeight - Math.floor (fieldHeight) / Math.floor (2) - y);
-			});},
+			}, 'orthoY');},
 			get keydown () {return __get__ (this, function (self, event) {
 				self.keySet.add (event.keyCode);
-			});},
+			}, 'keydown');},
 			get keyup () {return __get__ (this, function (self, event) {
 				self.keySet.remove (event.keyCode);
-			});}
+			}, 'keyup');}
 		});
 		var game = Game ();
 		__pragma__ ('<use>' +

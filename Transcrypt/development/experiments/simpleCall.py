@@ -5,6 +5,9 @@ class A:
 	def f (self):
 		console.log (self)
 		
+	def __call__ (self, x):
+		self.x = x
+		
 class B (A):
 	pass
 		
@@ -16,4 +19,6 @@ a2.f ()
 
 a1.f ()
 a2.f ()
+
+a1.(5) 
 

@@ -67,7 +67,7 @@ Hierarchical modules: both local to the project and global url-based
 	:tab-width: 4
 	:caption: Testlet: modules
 
- Indices and slices: LHS, RHS, basic and extended
+Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/indices_and_slices/__init__.py

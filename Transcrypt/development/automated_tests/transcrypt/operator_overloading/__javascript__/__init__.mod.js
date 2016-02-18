@@ -33,7 +33,7 @@
 									return __accu0__;
 								} ();
 							}
-						});},
+						}, '__init__');},
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
@@ -55,7 +55,7 @@
 							else {
 								return self.__rmul__ (other);
 							}
-						});},
+						}, '__mul__');},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -68,7 +68,7 @@
 								}
 							}
 							return result;
-						});},
+						}, '__rmul__');},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -81,17 +81,84 @@
 								}
 							}
 							return result;
-						});},
+						}, '__add__');},
 						get __getitem__ () {return __get__ (this, function (self, index) {
 							return self._ [index];
-						});},
+						}, '__getitem__');},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
 							self._ [index] = value;
-						});},
+						}, '__setitem__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
-						});}
+						}, '__repr__');}
 					});
+					var Functor = __class__ ('Functor', [object], {
+						get __init__ () {return __get__ (this, function (self, factor) {
+							self.factor = factor;
+						}, '__init__');},
+						get __call__ () {return __get__ (this, function (self, x, y) {
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = -1;
+							};
+							var m = -2;
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									var kwargs = {};
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+											case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+											case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+											case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
+									}
+									kwargs.__class__ = null;
+								}
+								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
+							}
+							return tuple (list ([self.factor * x, self.factor * y, function () {
+								var __accu0__ = [];
+								var __iter0__ = args;
+								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+									var arg = __iter0__ [__index0__];
+									__accu0__.append (self.factor * arg);
+								}
+								return __accu0__;
+							} (), self.factor * m, self.factor * n]));
+						}, '__call__');}
+					});
+					var f = Functor (10);
+					;
+					var g = function (x, y) {
+						if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+							var y = -1;
+						};
+						var m = -2;
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								var kwargs = {};
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'x': var x = __allkwargs0__ [__attrib0__]; break;
+										case 'y': var y = __allkwargs0__ [__attrib0__]; break;
+										case 'm': var m = __allkwargs0__ [__attrib0__]; break;
+										case 'n': var n = __allkwargs0__ [__attrib0__]; break;
+										default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+									}
+								}
+								kwargs.__class__ = null;
+							}
+							var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
+						}
+						return tuple (list ([x, y, args, m, n]));
+					};
+					;
 					var run = function (autoTester) {
 						var m0 = Matrix (3, 3, list ([list ([1, 2, 3]), list ([4, 5, 6]), list ([7, 8, 10])]));
 						var m1 = Matrix (3, 3, list ([list ([10, 20, 30]), list ([40, 50, 60]), list ([70, 80, 90])]));
@@ -103,7 +170,7 @@
 						var slow = __add__ (2, 3);
 						var m2 = __add__ (__mul__ (m0, m1), __mul__ (m1, __add__ (m0, m1)));
 						var m3 = __mul__ (__mul__ (2, __add__ (__mul__ (__mul__ (__mul__ (2, m0), 3), m1), __mul__ (m2, 4))), 2);
-						autoTester.check (__getitem__ (__getitem__ (m0, 1), 1), __getitem__ (__getitem__ (m0, 1), 2), __getitem__ (__getitem__ (m1, 1), 1), __getitem__ (__getitem__ (m1, 1), 2));
+						__call__ (autoTester.check, __getitem__ (__getitem__ (m0, 1), 1), __getitem__ (__getitem__ (m0, 1), 2), __getitem__ (__getitem__ (m1, 1), 1), __getitem__ (__getitem__ (m1, 1), 2));
 						;
 						var fast2 = 16 * y + 1;
 						autoTester.check (m0, m1);
@@ -111,9 +178,17 @@
 						autoTester.check (m2);
 						autoTester.check (m3);
 						autoTester.check (fast, slow, fast2);
+						var x = 'marker';
+						;
+						__call__ (autoTester.check, __call__ (f, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
+						__call__ (autoTester.check, __call__ (g, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
+						;
 					};
 					__pragma__ ('<all>')
+						__all__.Functor = Functor;
 						__all__.Matrix = Matrix;
+						__all__.f = f;
+						__all__.g = g;
 						__all__.run = run;
 					__pragma__ ('</all>')
 				}

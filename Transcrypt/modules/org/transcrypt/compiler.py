@@ -727,7 +727,7 @@ class Generator (ast.NodeVisitor):
 			assignTarget (node.targets [0], node.value)			
 		else:
 			# Multiple RHS or tuple assignment, we need __tmp__, create assignment node on the fly and visit it
-			self.visit (ast.Assign ([ast.Name (self.nextTemp ('left'), ast.Store)], node.value))
+			self.visit (ast.Assign ([ast.Name (id = self.nextTemp ('left'), ctx = ast.Store)], node.value))
 			
 			for expr in node.targets:
 				walkTarget (expr, [])
@@ -917,6 +917,12 @@ class Generator (ast.NodeVisitor):
 				self.emit ('new ')
 				self.visit (node.args [0])
 				return
+					
+		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add __call__ node on the fly and visit it
+			self.visit (ast.Call (
+				func = ast.Name (id = '__call__', ctx = node.func.ctx), args = [node.func] + node.args, keywords = node.keywords)
+			)
+			return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit. 
 				
 		self.visit (node.func)
 		

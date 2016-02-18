@@ -302,3 +302,4 @@ Transcrypt/modules/org/transcrypt/static_check/pyflakes/pyflakes/test/test_retur
 Transcrypt/modules/org/transcrypt/static_check/pyflakes/pyflakes/test/test_undefined_names.py
 Transcrypt/modules/org/transcrypt/stubs/__init__.py
 Transcrypt/modules/org/transcrypt/stubs/browser.py
+dist/Transcrypt-3.5.87.zip

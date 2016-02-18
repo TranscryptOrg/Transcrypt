@@ -50,6 +50,7 @@ Status
 What's new
 ==========
 
+- Overloading of () added + test
 - Optional overloading of [] enabled, doc updated, tests added
 - Doc update, operator overloading and sort/sorted examples added
 - Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('nopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
@@ -130,7 +131,7 @@ Known restrictions
 Known bugs
 ==========
 
-- Syntax error reporting broken, other error reporting confusing. PRIORITY: HIGH
+- \*\*kwargs lack keys () method, will be added
 
 Readability
 ===========

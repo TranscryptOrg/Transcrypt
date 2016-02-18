@@ -44,6 +44,29 @@ class Matrix:
 	def __repr__ (self):
 		return repr (self._)
 		
+class Functor:
+	def __init__ (self, factor):
+		self.factor = factor
+		
+	__pragma__ ('kwargs')
+	def __call__ (self, x, y = -1, *args, m = -2, n, **kwargs):
+		return (
+			self.factor * x,
+			self.factor * y,
+			[self.factor * arg for arg in args],
+			self.factor * m,
+			self.factor * n,
+			# !!! [self.factor * kwargs [key] for key in sorted (kwargs.keys ())] Add supoprt for keys () on kwargs
+		)
+	__pragma__ ('nokwargs')
+	
+f = Functor (10)
+
+__pragma__ ('kwargs')
+def g (x, y = -1, *args, m = -2, n, **kwargs):
+	return (x, y, args, m, n) # !!! , [kwargs [key] for key in sorted (kwargs.keys ())]) Add support for keys () on kwargs
+__pragma__ ('nokwargs')
+		
 def run (autoTester):
 	m0 = Matrix (3, 3, [
 		[1, 2, 3],
@@ -78,3 +101,10 @@ def run (autoTester):
 	autoTester.check (m2)
 	autoTester.check (m3)
 	autoTester.check (fast, slow, fast2)
+	
+	x = 'marker'
+	
+	__pragma__ ('opov')
+	autoTester.check (f (3, 4, 30, 40, m = 300, n = 400, p = 3000, q = 4000))
+	autoTester.check (g (3, 4, 30, 40, m = 300, n = 400, p = 3000, q = 4000))
+	__pragma__ ('noopov')

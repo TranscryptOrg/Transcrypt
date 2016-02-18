@@ -7,10 +7,10 @@
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x) {
 							self.x = x;
-						});},
+						}, '__init__');},
 						get f () {return __get__ (this, function (self) {
 							return self.x;
-						});}
+						}, 'f');}
 					});
 					__pragma__ ('<all>')
 						__all__.A = A;

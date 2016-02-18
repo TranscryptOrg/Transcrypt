@@ -42,10 +42,10 @@ class AutoTester:
 				aFile.write ('<b>Status:</b>\n')
 				aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId))
 				
-				aFile.write ('<b>Reference output:</b>\n')
+				aFile.write ('<b>CPython output:</b>\n')
 				aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)))
 				
-				aFile.write ('<b>Test output:</b>\n')
+				aFile.write ('<b>Transcrypt output:</b>\n')
 				aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId))
 
 				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix))

@@ -13,7 +13,7 @@
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -21,7 +21,7 @@
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -34,7 +34,7 @@
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					;
 					var __sort__ = function (iterable, key, reverse) {

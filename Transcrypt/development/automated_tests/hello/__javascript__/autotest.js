@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-18 02:48:57
+// Transcrypt'ed from Python, 2016-02-18 17:10:25
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.87';
+							self.transpilerVersion = '3.5.89';
 							self.targetSubDir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -131,7 +131,7 @@ function autotest () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -139,7 +139,7 @@ function autotest () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -152,7 +152,7 @@ function autotest () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					;
 					var __sort__ = function (iterable, key, reverse) {
@@ -758,6 +758,16 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+	var __call__ = function (/* <callee>, <params>* */) {
+		var args = [] .slice.apply (arguments)
+		if (typeof args [0] == 'object' && '__call__' in args [0]) {
+			return args [0] .__call__ .apply (null,  args.slice (1));
+		}
+		else {
+			return args [0] .apply (null, args.slice (1));
+		}
+	};
+	__all__.__call__ = __call__;
 	__nest__ (
 		__all__,
 		'itertools', {
@@ -799,7 +809,7 @@ function f() { /** ... */ }
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						});},
+						}, '__init__');},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -817,7 +827,7 @@ function f() { /** ... */ }
 							else {
 								self.referenceBuffer.append (item);
 							}
-						});},
+						}, 'check');},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -826,14 +836,14 @@ function f() { /** ... */ }
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<b>Status:</b>\n');
 								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
-								aFile.write ('<b>Reference output:</b>\n');
+								aFile.write ('<b>CPython output:</b>\n');
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
-								aFile.write ('<b>Test output:</b>\n');
+								aFile.write ('<b>Transcrypt output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						});},
+						}, 'dump');},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -862,12 +872,12 @@ function f() { /** ... */ }
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						});},
+						}, 'compare');},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						});},
+						}, 'run');},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -875,7 +885,7 @@ function f() { /** ... */ }
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						});}
+						}, 'done');}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +

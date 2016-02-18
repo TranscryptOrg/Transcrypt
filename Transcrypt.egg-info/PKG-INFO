@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: Transcrypt
-Version: 3.5.87
+Version: 3.5.88
 Summary: Python to JavaScript transpiler, supporting multiple inheritance and generating lean, highly readable code
 Home-page: http://www.transcrypt.org
 Author: Jacques de Hooge
@@ -14,6 +14,7 @@ Description: Transcrypt is a tool to precompile a fairly extensive subset of Pyt
         - Simple relation between Python source and generated JavaScript code for easy debugging
         - Compact downloads, kB's rather than MB's
         - Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
+        - Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
         
         Request to early adopters
         =========================
@@ -44,11 +45,12 @@ Description: Transcrypt is a tool to precompile a fairly extensive subset of Pyt
         ==========================================
         
         Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org
-        Some people have contacted me personally with 'howto' questions and feature requests. While that's quite alright, if you want others to benefit from the answers, use the forum: http://transcrypt.boards.net
+        Some people have contacted me personally with 'howto' questions and feature requests. While that's quite alright, if you want others to benefit from the answers, use the forum: http://transcrypt.boards.net .
         
         Status
         ======
         
+        - MANY THINGS HAVE BEEN ADDED THAT SURPASS THE ORIGINAL GOALS, all with the "lean and mean" credo in mind: fastcalls, optional local operator overloading and static checks.
         - The fabric.js library has been encapsulated as a Transcrypt module. Seamless JavaScript integration is a fact now.
         - Working Pong example added to http://www.transcrypt.org and to the distribution.
         - ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, properties, dicts, sets, modules. But there's a lot more (see docs). Development of Transcrypt has gone much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds. This will allow Transcrypt to keep up with developments in the future. While Transcrypt still alpha, it's almost ready to occupy its niche between PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
@@ -56,6 +58,7 @@ Description: Transcrypt is a tool to precompile a fairly extensive subset of Pyt
         What's new
         ==========
         
+        - Optional overloading of [] enabled, doc updated, tests added
         - Doc update, operator overloading and sort/sorted examples added
         - Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('nopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
         - -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distribution and automatically invoked

@@ -353,7 +353,7 @@ file: Module
 													ctx: Load 
 												args: list 
 													element: Str 
-														s: str = <b>Reference output:</b>
+														s: str = <b>CPython output:</b>
 
 												keywords: list 
 										element: Expr 
@@ -406,7 +406,7 @@ file: Module
 													ctx: Load 
 												args: list 
 													element: Str 
-														s: str = <b>Test output:</b>
+														s: str = <b>Transcrypt output:</b>
 
 												keywords: list 
 										element: Expr 

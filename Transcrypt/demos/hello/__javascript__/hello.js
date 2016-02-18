@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-18 02:49:12
+// Transcrypt'ed from Python, 2016-02-18 17:10:35
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.87';
+							self.transpilerVersion = '3.5.89';
 							self.targetSubDir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -131,7 +131,7 @@ function hello () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -139,7 +139,7 @@ function hello () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -152,7 +152,7 @@ function hello () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					;
 					var __sort__ = function (iterable, key, reverse) {
@@ -758,6 +758,16 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+	var __call__ = function (/* <callee>, <params>* */) {
+		var args = [] .slice.apply (arguments)
+		if (typeof args [0] == 'object' && '__call__' in args [0]) {
+			return args [0] .__call__ .apply (null,  args.slice (1));
+		}
+		else {
+			return args [0] .apply (null, args.slice (1));
+		}
+	};
+	__all__.__call__ = __call__;
 	__nest__ (
 		__all__,
 		'itertools', {
@@ -784,16 +794,16 @@ function f() { /** ... */ }
 		var SolarSystem = __class__ ('SolarSystem', [object], {
 			get __init__ () {return __get__ (this, function (self) {
 				self.lineIndex = 0;
-			});},
+			}, '__init__');},
 			get greet () {return __get__ (this, function (self) {
 				self.planet = self.planets [int (Math.random () * len (self.planets))];
 				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planet [0]);
 				self.explain ();
-			});},
+			}, 'greet');},
 			get explain () {return __get__ (this, function (self) {
 				document.getElementById ('explain').innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
 				self.lineIndex = (self.lineIndex + 1) % 3;
-			});}
+			}, 'explain');}
 		});
 		SolarSystem.planets = function () {
 			var __accu0__ = [];

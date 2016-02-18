@@ -18,7 +18,7 @@
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						});},
+						}, '__init__');},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -36,7 +36,7 @@
 							else {
 								self.referenceBuffer.append (item);
 							}
-						});},
+						}, 'check');},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -45,14 +45,14 @@
 								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
 								aFile.write ('<b>Status:</b>\n');
 								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
-								aFile.write ('<b>Reference output:</b>\n');
+								aFile.write ('<b>CPython output:</b>\n');
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
-								aFile.write ('<b>Test output:</b>\n');
+								aFile.write ('<b>Transcrypt output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						});},
+						}, 'dump');},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -81,12 +81,12 @@
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						});},
+						}, 'compare');},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						});},
+						}, 'run');},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -94,7 +94,7 @@
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						});}
+						}, 'done');}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +
