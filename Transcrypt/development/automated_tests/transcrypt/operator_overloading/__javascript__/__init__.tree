@@ -635,7 +635,7 @@ file: Module
 										value: Name 
 											id: str = self
 											ctx: Load 
-										attr: str = elements_
+										attr: str = _
 										ctx: Load 
 									slice: Index 
 										value: Name 
@@ -825,6 +825,34 @@ file: Module
 						keywords: list 
 				element: Assign 
 					targets: list 
+						element: Subscript 
+							value: Subscript 
+								value: Name 
+									id: str = m1
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 1
+								ctx: Load 
+							slice: Index 
+								value: Num 
+									n: int = 2
+							ctx: Store 
+					value: Subscript 
+						value: Subscript 
+							value: Name 
+								id: str = m0
+								ctx: Load 
+							slice: Index 
+								value: Num 
+									n: int = 1
+							ctx: Load 
+						slice: Index 
+							value: Num 
+								n: int = 2
+						ctx: Load 
+				element: Assign 
+					targets: list 
 						element: Name 
 							id: str = slow
 							ctx: Store 
@@ -900,6 +928,68 @@ file: Module
 						op: Mult 
 						right: Num 
 							n: int = 2
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Subscript 
+									value: Name 
+										id: str = m0
+										ctx: Load 
+									slice: Index 
+										value: Num 
+											n: int = 1
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 1
+								ctx: Load 
+							element: Subscript 
+								value: Subscript 
+									value: Name 
+										id: str = m0
+										ctx: Load 
+									slice: Index 
+										value: Num 
+											n: int = 1
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 2
+								ctx: Load 
+							element: Subscript 
+								value: Subscript 
+									value: Name 
+										id: str = m1
+										ctx: Load 
+									slice: Index 
+										value: Num 
+											n: int = 1
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 1
+								ctx: Load 
+							element: Subscript 
+								value: Subscript 
+									value: Name 
+										id: str = m1
+										ctx: Load 
+									slice: Index 
+										value: Num 
+											n: int = 1
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 2
+								ctx: Load 
+						keywords: list 
 				element: Expr 
 					value: Call 
 						func: Name 

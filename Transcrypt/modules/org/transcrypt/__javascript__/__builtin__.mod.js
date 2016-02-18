@@ -573,7 +573,7 @@ function f() { /** ... */ }
 	
 	// Operator overloading, only the ones that make most sense in matrix operations
 	
-	var matmul = function (a, b) { 
+	var __matmul__ = function (a, b) { 
 		if (typeof a == 'object' && '__matmul__' in a) {
 			return a.__matmul__ (b);
 		}
@@ -581,9 +581,9 @@ function f() { /** ... */ }
 			return b.__rmatmul__ (a);
 		}
 	};  
-	__all__.matmul = matmul;
+	__all__.__matmul__ = __matmul__;
 	
-	var mul = function (a, b) {
+	var __mul__ = function (a, b) {
 		if (typeof a == 'object' && '__mul__' in a) {
 			return a.__mul__ (b);
 		}
@@ -594,9 +594,9 @@ function f() { /** ... */ }
 			return a * b;
 		}
 	};  
-	__all__.mul = mul;
+	__all__.__mul__ = __mul__;
 	
-	var div = function (a, b) {
+	var __div__ = function (a, b) {
 		if (typeof a == 'object' && '__div__' in a) {
 			return a.__div__ (b);
 		}
@@ -607,9 +607,9 @@ function f() { /** ... */ }
 			return a / b;
 		}
 	};  
-	__all__.div = div;
+	__all__.__div__ = __div__;
 	
-	var add = function (a, b) {
+	var __add__ = function (a, b) {
 		if (typeof a == 'object' && '__add__' in a) {
 			return a.__add__ (b);
 		}
@@ -620,9 +620,9 @@ function f() { /** ... */ }
 			return a + b;
 		}
 	};  
-	__all__.add = add;
+	__all__.__add__ = __add__;
 	
-	var sub = function (a, b) {
+	var __sub__ = function (a, b) {
 		if (typeof a == 'object' && '__sub__' in a) {
 			return a.__sub__ (b);
 		}
@@ -633,24 +633,25 @@ function f() { /** ... */ }
 			return a - b;
 		}
 	};  
-	__all__.sub = sub;
+	__all__.__sub__ = __sub__;
 	
-	var getitem = function (container, key) {
-		if (typeof item == 'object' && '__getitem__' in container) {
+	var __getitem__ = function (container, key) {
+		if (typeof container == 'object' && '__getitem__' in container) {
 			return container.__getitem__ (key);
 		}
 		else {
 			return container [key];
 		}
-	}
-	__all__.getitem = getitem;
+	};
+	__all__.__getitem__ = __getitem__;
 
-	var setitem = function (container, key, value) {
-		if (typeof item == 'object' && '__setitem__' in container) {
+	var __setitem__ = function (container, key, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
 			container.__setitem__ (key, value);
 		}
 		else {
 			container [key] = value;
 		}
-	}
+	};
+	__all__.__setitem__ = __setitem__;
 

@@ -648,10 +648,10 @@ class Generator (ast.NodeVisitor):
 						utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid LHS slice')
 				elif type (target.slice) == ast.Index:
 					if self.allowOperatorOverloading:
-						self.emit ('setitem (')
+						self.emit ('__setitem__ (')
 						self.visit (target.value)
-						self.visit (', ')
-						self.visit (target.slice.index)
+						self.emit (', ')
+						self.visit (target.slice.value)
 						self.emit (', ')
 						self.visit (value)
 						emitPathIndices ()
@@ -779,11 +779,11 @@ class Generator (ast.NodeVisitor):
 		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub)):
 			self.emit ('{} ('.format (self.filterId (
 				'Math.pow' if type (node.op) == ast.Pow else
-				'matmul' if type (node.op) == ast.MatMult else
-				'mul' if type (node.op) == ast.Mult else
-				'div' if type (node.op) == ast.Div else
-				'add' if type (node.op) == ast.Add else
-				'sub' # if type (node.op) == ast.Sub else
+				'__matmul__' if type (node.op) == ast.MatMult else
+				'__mul__' if type (node.op) == ast.Mult else
+				'__div__' if type (node.op) == ast.Div else
+				'__add__' if type (node.op) == ast.Add else
+				'__sub__' # if type (node.op) == ast.Sub else
 			)))
 			self.visit (node.left)
 			self.emit (', ')
@@ -1385,12 +1385,12 @@ class Generator (ast.NodeVisitor):
 		self.emit ('{}', repr (node.s))
 		
 	# Visited for RHS slice, RHS index and non-overloaded LHS index
-	# LHS slice and overloaded RHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
+	# LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
 	def visit_Subscript (self, node):
 		if self.allowOperatorOverloading and type (node.slice == ast.Index):
 				self.emit ('__getitem__ (')
 				self.visit (node.value)
-				self.visit (', ')
+				self.emit (', ')
 				self.visit (node.slice.value)
 				self.emit (')')
 		else:
@@ -1429,11 +1429,11 @@ class Generator (ast.NodeVisitor):
 					self.emit (')')
 				except Exception as exception:
 					utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid RHS slice')
-			elif type (node.slice == ast.Index):	# No operator overloading, see start of this function
+			elif type (node.slice == ast.Index):	# No operator overloading, overloaded version at start of this function
 				self.emit (' [')
 				self.visit (node.slice.value)
 				self.emit (']')
-			else:								# Here target.slice is an ast.Index, target.ctx may vary (ast.ExtSlice not dealth with yet)			
+			else:
 				raise utils.Error (
 					moduleName = self.module.metadata.name,
 					lineNr = self.lineNr,

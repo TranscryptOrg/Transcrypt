@@ -86,7 +86,7 @@
 							return self._ [index];
 						});},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
-							self.elements_ [index] = value;
+							self._ [index] = value;
 						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
@@ -99,9 +99,11 @@
 						var y = x * 4 * x;
 						var fast = 2 * 3;
 						;
-						var slow = add (2, 3);
-						var m2 = add (mul (m0, m1), mul (m1, add (m0, m1)));
-						var m3 = mul (mul (2, add (mul (mul (mul (2, m0), 3), m1), mul (m2, 4))), 2);
+						__setitem__ (__getitem__ (m1, 1), 2, __getitem__ (__getitem__ (m0, 1), 2));
+						var slow = __add__ (2, 3);
+						var m2 = __add__ (__mul__ (m0, m1), __mul__ (m1, __add__ (m0, m1)));
+						var m3 = __mul__ (__mul__ (2, __add__ (__mul__ (__mul__ (__mul__ (2, m0), 3), m1), __mul__ (m2, 4))), 2);
+						autoTester.check (__getitem__ (__getitem__ (m0, 1), 1), __getitem__ (__getitem__ (m0, 1), 2), __getitem__ (__getitem__ (m1, 1), 1), __getitem__ (__getitem__ (m1, 1), 2));
 						;
 						var fast2 = 16 * y + 1;
 						autoTester.check (m0, m1);

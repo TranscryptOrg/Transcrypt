@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-17 05:19:45
+// Transcrypt'ed from Python, 2016-02-18 02:49:12
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.85';
+							self.transpilerVersion = '3.5.87';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -683,7 +683,7 @@ function f() { /** ... */ }
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	var matmul = function (a, b) {
+	var __matmul__ = function (a, b) {
 		if (typeof a == 'object' && '__matmul__' in a) {
 			return a.__matmul__ (b);
 		}
@@ -691,8 +691,8 @@ function f() { /** ... */ }
 			return b.__rmatmul__ (a);
 		}
 	};
-	__all__.matmul = matmul;
-	var mul = function (a, b) {
+	__all__.__matmul__ = __matmul__;
+	var __mul__ = function (a, b) {
 		if (typeof a == 'object' && '__mul__' in a) {
 			return a.__mul__ (b);
 		}
@@ -703,8 +703,8 @@ function f() { /** ... */ }
 			return a * b;
 		}
 	};
-	__all__.mul = mul;
-	var div = function (a, b) {
+	__all__.__mul__ = __mul__;
+	var __div__ = function (a, b) {
 		if (typeof a == 'object' && '__div__' in a) {
 			return a.__div__ (b);
 		}
@@ -715,8 +715,8 @@ function f() { /** ... */ }
 			return a / b;
 		}
 	};
-	__all__.div = div;
-	var add = function (a, b) {
+	__all__.__div__ = __div__;
+	var __add__ = function (a, b) {
 		if (typeof a == 'object' && '__add__' in a) {
 			return a.__add__ (b);
 		}
@@ -727,8 +727,8 @@ function f() { /** ... */ }
 			return a + b;
 		}
 	};
-	__all__.add = add;
-	var sub = function (a, b) {
+	__all__.__add__ = __add__;
+	var __sub__ = function (a, b) {
 		if (typeof a == 'object' && '__sub__' in a) {
 			return a.__sub__ (b);
 		}
@@ -739,7 +739,25 @@ function f() { /** ... */ }
 			return a - b;
 		}
 	};
-	__all__.sub = sub;
+	__all__.__sub__ = __sub__;
+	var __getitem__ = function (container, key) {
+		if (typeof container == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (key);
+		}
+		else {
+			return container [key];
+		}
+	};
+	__all__.__getitem__ = __getitem__;
+	var __setitem__ = function (container, key, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
+			container.__setitem__ (key, value);
+		}
+		else {
+			container [key] = value;
+		}
+	};
+	__all__.__setitem__ = __setitem__;
 	__nest__ (
 		__all__,
 		'itertools', {

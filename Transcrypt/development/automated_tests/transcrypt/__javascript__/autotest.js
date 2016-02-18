@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-17 20:14:10
+// Transcrypt'ed from Python, 2016-02-18 02:49:04
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -683,7 +683,7 @@ function f() { /** ... */ }
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	var matmul = function (a, b) {
+	var __matmul__ = function (a, b) {
 		if (typeof a == 'object' && '__matmul__' in a) {
 			return a.__matmul__ (b);
 		}
@@ -691,8 +691,8 @@ function f() { /** ... */ }
 			return b.__rmatmul__ (a);
 		}
 	};
-	__all__.matmul = matmul;
-	var mul = function (a, b) {
+	__all__.__matmul__ = __matmul__;
+	var __mul__ = function (a, b) {
 		if (typeof a == 'object' && '__mul__' in a) {
 			return a.__mul__ (b);
 		}
@@ -703,8 +703,8 @@ function f() { /** ... */ }
 			return a * b;
 		}
 	};
-	__all__.mul = mul;
-	var div = function (a, b) {
+	__all__.__mul__ = __mul__;
+	var __div__ = function (a, b) {
 		if (typeof a == 'object' && '__div__' in a) {
 			return a.__div__ (b);
 		}
@@ -715,8 +715,8 @@ function f() { /** ... */ }
 			return a / b;
 		}
 	};
-	__all__.div = div;
-	var add = function (a, b) {
+	__all__.__div__ = __div__;
+	var __add__ = function (a, b) {
 		if (typeof a == 'object' && '__add__' in a) {
 			return a.__add__ (b);
 		}
@@ -727,8 +727,8 @@ function f() { /** ... */ }
 			return a + b;
 		}
 	};
-	__all__.add = add;
-	var sub = function (a, b) {
+	__all__.__add__ = __add__;
+	var __sub__ = function (a, b) {
 		if (typeof a == 'object' && '__sub__' in a) {
 			return a.__sub__ (b);
 		}
@@ -739,24 +739,25 @@ function f() { /** ... */ }
 			return a - b;
 		}
 	};
-	__all__.sub = sub;
-	var getitem = function (container, key) {
-		if (typeof item == 'object' && '__getitem__' in container) {
+	__all__.__sub__ = __sub__;
+	var __getitem__ = function (container, key) {
+		if (typeof container == 'object' && '__getitem__' in container) {
 			return container.__getitem__ (key);
 		}
 		else {
 			return container [key];
 		}
-	}
-	__all__.getitem = getitem;
-	var setitem = function (container, key, value) {
-		if (typeof item == 'object' && '__setitem__' in container) {
+	};
+	__all__.__getitem__ = __getitem__;
+	var __setitem__ = function (container, key, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
 			container.__setitem__ (key, value);
 		}
 		else {
 			container [key] = value;
 		}
-	}
+	};
+	__all__.__setitem__ = __setitem__;
 	__nest__ (
 		__all__,
 		'py_arguments', {
@@ -1909,7 +1910,7 @@ function f() { /** ... */ }
 							return self._ [index];
 						});},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
-							self.elements_ [index] = value;
+							self._ [index] = value;
 						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
@@ -1922,9 +1923,11 @@ function f() { /** ... */ }
 						var y = x * 4 * x;
 						var fast = 2 * 3;
 						;
-						var slow = add (2, 3);
-						var m2 = add (mul (m0, m1), mul (m1, add (m0, m1)));
-						var m3 = mul (mul (2, add (mul (mul (mul (2, m0), 3), m1), mul (m2, 4))), 2);
+						__setitem__ (__getitem__ (m1, 1), 2, __getitem__ (__getitem__ (m0, 1), 2));
+						var slow = __add__ (2, 3);
+						var m2 = __add__ (__mul__ (m0, m1), __mul__ (m1, __add__ (m0, m1)));
+						var m3 = __mul__ (__mul__ (2, __add__ (__mul__ (__mul__ (__mul__ (2, m0), 3), m1), __mul__ (m2, 4))), 2);
+						autoTester.check (__getitem__ (__getitem__ (m0, 1), 1), __getitem__ (__getitem__ (m0, 1), 2), __getitem__ (__getitem__ (m1, 1), 1), __getitem__ (__getitem__ (m1, 1), 2));
 						;
 						var fast2 = 16 * y + 1;
 						autoTester.check (m0, m1);
