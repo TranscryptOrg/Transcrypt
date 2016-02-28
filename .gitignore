@@ -1,8 +1,8 @@
 *.pyc
 *.npp
-**.__pycache__
-dist
-Transcrypt.egg-info
-Transcrypt/development/attic
-Transcrypt/development/docs
-Transcrypt/development/experiments
+**.__pycache__/
+dist/
+Transcrypt.egg-info/
+Transcrypt/development/attic/
+Transcrypt/development/docs/
+Transcrypt/development/experiments/
