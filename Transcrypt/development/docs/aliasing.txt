@@ -1,8 +1,0 @@
-Identifier filtering:
-
-A selected list of identifiers <id> is converted to __$<id>__
-
-arguments
-sort
-
-Identifiers starting with js__<id> will be converted to <id>
