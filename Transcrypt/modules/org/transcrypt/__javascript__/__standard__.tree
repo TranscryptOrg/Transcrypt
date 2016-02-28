@@ -1,30 +1,5 @@
 file: Module 
 	body: list 
-		element: Expr 
-			value: Call 
-				func: Name 
-					id: str = __pragma__
-					ctx: Load 
-				args: list 
-					element: Str 
-						s: str = skip
-				keywords: list 
-		element: Assign 
-			targets: list 
-				element: Name 
-					id: str = copy
-					ctx: Store 
-			value: Num 
-				n: int = 0
-		element: Expr 
-			value: Call 
-				func: Name 
-					id: str = __pragma__
-					ctx: Load 
-				args: list 
-					element: Str 
-						s: str = noskip
-				keywords: list 
 		element: ImportFrom 
 			module: str = org.transcrypt.stubs.browser
 			names: list 
@@ -39,7 +14,7 @@ file: Module
 					ctx: Load 
 				args: list 
 					element: Str 
-						s: str = noalias
+						s: str = nokwargs
 				keywords: list 
 		element: Expr 
 			value: Call 
@@ -48,7 +23,9 @@ file: Module
 					ctx: Load 
 				args: list 
 					element: Str 
-						s: str = nokwargs
+						s: str = noalias
+					element: Str 
+						s: str = sort
 				keywords: list 
 		element: ClassDef 
 			name: str = Exception
@@ -244,6 +221,16 @@ file: Module
 					decorator_list: list 
 					returns: NoneType = None
 			decorator_list: list 
+		element: ClassDef 
+			name: str = ValueError
+			bases: list 
+				element: Name 
+					id: str = Exception
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Pass 
+			decorator_list: list 
 		element: Expr 
 			value: Call 
 				func: Name 
@@ -379,20 +366,59 @@ file: Module
 					element: NameConstant 
 						value: bool = False
 			body: list 
-				element: Assign 
-					targets: list 
-						element: Name 
-							id: str = result
-							ctx: Store 
-					value: Call 
-						func: Name 
-							id: str = copy
-							ctx: Load 
-						args: list 
-							element: Name 
-								id: str = iterable
+				element: If 
+					test: Compare 
+						left: Call 
+							func: Name 
+								id: str = type
 								ctx: Load 
-						keywords: list 
+							args: list 
+								element: Name 
+									id: str = iterable
+									ctx: Load 
+							keywords: list 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Name 
+								id: str = dict
+								ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = result
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = copy
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = iterable
+												ctx: Load 
+											attr: str = keys
+											ctx: Load 
+										args: list 
+										keywords: list 
+								keywords: list 
+					orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = result
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = copy
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = iterable
+										ctx: Load 
+								keywords: list 
 				element: Expr 
 					value: Call 
 						func: Name 

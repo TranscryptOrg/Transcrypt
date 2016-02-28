@@ -296,13 +296,18 @@ class Generator (ast.NodeVisitor):
 		
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases 
-			('js_sort', 'sort'),
 			('sort', 'py_sort'),
-			('js_split', 'split'),
+			('js_sort', 'sort'),
 			('split', 'py_split'),
+			('js_split', 'split'),
 			('keys', 'py_keys'),
-			('js_arguments', 'arguments'),
-			('arguments', 'py_arguments')
+			('js_keys', 'keys'),
+			('items', 'py_items'),
+			('js_items', 'items'),
+			('del', 'py_del'),
+			('js_del', 'del'),
+			('arguments', 'py_arguments'),
+			('js_arguments', 'arguments')
 # END predef_aliases
 		)]
 		
@@ -349,6 +354,7 @@ class Generator (ast.NodeVisitor):
 		
 		self.allowKeywordArgs = utils.commandArgs.kwargs
 		self.allowOperatorOverloading = utils.commandArgs.opov
+		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
 		
@@ -868,14 +874,24 @@ class Generator (ast.NodeVisitor):
 				self.emit (')')
 				return
 			elif node.func.id == '__pragma__':
-				if node.args [0] .s == 'kwargs':		# Start emitting kwargs code for FunctionDef's
-					self.allowKeywordArgs = True
-				elif node.args [0] .s == 'nokwargs':	# Stop emitting kwargs code for FunctionDef's
-					self.allowKeywordArgs = False
-				elif node.args [0] .s == 'opov':		# Overloading of a small sane subset of operators allowed
-					self.allowOperatorOverloading = True
-				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
-					self.allowOperatorOverloading = False
+				self.skipSemiNew = True
+				if node.args [0] .s == 'alias':
+					self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
+				elif node.args [0] .s == 'noalias':
+					if len (node.args) == 1:
+						self.aliasers = []
+					else:
+						for index in reversed (range (len (self.aliasers))):
+							if self.aliasers [index][0] == node.args [1] .s:
+								self.aliasers.pop (index)
+				elif node.args [0] .s == 'fcall':
+					self.memoizeCalls = True
+				elif node.args [0] .s == 'nofcall':
+					self.memoizeCalls = False
+				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
+					self.allowConversionToIterable = True
+				elif node.args [0] .s == 'noiconv':		# Automatic conversion to iterable not supported
+					self.allowConversionToIterable = False
 				elif node.args [0] .s == 'js':			# Include JavaScript code literally in the output
 					self.emit ('\n{}\n', node.args [1] .s.format (* [
 						eval (
@@ -889,19 +905,14 @@ class Generator (ast.NodeVisitor):
 						)
 						for arg in node.args [2:]
 					]))
-				elif node.args [0] .s == 'alias':
-					self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
-				elif node.args [0] .s == 'noalias':
-					if len (node.args) == 1:
-						self.aliasers = []
-					else:
-						for index in range (len (self.aliasers)) .reverse ():
-							if self.aliasers [index][0] == node.args [1]:
-								self.aliasers.pop (index)
-				elif node.args [0] .s == 'fcall':
-					self.memoizeCalls = True
-				elif node.args [0] .s == 'nofcall':
-					self.memoizeCalls = False
+				elif node.args [0] .s == 'kwargs':		# Start emitting kwargs code for FunctionDef's
+					self.allowKeywordArgs = True
+				elif node.args [0] .s == 'nokwargs':	# Stop emitting kwargs code for FunctionDef's
+					self.allowKeywordArgs = False
+				elif node.args [0] .s == 'opov':		# Overloading of a small sane subset of operators allowed
+					self.allowOperatorOverloading = True
+				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
+					self.allowOperatorOverloading = False
 				elif node.args [0] .s in ('skip', 'noskip'):
 					pass						# Easier dealth with on statement / expression level in self.visit
 				else:
@@ -962,6 +973,8 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
+		self.skipSemiNew = False
+
 		if type (self.getscope ()) == ast.Module:
 			self.all.add (node.name)
 
@@ -999,6 +1012,7 @@ class Generator (ast.NodeVisitor):
 			self.visit (classVarAssign)
 
 		self.descope ()	# No earlier, class vars need it
+		self.skipSemiNew = False
 		
 	def visit_Compare (self, node):
 		if len (node.comparators) > 1:
@@ -1028,6 +1042,13 @@ class Generator (ast.NodeVisitor):
 	def visit_Continue (self, node):
 		self.emit ('continue')
 	
+	def visit_Delete (self, node):	# Currently dict element only, rest can be done with empty slice assignment
+		for expr in node.targets:
+			self.emit ('delete ')
+			self.visit (expr)
+			self.emit (';\n')
+			self.skipSemiNew = True
+	
 	def visit_Dict (self, node):
 		if not utils.commandArgs.jskeys:
 			for key in node.keys:
@@ -1043,13 +1064,13 @@ class Generator (ast.NodeVisitor):
 					self.emit ('])')
 					return
 					
-		self.emit ('{{')
+		self.emit ('dict ({{')
 		for index, (key, value) in enumerate (zip (node.keys, node.values)):
 			self.emitComma (index)
 			self.visit (key)	# In a JavaScript object literal name isn't evaluated but literally taken to be a key ('virtual' quotes added) 
 			self.emit (': ')
 			self.visit (value)
-		self.emit ('}}')
+		self.emit ('}})')
 			
 	def visit_Expr (self, node):
 		self.visit (node.value)
@@ -1058,6 +1079,13 @@ class Generator (ast.NodeVisitor):
 		self.emit ('var {} = ', self.nextTemp ('iter'))
 		self.visit (node.iter)
 		self.emit (';\n')
+		
+		if self.allowConversionToIterable:
+			self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iter'))
+			self.indent ()
+			self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iter'), self.filterId ('keys'))
+			self.dedent ()
+			self.emit ('}}\n')
 		
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
@@ -1101,10 +1129,11 @@ class Generator (ast.NodeVisitor):
 			self.emitBody (node.body)
 			self.dedent ()
 			self.descope ()
-			
+
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
 											# The rest of its use is only at compile time at compile time
+			self.skipSemiNew = False			
 			if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getscope ()) == ast.Module:
 					self.all.add (node.name)
@@ -1122,6 +1151,7 @@ class Generator (ast.NodeVisitor):
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
 				self.emit (');}}')
+			self.skipSemiNew = False			
 		
 	def visit_If (self, node):
 		self.emit ('if (')
@@ -1456,21 +1486,27 @@ class Generator (ast.NodeVisitor):
 		self.emit ('catch (__except__) {{\n')
 		self.indent ()
 		for index, excepthandler in enumerate (node.handlers):
-			if excepthandler.type:
+			if excepthandler.type:	# One 'if' and possible several 'else if' clauses
 				if index:
 					self.emit ('else ')
 				self.emit ('if (isinstance (__except__, ')
 				self.visit (excepthandler.type)
 				self.emit (')) {{\n')
-			else:
-				self.emit ('else {{\n')
+			else:					# Nothing caught yet
+				if index:
+					self.emit ('else {{\n')
+			
+			if excepthandler.type or index:
+				self.indent ()
 				
-			self.indent ()
 			if excepthandler.name:
 				self.emit ('var {} = __except__;\n', excepthandler.name)				
 			self.emitBody (excepthandler.body)
-			self.dedent ()	
-			self.emit ('}}\n')
+
+			if excepthandler.type or index:
+				self.dedent ()	
+				self.emit ('}}\n')
+				
 		self.dedent ()
 		self.emit ('}}\n')
 		

@@ -43,31 +43,14 @@ To test the non-GUI part of your code in a desktop rather than a browser environ
 
 The *sort* global function has the same in-place sorting functionality as the Python *sort* method. When using *sort* as a method rather than a global function in a Transcrypt source file, the JavaScript *sort* is used. The functionality of this method differs slightly from its Python counterpart. To allow seamless integration with existing JavaScript libaries, both functions are available: the JavaScript one as a method and the Python one as a global function.
 
-Surpassing the speed of native JavaScript: __pragma__ ('fcall') and __pragma ('nofcall')
-----------------------------------------------------------------------------------------
-Fast calls or fcalls are method calls where the method isn't an attribute of an object's prototype, but of the object itself, even if this method is inherited over multiple levels. This means that only for the first call the prototype chain is searched and the method is bound to the object. All subsequent calls invoke the bound method directly on the object. You can use the -f command line switch to generate fcall's pervasively, making your objects slightly larger since they will contain references to their methods. If you don't want that, just place the definition of the method(s) or class(es) you wish to optimize between   *__pragma__ ('fcall')* and *__pragma__ ('nofcall')*. You can also do the opposite, using the -f switch and exempting some method(s) or class(es) by embedding them between *__pragma__ ('nofcall')* and *__pragma__ ('fcall')*.
+Creating JavaScript objects with __new__ (<constructor call>)
+-------------------------------------------------------------
 
-Note that these pragmas have to be applied on the function definition location rather than the call location. Placing *__pragma__ ('fcall')* or *__pragma__ ('nofcall')* at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.
+While creating objects in Transcrypt mostly happens in the plain Python way, e.g. *canvas = Canvas (<parameters>)*, objects from 3rd party JavaScript libraries often have to be created using *new*. In Transcrypt such objects are created by calling the  *__new__* function, e.g. *canvas = __new__ (Canvas (<parameters>)*, as can be seen in the :ref:`Pong example<code_pong>`. This mechanism is simple, follows Python's syntax rules and doesn't require updating of an encapsulation layer if a later version of the underlying JavaScript library features additional constructor functions. Therefore in most cases it is the preferred way to create objects who's initialization requires calling 3rd party JavaScript constructor functions.
 
-Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
--------------------------------------------------------------------------
-While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.
+As an alternative, instantiation and construction can be encapsulated in one function call. Since this in fact creates an alternative API facade for the 3rd party JavaScript library, such an encapsulation should be kept separate from the original library, e.g. by putting it in a separate importable module. The JavaScript code for this encapsulation would e.g. be *<facade module name>.Canvas = function (<parameters>) {return new Canvas (<parameters>);};*. After importing the facade module, canvas creation is straightforward: *canvas = Canvas (<parameters>)*.
 
-Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')
--------------------------------------------------------------------
-Transcrypt currently supports overloading of the following binary operators: \* / + - @, [] and ().
-
-These operators have been chosen since they can enhance the readability of computations involving matrices and vectors and enable the use of callable objects (functors). Using the -o command line switch will activate operator overloading globally. *This is strongly disadvised*, since even 1 + 2 will result in two function calls in that case. It's better to use *__pragma__ ('opov')* to switch it on locally and *__pragma__ ('noopov')* to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.
-
-Formula v4 = M \* (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and \* operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of *__mul__*, *__rmul__*, *__div__*, *__rdiv__*, *__add__*, *__radd__*, *__sub__*, *__rsub__*, *__matmul__*, *__rmatmul__*, *__getitem__*, *__setitem__* and *__call__* as described in the CPython documentation.
-
-Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
----------------------------------------------------------------------------------------------------------------
-During compilation the * __pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
-
-An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *include (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
-
-.. _pragma_alias:
+As a third alternative, encapsulation can be done in Python rather than JavaScript: *def Canvas (<parameters>): return __new__ (<3rd party module name>.Canvas (<parameters>)*. Also in this case the creation syntax is simple: *canvas = Canvas (<parameters>)*.
 
 Identifier aliasing: __pragma__ ('alias', ...) and __pragma__ ('noalias', ...)
 --------------------------------------------------------------------------------------------------------------------------------
@@ -117,6 +100,37 @@ Calling *__pragma__ ('noalias', <Python id part>)* will remove the alias. Callin
 
 The alias mechanism is vital to both the compactness and speed of code generated by Transcrypt and to its seamless integration with JavaScript. It allows Transcrypt to extend native JavaScript objects without causing name conflicts even when JavaScript gets expanded over the years, but also without any conversions or other overhead. That's why in Transcrypt this approach is favored over wrapping native objects.
 
+Surpassing the speed of native JavaScript: __pragma__ ('fcall') and __pragma ('nofcall')
+----------------------------------------------------------------------------------------
+Fast calls or fcalls are method calls where the method isn't an attribute of an object's prototype, but of the object itself, even if this method is inherited over multiple levels. This means that only for the first call the prototype chain is searched and the method is bound to the object. All subsequent calls invoke the bound method directly on the object. You can use the -f command line switch to generate fcall's pervasively, making your objects slightly larger since they will contain references to their methods. If you don't want that, just place the definition of the method(s) or class(es) you wish to optimize between   *__pragma__ ('fcall')* and *__pragma__ ('nofcall')*. You can also do the opposite, using the -f switch and exempting some method(s) or class(es) by embedding them between *__pragma__ ('nofcall')* and *__pragma__ ('fcall')*.
+
+Note that these pragmas have to be applied on the function definition location rather than the call location. Placing *__pragma__ ('fcall')* or *__pragma__ ('nofcall')* at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.
+
+Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv')
+---------------------------------------------------------------------------------
+
+In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a *dict* without explicitly calling its *keys ()* member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, *__pragma__ ('iconv')* and *__pragma__ ('noiconv')* can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each *for .. in ..* loop. When designing numerical processing libraries, it's advisable to use *__pragma__ ('noiconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won't suffer.
+
+Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
+---------------------------------------------------------------------------------------------------------------
+During compilation the * __pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
+
+An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *include (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
+
+.. _pragma_alias:
+
+Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
+-------------------------------------------------------------------------
+While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.
+
+Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')
+-------------------------------------------------------------------
+Transcrypt currently supports overloading of the following binary operators: \* / + - @, [] and ().
+
+These operators have been chosen since they can enhance the readability of computations involving matrices and vectors and enable the use of callable objects (functors). Using the -o command line switch will activate operator overloading globally. *This is strongly disadvised*, since even 1 + 2 will result in two function calls in that case. It's better to use *__pragma__ ('opov')* to switch it on locally and *__pragma__ ('noopov')* to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.
+
+Formula v4 = M \* (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and \* operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of *__mul__*, *__rmul__*, *__div__*, *__rdiv__*, *__add__*, *__radd__*, *__sub__*, *__rsub__*, *__matmul__*, *__rmatmul__*, *__getitem__*, *__setitem__* and *__call__* as described in the CPython documentation.
+
 .. _skipping_fragments:
 
 Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')
@@ -127,12 +141,3 @@ On some occasions it's handy to be able to skip code generation for fragments of
 	:end-before: class Attribute:
 	:tab-width: 4
 	:caption: Preventing complaints of the static checker about unknown global JavaScript names in pong.py
-
-Creating JavaScript objects with __new__ (<constructor call>)
--------------------------------------------------------------
-
-While creating objects in Transcrypt mostly happens in the plain Python way, e.g. *canvas = Canvas (<parameters>)*, objects from 3rd party JavaScript libraries often have to be created using *new*. In Transcrypt such objects are created by calling the  *__new__* function, e.g. *canvas = __new__ (Canvas (<parameters>)*, as can be seen in the :ref:`Pong example<code_pong>`. This mechanism is simple, follows Python's syntax rules and doesn't require updating of an encapsulation layer if a later version of the underlying JavaScript library features additional constructor functions. Therefore in most cases it is the preferred way to create objects who's initialization requires calling 3rd party JavaScript constructor functions.
-
-As an alternative, instantiation and construction can be encapsulated in one function call. Since this in fact creates an alternative API facade for the 3rd party JavaScript library, such an encapsulation should be kept separate from the original library, e.g. by putting it in a separate importable module. The JavaScript code for this encapsulation would e.g. be *<facade module name>.Canvas = function (<parameters>) {return new Canvas (<parameters>);};*. After importing the facade module, canvas creation is straightforward: *canvas = Canvas (<parameters>)*.
-
-As a third alternative, encapsulation can be done in Python rather than JavaScript: *def Canvas (<parameters>): return __new__ (<3rd party module name>.Canvas (<parameters>)*. Also in this case the creation syntax is simple: *canvas = Canvas (<parameters>)*.

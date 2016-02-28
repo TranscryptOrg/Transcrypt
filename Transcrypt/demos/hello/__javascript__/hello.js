@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-18 17:10:35
+// Transcrypt'ed from Python, 2016-02-28 08:25:16
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.89';
+							self.transpilerVersion = '3.5.92';
 							self.targetSubDir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -122,16 +122,11 @@ function hello () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					;
-					;
-					;
-					;
-					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -139,7 +134,7 @@ function hello () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -152,9 +147,10 @@ function hello () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
-					;
+					var ValueError = __class__ ('ValueError', [Exception], {
+					});
 					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
 							var key = null;
@@ -218,12 +214,18 @@ function hello () {
 								}
 							}
 						}
-						var result = copy (iterable);
+						if (type (iterable) == dict) {
+							var result = copy (iterable.py_keys ());
+						}
+						else {
+							var result = copy (iterable);
+						}
 						__sort__ (result, key, reverse);
 						return result;
 					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
+						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
@@ -272,7 +274,12 @@ function f() { /** ... */ }
 		print ([] .slice.apply (arguments) .slice (1));
 	};
 	var __in__ = function (element, container) {
-		return container.indexOf (element) > -1;
+		if (type (container) == dict) {
+			return container.py_keys () .indexOf (element) > -1;
+		}
+		else {
+			return container.indexOf (element) > -1;
+		}
 	}
 	__all__.__in__ = __in__;
 	var __specialattrib__ = function (attrib) {
@@ -296,13 +303,21 @@ function f() { /** ... */ }
 	__all__.len = len;
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
-	var int = function (aNumber) {
-		return aNumber | 0;
+	var float = function (any) {
+		if (isNaN (any)) {
+			throw ('ValueError');
+		}
+		else {
+			return +any;
+		}
+	}
+	float.__name__ = 'float'
+	__all__.float = float;
+	var int = function (any) {
+		return float (any) | 0
 	}
 	int.__name__ = 'int';
 	__all__.int = int;
-	var float = {__name__:'float'}
-	__all__.float = float;
 	var type = function (anObject) {
 		try {
 			return anObject.__class__;
@@ -579,25 +594,46 @@ function f() { /** ... */ }
 		}
 	}
 	function __keys__ () {
-		keys = []
-		for (attrib in this) {
-			if (__normalattrib__ (attrib)) {
-				keys.push (key);
+		var keys = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				keys.push (attrib);
 			}
 		}
 		return keys;
 	}
 	__all__.__keys__ = __keys__;
-	function dict (pairs) {
-		var instance = {};
-		if (pairs) {
-			for (var index = 0; index < pairs.length; index++) {
-				var pair = pairs [index];
-				instance [pair [0]] = pair [1];
+	function __items__ () {
+		var items = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				items.push ([attrib, this [attrib]]);
 			}
 		}
-		instance.__class__ = dict;
-		instance.py_keys = __keys__;
+		return items;
+	}
+	__all__.__items__ = __items__;
+	function __del__ (key) {
+		delete this [key];
+	}
+	__all__.__del__ = __del__;
+	function dict (objectOrPairs) {
+		if (!objectOrPairs || objectOrPairs instanceof Array) {
+			var instance = {};
+			if (objectOrPairs) {
+				for (var index = 0; index < objectOrPairs.length; index++) {
+					var pair = objectOrPairs [index];
+					instance [pair [0]] = pair [1];
+				}
+			}
+		}
+		else {
+			var instance = objectOrPairs;
+		}
+		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
+		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});
+		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});
+		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
 		return instance;
 	}
 	__all__.dict = dict;
@@ -794,16 +830,16 @@ function f() { /** ... */ }
 		var SolarSystem = __class__ ('SolarSystem', [object], {
 			get __init__ () {return __get__ (this, function (self) {
 				self.lineIndex = 0;
-			}, '__init__');},
+			});},
 			get greet () {return __get__ (this, function (self) {
 				self.planet = self.planets [int (Math.random () * len (self.planets))];
 				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planet [0]);
 				self.explain ();
-			}, 'greet');},
+			});},
 			get explain () {return __get__ (this, function (self) {
 				document.getElementById ('explain').innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
 				self.lineIndex = (self.lineIndex + 1) % 3;
-			}, 'explain');}
+			});}
 		});
 		SolarSystem.planets = function () {
 			var __accu0__ = [];

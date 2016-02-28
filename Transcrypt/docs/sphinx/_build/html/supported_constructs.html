@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.89 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.92 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.89',
+        VERSION:     '3.5.92',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.89 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.92 documentation" href="index.html" />
     <link rel="next" title="5. Integration with JavaScript libraries" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.89 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -62,6 +62,7 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="kn">import</span> <span class="nn">conditional_expressions</span>
 <span class="kn">import</span> <span class="nn">control_structures</span>
 <span class="kn">import</span> <span class="nn">data_structures</span>
+<span class="kn">import</span> <span class="nn">dictionaries</span>
 <span class="kn">import</span> <span class="nn">exceptions</span>
 <span class="kn">import</span> <span class="nn">general_functions</span>
 <span class="kn">import</span> <span class="nn">indices_and_slices</span>
@@ -80,6 +81,7 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">conditional_expressions</span><span class="p">,</span> <span class="s">&#39;conditional_expressions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">control_structures</span><span class="p">,</span> <span class="s">&#39;control_structures&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">data_structures</span><span class="p">,</span> <span class="s">&#39;data_structures&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">dictionaries</span><span class="p">,</span> <span class="s">&#39;dictionaries&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">exceptions</span><span class="p">,</span> <span class="s">&#39;exceptions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">general_functions</span><span class="p">,</span> <span class="s">&#39;general_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">indices_and_slices</span><span class="p">,</span> <span class="s">&#39;indices_and_slices&#39;</span><span class="p">)</span>
@@ -682,7 +684,7 @@ Since they systematically cover all language constructs, they are also very effe
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">*</span> <span class="n">arg</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span>
-            <span class="c"># !!! [self.factor * kwargs [key] for key in sorted (kwargs.keys ())]</span>
+            <span class="c"># !!! [self.factor * kwargs [key] for key in sorted (kwargs.keys ())] Add supoprt for keys () on kwargs</span>
         <span class="p">)</span>
     <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
     
@@ -690,7 +692,7 @@ Since they systematically cover all language constructs, they are also very effe
 
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;kwargs&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">g</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="c"># !!! , [kwargs [key] for key in sorted (kwargs.keys ())])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="c"># !!! , [kwargs [key] for key in sorted (kwargs.keys ())]) Add support for keys () on kwargs</span>
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
         
 <span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -1014,7 +1016,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.89 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

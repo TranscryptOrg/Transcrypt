@@ -54,6 +54,7 @@ Status
 What's new
 ==========
 
+- Dict omissions and bugs fixed and added to autotest, .gitignore recovered
 - Overloading of () added + test
 - Optional overloading of [] enabled, doc updated, tests added
 - Doc update, operator overloading and sort/sorted examples added

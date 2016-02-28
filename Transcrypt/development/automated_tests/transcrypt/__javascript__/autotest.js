@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-18 17:10:29
+// Transcrypt'ed from Python, 2016-02-28 08:25:09
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.89';
+							self.transpilerVersion = '3.5.92';
 							self.targetSubDir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -122,16 +122,11 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					;
-					;
-					;
-					;
-					;
 					var Exception = __class__ ('Exception', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -139,7 +134,7 @@ function autotest () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -152,9 +147,10 @@ function autotest () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
-					;
+					var ValueError = __class__ ('ValueError', [Exception], {
+					});
 					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .__class__ == __kwargdict__)) {;
 							var key = null;
@@ -218,12 +214,18 @@ function autotest () {
 								}
 							}
 						}
-						var result = copy (iterable);
+						if (type (iterable) == dict) {
+							var result = copy (iterable.py_keys ());
+						}
+						else {
+							var result = copy (iterable);
+						}
 						__sort__ (result, key, reverse);
 						return result;
 					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
+						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
@@ -272,7 +274,12 @@ function f() { /** ... */ }
 		print ([] .slice.apply (arguments) .slice (1));
 	};
 	var __in__ = function (element, container) {
-		return container.indexOf (element) > -1;
+		if (type (container) == dict) {
+			return container.py_keys () .indexOf (element) > -1;
+		}
+		else {
+			return container.indexOf (element) > -1;
+		}
 	}
 	__all__.__in__ = __in__;
 	var __specialattrib__ = function (attrib) {
@@ -296,13 +303,21 @@ function f() { /** ... */ }
 	__all__.len = len;
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
-	var int = function (aNumber) {
-		return aNumber | 0;
+	var float = function (any) {
+		if (isNaN (any)) {
+			throw ('ValueError');
+		}
+		else {
+			return +any;
+		}
+	}
+	float.__name__ = 'float'
+	__all__.float = float;
+	var int = function (any) {
+		return float (any) | 0
 	}
 	int.__name__ = 'int';
 	__all__.int = int;
-	var float = {__name__:'float'}
-	__all__.float = float;
 	var type = function (anObject) {
 		try {
 			return anObject.__class__;
@@ -579,25 +594,46 @@ function f() { /** ... */ }
 		}
 	}
 	function __keys__ () {
-		keys = []
-		for (attrib in this) {
-			if (__normalattrib__ (attrib)) {
-				keys.push (key);
+		var keys = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				keys.push (attrib);
 			}
 		}
 		return keys;
 	}
 	__all__.__keys__ = __keys__;
-	function dict (pairs) {
-		var instance = {};
-		if (pairs) {
-			for (var index = 0; index < pairs.length; index++) {
-				var pair = pairs [index];
-				instance [pair [0]] = pair [1];
+	function __items__ () {
+		var items = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				items.push ([attrib, this [attrib]]);
 			}
 		}
-		instance.__class__ = dict;
-		instance.py_keys = __keys__;
+		return items;
+	}
+	__all__.__items__ = __items__;
+	function __del__ (key) {
+		delete this [key];
+	}
+	__all__.__del__ = __del__;
+	function dict (objectOrPairs) {
+		if (!objectOrPairs || objectOrPairs instanceof Array) {
+			var instance = {};
+			if (objectOrPairs) {
+				for (var index = 0; index < objectOrPairs.length; index++) {
+					var pair = objectOrPairs [index];
+					instance [pair [0]] = pair [1];
+				}
+			}
+		}
+		else {
+			var instance = objectOrPairs;
+		}
+		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
+		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});
+		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});
+		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
 		return instance;
 	}
 	__all__.dict = dict;
@@ -774,7 +810,6 @@ function f() { /** ... */ }
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					;
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
 							if (typeof x == 'undefined' || (x != null && x .__class__ == __kwargdict__)) {;
@@ -810,7 +845,7 @@ function f() { /** ... */ }
 							self.n = n;
 							self.kwargs = kwargs;
 							self.extra = 'hello';
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self, autoTester) {
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
@@ -825,7 +860,7 @@ function f() { /** ... */ }
 								}
 							}
 							autoTester.check (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra);
-						}, 'f');}
+						});}
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
@@ -853,13 +888,13 @@ function f() { /** ... */ }
 								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
-						}, '__init__');}
+						});}
 					});
 					var C = __class__ ('C', [object], {
 						get tricky () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							return args;
-						}, 'tricky');}
+						});}
 					});
 					var run = function (autoTester) {
 						if (arguments.length) {
@@ -944,7 +979,7 @@ function f() { /** ... */ }
 							}
 							autoTester.check (args, kwargs);
 						};
-						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ ({'p': 'aP', 'q': 'aQ', 'r': 'anR'})]));
+						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ (dict ({'p': 'aP', 'q': 'aQ', 'r': 'anR'}))]));
 						(function __lambda__ (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = -1;
@@ -994,13 +1029,13 @@ function f() { /** ... */ }
 							get __init__ () {return __get__ (this, function (self, x) {
 								self.x = x;
 								autoTester.check (self.p);
-							}, '__init__');},
+							});},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show', label, self.x);
-							}, 'show');},
+							});},
 							get show2 () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show2', label, self.x);
-							}, 'show2');}
+							});}
 						});
 						A.p = 123;
 						var B = __class__ ('B', [object], {
@@ -1008,10 +1043,10 @@ function f() { /** ... */ }
 								autoTester.check ('In B constructor');
 								self.y = y;
 								autoTester.check (self.p);
-							}, '__init__');},
+							});},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('B.show', label, self.y);
-							}, 'show');}
+							});}
 						});
 						var __left0__ = tuple (list ([456, 789]));
 						B.p = __left0__ [0];
@@ -1021,12 +1056,12 @@ function f() { /** ... */ }
 								autoTester.check ('In C constructor');
 								A.__init__ (self, x);
 								B.__init__ (self, y);
-							}, '__init__');},
+							});},
 							get show () {return __get__ (this, function (self, label) {
 								A.show (self, label);
 								B.show (self, label);
 								autoTester.check ('C.show', label, self.x, self.y);
-							}, 'show');}
+							});}
 						});
 						var a = A (1001);
 						a.show ('america');
@@ -1255,7 +1290,7 @@ function f() { /** ... */ }
 						autoTester.check (aList);
 						var anotherList = list (tuple (list (['a', 'b', 'c'])));
 						autoTester.check (anotherList);
-						var aDict = {1: 'plant', 'animal': 2};
+						var aDict = dict ({1: 'plant', 'animal': 2});
 						autoTester.check (aDict);
 						autoTester.check (aDict [1], aDict ['animal']);
 						var p = function () {
@@ -1276,6 +1311,64 @@ function f() { /** ... */ }
 						var emptySet = set ();
 						autoTester.check (emptySet);
 						autoTester.check (len (emptySet));
+					};
+					__pragma__ ('<all>')
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'dictionaries', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var tel = dict ({'guido': 4127, 'jack': 4098});
+						tel ['sape'] = 4139;
+						autoTester.check (tel);
+						autoTester.check (tel ['jack']);
+						delete tel ['sape'];
+						tel ['irv'] = 4127;
+						autoTester.check (tel);
+						autoTester.check (sorted (list (tel.py_keys ())), false);
+						autoTester.check (sorted (tel.py_keys ()));
+						autoTester.check (__in__ ('guido', tel));
+						autoTester.check (!__in__ ('jack', tel));
+						autoTester.check (dict (list ([tuple (list (['guido', 4127])), tuple (list (['jack', 4098])), tuple (list (['sape', 4139]))])));
+						var knights = dict ({'robin': 'the brave', 'gallahad': 'the pure'});
+						var __iter0__ = sorted (knights.py_items ());
+						if (type (__iter0__) == dict) {
+							__iter0__ = __iter0__.py_keys ();
+						}
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var __left0__ = __iter0__ [__index0__];
+							var k = __left0__ [0];
+							var v = __left0__ [1];
+							autoTester.check (k, v);
+						}
+						if (__in__ ('gallahad', knights)) {
+							autoTester.check ('gallahad is a knight');
+						}
+						var __iter0__ = sorted (knights);
+						if (type (__iter0__) == dict) {
+							__iter0__ = __iter0__.py_keys ();
+						}
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var k = __iter0__ [__index0__];
+							autoTester.check (k);
+						}
+						var knight = dict ({'rudolph': 'the righteous'});
+						var __iter0__ = knight;
+						if (type (__iter0__) == dict) {
+							__iter0__ = __iter0__.py_keys ();
+						}
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var k = __iter0__ [__index0__];
+							autoTester.check (k);
+						}
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -1734,10 +1827,10 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x) {
 							self.x = x;
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self) {
 							return self.x;
-						}, 'f');}
+						});}
 					});
 					__pragma__ ('<all>')
 						__all__.A = A;
@@ -1803,7 +1896,7 @@ function f() { /** ... */ }
 					var B = __class__ ('B', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.x = 'Geef mij maar Amsterdam\n';
-						}, '__init__');}
+						});}
 					});
 					__pragma__ ('<all>')
 						__all__.B = B;
@@ -1867,7 +1960,7 @@ function f() { /** ... */ }
 									return __accu0__;
 								} ();
 							}
-						}, '__init__');},
+						});},
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
@@ -1889,7 +1982,7 @@ function f() { /** ... */ }
 							else {
 								return self.__rmul__ (other);
 							}
-						}, '__mul__');},
+						});},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -1902,7 +1995,7 @@ function f() { /** ... */ }
 								}
 							}
 							return result;
-						}, '__rmul__');},
+						});},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -1915,21 +2008,21 @@ function f() { /** ... */ }
 								}
 							}
 							return result;
-						}, '__add__');},
+						});},
 						get __getitem__ () {return __get__ (this, function (self, index) {
 							return self._ [index];
-						}, '__getitem__');},
+						});},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
 							self._ [index] = value;
-						}, '__setitem__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
-						}, '__repr__');}
+						});}
 					});
 					var Functor = __class__ ('Functor', [object], {
 						get __init__ () {return __get__ (this, function (self, factor) {
 							self.factor = factor;
-						}, '__init__');},
+						});},
 						get __call__ () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = -1;
@@ -1963,10 +2056,9 @@ function f() { /** ... */ }
 								}
 								return __accu0__;
 							} (), self.factor * m, self.factor * n]));
-						}, '__call__');}
+						});}
 					});
 					var f = Functor (10);
-					;
 					var g = function (x, y) {
 						if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 							var y = -1;
@@ -1992,20 +2084,17 @@ function f() { /** ... */ }
 						}
 						return tuple (list ([x, y, args, m, n]));
 					};
-					;
 					var run = function (autoTester) {
 						var m0 = Matrix (3, 3, list ([list ([1, 2, 3]), list ([4, 5, 6]), list ([7, 8, 10])]));
 						var m1 = Matrix (3, 3, list ([list ([10, 20, 30]), list ([40, 50, 60]), list ([70, 80, 90])]));
 						var x = 3;
 						var y = x * 4 * x;
 						var fast = 2 * 3;
-						;
 						__setitem__ (__getitem__ (m1, 1), 2, __getitem__ (__getitem__ (m0, 1), 2));
 						var slow = __add__ (2, 3);
 						var m2 = __add__ (__mul__ (m0, m1), __mul__ (m1, __add__ (m0, m1)));
 						var m3 = __mul__ (__mul__ (2, __add__ (__mul__ (__mul__ (__mul__ (2, m0), 3), m1), __mul__ (m2, 4))), 2);
 						__call__ (autoTester.check, __getitem__ (__getitem__ (m0, 1), 1), __getitem__ (__getitem__ (m0, 1), 2), __getitem__ (__getitem__ (m1, 1), 1), __getitem__ (__getitem__ (m1, 1), 2));
-						;
 						var fast2 = 16 * y + 1;
 						autoTester.check (m0, m1);
 						autoTester.check (x, y);
@@ -2013,10 +2102,8 @@ function f() { /** ... */ }
 						autoTester.check (m3);
 						autoTester.check (fast, slow, fast2);
 						var x = 'marker';
-						;
 						__call__ (autoTester.check, __call__ (f, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
 						__call__ (autoTester.check, __call__ (g, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
-						;
 					};
 					__pragma__ ('<all>')
 						__all__.Functor = Functor;
@@ -2036,7 +2123,6 @@ function f() { /** ... */ }
 				__inited__: false,
 				__init__: function (__all__) {
 					var itertools = {};
-					;
 					__nest__ (itertools, '', __init__ (__world__.itertools));
 					var okColor = 'green';
 					var errorColor = 'red';
@@ -2049,7 +2135,75 @@ function f() { /** ... */ }
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						}, '__init__');},
+						});},
+						get sortedRepr () {return __get__ (this, function (self, any) {
+							var tryGetNumKey = function (key) {
+								if (type (key) == str) {
+									try {
+										return int (key);
+									}
+									catch (__except__) {
+										try {
+											return float (key);
+										}
+										catch (__except__) {
+											return key;
+										}
+									}
+								}
+								else {
+									return key;
+								}
+							};
+							if (type (any) == dict) {
+								return '{' + ', '.join (function () {
+									var __accu0__ = [];
+									var __iter0__ = enumerate (sorted (function () {
+										var __accu1__ = [];
+										var __iter1__ = any.py_keys ();
+										for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
+											var key = __iter1__ [__index0__];
+											__accu1__.append (tryGetNumKey (key));
+										}
+										return __accu1__;
+									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
+										return str (aKey);})})));
+									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+										var __left0__ = __iter0__ [__index0__];
+										var index = __left0__ [0];
+										var key = __left0__ [1];
+										__accu0__.append ('{}: {}'.format (repr (key), repr (any [key])));
+									}
+									return __accu0__;
+								} ()) + '}';
+							}
+							else {
+								if (type (any) == set) {
+									if (len (any)) {
+										return '{' + ', '.join (function () {
+											var __accu0__ = [];
+											var __iter0__ = sorted (list (any));
+											for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+												var item = __iter0__ [__index0__];
+												__accu0__.append (str (item));
+											}
+											return __accu0__;
+										} ()) + '}';
+									}
+									else {
+										return repr (any);
+									}
+								}
+								else {
+									if (type (any) == range) {
+										return repr (list (any));
+									}
+									else {
+										return repr (any);
+									}
+								}
+							}
+						});},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -2057,7 +2211,7 @@ function f() { /** ... */ }
 								var __iter0__ = args;
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var arg = __iter0__ [__index0__];
-									__accu0__.append (repr (arg));
+									__accu0__.append (self.sortedRepr (arg));
 								}
 								return __accu0__;
 							} ());
@@ -2067,7 +2221,7 @@ function f() { /** ... */ }
 							else {
 								self.referenceBuffer.append (item);
 							}
-						}, 'check');},
+						});},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -2083,7 +2237,7 @@ function f() { /** ... */ }
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						}, 'dump');},
+						});},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -2112,12 +2266,12 @@ function f() { /** ... */ }
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						}, 'compare');},
+						});},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						}, 'run');},
+						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -2125,7 +2279,7 @@ function f() { /** ... */ }
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						}, 'done');}
+						});}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +
@@ -2150,34 +2304,34 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get getX () {return __get__ (this, function (self) {
 							return self._x;
-						}, 'getX');},
+						});},
 						get setX () {return __get__ (this, function (self, value) {
 							self._x = value;
-						}, 'setX');},
+						});},
 						get getY () {return __get__ (this, function (self) {
 							return self._y;
-						}, 'getY');},
+						});},
 						get setY () {return __get__ (this, function (self, value) {
 							self._y = 1000 + value;
-						}, 'setY');},
+						});},
 						get getY2 () {return __get__ (this, function (self) {
 							return self._y;
-						}, 'getY2');},
+						});},
 						get setY2 () {return __get__ (this, function (self, value) {
 							self._y = value;
-						}, 'setY2');},
+						});},
 						get getT () {return __get__ (this, function (self) {
 							return self._t;
-						}, 'getT');},
+						});},
 						get setT () {return __get__ (this, function (self, value) {
 							self._t = value;
-						}, 'setT');},
+						});},
 						get getU () {return __get__ (this, function (self) {
 							return self._u + 10000;
-						}, 'getU');},
+						});},
 						get setU () {return __get__ (this, function (self, value) {
 							self._u = value - 5000;
-						}, 'setU');}
+						});}
 					});
 					A.p = 1234;
 					var __left0__ = tuple (list ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]));
@@ -2190,22 +2344,22 @@ function f() { /** ... */ }
 					var B = __class__ ('B', [object], {
 						get getZ () {return __get__ (this, function (self) {
 							return self.z_;
-						}, 'getZ');},
+						});},
 						get setZ () {return __get__ (this, function (self, value) {
 							self.z_ = value;
-						}, 'setZ');}
+						});}
 					});
 					Object.defineProperty (B, 'z', property.call (B, B.getZ, B.setZ));;
 					var C = __class__ ('C', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.offset = 1234;
-						}, '__init__');},
+						});},
 						get getW () {return __get__ (this, function (self) {
 							return self.w_ + self.offset;
-						}, 'getW');},
+						});},
 						get setW () {return __get__ (this, function (self, value) {
 							self.w_ = value - self.offset;
-						}, 'setW');}
+						});}
 					});
 					Object.defineProperty (C, 'w', property.call (C, C.getW, C.setW));;
 					var run = function (autoTester) {
@@ -2253,10 +2407,10 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.i = 0;
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self) {
 							return self.i;
-						}, 'f');}
+						});}
 					});
 					var a = A ();
 					var run = function (autoTester) {
@@ -2372,6 +2526,7 @@ function f() { /** ... */ }
 		var conditional_expressions = {};
 		var control_structures = {};
 		var data_structures = {};
+		var dictionaries = {};
 		var exceptions = {};
 		var general_functions = {};
 		var indices_and_slices = {};
@@ -2389,6 +2544,7 @@ function f() { /** ... */ }
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
+		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
@@ -2405,6 +2561,7 @@ function f() { /** ... */ }
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
+		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (general_functions, 'general_functions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
@@ -2422,6 +2579,7 @@ function f() { /** ... */ }
 			'conditional_expressions' +
 			'control_structures' +
 			'data_structures' +
+			'dictionaries' +
 			'exceptions' +
 			'general_functions' +
 			'indices_and_slices' +

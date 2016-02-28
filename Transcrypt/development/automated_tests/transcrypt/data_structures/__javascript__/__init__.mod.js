@@ -17,7 +17,7 @@
 						autoTester.check (aList);
 						var anotherList = list (tuple (list (['a', 'b', 'c'])));
 						autoTester.check (anotherList);
-						var aDict = {1: 'plant', 'animal': 2};
+						var aDict = dict ({1: 'plant', 'animal': 2});
 						autoTester.check (aDict);
 						autoTester.check (aDict [1], aDict ['animal']);
 						var p = function () {

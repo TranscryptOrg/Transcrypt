@@ -28,8 +28,36 @@ class AutoTester:
 		self.referenceDivId = 'python'
 		self.testDivId = 'transcrypt'
 		
+	def sortedRepr (self, any):	# When using sets or dicts, use elemens or keys of one type, in sort order
+		def tryGetNumKey (key):
+			if type (key) == str:	# Try to interpret key as numerical, see comment with repr function in __builtins__
+				try:
+					return int (key)
+				except:
+					try:
+						return float (key)
+					except:
+						return key
+			else:
+				return key
+				
+		if type (any) == dict:
+			return '{' + ', '.join ([
+				'{}: {}'.format (repr (key), repr (any [key]))
+				for index, key in enumerate (sorted ([tryGetNumKey (key) for key in any.keys ()], key = lambda aKey: str (aKey)))
+			]) + '}'
+		elif type (any) == set:
+			if len (any):
+				return '{' + ', '.join ([str (item) for item in sorted (list (any))]) + '}'
+			else:
+				return repr (any)
+		elif type (any) == range:
+			return repr (list (any))
+		else:
+			return repr (any)
+			
 	def check (self, *args):
-		item = ' '.join ([repr (arg) for arg in args])	# N.B. stubs.browser provides a special sorting repr
+		item = ' '.join ([self.sortedRepr (arg) for arg in args])	# N.B. stubs.browser provides a special sorting repr
 		if __envir__.executorName == __envir__.transpilerName:
 			self.testBuffer.append (item)
 		else:

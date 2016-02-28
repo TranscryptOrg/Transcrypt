@@ -64,7 +64,12 @@ function f() { /** ... */ }
 
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
-		return container.indexOf (element) > -1;
+		if (type (container) == dict) {
+			return container.py_keys () .indexOf (element) > -1;
+		}
+		else {
+			return container.indexOf (element) > -1;
+		}
 	}
 	__all__.__in__ = __in__;
 	
@@ -94,14 +99,22 @@ function f() { /** ... */ }
 	var bool = {__name__: 'bool'}
 	__all__.bool = bool;
 	
-	var int = function (aNumber) {
-		return aNumber | 0;
+	var float = function (any) {
+		if (isNaN (any)) {
+			throw ('ValueError');	// !!! Turn into real value error
+		}
+		else {
+			return +any;
+		}
+	}
+	float.__name__ = 'float'
+	__all__.float = float;
+	
+	var int = function (any) {
+		return float (any) | 0
 	}
 	int.__name__ = 'int';
 	__all__.int = int;
-	
-	var float = {__name__:'float'}
-	__all__.float = float;
 	
 	var type = function (anObject) {
 		try {
@@ -160,8 +173,8 @@ function f() { /** ... */ }
 						for (var attrib in anObject) {
 							if (!__specialattrib__ (attrib)) {
 								if (attrib.isnumeric ()) {
-									var attribRepr = attrib;				// Numerical key in dict 
-								}											// So e.g. '1' is misrepresented as 1
+									var attribRepr = attrib;				// If key can be interpreted as numerical, we make it numerical 
+								}											// So we accept that '1' is misrepresented as 1
 								else {
 									var attribRepr = '\'' + attrib + '\'';	// Alpha key in dict
 								}
@@ -433,28 +446,58 @@ function f() { /** ... */ }
 	}
 	
 	// Dict extensions to object
-
+	
 	function __keys__ () {
-		keys = []
-		for (attrib in this) {
-			if (__normalattrib__ (attrib)) {
-				keys.push (key);
+		var keys = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				keys.push (attrib);
 			}     
 		}
 		return keys;
 	}
 	__all__.__keys__ = __keys__;
 		
-	function dict (pairs) {
-		var instance = {};
-		if (pairs) {
-			for (var index = 0; index < pairs.length; index++) {
-				var pair = pairs [index];
-				instance [pair [0]] = pair [1];
+	function __items__ () {
+		var items = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				items.push ([attrib, this [attrib]]);
+			}     
+		}
+		return items;
+	}
+	__all__.__items__ = __items__;
+		
+	function __del__ (key) {
+		delete this [key];
+	}
+	
+	__all__.__del__ = __del__;
+		
+	function dict (objectOrPairs) {
+		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
+			var instance = {};
+			if (objectOrPairs) {
+				for (var index = 0; index < objectOrPairs.length; index++) {
+					var pair = objectOrPairs [index];
+					instance [pair [0]] = pair [1];
+				}
 			}
 		}
-		instance.__class__ = dict;	// Not all arrays are sets
-		instance.py_keys = __keys__;	// Defined externally, so only once
+		else {													// It's a JavaScript object literal
+			var instance = objectOrPairs;
+		}
+			
+		// Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
+		// So dict literals rather than bare Object literals will be passed to JavaScript libraries
+		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
+		// So the properties of a dict should be non-enumerable
+		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
+		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});			
+		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
+		
 		return instance;
 	}
 	__all__.dict = dict;

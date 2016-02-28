@@ -14972,7 +14972,6 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 			return exports;
 		}) () .fabric;
 	
-					;
 					__pragma__ ('<all>')
 						__all__.fabric = fabric;
 					__pragma__ ('</all>')

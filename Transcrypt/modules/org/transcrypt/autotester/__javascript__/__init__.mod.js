@@ -5,7 +5,6 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var itertools = {};
-					;
 					__nest__ (itertools, '', __init__ (__world__.itertools));
 					var okColor = 'green';
 					var errorColor = 'red';
@@ -18,7 +17,75 @@
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						}, '__init__');},
+						});},
+						get sortedRepr () {return __get__ (this, function (self, any) {
+							var tryGetNumKey = function (key) {
+								if (type (key) == str) {
+									try {
+										return int (key);
+									}
+									catch (__except__) {
+										try {
+											return float (key);
+										}
+										catch (__except__) {
+											return key;
+										}
+									}
+								}
+								else {
+									return key;
+								}
+							};
+							if (type (any) == dict) {
+								return '{' + ', '.join (function () {
+									var __accu0__ = [];
+									var __iter0__ = enumerate (sorted (function () {
+										var __accu1__ = [];
+										var __iter1__ = any.py_keys ();
+										for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
+											var key = __iter1__ [__index0__];
+											__accu1__.append (tryGetNumKey (key));
+										}
+										return __accu1__;
+									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
+										return str (aKey);})})));
+									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+										var __left0__ = __iter0__ [__index0__];
+										var index = __left0__ [0];
+										var key = __left0__ [1];
+										__accu0__.append ('{}: {}'.format (repr (key), repr (any [key])));
+									}
+									return __accu0__;
+								} ()) + '}';
+							}
+							else {
+								if (type (any) == set) {
+									if (len (any)) {
+										return '{' + ', '.join (function () {
+											var __accu0__ = [];
+											var __iter0__ = sorted (list (any));
+											for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+												var item = __iter0__ [__index0__];
+												__accu0__.append (str (item));
+											}
+											return __accu0__;
+										} ()) + '}';
+									}
+									else {
+										return repr (any);
+									}
+								}
+								else {
+									if (type (any) == range) {
+										return repr (list (any));
+									}
+									else {
+										return repr (any);
+									}
+								}
+							}
+						});},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -26,7 +93,7 @@
 								var __iter0__ = args;
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 									var arg = __iter0__ [__index0__];
-									__accu0__.append (repr (arg));
+									__accu0__.append (self.sortedRepr (arg));
 								}
 								return __accu0__;
 							} ());
@@ -36,7 +103,7 @@
 							else {
 								self.referenceBuffer.append (item);
 							}
-						}, 'check');},
+						});},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -52,7 +119,7 @@
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						}, 'dump');},
+						});},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -81,12 +148,12 @@
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						}, 'compare');},
+						});},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						}, 'run');},
+						});},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -94,7 +161,7 @@
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						}, 'done');}
+						});}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +

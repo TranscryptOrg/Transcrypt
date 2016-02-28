@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.89 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.92 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.89',
+        VERSION:     '3.5.92',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.89 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.92 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.89 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -412,7 +412,7 @@
                 Attribute.__init__ (self, game);
             });},
             get install () {return __get__ (this, function (self) {
-                self.image = new fabric.Rect ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;});
+                self.image = new fabric.Rect (dict ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;}));
             });},
             get reset () {return __get__ (this, function (self, vX, vY, x, y) {
                 if (typeof vX == &#39;undefined&#39; || (vX != null &amp;&amp; vX .__class__ == __kwargdict__)) {;
@@ -553,12 +553,12 @@
                         var __left0__ = __iter0__ [__index0__];
                         var name = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
-                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX (-7 / 16 * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)});
-                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), {&#39;stroke&#39;: &#39;white&#39;});
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX (-7 / 16 * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)}));
+                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), dict ({&#39;stroke&#39;: &#39;white&#39;}));
             });},
             get increment () {return __get__ (this, function (self, playerIndex) {
                 self.scores [playerIndex]++;
@@ -575,7 +575,7 @@
                         var __left0__ = __iter0__ [__index0__];
                         var score = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), {&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)}));
+                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
@@ -600,7 +600,7 @@
                 self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
                 self.pause = true;
                 self.keySet = set ();
-                self.canvas = new fabric.Canvas (&#39;canvas&#39;, {&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;});
+                self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ({&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;}));
                 self.canvas.onWindowResise = self.resize;
                 self.canvas.onWindowDraw = self.draw;
                 self.canvas.lineWidth = 2;
@@ -764,7 +764,7 @@
                 var __iter0__ = $divs;
                 for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
                     var div = __iter0__ [__index0__];
-                    $ (div).css ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
+                    $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
                         var __accu0__ = [];
                         var __iter1__ = range (3);
                         for (var __index1__ = 0; __index1__ &lt; __iter1__.length; __index1__++) {
@@ -772,7 +772,7 @@
                             __accu0__.append (int (256 * Math.random ()));
                         }
                         return __accu0__;
-                    } ())});
+                    } ())}));
                 }
             };
             var $divs = $ (&#39;div&#39;);
@@ -855,7 +855,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.89 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

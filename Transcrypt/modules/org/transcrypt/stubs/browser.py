@@ -27,30 +27,7 @@ for attributeName in window.__dict__:
 def print (*args):
 	console.log (*args)
 
-# Define repr for autotester
-# N.B. When using sets or dicts, use elemens or keys of one type, in sort order
-def repr (any):
-	def getNumAlphaKey (key):
-		if type (key) == str:
-			return key
-		else:
-			return str (1e10 + key)
-			
-	if type (any) == dict:	
-		return '{' + ', '.join ([
-			'{}: {}'.format (builtins.repr (key), builtins.repr (any [key]))
-			for index, key in enumerate (sorted (any, key = getNumAlphaKey))
-		]) + '}'
-	elif type (any) == set:
-		if any:
-			return '{' + ', '.join ([str (item) for item in sorted (list (any))]) + '}'
-		else:
-			return builtins.repr (any)
-	elif type (any) == range:
-		return builtins.repr (list (any))
-	else:
-		return builtins.repr (any)
-	
-def __pragma__ (*args):	# Ignore all pragma's when running CPython
+# Ignore all pragma's when running CPython
+def __pragma__ (*args):
 	pass
 	
