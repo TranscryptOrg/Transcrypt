@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.92 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.93 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.92',
+        VERSION:     '3.5.93',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.92 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.93 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.93 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -296,7 +296,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">()</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Canvas</span> <span class="p">(</span><span class="s">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;backgroundColor&#39;</span><span class="p">:</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;originX&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;originY&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">}))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowResise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>    <span class="c"># Install draw callback, will be called asynch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowResize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>    <span class="c"># Install draw callback, will be called asynch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowDraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span>        <span class="c"># Install resize callback, will be called if resized</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">lineWidth</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>    
@@ -377,7 +377,6 @@
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        ;
         ;
         ;
         var fabric = __init__ (__world__.com.fabricjs).fabric;
@@ -730,7 +729,7 @@
 </div>
 <div class="section" id="integration-example-jquery">
 <h2>5.4. Integration example: jQuery<a class="headerlink" href="#integration-example-jquery" title="Permalink to this headline">¶</a></h2>
-<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a Content Delivery Network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
+<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="43%" />
@@ -758,7 +757,6 @@
 <td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        ;
         var start = function () {
             var changeColors = function () {
                 var __iter0__ = $divs;
@@ -855,7 +853,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.93 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

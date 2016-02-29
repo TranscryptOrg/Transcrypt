@@ -20,13 +20,10 @@ This can only be achieved with your help.
 Do you think it deserves a lasting place under the sun?
 Do you want it to be at your disposal, evolve and have an active community to answer your questions?
 Then let the world know it exists!
-
 Do you know someone who can blog about it?
 Please ask that person to do so...
 Want to show your discovery to your colleagues, classmates or friends?
 Go ahead... 
-Or upvote Transcrypt on Stackoverflow by opening this link in a new tab:
-http://meta.stackoverflow.com/questions/314722/open-source-advertising-1h-2016/317184#317184
 
 For me this is about having pleasure in ones job. I've enjoyed laying the groundwork for Transcrypt. And I hope many will enjoy using it.
 

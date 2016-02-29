@@ -46,6 +46,13 @@ Data structures: tuple, list, dict, set
 	:tab-width: 4
 	:caption: Testlet: data_structures
 
+Dictionaries: dict revisited
+----------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/dictionaries/__init__.py
+	:tab-width: 4
+	:caption: Testlet: dictionaries
+
 Exceptions: exception class hierarchy, finally
 ----------------------------------------------
 

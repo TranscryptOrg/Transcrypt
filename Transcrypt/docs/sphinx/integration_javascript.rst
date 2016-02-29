@@ -45,7 +45,7 @@ As can be seen from the listings, *pong.mod.js* without libraries is only slight
 Integration example: jQuery
 ---------------------------
 
-In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* hasn't been encapsulated at all. It's just downloaded on the fly from a Content Delivery Network and used as-is. Instead of the *$* (that is not a valid Python identifier), an *S* is used as :ref:`alias <pragma_alias>`. This might have been any character sequence.
+In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* hasn't been encapsulated at all. It's just downloaded on the fly from a content delivery network and used as-is. Instead of the *$* (that is not a valid Python identifier), an *S* is used as :ref:`alias <pragma_alias>`. This might have been any character sequence.
 
 +------------------------------------------------------------+-------------------------------------------------------------------------------+
 | .. literalinclude:: ../../demos/jquery_demo/jquery_demo.py | .. literalinclude:: ../../demos/jquery_demo/__javascript__/jquery_demo.mod.js |

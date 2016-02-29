@@ -66,5 +66,5 @@ They are specified in the source code of Transcrypt as follows:
 	:tab-width: 4
 	:caption: Transcrypt command line switches as specified in module/orgs/transcrypt/utils.py
 	
-If static checking is enabled, insert :ref:`dummy definitions of global JavaScript variables <skipping_fragments>` to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.
+If static checking is enabled, insert dummy definitions of global JavaScript variables between :ref:`__pragma__ ('skip') and __pragma__ ('noskip') <skipping_fragments>` to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.
 	

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 3.5.92 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 3.5.93 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.92',
+        VERSION:     '3.5.93',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.92 documentation" href="#" />
+    <link rel="top" title="Transcrypt 3.5.93 documentation" href="#" />
     <link rel="next" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
   <body role="document">
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.93 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -67,9 +67,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="special_facilities.html">3. Special facilities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#transcrypt-s-module-mechanism">3.1. Transcrypt&#8217;s module mechanism</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#using-browser-stubs-to-test-non-gui-code-that-uses-console-log-window-alert-and-sort">3.2. Using browser stubs to test non-GUI code that uses console.log, window.alert and  sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#using-browser-stubs-to-test-non-gui-code-that-uses-console-log-and-window-alert">3.2. Using browser stubs to test non-GUI code that uses console.log and window.alert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#creating-javascript-objects-with-new-constructor-call">3.3. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#identifier-aliasing-pragma-alias-and-pragma-noalias">3.4. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#pragma-alias">3.4. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall">3.5. Surpassing the speed of native JavaScript: __pragma__ (&#8216;fcall&#8217;) and __pragma (&#8216;nofcall&#8217;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv">3.6. Automatic conversion to iterable: __pragma__ (&#8216;iconv&#8217;) and __pragma__ (&#8216;noiconv&#8217;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#inserting-literal-javascript-pragma-js-and-include">3.7. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
@@ -84,16 +84,17 @@
 <li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#conditional-expressions-simple-and-nested">4.3. Conditional expressions: simple and nested</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#control-structures-for-else-while-else-if-elif-else-break-continue">4.4. Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#data-structures-tuple-list-dict-set">4.5. Data structures: tuple, list, dict, set</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#exceptions-exception-class-hierarchy-finally">4.6. Exceptions: exception class hierarchy, finally</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#general-functions-sort-and-sorted">4.7. General functions: sort and sorted</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#hierarchical-modules-both-local-to-the-project-and-global-url-based">4.8. Hierarchical modules: both local to the project and global url-based</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#indices-and-slices-lhs-rhs-basic-and-extended">4.9. Indices and slices: LHS, RHS, basic and extended</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#lambda-functions-with-all-types-of-args">4.10. Lambda functions with all types of args</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.11. List comprehensions: multi-loop and nested with multiple if&#8217;s</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#operator-overloading">4.12. Operator overloading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#properties">4.13. Properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#simple-and-augmented-assignment">4.14. Simple and augmented assignment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.15. Tuple assignment: recursive and in for-headers using enumerate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#dictionaries-dict-revisited">4.6. Dictionaries: dict revisited</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#exceptions-exception-class-hierarchy-finally">4.7. Exceptions: exception class hierarchy, finally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#general-functions-sort-and-sorted">4.8. General functions: sort and sorted</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#hierarchical-modules-both-local-to-the-project-and-global-url-based">4.9. Hierarchical modules: both local to the project and global url-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#indices-and-slices-lhs-rhs-basic-and-extended">4.10. Indices and slices: LHS, RHS, basic and extended</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#lambda-functions-with-all-types-of-args">4.11. Lambda functions with all types of args</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.12. List comprehensions: multi-loop and nested with multiple if&#8217;s</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#operator-overloading">4.13. Operator overloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#properties">4.14. Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#simple-and-augmented-assignment">4.15. Simple and augmented assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported_constructs.html#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.16. Tuple assignment: recursive and in for-headers using enumerate</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="integration_javascript.html">5. Integration with JavaScript libraries</a><ul>
@@ -166,7 +167,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.92 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.93 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

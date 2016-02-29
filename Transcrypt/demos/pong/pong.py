@@ -204,7 +204,7 @@ class Game:
 		self.keySet = set ()
 		
 		self.canvas = __new__ (fabric.Canvas ('canvas', {'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}))
-		self.canvas.onWindowResise = self.resize	# Install draw callback, will be called asynch
+		self.canvas.onWindowResize = self.resize	# Install draw callback, will be called asynch
 		self.canvas.onWindowDraw = self.draw		# Install resize callback, will be called if resized
 		self.canvas.lineWidth = 2
 		self.canvas.clear ()	

@@ -7,7 +7,7 @@ What is Transcrypt
 Transcrypt is a tool to compile a fairly extensive subset of Python into compact, readable JavaScript. It has the following characteristics:
 
 1. It's lightweight, in accordance Pareto’s rule adapted for IT: 99% of the result can be achieved with 1% of the effort.
-2. It offers the semantic essence of Python along with the clean, highly readable syntax that the language is famous for
+2. It offers the semantic essence of Python along with the clean syntax that the language is famous for
 3. It cooperates flawlessly with the JavaScript universe of web-oriented libraries
 4. It translates Python into highly readable, easy to debug JavaScript
 
