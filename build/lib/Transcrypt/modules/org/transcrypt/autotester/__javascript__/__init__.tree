@@ -1,0 +1,1363 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __main__
+					asname: NoneType = None
+				element: alias 
+					name: str = __envir__
+					asname: NoneType = None
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nokwargs
+				keywords: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = itertools
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = okColor
+					ctx: Store 
+			value: Str 
+				s: str = green
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = errorColor
+					ctx: Store 
+			value: Str 
+				s: str = red
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = highlightColor
+					ctx: Store 
+			value: Str 
+				s: str = yellow
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = testletNameColor
+					ctx: Store 
+			value: Str 
+				s: str = blue
+		element: ClassDef 
+			name: str = AutoTester
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = referenceBuffer
+									ctx: Store 
+							value: List 
+								elts: list 
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = testBuffer
+									ctx: Store 
+							value: List 
+								elts: list 
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = messageDivId
+									ctx: Store 
+							value: Str 
+								s: str = message
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = referenceDivId
+									ctx: Store 
+							value: Str 
+								s: str = python
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = testDivId
+									ctx: Store 
+							value: Str 
+								s: str = transcrypt
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = sortedRepr
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = any
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = tryGetNumKey
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = key
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: If 
+									test: Compare 
+										left: Call 
+											func: Name 
+												id: str = type
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = key
+													ctx: Load 
+											keywords: list 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Name 
+												id: str = str
+												ctx: Load 
+									body: list 
+										element: Try 
+											body: list 
+												element: Return 
+													value: Call 
+														func: Name 
+															id: str = int
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = key
+																ctx: Load 
+														keywords: list 
+											handlers: list 
+												element: ExceptHandler 
+													type: NoneType = None
+													name: NoneType = None
+													body: list 
+														element: Try 
+															body: list 
+																element: Return 
+																	value: Call 
+																		func: Name 
+																			id: str = float
+																			ctx: Load 
+																		args: list 
+																			element: Name 
+																				id: str = key
+																				ctx: Load 
+																		keywords: list 
+															handlers: list 
+																element: ExceptHandler 
+																	type: NoneType = None
+																	name: NoneType = None
+																	body: list 
+																		element: Return 
+																			value: Name 
+																				id: str = key
+																				ctx: Load 
+															orelse: list 
+															finalbody: list 
+											orelse: list 
+											finalbody: list 
+									orelse: list 
+										element: Return 
+											value: Name 
+												id: str = key
+												ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: If 
+							test: Compare 
+								left: Call 
+									func: Name 
+										id: str = type
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = any
+											ctx: Load 
+									keywords: list 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = dict
+										ctx: Load 
+							body: list 
+								element: Return 
+									value: BinOp 
+										left: BinOp 
+											left: Str 
+												s: str = {
+											op: Add 
+											right: Call 
+												func: Attribute 
+													value: Str 
+														s: str = , 
+													attr: str = join
+													ctx: Load 
+												args: list 
+													element: ListComp 
+														elt: Call 
+															func: Attribute 
+																value: Str 
+																	s: str = {}: {}
+																attr: str = format
+																ctx: Load 
+															args: list 
+																element: Call 
+																	func: Name 
+																		id: str = repr
+																		ctx: Load 
+																	args: list 
+																		element: Name 
+																			id: str = key
+																			ctx: Load 
+																	keywords: list 
+																element: Call 
+																	func: Name 
+																		id: str = repr
+																		ctx: Load 
+																	args: list 
+																		element: Subscript 
+																			value: Name 
+																				id: str = any
+																				ctx: Load 
+																			slice: Index 
+																				value: Name 
+																					id: str = key
+																					ctx: Load 
+																			ctx: Load 
+																	keywords: list 
+															keywords: list 
+														generators: list 
+															element: comprehension 
+																target: Tuple 
+																	elts: list 
+																		element: Name 
+																			id: str = index
+																			ctx: Store 
+																		element: Name 
+																			id: str = key
+																			ctx: Store 
+																	ctx: Store 
+																iter: Call 
+																	func: Name 
+																		id: str = enumerate
+																		ctx: Load 
+																	args: list 
+																		element: Call 
+																			func: Name 
+																				id: str = sorted
+																				ctx: Load 
+																			args: list 
+																				element: ListComp 
+																					elt: Call 
+																						func: Name 
+																							id: str = tryGetNumKey
+																							ctx: Load 
+																						args: list 
+																							element: Name 
+																								id: str = key
+																								ctx: Load 
+																						keywords: list 
+																					generators: list 
+																						element: comprehension 
+																							target: Name 
+																								id: str = key
+																								ctx: Store 
+																							iter: Call 
+																								func: Attribute 
+																									value: Name 
+																										id: str = any
+																										ctx: Load 
+																									attr: str = keys
+																									ctx: Load 
+																								args: list 
+																								keywords: list 
+																							ifs: list 
+																			keywords: list 
+																				element: keyword 
+																					arg: str = key
+																					value: Lambda 
+																						args: arguments 
+																							args: list 
+																								element: arg 
+																									arg: str = aKey
+																									annotation: NoneType = None
+																							vararg: NoneType = None
+																							kwonlyargs: list 
+																							kw_defaults: list 
+																							kwarg: NoneType = None
+																							defaults: list 
+																						body: Call 
+																							func: Name 
+																								id: str = str
+																								ctx: Load 
+																							args: list 
+																								element: Name 
+																									id: str = aKey
+																									ctx: Load 
+																							keywords: list 
+																	keywords: list 
+																ifs: list 
+												keywords: list 
+										op: Add 
+										right: Str 
+											s: str = }
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Call 
+											func: Name 
+												id: str = type
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = any
+													ctx: Load 
+											keywords: list 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Name 
+												id: str = set
+												ctx: Load 
+									body: list 
+										element: If 
+											test: Call 
+												func: Name 
+													id: str = len
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = any
+														ctx: Load 
+												keywords: list 
+											body: list 
+												element: Return 
+													value: BinOp 
+														left: BinOp 
+															left: Str 
+																s: str = {
+															op: Add 
+															right: Call 
+																func: Attribute 
+																	value: Str 
+																		s: str = , 
+																	attr: str = join
+																	ctx: Load 
+																args: list 
+																	element: ListComp 
+																		elt: Call 
+																			func: Name 
+																				id: str = str
+																				ctx: Load 
+																			args: list 
+																				element: Name 
+																					id: str = item
+																					ctx: Load 
+																			keywords: list 
+																		generators: list 
+																			element: comprehension 
+																				target: Name 
+																					id: str = item
+																					ctx: Store 
+																				iter: Call 
+																					func: Name 
+																						id: str = sorted
+																						ctx: Load 
+																					args: list 
+																						element: Call 
+																							func: Name 
+																								id: str = list
+																								ctx: Load 
+																							args: list 
+																								element: Name 
+																									id: str = any
+																									ctx: Load 
+																							keywords: list 
+																					keywords: list 
+																				ifs: list 
+																keywords: list 
+														op: Add 
+														right: Str 
+															s: str = }
+											orelse: list 
+												element: Return 
+													value: Call 
+														func: Name 
+															id: str = repr
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = any
+																ctx: Load 
+														keywords: list 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Call 
+													func: Name 
+														id: str = type
+														ctx: Load 
+													args: list 
+														element: Name 
+															id: str = any
+															ctx: Load 
+													keywords: list 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Name 
+														id: str = range
+														ctx: Load 
+											body: list 
+												element: Return 
+													value: Call 
+														func: Name 
+															id: str = repr
+															ctx: Load 
+														args: list 
+															element: Call 
+																func: Name 
+																	id: str = list
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = any
+																		ctx: Load 
+																keywords: list 
+														keywords: list 
+											orelse: list 
+												element: Return 
+													value: Call 
+														func: Name 
+															id: str = repr
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = any
+																ctx: Load 
+														keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = check
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: arg 
+							arg: str = args
+							annotation: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = item
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str =  
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: ListComp 
+										elt: Call 
+											func: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = sortedRepr
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = arg
+													ctx: Load 
+											keywords: list 
+										generators: list 
+											element: comprehension 
+												target: Name 
+													id: str = arg
+													ctx: Store 
+												iter: Name 
+													id: str = args
+													ctx: Load 
+												ifs: list 
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = __envir__
+										ctx: Load 
+									attr: str = executorName
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = __envir__
+											ctx: Load 
+										attr: str = transpilerName
+										ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = testBuffer
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = item
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = referenceBuffer
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = item
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = dump
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = filePrename
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = minified
+								ctx: Store 
+							iter: Tuple 
+								elts: list 
+									element: NameConstant 
+										value: bool = False
+									element: NameConstant 
+										value: bool = True
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = miniInfix
+											ctx: Store 
+									value: IfExp 
+										test: Name 
+											id: str = minified
+											ctx: Load 
+										body: Str 
+											s: str = .min
+										orelse: Str 
+											s: str = 
+								element: With 
+									items: list 
+										element: withitem 
+											context_expr: Call 
+												func: Name 
+													id: str = open
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = {}{}.html
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = filePrename
+																ctx: Load 
+															element: Name 
+																id: str = miniInfix
+																ctx: Load 
+														keywords: list 
+													element: Str 
+														s: str = w
+												keywords: list 
+											optional_vars: Name 
+												id: str = aFile
+												ctx: Store 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = <b>Status:</b>
+
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}"></div><br><br>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = messageDivId
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = <b>CPython output:</b>
+
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}">{}</div><br><br>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = referenceDivId
+																ctx: Load 
+															element: Call 
+																func: Attribute 
+																	value: Str 
+																		s: str =  | 
+																	attr: str = join
+																	ctx: Load 
+																args: list 
+																	element: Attribute 
+																		value: Name 
+																			id: str = self
+																			ctx: Load 
+																		attr: str = referenceBuffer
+																		ctx: Load 
+																keywords: list 
+														keywords: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = <b>Transcrypt output:</b>
+
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <div id="{}"></div>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = testDivId
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = aFile
+														ctx: Load 
+													attr: str = write
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = <script src="{}/{}{}.js"></script>
+
+
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = __envir__
+																	ctx: Load 
+																attr: str = targetSubDir
+																ctx: Load 
+															element: Name 
+																id: str = filePrename
+																ctx: Load 
+															element: Name 
+																id: str = miniInfix
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = compare
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = referenceBuffer
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Call 
+											func: Attribute 
+												value: Name 
+													id: str = document
+													ctx: Load 
+												attr: str = getElementById
+												ctx: Load 
+											args: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = referenceDivId
+													ctx: Load 
+											keywords: list 
+										attr: str = innerHTML
+										ctx: Load 
+									attr: str = split
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str =  | 
+								keywords: list 
+						element: For 
+							target: Tuple 
+								elts: list 
+									element: Name 
+										id: str = index
+										ctx: Store 
+									element: Tuple 
+										elts: list 
+											element: Name 
+												id: str = testItem
+												ctx: Store 
+											element: Name 
+												id: str = referenceItem
+												ctx: Store 
+										ctx: Store 
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = enumerate
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = zip
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = testBuffer
+												ctx: Load 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = referenceBuffer
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							body: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = testItem
+											ctx: Load 
+										ops: list 
+											element: NotEq 
+										comparators: list 
+											element: Name 
+												id: str = referenceItem
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = document
+																ctx: Load 
+															attr: str = getElementById
+															ctx: Load 
+														args: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = messageDivId
+																ctx: Load 
+														keywords: list 
+													attr: str = innerHTML
+													ctx: Store 
+											value: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <div style="color: {}"><b>Test failed</b></div>
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = errorColor
+														ctx: Load 
+												keywords: list 
+										element: For 
+											target: Tuple 
+												elts: list 
+													element: Name 
+														id: str = buffer
+														ctx: Store 
+													element: Name 
+														id: str = divId
+														ctx: Store 
+													element: Name 
+														id: str = accentColor
+														ctx: Store 
+												ctx: Store 
+											iter: Tuple 
+												elts: list 
+													element: Tuple 
+														elts: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = referenceBuffer
+																ctx: Load 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = referenceDivId
+																ctx: Load 
+															element: Name 
+																id: str = okColor
+																ctx: Load 
+														ctx: Load 
+													element: Tuple 
+														elts: list 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = testBuffer
+																ctx: Load 
+															element: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = testDivId
+																ctx: Load 
+															element: Name 
+																id: str = errorColor
+																ctx: Load 
+														ctx: Load 
+												ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Name 
+															id: str = buffer
+															ctx: Store 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = itertools
+																ctx: Load 
+															attr: str = chain
+															ctx: Load 
+														args: list 
+															element: Subscript 
+																value: Name 
+																	id: str = buffer
+																	ctx: Load 
+																slice: Slice 
+																	lower: NoneType = None
+																	upper: Name 
+																		id: str = index
+																		ctx: Load 
+																	step: NoneType = None
+																ctx: Load 
+															element: List 
+																elts: list 
+																	element: Call 
+																		func: Attribute 
+																			value: Str 
+																				s: str = !!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>
+																			attr: str = format
+																			ctx: Load 
+																		args: list 
+																			element: Name 
+																				id: str = accentColor
+																				ctx: Load 
+																			element: Name 
+																				id: str = highlightColor
+																				ctx: Load 
+																			element: Subscript 
+																				value: Name 
+																					id: str = buffer
+																					ctx: Load 
+																				slice: Index 
+																					value: Name 
+																						id: str = index
+																						ctx: Load 
+																				ctx: Load 
+																		keywords: list 
+																ctx: Load 
+															element: Subscript 
+																value: Name 
+																	id: str = buffer
+																	ctx: Load 
+																slice: Slice 
+																	lower: BinOp 
+																		left: Name 
+																			id: str = index
+																			ctx: Load 
+																		op: Add 
+																		right: Num 
+																			n: int = 1
+																	upper: NoneType = None
+																	step: NoneType = None
+																ctx: Load 
+														keywords: list 
+												element: Assign 
+													targets: list 
+														element: Attribute 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = document
+																		ctx: Load 
+																	attr: str = getElementById
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = divId
+																		ctx: Load 
+																keywords: list 
+															attr: str = innerHTML
+															ctx: Store 
+													value: Call 
+														func: Attribute 
+															value: Str 
+																s: str =  | 
+															attr: str = join
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = buffer
+																ctx: Load 
+														keywords: list 
+											orelse: list 
+										element: Break 
+									orelse: list 
+							orelse: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = document
+														ctx: Load 
+													attr: str = getElementById
+													ctx: Load 
+												args: list 
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = messageDivId
+														ctx: Load 
+												keywords: list 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="color: {}">Test succeeded</div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = okColor
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = document
+														ctx: Load 
+													attr: str = getElementById
+													ctx: Load 
+												args: list 
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = testDivId
+														ctx: Load 
+												keywords: list 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str =  | 
+											attr: str = join
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = testBuffer
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = run
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testlet
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testletName
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = testletNameColor
+												ctx: Load 
+											element: Name 
+												id: str = testletName
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = testlet
+										ctx: Load 
+									attr: str = run
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = self
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = <br><br>
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = done
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = __envir__
+										ctx: Load 
+									attr: str = executorName
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = __envir__
+											ctx: Load 
+										attr: str = transpilerName
+										ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = compare
+											ctx: Load 
+										args: list 
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = dump
+											ctx: Load 
+										args: list 
+											element: Subscript 
+												value: Call 
+													func: Attribute 
+														value: Call 
+															func: Attribute 
+																value: Subscript 
+																	value: Attribute 
+																		value: Name 
+																			id: str = __main__
+																			ctx: Load 
+																		attr: str = __file__
+																		ctx: Load 
+																	slice: Slice 
+																		lower: NoneType = None
+																		upper: UnaryOp 
+																			op: USub 
+																			operand: Num 
+																				n: int = 3
+																		step: NoneType = None
+																	ctx: Load 
+																attr: str = replace
+																ctx: Load 
+															args: list 
+																element: Str 
+																	s: str = \
+																element: Str 
+																	s: str = /
+															keywords: list 
+														attr: str = rsplit
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = /
+														element: Num 
+															n: int = 1
+													keywords: list 
+												slice: Index 
+													value: UnaryOp 
+														op: USub 
+														operand: Num 
+															n: int = 1
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 

@@ -21,27 +21,27 @@ Finding the code for a module proceeds as follows:
 
 Suppose you import a module *all.the.kings.men*. Then the following paths will be searched respectively:
 
-- *<directory of your main module>/all/the/kings/men.py*
-- *<directory of your main module>/all/the/kings/__javascript__/men.mod.js*
-- *<directory of your main module>/all/the/kings/men/__init__py*
-- *<directory of your main module>/all/the/kings/men/__javascript__/__init__.mod.js*
+	+ *<directory of your main module>/all/the/kings/men.py*
+	+ *<directory of your main module>/all/the/kings/__javascript__/men.mod.js*
+	+ *<directory of your main module>/all/the/kings/men/__init__py*
+	+ *<directory of your main module>/all/the/kings/men/__javascript__/__init__.mod.js*
+	
+	- *transcrypt/Transcrypt/modules/all/the/kings/men.py*
+	- *transcrypt/Transcrypt/modules/all/the/kings/__javascript__/men.mod.js*
+	- *transcrypt/Transcrypt/modules/all/the/kings/men/__init__py*
+	- *transcrypt/Transcrypt/modules/all/the/kings/men/__javascript__/__init__.mod.js*
+	
+	+ *<CPython packages directory 1>/all/the/kings/men.py*
+	+ *<CPython packages directory 1>/all/the/kings/__javascript__/men.mod.js*
+	+ *<CPython packages directory 1>/all/the/kings/men/__init__py*
+	+ *<CPython packages directory 1>/all/the/kings/men/__javascript__/__init__.mod.js*
+	
+	- *<CPython packages directory 2>/all/the/kings/men.py*
+	- *<CPython packages directory 2>/all/the/kings/__javascript__/men.mod.js*
+	- *<CPython packages directory 2>/all/the/kings/men/__init__py*
+	- *<CPython packages directory 2>/all/the/kings/men/__javascript__/__init__.mod.js*
 
-- *transcrypt/Transcrypt/modules/all/the/kings/men.py*
-- *transcrypt/Transcrypt/modules/all/the/kings/__javascript__/men.mod.js*
-- *transcrypt/Transcrypt/modules/all/the/kings/men/__init__py*
-- *transcrypt/Transcrypt/modules/all/the/kings/men/__javascript__/__init__.mod.js*
-
-- *<CPython packages directory 1>/all/the/kings/men.py*
-- *<CPython packages directory 1>/all/the/kings/__javascript__/men.mod.js*
-- *<CPython packages directory 1>/all/the/kings/men/__init__py*
-- *<CPython packages directory 1>/all/the/kings/men/__javascript__/__init__.mod.js*
-
-- *<CPython packages directory 2>/all/the/kings/men.py*
-- *<CPython packages directory 2>/all/the/kings/__javascript__/men.mod.js*
-- *<CPython packages directory 2>/all/the/kings/men/__init__py*
-- *<CPython packages directory 2>/all/the/kings/men/__javascript__/__init__.mod.js*
-
-- *More CPython packages directories*
+	+ *More CPython packages directories*
 
 As can be seen from the above list, modules local to your project take precedence of modules available in Transcrypt, which again take precedence over modules available globally in CPython. Note that even if modules are made available globally in CPython, importing them in Transcrypt gives special possibilities and restrictions. They are allowed to be written in native JavaScript, in which case they reside in the __javascript__ subdirectory of the module. They should not depend on C, C++ or features that are outside Python subset supported by Transcrypt.
 

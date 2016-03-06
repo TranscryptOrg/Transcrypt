@@ -1,0 +1,3 @@
+include README.rst NEWS.txt
+include AUTHORS LICENSE
+include bin/pyflakes

@@ -1,0 +1,59 @@
+file: Module 
+	body: list 
+		element: ClassDef 
+			name: str = A
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = x
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = x
+									ctx: Store 
+							value: Name 
+								id: str = x
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = f
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = x
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 

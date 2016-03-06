@@ -1,0 +1,41 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = goodbye
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = moon
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

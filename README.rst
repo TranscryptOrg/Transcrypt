@@ -51,6 +51,8 @@ Status
 What's new
 ==========
 
+- Docs updated
+- Transcrypt modules can now be stored also in CPYthon's sitepackages directory
 - Dict omissions and bugs fixed and added to autotest, .gitignore recovered
 - Overloading of () added + test
 - Optional overloading of [] enabled, doc updated, tests added

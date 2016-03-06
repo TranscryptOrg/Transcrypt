@@ -1,0 +1,1 @@
+/usr/bin/python3.5 $(dirname $0)/transcrypt.py $*
