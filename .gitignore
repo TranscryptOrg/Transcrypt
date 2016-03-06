@@ -1,3 +1,4 @@
+*.nogit
 *.pyc
 *.npp
 **.__pycache__/

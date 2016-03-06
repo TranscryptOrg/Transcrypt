@@ -222,7 +222,7 @@
 				self.pause = true;
 				self.keySet = set ();
 				self.canvas = new fabric.Canvas ('canvas', dict ({'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}));
-				self.canvas.onWindowResise = self.resize;
+				self.canvas.onWindowResize = self.resize;
 				self.canvas.onWindowDraw = self.draw;
 				self.canvas.lineWidth = 2;
 				self.canvas.clear ();

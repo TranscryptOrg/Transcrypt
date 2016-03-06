@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-28 18:17:26
+// Transcrypt'ed from Python, 2016-03-06 16:40:06
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;

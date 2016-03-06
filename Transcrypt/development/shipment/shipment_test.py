@@ -1,8 +1,8 @@
 import os
 import webbrowser
 
-testDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
-rootDir = '/'.join  (testDir.split ('/')[ : -2])
+shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
+rootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
 def getAbsPath (relPath):
 	return '{}/{}'.format (rootDir, relPath)

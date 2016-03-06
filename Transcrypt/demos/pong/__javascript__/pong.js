@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-02-28 18:17:27
+// Transcrypt'ed from Python, 2016-03-06 16:40:08
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -16009,7 +16009,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				self.pause = true;
 				self.keySet = set ();
 				self.canvas = new fabric.Canvas ('canvas', dict ({'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}));
-				self.canvas.onWindowResise = self.resize;
+				self.canvas.onWindowResize = self.resize;
 				self.canvas.onWindowDraw = self.draw;
 				self.canvas.lineWidth = 2;
 				self.canvas.clear ();

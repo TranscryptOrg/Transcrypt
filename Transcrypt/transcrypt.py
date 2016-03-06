@@ -17,6 +17,7 @@
 import os
 import sys
 import traceback
+import site
 
 sys.path [0] = sys.path [0] + '/modules'
 
@@ -58,7 +59,7 @@ if utils.commandArgs.run:
 		)
 else:
 	try:
-		compiler.Program ([programDir, modulesDir])
+		compiler.Program ([programDir, modulesDir] + [sitepackagesDir.replace ('\\', '/') for sitepackagesDir in site.getsitepackages ()])
 	except utils.Error as error:
 		utils.log (True, '\n{}\n', error)
 		

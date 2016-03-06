@@ -31,7 +31,21 @@ Suppose you import a module *all.the.kings.men*. Then the following paths will b
 - *transcrypt/Transcrypt/modules/all/the/kings/men/__init__py*
 - *transcrypt/Transcrypt/modules/all/the/kings/men/__javascript__/__init__.mod.js*
 
-As can be seen from the above list, modules local to your project take precedence of globally available modules. If both a Python and a JavaScript module are present, the Python module is only recompiled if it's younger than the corresponding JavaScript module, unless the -b switch is used.
+- *<CPython packages directory 1>/all/the/kings/men.py*
+- *<CPython packages directory 1>/all/the/kings/__javascript__/men.mod.js*
+- *<CPython packages directory 1>/all/the/kings/men/__init__py*
+- *<CPython packages directory 1>/all/the/kings/men/__javascript__/__init__.mod.js*
+
+- *<CPython packages directory 2>/all/the/kings/men.py*
+- *<CPython packages directory 2>/all/the/kings/__javascript__/men.mod.js*
+- *<CPython packages directory 2>/all/the/kings/men/__init__py*
+- *<CPython packages directory 2>/all/the/kings/men/__javascript__/__init__.mod.js*
+
+- *More CPython packages directories*
+
+As can be seen from the above list, modules local to your project take precedence of modules available in Transcrypt, which again take precedence over modules available globally in CPython. Note that even if modules are made available globally in CPython, importing them in Transcrypt gives special possibilities and restrictions. They are allowed to be written in native JavaScript, in which case they reside in the __javascript__ subdirectory of the module. They should not depend on C, C++ or features that are outside Python subset supported by Transcrypt.
+
+Although under these guidelines it's quite possible to write modules that are importable both by CPyton and Transcrypt, most Transcrypt modules will be come from the JavaScript, rather than from the Python ecosystem. If both a Python and a JavaScript incarnation of a module are present, the Python module is only recompiled if it's younger than the corresponding JavaScript module, unless the -b switch is used.
 
 Furthermore, note that the *__init__.py* or *__init__.mod.js* file of a module is executed if and only if that module is imported, not if it's just somewhere in the hierarchy of directories containing that module. Furthermore the global code of a module is executed only once, no matter how often that module is imported, as is equally the case with CPython.
 

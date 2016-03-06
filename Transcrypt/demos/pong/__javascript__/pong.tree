@@ -2755,7 +2755,7 @@ file: Module
 											ctx: Load 
 										attr: str = canvas
 										ctx: Load 
-									attr: str = onWindowResise
+									attr: str = onWindowResize
 									ctx: Store 
 							value: Attribute 
 								value: Name 
