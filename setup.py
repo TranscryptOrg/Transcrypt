@@ -18,7 +18,7 @@ setup (
 		read ('README.rst') + '\n\n' +
 		read ('license_reference.txt')
 	),
-	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'kivy', 'django'],
+	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django'],
 	url = 'http://www.transcrypt.org',	
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',
