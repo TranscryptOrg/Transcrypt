@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-06 16:40:06
+// Transcrypt'ed from Python, 2016-03-08 19:38:20
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.93';
+							self.transpilerVersion = '3.5.109';
 							self.targetSubDir = '__javascript__';
 						});}
 					});

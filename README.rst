@@ -51,6 +51,7 @@ Status
 What's new
 ==========
 
+- Added pip install for Windows and Linux
 - Docs updated
 - Transcrypt modules can now be stored also in CPYthon's sitepackages directory
 - Dict omissions and bugs fixed and added to autotest, .gitignore recovered
