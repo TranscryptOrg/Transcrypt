@@ -4,6 +4,7 @@
 		var conditional_expressions = {};
 		var control_structures = {};
 		var data_structures = {};
+		var dict_comprehensions = {};
 		var dictionaries = {};
 		var exceptions = {};
 		var general_functions = {};
@@ -14,6 +15,7 @@
 		var operator_overloading = {};
 		var org = {};
 		var properties = {};
+		var set_comprehensions = {};
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
@@ -22,6 +24,7 @@
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
+		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
@@ -31,6 +34,7 @@
 		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
+		__nest__ (set_comprehensions, '', __init__ (__world__.set_comprehensions));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
@@ -39,6 +43,7 @@
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
+		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (general_functions, 'general_functions');
@@ -48,6 +53,7 @@
 		autoTester.run (modules, 'modules');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
+		autoTester.run (set_comprehensions, 'set_comprehensions');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
@@ -57,6 +63,7 @@
 			'conditional_expressions' +
 			'control_structures' +
 			'data_structures' +
+			'dict_comprehensions' +
 			'dictionaries' +
 			'exceptions' +
 			'general_functions' +
@@ -67,6 +74,7 @@
 			'operator_overloading' +
 			'org.transcrypt.autotester' +
 			'properties' +
+			'set_comprehensions' +
 			'simple_and_augmented_assignment' +
 			'tuple_assignment' +
 		'</use>')

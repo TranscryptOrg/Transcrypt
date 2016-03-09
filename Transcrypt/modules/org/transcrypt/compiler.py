@@ -1073,6 +1073,9 @@ class Generator (ast.NodeVisitor):
 			self.emit (': ')
 			self.visit (value)
 		self.emit ('}})')
+		
+	def visit_DictComp (self, node):
+		self.visit_ListComp (node, isDict = True)
 			
 	def visit_Expr (self, node):
 		self.visit (node.value)
@@ -1263,7 +1266,7 @@ class Generator (ast.NodeVisitor):
 			self.visit (elt)
 		self.emit ('])')
 		
-	def visit_ListComp (self, node):
+	def visit_ListComp (self, node, isSet = False, isDict = False):
 		elts = []
 		bodies = [[]]
 		
@@ -1297,7 +1300,7 @@ class Generator (ast.NodeVisitor):
 						'append',
 						ast.Load
 					),
-					[node.elt],
+					[ast.List (elts = [node.key, node.value], ctx = ast.Load) if isDict else node.elt],
 					[]
 				)
 			)
@@ -1311,7 +1314,11 @@ class Generator (ast.NodeVisitor):
 		self.indent ()
 		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
 		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
-		self.emit ('return {};\n'.format (self.getTemp ('accu')))
+		self.emit ('return {}{}{};\n'.format (
+			'set (' if isSet else 'dict (' if isDict else '',
+			self.getTemp ('accu'),
+			')' if isSet or isDict else ''		
+		))
 		self.prevTemp ('accu')
 		self.dedent ()
 		self.skipSemiNew = False	# Was still True since the outer for wasn't visited as part of a Body 
@@ -1417,8 +1424,11 @@ class Generator (ast.NodeVisitor):
 		for index, elt in enumerate (node.elts):
 			self.emitComma (index)
 			self.visit (elt)
-		self.emit ('])')		
-				
+		self.emit ('])')
+		
+	def visit_SetComp (self, node):
+		self.visit_ListComp (node, isSet = True)
+						
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
 		

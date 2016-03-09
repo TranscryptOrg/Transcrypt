@@ -46,6 +46,13 @@ Data structures: tuple, list, dict, set
 	:tab-width: 4
 	:caption: Testlet: data_structures
 
+Dict comprehensions
+-------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/dict_comprehensions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: dict_comprehensions
+
 Dictionaries: dict revisited
 ----------------------------
 
@@ -109,6 +116,13 @@ Properties
 	:tab-width: 4
 	:caption: Testlet: properties
 		
+Set comprehensions
+------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/set_comprehensions/__init__.py
+	:tab-width: 4
+	:caption: Testlet: set_comprehensions
+
 Simple and augmented assignment
 -------------------------------
 

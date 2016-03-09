@@ -48,7 +48,7 @@ class AutoTester:
 			]) + '}'
 		elif type (any) == set:
 			if len (any):
-				return '{' + ', '.join ([str (item) for item in sorted (list (any))]) + '}'
+				return '{' + ', '.join (sorted ([str (item) for item in list (any)])) + '}'
 			else:
 				return repr (any)
 		elif type (any) == range:

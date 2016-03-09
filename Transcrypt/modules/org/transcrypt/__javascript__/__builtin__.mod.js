@@ -392,12 +392,20 @@ function f() { /** ... */ }
 		this.push (element);
 	};
 
-	Array.prototype.clear = function (aList) {
-		aList.splice (0, aList.length);
+	Array.prototype.clear = function () {
+		this.length = 0;
 	};
 	
 	Array.prototype.extend = function (aList) {
 		this.push.apply (this, aList);
+	};
+
+	Array.prototype.remove = function (element) {
+		var index = this.indexOf (element);
+		if (index == -1) {
+			throw ('KeyError');
+		}
+		this.splice (index, 1);
 	};
 
 	Array.prototype.py_sort = function () {
@@ -418,6 +426,7 @@ function f() { /** ... */ }
 	tuple.__name__ = 'tuple';
 	
 	// Set extensions to Array
+	// N.B. Since sets are unordered, set operations will occasionally alter the 'this' array by sorting it
 		
 	function set (iterable) {
 		var instance = [];
@@ -425,6 +434,8 @@ function f() { /** ... */ }
 			for (var index = 0; index < iterable.length; index++) {
 				instance.add (iterable [index]);
 			}
+			
+			
 		}
 		instance.__class__ = set;	// Not all arrays are sets
 		return instance;
@@ -432,18 +443,114 @@ function f() { /** ... */ }
 	__all__.set = set;
 	set.__name__ = 'set';
 	
-	Array.prototype.add = function (element) {
+	Array.prototype.__bindexOf__ = function (element) {	// Used to turn O (n^2) into O (n log n)
+	// Since sorting is lex, compare has to be lex. This also allows for mixed lists
+	
+		element += '';
+	
+		var mindex = 0;
+		var maxdex = this.length - 1;
+			 
+		while (mindex <= maxdex) {
+			var index = (mindex + maxdex) / 2 | 0;
+			var middle = this [index] + '';
+	 
+			if (middle < element) {
+				mindex = index + 1;
+			}
+			else if (middle > element) {
+				maxdex = index - 1;
+			}
+			else {
+				return index;
+			}
+		}
+	 
+		return -1;
+	}
+	
+	Array.prototype.add = function (element) {		
 		if (this.indexOf (element) == -1) {	// Avoid duplicates in set
 			this.push (element);
 		}
-	}
+	};
 	
-	Array.prototype.remove = function (element) {
+	Array.prototype.discard = function (element) {
 		var index = this.indexOf (element);
 		if (index != -1) {
 			this.splice (index, 1);
 		}
-	}
+	};
+	
+	Array.prototype.isdisjoint = function (other) {
+		this.sort ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) != -1) {
+				return false;
+			}
+		}
+		return true;
+	};
+	
+	Array.prototype.issuperset = function (other) {
+		this.sort ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) == -1) {
+				return false;
+			}
+		}
+		return true;
+	};
+	
+	Array.prototype.issubset = function (other) {
+		return set (other.slice ()) .issuperset (this);	// Sort copy of 'other', not 'other' itself, since it may be an ordered sequence
+	};
+	
+	Array.prototype.union = function (other) {
+		var result = set (this.slice () .sort ());
+		for (var i = 0; i < other.length; i++) {
+			if (result.__bindexOf__ (other [i]) == -1) {
+				result.push (other [i]);
+			}
+		}
+		return result;
+	};
+	
+	Array.prototype.intersection = function (other) {
+		this.sort ();
+		var result = set ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) != -1) {
+				result.push (other [i]);
+			}
+		}
+		return result;
+	};
+	
+	Array.prototype.difference = function (other) {
+		var sother = set (other.slice () .sort ());
+		var result = set ();
+		for (var i = 0; i < this.length; i++) {
+			if (sother.__bindexOf__ (this [i]) == -1) {
+				result.push (this [i]);
+			}
+		}
+		return result;
+	};
+	
+	Array.prototype.symmetric_difference = function (other) {
+		return this.union (other) .difference (this.intersection (other));
+	};
+	
+	Array.prototype.update = function () {	// O (n)
+		var updated = [] .concat.apply (this.slice (), arguments) .sort ();		
+		this.clear ();
+		for (var i = 0; i < updated.length; i++) {
+			if (updated [i] != updated [i - 1]) {
+				this.push (updated [i]);
+			}
+		}
+	};
 	
 	// Dict extensions to object
 	

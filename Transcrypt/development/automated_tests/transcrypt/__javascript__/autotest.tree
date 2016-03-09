@@ -33,6 +33,11 @@ file: Module
 		element: Import 
 			names: list 
 				element: alias 
+					name: str = dict_comprehensions
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
 					name: str = dictionaries
 					asname: NoneType = None
 		element: Import 
@@ -74,6 +79,11 @@ file: Module
 			names: list 
 				element: alias 
 					name: str = properties
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = set_comprehensions
 					asname: NoneType = None
 		element: Import 
 			names: list 
@@ -179,6 +189,21 @@ file: Module
 						ctx: Load 
 					element: Str 
 						s: str = data_structures
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = dict_comprehensions
+						ctx: Load 
+					element: Str 
+						s: str = dict_comprehensions
 				keywords: list 
 		element: Expr 
 			value: Call 
@@ -314,6 +339,21 @@ file: Module
 						ctx: Load 
 					element: Str 
 						s: str = properties
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = set_comprehensions
+						ctx: Load 
+					element: Str 
+						s: str = set_comprehensions
 				keywords: list 
 		element: Expr 
 			value: Call 

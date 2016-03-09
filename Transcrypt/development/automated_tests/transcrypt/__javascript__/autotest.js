@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-08 19:38:15
+// Transcrypt'ed from Python, 2016-03-09 09:24:12
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.109';
+							self.transpilerVersion = '3.5.110';
 							self.targetSubDir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -126,7 +126,7 @@ function autotest () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -134,7 +134,7 @@ function autotest () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -147,7 +147,7 @@ function autotest () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -554,11 +554,18 @@ function f() { /** ... */ }
 	Array.prototype.append = function (element) {
 		this.push (element);
 	};
-	Array.prototype.clear = function (aList) {
-		aList.splice (0, aList.length);
+	Array.prototype.clear = function () {
+		this.length = 0;
 	};
 	Array.prototype.extend = function (aList) {
 		this.push.apply (this, aList);
+	};
+	Array.prototype.remove = function (element) {
+		var index = this.indexOf (element);
+		if (index == -1) {
+			throw ('KeyError');
+		}
+		this.splice (index, 1);
 	};
 	Array.prototype.py_sort = function () {
 		__sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));
@@ -582,17 +589,98 @@ function f() { /** ... */ }
 	}
 	__all__.set = set;
 	set.__name__ = 'set';
+	Array.prototype.__bindexOf__ = function (element) {
+		element += '';
+		var mindex = 0;
+		var maxdex = this.length - 1;
+		while (mindex <= maxdex) {
+			var index = (mindex + maxdex) / 2 | 0;
+			var middle = this [index] + '';
+			if (middle < element) {
+				mindex = index + 1;
+			}
+			else if (middle > element) {
+				maxdex = index - 1;
+			}
+			else {
+				return index;
+			}
+		}
+		return -1;
+	}
 	Array.prototype.add = function (element) {
 		if (this.indexOf (element) == -1) {
 			this.push (element);
 		}
-	}
-	Array.prototype.remove = function (element) {
+	};
+	Array.prototype.discard = function (element) {
 		var index = this.indexOf (element);
 		if (index != -1) {
 			this.splice (index, 1);
 		}
-	}
+	};
+	Array.prototype.isdisjoint = function (other) {
+		this.sort ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) != -1) {
+				return false;
+			}
+		}
+		return true;
+	};
+	Array.prototype.issuperset = function (other) {
+		this.sort ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) == -1) {
+				return false;
+			}
+		}
+		return true;
+	};
+	Array.prototype.issubset = function (other) {
+		return set (other.slice ()) .issuperset (this);
+	};
+	Array.prototype.union = function (other) {
+		var result = set (this.slice () .sort ());
+		for (var i = 0; i < other.length; i++) {
+			if (result.__bindexOf__ (other [i]) == -1) {
+				result.push (other [i]);
+			}
+		}
+		return result;
+	};
+	Array.prototype.intersection = function (other) {
+		this.sort ();
+		var result = set ();
+		for (var i = 0; i < other.length; i++) {
+			if (this.__bindexOf__ (other [i]) != -1) {
+				result.push (other [i]);
+			}
+		}
+		return result;
+	};
+	Array.prototype.difference = function (other) {
+		var sother = set (other.slice () .sort ());
+		var result = set ();
+		for (var i = 0; i < this.length; i++) {
+			if (sother.__bindexOf__ (this [i]) == -1) {
+				result.push (this [i]);
+			}
+		}
+		return result;
+	};
+	Array.prototype.symmetric_difference = function (other) {
+		return this.union (other) .difference (this.intersection (other));
+	};
+	Array.prototype.update = function () {
+		var updated = [] .concat.apply (this.slice (), arguments) .sort ();
+		this.clear ();
+		for (var i = 0; i < updated.length; i++) {
+			if (updated [i] != updated [i - 1]) {
+				this.push (updated [i]);
+			}
+		}
+	};
 	function __keys__ () {
 		var keys = []
 		for (var attrib in this) {
@@ -845,7 +933,7 @@ function f() { /** ... */ }
 							self.n = n;
 							self.kwargs = kwargs;
 							self.extra = 'hello';
-						});},
+						}, '__init__');},
 						get f () {return __get__ (this, function (self, autoTester) {
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
@@ -860,7 +948,7 @@ function f() { /** ... */ }
 								}
 							}
 							autoTester.check (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra);
-						});}
+						}, 'f');}
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
@@ -888,13 +976,13 @@ function f() { /** ... */ }
 								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
-						});}
+						}, '__init__');}
 					});
 					var C = __class__ ('C', [object], {
 						get tricky () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							return args;
-						});}
+						}, 'tricky');}
 					});
 					var run = function (autoTester) {
 						if (arguments.length) {
@@ -1029,13 +1117,13 @@ function f() { /** ... */ }
 							get __init__ () {return __get__ (this, function (self, x) {
 								self.x = x;
 								autoTester.check (self.p);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show', label, self.x);
-							});},
+							}, 'show');},
 							get show2 () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show2', label, self.x);
-							});}
+							}, 'show2');}
 						});
 						A.p = 123;
 						var B = __class__ ('B', [object], {
@@ -1043,10 +1131,10 @@ function f() { /** ... */ }
 								autoTester.check ('In B constructor');
 								self.y = y;
 								autoTester.check (self.p);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('B.show', label, self.y);
-							});}
+							}, 'show');}
 						});
 						var __left0__ = tuple (list ([456, 789]));
 						B.p = __left0__ [0];
@@ -1056,12 +1144,12 @@ function f() { /** ... */ }
 								autoTester.check ('In C constructor');
 								A.__init__ (self, x);
 								B.__init__ (self, y);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								A.show (self, label);
 								B.show (self, label);
 								autoTester.check ('C.show', label, self.x, self.y);
-							});}
+							}, 'show');}
 						});
 						var a = A (1001);
 						a.show ('america');
@@ -1311,6 +1399,36 @@ function f() { /** ... */ }
 						var emptySet = set ();
 						autoTester.check (emptySet);
 						autoTester.check (len (emptySet));
+					};
+					__pragma__ ('<all>')
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'dict_comprehensions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var original = dict ({'Isaac': 'Newton', 'Albert': 'Einstein', 'Paul': 'Dirac'});
+						autoTester.check (original);
+						var inverted = function () {
+							var __accu0__ = [];
+							var __iter0__ = original;
+							if (type (__iter0__) == dict) {
+								__iter0__ = __iter0__.py_keys ();
+							}
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var key = __iter0__ [__index0__];
+								__accu0__.append (list ([original [key], key]));
+							}
+							return dict (__accu0__);
+						} ();
+						autoTester.check (inverted);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -1827,10 +1945,10 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self, x) {
 							self.x = x;
-						});},
+						}, '__init__');},
 						get f () {return __get__ (this, function (self) {
 							return self.x;
-						});}
+						}, 'f');}
 					});
 					__pragma__ ('<all>')
 						__all__.A = A;
@@ -1896,7 +2014,7 @@ function f() { /** ... */ }
 					var B = __class__ ('B', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.x = 'Geef mij maar Amsterdam\n';
-						});}
+						}, '__init__');}
 					});
 					__pragma__ ('<all>')
 						__all__.B = B;
@@ -1960,7 +2078,7 @@ function f() { /** ... */ }
 									return __accu0__;
 								} ();
 							}
-						});},
+						}, '__init__');},
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
@@ -1982,7 +2100,7 @@ function f() { /** ... */ }
 							else {
 								return self.__rmul__ (other);
 							}
-						});},
+						}, '__mul__');},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -1995,7 +2113,7 @@ function f() { /** ... */ }
 								}
 							}
 							return result;
-						});},
+						}, '__rmul__');},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
 							var __iter0__ = range (self.nRows);
@@ -2008,21 +2126,21 @@ function f() { /** ... */ }
 								}
 							}
 							return result;
-						});},
+						}, '__add__');},
 						get __getitem__ () {return __get__ (this, function (self, index) {
 							return self._ [index];
-						});},
+						}, '__getitem__');},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
 							self._ [index] = value;
-						});},
+						}, '__setitem__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
-						});}
+						}, '__repr__');}
 					});
 					var Functor = __class__ ('Functor', [object], {
 						get __init__ () {return __get__ (this, function (self, factor) {
 							self.factor = factor;
-						});},
+						}, '__init__');},
 						get __call__ () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = -1;
@@ -2056,7 +2174,7 @@ function f() { /** ... */ }
 								}
 								return __accu0__;
 							} (), self.factor * m, self.factor * n]));
-						});}
+						}, '__call__');}
 					});
 					var f = Functor (10);
 					var g = function (x, y) {
@@ -2135,7 +2253,7 @@ function f() { /** ... */ }
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						});},
+						}, '__init__');},
 						get sortedRepr () {return __get__ (this, function (self, any) {
 							var tryGetNumKey = function (key) {
 								if (type (key) == str) {
@@ -2180,15 +2298,15 @@ function f() { /** ... */ }
 							else {
 								if (type (any) == set) {
 									if (len (any)) {
-										return '{' + ', '.join (function () {
+										return '{' + ', '.join (sorted (function () {
 											var __accu0__ = [];
-											var __iter0__ = sorted (list (any));
+											var __iter0__ = list (any);
 											for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 												var item = __iter0__ [__index0__];
 												__accu0__.append (str (item));
 											}
 											return __accu0__;
-										} ()) + '}';
+										} ())) + '}';
 									}
 									else {
 										return repr (any);
@@ -2203,7 +2321,7 @@ function f() { /** ... */ }
 									}
 								}
 							}
-						});},
+						}, 'sortedRepr');},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -2221,7 +2339,7 @@ function f() { /** ... */ }
 							else {
 								self.referenceBuffer.append (item);
 							}
-						});},
+						}, 'check');},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple (list ([false, true]));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -2237,7 +2355,7 @@ function f() { /** ... */ }
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						});},
+						}, 'dump');},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
@@ -2266,12 +2384,12 @@ function f() { /** ... */ }
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						});},
+						}, 'compare');},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						});},
+						}, 'run');},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executorName == __envir__.transpilerName) {
 								self.compare ();
@@ -2279,7 +2397,7 @@ function f() { /** ... */ }
 							else {
 								self.dump (__main__.__file__.slice (0, -3).replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						});}
+						}, 'done');}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +
@@ -2304,34 +2422,34 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get getX () {return __get__ (this, function (self) {
 							return self._x;
-						});},
+						}, 'getX');},
 						get setX () {return __get__ (this, function (self, value) {
 							self._x = value;
-						});},
+						}, 'setX');},
 						get getY () {return __get__ (this, function (self) {
 							return self._y;
-						});},
+						}, 'getY');},
 						get setY () {return __get__ (this, function (self, value) {
 							self._y = 1000 + value;
-						});},
+						}, 'setY');},
 						get getY2 () {return __get__ (this, function (self) {
 							return self._y;
-						});},
+						}, 'getY2');},
 						get setY2 () {return __get__ (this, function (self, value) {
 							self._y = value;
-						});},
+						}, 'setY2');},
 						get getT () {return __get__ (this, function (self) {
 							return self._t;
-						});},
+						}, 'getT');},
 						get setT () {return __get__ (this, function (self, value) {
 							self._t = value;
-						});},
+						}, 'setT');},
 						get getU () {return __get__ (this, function (self) {
 							return self._u + 10000;
-						});},
+						}, 'getU');},
 						get setU () {return __get__ (this, function (self, value) {
 							self._u = value - 5000;
-						});}
+						}, 'setU');}
 					});
 					A.p = 1234;
 					var __left0__ = tuple (list ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]));
@@ -2344,22 +2462,22 @@ function f() { /** ... */ }
 					var B = __class__ ('B', [object], {
 						get getZ () {return __get__ (this, function (self) {
 							return self.z_;
-						});},
+						}, 'getZ');},
 						get setZ () {return __get__ (this, function (self, value) {
 							self.z_ = value;
-						});}
+						}, 'setZ');}
 					});
 					Object.defineProperty (B, 'z', property.call (B, B.getZ, B.setZ));;
 					var C = __class__ ('C', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.offset = 1234;
-						});},
+						}, '__init__');},
 						get getW () {return __get__ (this, function (self) {
 							return self.w_ + self.offset;
-						});},
+						}, 'getW');},
 						get setW () {return __get__ (this, function (self, value) {
 							self.w_ = value - self.offset;
-						});}
+						}, 'setW');}
 					});
 					Object.defineProperty (C, 'w', property.call (C, C.getW, C.setW));;
 					var run = function (autoTester) {
@@ -2400,6 +2518,68 @@ function f() { /** ... */ }
 	);
 	__nest__ (
 		__all__,
+		'set_comprehensions', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var even = function () {
+							var __accu0__ = [];
+							var __iter0__ = list ([0, 9, 1, 7, 2, 8, 3, 6, 4, 5]);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var i = __iter0__ [__index0__];
+								__accu0__.append (2 * i);
+							}
+							return set (__accu0__);
+						} ();
+						autoTester.check (even);
+						var odd = function () {
+							var __accu0__ = [];
+							var __iter0__ = list ([5, 6, 7, 8, 9, 4, 3, 1, 2, 0]);
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var i = __iter0__ [__index0__];
+								__accu0__.append (2 * i + 1);
+							}
+							return set (__accu0__);
+						} ();
+						autoTester.check (odd);
+						even.add (12);
+						even.add (12);
+						autoTester.check (even);
+						even.discard (12);
+						even.discard (12);
+						autoTester.check (even);
+						var uni = even.union (odd);
+						autoTester.check (uni);
+						autoTester.check (odd.isdisjoint (even));
+						autoTester.check (uni.isdisjoint (even));
+						autoTester.check (even.issuperset (uni));
+						autoTester.check (uni.issuperset (even));
+						autoTester.check (even.issubset (uni));
+						autoTester.check (uni.issubset (even));
+						var first = new set ([4, 1, 0, 5, 3, 2, 6]);
+						autoTester.check (first);
+						var second = new set ([3, 5, 6, 9, 4, 7, 8]);
+						autoTester.check (second);
+						var inter = first.intersection (second);
+						autoTester.check (inter);
+						var diff = first.difference (second);
+						autoTester.check (diff);
+						var symDiff = first.symmetric_difference (second);
+						autoTester.check (symDiff);
+						var aSet = new set ([200, 4, 5, 100]);
+						aSet.update (first, symDiff, second);
+						autoTester.check (aSet);
+					};
+					__pragma__ ('<all>')
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'simple_and_augmented_assignment', {
 			__all__: {
 				__inited__: false,
@@ -2407,10 +2587,10 @@ function f() { /** ... */ }
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.i = 0;
-						});},
+						}, '__init__');},
 						get f () {return __get__ (this, function (self) {
 							return self.i;
-						});}
+						}, 'f');}
 					});
 					var a = A ();
 					var run = function (autoTester) {
@@ -2526,6 +2706,7 @@ function f() { /** ... */ }
 		var conditional_expressions = {};
 		var control_structures = {};
 		var data_structures = {};
+		var dict_comprehensions = {};
 		var dictionaries = {};
 		var exceptions = {};
 		var general_functions = {};
@@ -2536,6 +2717,7 @@ function f() { /** ... */ }
 		var operator_overloading = {};
 		var org = {};
 		var properties = {};
+		var set_comprehensions = {};
 		var simple_and_augmented_assignment = {};
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
@@ -2544,6 +2726,7 @@ function f() { /** ... */ }
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
 		__nest__ (data_structures, '', __init__ (__world__.data_structures));
+		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
@@ -2553,6 +2736,7 @@ function f() { /** ... */ }
 		__nest__ (modules, '', __init__ (__world__.modules));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
+		__nest__ (set_comprehensions, '', __init__ (__world__.set_comprehensions));
 		__nest__ (simple_and_augmented_assignment, '', __init__ (__world__.simple_and_augmented_assignment));
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
@@ -2561,6 +2745,7 @@ function f() { /** ... */ }
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
 		autoTester.run (data_structures, 'data_structures');
+		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (general_functions, 'general_functions');
@@ -2570,6 +2755,7 @@ function f() { /** ... */ }
 		autoTester.run (modules, 'modules');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
+		autoTester.run (set_comprehensions, 'set_comprehensions');
 		autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment');
 		autoTester.run (tuple_assignment, 'tuple_assignemt');
 		autoTester.done ();
@@ -2579,6 +2765,7 @@ function f() { /** ... */ }
 			'conditional_expressions' +
 			'control_structures' +
 			'data_structures' +
+			'dict_comprehensions' +
 			'dictionaries' +
 			'exceptions' +
 			'general_functions' +
@@ -2589,6 +2776,7 @@ function f() { /** ... */ }
 			'operator_overloading' +
 			'org.transcrypt.autotester' +
 			'properties' +
+			'set_comprehensions' +
 			'simple_and_augmented_assignment' +
 			'tuple_assignment' +
 		'</use>')

@@ -412,27 +412,27 @@ file: Module
 																	attr: str = join
 																	ctx: Load 
 																args: list 
-																	element: ListComp 
-																		elt: Call 
-																			func: Name 
-																				id: str = str
-																				ctx: Load 
-																			args: list 
-																				element: Name 
-																					id: str = item
-																					ctx: Load 
-																			keywords: list 
-																		generators: list 
-																			element: comprehension 
-																				target: Name 
-																					id: str = item
-																					ctx: Store 
-																				iter: Call 
+																	element: Call 
+																		func: Name 
+																			id: str = sorted
+																			ctx: Load 
+																		args: list 
+																			element: ListComp 
+																				elt: Call 
 																					func: Name 
-																						id: str = sorted
+																						id: str = str
 																						ctx: Load 
 																					args: list 
-																						element: Call 
+																						element: Name 
+																							id: str = item
+																							ctx: Load 
+																					keywords: list 
+																				generators: list 
+																					element: comprehension 
+																						target: Name 
+																							id: str = item
+																							ctx: Store 
+																						iter: Call 
 																							func: Name 
 																								id: str = list
 																								ctx: Load 
@@ -441,8 +441,8 @@ file: Module
 																									id: str = any
 																									ctx: Load 
 																							keywords: list 
-																					keywords: list 
-																				ifs: list 
+																						ifs: list 
+																		keywords: list 
 																keywords: list 
 														op: Add 
 														right: Str 

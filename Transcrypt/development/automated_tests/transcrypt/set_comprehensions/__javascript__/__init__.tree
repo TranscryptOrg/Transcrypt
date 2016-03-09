@@ -1,0 +1,572 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = even
+							ctx: Store 
+					value: SetComp 
+						elt: BinOp 
+							left: Num 
+								n: int = 2
+							op: Mult 
+							right: Name 
+								id: str = i
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: List 
+									elts: list 
+										element: Num 
+											n: int = 0
+										element: Num 
+											n: int = 9
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 7
+										element: Num 
+											n: int = 2
+										element: Num 
+											n: int = 8
+										element: Num 
+											n: int = 3
+										element: Num 
+											n: int = 6
+										element: Num 
+											n: int = 4
+										element: Num 
+											n: int = 5
+									ctx: Load 
+								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = even
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = odd
+							ctx: Store 
+					value: SetComp 
+						elt: BinOp 
+							left: BinOp 
+								left: Num 
+									n: int = 2
+								op: Mult 
+								right: Name 
+									id: str = i
+									ctx: Load 
+							op: Add 
+							right: Num 
+								n: int = 1
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: List 
+									elts: list 
+										element: Num 
+											n: int = 5
+										element: Num 
+											n: int = 6
+										element: Num 
+											n: int = 7
+										element: Num 
+											n: int = 8
+										element: Num 
+											n: int = 9
+										element: Num 
+											n: int = 4
+										element: Num 
+											n: int = 3
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 2
+										element: Num 
+											n: int = 0
+									ctx: Load 
+								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = odd
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = even
+								ctx: Load 
+							attr: str = add
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 12
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = even
+								ctx: Load 
+							attr: str = add
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 12
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = even
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = even
+								ctx: Load 
+							attr: str = discard
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 12
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = even
+								ctx: Load 
+							attr: str = discard
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 12
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = even
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = uni
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = even
+								ctx: Load 
+							attr: str = union
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = odd
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = uni
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = odd
+										ctx: Load 
+									attr: str = isdisjoint
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = even
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = uni
+										ctx: Load 
+									attr: str = isdisjoint
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = even
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = even
+										ctx: Load 
+									attr: str = issuperset
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = uni
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = uni
+										ctx: Load 
+									attr: str = issuperset
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = even
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = even
+										ctx: Load 
+									attr: str = issubset
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = uni
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = uni
+										ctx: Load 
+									attr: str = issubset
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = even
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = first
+							ctx: Store 
+					value: Set 
+						elts: list 
+							element: Num 
+								n: int = 4
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: int = 5
+							element: Num 
+								n: int = 3
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 6
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = first
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = second
+							ctx: Store 
+					value: Set 
+						elts: list 
+							element: Num 
+								n: int = 3
+							element: Num 
+								n: int = 5
+							element: Num 
+								n: int = 6
+							element: Num 
+								n: int = 9
+							element: Num 
+								n: int = 4
+							element: Num 
+								n: int = 7
+							element: Num 
+								n: int = 8
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = second
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = inter
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = first
+								ctx: Load 
+							attr: str = intersection
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = second
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = inter
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = diff
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = first
+								ctx: Load 
+							attr: str = difference
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = second
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = diff
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = symDiff
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = first
+								ctx: Load 
+							attr: str = symmetric_difference
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = second
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = symDiff
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aSet
+							ctx: Store 
+					value: Set 
+						elts: list 
+							element: Num 
+								n: int = 200
+							element: Num 
+								n: int = 4
+							element: Num 
+								n: int = 5
+							element: Num 
+								n: int = 100
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = aSet
+								ctx: Load 
+							attr: str = update
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = first
+								ctx: Load 
+							element: Name 
+								id: str = symDiff
+								ctx: Load 
+							element: Name 
+								id: str = second
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aSet
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

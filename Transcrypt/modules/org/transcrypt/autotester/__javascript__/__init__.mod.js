@@ -62,15 +62,15 @@
 							else {
 								if (type (any) == set) {
 									if (len (any)) {
-										return '{' + ', '.join (function () {
+										return '{' + ', '.join (sorted (function () {
 											var __accu0__ = [];
-											var __iter0__ = sorted (list (any));
+											var __iter0__ = list (any);
 											for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 												var item = __iter0__ [__index0__];
 												__accu0__.append (str (item));
 											}
 											return __accu0__;
-										} ()) + '}';
+										} ())) + '}';
 									}
 									else {
 										return repr (any);
