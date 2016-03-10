@@ -11,9 +11,8 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 Request to early adopters
 =========================
 
-Transcrypt is in Alpha now!
-As you may have already discovered, it is lean, fast, generates highly readable JavaScript, covers most of Python, including stuff like multiple inheritance, properties, tuple assignment, \*\*kwargs and \*args, and it cooperates seamlessly with any JavaScript library.
-The first version will be 3.5, not for marketing reasons, but to make clear what is the matching version of CPython.
+As you may have already discovered, Transcrypt is lean, fast, generates highly readable JavaScript, covers most of Python, including multiple inheritance, properties, tuple assignment, \*\*kwargs, \*args and selective operator overloading, and it cooperates seamlessly with any JavaScript library.
+The first version is 3.5, not for marketing reasons, but to make clear what is the matching version of CPython.
 
 While work on Transcrypt will continue, what's most important now for Transcrypt to become a permanent, well-maintained asset for the programmer community is mindshare!
 This can only be achieved with your help.
@@ -37,106 +36,37 @@ Jacques de Hooge, Rotterdam, Netherlands
 Documentation with code examples and forum
 ==========================================
 
-Take a look at the growing documentation with code examples at the Transcrypt website: http://www.transcrypt.org
+Take a look at the documentation with code examples at the Transcrypt website: http://www.transcrypt.org
 Some people have contacted me personally with 'howto' questions and feature requests. While that's quite alright, if you want others to benefit from the answers, use the forum: http://transcrypt.boards.net .
 
 Status
 ======
 
-- MANY THINGS HAVE BEEN ADDED THAT SURPASS THE ORIGINAL GOALS, all with the "lean and mean" credo in mind: fastcalls, optional local operator overloading and static checks.
-- The fabric.js library has been encapsulated as a Transcrypt module. Seamless JavaScript integration is a fact now.
-- Working Pong example added to http://www.transcrypt.org and to the distribution.
-- ALL THE PLANNED FEATURES ARE NOW AVAILABLE. Those were: functions incl. lambda's, classes, multiple inheritance, dynamic typing, tuples, lists incl. comprehensions, properties, dicts, sets, modules. But there's a lot more (see docs). Development of Transcrypt has gone much faster than anticipated. Automated back-to-back regression testing with CPython has proven of key value. If new features are added, establishing that nothing has fallen over is a matter of seconds. This will allow Transcrypt to keep up with developments in the future. While Transcrypt still alpha, it's almost ready to occupy its niche between PyJs, Py2Js, RapydScript, Brython, Flexx, PyPyJs or any similar excellent projects.
+Transcrypt is in Beta now.
+This means that the core is considered feature complete for the first release and has rather well tested, although omissions and bugs may still surface.
+It can be safely said that at this moment Transcrypt is already an attractive alternative for writing JavaScript code in a professional setting.
+The Beta status will be maintained for some time to allow for feedback and ironning out the last wrinkles.
+Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt
 
 What's new
 ==========
 
-- Added pip install for Windows and Linux
-- Docs updated
-- Transcrypt modules can now be stored also in CPYthon's sitepackages directory
-- Dict omissions and bugs fixed and added to autotest, .gitignore recovered
-- Overloading of () added + test
-- Optional overloading of [] enabled, doc updated, tests added
-- Doc update, operator overloading and sort/sorted examples added
-- Optional operator overloading added, -o (--opov) option, __pragma__ ('opov') and __pragma__ ('noopov'), currently supporting * / + - @ (MatMult). USE ONLY LOCALLY in Matrix/vector intensive code parts to maintain performance. The commandline switch I'd never use, but alas, it's there for symetry reasons. Testcases added.
-- -c (--check) option added, triggering static source code checks by PyFlakes, that's included in the distribution and automatically invoked
-- __pragma__ ('skip') and __pragma__ ('noskip') added to skip code generation for certain fragments
-- -j (--jskeys) option added. Normally in Python {key: 'value'} and {keyfunc (): 'value'} are allowed, and the keys are dynamically evaluated. JS programmers are used to {key, 'value'} being interpreted as {'key': 'value'} and {keyfunc (): 'value'} being forbidden. The Python interpretation is preferred, since its more flexible. If you cherish your JS habits, use the --jskeys switch. Note that this has no influence on compatibility with 3rd party JS libs.
-- FastCall (fcall) command line switch, __pragma__ ('fcall') and __pragma__ ('nofcall') added. When this switch is on, Transcrypt will bind methods directly to objects rather than to prototypes somewhere up in the class hierarchy, surpassing native JavaScript speed in many cases, since no travelling of the prototype chain is needed. Since a reference to the bound method is stored in each object of that class, the most efficient thing to do is to reserve its use for functions that are called in inner loops, achieving for lightning fast code with negligeable space overhead. The fcall mechanism has no semantical or syntactical consequences, the syntax remains pure Python.
-- Linux startup script added (I hope). It doesn't have an extension, but \*. didn't work, I hope \* does...
-- Startup batches / scripts were missing, added to distro.
-- Transcrypt can now also run without minification, in case you can't or won't install Java. -n switch, see docs.
-- Simple beginning of a shipment test added, both for Linux and Windows
-- Docs adapted, identifier filtering replaced by identifier aliasing
-- Python sort is now a method as it should be, thanks to id aliasing
-- __pragma__ ('alias') functionality expanded, __pragma__ ('noalias') added. NB: Not backwards compatible
-- Twitter account opened for notification of new versions (see http://www.transcrypt.org)
-- Documentation improved on several points.
-- Everything tested under Linux as well.
-- Linux support added. Installation and behaviour under Windows and Linux is identical.
-- Several bugs fixed, e.g. <aString>.format (\*args)
-- Simple jQuery example added
-- __pragma__ ('alias', ...) added, e.g. to generate $ from S or jq
-- __pragma__ ('js', ...) improved
-- Css files etc. for docu included
-- Error reporting improved, module import bug fixed (-b was needed first)
-- Docs improved, 'hello' example added showing HTML - JavaScript - Python cooperation in a nutshell
-- Early adopter request added
-- Properties, including tuple assignment: x, y, z = property (getX, setY), property (getY, setY), property (getZ, setZ)
-- Forum online
-- Docs adapted
-- Pong example added
-- Minification fixed
-- List comprehension tuple assignment bug fixed (pfff ** 2)
-- fabric.js graphis module added
-- Many bug fixes
-- Autotest output (active, using autotest.js) added to www.transcrypt.org
-- __pragma__ ('kwargs') and __pragma__ ('nokwargs') added + -kwargs command line argument
-- \*\*kwargs bug fixed
-- \*args, \*\*kwargs, default values both def time and call time completed + testcase + docs
-- \*args, \*\*kwargs, default values a la Python 3.5, partially finished + testcase + docs
-- Lambda functions + testcase + docs
-- Conditional expressions finished + testcase + docs
-- Minification added using Google's closure compiler, included in distro and run automatically
-- Exceptions added + autotest + docs
-- Function inheritance bug fixed (ooops...)
-- Autotest output example added to docs
-- Docs adapted
-- +=, -=, \*= etc., optimized towards ++ and --, autotest added
-- For...else, while...else..., break, continue completed, autotest added
-- Import ... as, from ... import and from ... import as ... added, autotest augmented
-- Transcript.org website dressed up a little
-- Basic and extended slices, both LHS (pfff...) and RHS, testlet for those, docs adapted
-- Many string methods added
-- Autotests added for listcomps and nested tuple assignment
-- Autotester slightly improved
-- Nested multi-loop list comprehensions
-- Working autotester + first start of regression test set
-- First start of documentation
-- Some datastructures and members
-- Some work done on zip, enumerate and stuff like that
-- Some operators
-- Recursive tuple assignment (pfff...)
-- Manual tests added in interactive_tests  subdir
-- A simple start made with an autotest/regressiontest feature. This will REALLY be needed! But Transcrypt first needs to be able to support it...
-- Transpiler core
+Core is feature complete for first release.
+Status moved to Beta.
 
 Known restrictions
 ==================
 
-- No standard libs, use or encapsulate the JS ones, that's part of the concept. Some may be ported though.
-- Not all methods of builtin types are there by default. This is deliberately to keep Transcrypt lean. Such things can be distributed in separate libs.
-- No set or dict comprehensions yet. Should be easy but low priority.
-- No eval and exec (will stay that way, with minor exceptions)
-- No threading of any kind. Will probably stay that way as long as JS doesn't properly support that.
-- No operator overloading. May be added, but low priority
-- _name doesn't mean private in any way
-- No iterator, generator, xrange stuff. Maybe in the future if JS becomes better at that kind of things
+- No standard libs, use or encapsulate the JavaScript ones, that's part of the concept. Some may be ported though.
+- Not all methods of builtin types are there by default. This results from a deliberate choice to keep Transcrypt lean. Such things can be distributed in separate libs.
+- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads.
+- No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
+- No iterator, generator, xrange stuff. Maybe in the future if a broadly installed version of JavaScript has become better at that type of thing.
 
 Known bugs
 ==========
 
-- \*\*kwargs lack keys () method, will be added
+- None.
 
 Readability
 ===========

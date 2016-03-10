@@ -1314,11 +1314,12 @@ class Generator (ast.NodeVisitor):
 		self.indent ()
 		self.emit ('var {} = [];\n', self.nextTemp ('accu'))
 		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
-		self.emit ('return {}{}{};\n'.format (
+		self.emit (
+			'return {}{}{};\n',
 			'set (' if isSet else 'dict (' if isDict else '',
 			self.getTemp ('accu'),
 			')' if isSet or isDict else ''		
-		))
+		)
 		self.prevTemp ('accu')
 		self.dedent ()
 		self.skipSemiNew = False	# Was still True since the outer for wasn't visited as part of a Body 

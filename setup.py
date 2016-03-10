@@ -31,10 +31,10 @@ setup (
 	},
 	include_package_data = True,
 	classifiers = [
-		'Development Status :: 3 - Alpha',
+		'Development Status :: 4 - Beta',
 		'Intended Audience :: Developers',
 		'Natural Language :: English',
-		'License :: Other/Proprietary License',
+		'License :: OSI Approved :: Apache Software License',
 		'Topic :: Software Development :: Libraries :: Python Modules',
 		'Operating System :: OS Independent',
 		'Programming Language :: Python :: 3.5',
