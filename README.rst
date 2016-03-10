@@ -36,23 +36,23 @@ Jacques de Hooge, Rotterdam, Netherlands
 Documentation with code examples and forum
 ==========================================
 
-Take a look at the documentation with code examples at the Transcrypt website: http://www.transcrypt.org
+Take a look at the documentation with code examples at the Transcrypt website: http://www.transcrypt.org .
 Some people have contacted me personally with 'howto' questions and feature requests. While that's quite alright, if you want others to benefit from the answers, use the forum: http://transcrypt.boards.net .
 
 Status
 ======
 
 Transcrypt is in Beta now.
-This means that the core is considered feature complete for the first release and has rather well tested, although omissions and bugs may still surface.
+This means that the core is considered feature complete for the first release and has been rather well tested, although omissions and bugs may still surface.
 It can be safely said that at this moment Transcrypt is already an attractive alternative for writing JavaScript code in a professional setting.
 The Beta status will be maintained for some time to allow for feedback and ironning out the last wrinkles.
-Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt
+Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 
 What's new
 ==========
 
-Core is feature complete for first release.
-Status moved to Beta.
+- Core is feature complete for first release.
+- Status moved to Beta.
 
 Known restrictions
 ==================
@@ -61,7 +61,7 @@ Known restrictions
 - Not all methods of builtin types are there by default. This results from a deliberate choice to keep Transcrypt lean. Such things can be distributed in separate libs.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads.
 - No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
-- No iterator, generator, xrange stuff. Maybe in the future if a broadly installed version of JavaScript has become better at that type of thing.
+- No iterator, generator, xrange stuff. Maybe in the future if a broadly installed version of JavaScript suppports it.
 
 Known bugs
 ==========
