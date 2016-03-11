@@ -281,7 +281,13 @@ class Module:
 		
 		with utils.create (self.metadata.targetPath) as targetFile:
 			targetFile.write (self.targetCode)
-			
+	
+class Scope:
+	def __init__ (self, node):
+		self.node = node
+		self.globals = set ()
+		self.nonlocals = set ()
+	
 class Generator (ast.NodeVisitor):
 	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 	
@@ -422,21 +428,20 @@ class Generator (ast.NodeVisitor):
 	def dedent (self):
 		self.indentLevel -= 1
 		
-	def inscope (self, scope):
-		self.scopes.append (scope)
+	def inscope (self, node):
+		self.scopes.append (Scope (node))
 		
 	def descope (self):
 		self.scopes.pop ()
 		
-	def getscope (self, scopeType = None):
-		if scopeType:
+	def getscope (self, nodeType = None):
+		if nodeType:
 			for scope in reversed (self.scopes):
-				if type (scope) == scopeType:
+				if type (scope.node) == nodeType:
 					return scope
 		else:
 			return self.scopes [-1]
-
-		
+			
 	def emitComma (self, index, blank = True):
 		if index:
 			self.emit (', ' if blank else ',')
@@ -677,16 +682,19 @@ class Generator (ast.NodeVisitor):
 					)
 			else:
 				if isPropertyAssign and not target.id == self.getTemp ('left'):
-					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .name, target.id))
+					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .node.name, target.id))
 					self.visit (value)
 					emitPathIndices ()
 					self.emit (');')
 				else:
 					if type (target) == ast.Name:
-						if type (self.getscope ()) == ast.ClassDef and target.id != self.getTemp ('left'):
-							self.emit ('{}.'.format (self.getscope () .name))	# The target is an attribute
+						if type (self.getscope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
+							self.emit ('{}.'.format (self.getscope () .node.name))	# The target is an attribute
 						else:
-							self.emit ('var ')
+							if target.id in self.getscope () .nonlocals or target.id in self.getscope () .globals:
+								self.emit ('')
+							else:
+								self.emit ('var ')
 							
 					self.visit (target)
 					self.emit (' = ')
@@ -722,7 +730,7 @@ class Generator (ast.NodeVisitor):
 				except:	# At this point it wasn't a property and also not a tuple or a list of properties
 					return False
 
-		isPropertyAssign = type (self.getscope ()) == ast.ClassDef and getIsPropertyAssign (node.value)
+		isPropertyAssign = type (self.getscope () .node) == ast.ClassDef and getIsPropertyAssign (node.value)
 		# In transpiling to efficient JavaScript, we need a special, simplified case for properties
 		# In JavaScript generating '=' for properties won't do, it has to be 'Object.defineProperty'
 		# We can't look out for property installation at runtime, that would make all assignments slow
@@ -870,9 +878,9 @@ class Generator (ast.NodeVisitor):
 				
 		if type (node.func) == ast.Name:
 			if node.func.id == 'property':
-				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getscope (ast.ClassDef) .name, node.args [0].id))
+				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getscope (ast.ClassDef) .node.name, node.args [0].id))
 				if len (node.args) > 1:
-					self.emit (', {}.{}'.format (self.getscope (ast.ClassDef) .name, node.args [1].id))
+					self.emit (', {}.{}'.format (self.getscope (ast.ClassDef) .node.name, node.args [1].id))
 				self.emit (')')
 				return
 			elif node.func.id == '__pragma__':
@@ -977,7 +985,7 @@ class Generator (ast.NodeVisitor):
 	def visit_ClassDef (self, node):
 		self.skipSemiNew = False
 
-		if type (self.getscope ()) == ast.Module:
+		if type (self.getscope () .node) == ast.Module:
 			self.all.add (node.name)
 
 		self.emit ('var {0} = __class__ (\'{0}\', [', self.filterId (node.name))
@@ -1139,8 +1147,8 @@ class Generator (ast.NodeVisitor):
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
 											# The rest of its use is only at compile time at compile time
 			self.skipSemiNew = False			
-			if type (self.getscope ()) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
-				if type (self.getscope ()) == ast.Module:
+			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
+				if type (self.getscope () .node) == ast.Module:
 					self.all.add (node.name)
 				self.emit ('var {} = function ', self.filterId (node.name))
 				self.visit (node.args)
@@ -1157,6 +1165,10 @@ class Generator (ast.NodeVisitor):
 					
 				self.emit (');}}')
 			self.skipSemiNew = False			
+		
+	def visit_Global (self, node):
+		self.getscope (ast.FunctionDef) .globals.update ([name for name in node.names])
+		self.skipSemiNew = True
 		
 	def visit_If (self, node):
 		self.emit ('if (')
@@ -1389,13 +1401,17 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_Name (self, node):	
 		if type (node.ctx) == ast.Store:
-			if type (self.getscope ()) == ast.Module:
+			if type (self.getscope () .node) == ast.Module:
 				self.all.add (node.id)
 				
 		self.emit (self.filterId (node.id))
 		
 	def visit_NameConstant (self, node):
 		self.emit (self.nameConsts [node.value])
+		
+	def visit_Nonlocal (self, node):
+		self.getscope (ast.FunctionDef) .nonlocals.update ([name for name in node.names])
+		self.skipSemiNew = True
 		
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)

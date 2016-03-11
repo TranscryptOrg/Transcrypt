@@ -51,6 +51,8 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Fix for missing getsitepackages () of virtualenv, tested.
+- Fix for missing global and nonlocal, only partially tested.
 - Core is feature complete for first release.
 - Status moved to Beta.
 
@@ -66,7 +68,7 @@ Known restrictions
 Known bugs
 ==========
 
-- None.
+- Keywords 'global' and 'nonlocal' insufficiently tested 
 
 Readability
 ===========

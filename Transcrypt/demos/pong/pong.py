@@ -141,7 +141,7 @@ class Ball (Sprite):
 		elif self.x > orthoWidth // 2:
 			self.game.scored (0)
 			
-		if self.y > fieldHeight // 2:	# If it hit top wall
+		if self.y > fieldHeight // 2:	# If it hits top wall
 			self.y = fieldHeight // 2	#	It may have gone too far already
 			self.vY = -self.vY			#	Bounce
 		elif self.y < -fieldHeight // 2:

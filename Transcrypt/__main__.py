@@ -60,7 +60,15 @@ def main ():
 			)
 	else:
 		try:
-			compiler.Program ([programDir, modulesDir] + [sitepackagesDir.replace ('\\', '/') for sitepackagesDir in site.getsitepackages ()])
+			sitepackagesDirs = site.getsitepackages ()
+		except:	# Omission in virtualenv, doesn't know getsitepackages
+			try:
+				sitepackagesDirs = [os.path.dirname (site.__file__) + '/site-packages']
+			except:	# Graceful degradation, cater for the unknown
+				sitepackagesDirs = []
+			
+		try:
+			compiler.Program ([programDir, modulesDir] + [sitepackagesDir.replace ('\\', '/') for sitepackagesDir in sitepackagesDirs])
 		except utils.Error as error:
 			utils.log (True, '\n{}\n', error)
 			
