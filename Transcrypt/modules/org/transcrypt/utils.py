@@ -3,7 +3,7 @@ import sys
 import argparse
 import inspect
 
-debug = True
+debug = False
 
 class CommandArgs:		
 	def parse (self):

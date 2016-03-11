@@ -285,7 +285,6 @@ class Module:
 class Scope:
 	def __init__ (self, node):
 		self.node = node
-		self.globals = set ()
 		self.nonlocals = set ()
 	
 class Generator (ast.NodeVisitor):
@@ -690,11 +689,10 @@ class Generator (ast.NodeVisitor):
 					if type (target) == ast.Name:
 						if type (self.getscope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
 							self.emit ('{}.'.format (self.getscope () .node.name))	# The target is an attribute
+						elif target.id in self.getscope () .nonlocals:
+							pass
 						else:
-							if target.id in self.getscope () .nonlocals or target.id in self.getscope () .globals:
-								self.emit ('')
-							else:
-								self.emit ('var ')
+							self.emit ('var ')
 							
 					self.visit (target)
 					self.emit (' = ')
@@ -1167,8 +1165,11 @@ class Generator (ast.NodeVisitor):
 			self.skipSemiNew = False			
 		
 	def visit_Global (self, node):
-		self.getscope (ast.FunctionDef) .globals.update ([name for name in node.names])
-		self.skipSemiNew = True
+		raise utils.Error (
+			moduleName = self.module.metadata.name,
+			lineNr = self.lineNr,
+			message = 'Keyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
+		)
 		
 	def visit_If (self, node):
 		self.emit ('if (')
@@ -1410,9 +1411,9 @@ class Generator (ast.NodeVisitor):
 		self.emit (self.nameConsts [node.value])
 		
 	def visit_Nonlocal (self, node):
-		self.getscope (ast.FunctionDef) .nonlocals.update ([name for name in node.names])
+		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
 		self.skipSemiNew = True
-		
+
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)
 		

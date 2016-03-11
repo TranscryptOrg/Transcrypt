@@ -13,6 +13,7 @@ import indices_and_slices
 import lambda_functions
 import list_comprehensions
 import modules
+import nonlocals
 import operator_overloading
 import properties
 import set_comprehensions
@@ -34,6 +35,7 @@ autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
 autoTester.run (modules, 'modules')
+autoTester.run (nonlocals, 'nonlocals')
 autoTester.run (operator_overloading, 'operator_overloading')
 autoTester.run (properties, 'properties')
 autoTester.run (set_comprehensions, 'set_comprehensions')

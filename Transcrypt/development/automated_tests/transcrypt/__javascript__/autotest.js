@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-11 12:05:56
+// Transcrypt'ed from Python, 2016-03-11 19:15:16
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.115';
+							self.transpilerVersion = '3.5.116';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -2045,6 +2045,30 @@ function f() { /** ... */ }
 	);
 	__nest__ (
 		__all__,
+		'nonlocals', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var run = function (autoTester) {
+						var test1 = 1;
+						var test2 = 2;
+						var f = function () {
+							var test1 = 10;
+							test2 = 20;
+							autoTester.check (test1, test2);
+						};
+						f ();
+						autoTester.check (test1, test2);
+					};
+					__pragma__ ('<all>')
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'operator_overloading', {
 			__all__: {
 				__inited__: false,
@@ -2714,6 +2738,7 @@ function f() { /** ... */ }
 		var lambda_functions = {};
 		var list_comprehensions = {};
 		var modules = {};
+		var nonlocals = {};
 		var operator_overloading = {};
 		var org = {};
 		var properties = {};
@@ -2734,6 +2759,7 @@ function f() { /** ... */ }
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (nonlocals, '', __init__ (__world__.nonlocals));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
 		__nest__ (set_comprehensions, '', __init__ (__world__.set_comprehensions));
@@ -2753,6 +2779,7 @@ function f() { /** ... */ }
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (nonlocals, 'nonlocals');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
 		autoTester.run (set_comprehensions, 'set_comprehensions');
@@ -2773,6 +2800,7 @@ function f() { /** ... */ }
 			'lambda_functions' +
 			'list_comprehensions' +
 			'modules' +
+			'nonlocals' +
 			'operator_overloading' +
 			'org.transcrypt.autotester' +
 			'properties' +

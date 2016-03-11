@@ -12,6 +12,7 @@
 		var lambda_functions = {};
 		var list_comprehensions = {};
 		var modules = {};
+		var nonlocals = {};
 		var operator_overloading = {};
 		var org = {};
 		var properties = {};
@@ -32,6 +33,7 @@
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (nonlocals, '', __init__ (__world__.nonlocals));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
 		__nest__ (set_comprehensions, '', __init__ (__world__.set_comprehensions));
@@ -51,6 +53,7 @@
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (nonlocals, 'nonlocals');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
 		autoTester.run (set_comprehensions, 'set_comprehensions');
@@ -71,6 +74,7 @@
 			'lambda_functions' +
 			'list_comprehensions' +
 			'modules' +
+			'nonlocals' +
 			'operator_overloading' +
 			'org.transcrypt.autotester' +
 			'properties' +
