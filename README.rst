@@ -51,7 +51,8 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
-- Missing com.fabricjs module added
+- 'nonlocal' implemented + testcase.
+- Missing com.fabricjs module added.
 - Fix for missing getsitepackages () of virtualenv, tested.
 - Fix for missing global and nonlocal, only partially tested.
 - Core is feature complete for first release.
@@ -69,7 +70,7 @@ Known restrictions
 Known bugs
 ==========
 
-- Keywords 'global' and 'nonlocal' insufficiently tested 
+- None
 
 Readability
 ===========
