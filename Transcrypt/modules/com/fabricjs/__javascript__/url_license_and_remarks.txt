@@ -1,0 +1,9 @@
+Site: http://www.fabricjs.com
+License at: https://github.com/kangax/fabric.js/blob/master/LICENSE
+
+You can drop-in replace fabric.js by another custom build, including more features. You can use those new features directly from Transcrypt.
+
+Interaction needs to be included in the (dev) download, otherwise canvas will be missing.
+Look for !!! in this modified copy of fabric.js to find a fix for a warning from Google's closure compiler.
+
+

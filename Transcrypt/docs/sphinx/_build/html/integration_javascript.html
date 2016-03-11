@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.114 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.115 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.114',
+        VERSION:     '3.5.115',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.114 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.115 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.114 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.115 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,6 +60,23 @@
 <li>The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without</li>
 </ol>
 <p>In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.</p>
+<div class="literal-block-wrapper container" id="the-encapsulation-layer-for-fabric-js">
+<span id="code-encaps-fabric"></span><div class="code-block-caption"><span class="caption-text">The encapsulation layer for fabric.js</span><a class="headerlink" href="#the-encapsulation-layer-for-fabric-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fabric</span> <span class="o">=</span> <span class="n">__pragma__</span> <span class="p">(</span>
+    <span class="s">&#39;js&#39;</span><span class="p">,</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        (function () {{</span>
+<span class="sd">            var exports = {{}};</span>
+<span class="sd">            {}  // Puts fabric in exports and in global window</span>
+<span class="sd">            delete window.fabric;</span>
+<span class="sd">            return exports;</span>
+<span class="sd">        }}) () .fabric;</span>
+<span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
+    <span class="n">__include__</span> <span class="p">(</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <p>Note that __pragma__ (&#8216;js&#8217;, &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replaces the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
 </div>
 <div class="section" id="integration-example-pong">
@@ -836,7 +853,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.114 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.115 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
