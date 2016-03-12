@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.117 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.118 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.117',
+        VERSION:     '3.5.118',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.117 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.118 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.117 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.118 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -183,14 +183,20 @@ They are specified in the source code of Transcrypt as follows:</p>
 
         <span class="k">global</span> <span class="n">extraLines</span>
         <span class="n">extraLines</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s">&#39;def __pragma__ (): pass&#39;</span><span class="p">,</span>  <span class="c">#  __pragma__ (&#39;&lt;all&gt;&#39;) in JavaScript requires it to remain a function</span>
-            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">skip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>    <span class="c"># Here __pragma__ must already be a known name for the static_check</span>
-            <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>
+            <span class="c"># Make identifier __pragma__ known to static checker</span>
+            <span class="c"># It was only known in JavaScript from __core__.mod.js, which the checker doesn&#39;t see</span>
+            <span class="c"># __pragma__ (&#39;&lt;all&gt;&#39;) in JavaScript requires it to remain a function, as it was in the core</span>
+            <span class="c"># It can&#39;t be skipped, since it has to precede __pragma__ (&#39;skip&#39;), to make the checker accept that</span>
+            <span class="s">&#39;def __pragma__ (): pass&#39;</span><span class="p">,</span>
+        
+            <span class="c"># Make __include__ known to the static checker</span>
+            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">skip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>            
+            <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>    
             <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">noskip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>
             <span class="s">&#39;&#39;</span>
         <span class="p">]</span> <span class="k">if</span> <span class="n">commandArgs</span><span class="o">.</span><span class="n">check</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">global</span> <span class="n">nrOfExtraLines</span>
-        <span class="n">nrOfExtraLines</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Last line only to force linefeed</span>
+        <span class="n">nrOfExtraLines</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Last line only serves to force linefeed</span>
         <span class="n">extraLines</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -263,7 +269,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.117 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.118 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -2,9 +2,9 @@
 # It is included after the __builtin__ module, since it uses its facilities
 # In Transcrypt, __standard__ is available inline, it isn't nested and cannot be imported in the normal way
 
-#__pragma__ ('skip')
-#copy = 0
-#__pragma__ ('noskip')
+__pragma__ ('skip')
+copy = 0
+__pragma__ ('noskip')
 
 from org.transcrypt.stubs.browser import __pragma__
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.117 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.118 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.117',
+        VERSION:     '3.5.118',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.117 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.118 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.117 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.118 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -377,8 +377,6 @@
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        ;
-        ;
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -398,10 +396,13 @@
                 self.commit ();
             });},
             get predict () {return __get__ (this, function (self) {
+                /* pass */;
             });},
             get interact () {return __get__ (this, function (self) {
+                /* pass */;
             });},
             get commit () {return __get__ (this, function (self) {
+                /* pass */;
             });}
         });
         var Sprite = __class__ (&#39;Sprite&#39;, [Attribute], {
@@ -674,6 +675,7 @@
                 }
             });},
             get resize () {return __get__ (this, function (self, width, height) {
+                /* pass */;
             });},
             get scaleX () {return __get__ (this, function (self, x) {
                 return x * self.canvas.width / orthoWidth;
@@ -853,7 +855,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.117 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.118 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

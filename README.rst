@@ -51,6 +51,8 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Python 'pass' statement now translates to /\* pass \*/
+- Superfluous semicolons removed when in static_check mode
 - 'nonlocal' implemented + testcase.
 - Missing com.fabricjs module added.
 - Fix for missing getsitepackages () of virtualenv, tested.

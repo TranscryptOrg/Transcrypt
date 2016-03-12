@@ -30,14 +30,20 @@ class CommandArgs:
 
 		global extraLines
 		extraLines = [
-			'def __pragma__ (): pass',	#  __pragma__ ('<all>') in JavaScript requires it to remain a function
-			'__pragma__ (\'skip\')',	# Here __pragma__ must already be a known name for the static_check
-			'__new__ = __include__ = 0',
+			# Make identifier __pragma__ known to static checker
+			# It was only known in JavaScript from __core__.mod.js, which the checker doesn't see
+			# __pragma__ ('<all>') in JavaScript requires it to remain a function, as it was in the core
+			# It can't be skipped, since it has to precede __pragma__ ('skip'), to make the checker accept that
+			'def __pragma__ (): pass',
+		
+			# Make __include__ known to the static checker
+			'__pragma__ (\'skip\')',			
+			'__new__ = __include__ = 0',	
 			'__pragma__ (\'noskip\')',
 			''
 		] if commandArgs.check else []
 		global nrOfExtraLines
-		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only to force linefeed
+		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only serves to force linefeed
 		extraLines = '\n'.join (extraLines)
 				
 commandArgs = CommandArgs ()

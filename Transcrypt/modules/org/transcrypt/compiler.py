@@ -220,16 +220,6 @@ class Module:
 			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
 			if word.startswith ('.')
 		]))
-
-		extraLines = [
-			'__pragma__ = 0',			# No code will be emitted for pragma's anyhow
-			'__pragma__ (\'skip\')',	# Here __pragma__ must already be a known name for the static_check
-			'__new__ = __include__ = 0',
-			'__pragma__ (\'noskip\')'
-			''
-		] if utils.commandArgs else []
-		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only to force linefeed
-		extraLines = '\n'.join (extraLines)
 		
 	def parse (self):
 		try:
@@ -279,6 +269,8 @@ class Module:
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 		self.targetCode = ''.join (Generator (self) .targetFragments)
 		
+		self.targetCode = '\n'.join ([line for line in self.targetCode.split ('\n') if line.strip () != ';'])
+		
 		with utils.create (self.metadata.targetPath) as targetFile:
 			targetFile.write (self.targetCode)
 	
@@ -294,7 +286,6 @@ class Generator (ast.NodeVisitor):
 		self.module = module
 		
 		self.targetFragments = []		
-		self.skipSemiNew = False
 		self.indentLevel = 0
 		self.scopes = []
 		self.use = set ()
@@ -448,10 +439,7 @@ class Generator (ast.NodeVisitor):
 	def emitBody (self, body):
 		for stmt in body:
 			self.visit (stmt)
-			if self.skipSemiNew:	# No imports here, but just to be sure for the future
-				self.skipSemiNew = False
-			else:
-				self.emit (';\n')
+			self.emit (';\n')
 				
 	def nextTemp (self, name):
 		if name in self.tempIndices:
@@ -882,7 +870,6 @@ class Generator (ast.NodeVisitor):
 				self.emit (')')
 				return
 			elif node.func.id == '__pragma__':
-				self.skipSemiNew = True
 				if node.args [0] .s == 'alias':
 					self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
 				elif node.args [0] .s == 'noalias':
@@ -981,8 +968,6 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
-		self.skipSemiNew = False
-
 		if type (self.getscope () .node) == ast.Module:
 			self.all.add (node.name)
 
@@ -1020,7 +1005,6 @@ class Generator (ast.NodeVisitor):
 			self.visit (classVarAssign)
 
 		self.descope ()	# No earlier, class vars need it
-		self.skipSemiNew = False
 		
 	def visit_Compare (self, node):
 		if len (node.comparators) > 1:
@@ -1055,7 +1039,6 @@ class Generator (ast.NodeVisitor):
 			self.emit ('delete ')
 			self.visit (expr)
 			self.emit (';\n')
-			self.skipSemiNew = True
 	
 	def visit_Dict (self, node):
 		if not utils.commandArgs.jskeys:
@@ -1129,8 +1112,6 @@ class Generator (ast.NodeVisitor):
 			
 			self.emit ('}}\n')
 			
-		self.skipSemiNew = True
-			
 		self.prevTemp ('index')
 		self.prevTemp ('iter')
 		
@@ -1143,8 +1124,7 @@ class Generator (ast.NodeVisitor):
 
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
-											# The rest of its use is only at compile time at compile time
-			self.skipSemiNew = False			
+											# The rest of its use is only at compile time at compile time			
 			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getscope () .node) == ast.Module:
 					self.all.add (node.name)
@@ -1161,8 +1141,7 @@ class Generator (ast.NodeVisitor):
 				if self.memoizeCalls:
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
-				self.emit (');}}')
-			self.skipSemiNew = False			
+				self.emit (');}}')		
 		
 	def visit_Global (self, node):
 		raise utils.Error (
@@ -1188,8 +1167,6 @@ class Generator (ast.NodeVisitor):
 			self.emitBody (node.orelse)
 			self.dedent ()
 			self.emit ('}}\n')
-			
-		self.skipSemiNew = True
 		
 	def visit_IfExp (self, node):
 		self.emit ('(')
@@ -1204,7 +1181,6 @@ class Generator (ast.NodeVisitor):
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
-			self.skipSemiNew = True
 			return
 		
 		for index, alias in enumerate (names):
@@ -1228,7 +1204,6 @@ class Generator (ast.NodeVisitor):
 				
 	def visit_ImportFrom (self, node):	# From .. import can import modules or entities in modules
 		if node.module.startswith (self.stubsName):
-			self.skipSemiNew = True 
 			return
 		
 		try:			
@@ -1335,7 +1310,6 @@ class Generator (ast.NodeVisitor):
 		)
 		self.prevTemp ('accu')
 		self.dedent ()
-		self.skipSemiNew = False	# Was still True since the outer for wasn't visited as part of a Body 
 		self.descope ()
 		self.emit ('}} ()')
 		
@@ -1412,13 +1386,12 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_Nonlocal (self, node):
 		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
-		self.skipSemiNew = True
 
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)
 		
 	def visit_Pass (self, node):
-		self.skipSemiNew = True
+		self.emit ('/* pass */')
 		
 	def visit_Raise (self, node):
 		self.emit ('__except__ = ') 
@@ -1544,8 +1517,6 @@ class Generator (ast.NodeVisitor):
 			self.emit ('finally {{')
 			self.emitBody (node.finalbody)
 			self.emit ('}}\n')
-			
-		self.skipSemiNew = True
 		
 	def visit_Tuple (self, node):
 		self.emit ('tuple (')
@@ -1579,8 +1550,6 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			
 			self.emit ('}}\n')
-			
-		self.skipSemiNew = True
 		
 	def visit_With (self, node):	
 		for withitem in node.items:

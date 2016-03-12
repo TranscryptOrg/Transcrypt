@@ -1,6 +1,4 @@
 	(function () {
-		;
-		;
 		var fabric = __init__ (__world__.com.fabricjs).fabric;
 		var orthoWidth = 1000;
 		var orthoHeight = 750;
@@ -20,10 +18,13 @@
 				self.commit ();
 			});},
 			get predict () {return __get__ (this, function (self) {
+				/* pass */;
 			});},
 			get interact () {return __get__ (this, function (self) {
+				/* pass */;
 			});},
 			get commit () {return __get__ (this, function (self) {
+				/* pass */;
 			});}
 		});
 		var Sprite = __class__ ('Sprite', [Attribute], {
@@ -296,6 +297,7 @@
 				}
 			});},
 			get resize () {return __get__ (this, function (self, width, height) {
+				/* pass */;
 			});},
 			get scaleX () {return __get__ (this, function (self, x) {
 				return x * self.canvas.width / orthoWidth;

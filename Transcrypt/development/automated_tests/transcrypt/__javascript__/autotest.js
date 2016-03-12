@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-11 19:15:16
+// Transcrypt'ed from Python, 2016-03-12 13:37:25
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.116';
+							self.transpilerVersion = '3.5.117';
 							self.targetSubDir = '__javascript__';
 						});}
 					});

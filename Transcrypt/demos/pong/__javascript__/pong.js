@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-11 19:15:29
+// Transcrypt'ed from Python, 2016-03-12 13:37:37
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.116';
+							self.transpilerVersion = '3.5.117';
 							self.targetSubDir = '__javascript__';
 						});}
 					});
@@ -15874,8 +15874,6 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 		}
 	);
 	(function () {
-		;
-		;
 		var fabric = __init__ (__world__.com.fabricjs).fabric;
 		var orthoWidth = 1000;
 		var orthoHeight = 750;
@@ -15895,10 +15893,13 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				self.commit ();
 			});},
 			get predict () {return __get__ (this, function (self) {
+				/* pass */;
 			});},
 			get interact () {return __get__ (this, function (self) {
+				/* pass */;
 			});},
 			get commit () {return __get__ (this, function (self) {
+				/* pass */;
 			});}
 		});
 		var Sprite = __class__ ('Sprite', [Attribute], {
@@ -16171,6 +16172,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
 				}
 			});},
 			get resize () {return __get__ (this, function (self, width, height) {
+				/* pass */;
 			});},
 			get scaleX () {return __get__ (this, function (self, x) {
 				return x * self.canvas.width / orthoWidth;
