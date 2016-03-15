@@ -19,19 +19,19 @@
 						autoTester.check (squares);
 						var tuples = function () {
 							var __accu0__ = [];
-							var __iter0__ = tuple (list ([100, 200, 300, 400, 500, 600, 700]));
+							var __iter0__ = tuple ([100, 200, 300, 400, 500, 600, 700]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var x = __iter0__ [__index0__];
-								var __iter1__ = tuple (list ([10, 20, 30, 40, 50, 60, 70]));
+								var __iter1__ = tuple ([10, 20, 30, 40, 50, 60, 70]);
 								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 									var y = __iter1__ [__index1__];
 									if ((20 < y && y < 60)) {
-										var __iter2__ = tuple (list ([1, 2, 3, 4, 5, 6, 7]));
+										var __iter2__ = tuple ([1, 2, 3, 4, 5, 6, 7]);
 										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
 											var z = __iter2__ [__index2__];
 											if ((200 < x && x < 600)) {
 												if ((2 < z && z < 6)) {
-													__accu0__.append (tuple (list ([x, y, z])));
+													__accu0__.append (tuple ([x, y, z]));
 												}
 											}
 										}
@@ -43,12 +43,12 @@
 						autoTester.check (tuples);
 						var tricky = function () {
 							var __accu0__ = [];
-							var __iter0__ = tuple (list ([tuple (list ([10, 11])), tuple (list ([20, 21]))]));
+							var __iter0__ = tuple ([tuple ([10, 11]), tuple ([20, 21])]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__];
 								var x = __left0__ [0];
 								var y = __left0__ [1];
-								__accu0__.append (tuple (list ([2 * x, 3 * y])));
+								__accu0__.append (tuple ([2 * x, 3 * y]));
 							}
 							return __accu0__;
 						} ();

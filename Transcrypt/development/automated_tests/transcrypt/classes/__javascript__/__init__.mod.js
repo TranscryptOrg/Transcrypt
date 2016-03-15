@@ -28,7 +28,7 @@
 								autoTester.check ('B.show', label, self.y);
 							});}
 						});
-						var __left0__ = tuple (list ([456, 789]));
+						var __left0__ = tuple ([456, 789]);
 						B.p = __left0__ [0];
 						B.q = __left0__ [1];
 						var C = __class__ ('C', [A, B], {

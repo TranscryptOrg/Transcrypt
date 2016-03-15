@@ -51,9 +51,13 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
-- Python 'pass' statement now translates to /\* pass \*/
-- Superfluous semicolons removed when in static_check mode
-- 'nonlocal' implemented + testcase.
+- Extended slices added to support Numscrypt, not yet finished
+- Tuple representation made more compact
+- Slices return list rather than array
+- Methods insert and pop added to list
+- Python pass statement now translates to /\* pass \*/
+- Superfluous semicolons removed when in compiling with static check switch
+- nonlocal implemented + testcase.
 - Missing com.fabricjs module added.
 - Fix for missing getsitepackages () of virtualenv, tested.
 - Fix for missing global and nonlocal, only partially tested.

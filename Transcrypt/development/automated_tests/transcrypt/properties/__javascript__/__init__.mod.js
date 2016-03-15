@@ -37,7 +37,7 @@
 						});}
 					});
 					A.p = 1234;
-					var __left0__ = tuple (list ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]));
+					var __left0__ = tuple ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]);
 					Object.defineProperty (A, 'x', __left0__ [0]);;
 					Object.defineProperty (A, 'y', __left0__ [1]);;
 					Object.defineProperty (A, 'y2', __left0__ [2]);;

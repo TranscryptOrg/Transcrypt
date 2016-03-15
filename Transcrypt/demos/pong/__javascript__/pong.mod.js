@@ -3,7 +3,7 @@
 		var orthoWidth = 1000;
 		var orthoHeight = 750;
 		var fieldHeight = 650;
-		var __left0__ = tuple (list ([13, 27, 32]));
+		var __left0__ = tuple ([13, 27, 32]);
 		var enter = __left0__ [0];
 		var esc = __left0__ [1];
 		var space = __left0__ [2];
@@ -170,7 +170,7 @@
 			get install () {return __get__ (this, function (self) {
 				self.playerLabels = function () {
 					var __accu0__ = [];
-					var __iter0__ = tuple (list ([tuple (list (['AZ keys:', -7 / 16])), tuple (list (['KM keys:', 1 / 16]))]));
+					var __iter0__ = tuple ([tuple (['AZ keys:', -7 / 16]), tuple (['KM keys:', 1 / 16])]);
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
 						var name = __left0__ [0];
@@ -192,7 +192,7 @@
 			get commit () {return __get__ (this, function (self) {
 				self.scoreLabels = function () {
 					var __accu0__ = [];
-					var __iter0__ = zip (self.scores, tuple (list ([-2 / 16, 6 / 16])));
+					var __iter0__ = zip (self.scores, tuple ([-2 / 16, 6 / 16]));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
 						var score = __left0__ [0];

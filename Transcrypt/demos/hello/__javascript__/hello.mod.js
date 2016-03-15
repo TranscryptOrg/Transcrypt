@@ -16,16 +16,16 @@
 		});
 		SolarSystem.planets = function () {
 			var __accu0__ = [];
-			var __iter0__ = enumerate (tuple (list ([tuple (list (['Mercury', 'hot', 2240])), tuple (list (['Venus', 'sulphurous', 6052])), tuple (list (['Earth', 'fertile', 6378])), tuple (list (['Mars', 'reddish', 3397])), tuple (list (['Jupiter', 'stormy', 71492])), tuple (list (['Saturn', 'ringed', 60268])), tuple (list (['Uranus', 'cold', 25559])), tuple (list (['Neptune', 'very cold', 24766]))])));
+			var __iter0__ = enumerate (tuple ([tuple (['Mercury', 'hot', 2240]), tuple (['Venus', 'sulphurous', 6052]), tuple (['Earth', 'fertile', 6378]), tuple (['Mars', 'reddish', 3397]), tuple (['Jupiter', 'stormy', 71492]), tuple (['Saturn', 'ringed', 60268]), tuple (['Uranus', 'cold', 25559]), tuple (['Neptune', 'very cold', 24766])]));
 			for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 				var __left0__ = __iter0__ [__index0__];
 				var index = __left0__ [0];
 				var planet = __left0__ [1];
-				__accu0__.append (chain (planet, tuple (list ([index + 1]))));
+				__accu0__.append (chain (planet, tuple ([index + 1])));
 			}
 			return __accu0__;
 		} ();
-		SolarSystem.lines = tuple (list (['{} is a {} planet', 'The radius of {} is {} km', '{} is planet nr. {} counting from the sun']));
+		SolarSystem.lines = tuple (['{} is a {} planet', 'The radius of {} is {} km', '{} is planet nr. {} counting from the sun']);
 		var solarSystem = SolarSystem ();
 		__pragma__ ('<use>' +
 			'itertools' +

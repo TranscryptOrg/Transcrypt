@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import _ast
+
 import os
 import sys
 import ast
@@ -294,6 +296,8 @@ class Generator (ast.NodeVisitor):
 		
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases 
+			('pop', 'py_pop'),
+			('js_pop', 'pop'),
 			('sort', 'py_sort'),
 			('js_sort', 'sort'),
 			('split', 'py_split'),
@@ -472,7 +476,7 @@ class Generator (ast.NodeVisitor):
 				type (node.value.func) == ast.Name and node.value.func.id == '__pragma__'
 			) else
 			None
-		)			
+		)
 		
 	def visit (self, node):	
 		try:
@@ -648,7 +652,7 @@ class Generator (ast.NodeVisitor):
 						utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid LHS slice')
 				elif type (target.slice) == ast.Index:
 					if self.allowOperatorOverloading:
-						self.emit ('__setitem__ (')
+						self.emit ('__setitem__ (')	# Global function tries .__setitem__ and []
 						self.visit (target.value)
 						self.emit (', ')
 						self.visit (target.slice.value)
@@ -661,12 +665,17 @@ class Generator (ast.NodeVisitor):
 						self.emit (' = ')
 						self.visit (value)
 						emitPathIndices ()						
-				else:
-					raise utils.Error (
-						moduleName = self.module.metadata.name,
-						lineNr = self.lineNr,
-						message = 'Extended slices not supported\n'
-					)
+				elif type (target.slice) == ast.ExtSlice:
+					self.visit (target.value)		
+					self.emit ('.__setitem__ (')	# Method, since extended slice access is always overloaded
+					self.emit ('[')
+					for index, dim in enumerate (target.slice.dims):
+						self.emitComma (index)
+						self.visit (dim)
+					self.emit (']')
+					self.emit (', ')
+					self.visit (value)
+					self.emit (')')
 			else:
 				if isPropertyAssign and not target.id == self.getTemp ('left'):
 					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .node.name, target.id))
@@ -1141,8 +1150,8 @@ class Generator (ast.NodeVisitor):
 				if self.memoizeCalls:
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
-				self.emit (');}}')		
-		
+				self.emit (');}}')
+				
 	def visit_Global (self, node):
 		raise utils.Error (
 			moduleName = self.module.metadata.name,
@@ -1238,7 +1247,7 @@ class Generator (ast.NodeVisitor):
 						self.emit (';\n')
 		except Exception as exception:
 			utils.enhanceException (exception, lineNr = self.lineNr, message = 'Can\'t import from module \'{}\''.format (node.module))
-		
+			
 	def visit_Lambda (self, node):
 		self.emit ('(function __lambda__ ',)	# Extra () needed to make it callable at definition time
 		self.visit (node.args)
@@ -1419,65 +1428,69 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_SetComp (self, node):
 		self.visit_ListComp (node, isSet = True)
-						
+				
+	def visit_Slice (self, node):	# Only visited for dims as part of ExtSlice
+		self.emit ('[')
+		self.visit (node.lower)
+		self.emit (', ')
+		self.visit (node.upper)
+		self.emit (', ')
+		self.visit (node.step)
+		self.emit (']')	
+		
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
 		
 	# Visited for RHS slice, RHS index and non-overloaded LHS index
 	# LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
 	def visit_Subscript (self, node):
-		if self.allowOperatorOverloading and type (node.slice == ast.Index):
-				self.emit ('__getitem__ (')
-				self.visit (node.value)
-				self.emit (', ')
-				self.visit (node.slice.value)
-				self.emit (')')
+		if self.allowOperatorOverloading and type (node.slice) == ast.Index:
+			self.emit ('__getitem__ (')				# Global function tries .__getitem__ and []
+			self.visit (node.value)
+			self.emit (', ')
+			self.visit (node.slice.value)
+			self.emit (')')
 		else:
 			self.visit (node.value)
 			
-			if type (node.slice) == ast.Slice:	# Then we're sure node.ctx == ast.Load	
+			if type (node.slice) == ast.Slice:		# Then we're sure node.ctx == ast.Load	
 				try:
-					if node.slice.step == None:
-						self.emit ('.slice (')
-						
-						if node.slice.lower == None:
-							self.emit ('0')
-						else:
-							self.visit (node.slice.lower)
-							
-						if node.slice.upper != None:
-							self.emit (', ')
-							self.visit (node.slice.upper)
-					else:
-						self.emit ('.__getslice__ (')
-						
-						if node.slice.lower == None:
-							self.emit ('0')
-						else:
-							self.visit (node.slice.lower)
-							
-						self.emit (', ')
-						if node.slice.upper == None:
-							self.emit ('null')
-						else:
-							self.visit (node.slice.upper)
+					self.emit ('.__getslice__ (')
 					
-						self.emit (', ')
+					if node.slice.lower == None:
+						self.emit ('0')
+					else:
+						self.visit (node.slice.lower)
+						
+					self.emit (', ')
+					if node.slice.upper == None:
+						self.emit ('null')
+					else:
+						self.visit (node.slice.upper)
+				
+					self.emit (', ')
+					
+					if node.slice.step == None:
+						self.emit ('1')
+					else:
 						self.visit (node.slice.step)
 						
 					self.emit (')')
 				except Exception as exception:
+					print (777, traceback.format_exc (), 888)
 					utils.enhanceException (exception, lineNr = self.lineNr, message = 'Invalid RHS slice')
-			elif type (node.slice == ast.Index):	# No operator overloading, overloaded version at start of this function
+			elif type (node.slice) == ast.Index:	# No operator overloading, overloaded version at start of this function
 				self.emit (' [')
 				self.visit (node.slice.value)
 				self.emit (']')
-			else:
-				raise utils.Error (
-					moduleName = self.module.metadata.name,
-					lineNr = self.lineNr,
-					message = 'Extended slices not supported\n'
-				)
+			elif type (node.slice) == ast.ExtSlice:
+				self.emit ('.__getitem__ (')		# Method, since extended slice access is always overloaded
+				self.emit ('[')
+				for index, dim in enumerate (node.slice.dims):
+					self.emitComma (index)
+					self.visit (dim)
+				self.emit (']')
+				self.emit (')')
 					
 	def visit_Try (self, node):
 		self.emit ('try {{\n')
@@ -1519,9 +1532,11 @@ class Generator (ast.NodeVisitor):
 			self.emit ('}}\n')
 		
 	def visit_Tuple (self, node):
-		self.emit ('tuple (')
-		self.visit_List (node)
-		self.emit (')')
+		self.emit ('tuple ([')
+		for index, elt in enumerate (node.elts):
+			self.emitComma (index)
+			self.visit (elt)
+		self.emit ('])')
 			
 	def visit_UnaryOp (self, node):
 		self.emit (self.operators [type (node.op)][0])			

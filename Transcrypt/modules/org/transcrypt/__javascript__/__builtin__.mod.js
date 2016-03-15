@@ -35,6 +35,9 @@ function f() { /** ... */ }
 	
 	// Property installer function, no member since that would bloat classes
 	var property = function (getter, setter) {	// Returns a property descriptor rather than a property
+		if (!setter) {	// ??? Make setter optional instead of dummy?
+			setter = function () {};
+		}
 		return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
 	}
 	__all__.property = property;
@@ -53,7 +56,12 @@ function f() { /** ... */ }
 	
 	// Console message
 	var print = function () {
-		console.log ([] .slice.apply (arguments) .join (' '));
+		var args = [] .slice.apply (arguments)
+		var result = ''
+		for (var i = 0; i < args.length; i++) {
+			result += str (args [i]) + ' ';
+		}
+		console.log (result);
 	};
 	__all__.print = print;
 	
@@ -85,7 +93,7 @@ function f() { /** ... */ }
 			return anObject.length;
 		}
 		catch (exception) {
-			result = 0;
+			var result = 0;
 			for (attrib in anObject) {
 				if (!__specialattrib__ (attrib)) {
 					result++;
@@ -223,9 +231,16 @@ function f() { /** ... */ }
 	}
 	__all__.org = ord;
 	
+	// Reversed function for arrays
+	var reversed = function (iterable) {
+		iterable = iterable.slice ();
+		iterable.reverse ();
+		return iterable;
+	}
+	
 	// Zip method for arrays
 	var zip = function () {
-		var args = [].slice.call (arguments);
+		var args = [] .slice.call (arguments);
 		var shortest = args.length == 0 ? [] : args.reduce (	// Find shortest array in arguments
 			function (array0, array1) {
 				return array0.length < array1.length ? array0 : array1;
@@ -328,7 +343,7 @@ function f() { /** ... */ }
 			stop = this.length + 1 - stop;
 		}
 		
-		var result = [];
+		var result = list ([]);
 		for (var index = start; index < stop; index += step) {
 			result.push (this [index]);
 		}
@@ -399,6 +414,10 @@ function f() { /** ... */ }
 	Array.prototype.extend = function (aList) {
 		this.push.apply (this, aList);
 	};
+	
+	Array.prototype.insert = function (index, element) {
+		this.splice (index, 0, element);
+	};
 
 	Array.prototype.remove = function (element) {
 		var index = this.indexOf (element);
@@ -408,6 +427,15 @@ function f() { /** ... */ }
 		this.splice (index, 1);
 	};
 
+	Array.prototype.py_pop = function (index) {
+		if (index == undefined) {
+			return this.pop ()	// Remove last element
+		}
+		else {
+			return this.splice (index, 1) [0];
+		}
+	};	
+	
 	Array.prototype.py_sort = function () {
 		__sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));	// Can't work directly with arguments
 		// Python params: (iterable, key = None, reverse = False)
@@ -613,7 +641,12 @@ function f() { /** ... */ }
 	// String extensions
 		
 	function str (stringable) {
-		return new String (stringable);
+		try {
+			return stringable.__str__ ();
+		}
+		catch (e) {
+			return new String (stringable);
+		}
 	}
 	__all__.str = str;	
 	
@@ -650,7 +683,7 @@ function f() { /** ... */ }
 	// Call memoizing is unattractive here, since every string would then have to hold a reference to a bound format method
 	Object.defineProperty (String.prototype, 'format', {
 		get: function () {return __get__ (this, function (self) {
-			var args = tuple ([].slice.apply (arguments).slice (1));			
+			var args = tuple ([] .slice.apply (arguments).slice (1));			
 			var autoIndex = 0;
 			return self.replace (/\{(\w*)\}/g, function (match, key) { 
 				if (key == '') {

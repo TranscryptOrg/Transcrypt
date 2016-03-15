@@ -173,7 +173,7 @@
 							}
 							autoTester.check (args, kwargs);
 						};
-						g.apply (null, tuple (list ([1, 2, 3])).concat ([__kwargdict__ (dict ({'p': 'aP', 'q': 'aQ', 'r': 'anR'}))]));
+						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ (dict ({'p': 'aP', 'q': 'aQ', 'r': 'anR'}))]));
 						(function __lambda__ (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = -1;

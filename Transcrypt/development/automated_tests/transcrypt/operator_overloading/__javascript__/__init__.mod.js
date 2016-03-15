@@ -120,7 +120,7 @@
 								}
 								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
-							return tuple (list ([self.factor * x, self.factor * y, function () {
+							return tuple ([self.factor * x, self.factor * y, function () {
 								var __accu0__ = [];
 								var __iter0__ = args;
 								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -128,7 +128,7 @@
 									__accu0__.append (self.factor * arg);
 								}
 								return __accu0__;
-							} (), self.factor * m, self.factor * n]));
+							} (), self.factor * m, self.factor * n]);
 						});}
 					});
 					var f = Functor (10);
@@ -155,7 +155,7 @@
 							}
 							var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 						}
-						return tuple (list ([x, y, args, m, n]));
+						return tuple ([x, y, args, m, n]);
 					};
 					var run = function (autoTester) {
 						var m0 = Matrix (3, 3, list ([list ([1, 2, 3]), list ([4, 5, 6]), list ([7, 8, 10])]));

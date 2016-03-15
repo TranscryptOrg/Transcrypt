@@ -1,5 +1,7 @@
 def run (autoTester):
-	aList = [1, 2, 3, 'sun', 'moon', 'stars']
+	aList = [1, 2, 3, 'moon', 'stars']
+	autoTester.check (aList)
+	aList.insert (3, 'sun')
 	autoTester.check (aList)
 	autoTester.check (aList [2:4:1])
 	autoTester.check (aList [:])
@@ -17,7 +19,6 @@ def run (autoTester):
 	autoTester.check (aDict)
 	autoTester.check (aDict [1], aDict ['animal'])
 	
-
 	def p ():
 		return 3
 		

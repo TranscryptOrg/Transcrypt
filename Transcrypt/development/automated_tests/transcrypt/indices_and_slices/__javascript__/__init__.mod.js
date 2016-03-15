@@ -7,7 +7,7 @@
 					var run = function (autoTester) {
 						var all = range (32);
 						autoTester.check (all);
-						autoTester.check (all.slice (8, 24));
+						autoTester.check (all.__getslice__ (8, 24, 1));
 						autoTester.check (all.__getslice__ (8, 24, 2));
 						var aList = list ([3, 4, 7, 8]);
 						autoTester.check (aList);

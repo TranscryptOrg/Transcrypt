@@ -16,7 +16,7 @@
 						autoTester.check (sorted (tel.py_keys ()));
 						autoTester.check (__in__ ('guido', tel));
 						autoTester.check (!__in__ ('jack', tel));
-						autoTester.check (dict (list ([tuple (list (['guido', 4127])), tuple (list (['jack', 4098])), tuple (list (['sape', 4139]))])));
+						autoTester.check (dict (list ([tuple (['guido', 4127]), tuple (['jack', 4098]), tuple (['sape', 4139])])));
 						var knights = dict ({'robin': 'the brave', 'gallahad': 'the pure'});
 						var __iter0__ = sorted (knights.py_items ());
 						if (type (__iter0__) == dict) {
