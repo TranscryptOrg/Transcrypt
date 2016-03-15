@@ -1,3 +1,0 @@
-The transpiler keeps a stack of statically enclosing scopes.
-Whenever it finds an rvalue reference by name, it looks it up in the scopes on the stack, taking the nearest one.
-If it isn't found at all it's assumed to be a JavaScript "global".
