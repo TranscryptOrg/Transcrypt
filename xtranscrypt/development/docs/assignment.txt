@@ -1,0 +1,44 @@
+With assignment, usage of the Python and JavaScript scopes has to be parallel.
+Module, class, object and function nesting has to be in the same recursive order.
+
+Python modules, classes and objects are mapped to JavaScript objects.
+Python functions are mapped to JavaScript functions.
+
+Since in JavaScript objects or functions can be nested in objects or functions,
+Python nesting can be represented by JavaScript nesting without a problem.
+
+A construction like p.q.r.x will be the same in JavaScript.
+This also holds for p.q.r.f (), since p.q.r.f is just an attribute like x is.
+
+The peculiar thing is that it seems we do not have to remember scope,
+but can blindly generate code for constructions like that.
+If a symbol cannot be found, JavaScript rather than Python reports the error.
+This has to be so, since attributes can be added at runtime.
+By supplying a stub library, testruns can be done in Python,
+which will give Python symbol error reporting without transpilation.
+
+
+The only thing lacking in the Python sourcecode is the module prefix of the current module.
+To prevent name clashes in all modules, the global JavaScript namespace should be imported.
+The choice should be js rather than window, since window itself is in js.
+Also window is to much tied to browser applications.
+
+To keep the global JavaScript namespace out of the way (it may contain names that are also names of our modules) all transpiled code has to be inside a function, having js as a parameter.
+
+So all JavaScript identifiers are preceded by js. (dot).
+
+To keep the namespaces of modules separate will harness JavaScript scope by having a separate module creator function for each module. This function contains all code for that module. The module creator function returns all its locals in a module object.
+This object can than be imported as a whole (import <modulename>) or its attributes can be copied as locals in another module creator (from <moduleName> import).
+
+Start importing from main, the first time a module is imported, its creator will run, creating the module object. Each import adds the right stuff from the module object to the local namespace, either individual attributes or the whole module object.
+
+Importing is a runtime thing, and happens as part of the execution of an importing module.
+
+
+In a browser environment the following two assignments have to be in the transpiled code:
+
+js = window
+js.window = window
+
+And then js is to be passed in as parameter to the function holding all transpiled code.
+In a later stage the 'from import' mechanism will make it possible to use unprefixed js expressions, since it will add all names from each imported module to the local namespace that is accessed using the current module prefix in the transpiled code.

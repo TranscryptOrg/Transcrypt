@@ -1,0 +1,39 @@
+transcrypt.__newmod__ (
+	'test',
+	function () {
+		// For compilation first round up all imports in order
+		// Then find the set of roots
+		// Create the roots
+		// Do the imports
+		
+		// First create all roots
+		
+		var testmod = {};
+		var testmod2 = {};
+		
+		// Then insert what's needed in any order$$$
+
+		transcrypt.__nest__ (testmod, ['testmod2.testmod21'], transcrypt.testmod2.testmod21);	// The list may be empty
+		
+		// At this point all empty modules exist
+		// So insertin can happen in any order, that's why filling is separate
+		// Nothing is initialized yet
+		
+		transcrypt.__eggs__ (transcrypt.testmod1, testmod);
+		transcrypt.__eggs__ (transcrypt.testmod2, testmod2);
+		transcrypt.__eggs__ (transcrypt.testmod2.testmod21.testmod211, testmod2.testmod21, testmod211);
+		
+		console.log.call (null , 'test');
+		testmod.f.call (null );
+		testmod2.f.call (null );
+		testmod2.testmod21.f.call (null );
+		var A = transcrypt.__class__ ('A', [transcrypt.object], {
+			__init__: function (self, x) {
+				self.x = x;
+			}
+		});
+		var B = transcrypt.__class__ ('B', [transcrypt.object], {
+			__init__: function (self, y) {
+		...
+		...
+		...

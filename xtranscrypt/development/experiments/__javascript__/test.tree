@@ -1,0 +1,74 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = iconv
+				keywords: list 
+		element: For 
+			target: Name 
+				id: str = i
+				ctx: Store 
+			iter: Call 
+				func: Name 
+					id: str = range
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 3
+				keywords: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = i
+								ctx: Load 
+						keywords: list 
+			orelse: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = d
+					ctx: Store 
+			value: Dict 
+				keys: list 
+					element: Num 
+						n: int = 0
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 2
+				values: list 
+					element: Str 
+						s: str = zero
+					element: Str 
+						s: str = one
+					element: Str 
+						s: str = two
+		element: For 
+			target: Name 
+				id: str = i
+				ctx: Store 
+			iter: Name 
+				id: str = d
+				ctx: Load 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = i
+								ctx: Load 
+						keywords: list 
+			orelse: list 

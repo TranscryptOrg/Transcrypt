@@ -1,0 +1,14 @@
+There've been some constructive and well meant remarks about the code formatting style used in the Transcrypt core and I owe it to you all to elaborate a bit on that. I value the style suggestions made, since the intention clearly is to make Transcrypt better, but I won't follow them unless they're a clear improvement to what I've learned during my life as a programmer. Here's why.
+
+My first language was Algol 60, followed by Fortran 77, Fortran 90, Cobol, Basic, Turbo Pascal, Ada, Modula II, C, C++, div. macro assemblers, each with their own habits, PLC languages, Java, JavaScript, F# and Python. I've been programming ever since I was fifteen years old, but since I use Python a lot in the last twelve years or so, about five years ago I decided to seriously attempt to follow the habits of its community. It didn't work out for me.
+
+For the projects I earn a living with, like the ones described in the articles on http://www.geatec.com/publications, I have to use a combination of C++ and Python. Since Python classes and C++ classes are used in the same piece of Python or C++ code, consequently sticking to Python style proved a problem. I therefore gathered all I'd learned from the above languages and decided on one eclectic style that I use over all my projects, so that they're internally consistent. Transcrypt also, for me, is part of such a multi-language project, that has been running over multiple years, with contributions of many people. Since, however, I thought it would be worthwhile for the programmer community as a whole, I decided to to split it off and offer it as open source.
+
+But I will not force this style upon developers that use Transcrypt! Instead I will do the following. Since the core is what I'll be working on most for the coming years, I will maintain my 'grown over the years' style there, since changing it would seriously impair my productivity. I also will only very rarely merge any commits in this part of the code, since I have a well defined growth path in mind for it. But I will at all times remain open to good ideas. Don't be offended, however, if I don't follow them (although I might).
+
+HOWEVER: For any libraries it's a completely different story. If anyone should contribute libraries, I will conform the style utilized there and let go of my own style without hesitation if I would make any contributions to such a library. This is what I've allways done for customers in the past thirty years. If it's well designed, but different from what I would have done, I respect the code that's there and follow its line of thought.
+
+Kind regards
+Jacques de Hooge
+
+
