@@ -25,6 +25,7 @@ def main ():
 	modulesDir = '{}/modules'.format (transpilerDir)
 		
 	sys.path [0] = modulesDir
+	sys.modules.pop ('org', None)	# Unload preloaded site-packages.org module
 
 	from org.transcrypt import __base__
 	from org.transcrypt import utils

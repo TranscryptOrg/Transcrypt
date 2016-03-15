@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Unload preloaded org module to allow pip co-installation with Numscrypt
 - Package name changed to lowercase
 - Extended slices added to support Numscrypt, not yet finished
 - Tuple representation made more compact
