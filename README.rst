@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Package name changed to lowercase
 - Extended slices added to support Numscrypt, not yet finished
 - Tuple representation made more compact
 - Slices return list rather than array
@@ -97,3 +98,4 @@ Other packages you might like
 - PLC simulator with Arduino code generation: https://pypi.python.org/pypi/SimPyLC
 - A lightweight Python course taking beginners seriously (under construction): https://pypi.python.org/pypi/LightOn
 - Event driven evaluation nodes: https://pypi.python.org/pypi/Eden
+- Numscrypt (under construction, very early stage), experimental port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://pypi.python.org/pypi/Numscrypt

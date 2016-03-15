@@ -3,7 +3,7 @@
 *.npp
 **.__pycache__/
 dist/
-Transcrypt.egg-info/
-Transcrypt/development/attic/
-Transcrypt/development/docs/
-Transcrypt/development/experiments/
+transcrypt.egg-info/
+transcrypt/development/attic/
+transcrypt/development/docs/
+transcrypt/development/experiments/

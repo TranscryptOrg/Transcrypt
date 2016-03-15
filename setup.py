@@ -16,17 +16,17 @@ setup (
 	description = 'Python to JavaScript transpiler, supporting multiple inheritance and generating lean, highly readable code',
 	long_description = (
 		read ('README.rst') + '\n\n' +
-		read ('Transcrypt/license_reference.txt')
+		read ('transcrypt/license_reference.txt')
 	),
 	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django'],
 	url = 'http://www.transcrypt.org',	
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',
 	author_email = 'jacques.de.hooge@qquick.org',
-	packages = ['Transcrypt'],
+	packages = ['transcrypt'],
 	entry_points = {
 		'console_scripts': [
-			'transcrypt = Transcrypt.__main__:main'
+			'transcrypt = transcrypt.__main__:main'
 		]
 	},
 	include_package_data = True,
