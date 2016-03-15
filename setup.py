@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append ('Transcrypt/modules/org/transcrypt')
+sys.path.append ('transcrypt/modules/org/transcrypt')
 import __base__
 
 from setuptools import setup
