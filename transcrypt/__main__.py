@@ -23,11 +23,14 @@ def main ():
 	programDir = os.getcwd () .replace ('\\', '/')
 	transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')	
 	modulesDir = '{}/modules'.format (transpilerDir)
-		
-	sys.path [0] = modulesDir
-	sys.modules.pop ('org', None)	# Unload preloaded site-packages.org module
+	
+	# Both CPython and Transcrypt will use all dirs in sys.path as search roots for modules
+	# CPython will also search relatively from each module, Transcrypt only from the main module
+	
+	sys.path = [programDir, modulesDir] + sys.path	# Under Linux sys.path does not always contain programDir
+	sys.modules.pop ('org', None)					# Unload org from a packages dir, if it's there.
 
-	from org.transcrypt import __base__
+	from org.transcrypt import __base__				# May reload org from a packages dir (or load org from different location)
 	from org.transcrypt import utils
 	from org.transcrypt import compiler
 
@@ -53,22 +56,10 @@ def main ():
 			
 	if utils.commandArgs.run:
 		with open (utils.commandArgs.source) as sourceFile:
-			exec (
-				'sys.path [0] = sys.path [1 : ]\n' +	# "import transcrypt" should refer to library rather than to this file
-				'sys.path.append (\'{}\')\n'.format (modulesDir) +
-				sourceFile.read ()
-			)
-	else:
+			exec (sourceFile.read ())
+	else:			
 		try:
-			sitepackagesDirs = site.getsitepackages ()
-		except:	# Omission in virtualenv, doesn't know getsitepackages
-			try:
-				sitepackagesDirs = [os.path.dirname (site.__file__) + '/site-packages']
-			except:	# Graceful degradation, cater for the unknown
-				sitepackagesDirs = []
-			
-		try:
-			compiler.Program ([programDir, modulesDir] + [sitepackagesDir.replace ('\\', '/') for sitepackagesDir in sitepackagesDirs])
+			compiler.Program (sys.path)
 		except utils.Error as error:
 			utils.log (True, '\n{}\n', error)
 			

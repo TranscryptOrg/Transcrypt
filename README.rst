@@ -51,8 +51,9 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Module search for Transcrypt -r and Transcrypt [-b] now both use same sys.path contents
 - Setup.py adapted to Linux' case sensitivity
-- Unload preloaded org module to allow pip co-installation with Numscrypt
+- Unload preloaded org module, since it may be shadowed by a Trancrypt-specific one
 - Package name changed to lowercase
 - Extended slices added to support Numscrypt, not yet finished
 - Tuple representation made more compact

@@ -9,11 +9,11 @@ def getAbsPath (relPath):
 
 def test (relPath, fileNamePrefix, run = False):
 	os.chdir (getAbsPath (relPath))
-	os.system ('transcrypt -b {}{}.py'.format (fcallSwitch, fileNamePrefix))	
+	os.system ('run_transcrypt -b {}{}.py'.format (fcallSwitch, fileNamePrefix))	
 
 	if run:
 		os.chdir (getAbsPath (relPath))
-		os.system ('transcrypt -r {}.py'.format (fileNamePrefix))		
+		os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
 	
 	webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
 	webbrowser.open ('file://{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
