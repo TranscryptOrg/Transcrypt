@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import _ast
+
 import os
 import sys
 import ast
@@ -624,8 +626,10 @@ class Generator (ast.NodeVisitor):
 					if self.allowOperatorOverloading:	# Possibly overloaded LHS index dealth with here, is special case
 						self.emit ('__setitem__ (')		# Free function tries .__setitem__ (overload) and [] (native)
 						self.visit (target.value)
-						self.emit (', ')
-						self.visit (target.slice.value)
+						if True or type (target.slice.value) == ast.Num:
+							self.visit (target.slice.value)
+						else:
+							self.visit (ast.List (elts = target.slice.value.elts, ctx = target.slice.value.ctx))
 						self.emit (', ')
 						self.visit (value)
 						emitPathIndices ()
@@ -668,11 +672,11 @@ class Generator (ast.NodeVisitor):
 				elif type (target.slice) == ast.ExtSlice:
 					self.visit (target.value)		
 					self.emit ('.__setitem__ (')	# Method, since extended slice access is always overloaded
-					self.emit ('tuple ([')
+					self.emit ('[')
 					for index, dim in enumerate (target.slice.dims):
 						self.emitComma (index)
 						self.visit (dim)
-					self.emit ('])')
+					self.emit (']')
 					self.emit (', ')
 					self.visit (value)
 					self.emit (')')
@@ -1430,13 +1434,13 @@ class Generator (ast.NodeVisitor):
 		self.visit_ListComp (node, isSet = True)
 				
 	def visit_Slice (self, node):	# Only visited for dims as part of ExtSlice
-		self.emit ('tuple ([')
+		self.emit ('[')
 		self.visit (node.lower)
 		self.emit (', ')
 		self.visit (node.upper)
 		self.emit (', ')
 		self.visit (node.step)
-		self.emit ('])')	
+		self.emit (']')	
 		
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
@@ -1449,6 +1453,10 @@ class Generator (ast.NodeVisitor):
 				self.emit ('__getitem__ (')		# Free function tries .__getitem__ (overload) and [] (native)
 				self.visit (node.value)
 				self.emit (', ')
+				if True or type (node.slice.value) == ast.Num:
+					self.visit (node.slice.value)
+				else:
+					self.visit (ast.List (elts = node.slice.value.elts, ctx = node.slice.value.ctx))
 				self.visit (node.slice.value)
 				self.emit (')')
 			else:								# It may be an LHS or RHS index 
@@ -1486,11 +1494,11 @@ class Generator (ast.NodeVisitor):
 		elif type (node.slice) == ast.ExtSlice:	# Always overloaded
 			self.visit (node.value)
 			self.emit ('.__getitem__ (')		# Method, since extended slice access is always overloaded
-			self.emit ('tuple ([')
+			self.emit ('[')
 			for index, dim in enumerate (node.slice.dims):
 				self.emitComma (index)
 				self.visit (dim)
-			self.emit ('])')
+			self.emit (']')
 			self.emit (')')
 					
 	def visit_Try (self, node):

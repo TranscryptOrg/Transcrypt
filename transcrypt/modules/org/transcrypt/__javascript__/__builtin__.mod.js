@@ -3,9 +3,7 @@
 	// It can't do that itself, because it is a regular Python module
 	// The compiler recognizes its their namesand generates them inline rather than nesting them
 	// In this way it isn't needed to import them everywhere
-	 
-function f() { /** ... */ }
-	
+	 	
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 
@@ -15,7 +13,7 @@ function f() { /** ... */ }
 	var sorted = __all__.sorted;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
-	__envir__.executorName = __envir__.transpilerName;
+	__envir__.executor_name = __envir__.transpiler_name;
 	
 	// Make make __main__ available in browser
 	var __main__ = {__file__: ''};
@@ -331,7 +329,7 @@ function f() { /** ... */ }
 	Array.prototype.__class__ = list;	// Arrays are lists, unless constructed otherwise
 	list.__name__ = 'list';
 	
-	Array.prototype.__getslice__ = function (start, stop, step) {	// Only called if step is not null, else slice is called
+	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
 			start = this.length + 1 - start;
 		}
@@ -349,6 +347,29 @@ function f() { /** ... */ }
 		}
 		
 		return result;
+	}
+		
+	Array.prototype.__setslice__ = function (start, stop, step, source) {
+		if (start < 0) {
+			start = this.length + 1 - start;
+		}
+			
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+			
+		if (step == null) {	// Assign to 'ordinary' slice, replace subsequence
+			Array.prototype.splice.apply (this, [start, stop - start] .concat (source)) 
+		}
+		else {				// Assign to extended slice, replace designated items one by one
+			var sourceIndex = 0;
+			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+				this [targetIndex] = source [sourceIndex++];
+			}
+		}
 	}
 		
 	Array.prototype.__repr__ = function () {
@@ -378,29 +399,6 @@ function f() { /** ... */ }
 		return result;
 	};
 	
-	Array.prototype.__setslice__ = function (start, stop, step, source) {
-		if (start < 0) {
-			start = this.length + 1 - start;
-		}
-			
-		if (stop == null) {
-			stop = this.length;
-		}
-		else if (stop < 0) {
-			stop = this.length + 1 - stop;
-		}
-			
-		if (step == null) {	// Assign to 'ordinary' slice, replace subsequence
-			Array.prototype.splice.apply (this, [start, stop - start] .concat (source)) 
-		}
-		else {				// Assign to extended slice, replace designated items one by one
-			var sourceIndex = 0;
-			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
-				this [targetIndex] = source [sourceIndex++];
-			}
-		}
-	}
-		
 	Array.prototype.__str__ = Array.prototype.__repr__;
 	
 	Array.prototype.append = function (element) {
@@ -837,6 +835,26 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+
+	var __getslice__ = function (container, lower, upper, step) {
+		if (typeof container == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (tuple ([lower, upper, step]));
+		}
+		else {
+			return container.__getslice__ (lower, upper, step);
+		}
+	};
+	__all__.__getslice__ = __getslice__;
+
+	var __setslice__ = function (container, lower, upper, step, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
+			container.__setitem__ (tuple ([lower, upper, step]), value);
+		}
+		else {
+			container.__setslice__ (lower, upper, step, value);
+		}
+	};
+	__all__.__setslice__ = __setslice__;
 
 	var __call__ = function (/* <callee>, <params>* */) {
 		var args = [] .slice.apply (arguments)

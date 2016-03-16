@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-16 08:42:45
+// Transcrypt'ed from Python, 2016-03-16 16:32:03
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -102,9 +102,9 @@ function autotest () {
 				__init__: function (__all__) {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.125';
-							self.targetSubDir = '__javascript__';
+							self.transpiler_name = 'transcrypt';
+							self.transpiler_version = '3.5.126';
+							self.target_subdir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -233,14 +233,13 @@ function autotest () {
 			}
 		}
 	);
-function f() { /** ... */ }
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
-	__envir__.executorName = __envir__.transpilerName;
+	__envir__.executor_name = __envir__.transpiler_name;
 	var __main__ = {__file__: ''};
 	__all__.main = __main__;
 	var __except__ = null;
@@ -521,6 +520,26 @@ function f() { /** ... */ }
 		}
 		return result;
 	}
+	Array.prototype.__setslice__ = function (start, stop, step, source) {
+		if (start < 0) {
+			start = this.length + 1 - start;
+		}
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+		if (step == null) {
+			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
+		}
+		else {
+			var sourceIndex = 0;
+			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+				this [targetIndex] = source [sourceIndex++];
+			}
+		}
+	}
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
 			return 'set()';
@@ -543,26 +562,6 @@ function f() { /** ... */ }
 		result += !this.__class__ || this.__class__ == list ? ']' : this.__class__ == tuple ? ')' : '}';;
 		return result;
 	};
-	Array.prototype.__setslice__ = function (start, stop, step, source) {
-		if (start < 0) {
-			start = this.length + 1 - start;
-		}
-		if (stop == null) {
-			stop = this.length;
-		}
-		else if (stop < 0) {
-			stop = this.length + 1 - stop;
-		}
-		if (step == null) {
-			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
-		}
-		else {
-			var sourceIndex = 0;
-			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
-				this [targetIndex] = source [sourceIndex++];
-			}
-		}
-	}
 	Array.prototype.__str__ = Array.prototype.__repr__;
 	Array.prototype.append = function (element) {
 		this.push (element);
@@ -911,6 +910,24 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+	var __getslice__ = function (container, lower, upper, step) {
+		if (typeof container == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (tuple ([lower, upper, step]));
+		}
+		else {
+			return container.__getslice__ (lower, upper, step);
+		}
+	};
+	__all__.__getslice__ = __getslice__;
+	var __setslice__ = function (container, lower, upper, step, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
+			container.__setitem__ (tuple ([lower, upper, step]), value);
+		}
+		else {
+			container.__setslice__ (lower, upper, step, value);
+		}
+	};
+	__all__.__setslice__ = __setslice__;
 	var __call__ = function (/* <callee>, <params>* */) {
 		var args = [] .slice.apply (arguments)
 		if (typeof args [0] == 'object' && '__call__' in args [0]) {
@@ -1041,7 +1058,7 @@ function f() { /** ... */ }
 								}
 								return __accu0__;
 							} ());
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.testBuffer.append (item);
 							}
 							else {
@@ -1060,7 +1077,7 @@ function f() { /** ... */ }
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
 								aFile.write ('<b>Transcrypt output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
 								aFile.close ();
 							}
 						});},
@@ -1099,7 +1116,7 @@ function f() { /** ... */ }
 							self.check ('<br><br>');
 						});},
 						get done () {return __get__ (this, function (self) {
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.compare ();
 							}
 							else {

@@ -97,7 +97,7 @@
 								}
 								return __accu0__;
 							} ());
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.testBuffer.append (item);
 							}
 							else {
@@ -116,7 +116,7 @@
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
 								aFile.write ('<b>Transcrypt output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
 								aFile.close ();
 							}
 						});},
@@ -155,7 +155,7 @@
 							self.check ('<br><br>');
 						});},
 						get done () {return __get__ (this, function (self) {
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.compare ();
 							}
 							else {

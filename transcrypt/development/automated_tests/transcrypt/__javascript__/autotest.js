@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-16 08:42:49
+// Transcrypt'ed from Python, 2016-03-16 16:32:07
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -102,9 +102,9 @@ function autotest () {
 				__init__: function (__all__) {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							self.transpilerName = 'transcrypt';
-							self.transpilerVersion = '3.5.125';
-							self.targetSubDir = '__javascript__';
+							self.transpiler_name = 'transcrypt';
+							self.transpiler_version = '3.5.126';
+							self.target_subdir = '__javascript__';
 						});}
 					});
 					var __envir__ = __Envir__ ();
@@ -233,14 +233,13 @@ function autotest () {
 			}
 		}
 	);
-function f() { /** ... */ }
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
-	__envir__.executorName = __envir__.transpilerName;
+	__envir__.executor_name = __envir__.transpiler_name;
 	var __main__ = {__file__: ''};
 	__all__.main = __main__;
 	var __except__ = null;
@@ -521,6 +520,26 @@ function f() { /** ... */ }
 		}
 		return result;
 	}
+	Array.prototype.__setslice__ = function (start, stop, step, source) {
+		if (start < 0) {
+			start = this.length + 1 - start;
+		}
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + 1 - stop;
+		}
+		if (step == null) {
+			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
+		}
+		else {
+			var sourceIndex = 0;
+			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+				this [targetIndex] = source [sourceIndex++];
+			}
+		}
+	}
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
 			return 'set()';
@@ -543,26 +562,6 @@ function f() { /** ... */ }
 		result += !this.__class__ || this.__class__ == list ? ']' : this.__class__ == tuple ? ')' : '}';;
 		return result;
 	};
-	Array.prototype.__setslice__ = function (start, stop, step, source) {
-		if (start < 0) {
-			start = this.length + 1 - start;
-		}
-		if (stop == null) {
-			stop = this.length;
-		}
-		else if (stop < 0) {
-			stop = this.length + 1 - stop;
-		}
-		if (step == null) {
-			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
-		}
-		else {
-			var sourceIndex = 0;
-			for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
-				this [targetIndex] = source [sourceIndex++];
-			}
-		}
-	}
 	Array.prototype.__str__ = Array.prototype.__repr__;
 	Array.prototype.append = function (element) {
 		this.push (element);
@@ -911,6 +910,24 @@ function f() { /** ... */ }
 		}
 	};
 	__all__.__setitem__ = __setitem__;
+	var __getslice__ = function (container, lower, upper, step) {
+		if (typeof container == 'object' && '__getitem__' in container) {
+			return container.__getitem__ (tuple ([lower, upper, step]));
+		}
+		else {
+			return container.__getslice__ (lower, upper, step);
+		}
+	};
+	__all__.__getslice__ = __getslice__;
+	var __setslice__ = function (container, lower, upper, step, value) {
+		if (typeof container == 'object' && '__setitem__' in container) {
+			container.__setitem__ (tuple ([lower, upper, step]), value);
+		}
+		else {
+			container.__setslice__ (lower, upper, step, value);
+		}
+	};
+	__all__.__setslice__ = __setslice__;
 	var __call__ = function (/* <callee>, <params>* */) {
 		var args = [] .slice.apply (arguments)
 		if (typeof args [0] == 'object' && '__call__' in args [0]) {
@@ -1636,6 +1653,80 @@ function f() { /** ... */ }
 						__all__.run = run;
 						__all__.test1 = test1;
 						__all__.test2 = test2;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'extended_slices', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var indices = function (key) {
+						if (__envir__.executor_name == __envir__.transpiler_name) {
+							return key;
+						}
+						else {
+							try {
+								return key.indices (1000000000);
+							}
+							catch (__except__) {
+								try {
+									return tuple (function () {
+										var __accu0__ = [];
+										var __iter0__ = key;
+										for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+											var subkey = __iter0__ [__index0__];
+											__accu0__.append (indices (subkey));
+										}
+										return __accu0__;
+									} ());
+								}
+								catch (__except__) {
+									return key;
+								}
+							}
+						}
+					};
+					var Test = __class__ ('Test', [object], {
+						get __init__ () {return __get__ (this, function (self, autoTester) {
+							self.autoTester = autoTester;
+						});},
+						get __getitem__ () {return __get__ (this, function (self, key) {
+							self.autoTester.check ('getitem (', indices (key), ')');
+							return 1234567;
+						});},
+						get __setitem__ () {return __get__ (this, function (self, key, value) {
+							self.autoTester.check ('setitem (', indices (key), ')', value);
+						});}
+					});
+					var run = function (autoTester) {
+						var __left0__ = Test (autoTester);
+						var a = __left0__;
+						var b = __left0__;
+						var c = __left0__;
+						var d = __left0__;
+						var e = __left0__;
+						var f = __left0__;
+						var g = __left0__;
+						var h = __left0__;
+						var i = __left0__;
+						var j = __left0__;
+						var k = __left0__;
+						var l = __left0__;
+						a.__setitem__ (tuple ([tuple ([1, 2, 3]), tuple ([4, 5, 6])]), __getslice__ (b, 7, 8, 9));
+						__setslice__ (c, 1, 2, 3, d.__getitem__ (tuple ([tuple ([4, 5, 6]), tuple ([7, 8, 9])])));
+						e.__setitem__ (tuple ([1, tuple ([1, 2, 3]), 3]), f.__getitem__ (tuple ([4, tuple ([4, 5, 6]), 6])));
+						__setitem__ (g, tuple ([1, 2, 3]), __getitem__ (h, tuple ([1, 2, 3])));
+						__setitem__ (i, 1, __getitem__ (j, 1));
+						__setslice__ (k, 1, 2, 3, __getslice__ (l, 1, 2, 3));
+					};
+					__pragma__ ('<all>')
+						__all__.Test = Test;
+						__all__.indices = indices;
+						__all__.run = run;
 					__pragma__ ('</all>')
 				}
 			}
@@ -2388,7 +2479,7 @@ function f() { /** ... */ }
 								}
 								return __accu0__;
 							} ());
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.testBuffer.append (item);
 							}
 							else {
@@ -2407,7 +2498,7 @@ function f() { /** ... */ }
 								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
 								aFile.write ('<b>Transcrypt output:</b>\n');
 								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix));
+								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
 								aFile.close ();
 							}
 						});},
@@ -2446,7 +2537,7 @@ function f() { /** ... */ }
 							self.check ('<br><br>');
 						});},
 						get done () {return __get__ (this, function (self) {
-							if (__envir__.executorName == __envir__.transpilerName) {
+							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.compare ();
 							}
 							else {
@@ -2764,6 +2855,7 @@ function f() { /** ... */ }
 		var dict_comprehensions = {};
 		var dictionaries = {};
 		var exceptions = {};
+		var extended_slices = {};
 		var general_functions = {};
 		var indices_and_slices = {};
 		var lambda_functions = {};
@@ -2785,6 +2877,7 @@ function f() { /** ... */ }
 		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
+		__nest__ (extended_slices, '', __init__ (__world__.extended_slices));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
@@ -2805,6 +2898,7 @@ function f() { /** ... */ }
 		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (exceptions, 'exceptions');
+		autoTester.run (extended_slices, 'extended_slices');
 		autoTester.run (general_functions, 'general_functions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (lambda_functions, 'lambda_functions');
@@ -2826,6 +2920,7 @@ function f() { /** ... */ }
 			'dict_comprehensions' +
 			'dictionaries' +
 			'exceptions' +
+			'extended_slices' +
 			'general_functions' +
 			'indices_and_slices' +
 			'lambda_functions' +

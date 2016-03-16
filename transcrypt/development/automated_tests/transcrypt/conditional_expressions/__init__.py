@@ -21,3 +21,4 @@ def run (autoTester):
 	odd = [x if x % 2 else x + 1 for x in range (10)]
 	noDuplicates = set (odd)
 	autoTester.check (odd, noDuplicates)
+	

@@ -58,7 +58,7 @@ class AutoTester:
 			
 	def check (self, *args):
 		item = ' '.join ([self.sortedRepr (arg) for arg in args])	# N.B. stubs.browser provides a special sorting repr
-		if __envir__.executorName == __envir__.transpilerName:
+		if __envir__.executor_name == __envir__.transpiler_name:
 			self.testBuffer.append (item)
 		else:
 			self.referenceBuffer.append (item)
@@ -76,7 +76,7 @@ class AutoTester:
 				aFile.write ('<b>Transcrypt output:</b>\n')
 				aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId))
 
-				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.targetSubDir, filePrename, miniInfix))
+				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix))
 				
 	def compare (self):
 		self.referenceBuffer = document.getElementById (self.referenceDivId) .innerHTML.split (' | ')
@@ -99,7 +99,7 @@ class AutoTester:
 		self.check ('<br><br>')
 			
 	def done (self):
-		if __envir__.executorName == __envir__.transpilerName:
+		if __envir__.executor_name == __envir__.transpiler_name:
 			self.compare ()
 		else:
 			self.dump (__main__.__file__ [ : -3] .replace ('\\', '/') .rsplit ('/', 1) [-1])

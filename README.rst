@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Extended slices completed (pfff...), autotest added, not yet tested on Linux
 - Module search for Transcrypt -r and Transcrypt [-b] now both use same sys.path contents
 - Setup.py adapted to Linux' case sensitivity
 - Unload preloaded org module, since it may be shadowed by a Trancrypt-specific one

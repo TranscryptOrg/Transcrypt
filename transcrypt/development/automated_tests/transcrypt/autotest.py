@@ -8,6 +8,7 @@ import data_structures
 import dict_comprehensions
 import dictionaries
 import exceptions
+import extended_slices
 import general_functions
 import indices_and_slices
 import lambda_functions
@@ -30,6 +31,7 @@ autoTester.run (data_structures, 'data_structures')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')
 autoTester.run (dictionaries, 'dictionaries')
 autoTester.run (exceptions, 'exceptions')
+autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (lambda_functions, 'lambda_functions')

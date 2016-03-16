@@ -7,6 +7,7 @@
 		var dict_comprehensions = {};
 		var dictionaries = {};
 		var exceptions = {};
+		var extended_slices = {};
 		var general_functions = {};
 		var indices_and_slices = {};
 		var lambda_functions = {};
@@ -28,6 +29,7 @@
 		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
+		__nest__ (extended_slices, '', __init__ (__world__.extended_slices));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
@@ -48,6 +50,7 @@
 		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (exceptions, 'exceptions');
+		autoTester.run (extended_slices, 'extended_slices');
 		autoTester.run (general_functions, 'general_functions');
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (lambda_functions, 'lambda_functions');
@@ -69,6 +72,7 @@
 			'dict_comprehensions' +
 			'dictionaries' +
 			'exceptions' +
+			'extended_slices' +
 			'general_functions' +
 			'indices_and_slices' +
 			'lambda_functions' +

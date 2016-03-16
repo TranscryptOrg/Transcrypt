@@ -562,7 +562,7 @@ file: Module
 									value: Name 
 										id: str = __envir__
 										ctx: Load 
-									attr: str = executorName
+									attr: str = executor_name
 									ctx: Load 
 								ops: list 
 									element: Eq 
@@ -571,7 +571,7 @@ file: Module
 										value: Name 
 											id: str = __envir__
 											ctx: Load 
-										attr: str = transpilerName
+										attr: str = transpiler_name
 										ctx: Load 
 							body: list 
 								element: Expr 
@@ -832,7 +832,7 @@ file: Module
 																value: Name 
 																	id: str = __envir__
 																	ctx: Load 
-																attr: str = targetSubDir
+																attr: str = target_subdir
 																ctx: Load 
 															element: Name 
 																id: str = filePrename
@@ -1283,7 +1283,7 @@ file: Module
 									value: Name 
 										id: str = __envir__
 										ctx: Load 
-									attr: str = executorName
+									attr: str = executor_name
 									ctx: Load 
 								ops: list 
 									element: Eq 
@@ -1292,7 +1292,7 @@ file: Module
 										value: Name 
 											id: str = __envir__
 											ctx: Load 
-										attr: str = transpilerName
+										attr: str = transpiler_name
 										ctx: Load 
 							body: list 
 								element: Expr 

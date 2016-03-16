@@ -24,7 +24,7 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = transpilerName
+									attr: str = transpiler_name
 									ctx: Store 
 							value: Str 
 								s: str = transcrypt
@@ -34,17 +34,17 @@ file: Module
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = transpilerVersion
+									attr: str = transpiler_version
 									ctx: Store 
 							value: Str 
-								s: str = 3.5.125
+								s: str = 3.5.126
 						element: Assign 
 							targets: list 
 								element: Attribute 
 									value: Name 
 										id: str = self
 										ctx: Load 
-									attr: str = targetSubDir
+									attr: str = target_subdir
 									ctx: Store 
 							value: Str 
 								s: str = __javascript__

@@ -39,7 +39,7 @@ def main ():
 		utils.log (True, 'Error: missing license reference file\n')
 		return
 		
-	utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __base__.__envir__.transpilerName.capitalize (), __base__.__envir__.transpilerVersion)
+	utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __base__.__envir__.transpiler_name.capitalize (), __base__.__envir__.transpiler_version)
 	utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
 		
 	utils.commandArgs.parse ()
