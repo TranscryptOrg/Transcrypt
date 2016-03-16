@@ -701,7 +701,7 @@ class Generator (ast.NodeVisitor):
 		# However if a target leaf is an LHS slice,
 		# the actual assignment will involve iterating through an extra index level,
 		# as [1, 2][1:1] = [2, 3] should give [1, 2, 3, 4] rather than [1, [2, 3], 4]
-		# This extra target level is walked in the splice and 
+		# This extra target level is walked in the slice
 		def walkTarget (expr, pathIndices):
 			if type (expr) in targetLeafs:			# It's an LValue, matching an RHS leaf source
 				self.emit (';\n')
