@@ -754,7 +754,7 @@
 	
 	// Operator overloading, only the ones that make most sense in matrix operations
 	
-	var __matmul__ = function (a, b) { 
+	var __matmul__ = function (a, b) {
 		if (typeof a == 'object' && '__matmul__' in a) {
 			return a.__matmul__ (b);
 		}

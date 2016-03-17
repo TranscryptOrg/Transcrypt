@@ -854,6 +854,20 @@ class Generator (ast.NodeVisitor):
 				
 			self.emit (')')
 			
+		def tryEval (expression, globals, locals):
+			try:
+				return eval (
+					expression = compile (
+						ast.Expression (arg),	# Code to compile (can be AST or source)
+						'<string>',				# Not read from a file
+						'eval'					# Code is an expression
+					),
+					globals = {},
+					locals = {'__include__': include}
+				)
+			except:
+				return expression
+			
 		def include (fileName):
 			searchedIncludePaths = []
 			for searchDir in self.module.program.moduleSearchDirs:
@@ -899,13 +913,13 @@ class Generator (ast.NodeVisitor):
 				elif node.args [0] .s == 'js':			# Include JavaScript code literally in the output
 					code = node.args [1] .s.format (* [
 						eval (
-							compile (
+							expression = compile (
 								ast.Expression (arg),	# Code to compile (can be AST or source)
 								'<string>',				# Not read from a file
 								'eval'					# Code is an expression
 							),
-							{},
-							{'__include__': include}
+							globals = {},
+							locals = {'__include__': include}
 						)
 						for arg in node.args [2:]
 					])

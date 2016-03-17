@@ -14,12 +14,12 @@ file: Module
 						s: str = js
 					element: Str 
 						s: str = 
-		(function () {{
-			var exports = {{}};
-			{}	// Puts fabric in exports and in global window
-			delete window.fabric;
-			return exports;
-		}}) () .fabric;
+(function () {{
+	var exports = {{}};
+	{}	// Puts fabric in exports and in global window
+	delete window.fabric;
+	return exports;
+}}) () .fabric;
 	
 					element: Call 
 						func: Name 

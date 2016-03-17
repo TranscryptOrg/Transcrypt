@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Code formatting of __pragma__ ('js') improved
 - Extended slices tested on Linux
 - Extended slices completed (pfff...), autotest added, not yet tested on Linux
 - Module search for Transcrypt -r and Transcrypt [-b] now both use same sys.path contents
