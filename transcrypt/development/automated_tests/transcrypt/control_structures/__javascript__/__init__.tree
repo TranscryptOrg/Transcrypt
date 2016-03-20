@@ -14,6 +14,189 @@ file: Module
 				defaults: list 
 			body: list 
 				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 10
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 8
+							element: Num 
+								n: int = 16
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 8
+							element: Num 
+								n: int = 16
+							element: Num 
+								n: int = 2
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 10
+							element: Num 
+								n: int = 0
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 1
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 16
+							element: Num 
+								n: int = 8
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 2
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = animal
+						ctx: Store 
+					iter: Tuple 
+						elts: list 
+							element: Str 
+								s: str = cat
+							element: Str 
+								s: str = dog
+							element: Str 
+								s: str = turtle
+							element: Str 
+								s: str = goldfish
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = animal
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: For 
 					target: Tuple 
 						elts: list 
 							element: Name 
@@ -64,35 +247,29 @@ file: Module
 							target: Name 
 								id: str = y
 								ctx: Store 
-							iter: Call 
-								func: Name 
-									id: str = range
-									ctx: Load 
-								args: list 
+							iter: Tuple 
+								elts: list 
 									element: Num 
 										n: int = 1
 									element: Num 
 										n: int = 2
 									element: Num 
 										n: int = 3
-								keywords: list 
+								ctx: Load 
 							body: list 
 								element: For 
 									target: Name 
 										id: str = z
 										ctx: Store 
-									iter: Call 
-										func: Name 
-											id: str = range
-											ctx: Load 
-										args: list 
+									iter: Tuple 
+										elts: list 
 											element: Num 
 												n: int = 10
 											element: Num 
 												n: int = 20
 											element: Num 
 												n: int = 30
-										keywords: list 
+										ctx: Load 
 									body: list 
 										element: Expr 
 											value: Call 

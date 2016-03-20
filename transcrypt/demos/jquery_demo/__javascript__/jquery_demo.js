@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-17 16:33:29
+// Transcrypt'ed from Python, 2016-03-20 17:04:54
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.129';
+							self.transpiler_version = '3.5.130';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -126,7 +126,7 @@ function jquery_demo () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -134,7 +134,7 @@ function jquery_demo () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -147,7 +147,7 @@ function jquery_demo () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -506,13 +506,13 @@ function jquery_demo () {
 	list.__name__ = 'list';
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		var result = list ([]);
 		for (var index = start; index < stop; index += step) {
@@ -522,13 +522,13 @@ function jquery_demo () {
 	}
 	Array.prototype.__setslice__ = function (start, stop, step, source) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		if (step == null) {
 			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
@@ -946,9 +946,7 @@ function jquery_demo () {
 					var div = __iter0__ [__index0__];
 					$ (div).css (dict ({'color': 'rgb({},{},{})'.format.apply (null, function () {
 						var __accu0__ = [];
-						var __iter1__ = range (3);
-						for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-							var i = __iter1__ [__index1__];
+						for (var i = 0; i < 3; i++) {
 							__accu0__.append (int (256 * Math.random ()));
 						}
 						return __accu0__;

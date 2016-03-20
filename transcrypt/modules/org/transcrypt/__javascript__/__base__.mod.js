@@ -7,7 +7,7 @@
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.129';
+							self.transpiler_version = '3.5.130';
 							self.target_subdir = '__javascript__';
 						});}
 					});

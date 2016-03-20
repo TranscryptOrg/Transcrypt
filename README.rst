@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- For loops optimized for contiguous ranges
 - Code formatting of __pragma__ ('js') improved
 - Extended slices tested on Linux
 - Extended slices completed (pfff...), autotest added, not yet tested on Linux

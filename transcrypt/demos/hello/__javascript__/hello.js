@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-17 16:33:24
+// Transcrypt'ed from Python, 2016-03-20 17:06:21
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.129';
+							self.transpiler_version = '3.5.130';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -506,13 +506,13 @@ function hello () {
 	list.__name__ = 'list';
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		var result = list ([]);
 		for (var index = start; index < stop; index += step) {
@@ -522,13 +522,13 @@ function hello () {
 	}
 	Array.prototype.__setslice__ = function (start, stop, step, source) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		if (step == null) {
 			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))

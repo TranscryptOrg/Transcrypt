@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.129 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.130 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.129',
+        VERSION:     '3.5.130',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.129 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.130 documentation" href="index.html" />
     <link rel="next" title="5. Integration with JavaScript libraries" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.129 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.130 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -266,9 +266,27 @@ Since they systematically cover all language constructs, they are also very effe
 <div class="literal-block-wrapper container" id="testlet-control-structures">
 <div class="code-block-caption"><span class="caption-text">Testlet: control_structures</span><a class="headerlink" href="#testlet-control-structures" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;turtle&#39;</span><span class="p">,</span> <span class="s">&#39;goldfish&#39;</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">animal</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">square</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">([</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]):</span>
-        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">):</span>
                 <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">square</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="p">)</span>
 
     <span class="n">vehicles</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;bike&#39;</span><span class="p">,</span> <span class="s">&#39;train&#39;</span><span class="p">,</span> <span class="s">&#39;boat&#39;</span><span class="p">,</span> <span class="s">&#39;car&#39;</span><span class="p">,</span> <span class="s">&#39;plane&#39;</span><span class="p">,</span> <span class="s">&#39;bus&#39;</span><span class="p">]</span>
@@ -1145,7 +1163,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.129 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.130 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

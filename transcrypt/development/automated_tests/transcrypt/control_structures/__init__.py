@@ -1,7 +1,25 @@
 def run (autoTester):
+	for index in range (10):
+		autoTester.check (index)
+		
+	for index in range (8, 16):
+		autoTester.check (index)
+		
+	for index in range (8, 16, 2):
+		autoTester.check (index)
+		
+	for index in range (10, 0, -1):
+		autoTester.check (index)
+		
+	for index in range (16, 8, -2):
+		autoTester.check (index)
+		
+	for animal in ('cat', 'dog', 'turtle', 'goldfish'):
+		autoTester.check (animal)
+
 	for index, square in enumerate ([x * x for x in range (10) if x % 2]):
-		for y in range (1, 2, 3):
-			for z in range (10, 20, 30):
+		for y in (1, 2, 3):
+			for z in (10, 20, 30):
 				autoTester.check (square + y, z )
 
 	vehicles = ['bike', 'train', 'boat', 'car', 'plane', 'bus']

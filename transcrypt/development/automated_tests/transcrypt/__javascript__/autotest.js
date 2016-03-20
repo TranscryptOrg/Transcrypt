@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-17 16:33:14
+// Transcrypt'ed from Python, 2016-03-20 17:06:17
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.129';
+							self.transpiler_version = '3.5.130';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -506,13 +506,13 @@ function autotest () {
 	list.__name__ = 'list';
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		var result = list ([]);
 		for (var index = start; index < stop; index += step) {
@@ -522,13 +522,13 @@ function autotest () {
 	}
 	Array.prototype.__setslice__ = function (start, stop, step, source) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		if (step == null) {
 			Array.prototype.splice.apply (this, [start, stop - start] .concat (source))
@@ -1265,9 +1265,7 @@ function autotest () {
 						}
 						var odd = function () {
 							var __accu0__ = [];
-							var __iter0__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var x = __iter0__ [__index0__];
+							for (var x = 0; x < 10; x++) {
 								__accu0__.append ((x % 2 ? x : x + 1));
 							}
 							return __accu0__;
@@ -1290,11 +1288,29 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
+						for (var index = 0; index < 10; index++) {
+							autoTester.check (index);
+						}
+						for (var index = 8; index < 16; index++) {
+							autoTester.check (index);
+						}
+						for (var index = 8; index < 16; index += 2) {
+							autoTester.check (index);
+						}
+						for (var index = 10; index > 0; index--) {
+							autoTester.check (index);
+						}
+						for (var index = 16; index > 8; index -= 2) {
+							autoTester.check (index);
+						}
+						var __iter0__ = tuple (['cat', 'dog', 'turtle', 'goldfish']);
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var animal = __iter0__ [__index0__];
+							autoTester.check (animal);
+						}
 						var __iter0__ = enumerate (function () {
 							var __accu0__ = [];
-							var __iter1__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
-								var x = __iter1__ [__index0__];
+							for (var x = 0; x < 10; x++) {
 								if (x % 2) {
 									__accu0__.append (x * x);
 								}
@@ -1305,10 +1321,10 @@ function autotest () {
 							var __left0__ = __iter0__ [__index0__];
 							var index = __left0__ [0];
 							var square = __left0__ [1];
-							var __iter1__ = range (1, 2, 3);
+							var __iter1__ = tuple ([1, 2, 3]);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var y = __iter1__ [__index1__];
-								var __iter2__ = range (10, 20, 30);
+								var __iter2__ = tuple ([10, 20, 30]);
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
 									var z = __iter2__ [__index2__];
 									autoTester.check (square + y, z);
@@ -1322,14 +1338,10 @@ function autotest () {
 							var __iter1__ = tuple ([false, true]);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var doContinue = __iter1__ [__index1__];
-								var __iter2__ = range (10);
 								var __break0__ = false;
-								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var index = __iter2__ [__index2__];
-									var __iter3__ = range (0, 100, 10);
+								for (var index = 0; index < 10; index++) {
 									var __break1__ = false;
-									for (var __index3__ = 0; __index3__ < __iter3__.length; __index3__++) {
-										var index2 = __iter3__ [__index3__];
+									for (var index2 = 0; index2 < 100; index2 += 10) {
 										if (doBreak && index2 == 50) {
 											autoTester.check ('break2');
 											__break1__ = true;
@@ -1719,7 +1731,7 @@ function autotest () {
 						a.__setitem__ (tuple ([tuple ([1, 2, 3]), tuple ([4, 5, 6])]), __getslice__ (b, 7, 8, 9));
 						__setslice__ (c, 1, 2, 3, d.__getitem__ (tuple ([tuple ([4, 5, 6]), tuple ([7, 8, 9])])));
 						e.__setitem__ (tuple ([1, tuple ([1, 2, 3]), 3]), f.__getitem__ (tuple ([4, tuple ([4, 5, 6]), 6])));
-						__setitem__ (g, tuple ([1, 2, 3]), __getitem__ (h, tuple ([1, 2, 3])));
+						g.__setitem__ (tuple ([1, 2, 3]), h.__getitem__ (tuple ([1, 2, 3])));
 						__setitem__ (i, 1, __getitem__ (j, 1));
 						__setslice__ (k, 1, 2, 3, __getslice__ (l, 1, 2, 3));
 					};
@@ -1788,9 +1800,7 @@ function autotest () {
 						autoTester.check (aList);
 						aList.__setslice__ (0, null, 2, function () {
 							var __accu0__ = [];
-							var __iter0__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var x = __iter0__ [__index0__];
+							for (var x = 0; x < 10; x++) {
 								if (x % 2) {
 									__accu0__.append (x + 0.001);
 								}
@@ -1873,9 +1883,7 @@ function autotest () {
 					var run = function (autoTester) {
 						var squares = function () {
 							var __accu0__ = [];
-							var __iter0__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var i = __iter0__ [__index0__];
+							for (var i = 0; i < 10; i++) {
 								if (i % 2) {
 									__accu0__.append (i * i);
 								}
@@ -1923,9 +1931,7 @@ function autotest () {
 							var __accu0__ = [];
 							var __iter0__ = function () {
 								var __accu1__ = [];
-								var __iter1__ = range (3);
-								for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
-									var x = __iter1__ [__index0__];
+								for (var x = 0; x < 3; x++) {
 									__accu1__.append (x * x);
 								}
 								return __accu1__;
@@ -1941,9 +1947,7 @@ function autotest () {
 						var x = 5;
 						var scopeTest = function () {
 							var __accu0__ = [];
-							var __iter0__ = range (5);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var x = __iter0__ [__index0__];
+							for (var x = 0; x < 5; x++) {
 								__accu0__.append (x + a);
 							}
 							return __accu0__;
@@ -2208,14 +2212,10 @@ function autotest () {
 							else {
 								self._ = function () {
 									var __accu0__ = [];
-									var __iter0__ = range (nRows);
-									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-										var row = __iter0__ [__index0__];
+									for (var row = 0; row < nRows; row++) {
 										__accu0__.append (function () {
 											var __accu1__ = [];
-											var __iter1__ = range (nCols);
-											for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-												var col = __iter1__ [__index1__];
+											for (var col = 0; col < nCols; col++) {
 												__accu1__.append (0);
 											}
 											return __accu1__;
@@ -2228,15 +2228,9 @@ function autotest () {
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
-								var __iter0__ = range (result.nRows);
-								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-									var iTargetRow = __iter0__ [__index0__];
-									var __iter1__ = range (result.nCols);
-									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var iTargetCol = __iter1__ [__index1__];
-										var __iter2__ = range (self.nCols);
-										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-											var iTerm = __iter2__ [__index2__];
+								for (var iTargetRow = 0; iTargetRow < result.nRows; iTargetRow++) {
+									for (var iTargetCol = 0; iTargetCol < result.nCols; iTargetCol++) {
+										for (var iTerm = 0; iTerm < self.nCols; iTerm++) {
 											result._ [iTargetRow] [iTargetCol] += self._ [iTargetRow] [iTerm] * other._ [iTerm] [iTargetCol];
 										}
 									}
@@ -2249,12 +2243,8 @@ function autotest () {
 						});},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
-							var __iter0__ = range (self.nRows);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var iRow = __iter0__ [__index0__];
-								var __iter1__ = range (self.nCols);
-								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-									var iCol = __iter1__ [__index1__];
+							for (var iRow = 0; iRow < self.nRows; iRow++) {
+								for (var iCol = 0; iCol < self.nCols; iCol++) {
 									result._ [iRow] [iCol] = scalar * self._ [iRow] [iCol];
 								}
 							}
@@ -2262,12 +2252,8 @@ function autotest () {
 						});},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
-							var __iter0__ = range (self.nRows);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var iRow = __iter0__ [__index0__];
-								var __iter1__ = range (self.nCols);
-								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-									var iCol = __iter1__ [__index1__];
+							for (var iRow = 0; iRow < self.nRows; iRow++) {
+								for (var iCol = 0; iCol < self.nCols; iCol++) {
 									result._ [iRow] [iCol] = self._ [iRow] [iCol] + other._ [iRow] [iCol];
 								}
 							}
@@ -2504,8 +2490,8 @@ function autotest () {
 						});},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
-							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							var __break0__ = false;
+							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var __left0__ = __iter0__ [__index0__];
 								var index = __left0__ [0];
@@ -2819,9 +2805,7 @@ function autotest () {
 						var f = function () {
 							return function () {
 								var __accu0__ = [];
-								var __iter0__ = range (7000, 10000, 1000);
-								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-									var i = __iter0__ [__index0__];
+								for (var i = 7000; i < 10000; i += 1000) {
 									__accu0__.append (tuple ([i, 2 * i]));
 								}
 								return __accu0__;

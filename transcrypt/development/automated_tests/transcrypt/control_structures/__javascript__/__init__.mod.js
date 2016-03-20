@@ -5,11 +5,29 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
+						for (var index = 0; index < 10; index++) {
+							autoTester.check (index);
+						}
+						for (var index = 8; index < 16; index++) {
+							autoTester.check (index);
+						}
+						for (var index = 8; index < 16; index += 2) {
+							autoTester.check (index);
+						}
+						for (var index = 10; index > 0; index--) {
+							autoTester.check (index);
+						}
+						for (var index = 16; index > 8; index -= 2) {
+							autoTester.check (index);
+						}
+						var __iter0__ = tuple (['cat', 'dog', 'turtle', 'goldfish']);
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var animal = __iter0__ [__index0__];
+							autoTester.check (animal);
+						}
 						var __iter0__ = enumerate (function () {
 							var __accu0__ = [];
-							var __iter1__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
-								var x = __iter1__ [__index0__];
+							for (var x = 0; x < 10; x++) {
 								if (x % 2) {
 									__accu0__.append (x * x);
 								}
@@ -20,10 +38,10 @@
 							var __left0__ = __iter0__ [__index0__];
 							var index = __left0__ [0];
 							var square = __left0__ [1];
-							var __iter1__ = range (1, 2, 3);
+							var __iter1__ = tuple ([1, 2, 3]);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var y = __iter1__ [__index1__];
-								var __iter2__ = range (10, 20, 30);
+								var __iter2__ = tuple ([10, 20, 30]);
 								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
 									var z = __iter2__ [__index2__];
 									autoTester.check (square + y, z);
@@ -37,14 +55,10 @@
 							var __iter1__ = tuple ([false, true]);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var doContinue = __iter1__ [__index1__];
-								var __iter2__ = range (10);
 								var __break0__ = false;
-								for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-									var index = __iter2__ [__index2__];
-									var __iter3__ = range (0, 100, 10);
+								for (var index = 0; index < 10; index++) {
 									var __break1__ = false;
-									for (var __index3__ = 0; __index3__ < __iter3__.length; __index3__++) {
-										var index2 = __iter3__ [__index3__];
+									for (var index2 = 0; index2 < 100; index2 += 10) {
 										if (doBreak && index2 == 50) {
 											autoTester.check ('break2');
 											__break1__ = true;

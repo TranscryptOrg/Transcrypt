@@ -331,14 +331,14 @@
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 		
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 		
 		var result = list ([]);
@@ -351,14 +351,14 @@
 		
 	Array.prototype.__setslice__ = function (start, stop, step, source) {
 		if (start < 0) {
-			start = this.length + 1 - start;
+			start = this.length + start;
 		}
 			
 		if (stop == null) {
 			stop = this.length;
 		}
 		else if (stop < 0) {
-			stop = this.length + 1 - stop;
+			stop = this.length + stop;
 		}
 			
 		if (step == null) {	// Assign to 'ordinary' slice, replace subsequence

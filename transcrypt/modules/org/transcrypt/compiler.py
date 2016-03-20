@@ -467,13 +467,13 @@ class Generator (ast.NodeVisitor):
 		self.use.add (name)						# Must not be done if the healthy exception occurs
 		return result
 		
+	def isCall (self, node, name):
+		return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
+		
 	def getPragmaKindFromExpr (self, node):
 		return (
 			node.value.args [0] .s
-			if (
-				type (node) == ast.Expr and type (node.value) == ast.Call and
-				type (node.value.func) == ast.Name and node.value.func.id == '__pragma__'
-			) else
+			if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else
 			None
 		)
 		
@@ -619,10 +619,18 @@ class Generator (ast.NodeVisitor):
 				else:	# Most frequent and simple case, only one atomary LHS
 					pass
 					
-			if type (target) == ast.Subscript:			# Only non-overloaded LHS index can be left to visit_Subscript
-				if type (target.slice) == ast.Index:
-					if self.allowOperatorOverloading:	# Possibly overloaded LHS index dealth with here, is special case
-						self.emit ('__setitem__ (')		# Free function tries .__setitem__ (overload) and [] (native)
+			if type (target) == ast.Subscript:				# Only non-overloaded LHS index can be left to visit_Subscript
+				if type (target.slice) == ast.Index:		# Always overloaded
+					if type (target.slice.value) == ast.Tuple:
+						self.visit (target.value)
+						self.emit ('.__setitem__ (')			# Free function tries .__setitem__ (overload) and [] (native)
+						self.visit (target.slice.value)
+						self.emit (', ')
+						self.visit (value)
+						emitPathIndices ()
+						self.emit (')')					
+					elif self.allowOperatorOverloading:		# Possibly overloaded LHS index dealth with here, is special case
+						self.emit ('__setitem__ (')			# Free function tries .__setitem__ (overload) and [] (native)
 						self.visit (target.value)
 						self.emit (', ')
 						self.visit (target.slice.value)
@@ -630,14 +638,14 @@ class Generator (ast.NodeVisitor):
 						self.visit (value)
 						emitPathIndices ()
 						self.emit (')')
-					else:								# Non-overloaded LHS index just dealth with by visit_Subscript
-						self.visit (target)				# which is called indirectly here
+					else:									# Non-overloaded LHS index just dealth with by visit_Subscript
+						self.visit (target)					# which is called indirectly here
 						self.emit (' = ')
 						self.visit (value)
 						emitPathIndices ()						
 				elif type (target.slice) == ast.Slice:
 					if self.allowOperatorOverloading:
-						self.emit ('__setslice__ (')	# Free function tries .__setitem__ (overload) and .__setslice__ (native)
+						self.emit ('__setslice__ (')		# Free function tries .__setitem__ (overload) and .__setslice__ (native)
 						self.visit (target.value)		
 						self.emit (', ')
 					else:
@@ -665,9 +673,9 @@ class Generator (ast.NodeVisitor):
 					self.visit (value)
 							
 					self.emit (')')
-				elif type (target.slice) == ast.ExtSlice:
+				elif type (target.slice) == ast.ExtSlice:	# Always overloaded
 					self.visit (target.value)		
-					self.emit ('.__setitem__ (')	# Method, since extended slice access is always overloaded
+					self.emit ('.__setitem__ (')			# Method, since extended slice access is always overloaded
 					self.emit ('tuple ([')
 					for index, dim in enumerate (target.slice.dims):
 						self.emitComma (index)
@@ -716,7 +724,7 @@ class Generator (ast.NodeVisitor):
 				pathIndices.pop ()					# Remove the indexing level since we're done with that sequence
 				
 		def getIsPropertyAssign (value):
-			if type (value) == ast.Call and type (value.func) == ast.Name and value.func.id == 'property':
+			if self.isCall (value, 'property'):
 				return True
 			else:
 				try:	# Assume it's a tuple or a list of properties (and so recursively)
@@ -750,34 +758,41 @@ class Generator (ast.NodeVisitor):
 		self.emit ('.{}', self.filterId (node.attr))
 		
 	def visit_AugAssign (self, node):
-		self.visit (node.target)	# No need to emit var first, it has to exist already
-		
-		# Optimize for ++ and --
-		if type (node.value) == ast.Num and node.value.n == 1:
-			if type (node.op) == ast.Add:
-				self.emit ('++')
-				return
-			elif type (node.op) == ast.Sub:
-				self.emit ('--')
-				return
-		elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Num and node.value.operand.n == 1:
-			if type (node.op) == ast.Add:
-				if type (node.value.op) == ast.UAdd:
+		if type (node.target) == ast.Subscript and (
+				self.allowOperatorOverloading or
+				type (node.target.slice) != ast.Index or
+				type (node.target.slice.value) == ast.Tuple
+		):	# LHS is a call to __getitem__ or __getslice__, so generating <operator>= won't work
+			self.visit (ast.Assign ([node.target], ast.BinOp (node.target, node.op, node.value)))
+		else:	
+			self.visit (node.target)		# No need to emit var first, it has to exist already
+			
+			# Optimize for ++ and --
+			if type (node.value) == ast.Num and node.value.n == 1:
+				if type (node.op) == ast.Add:
 					self.emit ('++')
 					return
-				elif type (node.value.op) == ast.USub:
+				elif type (node.op) == ast.Sub:
 					self.emit ('--')
 					return
-			elif type (node.op) == ast.Sub:
-				if type (node.value.op) == ast.UAdd:
-					self.emit ('--')
-					return
-				elif type (node.value.op) == ast.USub:
-					self.emit ('++')
-					return				
-				
-		self.emit (' {}= ', self.operators [type (node.op)][0])
-		self.visit (node.value)
+			elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Num and node.value.operand.n == 1:
+				if type (node.op) == ast.Add:
+					if type (node.value.op) == ast.UAdd:
+						self.emit ('++')
+						return
+					elif type (node.value.op) == ast.USub:
+						self.emit ('--')
+						return
+				elif type (node.op) == ast.Sub:
+					if type (node.value.op) == ast.UAdd:
+						self.emit ('--')
+						return
+					elif type (node.value.op) == ast.USub:
+						self.emit ('++')
+						return				
+					
+			self.emit (' {}= ', self.operators [type (node.op)][0])
+			self.visit (node.value)
 		
 	def visit_BinOp (self, node):
 		if type (node.op) == ast.FloorDiv:
@@ -1079,40 +1094,89 @@ class Generator (ast.NodeVisitor):
 			
 	def visit_Expr (self, node):
 		self.visit (node.value)
-		
+				
 	def visit_For (self, node):
-		self.emit ('var {} = ', self.nextTemp ('iter'))
-		self.visit (node.iter)
-		self.emit (';\n')
-		
-		if self.allowConversionToIterable:
-			self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iter'))
-			self.indent ()
-			self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iter'), self.filterId ('keys'))
-			self.dedent ()
-			self.emit ('}}\n')
-		
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
-		
-		self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
-		self.indent ()
-		
-		# Create and visit Assign node on the fly to benefit from tupple assignment
-		self.visit (ast.Assign (
-			[node.target],
-			ast.Subscript (
-				value = ast.Name (id = self.getTemp ('iter'), ctx = ast.Load),
-				slice = ast.Index (ast.Num (n = self.getTemp ('index'))),
-				ctx = ast.Load
+			
+		optimize = (	# Special case optimization: iterating through range with constant step
+			type (node.target) == ast.Name and	# Since 'var' is emitted, target must not yet exist, so e.g. not be element of array
+			self.isCall (node.iter, 'range') and (
+				len (node.iter.args) < 3 or
+				type (node.iter.args [2]) == ast.Num or (
+					type (node.iter.args [2]) == ast.UnaryOp and
+					type (node.iter.args [2] .operand) == ast.Num
+				)
 			)
-		))
+		)
 		
-		self.emit (';\n')
+		if optimize:
+			step = (
+					1
+				if len (node.iter.args) <= 2 else
+					node.iter.args [2] .n
+				if type (node.iter.args [2]) == ast.Num else
+					node.iter.args [2] .operand .n
+				if type (node.iter.args [2] .op) == ast.UAdd else
+					-node.iter.args [2] .operand .n
+			)
+			
+			self.emit ('for (var ')
+			self.visit (node.target)
+			self.emit (' = ')
+			self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Num (0))
+			self.emit ('; ')
+			self.visit (node.target)
+			self.emit (' < ' if step > 0 else ' > ')
+			self.visit (node.iter.args [1] if len (node.iter.args) > 1 else node.iter.args [0])
+			self.emit ('; ')
+			self.visit (node.target)
+			if step == 1:
+				self.emit ('++')
+			elif step == -1:
+				self.emit ('--')
+			elif step >= 0:
+				self.emit ( ' += {}', step)
+			else:
+				self.emit ( ' -= {}', -step)
+			self.emit (') {{\n')
+			
+			self.indent ()
+		else:
+			self.emit ('var {} = ', self.nextTemp ('iter'))
+			self.visit (node.iter)
+			self.emit (';\n')
+			
+			if self.allowConversionToIterable:
+				self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iter'))
+				self.indent ()
+				self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iter'), self.filterId ('keys'))
+				self.dedent ()
+				self.emit ('}}\n')
+		
+			self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
+			self.indent ()
+		
+			# Create and visit Assign node on the fly to benefit from tupple assignment
+			self.visit (ast.Assign (
+				[node.target],
+				ast.Subscript (
+					value = ast.Name (id = self.getTemp ('iter'), ctx = ast.Load),
+					slice = ast.Index (ast.Num (n = self.getTemp ('index'))),
+					ctx = ast.Load
+				)
+			))
+			
+			self.emit (';\n')
+						
 		self.emitBody (node.body)
 		self.dedent ()
 		self.emit ('}}\n')
-		
+
+		if not optimize:
+			self.prevTemp ('index')
+			self.prevTemp ('iter')
+			
 		if node.orelse:
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
@@ -1122,10 +1186,7 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			
 			self.emit ('}}\n')
-			
-		self.prevTemp ('index')
-		self.prevTemp ('iter')
-		
+						
 	def visit_FunctionDef (self, node):
 		def emitScopedBody ():
 			self.inscope (node)
@@ -1447,20 +1508,25 @@ class Generator (ast.NodeVisitor):
 	# LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
 	def visit_Subscript (self, node):
 		if type (node.slice) == ast.Index:
-			if self.allowOperatorOverloading:	# It must be an RHS index
-				self.emit ('__getitem__ (')		# Free function tries .__getitem__ (overload) and [] (native)
+			if type (node.slice.value) == ast.Tuple:	# Always overloaded, it must be an RHS index
+				self.visit (node.value)
+				self.emit ('.__getitem__ (')
+				self.visit (node.slice.value)
+				self.emit (')')
+			elif self.allowOperatorOverloading:			# It must be an RHS index
+				self.emit ('__getitem__ (')				# Free function tries .__getitem__ (overload) and [] (native)
 				self.visit (node.value)
 				self.emit (', ')
 				self.visit (node.slice.value)
 				self.emit (')')
-			else:								# It may be an LHS or RHS index 
+			else:										# It may be an LHS or RHS index 
 				self.visit (node.value)
 				self.emit (' [')
 				self.visit (node.slice.value)
 				self.emit (']')
 		elif type (node.slice) == ast.Slice:
 			if self.allowOperatorOverloading:
-				self.emit ('__getslice__ (')	# Free function, tries .__getitem__ (overload) and .__getslice__ (native)
+				self.emit ('__getslice__ (')			# Free function, tries .__getitem__ (overload) and .__getslice__ (native)
 				self.visit (node.value)				
 				self.emit (', ')
 			else:
@@ -1485,9 +1551,9 @@ class Generator (ast.NodeVisitor):
 				self.visit (node.slice.step)
 				
 			self.emit (')')
-		elif type (node.slice) == ast.ExtSlice:	# Always overloaded
+		elif type (node.slice) == ast.ExtSlice:			# Always overloaded
 			self.visit (node.value)
-			self.emit ('.__getitem__ (')		# Method, since extended slice access is always overloaded
+			self.emit ('.__getitem__ (')				# Method, since extended slice access is always overloaded
 			self.emit ('tuple ([')
 			for index, dim in enumerate (node.slice.dims):
 				self.emitComma (index)

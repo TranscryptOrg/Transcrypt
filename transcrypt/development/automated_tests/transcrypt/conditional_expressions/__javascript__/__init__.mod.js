@@ -38,9 +38,7 @@
 						}
 						var odd = function () {
 							var __accu0__ = [];
-							var __iter0__ = range (10);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var x = __iter0__ [__index0__];
+							for (var x = 0; x < 10; x++) {
 								__accu0__.append ((x % 2 ? x : x + 1));
 							}
 							return __accu0__;

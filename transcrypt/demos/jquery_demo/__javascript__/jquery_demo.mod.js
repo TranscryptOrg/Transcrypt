@@ -6,9 +6,7 @@
 					var div = __iter0__ [__index0__];
 					$ (div).css (dict ({'color': 'rgb({},{},{})'.format.apply (null, function () {
 						var __accu0__ = [];
-						var __iter1__ = range (3);
-						for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-							var i = __iter1__ [__index1__];
+						for (var i = 0; i < 3; i++) {
 							__accu0__.append (int (256 * Math.random ()));
 						}
 						return __accu0__;

@@ -17,14 +17,10 @@
 							else {
 								self._ = function () {
 									var __accu0__ = [];
-									var __iter0__ = range (nRows);
-									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-										var row = __iter0__ [__index0__];
+									for (var row = 0; row < nRows; row++) {
 										__accu0__.append (function () {
 											var __accu1__ = [];
-											var __iter1__ = range (nCols);
-											for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-												var col = __iter1__ [__index1__];
+											for (var col = 0; col < nCols; col++) {
 												__accu1__.append (0);
 											}
 											return __accu1__;
@@ -37,15 +33,9 @@
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
-								var __iter0__ = range (result.nRows);
-								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-									var iTargetRow = __iter0__ [__index0__];
-									var __iter1__ = range (result.nCols);
-									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var iTargetCol = __iter1__ [__index1__];
-										var __iter2__ = range (self.nCols);
-										for (var __index2__ = 0; __index2__ < __iter2__.length; __index2__++) {
-											var iTerm = __iter2__ [__index2__];
+								for (var iTargetRow = 0; iTargetRow < result.nRows; iTargetRow++) {
+									for (var iTargetCol = 0; iTargetCol < result.nCols; iTargetCol++) {
+										for (var iTerm = 0; iTerm < self.nCols; iTerm++) {
 											result._ [iTargetRow] [iTargetCol] += self._ [iTargetRow] [iTerm] * other._ [iTerm] [iTargetCol];
 										}
 									}
@@ -58,12 +48,8 @@
 						});},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
-							var __iter0__ = range (self.nRows);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var iRow = __iter0__ [__index0__];
-								var __iter1__ = range (self.nCols);
-								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-									var iCol = __iter1__ [__index1__];
+							for (var iRow = 0; iRow < self.nRows; iRow++) {
+								for (var iCol = 0; iCol < self.nCols; iCol++) {
 									result._ [iRow] [iCol] = scalar * self._ [iRow] [iCol];
 								}
 							}
@@ -71,12 +57,8 @@
 						});},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
-							var __iter0__ = range (self.nRows);
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var iRow = __iter0__ [__index0__];
-								var __iter1__ = range (self.nCols);
-								for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-									var iCol = __iter1__ [__index1__];
+							for (var iRow = 0; iRow < self.nRows; iRow++) {
+								for (var iCol = 0; iCol < self.nCols; iCol++) {
 									result._ [iRow] [iCol] = self._ [iRow] [iCol] + other._ [iRow] [iCol];
 								}
 							}
