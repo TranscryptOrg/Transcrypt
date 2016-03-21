@@ -716,6 +716,10 @@
 		return this.toLowerCase ();
 	};
 	
+	String.prototype.py_replace = function (old, aNew, maxreplace) {
+		return this.split (old, maxreplace) .join (aNew);
+	};
+	
 	String.prototype.lstrip = function () {
 		return this.replace (/^\s*/g, '');
 	};

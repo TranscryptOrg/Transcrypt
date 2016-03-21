@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Transcrypt: what and why &mdash; Transcrypt 3.5.131 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.5.131',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Transcrypt 3.5.131 documentation" href="index.html" />
+    <link rel="next" title="2. Getting started" href="installation_use.html" />
+    <link rel="prev" title="Welcome to Transcrypt’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Transcrypt’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="transcrypt-what-and-why">
+<h1>1. Transcrypt: what and why<a class="headerlink" href="#transcrypt-what-and-why" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-transcrypt">
+<h2>1.1. What is Transcrypt<a class="headerlink" href="#what-is-transcrypt" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt is a tool to compile a fairly extensive subset of Python into compact, readable JavaScript. It has the following characteristics:</p>
+<ol class="arabic simple">
+<li>It&#8217;s lightweight, in accordance Pareto’s rule adapted for IT: 99% of the result can be achieved with 1% of the effort.</li>
+<li>It offers the semantic essence of Python along with the clean syntax that the language is famous for</li>
+<li>It cooperates flawlessly with the JavaScript universe of web-oriented libraries</li>
+<li>It translates Python into highly readable, easy to debug JavaScript</li>
+</ol>
+<p>In two words: it&#8217;s <em>lean</em> and <em>mean</em>.</p>
+</div>
+<div class="section" id="language-preferences-a-subjective-account">
+<h2>1.2. Language preferences, a subjective account<a class="headerlink" href="#language-preferences-a-subjective-account" title="Permalink to this headline">¶</a></h2>
+<p>Language preferences are largely subjective. For some developers, JavaScript is the language of choice. They are right. For others it&#8217;s Python. They&#8217;re equally right. It just fits the way of thinking of many. The word &#8216;pythonic&#8217; says it all: Programming in Python can be a joy. And, apart from being its own reward, taking joy in one&#8217;s work enhances quality like no other incentive.</p>
+<p>At the basis of Transcrypt lies the following shopping list:</p>
+<ul class="simple">
+<li>Python syntax</li>
+<li>Small downloads</li>
+<li>No barriers to the JavaScript / JQuery / DOM world</li>
+<li>Dynamic typing</li>
+<li>&#8216;Classic&#8217; object orientation including multiple inheritance</li>
+<li>Static transpilation</li>
+<li>Lambda’s</li>
+<li>Named parameters</li>
+<li>Lists, dicts and sets</li>
+<li>List comprehensions</li>
+<li>Nested tuple assignment</li>
+<li>Assignment of bound functions</li>
+</ul>
+<p>At the advent of Transcrypt there were many Python to JavaScript transpiler projects around, some of them quite mature. Neither of them fitted the above shopping list. Either the downloads were too large, or some of must have features were missing. To some, the shopping list may seem weird. Multiple inheritance? The whole Java world is doing without it. Exactly. And that&#8217;s one of the reasons why a large category of developers shunned Java from the start. To them multiple inheritance has proven a powerful tool ever since it was introduced in C++.</p>
+<p>So if it&#8217;s all that subjective, why should <em>you</em> use it?. Well, <em>only if and when you like it</em>. That&#8217;s all. In IT everything grows until it becomes unusable. One of the main goals of Transcrypt is to keep things simple, preventing it from disolution into an ocean of feature creep and conflicting demands. At its core it will stay lean and mean. For the rest: it&#8217;s open. There&#8217;s a hierarchical module system included right from the start, featuring Java-esque URL based unique package names. So, once the core of Transcrypt has stabilized, you&#8217;re invited to help its ecosystem grow.</p>
+</div>
+<div class="section" id="the-ecosystem-different-batteries">
+<h2>1.3. The ecosystem: different batteries<a class="headerlink" href="#the-ecosystem-different-batteries" title="Permalink to this headline">¶</a></h2>
+<p>To be effective, a programming language needs libraries. Python is famous for its &#8216;batteries included&#8217; claim: Almost any library you can think of has been written for Python, and is available from a central location: <a class="reference external" href="https://pypi.python.org">https://pypi.python.org</a> . But Python&#8217;s batteries are desktop c.q. server batteries. And Transcrypt is for the web client world. So it needs different batteries. There&#8217;s a virtually unlimited supply of free high quality JavaScript libraries for web applications. The web is dominated by designers and while programmers may loathe their way of thinking, they sure have created beautiful things. The set of available JQuery components alone beats almost anything available for the desktop from an aesthetic point of view. Rather than attempting to set up a parallel universe for Transcrypt, the only sensible thing to do is to embrace the JavaScript ecosystem to the max. There may be thin &#8216;pythonic&#8217; wrappers around JavaScript libraries, but even this is not needed. JavaScript libraries can be used from Transcrypt without restrictions or complications.</p>
+<p>There&#8217;s a category of libraries c.q. applications that are probably developed easier in Transcrypt than in JavaScript. Transcrypt&#8217;s niche are non-trivial web applications where, apart from looks, things like structure, overview, simplicity, explicitness and regularity start to count. This is where Python shines and Transcrypt with it. The preferred way to make Transcrypt libraries and applications avaible to the world is PyPi, Transcrypt being a Python flavour.</p>
+</div>
+<div class="section" id="code-structure">
+<h2>1.4. Code structure<a class="headerlink" href="#code-structure" title="Permalink to this headline">¶</a></h2>
+<p>In the JavaScript world, components are gathered from everywhere on the web during a page load, and small fragments of code may be anywhere in a web page. Transcrypt takes a different approach. The concept of a static webpage is secundary and may even be absent. Typically there&#8217;s one and only one Transcrypt application attachted to a certain URL or page. This application has it&#8217;s own namespace and may feature many entrypoints or callbacks attached to DOM components. Although traditional web pages can be made without restrictions using Transcrypt, the focus is on complex stateful web applications rather than on static pages interspersed with code fragments. Typically such a web application will rely on the server to store and retrieve data and program state. Although at some point &#8216;pythonic&#8217; libraries may come into existence to facilitate this, direct use of JavaScript AJAX or e.g. of a JQuery AJAX wrapper, will do the job fine.</p>
+</div>
+<div class="section" id="debuggability">
+<h2>1.5. Debuggability<a class="headerlink" href="#debuggability" title="Permalink to this headline">¶</a></h2>
+<p>In order to debug a transpiled web app, it helps a lot if there&#8217;s a simple correspondence between the Python source code and the generated JavaScript. In Transcrypt this is the case, as is illustrated by the following code fragments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="classes-py">
+<div class="code-block-caption"><span class="caption-text">classes.py</span><a class="headerlink" href="#classes-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">show</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;A.show&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">alert</span> <span class="p">(</span><span class="s">&#39;In B constructor&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        
+    <span class="k">def</span> <span class="nf">show</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;B.show&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        
+<span class="k">class</span> <span class="nc">C</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">alert</span> <span class="p">(</span><span class="s">&#39;In C constructor&#39;</span><span class="p">)</span>
+        <span class="n">A</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">B</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;constructor&#39;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">show</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="n">B</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;C.show&#39;</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span> <span class="p">(</span><span class="mi">1001</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;america&#39;</span><span class="p">)</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">B</span> <span class="p">(</span><span class="mi">2002</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;russia&#39;</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">C</span> <span class="p">(</span><span class="mi">3003</span><span class="p">,</span> <span class="mi">4004</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">show</span> <span class="p">(</span><span class="s">&#39;netherlands&#39;</span><span class="p">)</span>
+
+<span class="n">show2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">show</span>
+<span class="n">show2</span> <span class="p">(</span><span class="s">&#39;copy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="classes-js">
+<div class="code-block-caption"><span class="caption-text">classes.js</span><a class="headerlink" href="#classes-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>var A = __class__ (&#39;A&#39;, [object], {
+    get __init__ () {return __get__ (this, function (self, x) {
+        self.x = x;
+    });},
+    get show () {return __get__ (this, function (self, label) {
+        print (&#39;A.show&#39;, label, self.x);
+    });}
+});
+var B = __class__ (&#39;B&#39;, [object], {
+    get __init__ () {return __get__ (this, function (self, y) {
+        alert (&#39;In B constructor&#39;);
+        self.y = y;
+    });},
+    get show () {return __get__ (this, function (self, label) {
+        print (&#39;B.show&#39;, label, self.y);
+    });}
+});
+var C = __class__ (&#39;C&#39;, [A, B], {
+    get __init__ () {return __get__ (this, function (self, x, y) {
+        alert (&#39;In C constructor&#39;);
+        A.__init__ (self, x);
+        B.__init__ (self, y);
+        self.show (&#39;constructor&#39;);
+    });},
+    get show () {return __get__ (this, function (self, label) {
+        B.show (self, label);
+        print (&#39;C.show&#39;, label, self.x, self.y);
+    });}
+});
+var a = A (1001);
+a.show (&#39;america&#39;);
+var b = B (2002);
+b.show (&#39;russia&#39;);
+var c = C (3003, 4004);
+c.show (&#39;netherlands&#39;);
+var show2 = c.show;
+show2 (&#39;copy&#39;);
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Transcrypt: what and why</a><ul>
+<li><a class="reference internal" href="#what-is-transcrypt">1.1. What is Transcrypt</a></li>
+<li><a class="reference internal" href="#language-preferences-a-subjective-account">1.2. Language preferences, a subjective account</a></li>
+<li><a class="reference internal" href="#the-ecosystem-different-batteries">1.3. The ecosystem: different batteries</a></li>
+<li><a class="reference internal" href="#code-structure">1.4. Code structure</a></li>
+<li><a class="reference internal" href="#debuggability">1.5. Debuggability</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Transcrypt&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation_use.html"
+                        title="next chapter">2. Getting started</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/what_why.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Transcrypt’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

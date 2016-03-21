@@ -305,6 +305,8 @@ class Generator (ast.NodeVisitor):
 			('js_keys', 'keys'),
 			('pop', 'py_pop'),
 			('js_pop', 'pop'),
+			('replace', 'py_replace'),
+			('js_replace', 'replace'),
 			('sort', 'py_sort'),
 			('js_sort', 'sort'),
 			('split', 'py_split'),

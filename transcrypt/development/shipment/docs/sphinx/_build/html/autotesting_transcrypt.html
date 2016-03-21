@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Autotesting Transcrypt code &mdash; Transcrypt 3.5.131 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.5.131',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Transcrypt 3.5.131 documentation" href="index.html" />
+    <link rel="prev" title="5. Integration with JavaScript libraries" href="integration_javascript.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="integration_javascript.html" title="5. Integration with JavaScript libraries"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="autotesting-transcrypt-code">
+<h1>6. Autotesting Transcrypt code<a class="headerlink" href="#autotesting-transcrypt-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="why-it-s-needed">
+<h2>6.1. Why it&#8217;s needed<a class="headerlink" href="#why-it-s-needed" title="Permalink to this headline">¶</a></h2>
+<p>An simple autotest feature has been added to Transcrypt right from the start for the following reasons:</p>
+<ol class="arabic simple">
+<li>Any programming language compiler has to be reliable, since a large investment in code may come to depend upon it. Languages and libraries should be able to evolve without regression bugs being introduced. In a rich language many constructs are possible which all should be tested with each new release. This can only be done if testing is automated.</li>
+<li>Since Transcrypt compiles not all of Python but a fairly extensive subset, it has to be rigorously clear what can be compiled and what not. The sourcecode of a set of automated tests can be an effective means of laying down what is possible in the language. Whereas code examples and documents may lag back or deviate from reality, test code has to cover the essential features of the language and is, by nature, constantly exercised to match the latest status of the language.</li>
+</ol>
+</div>
+<div class="section" id="how-it-works">
+<h2>6.2. How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>When code is being tested, a reference is needed of what is considered to be correct. With Transcrypt that reference is CPython. Autotesting Transcrypt code is simple and boils down to the following.</p>
+<ol class="arabic simple">
+<li>Along with developing production code, a growing set of <em>testlets</em> is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method <em>org.transcrypt.autotester.AutoTester.check (self, *args)</em> to build a well defined sequence of output data.</li>
+<li>A series of testlets are imported into an application called an <em>autotest</em>.</li>
+<li>The autotest is first run from the command line: <em>python transcrypt -r autotest.py</em>. This will generate files <em>autotest.html</em> (using prettyfied code) and <em>autotest.min.html</em> (using minified code) in the working directory, both containing the <em>reference data sequence</em> produced by CPython, in an HTML DIV.</li>
+<li>After that, the autotest is compiled to JavaScript: <em>python transcryp -b autotest.py</em>. This will generate files <em>autotest.js</em> and <em>autotest.min.js</em> in the corresponding JavaScript directory.</li>
+<li>Click on <em>autotest.html</em> or <em>autotest.min.html</em> to load the autotest into the browser and run <em>autotest.js</em> or <em>autotest.min.js</em> respectively. This will generate the <em>test data sequence</em>, now using the Transcrypt runtime.</li>
+<li>After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.</li>
+</ol>
+<p>An example of two testlets combined into the &#8216;hello&#8217; autotest, that is part of the distribution:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="autotest-py">
+<div class="code-block-caption"><span class="caption-text">autotest.py</span><a class="headerlink" href="#autotest-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
+
+<span class="kn">import</span> <span class="nn">testlet0</span>
+<span class="kn">import</span> <span class="nn">testlet1</span>
+
+<span class="n">autoTester</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">transcrypt</span><span class="o">.</span><span class="n">autotester</span><span class="o">.</span><span class="n">AutoTester</span> <span class="p">()</span>
+
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">testlet0</span><span class="p">,</span> <span class="s">&#39;testlet0&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">testlet1</span><span class="p">,</span> <span class="s">&#39;testlet1&#39;</span><span class="p">)</span>
+
+<span class="n">autoTester</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="testlet0-py">
+<div class="code-block-caption"><span class="caption-text">testlet0.py</span><a class="headerlink" href="#testlet0-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;world&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="testlet1-py">
+<div class="code-block-caption"><span class="caption-text">testlet1.py</span><a class="headerlink" href="#testlet1-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;goodbye&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;moon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Output of the &#8216;hello&#8217; autotest with a deliberate error:</p>
+<div class="figure">
+<img alt="Output of 'hello autotest'" src="_images/autotest_hello.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. Autotesting Transcrypt code</a><ul>
+<li><a class="reference internal" href="#why-it-s-needed">6.1. Why it&#8217;s needed</a></li>
+<li><a class="reference internal" href="#how-it-works">6.2. How it works</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="integration_javascript.html"
+                        title="previous chapter">5. Integration with JavaScript libraries</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/autotesting_transcrypt.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="integration_javascript.html" title="5. Integration with JavaScript libraries"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

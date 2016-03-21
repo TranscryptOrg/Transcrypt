@@ -159,7 +159,7 @@
 								self.compare ();
 							}
 							else {
-								self.dump (__main__.__file__.__getslice__ (0, -3, 1).replace ('\\', '/').rsplit ('/', 1) [-1]);
+								self.dump (__main__.__file__.__getslice__ (0, -3, 1).py_replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
 						});}
 					});

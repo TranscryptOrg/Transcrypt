@@ -10,7 +10,7 @@
 						for (var index = 0; index < args.length; index++) {
 							result = result.concat (args [index]);
 						}
-						return result;
+						return list (result);
 					}
 					//<all>
 					__all__.chain = chain;

@@ -1,0 +1,861 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.131 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.5.131',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Transcrypt 3.5.131 documentation" href="index.html" />
+    <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
+    <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="autotesting_transcrypt.html" title="6. Autotesting Transcrypt code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="integration-with-javascript-libraries">
+<h1>5. Integration with JavaScript libraries<a class="headerlink" href="#integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="three-ways-of-integration">
+<h2>5.1. Three ways of integration<a class="headerlink" href="#three-ways-of-integration" title="Permalink to this headline">¶</a></h2>
+<p>There are three ways to integrate Transcrypt applications with existing JavaScript libraries.</p>
+<ol class="arabic simple">
+<li>The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don&#8217;t seem to mind that, many Python programmers do.</li>
+<li>Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distibution this is done for the <em>fabric</em> module, that encapsulates <em>fabric.js</em>. In this way the global namespace stays clean.</li>
+<li>The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without</li>
+</ol>
+<p>In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.</p>
+<div class="literal-block-wrapper container" id="the-encapsulation-layer-for-fabric-js">
+<span id="code-encaps-fabric"></span><div class="code-block-caption"><span class="caption-text">The encapsulation layer for fabric.js</span><a class="headerlink" href="#the-encapsulation-layer-for-fabric-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fabric</span> <span class="o">=</span> <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">(function () {{</span>
+<span class="sd">    var exports = {{}};</span>
+<span class="sd">    {}  // Puts fabric in exports and in global window</span>
+<span class="sd">    delete window.fabric;</span>
+<span class="sd">    return exports;</span>
+<span class="sd">}}) () .fabric;</span>
+<span class="sd">    &#39;&#39;&#39;</span><span class="p">,</span>
+    <span class="n">__include__</span> <span class="p">(</span><span class="s">&#39;com/fabricjs/__javascript__/fabric.js&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note that __pragma__ (&#8216;js&#8217;, &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replaces the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
+</div>
+<div class="section" id="integration-example-pong">
+<h2>5.2. Integration example: Pong<a class="headerlink" href="#integration-example-pong" title="Permalink to this headline">¶</a></h2>
+<p>In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that <em>new &lt;constructor&gt;</em> is replaced by <em>__new__ (&lt;constructor&gt;)</em>.</p>
+<table border="1" class="docutils" id="code-pong">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="pong-py">
+<div class="code-block-caption"><span class="caption-text">pong.py</span><a class="headerlink" href="#pong-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">Date</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c"># Prevent complaints by optional static checker</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
+
+<span class="n">orthoWidth</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">orthoHeight</span> <span class="o">=</span> <span class="mi">750</span>
+<span class="n">fieldHeight</span> <span class="o">=</span> <span class="mi">650</span>
+
+<span class="n">enter</span><span class="p">,</span> <span class="n">esc</span><span class="p">,</span> <span class="n">space</span> <span class="o">=</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">32</span>
+
+<span class="k">class</span> <span class="nc">Attribute</span><span class="p">:</span>    <span class="c"># Attribute in the gaming sense of the word, rather than of an object</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>                    <span class="c"># Attribute knows game it&#39;s part of</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c"># Game knows all its attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">install</span> <span class="p">()</span>                     <span class="c"># Put in place graphical representation of attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>                       <span class="c"># Reset attribute to start position</span>
+                    
+    <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="c"># Restore starting positions or score, then commit to fabric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commit</span> <span class="p">()</span>      <span class="c"># Nothing to restore for the Attribute base class</span>
+                
+    <span class="k">def</span> <span class="nf">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+                
+    <span class="k">def</span> <span class="nf">interact</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Sprite</span> <span class="p">(</span><span class="n">Attribute</span><span class="p">):</span>   <span class="c"># Here, a sprite is an attribute that can move</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="n">Attribute</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>     <span class="c"># The sprite holds an image that fabric can display</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Rect</span> <span class="p">({</span>
+            <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scaleX</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">),</span> <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scaleY</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span>
+            <span class="s">&#39;originX&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;originY&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span>
+        <span class="p">}))</span>
+        
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;kwargs&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vX</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vY</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vX</span> <span class="o">=</span> <span class="n">vX</span>        <span class="c"># Speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="n">vY</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>          <span class="c"># Predicted position, can be commit, no bouncing initially</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        
+        <span class="n">Attribute</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>     <span class="c"># Predict position, do not yet commit, bouncing may alter it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vX</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">deltaT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">deltaT</span>
+
+    <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>      <span class="c"># Update fabric image for asynch draw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">draw</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+         
+<span class="k">class</span> <span class="nc">Paddle</span> <span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="mi">30</span> <span class="c"># Distance of paddles from walls</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="mi">400</span> <span class="c"># / s</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>  <span class="c"># Paddle knows its player index, 0 == left, 1 == right</span>
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="c"># Put paddle in rest position, dependent on player index</span>
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="k">else</span> <span class="o">-</span><span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span><span class="p">,</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Let paddle react on keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="mi">0</span>
+    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>                          <span class="c"># Right player</span>
+            <span class="k">if</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;K&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>       <span class="c"># Letter k pressed</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
+            <span class="k">elif</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
+        <span class="k">else</span><span class="p">:</span>                                   <span class="c"># Left player</span>
+            <span class="k">if</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
+            <span class="k">elif</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;Z&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
+                
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>                   <span class="c"># Do not yet commit, paddle may bounce with walls</span>
+
+    <span class="k">def</span> <span class="nf">interact</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>    <span class="c"># Paddles and ball assumed infinitely thin</span>
+        <span class="c"># Paddle touches wall</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="n">max</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Math</span><span class="o">.</span><span class="n">min</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
+        
+        <span class="c"># Paddle hits ball</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="c"># On or behind left paddle</span>
+                <span class="ow">or</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="c"># On or behind right paddle</span>
+            <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>               <span class="c"># Ball may have gone too far already</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">vX</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">vX</span>  <span class="c"># Bounce on paddle</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">speedUp</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+<span class="k">class</span> <span class="nc">Ball</span> <span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="n">side</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="mi">300</span> <span class="c"># / s</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">side</span><span class="p">)</span>
+ 
+    <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>   <span class="c"># Launch according to service direction with random angle offset from horizontal</span>
+        <span class="n">angle</span> <span class="o">=</span>  <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">serviceIndex</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">PI</span>    <span class="c"># Service direction</span>
+            <span class="o">+</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">atan</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">/</span> <span class="n">orthoWidth</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">vX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">cos</span> <span class="p">(</span><span class="n">angle</span><span class="p">),</span>
+            <span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">sin</span> <span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Sprite</span><span class="o">.</span><span class="n">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>           <span class="c"># Integrate velocity to position</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>   <span class="c"># If out on left side</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scored</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="c">#   Right player scored</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scored</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>   <span class="c"># If it hits top wall</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span>   <span class="c">#   It may have gone too far already</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vY</span>          <span class="c">#   Bounce</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vY</span>
+
+    <span class="k">def</span> <span class="nf">speedUp</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bat</span><span class="p">):</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Math</span><span class="o">.</span><span class="n">abs</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">bat</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">bat</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>    <span class="c"># Speed will increase more if paddle hit near centre</span>
+        
+        <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">abs</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vX</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vX</span> <span class="o">*=</span> <span class="n">factor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">*=</span> <span class="n">factor</span>           
+
+<span class="k">class</span> <span class="nc">Scoreboard</span> <span class="p">(</span><span class="n">Attribute</span><span class="p">):</span>
+    <span class="n">nameShift</span> <span class="o">=</span> <span class="mi">75</span>
+    <span class="n">hintShift</span> <span class="o">=</span> <span class="mi">25</span>
+            
+    <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Graphical representation of scoreboard are four labels and a separator line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playerLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;Player {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">{</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+                <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
+        <span class="p">}))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="p">((</span><span class="s">&#39;AZ keys:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;KM keys:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">))]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">hintLabel</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;[spacebar] starts game, [enter] resets score&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;12&#39;</span><span class="p">,</span>
+                <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hintShift</span><span class="p">)</span>
+        <span class="p">}))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Line</span> <span class="p">([</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="o">-</span><span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">],</span>
+            <span class="p">{</span><span class="s">&#39;stroke&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">}</span>
+        <span class="p">))</span>
+                
+    <span class="k">def</span> <span class="nf">increment</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerIndex</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="p">[</span><span class="n">playerIndex</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+    <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">Attribute</span><span class="o">.</span><span class="n">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c"># Only does a commit here</span>
+        
+    <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>          <span class="c"># Committing labels is adapting their texts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoreLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">score</span><span class="p">),</span> <span class="p">{</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+                <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
+        <span class="p">}))</span> <span class="k">for</span> <span class="n">score</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scores</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="o">/</span><span class="mi">16</span><span class="p">))]</span>
+
+    <span class="k">def</span> <span class="nf">draw</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">playerLabel</span><span class="p">,</span> <span class="n">scoreLabel</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerLabels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scoreLabels</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">playerLabel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">scoreLabel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hintLabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+        
+<span class="k">class</span> <span class="nc">Game</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serviceIndex</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span>    <span class="c"># Index of player that has initial service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">True</span>                           <span class="c"># Start game in paused state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Canvas</span> <span class="p">(</span><span class="s">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;backgroundColor&#39;</span><span class="p">:</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;originX&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;originY&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowResize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>    <span class="c"># Install draw callback, will be called asynch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowDraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span>        <span class="c"># Install resize callback, will be called if resized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">lineWidth</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>    
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">[]</span>                        <span class="c"># All attributes will insert themselves here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paddles</span> <span class="o">=</span> <span class="p">[</span><span class="n">Paddle</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">2</span><span class="p">)]</span>    <span class="c"># Pass game as parameter self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ball</span> <span class="o">=</span> <span class="n">Ball</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoreboard</span> <span class="o">=</span> <span class="n">Scoreboard</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>     
+
+        <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>    <span class="c"># Install update callback, time in ms</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>      <span class="c"># Install draw callback, time in ms</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keydown&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keydown</span><span class="p">)</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keyup&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyup</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="o">+</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Date</span><span class="p">)</span>
+ 
+    <span class="k">def</span> <span class="nf">update</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>                          <span class="c"># Note that update and draw are not synchronized</span>
+        <span class="n">oldTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="o">+</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Date</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltaT</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">-</span> <span class="n">oldTime</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pause</span><span class="p">:</span>                          <span class="c"># If in paused state</span>
+            <span class="k">if</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>            <span class="c">#   If spacebar hit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">False</span>              <span class="c">#         Start playing</span>
+            <span class="k">elif</span> <span class="n">enter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>      <span class="c">#   Else if enter hit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scoreboard</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>        <span class="c">#         Reset score</span>
+        <span class="k">else</span><span class="p">:</span>                                   <span class="c"># Else, so if in active state</span>
+            <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>   <span class="c">#   Compute predicted values</span>
+                <span class="n">attribute</span><span class="o">.</span><span class="n">predict</span> <span class="p">()</span>
+            
+            <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>   <span class="c">#   Correct values for bouncing and scoring</span>
+                <span class="n">attribute</span><span class="o">.</span><span class="n">interact</span> <span class="p">()</span>
+            
+            <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>   <span class="c">#   Commit them to pyglet for display</span>
+                <span class="n">attribute</span><span class="o">.</span><span class="n">commit</span> <span class="p">()</span>
+            
+    <span class="k">def</span> <span class="nf">scored</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerIndex</span><span class="p">):</span>             <span class="c"># Player has scored</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoreboard</span><span class="o">.</span><span class="n">increment</span> <span class="p">(</span><span class="n">playerIndex</span><span class="p">)</span> <span class="c"># Increment player&#39;s points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serviceIndex</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">playerIndex</span>     <span class="c"># Grant service to the unlucky player</span>
+        
+        <span class="k">for</span> <span class="n">paddle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">paddles</span><span class="p">:</span>             <span class="c"># Put paddles in rest position</span>
+            <span class="n">paddle</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>                      <span class="c"># Put ball in rest position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">True</span>                       <span class="c"># Wait for next round</span>
+        
+    <span class="k">def</span> <span class="nf">draw</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+            <span class="n">attribute</span><span class="o">.</span><span class="n">draw</span> <span class="p">()</span>
+             
+    <span class="k">def</span> <span class="nf">resize</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="nf">scaleX</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">orthoWidth</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">scaleY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">orthoHeight</span><span class="p">)</span>   
+        
+    <span class="k">def</span> <span class="nf">orthoX</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaleX</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">orthoWidth</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">orthoY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaleY</span> <span class="p">(</span><span class="n">orthoHeight</span> <span class="o">-</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+                
+    <span class="k">def</span> <span class="nf">keydown</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">keyCode</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">keyup</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="o">.</span><span class="n">remove</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">keyCode</span><span class="p">)</span>
+        
+<span class="n">game</span> <span class="o">=</span> <span class="n">Game</span> <span class="p">()</span>  <span class="c"># Create and run game</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="pong-mod-js">
+<div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var fabric = __init__ (__world__.com.fabricjs).fabric;
+        var orthoWidth = 1000;
+        var orthoHeight = 750;
+        var fieldHeight = 650;
+        var __left0__ = tuple ([13, 27, 32]);
+        var enter = __left0__ [0];
+        var esc = __left0__ [1];
+        var space = __left0__ [2];
+        var Attribute = __class__ (&#39;Attribute&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self, game) {
+                self.game = game;
+                self.game.attributes.append (self);
+                self.install ();
+                self.reset ();
+            });},
+            get reset () {return __get__ (this, function (self) {
+                self.commit ();
+            });},
+            get predict () {return __get__ (this, function (self) {
+                /* pass */;
+            });},
+            get interact () {return __get__ (this, function (self) {
+                /* pass */;
+            });},
+            get commit () {return __get__ (this, function (self) {
+                /* pass */;
+            });}
+        });
+        var Sprite = __class__ (&#39;Sprite&#39;, [Attribute], {
+            get __init__ () {return __get__ (this, function (self, game, width, height) {
+                self.width = width;
+                self.height = height;
+                Attribute.__init__ (self, game);
+            });},
+            get install () {return __get__ (this, function (self) {
+                self.image = new fabric.Rect (dict ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;}));
+            });},
+            get reset () {return __get__ (this, function (self, vX, vY, x, y) {
+                if (typeof vX == &#39;undefined&#39; || (vX != null &amp;&amp; vX .__class__ == __kwargdict__)) {;
+                    var vX = 0;
+                };
+                if (typeof vY == &#39;undefined&#39; || (vY != null &amp;&amp; vY .__class__ == __kwargdict__)) {;
+                    var vY = 0;
+                };
+                if (typeof x == &#39;undefined&#39; || (x != null &amp;&amp; x .__class__ == __kwargdict__)) {;
+                    var x = 0;
+                };
+                if (typeof y == &#39;undefined&#39; || (y != null &amp;&amp; y .__class__ == __kwargdict__)) {;
+                    var y = 0;
+                };
+                if (arguments.length) {
+                    var __ilastarg0__ = arguments.length - 1;
+                    if (arguments [__ilastarg0__] &amp;&amp; arguments [__ilastarg0__].__class__ == __kwargdict__) {
+                        var __allkwargs0__ = arguments [__ilastarg0__--];
+                        for (var __attrib0__ in __allkwargs0__) {
+                            switch (__attrib0__) {
+                                case &#39;self&#39;: var self = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;vX&#39;: var vX = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;vY&#39;: var vY = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;x&#39;: var x = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;y&#39;: var y = __allkwargs0__ [__attrib0__]; break;
+                            }
+                        }
+                    }
+                }
+                self.vX = vX;
+                self.vY = vY;
+                self.x = x;
+                self.y = y;
+                Attribute.reset (self);
+            });},
+            get predict () {return __get__ (this, function (self) {
+                self.x += self.vX * self.game.deltaT;
+                self.y += self.vY * self.game.deltaT;
+            });},
+            get commit () {return __get__ (this, function (self) {
+                self.image.left = self.game.orthoX (self.x);
+                self.image.top = self.game.orthoY (self.y);
+            });},
+            get draw () {return __get__ (this, function (self) {
+                self.game.canvas.add (self.image);
+            });}
+        });
+        var Paddle = __class__ (&#39;Paddle&#39;, [Sprite], {
+            get __init__ () {return __get__ (this, function (self, game, index) {
+                self.index = index;
+                Sprite.__init__ (self, game, self.width, self.height);
+            });},
+            get reset () {return __get__ (this, function (self) {
+                Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth) / Math.floor (2) - self.margin : Math.floor (-orthoWidth) / Math.floor (2) + self.margin), y: 0}));
+            });},
+            get predict () {return __get__ (this, function (self) {
+                self.vY = 0;
+                if (self.index) {
+                    if (__in__ (ord (&#39;K&#39;), self.game.keySet)) {
+                        self.vY = self.speed;
+                    }
+                    else {
+                        if (__in__ (ord (&#39;M&#39;), self.game.keySet)) {
+                            self.vY = -self.speed;
+                        }
+                    }
+                }
+                else {
+                    if (__in__ (ord (&#39;A&#39;), self.game.keySet)) {
+                        self.vY = self.speed;
+                    }
+                    else {
+                        if (__in__ (ord (&#39;Z&#39;), self.game.keySet)) {
+                            self.vY = -self.speed;
+                        }
+                    }
+                }
+                Sprite.predict (self);
+            });},
+            get interact () {return __get__ (this, function (self) {
+                self.y = Math.max (Math.floor (self.height) / Math.floor (2) - Math.floor (fieldHeight) / Math.floor (2), Math.min (self.y, Math.floor (fieldHeight) / Math.floor (2) - Math.floor (self.height) / Math.floor (2)));
+                if ((self.y - Math.floor (self.height) / Math.floor (2) &lt; self.game.ball.y &amp;&amp; self.game.ball.y &lt; self.y + Math.floor (self.height) / Math.floor (2)) &amp;&amp; (self.index == 0 &amp;&amp; self.game.ball.x &lt; self.x || self.index == 1 &amp;&amp; self.game.ball.x &gt; self.x)) {
+                    self.game.ball.x = self.x;
+                    self.game.ball.vX = -self.game.ball.vX;
+                    self.game.ball.speedUp (self);
+                }
+            });}
+        });
+        Paddle.margin = 30;
+        Paddle.width = 10;
+        Paddle.height = 100;
+        Paddle.speed = 400;
+        var Ball = __class__ (&#39;Ball&#39;, [Sprite], {
+            get __init__ () {return __get__ (this, function (self, game) {
+                Sprite.__init__ (self, game, self.side, self.side);
+            });},
+            get reset () {return __get__ (this, function (self) {
+                var angle = self.game.serviceIndex * Math.PI + (Math.random () &gt; 0.5 ? 1 : -1) * Math.random () * Math.atan (fieldHeight / orthoWidth);
+                Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
+            });},
+            get predict () {return __get__ (this, function (self) {
+                Sprite.predict (self);
+                if (self.x &lt; Math.floor (-orthoWidth) / Math.floor (2)) {
+                    self.game.scored (1);
+                }
+                else {
+                    if (self.x &gt; Math.floor (orthoWidth) / Math.floor (2)) {
+                        self.game.scored (0);
+                    }
+                }
+                if (self.y &gt; Math.floor (fieldHeight) / Math.floor (2)) {
+                    self.y = Math.floor (fieldHeight) / Math.floor (2);
+                    self.vY = -self.vY;
+                }
+                else {
+                    if (self.y &lt; Math.floor (-fieldHeight) / Math.floor (2)) {
+                        self.y = Math.floor (-fieldHeight) / Math.floor (2);
+                        self.vY = -self.vY;
+                    }
+                }
+            });},
+            get speedUp () {return __get__ (this, function (self, bat) {
+                var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / Math.floor (bat.height) / Math.floor (2), 2);
+                if (Math.abs (self.vX) &lt; 3 * self.speed) {
+                    self.vX *= factor;
+                    self.vY *= factor;
+                }
+            });}
+        });
+        Ball.side = 8;
+        Ball.speed = 300;
+        var Scoreboard = __class__ (&#39;Scoreboard&#39;, [Attribute], {
+            get install () {return __get__ (this, function (self) {
+                self.playerLabels = function () {
+                    var __accu0__ = [];
+                    var __iter0__ = tuple ([tuple ([&#39;AZ keys:&#39;, -7 / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]);
+                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                        var __left0__ = __iter0__ [__index0__];
+                        var name = __left0__ [0];
+                        var position = __left0__ [1];
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
+                    }
+                    return __accu0__;
+                } ();
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX (-7 / 16 * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)}));
+                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), dict ({&#39;stroke&#39;: &#39;white&#39;}));
+            });},
+            get increment () {return __get__ (this, function (self, playerIndex) {
+                self.scores [playerIndex]++;
+            });},
+            get reset () {return __get__ (this, function (self) {
+                self.scores = list ([0, 0]);
+                Attribute.reset (self);
+            });},
+            get commit () {return __get__ (this, function (self) {
+                self.scoreLabels = function () {
+                    var __accu0__ = [];
+                    var __iter0__ = zip (self.scores, tuple ([-2 / 16, 6 / 16]));
+                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                        var __left0__ = __iter0__ [__index0__];
+                        var score = __left0__ [0];
+                        var position = __left0__ [1];
+                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
+                    }
+                    return __accu0__;
+                } ();
+            });},
+            get draw () {return __get__ (this, function (self) {
+                var __iter0__ = zip (self.playerLabels, self.scoreLabels);
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var __left0__ = __iter0__ [__index0__];
+                    var playerLabel = __left0__ [0];
+                    var scoreLabel = __left0__ [1];
+                    self.game.canvas.add (playerLabel);
+                    self.game.canvas.add (scoreLabel);
+                    self.game.canvas.add (self.hintLabel);
+                }
+                self.game.canvas.add (self.image);
+            });}
+        });
+        Scoreboard.nameShift = 75;
+        Scoreboard.hintShift = 25;
+        var Game = __class__ (&#39;Game&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self) {
+                self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
+                self.pause = true;
+                self.keySet = set ();
+                self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ({&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;}));
+                self.canvas.onWindowResize = self.resize;
+                self.canvas.onWindowDraw = self.draw;
+                self.canvas.lineWidth = 2;
+                self.canvas.clear ();
+                self.attributes = list ([]);
+                self.paddles = function () {
+                    var __accu0__ = [];
+                    for (var index = 0; index &lt; 2; index++) {
+                        __accu0__.append (Paddle (self, index));
+                    }
+                    return __accu0__;
+                } ();
+                self.ball = Ball (self);
+                self.scoreboard = Scoreboard (self);
+                window.setInterval (self.update, 10);
+                window.setInterval (self.draw, 20);
+                window.addEventListener (&#39;keydown&#39;, self.keydown);
+                window.addEventListener (&#39;keyup&#39;, self.keyup);
+                self.time = +new Date;
+            });},
+            get update () {return __get__ (this, function (self) {
+                var oldTime = self.time;
+                self.time = +new Date;
+                self.deltaT = (self.time - oldTime) / 1000.0;
+                if (self.pause) {
+                    if (__in__ (space, self.keySet)) {
+                        self.pause = false;
+                    }
+                    else {
+                        if (__in__ (enter, self.keySet)) {
+                            self.scoreboard.reset ();
+                        }
+                    }
+                }
+                else {
+                    var __iter0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                        var attribute = __iter0__ [__index0__];
+                        attribute.predict ();
+                    }
+                    var __iter0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                        var attribute = __iter0__ [__index0__];
+                        attribute.interact ();
+                    }
+                    var __iter0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                        var attribute = __iter0__ [__index0__];
+                        attribute.commit ();
+                    }
+                }
+            });},
+            get scored () {return __get__ (this, function (self, playerIndex) {
+                self.scoreboard.increment (playerIndex);
+                self.serviceIndex = 1 - playerIndex;
+                var __iter0__ = self.paddles;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var paddle = __iter0__ [__index0__];
+                    paddle.reset ();
+                }
+                self.ball.reset ();
+                self.pause = true;
+            });},
+            get draw () {return __get__ (this, function (self) {
+                self.canvas.clear ();
+                var __iter0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var attribute = __iter0__ [__index0__];
+                    attribute.draw ();
+                }
+            });},
+            get resize () {return __get__ (this, function (self, width, height) {
+                /* pass */;
+            });},
+            get scaleX () {return __get__ (this, function (self, x) {
+                return x * self.canvas.width / orthoWidth;
+            });},
+            get scaleY () {return __get__ (this, function (self, y) {
+                return y * self.canvas.height / orthoHeight;
+            });},
+            get orthoX () {return __get__ (this, function (self, x) {
+                return self.scaleX (x + Math.floor (orthoWidth) / Math.floor (2));
+            });},
+            get orthoY () {return __get__ (this, function (self, y) {
+                return self.scaleY (orthoHeight - Math.floor (fieldHeight) / Math.floor (2) - y);
+            });},
+            get keydown () {return __get__ (this, function (self, event) {
+                self.keySet.add (event.keyCode);
+            });},
+            get keyup () {return __get__ (this, function (self, event) {
+                self.keySet.remove (event.keyCode);
+            });}
+        });
+        var game = Game ();
+        __pragma__ (&#39;&lt;use&gt;&#39; +
+            &#39;com.fabricjs&#39; +
+        &#39;&lt;/use&gt;&#39;)
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Attribute = Attribute;
+            __all__.Ball = Ball;
+            __all__.Game = Game;
+            __all__.Paddle = Paddle;
+            __all__.Scoreboard = Scoreboard;
+            __all__.Sprite = Sprite;
+            __all__.enter = enter;
+            __all__.esc = esc;
+            __all__.fieldHeight = fieldHeight;
+            __all__.game = game;
+            __all__.orthoHeight = orthoHeight;
+            __all__.orthoWidth = orthoWidth;
+            __all__.space = space;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="joined-minification">
+<h2>5.3. Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
+<p>Minification is currently performed by the Google closure compiler, that&#8217;s also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
+<p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
+</div>
+<div class="section" id="integration-example-jquery">
+<h2>5.4. Integration example: jQuery<a class="headerlink" href="#integration-example-jquery" title="Permalink to this headline">¶</a></h2>
+<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="jquery-demo-py">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.py</span><a class="headerlink" href="#jquery-demo-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;alias&#39;</span><span class="p">,</span> <span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;$&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">start</span> <span class="p">():</span>
+    <span class="k">def</span> <span class="nf">changeColors</span> <span class="p">():</span>
+        <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">S__divs</span><span class="p">:</span>
+            <span class="n">S</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="o">.</span><span class="n">css</span> <span class="p">({</span>
+                <span class="s">&#39;color&#39;</span><span class="p">:</span> <span class="s">&#39;rgb({},{},{})&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="o">*</span> <span class="p">[</span><span class="nb">int</span> <span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
+            <span class="p">})</span>
+
+    <span class="n">S__divs</span> <span class="o">=</span> <span class="n">S</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+    <span class="n">changeColors</span> <span class="p">()</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="n">changeColors</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var start = function () {
+            var changeColors = function () {
+                var __iter0__ = $divs;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var div = __iter0__ [__index0__];
+                    $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
+                        var __accu0__ = [];
+                        for (var i = 0; i &lt; 3; i++) {
+                            __accu0__.append (int (256 * Math.random ()));
+                        }
+                        return __accu0__;
+                    } ())}));
+                }
+            };
+            var $divs = $ (&#39;div&#39;);
+            changeColors ();
+            window.setInterval (changeColors, 500);
+        };
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.start = start;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. Integration with JavaScript libraries</a><ul>
+<li><a class="reference internal" href="#three-ways-of-integration">5.1. Three ways of integration</a></li>
+<li><a class="reference internal" href="#integration-example-pong">5.2. Integration example: Pong</a></li>
+<li><a class="reference internal" href="#joined-minification">5.3. Joined minification</a></li>
+<li><a class="reference internal" href="#integration-example-jquery">5.4. Integration example: jQuery</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="supported_constructs.html"
+                        title="previous chapter">4. Systematic code examples: a guided tour of Transcrypt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="autotesting_transcrypt.html"
+                        title="next chapter">6. Autotesting Transcrypt code</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/integration_javascript.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="autotesting_transcrypt.html" title="6. Autotesting Transcrypt code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

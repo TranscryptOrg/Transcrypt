@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-21 08:32:13
+// Transcrypt'ed from Python, 2016-03-21 15:31:29
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.131';
+							self.transpiler_version = '3.5.132';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -806,6 +806,9 @@ function autotest () {
 	};
 	String.prototype.lower = function () {
 		return this.toLowerCase ();
+	};
+	String.prototype.py_replace = function (old, aNew, maxreplace) {
+		return this.split (old, maxreplace) .join (aNew);
 	};
 	String.prototype.lstrip = function () {
 		return this.replace (/^\s*/g, '');
@@ -1828,7 +1831,7 @@ function autotest () {
 						for (var index = 0; index < args.length; index++) {
 							result = result.concat (args [index]);
 						}
-						return result;
+						return list (result);
 					}
 					//<all>
 					__all__.chain = chain;
@@ -2527,7 +2530,7 @@ function autotest () {
 								self.compare ();
 							}
 							else {
-								self.dump (__main__.__file__.__getslice__ (0, -3, 1).replace ('\\', '/').rsplit ('/', 1) [-1]);
+								self.dump (__main__.__file__.__getslice__ (0, -3, 1).py_replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
 						});}
 					});

@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Special facilities &mdash; Transcrypt 3.5.131 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.5.131',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Transcrypt 3.5.131 documentation" href="index.html" />
+    <link rel="next" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" />
+    <link rel="prev" title="2. Getting started" href="installation_use.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="special-facilities">
+<h1>3. Special facilities<a class="headerlink" href="#special-facilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="transcrypt-s-module-mechanism">
+<h2>3.1. Transcrypt&#8217;s module mechanism<a class="headerlink" href="#transcrypt-s-module-mechanism" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt&#8217;s module mechanism looks a lot like Python&#8217;s but there are a few differences.
+Firstly, in Transcrypt it is good practice to use url-based unique module identifiers, e.g.</p>
+<ul class="simple">
+<li><em>com.github.&lt;my name&gt;.&lt;my module name&gt;</em></li>
+<li><em>org.python.pypi.&lt;my module name&gt;</em></li>
+<li><em>com.&lt;my company name&gt;.&lt;my module name&gt;</em></li>
+</ul>
+<p>To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g.</p>
+<ul class="simple">
+<li><em>itertools</em></li>
+</ul>
+<p>Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, to keep it lightweight. For computations e.g. JavaScripts <em>Math</em> object, rather then Python&#8217;s <em>math</em> module is currently used. Nevertheless porting (part of) some standard libraries might be handy. If you do, you&#8217;re invited to make them available via PyPi, using &#8216;Transcrypt&#8217; in your keyword list.</p>
+<p>Finding the code for a module proceeds as follows:</p>
+<p>Suppose you import a module <em>all.the.kings.men</em>. Then the following paths will be searched respectively:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>&lt;directory of your main module&gt;/all/the/kings/men.py</em></li>
+<li><em>&lt;directory of your main module&gt;/all/the/kings/__javascript__/men.mod.js</em></li>
+<li><em>&lt;directory of your main module&gt;/all/the/kings/men/__init__py</em></li>
+<li><em>&lt;directory of your main module&gt;/all/the/kings/men/__javascript__/__init__.mod.js</em></li>
+</ul>
+<ul class="simple">
+<li><em>transcrypt/Transcrypt/modules/all/the/kings/men.py</em></li>
+<li><em>transcrypt/Transcrypt/modules/all/the/kings/__javascript__/men.mod.js</em></li>
+<li><em>transcrypt/Transcrypt/modules/all/the/kings/men/__init__py</em></li>
+<li><em>transcrypt/Transcrypt/modules/all/the/kings/men/__javascript__/__init__.mod.js</em></li>
+</ul>
+<ul class="simple">
+<li><em>&lt;CPython packages directory 1&gt;/all/the/kings/men.py</em></li>
+<li><em>&lt;CPython packages directory 1&gt;/all/the/kings/__javascript__/men.mod.js</em></li>
+<li><em>&lt;CPython packages directory 1&gt;/all/the/kings/men/__init__py</em></li>
+<li><em>&lt;CPython packages directory 1&gt;/all/the/kings/men/__javascript__/__init__.mod.js</em></li>
+</ul>
+<ul class="simple">
+<li><em>&lt;CPython packages directory 2&gt;/all/the/kings/men.py</em></li>
+<li><em>&lt;CPython packages directory 2&gt;/all/the/kings/__javascript__/men.mod.js</em></li>
+<li><em>&lt;CPython packages directory 2&gt;/all/the/kings/men/__init__py</em></li>
+<li><em>&lt;CPython packages directory 2&gt;/all/the/kings/men/__javascript__/__init__.mod.js</em></li>
+</ul>
+<ul class="simple">
+<li><em>More CPython packages directories</em></li>
+</ul>
+</div></blockquote>
+<p>As can be seen from the above list, modules local to your project take precedence of modules available in Transcrypt, which again take precedence over modules available globally in CPython. Note that even if modules are made available globally in CPython, importing them in Transcrypt gives special possibilities and restrictions. They are allowed to be written in native JavaScript, in which case they reside in the __javascript__ subdirectory of the module. They should not depend on C, C++ or features that are outside Python subset supported by Transcrypt.</p>
+<p>Although under these guidelines it&#8217;s quite possible to write modules that are importable both by CPyton and Transcrypt, most Transcrypt modules will be come from the JavaScript, rather than from the Python ecosystem. If both a Python and a JavaScript incarnation of a module are present, the Python module is only recompiled if it&#8217;s younger than the corresponding JavaScript module, unless the -b switch is used.</p>
+<p>Furthermore, note that the <em>__init__.py</em> or <em>__init__.mod.js</em> file of a module is executed if and only if that module is imported, not if it&#8217;s just somewhere in the hierarchy of directories containing that module. Furthermore the global code of a module is executed only once, no matter how often that module is imported, as is equally the case with CPython.</p>
+<p>As a consequence of the above, modules may be distributed as Python <em>.py</em> files, but also as JavaScript-only <em>.mod.js</em> files. The JavaScript files may be hand written or generated by any tool including Transcrypt. Although they may be distributed in minified form, don&#8217;t give them the extension <em>.mod.min.js</em>, that exension is reserved for minification by Transcrypt itself. Since Trancrypt will minify your files anyhow, you&#8217;re encouraged to distribute the original, human readable sources, to facilitate debugging by users of your library.</p>
+</div>
+<div class="section" id="using-browser-stubs-to-test-non-gui-code-that-uses-console-log-and-window-alert">
+<h2>3.2. Using browser stubs to test non-GUI code that uses console.log and window.alert<a class="headerlink" href="#using-browser-stubs-to-test-non-gui-code-that-uses-console-log-and-window-alert" title="Permalink to this headline">¶</a></h2>
+<p>To test the non-GUI part of your code in a desktop rather than a browser environment, use <em>from org.transcrypt.stubs.browser import *</em>. This will allow you to call the <em>window.alert</em> and <em>console.log</em> functions in your code when you run it from the command prompt, using the -r command line switch: <em>transcrypt -r &lt;my main file name&gt;</em>. This will invoke CPython, searching the appropriate module paths as compilation would have done.</p>
+</div>
+<div class="section" id="creating-javascript-objects-with-new-constructor-call">
+<h2>3.3. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)<a class="headerlink" href="#creating-javascript-objects-with-new-constructor-call" title="Permalink to this headline">¶</a></h2>
+<p>While creating objects in Transcrypt mostly happens in the plain Python way, e.g. <em>canvas = Canvas (&lt;parameters&gt;)</em>, objects from 3rd party JavaScript libraries often have to be created using <em>new</em>. In Transcrypt such objects are created by calling the  <em>__new__</em> function, e.g. <em>canvas = __new__ (Canvas (&lt;parameters&gt;)</em>, as can be seen in the <a class="reference internal" href="integration_javascript.html#code-pong"><span>Pong example</span></a>. This mechanism is simple, follows Python&#8217;s syntax rules and doesn&#8217;t require updating of an encapsulation layer if a later version of the underlying JavaScript library features additional constructor functions. Therefore in most cases it is the preferred way to create objects who&#8217;s initialization requires calling 3rd party JavaScript constructor functions.</p>
+<p>As an alternative, instantiation and construction can be encapsulated in one function call. Since this in fact creates an alternative API facade for the 3rd party JavaScript library, such an encapsulation should be kept separate from the original library, e.g. by putting it in a separate importable module. The JavaScript code for this encapsulation would e.g. be <em>&lt;facade module name&gt;.Canvas = function (&lt;parameters&gt;) {return new Canvas (&lt;parameters&gt;);};</em>. After importing the facade module, canvas creation is straightforward: <em>canvas = Canvas (&lt;parameters&gt;)</em>.</p>
+<p>As a third alternative, encapsulation can be done in Python rather than JavaScript: <em>def Canvas (&lt;parameters&gt;): return __new__ (&lt;3rd party module name&gt;.Canvas (&lt;parameters&gt;)</em>. Also in this case the creation syntax is simple: <em>canvas = Canvas (&lt;parameters&gt;)</em>.</p>
+</div>
+<div class="section" id="pragma-alias">
+<span id="identifier-aliasing-pragma-alias-and-pragma-noalias"></span><h2>3.4. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)<a class="headerlink" href="#pragma-alias" title="Permalink to this headline">¶</a></h2>
+<p>Calling <em>__pragma__ (&#8216;alias&#8217;, &lt;Python id part&gt;, &lt;JavaScript id part&gt;)</em> at the start of a module will replace identifiers or parts thereof like in the following examples:</p>
+<p>Example 1:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="62%" />
+<col width="38%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td colspan="2">Used at the start of the module: <em>__pragma__ (&#8216;alias&#8217;, &#8216;S&#8217;, $)</em></td>
+</tr>
+<tr class="row-even"><td>Original in Python:</td>
+<td>Alias in JavaScript:</td>
+</tr>
+<tr class="row-odd"><td><em>S (&#8216;body&#8217;)</em></td>
+<td><em>$ (&#8216;body&#8217;)</em></td>
+</tr>
+<tr class="row-even"><td><em>S__body</em></td>
+<td><em>$body</em></td>
+</tr>
+<tr class="row-odd"><td><em>S__She__S__Sells__S__Sea__S__Shells__S</em></td>
+<td><em>$She$Sells$Sea$Shells$</em></td>
+</tr>
+</tbody>
+</table>
+<p>Using the above alias, a piece of jQuery code will look like this in Python:</p>
+<div class="literal-block-wrapper container" id="use-of-pragma-alias-s-in-jquery-demo-py">
+<div class="code-block-caption"><span class="caption-text">Use of __pragma__ (&#8216;alias&#8217;, &#8216;S&#8217;, &#8216;$&#8217;) in jquery_demo.py</span><a class="headerlink" href="#use-of-pragma-alias-s-in-jquery-demo-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;alias&#39;</span><span class="p">,</span> <span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;$&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">start</span> <span class="p">():</span>
+    <span class="k">def</span> <span class="nf">changeColors</span> <span class="p">():</span>
+        <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">S__divs</span><span class="p">:</span>
+            <span class="n">S</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="o">.</span><span class="n">css</span> <span class="p">({</span>
+                <span class="s">&#39;color&#39;</span><span class="p">:</span> <span class="s">&#39;rgb({},{},{})&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="o">*</span> <span class="p">[</span><span class="nb">int</span> <span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
+            <span class="p">})</span>
+
+    <span class="n">S__divs</span> <span class="o">=</span> <span class="n">S</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+    <span class="n">changeColors</span> <span class="p">()</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">setInterval</span> <span class="p">(</span><span class="n">changeColors</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Example 2:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="62%" />
+<col width="38%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td colspan="2">Used at the start of the module <em>__pragma__ (&#8216;alias&#8217;, &#8216;jq&#8217;, &#8216;$&#8217;)</em></td>
+</tr>
+<tr class="row-even"><td><em>jq__body = jq (body)</em></td>
+<td><em>$body = $ (&#8216;body&#8217;)</em></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the generated JavaScript only the modified identifiers will be present, not the original ones. So the JavaScript identifiers are only aliases for the Python ones, not for any identifier in the JavaScript code itself.</p>
+<p>A number of aliases are predefined in the source code of Transcrypt as follows:</p>
+<div class="literal-block-wrapper container" id="transcrypt-s-predefined-aliases">
+<div class="code-block-caption"><span class="caption-text">Transcrypt&#8217;s predefined aliases</span><a class="headerlink" href="#transcrypt-s-predefined-aliases" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>            <span class="p">(</span><span class="s">&#39;arguments&#39;</span><span class="p">,</span> <span class="s">&#39;py_arguments&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_arguments&#39;</span><span class="p">,</span> <span class="s">&#39;arguments&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;del&#39;</span><span class="p">,</span> <span class="s">&#39;py_del&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_del&#39;</span><span class="p">,</span> <span class="s">&#39;del&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_from&#39;</span><span class="p">,</span> <span class="s">&#39;from&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;items&#39;</span><span class="p">,</span> <span class="s">&#39;py_items&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_items&#39;</span><span class="p">,</span> <span class="s">&#39;items&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="s">&#39;py_keys&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_keys&#39;</span><span class="p">,</span> <span class="s">&#39;keys&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;pop&#39;</span><span class="p">,</span> <span class="s">&#39;py_pop&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_pop&#39;</span><span class="p">,</span> <span class="s">&#39;pop&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;sort&#39;</span><span class="p">,</span> <span class="s">&#39;py_sort&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_sort&#39;</span><span class="p">,</span> <span class="s">&#39;sort&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;split&#39;</span><span class="p">,</span> <span class="s">&#39;py_split&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;js_split&#39;</span><span class="p">,</span> <span class="s">&#39;split&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The predefined aliases are used to resolve name conflicts between Python and JavaScript. Calling e.g <em>&lt;object&gt;.sort (&lt;params&gt;)</em> from Python will invoke a <em>sort</em> method with Python semantics, which in the generated JavaScript is called <em>py_sort</em>. Calling <em>&lt;object&gt;.js_sort &lt;params&gt;</em> from Python will invoke a <em>sort</em> method with JavaScript semantics, which in the generated JavaScript is simply called <em>sort</em>, as 3rd party JavaScript libraries will expect.</p>
+<p>Calling <em>__pragma__ (&#8216;noalias&#8217;, &lt;Python id part&gt;)</em> will remove the alias. Calling <em>__pragma__ (&#8216;noalias&#8217;)</em> without second parameter will remove all aliases. WARNING: This will also remove the predefined aliases.</p>
+<p>The alias mechanism is vital to both the compactness and speed of code generated by Transcrypt and to its seamless integration with JavaScript. It allows Transcrypt to extend native JavaScript objects without causing name conflicts even when JavaScript gets expanded over the years, but also without any conversions or other overhead. That&#8217;s why in Transcrypt this approach is favored over wrapping native objects.</p>
+</div>
+<div class="section" id="surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall">
+<h2>3.5. Surpassing the speed of native JavaScript: __pragma__ (&#8216;fcall&#8217;) and __pragma (&#8216;nofcall&#8217;)<a class="headerlink" href="#surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall" title="Permalink to this headline">¶</a></h2>
+<p>Fast calls or fcalls are method calls where the method isn&#8217;t an attribute of an object&#8217;s prototype, but of the object itself, even if this method is inherited over multiple levels. This means that only for the first call the prototype chain is searched and the method is bound to the object. All subsequent calls invoke the bound method directly on the object. You can use the -f command line switch to generate fcall&#8217;s pervasively, making your objects slightly larger since they will contain references to their methods. If you don&#8217;t want that, just place the definition of the method(s) or class(es) you wish to optimize between   <em>__pragma__ (&#8216;fcall&#8217;)</em> and <em>__pragma__ (&#8216;nofcall&#8217;)</em>. You can also do the opposite, using the -f switch and exempting some method(s) or class(es) by embedding them between <em>__pragma__ (&#8216;nofcall&#8217;)</em> and <em>__pragma__ (&#8216;fcall&#8217;)</em>.</p>
+<p>Note that these pragmas have to be applied on the function definition location rather than the call location. Placing <em>__pragma__ (&#8216;fcall&#8217;)</em> or <em>__pragma__ (&#8216;nofcall&#8217;)</em> at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.</p>
+</div>
+<div class="section" id="automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv">
+<h2>3.6. Automatic conversion to iterable: __pragma__ (&#8216;iconv&#8217;) and __pragma__ (&#8216;noiconv&#8217;)<a class="headerlink" href="#automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv" title="Permalink to this headline">¶</a></h2>
+<p>In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a <em>dict</em> without explicitly calling its <em>keys ()</em> member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, <em>__pragma__ (&#8216;iconv&#8217;)</em> and <em>__pragma__ (&#8216;noiconv&#8217;)</em> can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each <em>for .. in ..</em> loop. When designing numerical processing libraries, it&#8217;s advisable to use <em>__pragma__ (&#8216;noiconv&#8217;)</em> explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won&#8217;t suffer.</p>
+</div>
+<div class="section" id="inserting-literal-javascript-pragma-js-and-include">
+<h2>3.7. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)<a class="headerlink" href="#inserting-literal-javascript-pragma-js-and-include" title="Permalink to this headline">¶</a></h2>
+<p>During compilation the * __pragma__ (&#8216;js&#8217;, code, &lt;format parameters&gt;)* is replaced by the JavaScript code given in the <em>code</em> parameter. This code is formatted using the Python <em>str.format</em> method, using <em>&lt;format parameters&gt;</em>.</p>
+<p>An example of its use is to encapsulate a JavaScript library as a Python module, as is <a class="reference internal" href="integration_javascript.html#code-encaps-fabric"><span>shown  for the fabric.js library</span></a>. In that case there&#8217;s usually one format parameter, namely a call to <em>include (&lt;relative module path&gt;)</em>. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.</p>
+</div>
+<div class="section" id="keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">
+<h2>3.8. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)<a class="headerlink" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs" title="Permalink to this headline">¶</a></h2>
+<p>While it&#8217;s possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the &#8216;kwargs&#8217; and &#8216;nokwargs&#8217; pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You&#8217;ll find an example of how to use these pragma&#8217;s in the <a class="reference internal" href="supported_constructs.html#autotest-arguments"><span>arguments autotest</span></a>. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma&#8217;s are ignored.</p>
+</div>
+<div class="section" id="operator-overloading-pragma-opov-and-pragma-noopov">
+<h2>3.9. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)<a class="headerlink" href="#operator-overloading-pragma-opov-and-pragma-noopov" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt currently supports overloading of the following binary operators: * / + - &#64;, [] and ().</p>
+<p>These operators have been chosen since they can enhance the readability of computations involving matrices and vectors and enable the use of callable objects (functors). Using the -o command line switch will activate operator overloading globally. <em>This is strongly disadvised</em>, since even 1 + 2 will result in two function calls in that case. It&#8217;s better to use <em>__pragma__ (&#8216;opov&#8217;)</em> to switch it on locally and <em>__pragma__ (&#8216;noopov&#8217;)</em> to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.</p>
+<p>Formula v4 = M * (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and * operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of <em>__mul__</em>, <em>__rmul__</em>, <em>__div__</em>, <em>__rdiv__</em>, <em>__add__</em>, <em>__radd__</em>, <em>__sub__</em>, <em>__rsub__</em>, <em>__matmul__</em>, <em>__rmatmul__</em>, <em>__getitem__</em>, <em>__setitem__</em> and <em>__call__</em> as described in the CPython documentation.</p>
+</div>
+<div class="section" id="skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">
+<span id="skipping-fragments"></span><h2>3.10. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)<a class="headerlink" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip" title="Permalink to this headline">¶</a></h2>
+<p>On some occasions it&#8217;s handy to be able to skip code generation for fragments of Python source. The most important use case is when you perform a static check using the <a class="reference internal" href="installation_use.html#command-line-switches"><span>-c or &#8211;check</span></a> command line switch. If you use global JavaScript names without importing them from some encapsulation module, you&#8217;ll have to tell the static checker that these names are not to be flagged as undefined. Insert a line containing dummy definitions of the unknown names for the static checker, surrounded by <em>__pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</em>, to make code generator skip these definitions. The beginning of the source code of the Pong demo, shown below, demonstates how this is done.</p>
+<div class="literal-block-wrapper container" id="preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py">
+<div class="code-block-caption"><span class="caption-text">Preventing complaints of the static checker about unknown global JavaScript names in pong.py</span><a class="headerlink" href="#preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">Date</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c"># Prevent complaints by optional static checker</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
+
+<span class="n">orthoWidth</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">orthoHeight</span> <span class="o">=</span> <span class="mi">750</span>
+<span class="n">fieldHeight</span> <span class="o">=</span> <span class="mi">650</span>
+
+<span class="n">enter</span><span class="p">,</span> <span class="n">esc</span><span class="p">,</span> <span class="n">space</span> <span class="o">=</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">32</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Special facilities</a><ul>
+<li><a class="reference internal" href="#transcrypt-s-module-mechanism">3.1. Transcrypt&#8217;s module mechanism</a></li>
+<li><a class="reference internal" href="#using-browser-stubs-to-test-non-gui-code-that-uses-console-log-and-window-alert">3.2. Using browser stubs to test non-GUI code that uses console.log and window.alert</a></li>
+<li><a class="reference internal" href="#creating-javascript-objects-with-new-constructor-call">3.3. Creating JavaScript objects with __new__ (&lt;constructor call&gt;)</a></li>
+<li><a class="reference internal" href="#pragma-alias">3.4. Identifier aliasing: __pragma__ (&#8216;alias&#8217;, ...) and __pragma__ (&#8216;noalias&#8217;, ...)</a></li>
+<li><a class="reference internal" href="#surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall">3.5. Surpassing the speed of native JavaScript: __pragma__ (&#8216;fcall&#8217;) and __pragma (&#8216;nofcall&#8217;)</a></li>
+<li><a class="reference internal" href="#automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv">3.6. Automatic conversion to iterable: __pragma__ (&#8216;iconv&#8217;) and __pragma__ (&#8216;noiconv&#8217;)</a></li>
+<li><a class="reference internal" href="#inserting-literal-javascript-pragma-js-and-include">3.7. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
+<li><a class="reference internal" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.8. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)</a></li>
+<li><a class="reference internal" href="#operator-overloading-pragma-opov-and-pragma-noopov">3.9. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)</a></li>
+<li><a class="reference internal" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.10. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation_use.html"
+                        title="previous chapter">2. Getting started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="supported_constructs.html"
+                        title="next chapter">4. Systematic code examples: a guided tour of Transcrypt</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/special_facilities.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.131 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>
