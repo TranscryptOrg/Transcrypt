@@ -838,7 +838,7 @@
 
 	var __getslice__ = function (container, lower, upper, step) {
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ (tuple ([lower, upper, step]));
+			return container.__getitem__ ([lower, upper, step]);
 		}
 		else {
 			return container.__getslice__ (lower, upper, step);
@@ -848,7 +848,7 @@
 
 	var __setslice__ = function (container, lower, upper, step, value) {
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ (tuple ([lower, upper, step]), value);
+			container.__setitem__ ([lower, upper, step], value);
 		}
 		else {
 			container.__setslice__ (lower, upper, step, value);

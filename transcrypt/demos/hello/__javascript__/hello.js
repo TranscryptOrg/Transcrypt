@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-20 17:06:21
+// Transcrypt'ed from Python, 2016-03-21 08:32:19
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.130';
+							self.transpiler_version = '3.5.131';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -912,7 +912,7 @@ function hello () {
 	__all__.__setitem__ = __setitem__;
 	var __getslice__ = function (container, lower, upper, step) {
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ (tuple ([lower, upper, step]));
+			return container.__getitem__ ([lower, upper, step]);
 		}
 		else {
 			return container.__getslice__ (lower, upper, step);
@@ -921,7 +921,7 @@ function hello () {
 	__all__.__getslice__ = __getslice__;
 	var __setslice__ = function (container, lower, upper, step, value) {
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ (tuple ([lower, upper, step]), value);
+			container.__setitem__ ([lower, upper, step], value);
 		}
 		else {
 			container.__setslice__ (lower, upper, step, value);

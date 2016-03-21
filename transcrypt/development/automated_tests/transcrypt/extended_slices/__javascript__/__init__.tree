@@ -49,9 +49,35 @@ file: Module
 								ctx: Load 
 					body: list 
 						element: Return 
-							value: Name 
-								id: str = key
-								ctx: Load 
+							value: IfExp 
+								test: Compare 
+									left: Call 
+										func: Name 
+											id: str = type
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = key
+												ctx: Load 
+										keywords: list 
+									ops: list 
+										element: Eq 
+									comparators: list 
+										element: Name 
+											id: str = list
+											ctx: Load 
+								body: Call 
+									func: Name 
+										id: str = tuple
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = key
+											ctx: Load 
+									keywords: list 
+								orelse: Name 
+									id: str = key
+									ctx: Load 
 					orelse: list 
 						element: Try 
 							body: list 

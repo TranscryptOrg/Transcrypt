@@ -358,6 +358,7 @@ class Generator (ast.NodeVisitor):
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
+		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices
 		
 		try:
 			self.visit (module.parseTree)
@@ -624,6 +625,7 @@ class Generator (ast.NodeVisitor):
 					if type (target.slice.value) == ast.Tuple:
 						self.visit (target.value)
 						self.emit ('.__setitem__ (')			# Free function tries .__setitem__ (overload) and [] (native)
+						self.stripTuple = True
 						self.visit (target.slice.value)
 						self.emit (', ')
 						self.visit (value)
@@ -1511,6 +1513,7 @@ class Generator (ast.NodeVisitor):
 			if type (node.slice.value) == ast.Tuple:	# Always overloaded, it must be an RHS index
 				self.visit (node.value)
 				self.emit ('.__getitem__ (')
+				self.stripTuple = True
 				self.visit (node.slice.value)
 				self.emit (')')
 			elif self.allowOperatorOverloading:			# It must be an RHS index
@@ -1601,11 +1604,21 @@ class Generator (ast.NodeVisitor):
 			self.emit ('}}\n')
 		
 	def visit_Tuple (self, node):
-		self.emit ('tuple ([')
+		keepTuple = not self.stripTuple		# Tuples used as indices are stripped for speed
+		self.stripTuple = False				# Only strip first tuple encountered
+		
+		if keepTuple:
+			self.emit ('tuple (')
+			
+		self.emit ('[')
 		for index, elt in enumerate (node.elts):
 			self.emitComma (index)
 			self.visit (elt)
-		self.emit ('])')
+			
+		self.emit (']')
+		
+		if keepTuple:
+			self.emit (')')
 			
 	def visit_UnaryOp (self, node):
 		self.emit (self.operators [type (node.op)][0])			

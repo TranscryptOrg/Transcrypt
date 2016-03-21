@@ -6,7 +6,7 @@
 				__init__: function (__all__) {
 					var indices = function (key) {
 						if (__envir__.executor_name == __envir__.transpiler_name) {
-							return key;
+							return (type (key) == list ? tuple (key) : key);
 						}
 						else {
 							try {
@@ -59,7 +59,7 @@
 						a.__setitem__ (tuple ([tuple ([1, 2, 3]), tuple ([4, 5, 6])]), __getslice__ (b, 7, 8, 9));
 						__setslice__ (c, 1, 2, 3, d.__getitem__ (tuple ([tuple ([4, 5, 6]), tuple ([7, 8, 9])])));
 						e.__setitem__ (tuple ([1, tuple ([1, 2, 3]), 3]), f.__getitem__ (tuple ([4, tuple ([4, 5, 6]), 6])));
-						g.__setitem__ (tuple ([1, 2, 3]), h.__getitem__ (tuple ([1, 2, 3])));
+						g.__setitem__ ([1, 2, 3], h.__getitem__ ([1, 2, 3]));
 						__setitem__ (i, 1, __getitem__ (j, 1));
 						__setslice__ (k, 1, 2, 3, __getslice__ (l, 1, 2, 3));
 					};

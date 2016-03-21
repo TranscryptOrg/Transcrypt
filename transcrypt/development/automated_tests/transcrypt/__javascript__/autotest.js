@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-20 17:06:17
+// Transcrypt'ed from Python, 2016-03-21 08:32:13
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.130';
+							self.transpiler_version = '3.5.131';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -912,7 +912,7 @@ function autotest () {
 	__all__.__setitem__ = __setitem__;
 	var __getslice__ = function (container, lower, upper, step) {
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ (tuple ([lower, upper, step]));
+			return container.__getitem__ ([lower, upper, step]);
 		}
 		else {
 			return container.__getslice__ (lower, upper, step);
@@ -921,7 +921,7 @@ function autotest () {
 	__all__.__getslice__ = __getslice__;
 	var __setslice__ = function (container, lower, upper, step, value) {
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ (tuple ([lower, upper, step]), value);
+			container.__setitem__ ([lower, upper, step], value);
 		}
 		else {
 			container.__setslice__ (lower, upper, step, value);
@@ -1678,7 +1678,7 @@ function autotest () {
 				__init__: function (__all__) {
 					var indices = function (key) {
 						if (__envir__.executor_name == __envir__.transpiler_name) {
-							return key;
+							return (type (key) == list ? tuple (key) : key);
 						}
 						else {
 							try {
@@ -1731,7 +1731,7 @@ function autotest () {
 						a.__setitem__ (tuple ([tuple ([1, 2, 3]), tuple ([4, 5, 6])]), __getslice__ (b, 7, 8, 9));
 						__setslice__ (c, 1, 2, 3, d.__getitem__ (tuple ([tuple ([4, 5, 6]), tuple ([7, 8, 9])])));
 						e.__setitem__ (tuple ([1, tuple ([1, 2, 3]), 3]), f.__getitem__ (tuple ([4, tuple ([4, 5, 6]), 6])));
-						g.__setitem__ (tuple ([1, 2, 3]), h.__getitem__ (tuple ([1, 2, 3])));
+						g.__setitem__ ([1, 2, 3], h.__getitem__ ([1, 2, 3]));
 						__setitem__ (i, 1, __getitem__ (j, 1));
 						__setslice__ (k, 1, 2, 3, __getslice__ (l, 1, 2, 3));
 					};

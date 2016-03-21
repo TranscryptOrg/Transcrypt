@@ -3,7 +3,7 @@ from org.transcrypt.stubs.browser import __pragma__, __envir__
 
 def indices (key):
 	if __envir__.executor_name == __envir__.transpiler_name:
-		return key
+		return tuple (key) if type (key) == list else key
 	else:
 		try:
 			return key.indices (1000000000)

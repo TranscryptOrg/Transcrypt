@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-20 17:04:54
+// Transcrypt'ed from Python, 2016-03-21 08:32:22
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,9 +103,9 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.130';
+							self.transpiler_version = '3.5.131';
 							self.target_subdir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -126,7 +126,7 @@ function jquery_demo () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -134,7 +134,7 @@ function jquery_demo () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -147,7 +147,7 @@ function jquery_demo () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -912,7 +912,7 @@ function jquery_demo () {
 	__all__.__setitem__ = __setitem__;
 	var __getslice__ = function (container, lower, upper, step) {
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ (tuple ([lower, upper, step]));
+			return container.__getitem__ ([lower, upper, step]);
 		}
 		else {
 			return container.__getslice__ (lower, upper, step);
@@ -921,7 +921,7 @@ function jquery_demo () {
 	__all__.__getslice__ = __getslice__;
 	var __setslice__ = function (container, lower, upper, step, value) {
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ (tuple ([lower, upper, step]), value);
+			container.__setitem__ ([lower, upper, step], value);
 		}
 		else {
 			container.__setslice__ (lower, upper, step, value);

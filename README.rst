@@ -51,6 +51,8 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Bugfix release: debug switch set to False
+- Tuple stripping optimization added for simple indices
 - For loops optimized for contiguous ranges
 - Code formatting of __pragma__ ('js') improved
 - Extended slices tested on Linux
