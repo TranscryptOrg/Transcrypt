@@ -129,6 +129,8 @@ class Program:
 		])
 		
 		# And sandwich them between the in-line modules
+		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent
+		
 		targetCode = (
 			self.header +
 			'function {} () {{\n'.format (self.mainModuleName) +
@@ -140,18 +142,18 @@ class Program:
 			self.moduleDict [self.mainModuleName].targetCode +
 			'	return __all__;\n' +
 			'}\n' +
-			'window [\'{0}\'] = {0} ();\n'.format (self.mainModuleName)
+			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
+			'{0} ();\n' .format (self.mainModuleName)
 		)	
 		
 		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir), self.mainModuleName)
-		utils.log (False, 'Saving result in: {}\n', targetFileName)
+		utils.log (True, 'Saving result in: {}\n', targetFileName)
 		with utils.create (targetFileName) as aFile:
 			aFile.write (targetCode)
 
-		miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, __base__.__envir__.target_subdir, self.mainModuleName)
-		utils.log (False, 'Saving minified result in: {}\n', miniFileName)
-		
 		if not utils.commandArgs.nomin:
+			miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, __base__.__envir__.target_subdir, self.mainModuleName)
+			utils.log (True, 'Saving minified result in: {}\n', miniFileName)
 			minify.run (targetFileName, miniFileName)
 			
 	def provide (self, moduleName):
@@ -170,7 +172,6 @@ class Module:
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
 		self.program.moduleDict [self.metadata.name] = self
-		
 		
 		if self.metadata.dirty ():
 			self.parse ()

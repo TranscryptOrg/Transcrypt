@@ -19,6 +19,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-l', '--license', help = "show license", action = 'store_true')
 		self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
 		self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is DISADVISED, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
+		self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold module, default is window, use -p . to generate self contained module, e.g. for use in node.js")
 		self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
 		self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
 		
