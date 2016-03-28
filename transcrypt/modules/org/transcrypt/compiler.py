@@ -316,6 +316,7 @@ class Generator (ast.NodeVisitor):
 		)]
 		
 		self.tempIndices = {}
+		self.skippedTemps = set ()
 		self.stubsName = 'org.{}.stubs.'.format (__base__.__envir__.transpiler_name)
 		
 		self.nameConsts = {
@@ -455,6 +456,12 @@ class Generator (ast.NodeVisitor):
 			self.tempIndices [name] = 0
 		return self.getTemp (name)
 		
+	def skipTemp (self, name):
+		self.skippedTemps.add (self.nextTemp (name))
+		
+	def skippedTemp (self, name):
+		return self.getTemp (name) in self.skippedTemps
+		
 	def getTemp (self, name):
 		if name in self.tempIndices:
 			return '__{}{}__'.format (name, self.tempIndices [name])
@@ -462,10 +469,13 @@ class Generator (ast.NodeVisitor):
 			return None
 	
 	def prevTemp (self, name):
+		if self.getTemp (name) in self.skippedTemps:
+			self.skippedTemps.remove (self.getTemp (name))
+			
 		self.tempIndices [name] -= 1
 		if self.tempIndices [name] < 0:
 			del self.tempIndices [name]
-		
+			
 	def useModule (self, name):
 		result = self.module.program.provide (name)	# Must be done first because it can generate a healthy exception
 		self.use.add (name)						# Must not be done if the healthy exception occurs
@@ -681,11 +691,11 @@ class Generator (ast.NodeVisitor):
 				elif type (target.slice) == ast.ExtSlice:	# Always overloaded
 					self.visit (target.value)		
 					self.emit ('.__setitem__ (')			# Method, since extended slice access is always overloaded
-					self.emit ('tuple ([')
+					self.emit ('[')
 					for index, dim in enumerate (target.slice.dims):
 						self.emitComma (index)
 						self.visit (dim)
-					self.emit ('])')
+					self.emit (']')
 					self.emit (', ')
 					self.visit (value)
 					self.emit (')')
@@ -832,7 +842,8 @@ class Generator (ast.NodeVisitor):
 			self.visitSubExpr (node, value)	
 	
 	def visit_Break (self, node):
-		self.emit ('{} = true;\n', self.getTemp ('break'))
+		if not self.skippedTemp ('break'):
+			self.emit ('{} = true;\n', self.getTemp ('break'))
 		self.emit ('break')
 	
 	def visit_Call (self, node):	
@@ -1103,6 +1114,8 @@ class Generator (ast.NodeVisitor):
 	def visit_For (self, node):
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
+		else:
+			self.skipTemp ('break')
 			
 		optimize = (	# Special case optimization: iterating through range with constant step
 			type (node.target) == ast.Name and	# Since 'var' is emitted, target must not yet exist, so e.g. not be element of array
@@ -1191,6 +1204,8 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			
 			self.emit ('}}\n')
+		else:
+			self.prevTemp ('break')
 						
 	def visit_FunctionDef (self, node):
 		def emitScopedBody ():
@@ -1499,12 +1514,27 @@ class Generator (ast.NodeVisitor):
 				
 	def visit_Slice (self, node):	# Only visited for dims as part of ExtSlice
 		self.emit ('tuple ([')
-		self.visit (node.lower)
+
+		if node.lower == None:
+			self.emit ('0')
+		else:
+			self.visit (node.lower)
+			
 		self.emit (', ')
-		self.visit (node.upper)
+		
+		if node.upper == None:
+			self.emit ('0')
+		else:
+			self.visit (node.upper)
+			
 		self.emit (', ')
-		self.visit (node.step)
-		self.emit ('])')	
+		
+		if node.step == None:
+			self.emit ('1')
+		else:
+			self.visit (node.step)
+		
+		self.emit ('])')
 		
 	def visit_Str (self, node):
 		self.emit ('{}', repr (node.s))
@@ -1560,11 +1590,11 @@ class Generator (ast.NodeVisitor):
 		elif type (node.slice) == ast.ExtSlice:			# Always overloaded
 			self.visit (node.value)
 			self.emit ('.__getitem__ (')				# Method, since extended slice access is always overloaded
-			self.emit ('tuple ([')
+			self.emit ('[')
 			for index, dim in enumerate (node.slice.dims):
 				self.emitComma (index)
 				self.visit (dim)
-			self.emit ('])')
+			self.emit (']')
 			self.emit (')')
 					
 	def visit_Try (self, node):
@@ -1630,6 +1660,8 @@ class Generator (ast.NodeVisitor):
 	def visit_While (self, node):
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
+		else:
+			self.skipTemp ('break')
 		
 		self.emit ('while (')
 		self.visit (node.test)
@@ -1650,6 +1682,8 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			
 			self.emit ('}}\n')
+		else:
+			self.prevTemp ('break')
 		
 	def visit_With (self, node):	
 		for withitem in node.items:

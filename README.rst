@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Bug in 'break' handling fixed
 - Optional -s (--parent) command line option to facilitate compilation for e.g. node.js
 - "Saving..." message now shows result location
 - Fix for string.replace bug

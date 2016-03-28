@@ -15,6 +15,9 @@ class window:
 	class console:
 		def log (*args):
 			builtins.print ('console.log :\t', *args)
+			
+		def dir (arg):
+			builtins.print ('console.dir :\t', arg, '\tof type\t', type (arg))
 
 	def alert (anObject):
 		input ('window.alert:\t {}\t(Press [ENTER] to continue)'.format (anObject))

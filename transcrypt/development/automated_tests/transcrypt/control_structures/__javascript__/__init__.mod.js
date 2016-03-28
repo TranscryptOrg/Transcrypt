@@ -55,13 +55,13 @@
 							var __iter1__ = tuple ([false, true]);
 							for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
 								var doContinue = __iter1__ [__index1__];
-								var __break0__ = false;
+								var __break2__ = false;
 								for (var index = 0; index < 10; index++) {
-									var __break1__ = false;
+									var __break3__ = false;
 									for (var index2 = 0; index2 < 100; index2 += 10) {
 										if (doBreak && index2 == 50) {
 											autoTester.check ('break2');
-											__break1__ = true;
+											__break3__ = true;
 											break;
 										}
 										if (doContinue && index2 == 50) {
@@ -69,12 +69,12 @@
 											continue;
 										}
 									}
-									if (!__break1__) {
+									if (!__break3__) {
 										autoTester.check ('noBreak2');
 									}
 									if (doBreak && index == 5) {
 										autoTester.check ('break');
-										__break0__ = true;
+										__break2__ = true;
 										break;
 									}
 									if (doContinue && index == 5) {
@@ -82,16 +82,16 @@
 										continue;
 									}
 								}
-								if (!__break0__) {
+								if (!__break2__) {
 									autoTester.check ('noBreak');
 								}
 								var index = 0;
-								var __break0__ = false;
+								var __break2__ = false;
 								while (index < len (vehicles) && vehicles [index] != 'bus') {
 									autoTester.check (index, vehicles [index]);
 									if (doBreak && vehicles [index] == 'car') {
 										autoTester.check ('breakWhile');
-										__break0__ = true;
+										__break2__ = true;
 										break;
 									}
 									if (doContinue && vehicles [index] == 'car') {
@@ -101,7 +101,7 @@
 									}
 									index++;
 								}
-								if (!__break0__) {
+								if (!__break2__) {
 									autoTester.check ('noBreakWhile');
 								}
 							}

@@ -321,12 +321,11 @@
 	
 	function list (iterable) {										// All such creators should be callable without new
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
-		instance.__class__ = list;
 		// Sort is the normal JavaScript sort, Python sort is a non-member function
 		return instance;
 	}
 	__all__.list = list;
-	Array.prototype.__class__ = list;	// Arrays are lists, unless constructed otherwise
+	Array.prototype.__class__ = list;	// All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
 	list.__name__ = 'list';
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {
