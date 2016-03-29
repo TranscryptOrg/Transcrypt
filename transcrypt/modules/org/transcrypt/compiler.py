@@ -176,7 +176,10 @@ class Module:
 		if self.metadata.dirty ():
 			self.parse ()
 			if utils.commandArgs.check:
-				static_check.run (self.metadata.sourcePath, self.parseTree)
+				try:
+					static_check.run (self.metadata.sourcePath, self.parseTree)
+				except Exception as exception:
+					utils.log (True, 'Checking: {}\n\tInternal error in static checker, remainder of module skipped\n', self.metadata.sourcePath)
 			self.dump ()
 			self.generate ()
 			self.extract ()
