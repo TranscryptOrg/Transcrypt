@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-29 20:35:32
+// Transcrypt'ed from Python, 2016-03-30 12:18:54
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -103,7 +103,7 @@ function hello () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.135';
+							self.transpiler_version = '3.5.137';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -837,13 +837,17 @@ function hello () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	var __matmul__ = function (a, b) {
-		if (typeof a == 'object' && '__matmul__' in a) {
-			return a.__matmul__ (b);
+	var __neg__ = function (a) {
+		if (typeof a == 'object' && '__neg__' in a) {
+			return a.__neg__ ();
 		}
 		else {
-			return b.__rmatmul__ (a);
+			return -a;
 		}
+	};
+	__all__.__neg__ = __neg__;
+	var __matmul__ = function (a, b) {
+		return a.__matmul__ (b);
 	};
 	__all__.__matmul__ = __matmul__;
 	var __mul__ = function (a, b) {

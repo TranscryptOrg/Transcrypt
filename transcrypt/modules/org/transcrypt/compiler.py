@@ -1657,8 +1657,13 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 			
 	def visit_UnaryOp (self, node):
-		self.emit (self.operators [type (node.op)][0])			
-		self.visitSubExpr (node, node.operand)
+		if self.allowOperatorOverloading and type (node.op) == ast.USub:
+			self.emit ('{} ('.format (self.filterId ('__neg__' )))
+			self.visit (node.operand)
+			self.emit (')')
+		else:
+			self.emit (self.operators [type (node.op)][0])			
+			self.visitSubExpr (node, node.operand)
 		
 	def visit_While (self, node):
 		if node.orelse:

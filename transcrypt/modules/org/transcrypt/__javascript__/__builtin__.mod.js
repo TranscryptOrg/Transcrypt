@@ -757,13 +757,18 @@
 	
 	// Operator overloading, only the ones that make most sense in matrix operations
 	
-	var __matmul__ = function (a, b) {
-		if (typeof a == 'object' && '__matmul__' in a) {
-			return a.__matmul__ (b);
+	var __neg__ = function (a) {
+		if (typeof a == 'object' && '__neg__' in a) {
+			return a.__neg__ ();
 		}
 		else {
-			return b.__rmatmul__ (a);
+			return -a;
 		}
+	};  
+	__all__.__neg__ = __neg__;
+	
+	var __matmul__ = function (a, b) {
+		return a.__matmul__ (b);
 	};  
 	__all__.__matmul__ = __matmul__;
 	
