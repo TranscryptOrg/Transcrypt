@@ -77,4 +77,25 @@ They are specified in the source code of Transcrypt as follows:
 	:caption: Transcrypt command line switches as specified in module/orgs/transcrypt/utils.py
 	
 If static checking is enabled, insert dummy definitions of global JavaScript variables between :ref:`__pragma__ ('skip') and __pragma__ ('noskip') <skipping_fragments>` to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.
+
+Compiling for node.js
+---------------------
+
+Transcrypt will allow you to target *node.js* while writing your server code in Python.
+This opens up the exploding world of node.js libraries from your favorite programming language.
+In the *demo/nodejs_demo* subdirectory of the installation, you'll find the following trivial example of a node.js server app:
+
+.. literalinclude:: ../../demos/nodejs_demo/nodejs_demo.py
+	:tab-width: 4
+	:caption: Using node.js from Transcrypt is trivial, including the use of 'require' to tap into a vast set of libraries
 	
+Follow the steps below to run this demo:
+
+- Install node.js from *https://nodejs.org*
+- Open a node.js command prompt
+- Go to the *demo/nodejs_demo* directory
+- Compile the demo with *transcrypt -b -p. nodejs_demo.py* (note the dot after the p switch)
+- Go to *demo/nodejs_demo/__javascript__* directory
+- Type *node nodejs_demo.js* (or node nodejs_demo.min.js if you want to run the minified version)
+- In your browser, view the result at *http://localhost:8080*
+- Repeatedly reload the page to see the text change (Google Chrome may actually reload twice)

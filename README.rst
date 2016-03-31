@@ -51,6 +51,7 @@ Bugs can be reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
 What's new
 ==========
 
+- Node.js demo added, featuring 'require' to tap into the world of node.js libraries
 - Overloaded unary minus added
 - On static checker internal error: report and skip checks for that module
 - Bug in 'break' handling fixed

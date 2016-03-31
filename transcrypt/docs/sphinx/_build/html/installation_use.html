@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.138 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.140 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.138',
+        VERSION:     '3.5.140',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.138 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.140 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.138 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.140 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -205,6 +205,65 @@ They are specified in the source code of Transcrypt as follows:</p>
 </div>
 <p>If static checking is enabled, insert dummy definitions of global JavaScript variables between <a class="reference internal" href="special_facilities.html#skipping-fragments"><span>__pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</span></a> to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.</p>
 </div>
+<div class="section" id="compiling-for-node-js">
+<h2>2.4. Compiling for node.js<a class="headerlink" href="#compiling-for-node-js" title="Permalink to this headline">¶</a></h2>
+<p>Transcrypt will allow you to target <em>node.js</em> while writing your server code in Python.
+This opens up the exploding world of node.js libraries from your favorite programming language.
+In the <em>demo/nodejs_demo</em> subdirectory of the installation, you&#8217;ll find the following trivial example of a node.js server app:</p>
+<div class="literal-block-wrapper container" id="using-node-js-from-transcrypt-is-trivial-including-the-use-of-require-to-tap-into-a-vast-set-of-libraries">
+<div class="code-block-caption"><span class="caption-text">Using node.js from Transcrypt is trivial, including the use of &#8216;require&#8217; to tap into a vast set of libraries</span><a class="headerlink" href="#using-node-js-from-transcrypt-is-trivial-including-the-use-of-require-to-tap-into-a-vast-set-of-libraries" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Compile with p. command line switch (see docs).</span>
+<span class="c"># The example will be served at URL: http://localhost:8080 in your browser</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="n">require</span> <span class="p">(</span> <span class="s">&#39;http&#39;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">Demo</span><span class="p">:</span>
+    <span class="n">texts</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;Welcome to the world of node.js&#39;</span><span class="p">,</span>
+        <span class="s">&#39;You can have your cake and eat it&#39;</span><span class="p">,</span>
+        <span class="s">&#39;Use node</span><span class="se">\&#39;</span><span class="s">s ecosystem while programming in Python&#39;</span><span class="p">,</span>
+        <span class="s">&#39;Using node.js from Transcrypt is easy&#39;</span><span class="p">,</span>
+        <span class="s">&#39;Take a Python ride into the node.js world&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Demo server started on port&#39;</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">createServer</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serve</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">listen</span> <span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oldIndex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newIndex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">def</span> <span class="nf">serve</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">writeHead</span> <span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Serving page&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">newIndex</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">oldIndex</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">newIndex</span> <span class="o">=</span> <span class="nb">int</span> <span class="p">(</span><span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">*</span> <span class="nb">len</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">texts</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oldIndex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">newIndex</span>
+        
+        <span class="n">response</span><span class="o">.</span><span class="n">end</span> <span class="p">(</span><span class="s">&#39;&lt;h1&gt;{}&lt;/h1&gt;&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">texts</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">newIndex</span><span class="p">]</span>
+        <span class="p">))</span>
+
+<span class="n">demo</span> <span class="o">=</span> <span class="n">Demo</span> <span class="p">(</span><span class="mi">8080</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Follow the steps below to run this demo:</p>
+<ul class="simple">
+<li>Install node.js from <em>https://nodejs.org</em></li>
+<li>Open a node.js command prompt</li>
+<li>Go to the <em>demo/nodejs_demo</em> directory</li>
+<li>Compile the demo with <em>transcrypt -b -p. nodejs_demo.py</em> (note the dot after the p switch)</li>
+<li>Go to <em>demo/nodejs_demo/__javascript__</em> directory</li>
+<li>Type <em>node nodejs_demo.js</em> (or node nodejs_demo.min.js if you want to run the minified version)</li>
+<li>In your browser, view the result at <em>http://localhost:8080</em></li>
+<li>Repeatedly reload the page to see the text change (Google Chrome may actually reload twice)</li>
+</ul>
+</div>
 </div>
 
 
@@ -225,6 +284,7 @@ They are specified in the source code of Transcrypt as follows:</p>
 </li>
 <li><a class="reference internal" href="#your-first-transcrypt-program">2.2. Your first Transcrypt program</a></li>
 <li><a class="reference internal" href="#command-line-switches">2.3. Command line switches</a></li>
+<li><a class="reference internal" href="#compiling-for-node-js">2.4. Compiling for node.js</a></li>
 </ul>
 </li>
 </ul>
@@ -271,7 +331,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.138 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.140 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

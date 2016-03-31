@@ -1,6 +1,6 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-03-31 11:40:23
-function jquery_demo () {
+// Transcrypt'ed from Python, 2016-03-31 11:15:04
+function nodejs_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
 	var __nest__ = function (headObject, tailNames, value) {
@@ -103,7 +103,7 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.138';
+							self.transpiler_version = '3.5.136';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -837,17 +837,13 @@ function jquery_demo () {
 	String.prototype.upper = function () {
 		return this.toUpperCase ();
 	};
-	var __neg__ = function (a) {
-		if (typeof a == 'object' && '__neg__' in a) {
-			return a.__neg__ ();
+	var __matmul__ = function (a, b) {
+		if (typeof a == 'object' && '__matmul__' in a) {
+			return a.__matmul__ (b);
 		}
 		else {
-			return -a;
+			return b.__rmatmul__ (a);
 		}
-	};
-	__all__.__neg__ = __neg__;
-	var __matmul__ = function (a, b) {
-		return a.__matmul__ (b);
 	};
 	__all__.__matmul__ = __matmul__;
 	var __mul__ = function (a, b) {
@@ -945,28 +941,35 @@ function jquery_demo () {
 	};
 	__all__.__call__ = __call__;
 	(function () {
-		var start = function () {
-			var changeColors = function () {
-				var __iter0__ = $divs;
-				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-					var div = __iter0__ [__index0__];
-					$ (div).css (dict ({'color': 'rgb({},{},{})'.format.apply (null, function () {
-						var __accu0__ = [];
-						for (var i = 0; i < 3; i++) {
-							__accu0__.append (int (256 * Math.random ()));
-						}
-						return __accu0__;
-					} ())}));
+		var http = require ('http');
+		var Demo = __class__ ('Demo', [object], {
+			get __init__ () {return __get__ (this, function (self, port) {
+				print ('Demo server started on port', port);
+				self.server = http.createServer (self.serve);
+				self.server.listen (port);
+				self.oldIndex = 0;
+				self.newIndex = 0;
+				self.count = 0;
+			});},
+			get serve () {return __get__ (this, function (self, request, response) {
+				response.writeHead (200);
+				print ('Serving page', self.count);
+				self.count++;
+				while (self.newIndex == self.oldIndex) {
+					self.newIndex = int (Math.random () * len (self.texts));
 				}
-			};
-			var $divs = $ ('div');
-			changeColors ();
-			window.setInterval (changeColors, 500);
-		};
+				self.oldIndex = self.newIndex;
+				response.end ('<h1>{}</h1>'.format (self.texts [self.newIndex]));
+			});}
+		});
+		Demo.texts = tuple (['Welcome to the world of node.js', 'You can have your cake and eat it', "Use node's ecosystem while programming in Python", 'Using node.js from Transcrypt is easy', 'Take a Python ride into the node.js world']);
+		var demo = Demo (8080);
 		__pragma__ ('<all>')
-			__all__.start = start;
+			__all__.Demo = Demo;
+			__all__.demo = demo;
+			__all__.http = http;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
 }
-window ['jquery_demo'] = jquery_demo ();
+nodejs_demo ();
