@@ -1,7 +1,7 @@
 # Compile with p. command line switch (see docs).
 # The example will be served at URL: http://localhost:8080 in your browser
 
-http = require ( 'http');
+http = require ('http')
 
 class Demo:
 	texts = (

@@ -96,6 +96,6 @@ Follow the steps below to run this demo:
 - Go to the *demo/nodejs_demo* directory
 - Compile the demo with *transcrypt -b -p. nodejs_demo.py* (note the dot after the p switch)
 - Go to *demo/nodejs_demo/__javascript__* directory
-- Type *node nodejs_demo.js* (or node nodejs_demo.min.js if you want to run the minified version)
+- Type *node nodejs_demo.js* (or *node nodejs_demo.min.js* if you want to run the minified version)
 - In your browser, view the result at *http://localhost:8080*
 - Repeatedly reload the page to see the text change (Google Chrome may actually reload twice)

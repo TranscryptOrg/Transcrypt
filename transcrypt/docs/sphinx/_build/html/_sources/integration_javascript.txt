@@ -52,3 +52,14 @@ In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* 
 |    :tab-width: 4                                           |    :tab-width: 4                                                              |
 |    :caption: jquery_demo.py                                |    :caption: jquery_demo.mod.js                                               |
 +------------------------------------------------------------+-------------------------------------------------------------------------------+
+
+Integration example: d3.js
+--------------------------
+
+The *d3.js* graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.
+
++--------------------------------------------------------+---------------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/d3js_demo/d3js_demo.py | .. literalinclude:: ../../demos/d3js_demo/__javascript__/d3js_demo.mod.js |
+|    :tab-width: 4                                       |    :tab-width: 4                                                          |
+|    :caption: d3js_demo.py                              |    :caption: d3js_demo.mod.js                                             |
++--------------------------------------------------------+---------------------------------------------------------------------------+

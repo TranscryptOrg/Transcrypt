@@ -26,6 +26,7 @@ for fcallSwitch in ('', '-f '):
 	autoTest ('development/automated_tests/transcrypt', 'autotest')
 	test ('demos/hello', 'hello')
 	test ('demos/jquery_demo', 'jquery_demo')
+	test ('demos/d3js_demo', 'd3js_demo')
 	test ('demos/pong', 'pong')
 	if fcallSwitch:
 		print ('Shipment test completed')
