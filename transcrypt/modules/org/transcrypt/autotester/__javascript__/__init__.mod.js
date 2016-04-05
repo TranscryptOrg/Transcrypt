@@ -17,7 +17,7 @@
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						});},
+						}, '__init__');},
 						get sortedRepr () {return __get__ (this, function (self, any) {
 							var tryGetNumKey = function (key) {
 								if (type (key) == str) {
@@ -85,7 +85,7 @@
 									}
 								}
 							}
-						});},
+						}, 'sortedRepr');},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -103,7 +103,7 @@
 							else {
 								self.referenceBuffer.append (item);
 							}
-						});},
+						}, 'check');},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple ([false, true]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -119,7 +119,7 @@
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						});},
+						}, 'dump');},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __break0__ = false;
@@ -148,12 +148,12 @@
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						});},
+						}, 'compare');},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						});},
+						}, 'run');},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.compare ();
@@ -161,7 +161,7 @@
 							else {
 								self.dump (__main__.__file__.__getslice__ (0, -3, 1).py_replace ('\\', '/').rsplit ('/', 1) [-1]);
 							}
-						});}
+						}, 'done');}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +

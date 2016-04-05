@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.141 documentation</title>
+    <title>5. Integration with JavaScript libraries &mdash; Transcrypt 3.5.142 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.141',
+        VERSION:     '3.5.142',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.141 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.142 documentation" href="index.html" />
     <link rel="next" title="6. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.141 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.142 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -787,8 +787,8 @@
 </table>
 </div>
 <div class="section" id="integration-example-d3-js">
-<h2>5.5. Integration example: d3.js<a class="headerlink" href="#integration-example-d3-js" title="Permalink to this headline">¶</a></h2>
-<p>The <em>d3.js</em> graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.</p>
+<h2>5.5. Integration example: D3.js<a class="headerlink" href="#integration-example-d3-js" title="Permalink to this headline">¶</a></h2>
+<p>The <em>D3.js</em> graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="43%" />
@@ -894,10 +894,10 @@
                 self.node = __left0__ [2];
                 self.link = __left0__ [3];
                 self.restart ();
-            });},
+            }, &#39;__init__&#39;);},
             get mousemove () {return __get__ (this, function (self) {
                 self.cursor.attr (&#39;transform&#39;, &#39;translate (&#39; + d3.mouse (self.svg.node ()) + &#39;)&#39;);
-            });},
+            }, &#39;mousemove&#39;);},
             get mousedown () {return __get__ (this, function (self) {
                 var pushLink = function (target) {
                     var __left0__ = tuple ([target.x - node.x, target.y - node.y]);
@@ -912,7 +912,7 @@
                 self.nodes.push (node);
                 self.nodes.forEach (pushLink);
                 self.restart ();
-            });},
+            }, &#39;mousedown&#39;);},
             get tick () {return __get__ (this, function (self) {
                 self.link.attr (&#39;x1&#39;, (function __lambda__ (d) {
                     return d.source.x;})).attr (&#39;y1&#39;, (function __lambda__ (d) {
@@ -922,14 +922,14 @@
                 self.node.attr (&#39;cx&#39;, (function __lambda__ (d) {
                     return d.x;})).attr (&#39;cy&#39;, (function __lambda__ (d) {
                     return d.y;}));
-            });},
+            }, &#39;tick&#39;);},
             get restart () {return __get__ (this, function (self) {
                 self.link = self.link.data (self.links);
                 self.link.enter ().insert (&#39;line&#39;, &#39;.node&#39;).attr (&#39;class&#39;, &#39;link&#39;);
                 self.node = self.node.data (self.nodes);
                 self.node.enter ().insert (&#39;circle&#39;, &#39;.cursor&#39;).attr (&#39;class&#39;, &#39;node&#39;).attr (&#39;r&#39;, 7).call (self.force.drag);
                 self.force.start ();
-            });}
+            }, &#39;restart&#39;);}
         });
         var spawn = Spawn (window.innerWidth, window.innerHeight);
         __pragma__ (&#39;&lt;all&gt;&#39;)
@@ -963,7 +963,7 @@
 <li><a class="reference internal" href="#integration-example-pong">5.2. Integration example: Pong</a></li>
 <li><a class="reference internal" href="#joined-minification">5.3. Joined minification</a></li>
 <li><a class="reference internal" href="#integration-example-jquery">5.4. Integration example: jQuery</a></li>
-<li><a class="reference internal" href="#integration-example-d3-js">5.5. Integration example: d3.js</a></li>
+<li><a class="reference internal" href="#integration-example-d3-js">5.5. Integration example: D3.js</a></li>
 </ul>
 </li>
 </ul>
@@ -1010,7 +1010,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.141 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.142 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
