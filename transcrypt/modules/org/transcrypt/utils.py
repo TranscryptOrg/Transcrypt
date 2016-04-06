@@ -17,10 +17,12 @@ class CommandArgs:
 		self.argParser.add_argument ('-j', '--jskeys', help = "interpret {key: 'value'} as {'key': 'value'} and forbid {key (): 'value'}, as JavaScript does. DISADVISED, since it's less flexible than the Python interpretation. Use {'key': 'value'} explicitly if you want literal keys", action = 'store_true')		
 		self.argParser.add_argument ('-k', '--kwargs', help = "enable keyword arguments by default. In general this is DISADVISED, use __pragma__ ('kwargs') and __pragma__('nokwargs') locally instead to prevent bloated code", action = 'store_true')
 		self.argParser.add_argument ('-l', '--license', help = "show license", action = 'store_true')
+		self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
 		self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
 		self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is DISADVISED, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
 		self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold module, default is window, use -p . to generate self contained module, e.g. for use in node.js")
 		self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
+		self.argParser.add_argument ('-t', '--tree', help = "dump syntax tree", action = 'store_true')
 		self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)

@@ -25,8 +25,6 @@ import traceback
 
 from org.transcrypt import __base__, utils, minify, static_check
 
-esc = chr (27)
-
 class ModuleMetadata:
 	def __init__ (self, program, name):
 		self.name = name
@@ -46,9 +44,7 @@ class ModuleMetadata:
 			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
 			
 			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
-			self.treePath = '{}/{}.mod.tree'.format (self.targetDir, self.filePrename)
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
-			self.mapPath = '{}/{}.mod.map'.format (self.targetDir, self.filePrename)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
@@ -283,33 +279,18 @@ class Module:
 		with utils.create ('{}/{}.tree'.format (self.metadata.targetDir, self.metadata.filePrename)) as treeFile:
 			treeFile.write (self.textTree)
 			
-	def generate (self):			
-		targetLines = ''.join (Generator (self) .targetFragments) .split ('\n')
+	def generate (self):
+		self.targetCode = ''.join (Generator (self) .targetFragments)
 		
 		if utils.commandArgs.map:
-			strippedLines = []
-			sourceLineNrs = []
-			lineNumberPrefix = '000001'
+			sourceLineNrs, targetLines = zip (* [(line [ : 6], line [6 : ]) for line in self.targetCode.split ('\n') if line.strip () != ';'])
 			
-			for targetLine in targetLines:
-				while True:
-					index = targetLine.find (esc)
-					if index == -1:
-						break
-					nextLineNumberPrefix = targetLine [index +1 : index + 7]
-					targetLine = '{}{}'.format (targetLine [ : index], targetLine [index + 7 : ])
-				if targetLine.strip () != ';':
-					strippedLines.append (targetLine)
-					sourceLineNrs.append (str (int (lineNumberPrefix)))
-				lineNumberPrefix = nextLineNumberPrefix
-			targetLines = strippedLines
 			self.sourceMap = ';'.join (sourceLineNrs)
-			
 			utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)
 			with utils.create (self.metadata.mapPath) as mapFile:
 				mapFile.write (self.sourceMap)
 		else:
-			targetLines = [line for line in targetLines if line.strip () != ';']		
+			targetLines = [line for line in self.targetCode.split ('\n') if line.strip () != ';']	# Some code duplication to achieve speed
 		
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 		self.targetCode = '\n'.join (targetLines)
@@ -333,9 +314,7 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
-		
-		self.oldLineNr = 0
-		self.lineNr = 1
+		self.optionalLineNr = '000001' if utils.commandArgs.map else ''
 		
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
@@ -455,17 +434,13 @@ class Generator (ast.NodeVisitor):
 		return indentLevel * '\t'
 		
 	def emit (self, fragment, *formatter):
-		if (utils.commandArgs.map and self.lineNr != self.oldLineNr):
-			self.targetFragments.append ('{}{}'.format (esc, str (1000000 + self.lineNr) [1:]))
-			self.oldLineNr = self.lineNr
-	
 		if (
 			not self.targetFragments or
 			(self.targetFragments and self.targetFragments [-1] .endswith ('\n'))
 		):
 			self.targetFragments.append (self.tabs ())
 			
-		fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
+		fragment = fragment [:-1] .replace ('\n', '\n' + self.optionalLineNr + self.tabs ()) + fragment [-1]
 		self.targetFragments.append (fragment.format (*formatter))
 		
 	def indent (self):
@@ -542,6 +517,9 @@ class Generator (ast.NodeVisitor):
 	def visit (self, node):	
 		try:
 			self.lineNr = node.lineno
+			
+			if utils.commandArgs.map:
+				self.optionalLineNr = str (self.lineNr + 1000000) [1 : ]
 		except:
 			pass
 			
