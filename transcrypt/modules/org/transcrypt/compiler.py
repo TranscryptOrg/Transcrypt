@@ -5,7 +5,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
 # 	http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
@@ -21,11 +20,31 @@ import re
 import copy
 import datetime
 import shutil
+import math
 import traceback
 
 from org.transcrypt import __base__, utils, minify, static_check
 
 esc = chr (27)
+
+class GetBase64Vlq:
+	def __init__ (self):
+		self.nBits32 = 5
+		self.encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+		self.prefabSize = 256
+		self.prefab = [self (i, True) for i in range (self.prefabSize)]
+	
+	def __call__ (self, anInteger, init = False):
+		if not init and 0 < anInteger < self.prefabSize:
+			return self.prefab [anInteger]
+		else:
+			signed = bin (abs (anInteger)) [2 : ] + ('1' if anInteger < 0 else '0')
+			nChunks = math.ceil (len (signed) / float (self.nBits32))
+			padded = (self.nBits32 * '0' + signed) [-nChunks * self.nBits32 : ]
+			chunks = [('1' if iChunk else '0') + padded [iChunk * self.nBits32 : (iChunk + 1) * self.nBits32] for iChunk in range (nChunks - 1, -1, -1)]
+			return ''.join ([self.encoding [int (chunk, 2)] for chunk in chunks])
+
+getBase64Vlq = GetBase64Vlq ()
 
 class ModuleMetadata:
 	def __init__ (self, program, name):
@@ -46,9 +65,10 @@ class ModuleMetadata:
 			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
 			
 			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
-			self.treePath = '{}/{}.mod.tree'.format (self.targetDir, self.filePrename)
+			self.treePath = '{}/{}.mod.tree.dump'.format (self.targetDir, self.filePrename)
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
-			self.mapPath = '{}/{}.mod.map'.format (self.targetDir, self.filePrename)
+			self.lineMapPath = '{}/{}.mod.js.map.dump'.format (self.targetDir, self.filePrename)
+			self.mapPath = '{}/{}.mod.js.map'.format (self.targetDir, self.filePrename)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
@@ -192,7 +212,7 @@ class Module:
 				except Exception as exception:
 					utils.log (True, 'Checking: {}\n\tInternal error in static checker, remainder of module skipped\n', self.metadata.sourcePath)
 					
-			if utils.commandArgs.tree:
+			if utils.commandArgs.dtree:
 				self.dumpTree ()
 				
 			self.generate ()
@@ -280,34 +300,57 @@ class Module:
 		walk ('file', self.parseTree, 0)
 		self.textTree = ''.join (self.treeFragments) [1:]
 		
-		with utils.create ('{}/{}.tree'.format (self.metadata.targetDir, self.metadata.filePrename)) as treeFile:
+		with utils.create (self.metadata.treePath) as treeFile:
 			treeFile.write (self.textTree)
 			
 	def generate (self):			
 		targetLines = ''.join (Generator (self) .targetFragments) .split ('\n')
 		
-		if utils.commandArgs.map:
+		if utils.commandArgs.map or utils.commandArgs.dmap:
 			strippedLines = []
 			sourceLineNrs = []
-			lineNumberPrefix = '000001'
-			
+			sourceLineNr = 1
+						
 			for targetLine in targetLines:
 				while True:
 					index = targetLine.find (esc)
 					if index == -1:
 						break
-					nextLineNumberPrefix = targetLine [index +1 : index + 7]
+					nextSourceLineNr = int (targetLine [index + 1 : index + 7])
 					targetLine = '{}{}'.format (targetLine [ : index], targetLine [index + 7 : ])
 				if targetLine.strip () != ';':
 					strippedLines.append (targetLine)
-					sourceLineNrs.append (str (int (lineNumberPrefix)))
-				lineNumberPrefix = nextLineNumberPrefix
+					sourceLineNrs.append (sourceLineNr)
+				sourceLineNr = nextSourceLineNr
 			targetLines = strippedLines
-			self.sourceMap = ';'.join (sourceLineNrs)
 			
-			utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)
-			with utils.create (self.metadata.mapPath) as mapFile:
-				mapFile.write (self.sourceMap)
+			if utils.commandArgs.dmap:
+				utils.log (False, 'Dumping line map for module: {}\n', self.metadata.lineMapPath)
+				with utils.create (self.metadata.lineMapPath) as lineMapFile:
+					lineMapFile.write ('{}\n'.format ('\n'.join ([
+						str ((sourceLineNr, targetLineIndex + 1 + 15926))
+						for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs)
+					])))
+			if utils.commandArgs.map:
+				sourceLineNrDeltas = [sourceLineNrs [0]] + [sourceLineNrs [index] - sourceLineNrs [index - 1] for index in range (1, len (sourceLineNrs))]
+				
+				filler = 15926				* ';'
+				#	//# sourceMappingURL=file:///D:/activ_tosh/geatec/transcrypt/transcrypt/demos/pong/__javascript__/pong.mod.js.map
+				#	"sources": ["../pong.py"],
+				
+				self.sourceMap = (
+					'{\n'
+					'\t"version": 3,\n' +
+					'\t"file": "{}",\n'.format (self.metadata.targetPath) +
+					'\t"sourceRoot": "",\n' +
+					'\t"sources": ["{}"],\n'.format (self.metadata.sourcePath) +
+					'\t"mappings": "{};"\n'.format (filler + ';'.join (['AA{}A'.format (getBase64Vlq (sourceLineNrDelta)) for sourceLineNrDelta in sourceLineNrDeltas])) +
+					'}\n'
+				)
+				
+				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)
+				with utils.create (self.metadata.mapPath) as mapFile:
+					mapFile.write (self.sourceMap)
 		else:
 			targetLines = [line for line in targetLines if line.strip () != ';']		
 		
@@ -315,6 +358,8 @@ class Module:
 		self.targetCode = '\n'.join (targetLines)
 		with utils.create (self.metadata.targetPath) as targetFile:
 			targetFile.write (self.targetCode)
+			if utils.commandArgs.map:
+				targetFile.write ('//# sourceMappingURL={}'.format (self.metadata.mapPath))
 			
 class Scope:
 	def __init__ (self, node):
@@ -455,15 +500,15 @@ class Generator (ast.NodeVisitor):
 		return indentLevel * '\t'
 		
 	def emit (self, fragment, *formatter):
-		if (utils.commandArgs.map and self.lineNr != self.oldLineNr):
-			self.targetFragments.append ('{}{}'.format (esc, str (1000000 + self.lineNr) [1:]))
-			self.oldLineNr = self.lineNr
-	
 		if (
 			not self.targetFragments or
 			(self.targetFragments and self.targetFragments [-1] .endswith ('\n'))
 		):
 			self.targetFragments.append (self.tabs ())
+			
+		if ((utils.commandArgs.map or utils.commandArgs.dmap) and self.lineNr != self.oldLineNr):
+			self.targetFragments.append ('{}{}'.format (esc, str (1000000 + self.lineNr) [1:]))
+			self.oldLineNr = self.lineNr
 			
 		fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
 		self.targetFragments.append (fragment.format (*formatter))
