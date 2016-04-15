@@ -70,7 +70,7 @@ def main ():
 			utils.log (True, '\n{}', exception)
 			
 			# Have to log something else, because a general exception isn't informative enough
-			utils.log (False, '{}\n', traceback.format_exc ())
+			utils.log (True, '{}\n', traceback.format_exc ())
 		utils.log (True, '\nReady\n')
 		
 if __name__ == '__main__':

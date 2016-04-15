@@ -39,7 +39,7 @@
 							self.n = n;
 							self.kwargs = kwargs;
 							self.extra = 'hello';
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self, autoTester) {
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
@@ -54,7 +54,7 @@
 								}
 							}
 							autoTester.check (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra);
-						}, 'f');}
+						});}
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
@@ -82,13 +82,35 @@
 								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
-						}, '__init__');}
+						});}
 					});
 					var C = __class__ ('C', [object], {
 						get tricky () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							return args;
-						}, 'tricky');}
+						});}
+					});
+					var Foo = __class__ ('Foo', [object], {
+						get __init__ () {return __get__ (this, function (self, a, b) {
+							if (typeof b == 'undefined' || (b != null && b .__class__ == __kwargdict__)) {;
+								var b = 99;
+							};
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'a': var a = __allkwargs0__ [__attrib0__]; break;
+											case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+										}
+									}
+								}
+							}
+							self.a = a;
+							self.b = b;
+						});}
 					});
 					var run = function (autoTester) {
 						if (arguments.length) {
@@ -201,11 +223,15 @@
 						autoTester.check (C ().tricky.apply (null, range (4)));
 						autoTester.check ('{}-{}'.format (1, 3, 5, 7, 9));
 						autoTester.check ('{}-{}'.format.apply (null, range (4)));
+						var f = Foo (1, __kwargdict__ ({b: 2}));
+						autoTester.check ('f.a', f.a);
+						autoTester.check ('f.b', f.b);
 					};
 					__pragma__ ('<all>')
 						__all__.A = A;
 						__all__.B = B;
 						__all__.C = C;
+						__all__.Foo = Foo;
 						__all__.run = run;
 					__pragma__ ('</all>')
 				}
