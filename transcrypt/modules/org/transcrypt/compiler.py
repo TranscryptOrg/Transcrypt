@@ -19,7 +19,6 @@ import ast
 import re
 import copy
 import datetime
-import shutil
 import math
 import traceback
 
@@ -53,8 +52,8 @@ class ModuleMetadata:
 			
 			self.mapDir = '{}/sourcemap'.format (self.extraDir)
 			self.mapPath = '{}/{}.mod.js.map'.format (self.mapDir, self.filePrename)
-			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!')
+			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
@@ -91,23 +90,16 @@ class ModuleMetadata:
 					
 		return youngestPath == self.sourcePath
 	
-class Program:
+class Program (sourcemaps.IndexMapper):
 	def __init__ (self, moduleSearchDirs):
-		self.header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
-			__base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-		)
-		
 		self.moduleSearchDirs = moduleSearchDirs
-		
+		self.moduleDict = {}
+
+		# Set paths that don't require the module dict
 		self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
 		self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
 		self.sourceFileName = self.sourcePath.split ('/') [-1]
-		
-		self.moduleDict = {}
-		self.fragments = {}
-		self.compile ()
-		
-	def compile (self):
+	
 		# Define names early, since they are cross-used in module compilation	
 		prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
 		self.coreModuleName = '{}.{}'.format (prefix, '__core__')
@@ -116,12 +108,13 @@ class Program:
 		self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
 		self.mainModuleName = self.sourceFileName [ : -3]
 
-		# Module compilation incl. optional source map generation
+		# Compile inline modules
 		Module (self, ModuleMetadata (self, self.coreModuleName))
 		Module (self, ModuleMetadata (self, self.baseModuleName))
 		Module (self, ModuleMetadata (self, self.standardModuleName))
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
-					
+
+		# Compile imported modules
 		try:
 			moduleMetadata = ModuleMetadata (self, self.mainModuleName)
 			Module (self, moduleMetadata)	# Compile of main module, will trigger recursive compilation
@@ -130,70 +123,63 @@ class Program:
 				exception,
 				message = str (exception)
 			)
+
+		# Set paths that require the module dict
+		self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		self.mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
+		self.miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
 			
-		# Join all normally imported modules
-		normallyImportedTargetCode = ''.join ([
-			self.moduleDict [moduleName] .targetCode
+		# Round up imported modules
+		importedModules = [
+			self.moduleDict [moduleName]
 			for moduleName in sorted (self.moduleDict)
 			if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
-		])
-		
+		]
+			
 		# And sandwich them between the in-line modules
-		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent
+		allModules = (
+			[
+				self.moduleDict [self.coreModuleName],
+				self.moduleDict [self.baseModuleName],
+				self.moduleDict [self.standardModuleName],
+				self.moduleDict [self.builtinModuleName]
+			] +
+			importedModules +
+			[self.moduleDict [self.mainModuleName]]
+		)
 		
+		# Encapsulate target code for all modules
+		header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
+			__base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+		)
+		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent		
 		targetCode = (
-			self.header +
+			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
-			self.moduleDict [self.coreModuleName].targetCode +
-			self.moduleDict [self.baseModuleName] .targetCode +
-			self.moduleDict [self.standardModuleName] .targetCode +
-			self.moduleDict [self.builtinModuleName].targetCode +
-			normallyImportedTargetCode +
-			self.moduleDict [self.mainModuleName].targetCode +
+			''.join ([module.targetCode for module in allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
 			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
 			'{0} ();\n' .format (self.mainModuleName)
 		)	
 						
-		# Write target code
-		targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-		utils.log (True, 'Saving result in: {}\n', targetPath)
-		with utils.create (targetPath) as aFile:
+		# Write encapsulated target code
+		utils.log (True, 'Saving result in: {}\n', self.targetPath)
+		with utils.create (self.targetPath) as aFile:
 			aFile.write (targetCode)
 			
 			if utils.commandArgs.map:
-				mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
-				aFile.write ('\n//# sourceMappingURL=file:///{}\n'.format (mapPath))		
+				aFile.write ('\n//# sourceMappingURL=file:///{}\n'.format (self.mapPath))		
 		
-		# Join and write source maps
+		# Join and save source maps
 		if utils.commandArgs.map:
-			# Join source maps of all normally imported modules
-			normallyImportedSourceMap = sourcemaps.SourceMap.join ([
-				self.moduleDict [moduleName] .sourceMap
-				for moduleName in sorted (self.moduleDict)
-				if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
-			])
-
-			# Sandwich them between source maps of the in-line modules and set the target path
-			overallSourceMap = sourcemaps.SourceMap.join ([
-				self.moduleDict [self.coreModuleName].sourceMap,
-				self.moduleDict [self.baseModuleName] .sourceMap,
-				self.moduleDict [self.standardModuleName] .sourceMap,
-				self.moduleDict [self.builtinModuleName].sourceMap,
-				normallyImportedSourceMap,
-				self.moduleDict [self.mainModuleName].sourceMap
-			]) .target (self.targetPath)
-		
-			utils.log (False, 'Saving overall sourcemap to: {}\n', mapPath, )
-			with utils.create (mapPath) as aFile:
-				aFile.write (str (overallSourceMap))
+			utils.log (False, 'Saving overall sourcemap to: {}\n', self.mapPath)
+			self.generateMap (allModules)
 		
 		# Minify
 		if not utils.commandArgs.nomin:
-			miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-			utils.log (True, 'Saving minified result in: {}\n', miniPath)
-			minify.run (targetPath, miniPath)
+			utils.log (True, 'Saving minified result in: {}\n', self.miniPath)
+			minify.run (self.targetPath, self.miniPath)
 			
 	def provide (self, moduleName):
 		if moduleName == '__main__':
@@ -206,7 +192,7 @@ class Program:
 		else:										# If not, provide by loading or compiling
 			return Module (self, moduleMetadata)
 						
-class Module:
+class Module (sourcemaps.StandardMapper):
 	def __init__ (self, program, moduleMetadata, strip = False):
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
@@ -222,66 +208,13 @@ class Module:
 					
 			if utils.commandArgs.dtree:
 				self.dumpTree ()
-				
-			self.generateJavascriptAndSourceMap ()
-			self.extractMetadata ()
-			self.saveJavascript ()
-			self.saveSourceMap ()
+					
+			self.generateJavascriptAndMap ()
+			self.extractPropertiesFromJavascript ()
 		else:
-			self.loadJavascript ()
-			self.extractMetadata ()
-			
-			if os.path.isfile (self.metadata.mapPath)
-				self.loadSourceMap ()
-			else:
-				self.padSourceMap ()
+			self.loadJavascriptAndMap ()	# Source maps are never loaded by Transcrypt, only saved.
+			self.extractPropertiesFromJavascript ()
 				
-	def loadJavascript (self):
-		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
-		
-		with open (self.metadata.targetPath) as aFile:
-			self.targetCode = aFile.read ()
-			
-		if self.metadata.name in (self.program.coreModuleName, self.program.builtinModuleName):
-			# Remove comment-like line tails and empty lines (so no // inside a string allowed)
-			self.targetCode = '{}\n'.format (
-				'\n'.join ([line for line in [line.split ('//') [0] .rstrip () for line in self.targetCode.split ('\n')] if line])
-			)
-			
-	def saveJavascript (self):
-		utils.log (False, 'Saving compiled module: {}\n', self.metadata.targetPath)
-		
-		with utils.create (self.metadata.targetPath) as aFile:
-			aFile.write (self.targetCode)
-
-	def extractMetadata (self):
-		utils.log (False, 'Extracting metadata from: {}\n', self.metadata.targetPath)
-				
-		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
-		self.use = sorted (set ([
-			word
-			for word in useFragment.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
-			if not word.startswith ('<')
-		]))
-		for moduleName in self.use:
-			self.program.provide (moduleName)
-		
-		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
-		self.all = sorted (set ([
-			word [1 : ]
-			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
-			if word.startswith ('.')
-		]))
-		
-	def loadSourceMap (self):
-		self.sourceMap = SourceMap.load (self.metadata.mapPath)
-	
-	def padSourceMap (self):
-		self.sourceMap = SourceMap.pad (self.targetCode)
-		
-	def saveSourceMap (self):
-		self.sourceMap.save (self.metadata.mapPath)
-		
 	def parse (self):
 		try:
 			utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
@@ -306,7 +239,7 @@ class Module:
 			)
 		
 	def dumpTree (self):
-		utils.log (False, 'Dumping syntax tree of module: {}\n', self.metadata.sourcePath)
+		utils.log (False, 'Dumping syntax tree for module: {}\n', self.metadata.sourcePath)
 
 		def walk (name, value, tabLevel):
 			self.treeFragments .append ('\n{0}{1}: {2} '.format (tabLevel * '\t', name, type (value).__name__ ))
@@ -326,7 +259,23 @@ class Module:
 		with utils.create (self.metadata.treePath) as treeFile:
 			treeFile.write (self.textTree)
 			
-	def generateJavascriptAndSourceMap (self):
+	def loadJavascriptAndMap (self):
+		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
+		
+		with open (self.metadata.targetPath) as aFile:
+			self.targetCode = aFile.read ()
+			
+		if self.metadata.name in (self.program.coreModuleName, self.program.builtinModuleName):
+			# Remove comment-like line tails and empty lines (so no // inside a string allowed)
+			self.targetCode = '{}\n'.format (
+				'\n'.join ([line for line in [line.split ('//') [0] .rstrip () for line in self.targetCode.split ('\n')] if line])
+			)
+			
+		self.loadMap ()
+
+	def generateJavascriptAndMap (self):
+		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
+		
 		if utils.commandArgs.map or utils.commandArgs.dmap:	# Generation of source map and / or linemap required
 			instrumentedTargetCode = ''
 			
@@ -335,7 +284,7 @@ class Module:
 			# The first one embedded is the one that should be used, since it points to the beginning of the construction at hand
 			for targetFragment  in Generator (self) .targetFragments:
 				if type (targetFragment) == int:
-					instrumentedTargetCode += '{}{} '.format (esc, str (maxNrOfSourceLinesPerModule + targetFragment) [1:])
+					instrumentedTargetCode += '{}{} '.format (sourcemaps.lineNrMarker, str (sourcemaps.maxNrOfSourceLinesPerModule + targetFragment) [1:])
 				else:
 					instrumentedTargetCode += targetFragment
 			
@@ -349,13 +298,13 @@ class Module:
 			for targetLine in instrumentedTargetLines:
 				firstFound = False
 				while True:
-					index = targetLine.find (esc)
+					index = targetLine.find (sourcemaps.lineNrMarker)
 					if index == -1:
 						break
 					if not firstFound:	# Take the first one only
-						sourceLineNr = int (targetLine [index + 1 : index + lineNrLength]) - 1
+						sourceLineNr = int (targetLine [index + 1 : index + sourcemaps.lineNrLength]) - 1
 						firstFound = True
-					targetLine = '{}{}'.format (targetLine [ : index], targetLine [index + lineNrLength : ])
+					targetLine = '{}{}'.format (targetLine [ : index], targetLine [index + sourcemaps.lineNrLength : ])
 
 				# Only append non-emptpy statements and their number info
 				if targetLine.strip () != ';':
@@ -371,29 +320,41 @@ class Module:
 						for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs)
 					])))
 					
-			# Generate per module sourcemap and copying sourcefile
+			# Generate per module sourcemap and copy sourcefile
 			if utils.commandArgs.map:
-				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)
-				
-				sourceLineNrDeltas = [sourceLineNrs [0]] + [sourceLineNrs [index] - sourceLineNrs [index - 1] for index in range (1, len (sourceLineNrs))]
-				self.sourceMap = sourcemaps.SourceMap.create (
-					self.metadata.mapSourceFileName,
-					';'.join (['AA{}A'.format (getBase64Vlq (sourceLineNrDelta)) for sourceLineNrDelta in sourceLineNrDeltas])
-				)
-				
-				with utils.create (self.metadata.mapPath) as mapFile:
-					mapFile.write (str (self.sourceMap))
-					
-				utils.log (False, 'Copying source file to: {}\n', self.metadata.mapSourcePath)
-				shutil.copyfile (self.metadata.sourcePath, self.metadata.mapSourcePath)
+				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)				
+				self.generateMap (sourceLineNrs)
 
 		else:	# No maps needed, shortcut for speed
 			targetLines = [line for line in  ''.join (Generator (self) .targetFragments) .split ('\n') if line.strip () != ';']		
 		
-		# Module code generation
-		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
+		# Join and save module code
 		self.targetCode = '\n'.join (targetLines)
+		with utils.create (self.metadata.targetPath) as aFile:
+			aFile.write (self.targetCode)
 			
+	def extractPropertiesFromJavascript (self):
+		utils.log (False, 'Extracting module properties from: {}\n', self.metadata.targetPath)
+				
+		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
+		self.use = sorted (set ([
+			word
+			for word in useFragment.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
+			if not word.startswith ('<')
+		]))
+		for moduleName in self.use:
+			self.program.provide (moduleName)
+		
+		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
+		self.all = sorted (set ([
+			word [1 : ]
+			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
+			if word.startswith ('.')
+		]))
+		
+		if utils.commandArgs.map:
+			self.nrOfTargetLines = self.targetCode.count ('\n') + 1
+		
 class Scope:
 	def __init__ (self, node):
 		self.node = node

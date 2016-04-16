@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-14 16:33:53
+// Transcrypt'ed from Python, 2016-04-16 20:43:44
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
