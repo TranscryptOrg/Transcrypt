@@ -39,12 +39,47 @@ getBase64Vlq = GetBase64Vlq ()	# Instantiation of functor
 
 mapVersion = 3
 
-class IndexMapper:
-	def generateMap (self, modules)	:	
+class ModuleMapperMixin:
+	def generateMap (self, fake = False):
+		self.rawMap = collections.OrderedDict ([
+			('version', mapVersion),
+			('file', self.metadata.targetPath),
+			('sources', [self.metadata.mapSourceFileName]),
+			('mappings', (
+				';'.join (['AACA'] * self.targetCode.count ('\n'))
+			) if fake else (
+				';'.join ([
+					'AA{}A'.format (getBase64Vlq (sourceLineNrDelta))
+					for sourceLineNrDelta in [
+						self.sourceLineNrs [index] - (self.sourceLineNrs [index - 1] if index else 0)
+						for index in range (len (self.sourceLineNrs))
+					]
+				])
+			))
+		])
+		
+		with utils.create (self.metadata.mapPath) as aFile:
+			aFile.write (json.dumps (self.rawMap, indent = '\t'))
+		
+		shutil.copyfile (self.metadata.sourcePath, self.metadata.mapSourcePath)
+	
+	def loadOrFakeMap (self):
+		if (
+			not (os.path.isfile (self.metadata.mapPath) and os.path.isfile (self.metadata.mapSourcePath))	# Both files are needed, and one may have been thrown away
+			or
+			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
+		):
+			self.generateMap (True)
+		else:	
+			with open (self.metadata.mapPath) as aFile:
+				self.rawMap = json.loads (aFile.read ())
+				
+class ProgramMapperMixin:
+	def generateMap (self)	:	
 		totalOffset = 0
 		rawSections = []
 		
-		for module in modules:
+		for module in self.allModules:
 			if module.rawMap:
 				rawSections.append (collections.OrderedDict ([
 					('offset', collections.OrderedDict ([
@@ -57,7 +92,7 @@ class IndexMapper:
 				if module.metadata.name != self.mainModuleName:
 					shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
 
-			totalOffset += module.nrOfTargetLines
+			totalOffset += module.targetCode.count ('\n')
 			
 		with utils.create (self.mapPath) as aFile:
 			aFile.write (json.dumps (collections.OrderedDict ([
@@ -66,26 +101,6 @@ class IndexMapper:
 				('sections', rawSections)
 			]), indent = '\t'))
 			
-class StandardMapper:
-	def generateMap (self, sourceLineNrs):
-		sourceLineNrDeltas = [sourceLineNrs [0]] + [sourceLineNrs [index] - sourceLineNrs [index - 1] for index in range (1, len (sourceLineNrs))]
-		
-		self.rawMap = collections.OrderedDict ([
-			('version', mapVersion),
-			('file', self.metadata.targetPath),
-			('sources', [self.metadata.mapSourceFileName]),
-			('mappings', ';'.join (['AA{}A'.format (getBase64Vlq (sourceLineNrDelta)) for sourceLineNrDelta in sourceLineNrDeltas]))
-		])
-		
-		with utils.create (self.metadata.mapPath) as aFile:
-			aFile.write (json.dumps (self.rawMap, indent = '\t'))
-		
-		shutil.copyfile (self.metadata.sourcePath, self.metadata.mapSourcePath)
-	
-	def loadMap (self):
-		if os.path.isfile (self.metadata.mapPath):
-			with open (self.metadata.mapPath) as aFile:
-				self.rawMap = json.loads (aFile.read ())
-		else:
-			self.rawMap = None
-			
+		for module in self.allModules:
+			if module.metadata.name != self.mainModuleName:
+				shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)

@@ -39,11 +39,13 @@ class ModuleMetadata:
 			else:				
 				self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
 				
-			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
-							
 			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)			
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
 
+			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+			if not os.path.isfile (self.sourcePath):
+				self.sourcePath = self.targetPath	# For a Javascript-only module, source and target are the same and a source map can be faked
+										
 			self.extraDir = '{}/{}'.format (self.targetDir, 'extra')
 			
 			self.dumpDir = '{}/dump'.format (self.extraDir)
@@ -78,6 +80,10 @@ class ModuleMetadata:
 		return self.sourceExists () or self.targetExists ()
 		
 	def dirty (self):
+		# Javascript-only modules are never dirty (so don't try to parse and compile Javascript)
+		if self.targetPath == self.sourcePath:
+			return False
+		
 		# Find youngest of .py and .js files and use that as "original"
 		youngestTime = 0
 		youngestPath = None
@@ -90,7 +96,7 @@ class ModuleMetadata:
 					
 		return youngestPath == self.sourcePath
 	
-class Program (sourcemaps.IndexMapper):
+class Program (sourcemaps.ProgramMapperMixin):
 	def __init__ (self, moduleSearchDirs):
 		self.moduleSearchDirs = moduleSearchDirs
 		self.moduleDict = {}
@@ -137,7 +143,7 @@ class Program (sourcemaps.IndexMapper):
 		]
 			
 		# And sandwich them between the in-line modules
-		allModules = (
+		self.allModules = (
 			[
 				self.moduleDict [self.coreModuleName],
 				self.moduleDict [self.baseModuleName],
@@ -156,7 +162,7 @@ class Program (sourcemaps.IndexMapper):
 		targetCode = (
 			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
-			''.join ([module.targetCode for module in allModules]) +			
+			''.join ([module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
 			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
@@ -174,7 +180,7 @@ class Program (sourcemaps.IndexMapper):
 		# Join and save source maps
 		if utils.commandArgs.map:
 			utils.log (False, 'Saving overall sourcemap to: {}\n', self.mapPath)
-			self.generateMap (allModules)
+			self.generateMap ()
 		
 		# Minify
 		if not utils.commandArgs.nomin:
@@ -192,7 +198,7 @@ class Program (sourcemaps.IndexMapper):
 		else:										# If not, provide by loading or compiling
 			return Module (self, moduleMetadata)
 						
-class Module (sourcemaps.StandardMapper):
+class Module (sourcemaps.ModuleMapperMixin):
 	def __init__ (self, program, moduleMetadata, strip = False):
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
@@ -212,8 +218,9 @@ class Module (sourcemaps.StandardMapper):
 			self.generateJavascriptAndMap ()
 			self.extractPropertiesFromJavascript ()
 		else:
-			self.loadJavascriptAndMap ()	# Source maps are never loaded by Transcrypt, only saved.
+			self.loadJavascript ()
 			self.extractPropertiesFromJavascript ()
+			self.loadOrFakeMap ()
 				
 	def parse (self):
 		try:
@@ -259,20 +266,12 @@ class Module (sourcemaps.StandardMapper):
 		with utils.create (self.metadata.treePath) as treeFile:
 			treeFile.write (self.textTree)
 			
-	def loadJavascriptAndMap (self):
+	def loadJavascript (self):
 		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
 		
 		with open (self.metadata.targetPath) as aFile:
 			self.targetCode = aFile.read ()
 			
-		if self.metadata.name in (self.program.coreModuleName, self.program.builtinModuleName):
-			# Remove comment-like line tails and empty lines (so no // inside a string allowed)
-			self.targetCode = '{}\n'.format (
-				'\n'.join ([line for line in [line.split ('//') [0] .rstrip () for line in self.targetCode.split ('\n')] if line])
-			)
-			
-		self.loadMap ()
-
 	def generateJavascriptAndMap (self):
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 		
@@ -292,7 +291,7 @@ class Module (sourcemaps.StandardMapper):
 		
 			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
 			targetLines = []
-			sourceLineNrs = []
+			self.sourceLineNrs = []
 			sourceLineNr = 1
 						
 			for targetLine in instrumentedTargetLines:
@@ -309,7 +308,7 @@ class Module (sourcemaps.StandardMapper):
 				# Only append non-emptpy statements and their number info
 				if targetLine.strip () != ';':
 					targetLines.append (targetLine)
-					sourceLineNrs.append (sourceLineNr)
+					self.sourceLineNrs.append (sourceLineNr)
 					
 			# Dump per-module line map for debugging purposes
 			if utils.commandArgs.dmap:
@@ -317,13 +316,13 @@ class Module (sourcemaps.StandardMapper):
 				with utils.create (self.metadata.lineMapPath) as lineMapFile:
 					lineMapFile.write ('{}\n'.format ('\n'.join ([
 						str ((sourceLineNr, targetLineIndex + 1))
-						for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs)
+						for targetLineIndex, sourceLineNr in enumerate (self.sourceLineNrs)
 					])))
 					
 			# Generate per module sourcemap and copy sourcefile
 			if utils.commandArgs.map:
 				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)				
-				self.generateMap (sourceLineNrs)
+				self.generateMap ()
 
 		else:	# No maps needed, shortcut for speed
 			targetLines = [line for line in  ''.join (Generator (self) .targetFragments) .split ('\n') if line.strip () != ';']		
