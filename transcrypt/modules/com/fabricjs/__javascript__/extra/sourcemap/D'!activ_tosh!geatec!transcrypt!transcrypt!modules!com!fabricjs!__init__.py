@@ -1,3 +1,5 @@
+__pragma__ ('nodmap')
+
 fabric = __pragma__ ('js',
 	'''
 (function () {{

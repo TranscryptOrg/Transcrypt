@@ -48,7 +48,9 @@ class ModuleMetadata:
 										
 			self.extraDir = '{}/{}'.format (self.targetDir, 'extra')
 			
-			self.treePath = '{}/{}.mod.tree'.format (self.extraDir, self.filePrename)
+			self.dumpDir = '{}/dump'.format (self.extraDir)
+			self.treePath = '{}/{}.mod.tree.dump'.format (self.dumpDir, self.filePrename)
+			self.lineMapPath = '{}/{}.mod.js.map.dump'.format (self.dumpDir, self.filePrename)
 			
 			self.mapDir = '{}/sourcemap'.format (self.extraDir)
 			self.mapPath = '{}/{}.mod.js.map'.format (self.mapDir, self.filePrename)
@@ -96,9 +98,6 @@ class ModuleMetadata:
 	
 class Program (sourcemaps.ProgramMapperMixin):
 	def __init__ (self, moduleSearchDirs):
-		self.rawModuleCaption = '\n\n// ============ Source: {} ============\n\n' if utils.commandArgs.anno else ''
-		self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
-	
 		self.moduleSearchDirs = moduleSearchDirs
 		self.moduleDict = {}
 
@@ -163,7 +162,7 @@ class Program (sourcemaps.ProgramMapperMixin):
 		targetCode = (
 			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
-			''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +			
+			''.join ([module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
 			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
@@ -213,7 +212,7 @@ class Module (sourcemaps.ModuleMapperMixin):
 				except Exception as exception:
 					utils.log (True, 'Checking: {}\n\tInternal error in static checker, remainder of module skipped\n', self.metadata.sourcePath)
 					
-			if utils.commandArgs.tree:
+			if utils.commandArgs.dtree:
 				self.dumpTree ()
 					
 			self.generateJavascriptAndMap ()
@@ -222,9 +221,6 @@ class Module (sourcemaps.ModuleMapperMixin):
 			self.loadJavascript ()
 			self.extractPropertiesFromJavascript ()
 			self.loadOrFakeMap ()
-			
-	def getModuleCaption (self):
-		return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''			
 				
 	def parse (self):
 		try:
@@ -279,27 +275,49 @@ class Module (sourcemaps.ModuleMapperMixin):
 	def generateJavascriptAndMap (self):
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 		
-		generator = Generator (self)
-		
-		if utils.commandArgs.map or generator.allowDmap:	# Generation of source map and / or prefix map required
-			instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')	
+		if utils.commandArgs.map or utils.commandArgs.dmap:	# Generation of source map and / or linemap required
+			instrumentedTargetCode = ''
 			
+			# Embed source line nrs in the target lines as recognizable fixed length chunks
+			# There may be from zero upto any nr of source line nrs per target line
+			# The first one embedded is the one that should be used, since it points to the beginning of the construction at hand
+			for targetFragment  in Generator (self) .targetFragments:
+				if type (targetFragment) == int:
+					instrumentedTargetCode += '{}{} '.format (sourcemaps.lineNrMarker, str (sourcemaps.maxNrOfSourceLinesPerModule + targetFragment) [1:])
+				else:
+					instrumentedTargetCode += targetFragment
+			
+			instrumentedTargetLines = instrumentedTargetCode.split ('\n')
+		
 			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
 			targetLines = []
 			self.sourceLineNrs = []
-				
+			sourceLineNr = 1
+						
 			for targetLine in instrumentedTargetLines:
-				sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
-				sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
-				targetLine = targetLine [ : -sourcemaps.lineNrLength]
-				
+				firstFound = False
+				while True:
+					index = targetLine.find (sourcemaps.lineNrMarker)
+					if index == -1:
+						break
+					if not firstFound:	# Take the last one only
+						sourceLineNr = int (targetLine [index + 1 : index + sourcemaps.lineNrLength])
+						firstFound = True
+					targetLine = '{}{}'.format (targetLine [ : index], targetLine [index + sourcemaps.lineNrLength : ])
+
 				# Only append non-emptpy statements and their number info
 				if targetLine.strip () != ';':
-					if generator.allowDmap:
-						targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)
-				
 					targetLines.append (targetLine)
 					self.sourceLineNrs.append (sourceLineNr)
+					
+			# Dump per-module line map for debugging purposes
+			if utils.commandArgs.dmap:
+				utils.log (False, 'Dumping line map for module: {}\n', self.metadata.lineMapPath)
+				with utils.create (self.metadata.lineMapPath) as lineMapFile:
+					lineMapFile.write ('{}\n'.format ('\n'.join ([
+						str ((sourceLineNr, targetLineIndex + 1))
+						for targetLineIndex, sourceLineNr in enumerate (self.sourceLineNrs)
+					])))
 					
 			# Generate per module sourcemap and copy sourcefile
 			if utils.commandArgs.map:
@@ -307,35 +325,29 @@ class Module (sourcemaps.ModuleMapperMixin):
 				self.generateMap ()
 
 		else:	# No maps needed, shortcut for speed
-			targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']		
+			targetLines = [line for line in  ''.join (Generator (self) .targetFragments) .split ('\n') if line.strip () != ';']		
 		
 		# Join and save module code
 		self.targetCode = '\n'.join (targetLines)
 		with utils.create (self.metadata.targetPath) as aFile:
 			aFile.write (self.targetCode)
-		
+			
 	def extractPropertiesFromJavascript (self):
-		def purgeLineNrs (clause):
-			if utils.commandArgs.anno:
-				return re.sub ('/\* {} \*/'.format (sourcemaps.lineNrLength * '\d'), '', clause)
-			else:
-				return clause	
-	
 		utils.log (False, 'Extracting module properties from: {}\n', self.metadata.targetPath)
 				
-		useClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')])
+		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
 		self.use = sorted (set ([
 			word
-			for word in useClause.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
+			for word in useFragment.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
 			if not word.startswith ('<')
 		]))
 		for moduleName in self.use:
 			self.program.provide (moduleName)
 		
-		allClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')])
+		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
 		self.all = sorted (set ([
 			word [1 : ]
-			for word in allClause.replace ('__all__', ' ') .replace ('=', ' ') .split ()
+			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
 			if word.startswith ('.')
 		]))
 		
@@ -359,9 +371,10 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
+		
+		self.oldLineNr = 0
 		self.lineNr = 1
-		self.lineNrString = ''
-
+		
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
 			('arguments', 'py_arguments'),
@@ -429,15 +442,12 @@ class Generator (ast.NodeVisitor):
 		self.allowKeywordArgs = utils.commandArgs.kwargs
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
-		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
 		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices
 		
 		try:
 			self.visit (module.parseTree)
-			self.targetFragments.append (self.lineNrString)	# Last target fragment doesn't have a '\n' to replace in the emit method
-
 		except Exception as exception:
 			utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr)
 			
@@ -483,14 +493,18 @@ class Generator (ast.NodeVisitor):
 		return indentLevel * '\t'
 		
 	def emit (self, fragment, *formatter):
-		if (	# At the start of a new line
+		if (
 			not self.targetFragments or
 			(self.targetFragments and self.targetFragments [-1] .endswith ('\n'))
 		):
 			self.targetFragments.append (self.tabs ())
 			
+		if ((utils.commandArgs.map or utils.commandArgs.dmap) and self.lineNr != self.oldLineNr):
+			self.targetFragments.append (self.lineNr)	# An int rather than a string, so we can pick it out later
+			self.oldLineNr = self.lineNr
+			
 		fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
-		self.targetFragments.append (fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
+		self.targetFragments.append (fragment.format (*formatter))
 		
 	def indent (self):
 		self.indentLevel += 1
@@ -516,17 +530,6 @@ class Generator (ast.NodeVisitor):
 		if index:
 			self.emit (', ' if blank else ',')
 			
-	def adaptLineNrString (self, node):
-		if utils.commandArgs.map or self.allowDmap:
-			if hasattr (node, 'lineno'):
-				lineNr = node.lineno
-			else:
-				lineNr = self.lineNr
-				
-			self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
-		else:
-			return ''
-		
 	def emitBody (self, body):
 		for stmt in body:
 			self.visit (stmt)
@@ -705,8 +708,6 @@ class Generator (ast.NodeVisitor):
 				)
 				
 	def visit_Assign (self, node):
-		self.adaptLineNrString (node)
-	
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
 		
 		def assignTarget (target, value, pathIndices = []):
@@ -931,9 +932,7 @@ class Generator (ast.NodeVisitor):
 			self.emit ('{} = true;\n', self.getTemp ('break'))
 		self.emit ('break')
 	
-	def visit_Call (self, node):
-		self.adaptLineNrString (node)
-	
+	def visit_Call (self, node):	
 		def emitKwargDict ():
 			self.emit ('__kwargdict__ (')
 			
@@ -1006,8 +1005,6 @@ class Generator (ast.NodeVisitor):
 						for index in reversed (range (len (self.aliasers))):
 							if self.aliasers [index][0] == node.args [1] .s:
 								self.aliasers.pop (index)
-				elif node.args [0] .s == 'noanno':
-					self.allowDmap = False
 				elif node.args [0] .s == 'fcall':
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
@@ -1099,8 +1096,6 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
-		self.adaptLineNrString (node)
-		
 		if type (self.getscope () .node) == ast.Module:
 			self.all.add (node.name)
 
@@ -1203,8 +1198,6 @@ class Generator (ast.NodeVisitor):
 		self.visit (node.value)
 				
 	def visit_For (self, node):
-		self.adaptLineNrString (node)
-		
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		else:
@@ -1289,8 +1282,6 @@ class Generator (ast.NodeVisitor):
 			self.prevTemp ('iter')
 			
 		if node.orelse:
-			self.adaptLineNrString (node.orelse)
-				
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
 			
@@ -1308,23 +1299,19 @@ class Generator (ast.NodeVisitor):
 			self.emitBody (node.body)
 			self.dedent ()
 			self.descope ()
-			
+
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
 											# The rest of its use is only at compile time at compile time			
 			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getscope () .node) == ast.Module:
 					self.all.add (node.name)
-					
-				self.adaptLineNrString (node)
 				self.emit ('var {} = function ', self.filterId (node.name))
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
 			else:															# Class scope, so it's a method and needs the currying mechanism
-				self.emit ('\n')
-				self.adaptLineNrString (node)
-				self.emit ('get {} () {{return __get__ (this, function ', self.filterId (node.name))	
+				self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))	
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
@@ -1342,8 +1329,6 @@ class Generator (ast.NodeVisitor):
 		)
 		
 	def visit_If (self, node):
-		self.adaptLineNrString (node)
-		
 		self.emit ('if (')
 		self.visit (node.test)
 		self.emit (') {{\n')
@@ -1355,8 +1340,6 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if node.orelse:
-			self.adaptLineNrString (node.orelse)
-				
 			self.emit ('else {{\n')
 			self.indent ()
 			self.emitBody (node.orelse)
@@ -1373,8 +1356,6 @@ class Generator (ast.NodeVisitor):
 		self.emit (')')
 		
 	def visit_Import (self, node):	# Import .. can only import modules
-		self.adaptLineNrString (node)
-		
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
@@ -1400,11 +1381,9 @@ class Generator (ast.NodeVisitor):
 				self.emit (';\n')
 				
 	def visit_ImportFrom (self, node):	# From .. import can import modules or entities in modules
-		self.adaptLineNrString (node)
-
 		if node.module.startswith (self.stubsName):
 			return
-				
+		
 		try:			
 			# N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
 			for index, alias in enumerate (node.names):
@@ -1513,11 +1492,8 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}} ()')
 		
 	def visit_Module (self, node):
-		self.adaptLineNrString (node)
-						
 		self.inscope (node)
 		self.indent ()
-			
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
 		else:
@@ -1593,13 +1569,9 @@ class Generator (ast.NodeVisitor):
 		self.emit ('{}', node.n)
 		
 	def visit_Pass (self, node):
-		self.adaptLineNrString (node)
-			
-		self.emit ('// pass')
+		self.emit ('/* pass */')
 		
 	def visit_Raise (self, node):
-		self.adaptLineNrString (node)
-			
 		self.emit ('__except__ = ') 
 		self.visit (node.exc)
 		self.emit (';\n')
@@ -1612,8 +1584,6 @@ class Generator (ast.NodeVisitor):
 		self.emit ('throw __except__')
 		
 	def visit_Return (self, node):
-		self.adaptLineNrString (node)
-			
 		self.emit ('return ')
 		if node.value:
 			self.visit (node.value)
@@ -1714,8 +1684,6 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 					
 	def visit_Try (self, node):
-		self.adaptLineNrString (node)
-			
 		self.emit ('try {{\n')
 		self.indent ()	
 		self.emitBody (node.body)
@@ -1781,8 +1749,6 @@ class Generator (ast.NodeVisitor):
 			self.visitSubExpr (node, node.operand)
 		
 	def visit_While (self, node):
-		self.adaptLineNrString (node)
-			
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		else:
@@ -1799,8 +1765,6 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if node.orelse:
-			self.adaptLineNrString (node.orelse)
-
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
 			
@@ -1812,9 +1776,7 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.prevTemp ('break')
 		
-	def visit_With (self, node):
-		self.adaptLineNrString (node)
-			
+	def visit_With (self, node):	
 		for withitem in node.items:
 			self.visit (withitem.optional_vars)
 			self.emit (' = ')

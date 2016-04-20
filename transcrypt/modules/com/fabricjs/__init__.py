@@ -1,3 +1,5 @@
+__pragma__ ('noanno')
+
 fabric = __pragma__ ('js',
 	'''
 (function () {{

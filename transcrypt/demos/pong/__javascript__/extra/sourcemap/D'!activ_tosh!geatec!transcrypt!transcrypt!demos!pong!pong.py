@@ -247,7 +247,7 @@ class Game:
 		
 		for paddle in self.paddles:				# Put paddles in rest position
 			paddle.reset ()
-
+			
 		self.ball.reset ()						# Put ball in rest position
 		self.pause = True						# Wait for next round
 		

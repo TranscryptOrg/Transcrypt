@@ -8,9 +8,8 @@ from org.transcrypt import utils
 
 # Tools to embed source map info in target code
 
-lineNrMarker = chr (27)
-maxNrOfSourceLinesPerModule = 1000000000
-lineNrLength = 11
+lineNrLength = 6
+maxNrOfSourceLinesPerModule = 1000000
 
 # Tools to encode numbers as base 64 variable length quantities
 
@@ -50,9 +49,11 @@ class ModuleMapperMixin:
 			) if fake else (
 				';'.join ([
 					'AA{}A'.format (getBase64Vlq (sourceLineNrDelta))
-					for sourceLineNrDelta in [
-						self.sourceLineNrs [index] - (self.sourceLineNrs [index - 1] if index else 0)
-						for index in range (len (self.sourceLineNrs))
+					
+					# Adapted to the quirks of Google Chrome and source maps in general
+					for sourceLineNrDelta in [								# Start with offset from second line w.r.t. first line
+						self.sourceLineNrs [index + 1] - self.sourceLineNrs [index]
+						for index in range (len (self.sourceLineNrs) - 1)	# One entry less than the nr of lines
 					]
 				])
 			))
@@ -76,14 +77,16 @@ class ModuleMapperMixin:
 				
 class ProgramMapperMixin:
 	def generateMap (self)	:	
-		totalOffset = 0
+		startLineNr = 4
 		rawSections = []
 		
 		for module in self.allModules:
+			startLineNr += self.moduleCaptionSkip
+				
 			if module.rawMap:
 				rawSections.append (collections.OrderedDict ([
 					('offset', collections.OrderedDict ([
-						('line', totalOffset),
+						('line', startLineNr),
 						('column', 0)
 					])),
 					('map',  module.rawMap)
@@ -92,7 +95,7 @@ class ProgramMapperMixin:
 				if module.metadata.name != self.mainModuleName:
 					shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
 
-			totalOffset += module.targetCode.count ('\n')
+			startLineNr += module.targetCode.count ('\n')
 			
 		with utils.create (self.mapPath) as aFile:
 			aFile.write (json.dumps (collections.OrderedDict ([
