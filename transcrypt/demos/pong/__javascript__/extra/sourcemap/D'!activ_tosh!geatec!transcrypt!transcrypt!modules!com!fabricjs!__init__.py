@@ -1,4 +1,4 @@
-__pragma__ ('nodmap')
+__pragma__ ('noanno')
 
 fabric = __pragma__ ('js',
 	'''

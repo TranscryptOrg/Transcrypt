@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-20 16:52:12
+// Transcrypt'ed from Python, 2016-04-20 17:51:14
 function pong () {
 
 
@@ -16497,4 +16497,4 @@ function pong () {
 }
 window ['pong'] = pong ();
 
-//# sourceMappingURL=file:///D:/activ_tosh/geatec/transcrypt/transcrypt/demos/pong/__javascript__/extra/sourcemap/pong.js.map
+//# sourceMappingURL=extra/sourcemap/pong.js.map

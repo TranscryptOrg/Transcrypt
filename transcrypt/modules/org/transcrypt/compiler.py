@@ -46,12 +46,15 @@ class ModuleMetadata:
 			if not os.path.isfile (self.sourcePath):
 				self.sourcePath = self.targetPath	# For a Javascript-only module, source and target are the same and a source map can be faked
 										
-			self.extraDir = '{}/{}'.format (self.targetDir, 'extra')
+			self.extraSubdir = 'extra'
+			self.extraDir = '{}/{}'.format (self.targetDir, self.extraSubdir)
 			
 			self.treePath = '{}/{}.mod.tree'.format (self.extraDir, self.filePrename)
 			
-			self.mapDir = '{}/sourcemap'.format (self.extraDir)
-			self.mapPath = '{}/{}.mod.js.map'.format (self.mapDir, self.filePrename)
+			self.sourceMapSubdir = '{}/{}'.format (self.extraSubdir, 'sourcemap')
+			self.mapUrl = '{}/{}.mod.js.map'.format (self.sourceMapSubdir, self.filePrename)
+			self.mapDir = '{}/{}'.format (self.targetDir, self.sourceMapSubdir)
+			self.mapPath = '{}/{}'.format (self.targetDir, self.mapUrl)
 			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!')
 			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
@@ -133,6 +136,7 @@ class Program (sourcemaps.ProgramMapperMixin):
 
 		# Set paths that require the module dict
 		self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		self.mapUrl = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
 		self.mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
 		self.miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
 			
@@ -176,7 +180,7 @@ class Program (sourcemaps.ProgramMapperMixin):
 			aFile.write (targetCode)
 			
 			if utils.commandArgs.map:
-				aFile.write ('\n//# sourceMappingURL=file:///{}\n'.format (self.mapPath))		
+				aFile.write ('\n//# sourceMappingURL={}\n'.format (self.mapUrl))		
 		
 		# Join and save source maps
 		if utils.commandArgs.map:
