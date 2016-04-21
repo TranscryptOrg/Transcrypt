@@ -29,7 +29,7 @@
 									return __accu0__;
 								} ();
 							}
-						}, '__init__');},
+						});},
 						get __mul__ () {return __get__ (this, function (self, other) {
 							if (type (other) == Matrix) {
 								var result = Matrix (self.nRows, other.nCols);
@@ -45,7 +45,7 @@
 							else {
 								return self.__rmul__ (other);
 							}
-						}, '__mul__');},
+						});},
 						get __rmul__ () {return __get__ (this, function (self, scalar) {
 							var result = Matrix (self.nRows, self.nCols);
 							for (var iRow = 0; iRow < self.nRows; iRow++) {
@@ -54,7 +54,7 @@
 								}
 							}
 							return result;
-						}, '__rmul__');},
+						});},
 						get __add__ () {return __get__ (this, function (self, other) {
 							var result = Matrix (self.nRows, self.nCols);
 							for (var iRow = 0; iRow < self.nRows; iRow++) {
@@ -63,26 +63,26 @@
 								}
 							}
 							return result;
-						}, '__add__');},
+						});},
 						get __getitem__ () {return __get__ (this, function (self, index) {
 							return self._ [index];
-						}, '__getitem__');},
+						});},
 						get __setitem__ () {return __get__ (this, function (self, index, value) {
 							self._ [index] = value;
-						}, '__setitem__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							return repr (self._);
-						}, '__repr__');}
+						});}
 					});
 					var Functor = __class__ ('Functor', [object], {
 						get __init__ () {return __get__ (this, function (self, factor) {
 							self.factor = factor;
-						}, '__init__');},
+						});},
 						get __call__ () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -111,14 +111,14 @@
 								}
 								return __accu0__;
 							} (), self.factor * m, self.factor * n]);
-						}, '__call__');}
+						});}
 					});
 					var f = Functor (10);
 					var g = function (x, y) {
 						if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-							var y = -1;
+							var y = -(1);
 						};
-						var m = -2;
+						var m = -(2);
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
 							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -143,7 +143,7 @@
 						var m0 = Matrix (3, 3, list ([list ([1, 2, 3]), list ([4, 5, 6]), list ([7, 8, 10])]));
 						var m1 = Matrix (3, 3, list ([list ([10, 20, 30]), list ([40, 50, 60]), list ([70, 80, 90])]));
 						var x = 3;
-						var y = x * 4 * x;
+						var y = (x * 4) * x;
 						var fast = 2 * 3;
 						__setitem__ (__getitem__ (m1, 1), 2, __getitem__ (__getitem__ (m0, 1), 2));
 						var slow = __add__ (2, 3);

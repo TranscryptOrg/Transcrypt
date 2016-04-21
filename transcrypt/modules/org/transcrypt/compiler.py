@@ -459,7 +459,7 @@ class Generator (ast.NodeVisitor):
 			else:
 				return 1000000	# No need for parenthesis
 				
-		if getPriority (child) < getPriority (node):
+		if getPriority (child) <= getPriority (node):
 			self.emit ('(')
 			self.visit (child)
 			self.emit (')')

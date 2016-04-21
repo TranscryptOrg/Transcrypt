@@ -59,9 +59,9 @@
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -90,28 +90,6 @@
 							return args;
 						});}
 					});
-					var Foo = __class__ ('Foo', [object], {
-						get __init__ () {return __get__ (this, function (self, a, b) {
-							if (typeof b == 'undefined' || (b != null && b .__class__ == __kwargdict__)) {;
-								var b = 99;
-							};
-							if (arguments.length) {
-								var __ilastarg0__ = arguments.length - 1;
-								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
-									var __allkwargs0__ = arguments [__ilastarg0__--];
-									for (var __attrib0__ in __allkwargs0__) {
-										switch (__attrib0__) {
-											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-											case 'a': var a = __allkwargs0__ [__attrib0__]; break;
-											case 'b': var b = __allkwargs0__ [__attrib0__]; break;
-										}
-									}
-								}
-							}
-							self.a = a;
-							self.b = b;
-						});}
-					});
 					var run = function (autoTester) {
 						if (arguments.length) {
 							var __ilastarg0__ = arguments.length - 1;
@@ -126,9 +104,9 @@
 						}
 						var f = function (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -149,9 +127,9 @@
 							}
 							var f2 = function (x, y) {
 								if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-									var y = -3;
+									var y = -(3);
 								};
-								var m = -4;
+								var m = -(4);
 								if (arguments.length) {
 									var __ilastarg0__ = arguments.length - 1;
 									if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -198,9 +176,9 @@
 						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ (dict ({'p': 'aP', 'q': 'aQ', 'r': 'anR'}))]));
 						(function __lambda__ (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -223,15 +201,11 @@
 						autoTester.check (C ().tricky.apply (null, range (4)));
 						autoTester.check ('{}-{}'.format (1, 3, 5, 7, 9));
 						autoTester.check ('{}-{}'.format.apply (null, range (4)));
-						var f = Foo (1, __kwargdict__ ({b: 2}));
-						autoTester.check ('f.a', f.a);
-						autoTester.check ('f.b', f.b);
 					};
 					__pragma__ ('<all>')
 						__all__.A = A;
 						__all__.B = B;
 						__all__.C = C;
-						__all__.Foo = Foo;
 						__all__.run = run;
 					__pragma__ ('</all>')
 				}
