@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-21 17:41:43
+// Transcrypt'ed from Python, 2016-04-21 19:26:58
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -1784,6 +1784,21 @@ function autotest () {
 						autoTester.check (py_switch);
 						autoTester.check (Math.floor (15 / 7));
 						autoTester.check (list (['zero', 'one', 'two', 'three', 'four']).index ('three'));
+						var results = list ([]);
+						for (var i = 0; i < 10; i++) {
+							results.append ((function __lambda__ (j) {
+								return (function __lambda__ () {
+									return j;});}) (i));
+						}
+						autoTester.check (function () {
+							var __accu0__ = [];
+							var __iter0__ = results;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var result = __iter0__ [__index0__];
+								__accu0__.append (result ());
+							}
+							return __accu0__;
+						} ());
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
