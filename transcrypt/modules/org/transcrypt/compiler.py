@@ -383,6 +383,7 @@ class Generator (ast.NodeVisitor):
 			('js_replace', 'replace'),
 			('sort', 'py_sort'),
 			('js_sort', 'sort'),
+			('switch', 'py_switch'),
 			('split', 'py_split'),
 			('js_split', 'split')
 # END predef_aliases

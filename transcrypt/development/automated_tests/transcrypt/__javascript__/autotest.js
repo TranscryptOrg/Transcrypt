@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-21 15:46:39
+// Transcrypt'ed from Python, 2016-04-21 15:58:40
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -1776,6 +1776,8 @@ function autotest () {
 				__init__: function (__all__) {
 					var run = function (autoTester) {
 						autoTester.check (65 / (5 * 2));
+						var py_switch = false;
+						autoTester.check (py_switch);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
