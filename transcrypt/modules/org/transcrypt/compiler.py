@@ -903,8 +903,7 @@ class Generator (ast.NodeVisitor):
 		if type (node.op) == ast.FloorDiv:
 			self.emit ('Math.floor (')
 			self.visit (node.left)
-			self.emit (') / ')
-			self.emit ('Math.floor (')
+			self.emit (' / ')
 			self.visit (node.right)
 			self.emit (')')
 		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub)):

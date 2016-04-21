@@ -8,6 +8,7 @@
 						autoTester.check (65 / (5 * 2));
 						var py_switch = false;
 						autoTester.check (py_switch);
+						autoTester.check (Math.floor (15 / 7));
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;

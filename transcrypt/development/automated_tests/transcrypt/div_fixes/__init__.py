@@ -6,3 +6,6 @@ def run (autoTester):
 	switch = False
 	autoTester.check (switch)
 	
+	# Issue 37
+	autoTester.check (15 // 7)
+	
