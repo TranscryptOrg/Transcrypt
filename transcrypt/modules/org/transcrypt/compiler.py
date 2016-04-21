@@ -55,7 +55,7 @@ class ModuleMetadata:
 			self.mapUrl = '{}/{}.mod.js.map'.format (self.sourceMapSubdir, self.filePrename)
 			self.mapDir = '{}/{}'.format (self.targetDir, self.sourceMapSubdir)
 			self.mapPath = '{}/{}'.format (self.targetDir, self.mapUrl)
-			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!')
+			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!') .lower ()
 			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
