@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-21 16:10:42
+// Transcrypt'ed from Python, 2016-04-21 16:19:17
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -700,6 +700,10 @@ function autotest () {
 		this.splice (index, 1);
 	};
 
+	Array.prototype.index = function (element) {
+		return this.indexOf (element)
+	};
+	
 	Array.prototype.py_pop = function (index) {
 		if (index == undefined) {
 			return this.pop ()	// Remove last element
@@ -1779,6 +1783,7 @@ function autotest () {
 						var py_switch = false;
 						autoTester.check (py_switch);
 						autoTester.check (Math.floor (15 / 7));
+						autoTester.check (list (['zero', 'one', 'two', 'three', 'four']).index ('three'));
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;

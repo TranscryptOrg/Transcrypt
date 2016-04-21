@@ -9,6 +9,7 @@
 						var py_switch = false;
 						autoTester.check (py_switch);
 						autoTester.check (Math.floor (15 / 7));
+						autoTester.check (list (['zero', 'one', 'two', 'three', 'four']).index ('three'));
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
