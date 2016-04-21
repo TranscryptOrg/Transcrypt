@@ -596,7 +596,7 @@ class Generator (ast.NodeVisitor):
 			ast.NodeVisitor.visit (self, node)
 		
 	def visit_arg (self, node):
-		self.emit (node.arg)
+		self.emit (self.filterId (node.arg))
 		
 	def visit_arguments (self, node):	# Visited for def's, not for calls
 		self.emit ('(')
@@ -620,9 +620,9 @@ class Generator (ast.NodeVisitor):
 		# It should not initialize a formal param, so it's overwritten by the default as well.
 		for arg, expr in reversed (list (zip (reversed (node.args), reversed (node.defaults)))):
 			if expr:
-				self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .__class__ == __kwargdict__)) {{;\n', arg.arg)
+				self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .__class__ == __kwargdict__)) {{;\n', self.filterId (arg.arg))
 				self.indent ()
-				self.emit ('var {} = ', arg.arg)
+				self.emit ('var {} = ', self.filterId (arg.arg))
 				self.visit (expr)
 				self.emit (';\n')
 				self.dedent ()
@@ -631,7 +631,7 @@ class Generator (ast.NodeVisitor):
 		# Defaults for kwonly args (after *), unconditionally, since they will be passed only after this point
 		for arg, expr in zip (node.kwonlyargs, node.kw_defaults):
 			if expr:
-				self.emit ('var {} = ', arg.arg)
+				self.emit ('var {} = ', self.filterId (arg.arg))
 				self.visit (expr)
 				self.emit (';\n')		
 				
@@ -652,7 +652,7 @@ class Generator (ast.NodeVisitor):
 			
 			# If there is a **kwargs arg, make a local to hold its calltime contents
 			if node.kwarg:
-				self.emit ('var {} = {{}};\n', node.kwarg.arg)
+				self.emit ('var {} = {{}};\n', self.filterId (node.kwarg.arg))
 				
 			# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
 			self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
@@ -665,11 +665,11 @@ class Generator (ast.NodeVisitor):
 							
 				# First generate a case for each normal keyword arg, generating a local for it
 				for arg in node.args + node.kwonlyargs:
-					self.emit ('case \'{0}\': var {0} = {1} [{2}]; break;\n', arg.arg, self.getTemp ('allkwargs'), self.getTemp ('attrib'))
+					self.emit ('case \'{0}\': var {0} = {1} [{2}]; break;\n', self.filterId (arg.arg), self.getTemp ('allkwargs'), self.getTemp ('attrib'))
 									
 				# Then put the rest into the **kwargs local
 				if node.kwarg:
-					self.emit ('default: {0} [{1}] = {2} [{1}];\n', node.kwarg.arg, self.getTemp ('attrib'), self.getTemp ('allkwargs'))
+					self.emit ('default: {0} [{1}] = {2} [{1}];\n', self.filterId (node.kwarg.arg), self.getTemp ('attrib'), self.getTemp ('allkwargs'))
 									
 				self.dedent ()
 				self.emit ('}}\n')	# switch..
@@ -682,7 +682,7 @@ class Generator (ast.NodeVisitor):
 			
 			# Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there
 			if node.kwarg:
-				self.emit ('{}.__class__ = null;\n', node.kwarg.arg)
+				self.emit ('{}.__class__ = null;\n', self.filterId (node.kwarg.arg))
 			
 			self.dedent ()
 			self.emit ('}}\n')	# if (arguments [{0}]..		
@@ -692,7 +692,7 @@ class Generator (ast.NodeVisitor):
 				# Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
 				self.emit (
 					'var {} = tuple ([].slice.apply (arguments).slice ({}, {} + 1));\n',
-					node.vararg.arg,
+					self.filterId (node.vararg.arg),
 					len (node.args),
 					self.getTemp ('ilastarg')
 				)
@@ -705,7 +705,7 @@ class Generator (ast.NodeVisitor):
 			if node.vararg:	# See above
 				self.emit (
 					'var {} = tuple ([].slice.apply (arguments).slice ({}));\n',
-					node.vararg.arg,
+					self.filterId (node.vararg.arg),
 					len (node.args),
 				)
 				
@@ -958,7 +958,7 @@ class Generator (ast.NodeVisitor):
 			for keywordIndex, keyword in enumerate (node.keywords):
 				if keyword.arg:
 					self.emitComma (keywordIndex)
-					self.emit ('{}: ', keyword.arg)
+					self.emit ('{}: ', self.filterId (keyword.arg))
 					self.visit (keyword.value)
 				else:
 					# It's the **kwargs arg, so the last arg

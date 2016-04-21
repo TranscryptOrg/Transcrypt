@@ -11,3 +11,4 @@ def run (autoTester):
 	
 	# Issue 27
 	autoTester.check (['zero', 'one', 'two', 'three', 'four'] .index ('three'))
+	
