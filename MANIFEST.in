@@ -1,5 +1,5 @@
 global-include *.py *.js *.rst *.html *.css *.lyx *.pdf *.png *.gif *.jpg *.txt *.jar *.bat *
-global-exclude *.pyc .gitignore
+global-exclude *.pyc .gitignore *.nogit
 
 prune .git
 prune dist

@@ -3,7 +3,7 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
-- Simple relation between Python source and generated JavaScript code for easy debugging
+- Simple relation between Python source and generated JavaScript code, combined with sourcemap support, for easy debugging
 - Compact downloads, kB's rather than MB's
 - Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
 - Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
@@ -21,14 +21,16 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status
 ======
 
-First release!
+First release with sourcemaps!
+Single level sourcemap support for Google Chrome has been added, allowing you to debug Python sources from non-minified JS target code.
 Extensive tests on both Windows and Linux have lead to the conclusion that Transcrypt is ready for production use.
-Any remaining bugs can reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
+Thanks to everyone who filed bug reports! You submit them as GitHub issues at: https://github.com/JdeH/Transcrypt .
 
 What's new
 ==========
 
-- Status moved to Production/Stable
+- Single level sourcemaps
+- Div. bug fixes guided by submitted issues + autotest-cases added for them
 
 Known restrictions
 ==================

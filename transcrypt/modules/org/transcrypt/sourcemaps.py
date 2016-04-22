@@ -92,7 +92,8 @@ class ProgramMapperMixin:
 					('map',  module.rawMap)
 				]))		
 				
-				if module.metadata.name != self.mainModuleName:
+				
+				if module.metadata.mapDir != self.moduleDict [self.mainModuleName] .metadata.mapDir:
 					shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
 
 			startLineNr += module.targetCode.count ('\n')
@@ -104,6 +105,3 @@ class ProgramMapperMixin:
 				('sections', rawSections)
 			]), indent = '\t'))
 			
-		for module in self.allModules:
-			if module.metadata.name != self.mainModuleName:
-				shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)

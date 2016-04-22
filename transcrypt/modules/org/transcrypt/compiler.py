@@ -56,6 +56,10 @@ class ModuleMetadata:
 			self.mapDir = '{}/{}'.format (self.targetDir, self.sourceMapSubdir)
 			self.mapPath = '{}/{}'.format (self.targetDir, self.mapUrl)
 			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!') .lower ()
+			
+			if len (self.mapSourceFileName) > 64:
+				self.mapSourceFileName = '...' + self.mapSourceFileName [-61 : ]
+				
 			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
@@ -281,7 +285,7 @@ class Module (sourcemaps.ModuleMapperMixin):
 			self.targetCode = aFile.read ()
 			
 	def generateJavascriptAndMap (self):
-		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
+		utils.log (False, 'Generating code for module: {}\n', self.metadata.sourcePath)
 		
 		generator = Generator (self)
 		
@@ -294,7 +298,10 @@ class Module (sourcemaps.ModuleMapperMixin):
 				
 			for targetLine in instrumentedTargetLines:
 				sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
-				sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+				try:
+					sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+				except:
+					print ('111', self.metadata.sourcePath, '222', targetLine)
 				targetLine = targetLine [ : -sourcemaps.lineNrLength]
 				
 				# Only append non-emptpy statements and their number info
@@ -1537,8 +1544,10 @@ class Generator (ast.NodeVisitor):
 			
 		self.indent ()
 		
+		# Remember relevant info to insert import heads at this spot in the fragments later
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
+		importHeadsLineNrString = self.lineNrString
 		
 		self.emitBody (node.body)
 			
@@ -1575,7 +1584,11 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 		
 		self.targetFragments.insert (importHeadsIndex, ''.join ([
-			'{}var {} = {{}};\n'.format (self.tabs (importHeadsLevel), self.filterId (head))
+			'{}var {} = {{}};{}\n'.format (
+				self.tabs (importHeadsLevel),
+				self.filterId (head),
+				importHeadsLineNrString
+			)
 			for head in sorted (self.importHeads)
 		]))
 		self.descope ()

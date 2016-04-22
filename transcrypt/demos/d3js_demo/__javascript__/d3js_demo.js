@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-22 14:41:42
+// Transcrypt'ed from Python, 2016-04-22 21:08:27
 function d3js_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -144,7 +144,7 @@ function d3js_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.142';
+							self.transpiler_version = '3.5.143';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1219,3 +1219,5 @@ function d3js_demo () {
 	return __all__;
 }
 window ['d3js_demo'] = d3js_demo ();
+
+//# sourceMappingURL=extra/sourcemap/d3js_demo.js.map

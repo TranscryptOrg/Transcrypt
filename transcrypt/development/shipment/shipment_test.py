@@ -9,7 +9,7 @@ def getAbsPath (relPath):
 
 def test (relPath, fileNamePrefix, run = False):
 	os.chdir (getAbsPath (relPath))
-	os.system ('run_transcrypt -b {}{}.py'.format (fcallSwitch, fileNamePrefix))	
+	os.system ('run_transcrypt -b -m {}{}.py'.format (fcallSwitch, fileNamePrefix))	
 
 	if run:
 		os.chdir (getAbsPath (relPath))
