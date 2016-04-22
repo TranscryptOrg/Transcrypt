@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-21 19:26:58
+// Transcrypt'ed from Python, 2016-04-22 14:41:30
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
