@@ -7,34 +7,34 @@
 					var A = __class__ ('A', [object], {
 						get getX () {return __get__ (this, function (self) {
 							return self._x;
-						}, 'getX');},
+						});},
 						get setX () {return __get__ (this, function (self, value) {
 							self._x = value;
-						}, 'setX');},
+						});},
 						get getY () {return __get__ (this, function (self) {
 							return self._y;
-						}, 'getY');},
+						});},
 						get setY () {return __get__ (this, function (self, value) {
 							self._y = 1000 + value;
-						}, 'setY');},
+						});},
 						get getY2 () {return __get__ (this, function (self) {
 							return self._y;
-						}, 'getY2');},
+						});},
 						get setY2 () {return __get__ (this, function (self, value) {
 							self._y = value;
-						}, 'setY2');},
+						});},
 						get getT () {return __get__ (this, function (self) {
 							return self._t;
-						}, 'getT');},
+						});},
 						get setT () {return __get__ (this, function (self, value) {
 							self._t = value;
-						}, 'setT');},
+						});},
 						get getU () {return __get__ (this, function (self) {
 							return self._u + 10000;
-						}, 'getU');},
+						});},
 						get setU () {return __get__ (this, function (self, value) {
 							self._u = value - 5000;
-						}, 'setU');}
+						});}
 					});
 					A.p = 1234;
 					var __left0__ = tuple ([property.call (A, A.getX, A.setX), property.call (A, A.getY, A.setY), property.call (A, A.getY2, A.setY2)]);
@@ -47,22 +47,22 @@
 					var B = __class__ ('B', [object], {
 						get getZ () {return __get__ (this, function (self) {
 							return self.z_;
-						}, 'getZ');},
+						});},
 						get setZ () {return __get__ (this, function (self, value) {
 							self.z_ = value;
-						}, 'setZ');}
+						});}
 					});
 					Object.defineProperty (B, 'z', property.call (B, B.getZ, B.setZ));;
 					var C = __class__ ('C', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.offset = 1234;
-						}, '__init__');},
+						});},
 						get getW () {return __get__ (this, function (self) {
 							return self.w_ + self.offset;
-						}, 'getW');},
+						});},
 						get setW () {return __get__ (this, function (self, value) {
 							self.w_ = value - self.offset;
-						}, 'setW');}
+						});}
 					});
 					Object.defineProperty (C, 'w', property.call (C, C.getW, C.setW));;
 					var run = function (autoTester) {

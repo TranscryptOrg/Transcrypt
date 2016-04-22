@@ -7,10 +7,10 @@
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.i = 0;
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self) {
 							return self.i;
-						}, 'f');}
+						});}
 					});
 					var a = A ();
 					var run = function (autoTester) {
@@ -33,7 +33,7 @@
 						autoTester.check (y);
 						y--;
 						autoTester.check (y);
-						x += -3;
+						x += -(3);
 						autoTester.check (x);
 						x += 6;
 						autoTester.check (x);

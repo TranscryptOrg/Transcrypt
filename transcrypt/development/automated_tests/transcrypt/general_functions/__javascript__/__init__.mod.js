@@ -5,7 +5,7 @@
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
-						var a = list ([1, 5, 3, 2, -1]);
+						var a = list ([1, 5, 3, 2, -(1)]);
 						var b = list (['sun', 'earth', 'moon']);
 						autoTester.check (sorted (a));
 						autoTester.check (sorted (b));

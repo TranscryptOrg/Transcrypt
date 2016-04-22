@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-20 19:20:02
+// Transcrypt'ed from Python, 2016-04-22 14:41:46
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -700,6 +700,10 @@ function pong () {
 		this.splice (index, 1);
 	};
 
+	Array.prototype.index = function (element) {
+		return this.indexOf (element)
+	};
+	
 	Array.prototype.py_pop = function (index) {
 		if (index == undefined) {
 			return this.pop ()	// Remove last element
@@ -16221,7 +16225,7 @@ function pong () {
 				Sprite.__init__ (self, game, self.width, self.height);
 			});},
 			get reset () {return __get__ (this, function (self) {
-				Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth) / Math.floor (2) - self.margin : Math.floor (-orthoWidth) / Math.floor (2) + self.margin), y: 0}));
+				Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth / 2) - self.margin : Math.floor (-(orthoWidth) / 2) + self.margin), y: 0}));
 			});},
 			get predict () {return __get__ (this, function (self) {
 				self.vY = 0;
@@ -16231,7 +16235,7 @@ function pong () {
 					}
 					else {
 						if (__in__ (ord ('M'), self.game.keySet)) {
-							self.vY = -self.speed;
+							self.vY = -(self.speed);
 						}
 					}
 				}
@@ -16241,17 +16245,17 @@ function pong () {
 					}
 					else {
 						if (__in__ (ord ('Z'), self.game.keySet)) {
-							self.vY = -self.speed;
+							self.vY = -(self.speed);
 						}
 					}
 				}
 				Sprite.predict (self);
 			});},
 			get interact () {return __get__ (this, function (self) {
-				self.y = Math.max (Math.floor (self.height) / Math.floor (2) - Math.floor (fieldHeight) / Math.floor (2), Math.min (self.y, Math.floor (fieldHeight) / Math.floor (2) - Math.floor (self.height) / Math.floor (2)));
-				if ((self.y - Math.floor (self.height) / Math.floor (2) < self.game.ball.y && self.game.ball.y < self.y + Math.floor (self.height) / Math.floor (2)) && (self.index == 0 && self.game.ball.x < self.x || self.index == 1 && self.game.ball.x > self.x)) {
+				self.y = Math.max (Math.floor (self.height / 2) - Math.floor (fieldHeight / 2), Math.min (self.y, Math.floor (fieldHeight / 2) - Math.floor (self.height / 2)));
+				if ((self.y - Math.floor (self.height / 2) < self.game.ball.y && self.game.ball.y < self.y + Math.floor (self.height / 2)) && (self.index == 0 && self.game.ball.x < self.x || self.index == 1 && self.game.ball.x > self.x)) {
 					self.game.ball.x = self.x;
-					self.game.ball.vX = -self.game.ball.vX;
+					self.game.ball.vX = -(self.game.ball.vX);
 					self.game.ball.speedUp (self);
 				}
 			});}
@@ -16265,32 +16269,32 @@ function pong () {
 				Sprite.__init__ (self, game, self.side, self.side);
 			});},
 			get reset () {return __get__ (this, function (self) {
-				var angle = self.game.serviceIndex * Math.PI + (Math.random () > 0.5 ? 1 : -1) * Math.random () * Math.atan (fieldHeight / orthoWidth);
+				var angle = self.game.serviceIndex * Math.PI + ((Math.random () > 0.5 ? 1 : -(1)) * Math.random ()) * Math.atan (fieldHeight / orthoWidth);
 				Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
 			});},
 			get predict () {return __get__ (this, function (self) {
 				Sprite.predict (self);
-				if (self.x < Math.floor (-orthoWidth) / Math.floor (2)) {
+				if (self.x < Math.floor (-(orthoWidth) / 2)) {
 					self.game.scored (1);
 				}
 				else {
-					if (self.x > Math.floor (orthoWidth) / Math.floor (2)) {
+					if (self.x > Math.floor (orthoWidth / 2)) {
 						self.game.scored (0);
 					}
 				}
-				if (self.y > Math.floor (fieldHeight) / Math.floor (2)) {
-					self.y = Math.floor (fieldHeight) / Math.floor (2);
-					self.vY = -self.vY;
+				if (self.y > Math.floor (fieldHeight / 2)) {
+					self.y = Math.floor (fieldHeight / 2);
+					self.vY = -(self.vY);
 				}
 				else {
-					if (self.y < Math.floor (-fieldHeight) / Math.floor (2)) {
-						self.y = Math.floor (-fieldHeight) / Math.floor (2);
-						self.vY = -self.vY;
+					if (self.y < Math.floor (-(fieldHeight) / 2)) {
+						self.y = Math.floor (-(fieldHeight) / 2);
+						self.vY = -(self.vY);
 					}
 				}
 			});},
 			get speedUp () {return __get__ (this, function (self, bat) {
-				var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / Math.floor (bat.height) / Math.floor (2), 2);
+				var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / (Math.floor (bat.height / 2)), 2);
 				if (Math.abs (self.vX) < 3 * self.speed) {
 					self.vX *= factor;
 					self.vY *= factor;
@@ -16303,17 +16307,17 @@ function pong () {
 			get install () {return __get__ (this, function (self) {
 				self.playerLabels = function () {
 					var __accu0__ = [];
-					var __iter0__ = tuple ([tuple (['AZ keys:', -7 / 16]), tuple (['KM keys:', 1 / 16])]);
+					var __iter0__ = tuple ([tuple (['AZ keys:', -(7) / 16]), tuple (['KM keys:', 1 / 16])]);
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
 						var name = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('Player {}'.format (name), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
+						__accu0__.append (new fabric.Text ('Player {}'.format (name), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
 					}
 					return __accu0__;
 				} ();
-				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12', 'left': self.game.orthoX (-7 / 16 * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.hintShift)}));
-				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2)), self.game.orthoX (Math.floor (orthoWidth) / Math.floor (2)), self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2))]), dict ({'stroke': 'white'}));
+				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12', 'left': self.game.orthoX ((-(7) / 16) * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
+				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-(orthoWidth) / 2)), self.game.orthoY (Math.floor (fieldHeight / 2)), self.game.orthoX (Math.floor (orthoWidth / 2)), self.game.orthoY (Math.floor (fieldHeight / 2))]), dict ({'stroke': 'white'}));
 			});},
 			get increment () {return __get__ (this, function (self, playerIndex) {
 				self.scores [playerIndex]++;
@@ -16325,12 +16329,12 @@ function pong () {
 			get commit () {return __get__ (this, function (self) {
 				self.scoreLabels = function () {
 					var __accu0__ = [];
-					var __iter0__ = zip (self.scores, tuple ([-2 / 16, 6 / 16]));
+					var __iter0__ = zip (self.scores, tuple ([-(2) / 16, 6 / 16]));
 					for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 						var __left0__ = __iter0__ [__index0__];
 						var score = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('{}'.format (score), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight) / Math.floor (2) + self.nameShift)})));
+						__accu0__.append (new fabric.Text ('{}'.format (score), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
 					}
 					return __accu0__;
 				} ();
@@ -16374,11 +16378,11 @@ function pong () {
 				window.setInterval (self.draw, 20);
 				window.addEventListener ('keydown', self.keydown);
 				window.addEventListener ('keyup', self.keyup);
-				self.time = +new Date;
+				self.time = +(new Date);
 			});},
 			get update () {return __get__ (this, function (self) {
 				var oldTime = self.time;
-				self.time = +new Date;
+				self.time = +(new Date);
 				self.deltaT = (self.time - oldTime) / 1000.0;
 				if (self.pause) {
 					if (__in__ (space, self.keySet)) {
@@ -16431,16 +16435,16 @@ function pong () {
 				// pass;
 			});},
 			get scaleX () {return __get__ (this, function (self, x) {
-				return x * self.canvas.width / orthoWidth;
+				return x * (self.canvas.width / orthoWidth);
 			});},
 			get scaleY () {return __get__ (this, function (self, y) {
-				return y * self.canvas.height / orthoHeight;
+				return y * (self.canvas.height / orthoHeight);
 			});},
 			get orthoX () {return __get__ (this, function (self, x) {
-				return self.scaleX (x + Math.floor (orthoWidth) / Math.floor (2));
+				return self.scaleX (x + Math.floor (orthoWidth / 2));
 			});},
 			get orthoY () {return __get__ (this, function (self, y) {
-				return self.scaleY (orthoHeight - Math.floor (fieldHeight) / Math.floor (2) - y);
+				return self.scaleY ((orthoHeight - Math.floor (fieldHeight / 2)) - y);
 			});},
 			get keydown () {return __get__ (this, function (self, event) {
 				self.keySet.add (event.keyCode);
@@ -16472,5 +16476,3 @@ function pong () {
 	return __all__;
 }
 window ['pong'] = pong ();
-
-//# sourceMappingURL=extra/sourcemap/pong.js.map
