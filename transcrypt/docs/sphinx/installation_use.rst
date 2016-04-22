@@ -4,8 +4,7 @@ Getting started
 Installation
 ------------
 
-Transcrypt is currently tested under Windows and Linux, OS X will probably follow later. To be able to use it, Python 3.5 has to be installed. To install Transcrypt itself, make sure the Scripts directory of your Python installation is in your system path.
-Then type
+Transcrypt is currently tested under Windows, Linux and OSX, with Chrome and IE. To be able to use it, Python 3.5 has to be installed. To install Transcrypt itself, make sure the Scripts directory of your Python installation is in your system path. Then type:
 
 *pip install transcrypt*
 
@@ -14,7 +13,7 @@ from the command prompt. This is the recommended way to install Transcrypt.
 Alternatively, for manual installation under Windows or Linux, follow the steps below:
 
 1.	Download the Transcrypt zip and unpack it anywhere you like
-2.	Add *../Transcrypt-<version>/Transcrypt to your system path*
+2.	Add *../Transcrypt-<version>/transcrypt* to your system path
 
 N.B. If you install Transcrypt manually, Trancrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to by used side by side selectively.
 

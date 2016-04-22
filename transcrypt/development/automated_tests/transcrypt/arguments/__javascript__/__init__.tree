@@ -339,6 +339,57 @@ file: Module
 								s: str = kwargs
 						keywords: list 
 			decorator_list: list 
+		element: ClassDef 
+			name: str = Foo
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = a
+								annotation: NoneType = None
+							element: arg 
+								arg: str = b
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: Num 
+								n: int = 99
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = a
+									ctx: Store 
+							value: Name 
+								id: str = a
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = b
+									ctx: Store 
+							value: Name 
+								id: str = b
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
 		element: FunctionDef 
 			name: str = run
 			args: arguments 
@@ -834,6 +885,59 @@ file: Module
 											keywords: list 
 										ctx: Load 
 								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = f
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = Foo
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 1
+						keywords: list 
+							element: keyword 
+								arg: str = b
+								value: Num 
+									n: int = 2
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = f.a
+							element: Attribute 
+								value: Name 
+									id: str = f
+									ctx: Load 
+								attr: str = a
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = f.b
+							element: Attribute 
+								value: Name 
+									id: str = f
+									ctx: Load 
+								attr: str = b
+								ctx: Load 
 						keywords: list 
 			decorator_list: list 
 			returns: NoneType = None

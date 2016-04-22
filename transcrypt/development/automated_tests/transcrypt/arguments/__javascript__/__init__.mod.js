@@ -39,7 +39,7 @@
 							self.n = n;
 							self.kwargs = kwargs;
 							self.extra = 'hello';
-						}, '__init__');},
+						});},
 						get f () {return __get__ (this, function (self, autoTester) {
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
@@ -54,14 +54,14 @@
 								}
 							}
 							autoTester.check (self.x, self.y, self.args, self.m, self.n, self.kwargs, self.extra);
-						}, 'f');}
+						});}
 					});
 					var B = __class__ ('B', [A], {
 						get __init__ () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -82,13 +82,13 @@
 								var args = tuple ([].slice.apply (arguments).slice (3, __ilastarg0__ + 1));
 							}
 							A.__init__.apply (null, [self].concat ([y]).concat ([x]).concat (args).concat ([__kwargdict__ (__merge__ ({m: n, n: m}, kwargs))]));
-						}, '__init__');}
+						});}
 					});
 					var C = __class__ ('C', [object], {
 						get tricky () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							return args;
-						}, 'tricky');}
+						});}
 					});
 					var run = function (autoTester) {
 						if (arguments.length) {
@@ -104,9 +104,9 @@
 						}
 						var f = function (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -127,9 +127,9 @@
 							}
 							var f2 = function (x, y) {
 								if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-									var y = -3;
+									var y = -(3);
 								};
-								var m = -4;
+								var m = -(4);
 								if (arguments.length) {
 									var __ilastarg0__ = arguments.length - 1;
 									if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
@@ -176,9 +176,9 @@
 						g.apply (null, tuple ([1, 2, 3]).concat ([__kwargdict__ (dict ({'p': 'aP', 'q': 'aQ', 'r': 'anR'}))]));
 						(function __lambda__ (x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
-								var y = -1;
+								var y = -(1);
 							};
-							var m = -2;
+							var m = -(2);
 							if (arguments.length) {
 								var __ilastarg0__ = arguments.length - 1;
 								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {

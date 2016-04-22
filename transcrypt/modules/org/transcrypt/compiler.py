@@ -5,7 +5,6 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
 # 	http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
@@ -20,10 +19,10 @@ import ast
 import re
 import copy
 import datetime
-import shutil
+import math
 import traceback
 
-from org.transcrypt import __base__, utils, minify, static_check
+from org.transcrypt import __base__, utils, sourcemaps, minify, static_check
 
 class ModuleMetadata:
 	def __init__ (self, program, name):
@@ -39,12 +38,25 @@ class ModuleMetadata:
 				self.filePrename = '__init__'
 			else:				
 				self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
-							
-			# Target dir should be the JavaScript subdir of the sourceDir
-			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
-			
-			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+				
+			self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)			
 			self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
+
+			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+			if not os.path.isfile (self.sourcePath):
+				self.sourcePath = self.targetPath	# For a Javascript-only module, source and target are the same and a source map can be faked
+										
+			self.extraSubdir = 'extra'
+			self.extraDir = '{}/{}'.format (self.targetDir, self.extraSubdir)
+			
+			self.treePath = '{}/{}.mod.tree'.format (self.extraDir, self.filePrename)
+			
+			self.sourceMapSubdir = '{}/{}'.format (self.extraSubdir, 'sourcemap')
+			self.mapUrl = '{}/{}.mod.js.map'.format (self.sourceMapSubdir, self.filePrename)
+			self.mapDir = '{}/{}'.format (self.targetDir, self.sourceMapSubdir)
+			self.mapPath = '{}/{}'.format (self.targetDir, self.mapUrl)
+			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!') .lower ()
+			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
@@ -69,6 +81,10 @@ class ModuleMetadata:
 		return self.sourceExists () or self.targetExists ()
 		
 	def dirty (self):
+		# Javascript-only modules are never dirty (so don't try to parse and compile Javascript)
+		if self.targetPath == self.sourcePath:
+			return False
+		
 		# Find youngest of .py and .js files and use that as "original"
 		youngestTime = 0
 		youngestPath = None
@@ -81,24 +97,20 @@ class ModuleMetadata:
 					
 		return youngestPath == self.sourcePath
 	
-class Program:
+class Program (sourcemaps.ProgramMapperMixin):
 	def __init__ (self, moduleSearchDirs):
-		self.header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
-			__base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-		)
-		
+		self.rawModuleCaption = '\n\n// ============ Source: {} ============\n\n' if utils.commandArgs.anno else ''
+		self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
+	
 		self.moduleSearchDirs = moduleSearchDirs
-		
+		self.moduleDict = {}
+
+		# Set paths that don't require the module dict
 		self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
 		self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
 		self.sourceFileName = self.sourcePath.split ('/') [-1]
-		
-		self.moduleDict = {}
-		self.fragments = {}
-		self.compile ()
-		
-	def compile (self):
-		# Define names early, since they are cross-used in module compilation
+	
+		# Define names early, since they are cross-used in module compilation	
 		prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
 		self.coreModuleName = '{}.{}'.format (prefix, '__core__')
 		self.baseModuleName = '{}.{}'.format (prefix, '__base__')
@@ -106,55 +118,79 @@ class Program:
 		self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
 		self.mainModuleName = self.sourceFileName [ : -3]
 
-		# Module compilation
+		# Compile inline modules
 		Module (self, ModuleMetadata (self, self.coreModuleName))
 		Module (self, ModuleMetadata (self, self.baseModuleName))
 		Module (self, ModuleMetadata (self, self.standardModuleName))
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
-					
+
+		# Compile imported modules
 		try:
 			moduleMetadata = ModuleMetadata (self, self.mainModuleName)
-			Module (self, moduleMetadata)	# Will trigger recursive compilation
+			Module (self, moduleMetadata)	# Compile of main module, will trigger recursive compilation
 		except Exception as exception:
 			utils.enhanceException (
 				exception,
 				message = str (exception)
 			)
+
+		# Set paths that require the module dict
+		self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		self.mapUrl = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
+		self.mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
+		self.miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
 			
-		# Join all non-inline modules
-		normallyImportedTargetCode = ''.join ([
-			self.moduleDict [moduleName] .targetCode
+		# Round up imported modules
+		importedModules = [
+			self.moduleDict [moduleName]
 			for moduleName in sorted (self.moduleDict)
 			if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
-		])
-		
+		]
+			
 		# And sandwich them between the in-line modules
-		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent
+		self.allModules = (
+			[
+				self.moduleDict [self.coreModuleName],
+				self.moduleDict [self.baseModuleName],
+				self.moduleDict [self.standardModuleName],
+				self.moduleDict [self.builtinModuleName]
+			] +
+			importedModules +
+			[self.moduleDict [self.mainModuleName]]
+		)
 		
+		# Encapsulate target code for all modules
+		header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
+			__base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+		)
+		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent		
 		targetCode = (
-			self.header +
+			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
-			self.moduleDict [self.coreModuleName].targetCode +
-			self.moduleDict [self.baseModuleName] .targetCode +
-			self.moduleDict [self.standardModuleName] .targetCode +
-			self.moduleDict [self.builtinModuleName].targetCode +
-			normallyImportedTargetCode +
-			self.moduleDict [self.mainModuleName].targetCode +
+			''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
 			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
 			'{0} ();\n' .format (self.mainModuleName)
 		)	
-		
-		targetFileName = '{}/{}.js'.format ('{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir), self.mainModuleName)
-		utils.log (True, 'Saving result in: {}\n', targetFileName)
-		with utils.create (targetFileName) as aFile:
+						
+		# Write encapsulated target code
+		utils.log (True, 'Saving result in: {}\n', self.targetPath)
+		with utils.create (self.targetPath) as aFile:
 			aFile.write (targetCode)
-
+			
+			if utils.commandArgs.map:
+				aFile.write ('\n//# sourceMappingURL={}\n'.format (self.mapUrl))		
+		
+		# Join and save source maps
+		if utils.commandArgs.map:
+			utils.log (False, 'Saving overall sourcemap to: {}\n', self.mapPath)
+			self.generateMap ()
+		
+		# Minify
 		if not utils.commandArgs.nomin:
-			miniFileName = '{}/{}/{}.min.js'.format (self.sourceDir, __base__.__envir__.target_subdir, self.mainModuleName)
-			utils.log (True, 'Saving minified result in: {}\n', miniFileName)
-			minify.run (targetFileName, miniFileName)
+			utils.log (True, 'Saving minified result in: {}\n', self.miniPath)
+			minify.run (self.targetPath, self.miniPath)
 			
 	def provide (self, moduleName):
 		if moduleName == '__main__':
@@ -167,7 +203,7 @@ class Program:
 		else:										# If not, provide by loading or compiling
 			return Module (self, moduleMetadata)
 						
-class Module:
+class Module (sourcemaps.ModuleMapperMixin):
 	def __init__ (self, program, moduleMetadata, strip = False):
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
@@ -180,51 +216,20 @@ class Module:
 					static_check.run (self.metadata.sourcePath, self.parseTree)
 				except Exception as exception:
 					utils.log (True, 'Checking: {}\n\tInternal error in static checker, remainder of module skipped\n', self.metadata.sourcePath)
-			self.dump ()
-			self.generate ()
-			self.extract ()
-			self.saveJavascript ()
+					
+			if utils.commandArgs.tree:
+				self.dumpTree ()
+					
+			self.generateJavascriptAndMap ()
+			self.extractPropertiesFromJavascript ()
 		else:
 			self.loadJavascript ()
-			self.extract ()
-				
-	def loadJavascript (self):
-		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
-		
-		with open (self.metadata.targetPath) as aFile:
-			self.targetCode = aFile.read ()
+			self.extractPropertiesFromJavascript ()
+			self.loadOrFakeMap ()
 			
-		if self.metadata.name in (self.program.coreModuleName, self.program.builtinModuleName):
-			# Remove comment-like line tails and empty lines (so no // inside a string allowed)
-			self.targetCode = '{}\n'.format (
-				'\n'.join ([line for line in [line.split ('//') [0] .rstrip () for line in self.targetCode.split ('\n')] if line])
-			)
-			
-	def saveJavascript (self,):
-		utils.log (False, 'Saving precompiled module: {}\n', self.metadata.targetPath)
-		
-		with utils.create (self.metadata.targetPath) as aFile:
-			aFile.write (self.targetCode)
-
-	def extract (self):
-		utils.log (False, 'Extracting metadata from: {}\n', self.metadata.targetPath)
+	def getModuleCaption (self):
+		return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''			
 				
-		useFragment = self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')]
-		self.use = sorted (set ([
-			word
-			for word in useFragment.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
-			if not word.startswith ('<')
-		]))
-		for moduleName in self.use:
-			self.program.provide (moduleName)
-		
-		allFragment = self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')]
-		self.all = sorted (set ([
-			word [1 : ]
-			for word in allFragment.replace ('__all__', ' ') .replace ('=', ' ') .split ()
-			if word.startswith ('.')
-		]))
-		
 	def parse (self):
 		try:
 			utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
@@ -248,8 +253,8 @@ class Module:
 				)
 			)
 		
-	def dump (self):
-		utils.log (False, 'Dumping syntax tree of module: {}\n', self.metadata.sourcePath)
+	def dumpTree (self):
+		utils.log (False, 'Dumping syntax tree for module: {}\n', self.metadata.sourcePath)
 
 		def walk (name, value, tabLevel):
 			self.treeFragments .append ('\n{0}{1}: {2} '.format (tabLevel * '\t', name, type (value).__name__ ))
@@ -266,25 +271,88 @@ class Module:
 		walk ('file', self.parseTree, 0)
 		self.textTree = ''.join (self.treeFragments) [1:]
 		
-		with utils.create ('{}/{}.tree'.format (self.metadata.targetDir, self.metadata.filePrename)) as treeFile:
+		with utils.create (self.metadata.treePath) as treeFile:
 			treeFile.write (self.textTree)
 			
-	def generate (self):
+	def loadJavascript (self):
+		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
+		
+		with open (self.metadata.targetPath) as aFile:
+			self.targetCode = aFile.read ()
+			
+	def generateJavascriptAndMap (self):
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
-		self.targetCode = ''.join (Generator (self) .targetFragments)
 		
-		self.targetCode = '\n'.join ([line for line in self.targetCode.split ('\n') if line.strip () != ';'])
+		generator = Generator (self)
 		
-		with utils.create (self.metadata.targetPath) as targetFile:
-			targetFile.write (self.targetCode)
+		if utils.commandArgs.map or generator.allowDmap:	# Generation of source map and / or prefix map required
+			instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')	
+			
+			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
+			targetLines = []
+			self.sourceLineNrs = []
+				
+			for targetLine in instrumentedTargetLines:
+				sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
+				sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+				targetLine = targetLine [ : -sourcemaps.lineNrLength]
+				
+				# Only append non-emptpy statements and their number info
+				if targetLine.strip () != ';':
+					if generator.allowDmap:
+						targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)
+				
+					targetLines.append (targetLine)
+					self.sourceLineNrs.append (sourceLineNr)
+					
+			# Generate per module sourcemap and copy sourcefile
+			if utils.commandArgs.map:
+				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)				
+				self.generateMap ()
+
+		else:	# No maps needed, shortcut for speed
+			targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']		
+		
+		# Join and save module code
+		self.targetCode = '\n'.join (targetLines)
+		with utils.create (self.metadata.targetPath) as aFile:
+			aFile.write (self.targetCode)
+		
+	def extractPropertiesFromJavascript (self):
+		def purgeLineNrs (clause):
+			if utils.commandArgs.anno:
+				return re.sub ('/\* {} \*/'.format (sourcemaps.lineNrLength * '\d'), '', clause)
+			else:
+				return clause	
 	
+		utils.log (False, 'Extracting module properties from: {}\n', self.metadata.targetPath)
+				
+		useClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')])
+		self.use = sorted (set ([
+			word
+			for word in useClause.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
+			if not word.startswith ('<')
+		]))
+		for moduleName in self.use:
+			self.program.provide (moduleName)
+		
+		allClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')])
+		self.all = sorted (set ([
+			word [1 : ]
+			for word in allClause.replace ('__all__', ' ') .replace ('=', ' ') .split ()
+			if word.startswith ('.')
+		]))
+		
+		if utils.commandArgs.map:
+			self.nrOfTargetLines = self.targetCode.count ('\n') + 1
+		
 class Scope:
 	def __init__ (self, node):
 		self.node = node
 		self.nonlocals = set ()
 	
 class Generator (ast.NodeVisitor):
-	# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
+# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 	
 	def __init__ (self, module):	
 		self.module = module
@@ -295,7 +363,9 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
-		
+		self.lineNr = 1
+		self.lineNrString = ''
+
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
 			('arguments', 'py_arguments'),
@@ -313,6 +383,7 @@ class Generator (ast.NodeVisitor):
 			('js_replace', 'replace'),
 			('sort', 'py_sort'),
 			('js_sort', 'sort'),
+			('switch', 'py_switch'),
 			('split', 'py_split'),
 			('js_split', 'split')
 # END predef_aliases
@@ -363,12 +434,15 @@ class Generator (ast.NodeVisitor):
 		self.allowKeywordArgs = utils.commandArgs.kwargs
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
+		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
 		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices
 		
 		try:
 			self.visit (module.parseTree)
+			self.targetFragments.append (self.lineNrString)	# Last target fragment doesn't have a '\n' to replace in the emit method
+
 		except Exception as exception:
 			utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr)
 			
@@ -386,7 +460,7 @@ class Generator (ast.NodeVisitor):
 			else:
 				return 1000000	# No need for parenthesis
 				
-		if getPriority (child) < getPriority (node):
+		if getPriority (child) <= getPriority (node):
 			self.emit ('(')
 			self.visit (child)
 			self.emit (')')
@@ -414,14 +488,14 @@ class Generator (ast.NodeVisitor):
 		return indentLevel * '\t'
 		
 	def emit (self, fragment, *formatter):
-		if (
+		if (	# At the start of a new line
 			not self.targetFragments or
 			(self.targetFragments and self.targetFragments [-1] .endswith ('\n'))
 		):
 			self.targetFragments.append (self.tabs ())
 			
 		fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
-		self.targetFragments.append (fragment.format (*formatter))
+		self.targetFragments.append (fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
 		
 	def indent (self):
 		self.indentLevel += 1
@@ -447,6 +521,17 @@ class Generator (ast.NodeVisitor):
 		if index:
 			self.emit (', ' if blank else ',')
 			
+	def adaptLineNrString (self, node):
+		if utils.commandArgs.map or self.allowDmap:
+			if hasattr (node, 'lineno'):
+				lineNr = node.lineno
+			else:
+				lineNr = self.lineNr
+				
+			self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
+		else:
+			return ''
+		
 	def emitBody (self, body):
 		for stmt in body:
 			self.visit (stmt)
@@ -481,7 +566,7 @@ class Generator (ast.NodeVisitor):
 			
 	def useModule (self, name):
 		result = self.module.program.provide (name)	# Must be done first because it can generate a healthy exception
-		self.use.add (name)						# Must not be done if the healthy exception occurs
+		self.use.add (name)							# Must not be done if the healthy exception occurs
 		return result
 		
 	def isCall (self, node, name):
@@ -511,7 +596,7 @@ class Generator (ast.NodeVisitor):
 			ast.NodeVisitor.visit (self, node)
 		
 	def visit_arg (self, node):
-		self.emit (node.arg)
+		self.emit (self.filterId (node.arg))
 		
 	def visit_arguments (self, node):	# Visited for def's, not for calls
 		self.emit ('(')
@@ -535,9 +620,9 @@ class Generator (ast.NodeVisitor):
 		# It should not initialize a formal param, so it's overwritten by the default as well.
 		for arg, expr in reversed (list (zip (reversed (node.args), reversed (node.defaults)))):
 			if expr:
-				self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .__class__ == __kwargdict__)) {{;\n', arg.arg)
+				self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .__class__ == __kwargdict__)) {{;\n', self.filterId (arg.arg))
 				self.indent ()
-				self.emit ('var {} = ', arg.arg)
+				self.emit ('var {} = ', self.filterId (arg.arg))
 				self.visit (expr)
 				self.emit (';\n')
 				self.dedent ()
@@ -546,7 +631,7 @@ class Generator (ast.NodeVisitor):
 		# Defaults for kwonly args (after *), unconditionally, since they will be passed only after this point
 		for arg, expr in zip (node.kwonlyargs, node.kw_defaults):
 			if expr:
-				self.emit ('var {} = ', arg.arg)
+				self.emit ('var {} = ', self.filterId (arg.arg))
 				self.visit (expr)
 				self.emit (';\n')		
 				
@@ -567,7 +652,7 @@ class Generator (ast.NodeVisitor):
 			
 			# If there is a **kwargs arg, make a local to hold its calltime contents
 			if node.kwarg:
-				self.emit ('var {} = {{}};\n', node.kwarg.arg)
+				self.emit ('var {} = {{}};\n', self.filterId (node.kwarg.arg))
 				
 			# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
 			self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
@@ -580,11 +665,11 @@ class Generator (ast.NodeVisitor):
 							
 				# First generate a case for each normal keyword arg, generating a local for it
 				for arg in node.args + node.kwonlyargs:
-					self.emit ('case \'{0}\': var {0} = {1} [{2}]; break;\n', arg.arg, self.getTemp ('allkwargs'), self.getTemp ('attrib'))
+					self.emit ('case \'{0}\': var {0} = {1} [{2}]; break;\n', self.filterId (arg.arg), self.getTemp ('allkwargs'), self.getTemp ('attrib'))
 									
 				# Then put the rest into the **kwargs local
 				if node.kwarg:
-					self.emit ('default: {0} [{1}] = {2} [{1}];\n', node.kwarg.arg, self.getTemp ('attrib'), self.getTemp ('allkwargs'))
+					self.emit ('default: {0} [{1}] = {2} [{1}];\n', self.filterId (node.kwarg.arg), self.getTemp ('attrib'), self.getTemp ('allkwargs'))
 									
 				self.dedent ()
 				self.emit ('}}\n')	# switch..
@@ -597,7 +682,7 @@ class Generator (ast.NodeVisitor):
 			
 			# Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there
 			if node.kwarg:
-				self.emit ('{}.__class__ = null;\n', node.kwarg.arg)
+				self.emit ('{}.__class__ = null;\n', self.filterId (node.kwarg.arg))
 			
 			self.dedent ()
 			self.emit ('}}\n')	# if (arguments [{0}]..		
@@ -607,7 +692,7 @@ class Generator (ast.NodeVisitor):
 				# Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
 				self.emit (
 					'var {} = tuple ([].slice.apply (arguments).slice ({}, {} + 1));\n',
-					node.vararg.arg,
+					self.filterId (node.vararg.arg),
 					len (node.args),
 					self.getTemp ('ilastarg')
 				)
@@ -620,11 +705,13 @@ class Generator (ast.NodeVisitor):
 			if node.vararg:	# See above
 				self.emit (
 					'var {} = tuple ([].slice.apply (arguments).slice ({}));\n',
-					node.vararg.arg,
+					self.filterId (node.vararg.arg),
 					len (node.args),
 				)
 				
 	def visit_Assign (self, node):
+		self.adaptLineNrString (node)
+	
 		targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
 		
 		def assignTarget (target, value, pathIndices = []):
@@ -816,8 +903,7 @@ class Generator (ast.NodeVisitor):
 		if type (node.op) == ast.FloorDiv:
 			self.emit ('Math.floor (')
 			self.visit (node.left)
-			self.emit (') / ')
-			self.emit ('Math.floor (')
+			self.emit (' / ')
 			self.visit (node.right)
 			self.emit (')')
 		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub)):
@@ -849,7 +935,9 @@ class Generator (ast.NodeVisitor):
 			self.emit ('{} = true;\n', self.getTemp ('break'))
 		self.emit ('break')
 	
-	def visit_Call (self, node):	
+	def visit_Call (self, node):
+		self.adaptLineNrString (node)
+	
 		def emitKwargDict ():
 			self.emit ('__kwargdict__ (')
 			
@@ -870,7 +958,7 @@ class Generator (ast.NodeVisitor):
 			for keywordIndex, keyword in enumerate (node.keywords):
 				if keyword.arg:
 					self.emitComma (keywordIndex)
-					self.emit ('{}: ', keyword.arg)
+					self.emit ('{}: ', self.filterId (keyword.arg))
 					self.visit (keyword.value)
 				else:
 					# It's the **kwargs arg, so the last arg
@@ -922,6 +1010,8 @@ class Generator (ast.NodeVisitor):
 						for index in reversed (range (len (self.aliasers))):
 							if self.aliasers [index][0] == node.args [1] .s:
 								self.aliasers.pop (index)
+				elif node.args [0] .s == 'noanno':
+					self.allowDmap = False
 				elif node.args [0] .s == 'fcall':
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
@@ -1013,6 +1103,8 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 		
 	def visit_ClassDef (self, node):
+		self.adaptLineNrString (node)
+		
 		if type (self.getscope () .node) == ast.Module:
 			self.all.add (node.name)
 
@@ -1115,6 +1207,8 @@ class Generator (ast.NodeVisitor):
 		self.visit (node.value)
 				
 	def visit_For (self, node):
+		self.adaptLineNrString (node)
+		
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		else:
@@ -1199,6 +1293,8 @@ class Generator (ast.NodeVisitor):
 			self.prevTemp ('iter')
 			
 		if node.orelse:
+			self.adaptLineNrString (node.orelse)
+				
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
 			
@@ -1216,19 +1312,23 @@ class Generator (ast.NodeVisitor):
 			self.emitBody (node.body)
 			self.dedent ()
 			self.descope ()
-
+			
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
 											# The rest of its use is only at compile time at compile time			
 			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getscope () .node) == ast.Module:
 					self.all.add (node.name)
+					
+				self.adaptLineNrString (node)
 				self.emit ('var {} = function ', self.filterId (node.name))
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
 			else:															# Class scope, so it's a method and needs the currying mechanism
-				self.emit ('\nget {} () {{return __get__ (this, function ', self.filterId (node.name))	
+				self.emit ('\n')
+				self.adaptLineNrString (node)
+				self.emit ('get {} () {{return __get__ (this, function ', self.filterId (node.name))	
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
@@ -1246,6 +1346,8 @@ class Generator (ast.NodeVisitor):
 		)
 		
 	def visit_If (self, node):
+		self.adaptLineNrString (node)
+		
 		self.emit ('if (')
 		self.visit (node.test)
 		self.emit (') {{\n')
@@ -1257,6 +1359,8 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if node.orelse:
+			self.adaptLineNrString (node.orelse)
+				
 			self.emit ('else {{\n')
 			self.indent ()
 			self.emitBody (node.orelse)
@@ -1273,6 +1377,8 @@ class Generator (ast.NodeVisitor):
 		self.emit (')')
 		
 	def visit_Import (self, node):	# Import .. can only import modules
+		self.adaptLineNrString (node)
+		
 		names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 		
 		if not names:
@@ -1298,9 +1404,11 @@ class Generator (ast.NodeVisitor):
 				self.emit (';\n')
 				
 	def visit_ImportFrom (self, node):	# From .. import can import modules or entities in modules
+		self.adaptLineNrString (node)
+
 		if node.module.startswith (self.stubsName):
 			return
-		
+				
 		try:			
 			# N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
 			for index, alias in enumerate (node.names):
@@ -1409,8 +1517,11 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}} ()')
 		
 	def visit_Module (self, node):
+		self.adaptLineNrString (node)
+						
 		self.inscope (node)
 		self.indent ()
+			
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
 		else:
@@ -1486,9 +1597,13 @@ class Generator (ast.NodeVisitor):
 		self.emit ('{}', node.n)
 		
 	def visit_Pass (self, node):
-		self.emit ('/* pass */')
+		self.adaptLineNrString (node)
+			
+		self.emit ('// pass')
 		
 	def visit_Raise (self, node):
+		self.adaptLineNrString (node)
+			
 		self.emit ('__except__ = ') 
 		self.visit (node.exc)
 		self.emit (';\n')
@@ -1501,6 +1616,8 @@ class Generator (ast.NodeVisitor):
 		self.emit ('throw __except__')
 		
 	def visit_Return (self, node):
+		self.adaptLineNrString (node)
+			
 		self.emit ('return ')
 		if node.value:
 			self.visit (node.value)
@@ -1601,6 +1718,8 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 					
 	def visit_Try (self, node):
+		self.adaptLineNrString (node)
+			
 		self.emit ('try {{\n')
 		self.indent ()	
 		self.emitBody (node.body)
@@ -1666,6 +1785,8 @@ class Generator (ast.NodeVisitor):
 			self.visitSubExpr (node, node.operand)
 		
 	def visit_While (self, node):
+		self.adaptLineNrString (node)
+			
 		if node.orelse:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		else:
@@ -1682,6 +1803,8 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if node.orelse:
+			self.adaptLineNrString (node.orelse)
+
 			self.emit ('if (!{}) {{\n', self.getTemp ('break'))
 			self.prevTemp ('break')
 			
@@ -1693,7 +1816,9 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.prevTemp ('break')
 		
-	def visit_With (self, node):	
+	def visit_With (self, node):
+		self.adaptLineNrString (node)
+			
 		for withitem in node.items:
 			self.visit (withitem.optional_vars)
 			self.emit (' = ')
