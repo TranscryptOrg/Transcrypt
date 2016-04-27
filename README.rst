@@ -29,6 +29,7 @@ Thanks to everyone who filed bug reports! You submit them as GitHub issues at: h
 What's new
 ==========
 
+- Debug mode switched off to prevent bloated syntax error reports
 - Single level sourcemaps
 - Div. bug fixes guided by submitted issues + autotest-cases added for them
 
