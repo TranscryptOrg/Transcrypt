@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-27 15:59:56
+// Transcrypt'ed from Python, 2016-04-27 16:50:16
 function hello () {
 	var __all__ = {};
 	var __world__ = __all__;

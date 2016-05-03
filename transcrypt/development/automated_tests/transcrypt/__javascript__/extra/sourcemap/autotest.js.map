@@ -9,7 +9,7 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/__core__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/org/transcrypt/__javascript__/__core__.mod.js",
 				"sources": [
 					"...nscrypt!modules!org!transcrypt!__javascript__!__core__.mod.js"
 				],
@@ -23,9 +23,9 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/__base__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/org/transcrypt/__javascript__/__base__.mod.js",
 				"sources": [
-					"...atec!transcrypt!transcrypt!modules!org!transcrypt!__base__.py"
+					"...b!site-packages!transcrypt!modules!org!transcrypt!__base__.py"
 				],
 				"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 			}
@@ -37,9 +37,9 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/__standard__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/org/transcrypt/__javascript__/__standard__.mod.js",
 				"sources": [
-					"...!transcrypt!transcrypt!modules!org!transcrypt!__standard__.py"
+					"...te-packages!transcrypt!modules!org!transcrypt!__standard__.py"
 				],
 				"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAaA;AACA;AAAA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAKA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 			}
@@ -51,7 +51,7 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/__builtin__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/org/transcrypt/__javascript__/__builtin__.mod.js",
 				"sources": [
 					"...rypt!modules!org!transcrypt!__javascript__!__builtin__.mod.js"
 				],
@@ -233,9 +233,9 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/itertools/__javascript__/__init__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/itertools/__javascript__/__init__.mod.js",
 				"sources": [
-					"...t!transcrypt!modules!itertools!__javascript__!__init__.mod.js"
+					"...s!transcrypt!modules!itertools!__javascript__!__init__.mod.js"
 				],
 				"mappings": "AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA"
 			}
@@ -429,9 +429,9 @@
 			},
 			"map": {
 				"version": 3,
-				"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/autotester/__javascript__/__init__.mod.js",
+				"file": "C:/Python35/lib/site-packages/transcrypt/modules/org/transcrypt/autotester/__javascript__/__init__.mod.js",
 				"sources": [
-					"...rypt!transcrypt!modules!org!transcrypt!autotester!__init__.py"
+					"...ages!transcrypt!modules!org!transcrypt!autotester!__init__.py"
 				],
 				"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAeA;AAEA;AACA;AACA;AACA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAEA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AADA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 			}
