@@ -64,7 +64,7 @@ class Base64VlqConverter:
 				else:																		# 	Else it won't have the sign bit:
 					weight *= 32															# 		So next weight * 32
 			else:																			# Else	('no continuation' means 'end of number', since chunks are reversed)
-				numbers.append (sign * accu)											#	Append accumulated number to results
+				numbers.append (sign * accu)												#	Append accumulated number to results
 				accu = 0																	#	Reset accumulator for next number
 				weight = 1																	#	Reset weight, next number will again start with least significant part
 				
@@ -75,7 +75,8 @@ base64VlqConverter = Base64VlqConverter ()
 # Tools to create and combine sourcemaps
 
 mapVersion = 3
-		
+iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)	
+
 class SourceMap:
 	def __init__ (self, targetDir, targetFileName):
 		self.targetDir = targetDir
@@ -83,23 +84,38 @@ class SourceMap:
 		self.targetPath = '{}/{}'.format (targetDir, targetFileName)
 		self.mapPath ='{}/extra/sourcemap/{}.map'.format (targetDir, targetFileName)
 		
-		self.version = 3		
 		self.sourcePaths = []
 		self.sourceIndex = -1
 		self.mappings = []
 		
-	def addMapping (self, targetLine, targetColumn, sourcePath, sourceLine, sourceColumn, nrOfTargetLines):
-		if self.sourcePaths [self.sourceIndex] != sourcePath:
-			self.sourceIndex = self.sourcePaths.index (sourcePath)
+	def addMapping (self, mapping, nrOfTargetLines):
+		if self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
+			self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
 			if self.sourceIndex == -1:
 				self.sourceIndex = len (self.sourcePaths)
-				self.sourcePaths.append (sourcePath)
+				self.sourcePaths.append (mapping [iSourceIndex])
 					
 		# At this point we should have a valid self.currentSourceIndex
 		
 		for i in range (nrOfTargetLines):
-			self.mappings.append ([targetLine + i , targetColumn, sourceIndex, soureRow, sourceColumn])
-						
+			self.mappings.append ([mapping [iTargetLine] + i , mapping [iTargetColumn], sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
+			
+	def getCascadedMapping (self, postMapping):	# N.B. self.mappings has to be sorted in advance
+		for mapping in self.mappings:
+			if mapping [iTargetLine] >= postMapping [iSourceLine] and mapping [iTargetColumn] >= postMapping [iSourceColumn]:
+				return (
+					postMapping [ : iTargetColumn + 1]	# Target location from post mapping
+					+
+					mapping [iSourceIndex : ]			# Source location from self
+				)
+				
+	def getCascadedMap (self, postMap):
+		cascadedMap = Map (postMap.targetDir, postMap.targetFileName)
+		cascadedMap.sourcePaths = self.sourcePaths
+		
+		self.mappings.sort ()		
+		cascadedMap.mappings = [getCascadedMapping (postMapping) for postMapping in postMap.mappings]
+			
 	def load (self):
 		with open (self.mapPath) as mapFile:
 			self.rawMap = json.loads (mapFile.read ())
@@ -150,7 +166,7 @@ class SourceMap:
 					deltaMappings [-1] .append ([mapping [i])
 	
 		self.rawMap = collections.OrderedDict ([
-			('version', self.version),
+			('version', mapVersion),
 			('file', self.targetPath),
 			('sources', [self.sourcePaths),
 			('mappings', ';'.join ([
