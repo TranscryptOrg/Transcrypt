@@ -21,27 +21,31 @@ class Base64VlqConverter:
 		self.prefabSize = 256																# The 256 most used vlq's are prefabricated
 		self.prefab = [self.encode (i, True) for i in range (self.prefabSize)]
 	
-	def encode (self, anInteger, init = False):
-		if not init and 0 < anInteger < self.prefabSize:
-			return self.prefab [anInteger]
-		else:
-			signed = bin (abs (anInteger)) [2 : ] + ('1' if anInteger < 0 else '0')			# Convert to binary, chop off '0b' and append sign bit
-			nChunks = math.ceil (len (signed) / 5.0)										# Determine minimum nr of needed 5 bit chunks (2 ^ 5 == 32)
-			padded = (5 * '0' + signed) [-nChunks * 5 : ]									# Pad by prepending zeroes to fit integer nr of chunks
-			chunks = [
-				('1' if iChunk else '0') + padded [											# Prefix first chunk with 0, continuation chunks with 1 (continuation bit)
-					iChunk * 5 : (iChunk + 1) * 5											# Pick out a not yet prefixed chunk from the padded bits 
-				] 
-				for iChunk in range (nChunks - 1, -1, -1)									# Reverse chunks, so the chunk starting with 0 will be last, first has sign bit
-			]																				# So encountering a chunk with int value < 32 will denote end of number
-			return ''.join ([self.encoding [int (chunk, 2)] for chunk in chunks])			# Convert each chunk, incl. continuation bit to its encoding
+	def encode (self, numbers, init = False):
+		segment = ''
+		for number in numbers:
+			if not init and 0 < number < self.prefabSize:
+				return self.prefab [number]
+			else:
+				signed = bin (abs (number)) [2 : ] + ('1' if number < 0 else '0')			# Convert to binary, chop off '0b' and append sign bit
+				nChunks = math.ceil (len (signed) / 5.0)									# Determine minimum nr of needed 5 bit chunks (2 ^ 5 == 32)
+				padded = (5 * '0' + signed) [-nChunks * 5 : ]								# Pad by prepending zeroes to fit integer nr of chunks
+				chunks = [
+					('1' if iChunk else '0') + padded [										# Prefix first chunk with 0, continuation chunks with 1 (continuation bit)
+						iChunk * 5 : (iChunk + 1) * 5										# Pick out a not yet prefixed chunk from the padded bits 
+					] 
+					for iChunk in range (nChunks - 1, -1, -1)								# Reverse chunks, so the chunk starting with 0 will be last, first has sign bit
+				]																			# So encountering a chunk with int value < 32 will denote end of number
+				field = ''.join ([self.encoding [int (chunk, 2)] for chunk in chunks])		# Convert each chunk, incl. continuation bit to its encoding
+			segment += field
+		return segment
 
-	def decode (self, codedNumbersString):
-		decodedInts = []
+	def decode (self, segment):
+		numbers = []
 		accu = 0
 		weight = 1
 
-		for char in codedNumbersString:
+		for char in segment:
 			ordinal = self.decoding [char]
 			isContinuation = ordinal >= 32
 			
@@ -60,54 +64,112 @@ class Base64VlqConverter:
 				else:																		# 	Else it won't have the sign bit:
 					weight *= 32															# 		So next weight * 32
 			else:																			# Else	('no continuation' means 'end of number', since chunks are reversed)
-				decodedInts.append (sign * accu)											#	Append accumulated number to results
+				numbers.append (sign * accu)											#	Append accumulated number to results
 				accu = 0																	#	Reset accumulator for next number
 				weight = 1																	#	Reset weight, next number will again start with least significant part
 				
-		return decodedInts
-				
+		return numbers
+		
 base64VlqConverter = Base64VlqConverter ()
 
 # Tools to create and combine sourcemaps
 
 mapVersion = 3
-
-class ModuleMapperMixin:
-	def generateMap (self, fake = False):	# Generates simple, non-segmented map for module self, .py -> .mod.js
-		self.rawMap = collections.OrderedDict ([
-			('version', mapVersion),
-			('file', self.metadata.targetPath),
-			('sources', [self.metadata.mapSourceFileName]),
-			('mappings', (
-				';'.join (['AACA'] * self.targetCode.count ('\n'))
-			) if fake else (
-				';'.join ([
-					'AA{}A'.format (base64VlqConverter.code (sourceLineNrDelta))
+		
+class SourceMap:
+	def __init__ (self, targetDir, targetFileName):
+		self.targetDir = targetDir
+		self.targetFileName = targetFilename
+		self.targetPath = '{}/{}'.format (targetDir, targetFileName)
+		self.mapPath ='{}/extra/sourcemap/{}.map'.format (targetDir, targetFileName)
+		
+		self.version = 3		
+		self.sourcePaths = []
+		self.sourceIndex = -1
+		self.mappings = []
+		
+	def addMapping (self, targetLine, targetColumn, sourcePath, sourceLine, sourceColumn, nrOfTargetLines):
+		if self.sourcePaths [self.sourceIndex] != sourcePath:
+			self.sourceIndex = self.sourcePaths.index (sourcePath)
+			if self.sourceIndex == -1:
+				self.sourceIndex = len (self.sourcePaths)
+				self.sourcePaths.append (sourcePath)
 					
-					# Adapted to the quirks of Google Chrome and source maps in general
-					for sourceLineNrDelta in [								# Start with offset from second line w.r.t. first line
-						self.sourceLineNrs [index + 1] - self.sourceLineNrs [index]
-						for index in range (len (self.sourceLineNrs) - 1)	# One entry less than the nr of lines
-					]
-				])
-			))
+		# At this point we should have a valid self.currentSourceIndex
+		
+		for i in range (nrOfTargetLines):
+			self.mappings.append ([targetLine + i , targetColumn, sourceIndex, soureRow, sourceColumn])
+						
+	def load (self):
+		with open (self.mapPath) as mapFile:
+			self.rawMap = json.loads (mapFile.read ())
+			
+		self.version = self.rawMap ['version']
+		self.sourcePaths =	self.rawMap ['sourcePaths']
+		self.sourceIndex = -1
+		
+		deltaMappings = [
+			[base64VlqConverter.decode (segment) for segment in group.split (',')]
+			for group in self.rawMap ['map'] .split (';')
+		]
+		
+		self.mappings = []
+		for groupIndex, deltaGroup in enumerate (deltaMappings):
+			for segmentIndex, deltaSegment in enumerate (deltaGroup):
+				if segmentIndex:
+					self.mappings.append ([self.mappings [-1][0] + deltaSegment [0]])
+				else:
+					self.mappings.append ([deltaSegment [0]])
+					
+				for i in range (1, 5):
+					if groupIndex:
+						self.mappings [-1] .append (self.mappings [-2][i] + deltaSegment [i])
+					else:
+						self.mappings [-1] .append (deltaSegment [i])
+			
+	def save (self):
+		self.rawMappings = []
+		targetColumnShift = 0
+		sourceLineShift = 0
+		sourceColumnShift = 0
+		
+		self.mappings.sort ()
+		deltaMappings = []	
+		oldMapping = [-1, -1, -1, -1, -1]
+		for mapping in self.mappings:
+			if mapping [0] == oldMapping [0]:									# Same target line means existing group
+				deltaMappings [-1] .append ([mapping [0] - oldMapping [0]])
+			else:																# Different target line means new group
+				deltaMappings.append ([])
+				deltaMappings [-1] .append ([mapping [0]])
+			
+			for i in range (1, 5):
+				if len (deltaMappings) > 1:
+					deltaMappings [-1] .append ([mapping [i] - oldMapping [i]])
+				else:
+					deltaMappings [-1] .append ([mapping [i])
+	
+		self.rawMap = collections.OrderedDict ([
+			('version', self.version),
+			('file', self.targetPath),
+			('sources', [self.sourcePaths),
+			('mappings', ';'.join ([
+				','.join (base64VlqConverter.code (segment)) for segment in group
+				for group in self.deltaMappings
+			]))
 		])
 		
-		with utils.create (self.metadata.mapPath) as aFile:
-			aFile.write (json.dumps (self.rawMap, indent = '\t'))
+		with utils.create (self.mapPath) as mapFile:
+			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
 		
-		shutil.copyfile (self.metadata.sourcePath, self.metadata.mapSourcePath)
-	
-	def loadOrFakeMap (self):
-		if (
-			not (os.path.isfile (self.metadata.mapPath) and os.path.isfile (self.metadata.mapSourcePath))	# Both files are needed, and one may have been thrown away
-			or
-			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
-		):
-			self.generateMap (True)
-		else:	
-			with open (self.metadata.mapPath) as aFile:
-				self.rawMap = json.loads (aFile.read ())
+		for sourcePath in self.sourcePaths:
+			mapSourcePath = '{}/{}'.format (
+				self.mapDir,
+				sourcePath.replace (':', '\'') .replace ('/', '!') .lower () [-96 : ]
+			)
+		
+			if not os.path.isfile (mapSourcePath):
+				shutil.copyfile (sourcePath, mapSourcePath)
 				
 class ProgramMapperMixin:
 	def getMapRef (self, mapUrl):
@@ -188,8 +250,10 @@ class ProgramMapperMixin:
 			rawPrettyGroups = section ['map'] .split (';')			# Take groups from unmodified, so 'pretty' map, which has only one segment per group
 			for lineIndex, group in enumerate (rawPrettyGroups):	
 				numbers = base64VlqConverter.decode (group)
-				
-				prettyPos = (
+				prettyPos = (lineIndex + 1, 0)
+				oldMiniPos = miniPos
+				setMiniPos (prettyPos)
+				if miniPos (0) !=
 				
 		with utils.create (self.miniMapPath) as aFile:
 			aFile.write (json.dumps (self.rawMiniMap, indent = '\t'))
