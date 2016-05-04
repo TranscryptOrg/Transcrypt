@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-22 14:41:46
+// Transcrypt'ed from Python, 2016-05-04 10:13:20
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -16476,3 +16476,5 @@ function pong () {
 	return __all__;
 }
 window ['pong'] = pong ();
+
+//# sourceMappingURL=extra/sourcemap/pong.js.map

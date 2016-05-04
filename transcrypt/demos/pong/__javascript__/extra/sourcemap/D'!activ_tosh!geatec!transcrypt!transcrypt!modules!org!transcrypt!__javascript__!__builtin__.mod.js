@@ -424,6 +424,10 @@
 		this.splice (index, 1);
 	};
 
+	Array.prototype.index = function (element) {
+		return this.indexOf (element)
+	};
+	
 	Array.prototype.py_pop = function (index) {
 		if (index == undefined) {
 			return this.pop ()	// Remove last element

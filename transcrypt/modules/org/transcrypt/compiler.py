@@ -52,9 +52,8 @@ class ModuleMetadata:
 			self.treePath = '{}/{}.mod.tree'.format (self.extraDir, self.filePrename)
 			
 			self.sourceMapSubdir = '{}/{}'.format (self.extraSubdir, 'sourcemap')
-			self.mapUrl = '{}/{}.mod.js.map'.format (self.sourceMapSubdir, self.filePrename)
 			self.mapDir = '{}/{}'.format (self.targetDir, self.sourceMapSubdir)
-			self.mapPath = '{}/{}'.format (self.targetDir, self.mapUrl)
+			self.mapPath = '{}/{}/{}.mod.js.map'.format (self.targetDir, self.sourceMapSubdir, self.filePrename)
 			self.mapSourceFileName = self.sourcePath.replace (':', '\'') .replace ('/', '!') .lower ()
 			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
 			
@@ -136,9 +135,14 @@ class Program (sourcemaps.ProgramMapperMixin):
 
 		# Set paths that require the module dict
 		self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-		self.mapUrl = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
-		self.mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
-		self.miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		self.miniTargetPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+
+		self.prettyMapUrl = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
+		self.miniMapUrl = '{}/{}.min.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
+		
+		self.prettyMapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
+		self.shrinkMapPath = '{}/{}.shrink.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
+		self.miniMapPath = '{}/{}.min.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
 			
 		# Round up imported modules
 		importedModules = [
@@ -180,17 +184,20 @@ class Program (sourcemaps.ProgramMapperMixin):
 			aFile.write (targetCode)
 			
 			if utils.commandArgs.map:
-				aFile.write ('\n//# sourceMappingURL={}\n'.format (self.mapUrl))		
+				aFile.write (self.getMapRef (self.prettyMapUrl))	
 		
 		# Join and save source maps
 		if utils.commandArgs.map:
-			utils.log (False, 'Saving overall sourcemap to: {}\n', self.mapPath)
-			self.generateMap ()
+			utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMapPath)
+			self.generatePrettyMap ()
 		
 		# Minify
 		if not utils.commandArgs.nomin:
-			utils.log (True, 'Saving minified result in: {}\n', self.miniPath)
-			minify.run (self.targetPath, self.miniPath)
+			utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
+			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMapPath)
+						
+			utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMapPath)
+			self.generateMiniMap ()
 			
 	def provide (self, moduleName):
 		if moduleName == '__main__':
