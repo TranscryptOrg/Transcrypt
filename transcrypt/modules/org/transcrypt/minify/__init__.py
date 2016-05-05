@@ -5,7 +5,7 @@ from org.transcrypt import utils
 
 closureCompilerPath = '{}/closure_compiler/compiler.jar'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/'))
 
-def run (sourcePath, targetPath, shrinkMapPath):
+def run (sourcePath, targetPath, postMapPath):
 	params = [
 		'java', '-jar',
 		closureCompilerPath,
@@ -18,7 +18,7 @@ def run (sourcePath, targetPath, shrinkMapPath):
 	
 	if utils.commandArgs.map:
 		params += [
-			'--create_source_map', shrinkMapPath,
+			'--create_source_map', postMapPath,
 			'--source_map_format=V3'
 		]
 

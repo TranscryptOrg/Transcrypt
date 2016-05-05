@@ -19,7 +19,7 @@ class Base64VlqConverter:
 		self.decoding = dict ((char, i) for i, char in enumerate (self.encoding))			# Enable reverse lookup, so from character to index
 		
 		self.prefabSize = 256																# The 256 most used vlq's are prefabricated
-		self.prefab = [self.encode (i, True) for i in range (self.prefabSize)]
+		self.prefab = [self.encode ([i], True) for i in range (self.prefabSize)]
 	
 	def encode (self, numbers, init = False):
 		segment = ''
@@ -78,43 +78,69 @@ mapVersion = 3
 iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)	
 
 class SourceMap:
-	def __init__ (self, targetDir, targetFileName):
+	def __init__ (self, targetDir, targetFileName, extraSubdir):
 		self.targetDir = targetDir
-		self.targetFileName = targetFilename
+		self.targetFileName = targetFileName
 		self.targetPath = '{}/{}'.format (targetDir, targetFileName)
-		self.mapPath ='{}/extra/sourcemap/{}.map'.format (targetDir, targetFileName)
+		self.mapSubdir = '{}/sourcemap'.format (extraSubdir)
+		self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
+		self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
+		self.mapRef = '\n//# sourceMappingURL={}/{}\n'.format (self.mapSubdir, self.targetFileName)
 		
 		self.sourcePaths = []
-		self.sourceIndex = -1
+		self.sourceIndex = 0
 		self.mappings = []
 		
-	def addMapping (self, mapping, nrOfTargetLines):
-		if self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
-			self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
-			if self.sourceIndex == -1:
+	def getMapSourcePath (self, sourcePath):
+		return '{}/{}'.format (
+			self.mapDir,
+			sourcePath.replace (':', '\'') .replace ('/', '!') .lower () [-96 : ]
+		)
+		
+	def addMapping (self, mapping, nrOfTargetLines = 1):
+		if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
+			try:
+				self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
+			except ValueError:
 				self.sourceIndex = len (self.sourcePaths)
 				self.sourcePaths.append (mapping [iSourceIndex])
 					
 		# At this point we should have a valid self.currentSourceIndex
 		
 		for i in range (nrOfTargetLines):
-			self.mappings.append ([mapping [iTargetLine] + i , mapping [iTargetColumn], sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
+			self.mappings.append ([mapping [iTargetLine] + i , mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
 			
-	def getCascadedMapping (self, postMapping):	# N.B. self.mappings has to be sorted in advance
+	def generate (self, sourcePath, sourceLineNrs):
+		self.mappings = []
+		for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs):
+			self.addMapping ((targetLineIndex + 1, 0, sourcePath, sourceLineNr, 0))
+		
+	def loadOrFake (self, sourcePath, nrOfTargetLines):
+		if (
+			not (os.path.isfile (self.mapPath) and os.path.isfile (self.getMapSourcePath(module.metadata.sourcePath)))	# Both files are needed, and one may have been thrown away
+			or
+			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
+		):
+			self.mappings = []
+			self.addMapping ((0, 0, sourcePath, 0, 0), nrOfTargetLines)
+		else:	
+			self.load ()
+		
+	def concatenate (self, moduleMaps):						# Result in self
+		self.mappings = []
+		
+	def getCascadedMapping (self, shrinkMapping):			# N.B. self.mappings has to be sorted in advance
 		for mapping in self.mappings:
-			if mapping [iTargetLine] >= postMapping [iSourceLine] and mapping [iTargetColumn] >= postMapping [iSourceColumn]:
+			if mapping [iTargetLine] >= shrinkMapping [iSourceLine] and mapping [iTargetColumn] >= shrinkMapping [iSourceColumn]:
 				return (
-					postMapping [ : iTargetColumn + 1]	# Target location from post mapping
+					shrinkMapping [ : iTargetColumn + 1]	# Target location from shrink mapping
 					+
-					mapping [iSourceIndex : ]			# Source location from self
+					mapping [iSourceIndex : ]				# Source location from self
 				)
 				
-	def getCascadedMap (self, postMap):
-		cascadedMap = Map (postMap.targetDir, postMap.targetFileName)
-		cascadedMap.sourcePaths = self.sourcePaths
-		
+	def cascade (self, shrinkMap, miniMap):					# Result in miniMap
 		self.mappings.sort ()		
-		cascadedMap.mappings = [getCascadedMapping (postMapping) for postMapping in postMap.mappings]
+		miniMap.mappings = [self.getCascadedMapping (shrinkMapping) for shrinkMapping in shrinkMap.mappings]
 			
 	def load (self):
 		with open (self.mapPath) as mapFile:
@@ -161,119 +187,29 @@ class SourceMap:
 			
 			for i in range (1, 5):
 				if len (deltaMappings) > 1:
-					deltaMappings [-1] .append ([mapping [i] - oldMapping [i]])
+					deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
 				else:
-					deltaMappings [-1] .append ([mapping [i])
+					deltaMappings [-1][-1] .append (mapping [i])
 	
 		self.rawMap = collections.OrderedDict ([
 			('version', mapVersion),
 			('file', self.targetPath),
-			('sources', [self.sourcePaths),
+			('sources', self.sourcePaths),
 			('mappings', ';'.join ([
-				','.join (base64VlqConverter.code (segment)) for segment in group
-				for group in self.deltaMappings
+				','.join (base64VlqConverter.encode (segment))
+				for group in deltaMappings
+				for segment in group
+				
 			]))
 		])
 		
 		with utils.create (self.mapPath) as mapFile:
 			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
 		
-		for sourcePath in self.sourcePaths:
-			mapSourcePath = '{}/{}'.format (
-				self.mapDir,
-				sourcePath.replace (':', '\'') .replace ('/', '!') .lower () [-96 : ]
-			)
-		
-			if not os.path.isfile (mapSourcePath):
-				shutil.copyfile (sourcePath, mapSourcePath)
+		for sourcePath in self.sourcePaths:		
+			if not os.path.isfile (self.getMapSourcePath (sourcePath)):
+				shutil.copyfile (sourcePath, self.getMapSourcePath (sourcePath))
 				
-class ProgramMapperMixin:
-	def getMapRef (self, mapUrl):
-		return '\n//# sourceMappingURL={}\n'.format (mapUrl)
-		
-	def generatePrettyMap (self):	# Generates segmented map for pretty target file of whole program, .py -> .js
-		startLineNr = 4
-		rawSections = []
-		
-		for module in self.allModules:
-			startLineNr += self.moduleCaptionSkip
-				
-			if module.rawMap:
-				rawSections.append (collections.OrderedDict ([
-					('offset', collections.OrderedDict ([
-						('line', startLineNr),
-						('column', 0)
-					])),
-					('map',  module.rawMap)
-				]))		
-				
-				if module.metadata.name != self.mainModuleName:
-					shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
-
-			startLineNr += module.targetCode.count ('\n')
-			
-		self.rawPrettyMap = collections.OrderedDict ([
-			('version', mapVersion),
-			('file', self.targetPath),
-			('sections', prettySections)
-		])
-		
-		with utils.create (self.prettyMapPath) as aFile:
-			aFile.write (json.dumps (self.rawPrettyMap, indent = '\t'))
-			
-		for module in self.allModules:
-			if module.metadata.name != self.mainModuleName:
-				shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
-						
-	def generateMiniMap (self):	# Cascades segmented pretty map (from Transcrypt) and non-segmented shrink map (from the minifier) into miniMap, .py -> .min.js
-	
-		# Read shrinkMap, it will be used to convert locations in the prettied target file to locations in the minified target file
-
-		with open (self.metadata.shrinkMapPath) as aFile:
-			self.rawShrinkMap = json.loads (aFile.read ())
-		
-		# Fill a conversion dictionary from the shrinkMap.
-		
-		conversionDict = {}
-
-		for group in self.rawShrinkMap ['mappings'] .split (';'):
-			for segment in group.split (','):
-				if not prettyPos in conversionDict:
-					conversionDict [prettyPos] = miniPos
-		
-		# Conversion works progressively, 'move' miniPos forward only if the next prettyPos is in the conversion dictionary
-		
-		miniPos = (0, 0)
-		
-		def setMiniPos (prettyPos):
-			try:
-				miniPos = conversionDict [prettyPos]
-			except KeyError:
-				pass
-			
-		# Start out with a rawMiniMap that is a copy of rawPrettyMap and then alter it section by section		
-	
-		self.rawMiniMap = copy.deepcopy (self.rawPrettyMap)
-		
-		for section in self.rawMiniMap ['sections']:
-		
-			# Change offset within pretty target to offset within mini target and 'move' miniPos to that point
-		
-			prettyPos = section ['offset']['line'], section ['offset']['column']
-			miniPos = setMiniPos (prettyPos)
-			section ['offset']['line'], section ['offset']['column'] = miniPos
-			
-			rawPrettyGroups = section ['map'] .split (';')			# Take groups from unmodified, so 'pretty' map, which has only one segment per group
-			for lineIndex, group in enumerate (rawPrettyGroups):	
-				numbers = base64VlqConverter.decode (group)
-				prettyPos = (lineIndex + 1, 0)
-				oldMiniPos = miniPos
-				setMiniPos (prettyPos)
-				if miniPos (0) !=
-				
-		with utils.create (self.miniMapPath) as aFile:
-			aFile.write (json.dumps (self.rawMiniMap, indent = '\t'))
-			aFile.write (self.getMapRef (self.miniMapUrl))
 				
 		
 
