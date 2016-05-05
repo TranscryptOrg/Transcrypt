@@ -202,11 +202,12 @@ class Program:
 		# Minify
 		if not utils.commandArgs.nomin:
 			utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
-			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath)
-						
-			utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
-			self.prettyMap.cascade (self.shrinkMap, self.miniMap)
-			self.miniMap.save ()
+			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None)
+				
+			if utils.commandArgs.map:
+				utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
+				self.prettyMap.cascade (self.shrinkMap, self.miniMap)
+				self.miniMap.save ()
 			
 	def provide (self, moduleName):
 		if moduleName == '__main__':
@@ -249,7 +250,9 @@ class Module:
 		else:
 			self.loadJavascript ()
 			self.extractPropertiesFromJavascript ()
-			self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
+			
+			if utils.commandArgs.map:
+				self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
 			
 	def getModuleCaption (self):
 		return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''			

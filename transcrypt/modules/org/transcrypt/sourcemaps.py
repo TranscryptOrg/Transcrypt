@@ -85,19 +85,14 @@ class SourceMap:
 		self.mapSubdir = '{}/sourcemap'.format (extraSubdir)
 		self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
 		self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
-		self.mapRef = '\n//# sourceMappingURL={}/{}\n'.format (self.mapSubdir, self.targetFileName)
+		self.mapRef = '\n//# sourceMappingURL={}/{}.map\n'.format (self.mapSubdir, self.targetFileName)
 		self.clear ()
 		
 	def clear (self):
 		self.sourcePaths = []
+		self.sourceCodes = []
 		self.sourceIndex = 0
 		self.mappings = []
-		
-	def getMapSourcePath (self, sourcePath):
-		return '{}/{}'.format (
-			self.mapDir,
-			sourcePath.replace (':', '\'') .replace ('/', '!') .lower () [-96 : ]
-		)
 		
 	def addMapping (self, mapping, nrOfTargetLines = 1):
 		if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
@@ -116,11 +111,15 @@ class SourceMap:
 		self.clear ()
 		for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs):
 			self.addMapping ((targetLineIndex, 0, sourcePath, sourceLineNr - 1, 0))
+			
+		for sourcePath in self.sourcePaths:
+			with open (sourcePath) as sourceFile:
+				self.sourceCodes.append (sourceFile.read ())
 		
 	def loadOrFake (self, sourcePath, nrOfTargetLines):
 		self.clear ()
 		if (
-			not (os.path.isfile (self.mapPath) and os.path.isfile (self.getMapSourcePath(module.metadata.sourcePath)))	# Both files are needed, and one may have been thrown away
+			not os.path.isfile (self.mapPath)	# If map doesn't yet exist fake it
 			or
 			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
 		):
@@ -142,9 +141,12 @@ class SourceMap:
 					mapping [iTargetColumn]
 				))
 			offset = lineIndex
+			
+		for sourcePath in self.sourcePaths:
+			with open (sourcePath) as sourceFile:
+				self.sourceCodes.append (sourceFile.read ())
+		
 		self.mappings.sort ()
-		for mapping in self.mappings:
-			print (mapping)
 		
 	def getCascadedMapping (self, shrinkMapping):			# N.B. self.mappings has to be sorted in advance
 		for mapping in self.mappings:
@@ -158,13 +160,16 @@ class SourceMap:
 	def cascade (self, shrinkMap, miniMap):					# Result in miniMap
 		self.mappings.sort ()		
 		miniMap.mappings = [self.getCascadedMapping (shrinkMapping) for shrinkMapping in shrinkMap.mappings]
+		miniMap.sourcePaths = self.sourcePaths
+		miniMap.sourceCodes = self.sourceCodes
 			
 	def load (self):
 		with open (self.mapPath) as mapFile:
 			self.rawMap = json.loads (mapFile.read ())
 			
 		self.version = self.rawMap ['version']
-		self.sourcePaths =	self.rawMap ['sourcePaths']
+		self.sourcePaths =	self.rawMap ['sources']
+		self.sourceCodes =	self.rawMap ['sourcesContent']
 		self.sourceIndex = -1
 		
 		deltaMappings = [
@@ -214,6 +219,7 @@ class SourceMap:
 			('version', mapVersion),
 			('file', self.targetPath),
 			('sources', self.sourcePaths),
+			('sourcesContent', self.sourceCodes),
 			('mappings', ';'.join ([
 				','.join ([
 					base64VlqConverter.encode (segment)
@@ -225,15 +231,3 @@ class SourceMap:
 				
 		with utils.create (self.mapPath) as mapFile:
 			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
-		
-		for sourcePath in self.sourcePaths:		
-			if not os.path.isfile (self.getMapSourcePath (sourcePath)):
-				shutil.copyfile (sourcePath, self.getMapSourcePath (sourcePath))
-				
-				
-		
-
-		
-		
-
-		
