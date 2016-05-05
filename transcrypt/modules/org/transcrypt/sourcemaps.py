@@ -25,7 +25,7 @@ class Base64VlqConverter:
 		segment = ''
 		for number in numbers:
 			if not init and 0 < number < self.prefabSize:
-				return self.prefab [number]
+				field = self.prefab [number]
 			else:
 				signed = bin (abs (number)) [2 : ] + ('1' if number < 0 else '0')			# Convert to binary, chop off '0b' and append sign bit
 				nChunks = math.ceil (len (signed) / 5.0)									# Determine minimum nr of needed 5 bit chunks (2 ^ 5 == 32)
@@ -75,7 +75,7 @@ base64VlqConverter = Base64VlqConverter ()
 # Tools to create and combine sourcemaps
 
 mapVersion = 3
-iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)	
+iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)	# Line indexes rather than line numbers are stored	
 
 class SourceMap:
 	def __init__ (self, targetDir, targetFileName, extraSubdir):
@@ -86,7 +86,9 @@ class SourceMap:
 		self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
 		self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
 		self.mapRef = '\n//# sourceMappingURL={}/{}\n'.format (self.mapSubdir, self.targetFileName)
+		self.clear ()
 		
+	def clear (self):
 		self.sourcePaths = []
 		self.sourceIndex = 0
 		self.mappings = []
@@ -111,23 +113,38 @@ class SourceMap:
 			self.mappings.append ([mapping [iTargetLine] + i , mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
 			
 	def generate (self, sourcePath, sourceLineNrs):
-		self.mappings = []
+		self.clear ()
 		for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs):
-			self.addMapping ((targetLineIndex + 1, 0, sourcePath, sourceLineNr, 0))
+			self.addMapping ((targetLineIndex, 0, sourcePath, sourceLineNr - 1, 0))
 		
 	def loadOrFake (self, sourcePath, nrOfTargetLines):
+		self.clear ()
 		if (
 			not (os.path.isfile (self.mapPath) and os.path.isfile (self.getMapSourcePath(module.metadata.sourcePath)))	# Both files are needed, and one may have been thrown away
 			or
 			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
 		):
-			self.mappings = []
 			self.addMapping ((0, 0, sourcePath, 0, 0), nrOfTargetLines)
 		else:	
 			self.load ()
 		
-	def concatenate (self, moduleMaps):						# Result in self
-		self.mappings = []
+	def concatenate (self, modMaps):						# Result in self
+		self.clear ()
+		offset = 0
+		for modMap in modMaps:
+			for mapping in modMap.mappings:
+				lineIndex = offset + mapping [iTargetLine]
+				self.addMapping ((
+					lineIndex,
+					mapping [iTargetColumn],
+					modMap.sourcePaths [mapping [iSourceIndex]],
+					mapping [iSourceLine],
+					mapping [iTargetColumn]
+				))
+			offset = lineIndex
+		self.mappings.sort ()
+		for mapping in self.mappings:
+			print (mapping)
 		
 	def getCascadedMapping (self, shrinkMapping):			# N.B. self.mappings has to be sorted in advance
 		for mapping in self.mappings:
@@ -157,15 +174,15 @@ class SourceMap:
 		
 		self.mappings = []
 		for groupIndex, deltaGroup in enumerate (deltaMappings):
-			for segmentIndex, deltaSegment in enumerate (deltaGroup):
+			for segmentIndex, deltaSegment in enumerate (deltaGroup):			
 				if segmentIndex:
-					self.mappings.append ([self.mappings [-1][0] + deltaSegment [0]])
+					self.mappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])
 				else:
-					self.mappings.append ([deltaSegment [0]])
+					self.mappings.append ([groupIndex, deltaSegment [0]])
 					
-				for i in range (1, 5):
+				for i in range (1, 4):
 					if groupIndex:
-						self.mappings [-1] .append (self.mappings [-2][i] + deltaSegment [i])
+						self.mappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
 					else:
 						self.mappings [-1] .append (deltaSegment [i])
 			
@@ -180,29 +197,32 @@ class SourceMap:
 		oldMapping = [-1, -1, -1, -1, -1]
 		for mapping in self.mappings:
 			if mapping [0] == oldMapping [0]:									# Same target line means existing group
-				deltaMappings [-1] .append ([mapping [0] - oldMapping [0]])
+				deltaMappings [-1] .append ([mapping [1] - oldMapping [1]])
 			else:																# Different target line means new group
 				deltaMappings.append ([])
-				deltaMappings [-1] .append ([mapping [0]])
+				deltaMappings [-1] .append ([mapping [1]])
 			
-			for i in range (1, 5):
+			for i in range (2, 5):
 				if len (deltaMappings) > 1:
 					deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
 				else:
 					deltaMappings [-1][-1] .append (mapping [i])
+					
+			oldMapping = mapping
 	
 		self.rawMap = collections.OrderedDict ([
 			('version', mapVersion),
 			('file', self.targetPath),
 			('sources', self.sourcePaths),
 			('mappings', ';'.join ([
-				','.join (base64VlqConverter.encode (segment))
+				','.join ([
+					base64VlqConverter.encode (segment)
+					for segment in group
+				])
 				for group in deltaMappings
-				for segment in group
-				
 			]))
 		])
-		
+				
 		with utils.create (self.mapPath) as mapFile:
 			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
 		

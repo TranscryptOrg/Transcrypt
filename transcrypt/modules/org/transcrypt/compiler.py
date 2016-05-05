@@ -196,7 +196,8 @@ class Program:
 		# Join and save source maps
 		if utils.commandArgs.map:
 			utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMap.mapPath)
-			self.prettyMap ()
+			self.prettyMap.concatenate ([module.modMap for module in self.allModules])
+			self.prettyMap.save ()
 		
 		# Minify
 		if not utils.commandArgs.nomin:
