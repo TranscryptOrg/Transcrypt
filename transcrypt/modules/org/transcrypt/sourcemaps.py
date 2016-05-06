@@ -94,7 +94,7 @@ class SourceMap:
 		self.sourceIndex = 0
 		self.mappings = []
 		
-	def addMapping (self, mapping, nrOfTargetLines = 1):
+	def addMapping (self, mapping):
 		if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
 			try:
 				self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
@@ -104,8 +104,7 @@ class SourceMap:
 					
 		# At this point we should have a valid self.currentSourceIndex
 		
-		for i in range (nrOfTargetLines):
-			self.mappings.append ([mapping [iTargetLine] + i , mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
+		self.mappings.append ([mapping [iTargetLine], mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
 			
 	def generate (self, sourcePath, sourceLineNrs):
 		self.clear ()
@@ -119,32 +118,44 @@ class SourceMap:
 	def loadOrFake (self, sourcePath, nrOfTargetLines):
 		self.clear ()
 		if (
-			not os.path.isfile (self.mapPath)	# If map doesn't yet exist fake it
-			or
-			(utils.commandArgs.build and self.metadata.sourcePath.endswith ('.js'))	# In case of a build and a JavaScript only module, force generation of new fake map
+			sourcePath.endswith ('.js')					# JavaScript-only module
+			and (
+				utils.commandArgs.build					# It's a build, and JavaScript source may have changed
+				or
+				not os.path.isfile (self.mapPath)		# Map doesn't yet exit
+			)
 		):
-			self.addMapping ((0, 0, sourcePath, 0, 0), nrOfTargetLines)
+			for index in range (nrOfTargetLines):
+				self.addMapping ((index, 0, sourcePath, index, 0))
 		else:	
 			self.load ()
 		
 	def concatenate (self, modMaps):						# Result in self
 		self.clear ()
 		offset = 0
-		for modMap in modMaps:
+		
+		padMap = SourceMap (None, None, None)
+		for targetLineIndex in range (4):
+			padMap.addMapping ([targetLineIndex, 0, '', 0, 0])
+		
+		for modMap in [padMap] + modMaps:
 			for mapping in modMap.mappings:
 				lineIndex = offset + mapping [iTargetLine]
-				self.addMapping ((
+				self.addMapping ([
 					lineIndex,
 					mapping [iTargetColumn],
 					modMap.sourcePaths [mapping [iSourceIndex]],
 					mapping [iSourceLine],
 					mapping [iTargetColumn]
-				))
+				])
 			offset = lineIndex
 			
 		for sourcePath in self.sourcePaths:
-			with open (sourcePath) as sourceFile:
-				self.sourceCodes.append (sourceFile.read ())
+			try:
+				with open (sourcePath) as sourceFile:
+					self.sourceCodes.append (sourceFile.read ())
+			except:
+				self.sourceCodes.append ('')
 		
 		self.mappings.sort ()
 		
@@ -198,7 +209,8 @@ class SourceMap:
 		sourceColumnShift = 0
 		
 		self.mappings.sort ()
-		deltaMappings = []	
+		
+		deltaMappings = []
 		oldMapping = [-1, -1, -1, -1, -1]
 		for mapping in self.mappings:
 			if mapping [0] == oldMapping [0]:									# Same target line means existing group
