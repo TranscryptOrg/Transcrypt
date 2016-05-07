@@ -85,6 +85,7 @@ class SourceMap:
 		self.mapSubdir = '{}/sourcemap'.format (extraSubdir)
 		self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
 		self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
+		self.mapdumpPath = '{}/{}.mapdump'.format (self.mapDir, targetFileName)
 		self.mapRef = '\n//# sourceMappingURL={}/{}.map\n'.format (self.mapSubdir, self.targetFileName)
 		self.clear ()
 		
@@ -139,7 +140,7 @@ class SourceMap:
 			padMap.addMapping ([targetLineIndex, 0, '', 0, 0])
 		
 		for modMap in [padMap] + modMaps:
-			for mapping in modMap.mappings:
+			for mapping in modMap.mappings [ : -1]:
 				lineIndex = offset + mapping [iTargetLine]
 				self.addMapping ([
 					lineIndex,
@@ -148,60 +149,83 @@ class SourceMap:
 					mapping [iSourceLine],
 					mapping [iTargetColumn]
 				])
-			offset = lineIndex
+			offset = lineIndex + 1
 			
 		for sourcePath in self.sourcePaths:
 			try:
 				with open (sourcePath) as sourceFile:
-					self.sourceCodes.append (sourceFile.read ())
+					self.sourceCodes.append (
+						(utils.extraLines if sourcePath.endswith ('.py') else '') +	# Check causes extra lines
+						sourceFile.read ()
+					)
 			except:
-				self.sourceCodes.append ('')
+				self.sourceCodes.append ('__pragma__ (\'padding\')')				# It was the pad map
 		
 		self.mappings.sort ()
 		
-	def getCascadedMapping (self, shrinkMapping):			# N.B. self.mappings has to be sorted in advance
-		for mapping in self.mappings:
-			if mapping [iTargetLine] >= shrinkMapping [iSourceLine] and mapping [iTargetColumn] >= shrinkMapping [iSourceColumn]:
-				return (
-					shrinkMapping [ : iTargetColumn + 1]	# Target location from shrink mapping
-					+
-					mapping [iSourceIndex : ]				# Source location from self
-				)
+	def getCascadedMapping (self, shrinkMapping):				# N.B. self.mappings has to be sorted in advance
+			prettyMapping = self.mappings [shrinkMapping [iSourceLine - 3]]
+						
+			result =			(
+				shrinkMapping [ : iTargetColumn + 1]								# Target location from shrink mapping
+				+
+				prettyMapping [iSourceIndex : ]										# Source location from self
+			)
+			
+			#print (shrinkMapping, prettyMapping, result)
+			#input ('')
+			
+			return result
 				
-	def cascade (self, shrinkMap, miniMap):					# Result in miniMap
-		self.mappings.sort ()		
-		miniMap.mappings = [self.getCascadedMapping (shrinkMapping) for shrinkMapping in shrinkMap.mappings]
+	def cascade (self, shrinkMap, miniMap):			# Result in miniMap
+		self.mappings.sort ()
+		
+		miniMap.mappings = [
+			self.getCascadedMapping (shrinkMapping)
+			for shrinkMapping in shrinkMap.mappings
+		]
+		
 		miniMap.sourcePaths = self.sourcePaths
 		miniMap.sourceCodes = self.sourceCodes
 			
-	def load (self):
+	def load (self):															# Only maps with a single soure file ever get loaded
 		with open (self.mapPath) as mapFile:
 			self.rawMap = json.loads (mapFile.read ())
 			
 		self.version = self.rawMap ['version']
 		self.sourcePaths =	self.rawMap ['sources']
-		self.sourceCodes =	self.rawMap ['sourcesContent']
-		self.sourceIndex = -1
 		
+		try:
+			self.sourceCodes =	self.rawMap ['sourcesContent']
+		except:																	# Shrink map doesn't contain source codes
+			pass
+				
 		deltaMappings = [
 			[base64VlqConverter.decode (segment) for segment in group.split (',')]
-			for group in self.rawMap ['map'] .split (';')
+			for group in self.rawMap ['mappings'] .split (';')
 		]
 		
 		self.mappings = []
 		for groupIndex, deltaGroup in enumerate (deltaMappings):
-			for segmentIndex, deltaSegment in enumerate (deltaGroup):			
-				if segmentIndex:
-					self.mappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])
-				else:
-					self.mappings.append ([groupIndex, deltaSegment [0]])
-					
-				for i in range (1, 4):
-					if groupIndex:
-						self.mappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
+			for segmentIndex, deltaSegment in enumerate (deltaGroup):
+				if deltaSegment:												# Shrink map ends with empty group, i.e. 'holding empty segment'
+					if segmentIndex:
+						self.mappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])#
 					else:
-						self.mappings [-1] .append (deltaSegment [i])
-			
+						self.mappings.append ([groupIndex, deltaSegment [0]])
+						
+					for i in range (1, 4):
+						if groupIndex or segmentIndex:
+							self.mappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
+						else:
+							try:
+								self.mappings [-1] .append (deltaSegment [i])
+							except:												# Shrink map starts with 'A' rather than 'AAAA'
+								self.mappings [-1] .append (0)
+								
+		if utils.commandArgs.dmap:
+			self.dump ()
+								
 	def save (self):
 		self.rawMappings = []
 		targetColumnShift = 0
@@ -243,3 +267,18 @@ class SourceMap:
 				
 		with utils.create (self.mapPath) as mapFile:
 			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
+			
+		if utils.commandArgs.dmap:
+			self.dump ()
+			
+	def dump (self):
+		self.mappings.sort ()
+				
+		with utils.create (self.mapdumpPath) as mapdumpFile:
+			mapdumpFile.write ('mapVersion: {}\n\n'.format (mapVersion))
+			mapdumpFile.write ('targetPath: {}\n\n'.format (self.targetPath))
+			mapdumpFile.write ('sourcePaths: {}\n\n'.format (self.sourcePaths))
+			mapdumpFile.write ('mappings:\n')
+			for mapping in self.mappings:
+				mapdumpFile.write ('\t{}\n'.format (mapping))
+				

@@ -191,7 +191,7 @@ class Program:
 			aFile.write (targetCode)
 			
 			if utils.commandArgs.map:
-				aFile.write (self.prettyMap.mapRef)	
+				aFile.write (self.prettyMap.mapRef)
 		
 		# Join and save source maps
 		if utils.commandArgs.map:
@@ -202,13 +202,17 @@ class Program:
 		# Minify
 		if not utils.commandArgs.nomin:
 			utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
-			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None)
-				
+			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map 
+			else None)
 			if utils.commandArgs.map:
 				utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
+				self.shrinkMap.load ()
 				self.prettyMap.cascade (self.shrinkMap, self.miniMap)
 				self.miniMap.save ()
-			
+				
+				with open (self.miniTargetPath, 'a') as miniFile:
+					miniFile.write (self.miniMap.mapRef)
+					
 	def provide (self, moduleName):
 		if moduleName == '__main__':
 			moduleName = self.mainModuleName
