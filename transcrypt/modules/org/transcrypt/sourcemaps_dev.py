@@ -241,7 +241,7 @@ class SourceMap:
 		self.mappings.sort ()
 		
 		deltaMappings = []
-		oldMapping = [-1, 0, 0, 0, 0]
+		oldMapping = [-1, -1, -1, -1, -1]
 		for mapping in self.mappings:
 			newGroup = mapping [iTargetLine] != oldMapping [iTargetLine]
 			
@@ -250,13 +250,11 @@ class SourceMap:
 				
 			deltaMappings [-1] .append ([])	# Append new segment, one for each mapping
 			
-			if newGroup:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn])
-			else:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn] - oldMapping [iTargetColumn])
-					
-			for i in [iSourceIndex, iSourceLine, iSourceColumn]:
-				deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
+			for i in range (iTargetColumn, iSourceColumn + 1):
+				if i == iSourceIndex or newGroup:
+					deltaMappings [-1][-1] .append (mapping [i])
+				else:
+					deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
 					
 			oldMapping = mapping
 			

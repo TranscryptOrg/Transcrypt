@@ -86,7 +86,7 @@ class SourceMap:
 		self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
 		self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
 		self.mapdumpPath = '{}/{}.mapdump'.format (self.mapDir, targetFileName)
-		self.deltaMapdumpPath = '{}/{}.delta.mapdump'.format (self.mapDir, targetFileName)
+		self.deltaMapdumpPath = '{}/{}.old.delta.mapdump'.format (self.mapDir, targetFileName)
 		self.cascadeMapdumpPath = '{}/{}.cascade.mapdump'.format (self.mapDir, targetFileName)
 		self.mapRef = '\n//# sourceMappingURL={}/{}.map\n'.format (self.mapSubdir, self.targetFileName)
 		self.clear ()
@@ -174,22 +174,17 @@ class SourceMap:
 				prettyMapping [iSourceIndex : ]									# Source location from self
 			)
 	
-			if utils.commandArgs.dmap:
-				self.cascadeMapdumpFile.write ('{} {} {}'.format (result, shrinkMapping, prettyMapping))
+			# print (result, shrinkMapping, prettyMapping)
 			
 			return result
 				
 	def cascade (self, shrinkMap, miniMap):										# Result in miniMap
 		self.mappings.sort ()
 		
-		self.cascadeMapdumpFile = utils.create (miniMap.cascadeMapdumpPath)
-		
 		miniMap.mappings = [
 			self.getCascadedMapping (shrinkMapping)
 			for shrinkMapping in shrinkMap.mappings
 		]
-		
-		self.cascadeMapdumpFile.close ()
 		
 		miniMap.sourcePaths = self.sourcePaths
 		miniMap.sourceCodes = self.sourceCodes
@@ -241,22 +236,19 @@ class SourceMap:
 		self.mappings.sort ()
 		
 		deltaMappings = []
-		oldMapping = [-1, 0, 0, 0, 0]
+		oldMapping = [-1, -1, -1, -1, -1]
 		for mapping in self.mappings:
-			newGroup = mapping [iTargetLine] != oldMapping [iTargetLine]
+			if mapping [0] == oldMapping [0]:									# Same target line means existing group
+				deltaMappings [-1] .append ([mapping [iTargetColumn] - oldMapping [iTargetColumn]])
+			else:																# Different target line means new group
+				deltaMappings.append ([])
+				deltaMappings [-1] .append ([mapping [iTargetColumn]])
 			
-			if newGroup:
-				deltaMappings.append ([])	# Append new group
-				
-			deltaMappings [-1] .append ([])	# Append new segment, one for each mapping
-			
-			if newGroup:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn])
-			else:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn] - oldMapping [iTargetColumn])
-					
-			for i in [iSourceIndex, iSourceLine, iSourceColumn]:
-				deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
+			for i in range (2, 5):
+				if len (deltaMappings) > 1:
+					deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
+				else:
+					deltaMappings [-1][-1] .append (mapping [i])
 					
 			oldMapping = mapping
 			
@@ -266,7 +258,7 @@ class SourceMap:
 					deltaMapdumpFile.write ('(New group) ')
 					for segment in group:
 						deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
-						
+	
 		self.rawMap = collections.OrderedDict ([
 			('version', mapVersion),
 			('file', self.targetPath),
