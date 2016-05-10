@@ -196,7 +196,7 @@ class Program:
 		# Join and save source maps
 		if utils.commandArgs.map:
 			utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMap.mapPath)
-			self.prettyMap.concatenate ([module.modMap for module in self.allModules])
+			self.prettyMap.concatenate ([module.modMap for module in self.allModules], self.moduleCaptionSkip)
 			self.prettyMap.save ()
 		
 		# Minify
@@ -318,7 +318,7 @@ class Module:
 		
 		if utils.commandArgs.map or generator.allowDmap:	# Generation of source map and / or prefix map required
 			instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')	
-			
+						
 			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
 			targetLines = []
 			self.sourceLineNrs = []
@@ -326,6 +326,7 @@ class Module:
 			for targetLine in instrumentedTargetLines:
 				sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
 				sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+				
 				targetLine = targetLine [ : -sourcemaps.lineNrLength]
 				
 				# Only append non-emptpy statements and their number info
@@ -1606,7 +1607,7 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 		
 		self.targetFragments.insert (importHeadsIndex, ''.join ([
-			'{}var {} = {{}};\n'.format (self.tabs (importHeadsLevel), self.filterId (head))
+			'{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
 			for head in sorted (self.importHeads)
 		]))
 		self.descope ()

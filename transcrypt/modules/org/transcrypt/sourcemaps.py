@@ -95,7 +95,7 @@ class SourceMap:
 		self.sourcePaths = []
 		self.sourceCodes = []
 		self.sourceIndex = 0
-		self.mappings = []
+		self.mappings = []		# Exactly one mapping per target line?
 		
 	def addMapping (self, mapping):
 		if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
@@ -133,17 +133,23 @@ class SourceMap:
 		else:	
 			self.load ()
 		
-	def concatenate (self, modMaps):						# Result in self
+	def concatenate (self, modMaps, moduleCaptionSkip):								# Result in self
 		self.clear ()
-		offset = 0
+		baseLineIndex = 0
 		
 		padMap = SourceMap (None, None, None)
-		for targetLineIndex in range (4):
-			padMap.addMapping ([targetLineIndex, 0, '', 0, 0])
+		for padLineIndex in range (4):
+			padMap.addMapping ([baseLineIndex, 0, '', 0, 0])
+			baseLineIndex += 1
 		
 		for modMap in [padMap] + modMaps:
+			if modMap != padMap:
+				for captionLineIndex in range (moduleCaptionSkip):
+					self.addMapping ([baseLineIndex, 0, '', 0, 0])
+					baseLineIndex += 1
+		
 			for mapping in modMap.mappings [ : -1]:
-				lineIndex = offset + mapping [iTargetLine]
+				lineIndex = baseLineIndex + mapping [iTargetLine]
 				self.addMapping ([
 					lineIndex,
 					mapping [iTargetColumn],
@@ -151,21 +157,21 @@ class SourceMap:
 					mapping [iSourceLine],
 					mapping [iTargetColumn]
 				])
-			offset = lineIndex + 1
+			baseLineIndex = lineIndex + 1
 			
 		for sourcePath in self.sourcePaths:
 			try:
 				with open (sourcePath) as sourceFile:
 					self.sourceCodes.append (
-						(utils.extraLines if sourcePath.endswith ('.py') else '') +	# Check causes extra lines
+						(utils.extraLines if sourcePath.endswith ('.py') else '') +		# Check causes extra lines
 						sourceFile.read ()
 					)
 			except:
-				self.sourceCodes.append ('__pragma__ (\'padding\')')				# It was the pad map
+				self.sourceCodes.append ('__pragma__ (\'padding\')')					# It was the pad map
 		
 		self.mappings.sort ()
 		
-	def getCascadedMapping (self, shrinkMapping):				# N.B. self.mappings has to be sorted in advance
+	def getCascadedMapping (self, shrinkMapping):								# N.B. self.mappings has to be sorted in advance
 			prettyMapping = self.mappings [min (shrinkMapping [iSourceLine], len (self.mappings) - 1)]
 						
 			result =			(
@@ -206,13 +212,13 @@ class SourceMap:
 		except:																	# Shrink map doesn't contain source codes
 			pass
 				
-		deltaMappings = [
+		self.deltaMappings = [
 			[base64VlqConverter.decode (segment) for segment in group.split (',')]
 			for group in self.rawMap ['mappings'] .split (';')
 		]
 		
 		self.mappings = []
-		for groupIndex, deltaGroup in enumerate (deltaMappings):
+		for groupIndex, deltaGroup in enumerate (self.deltaMappings):
 			for segmentIndex, deltaSegment in enumerate (deltaGroup):
 				if deltaSegment:												# Shrink map ends with empty group, i.e. 'holding empty segment'
 					if segmentIndex:
@@ -229,6 +235,8 @@ class SourceMap:
 							except:												# Shrink map starts with 'A' rather than 'AAAA'
 								self.mappings [-1] .append (0)
 								
+		self.mappings.sort ()
+								
 		if utils.commandArgs.dmap:
 			self.dump ()
 								
@@ -240,33 +248,26 @@ class SourceMap:
 		
 		self.mappings.sort ()
 		
-		deltaMappings = []
+		self.deltaMappings = []
 		oldMapping = [-1, 0, 0, 0, 0]
 		for mapping in self.mappings:
 			newGroup = mapping [iTargetLine] != oldMapping [iTargetLine]
 			
 			if newGroup:
-				deltaMappings.append ([])	# Append new group
+				self.deltaMappings.append ([])																# Append new group
 				
-			deltaMappings [-1] .append ([])	# Append new segment, one for each mapping
+			self.deltaMappings [-1] .append ([])															# Append new segment, one for each mapping
 			
 			if newGroup:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn])
+				self.deltaMappings [-1][-1] .append (mapping [iTargetColumn])								# Only target column reset for every group
 			else:
-				deltaMappings [-1][-1] .append (mapping [iTargetColumn] - oldMapping [iTargetColumn])
+				self.deltaMappings [-1][-1] .append (mapping [iTargetColumn] - oldMapping [iTargetColumn])	# Others are delta's, so cumulative
 					
 			for i in [iSourceIndex, iSourceLine, iSourceColumn]:
-				deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
+				self.deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
 					
 			oldMapping = mapping
-			
-		if utils.commandArgs.dmap:
-			with utils.create (self.deltaMapdumpPath) as deltaMapdumpFile:
-				for group in deltaMappings:
-					deltaMapdumpFile.write ('(New group) ')
-					for segment in group:
-						deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
-						
+									
 		self.rawMap = collections.OrderedDict ([
 			('version', mapVersion),
 			('file', self.targetPath),
@@ -277,7 +278,7 @@ class SourceMap:
 					base64VlqConverter.encode (segment)
 					for segment in group
 				])
-				for group in deltaMappings
+				for group in self.deltaMappings
 			]))
 		])
 				
@@ -288,8 +289,6 @@ class SourceMap:
 			self.dump ()
 			
 	def dump (self):
-		self.mappings.sort ()
-				
 		with utils.create (self.mapdumpPath) as mapdumpFile:
 			mapdumpFile.write ('mapVersion: {}\n\n'.format (mapVersion))
 			mapdumpFile.write ('targetPath: {}\n\n'.format (self.targetPath))
@@ -297,4 +296,12 @@ class SourceMap:
 			mapdumpFile.write ('mappings:\n')
 			for mapping in self.mappings:
 				mapdumpFile.write ('\t{}\n'.format (mapping))
+				
+		with utils.create (self.deltaMapdumpPath) as deltaMapdumpFile:
+			for group in self.deltaMappings:
+				deltaMapdumpFile.write ('(New group) ')
+				for segment in group:
+					deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
+
+		
 				

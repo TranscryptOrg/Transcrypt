@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-04-22 14:41:24
+// Transcrypt'ed from Python, 2016-05-10 16:36:44
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -144,9 +144,9 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.142';
+							self.transpiler_version = '3.5.143';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -167,7 +167,7 @@ function autotest () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -175,7 +175,7 @@ function autotest () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -188,7 +188,7 @@ function autotest () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -1195,7 +1195,7 @@ function autotest () {
 							self.messageDivId = 'message';
 							self.referenceDivId = 'python';
 							self.testDivId = 'transcrypt';
-						});},
+						}, '__init__');},
 						get sortedRepr () {return __get__ (this, function (self, any) {
 							var tryGetNumKey = function (key) {
 								if (type (key) == str) {
@@ -1263,7 +1263,7 @@ function autotest () {
 									}
 								}
 							}
-						});},
+						}, 'sortedRepr');},
 						get check () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							var item = ' '.join (function () {
@@ -1281,7 +1281,7 @@ function autotest () {
 							else {
 								self.referenceBuffer.append (item);
 							}
-						});},
+						}, 'check');},
 						get dump () {return __get__ (this, function (self, filePrename) {
 							var __iter0__ = tuple ([false, true]);
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -1297,7 +1297,7 @@ function autotest () {
 								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
 								aFile.close ();
 							}
-						});},
+						}, 'dump');},
 						get compare () {return __get__ (this, function (self) {
 							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
 							var __break0__ = false;
@@ -1326,12 +1326,12 @@ function autotest () {
 								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
 								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
 							}
-						});},
+						}, 'compare');},
 						get run () {return __get__ (this, function (self, testlet, testletName) {
 							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
 							testlet.run (self);
 							self.check ('<br><br>');
-						});},
+						}, 'run');},
 						get done () {return __get__ (this, function (self) {
 							if (__envir__.executor_name == __envir__.transpiler_name) {
 								self.compare ();
@@ -1339,7 +1339,7 @@ function autotest () {
 							else {
 								self.dump (__main__.__file__.__getslice__ (0, -(3), 1).py_replace ('\\', '/').rsplit ('/', 1) [-(1)]);
 							}
-						});}
+						}, 'done');}
 					});
 					__pragma__ ('<use>' +
 						'itertools' +

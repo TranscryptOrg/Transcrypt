@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/div_fixes/__javascript__/div_fixes.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/div_fixes/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\t# Issue 40\n\tautoTester.check (65 / (5 * 2))\n\n\t# Issue 24\n\tswitch = False\n\tautoTester.check (switch)\n\t\n\t# Issue 37\n\tautoTester.check (15 // 7)\n\t\n\t# Issue 27\n\tautoTester.check (['zero', 'one', 'two', 'three', 'four'] .index ('three'))\n\t\n\t# Issue 36, workaround for Python closures capturing variables rather than values\n\t# An extra enclosing scope is created to remember the value of the variable\n\t\n\tresults = []\n\n\tfor i in range (10):\n\t\t# results.append (lambda: i)\t\t\t\t# Works nowhere\n\t\t# results.append (lambda j = i: j)\t\t\t# Works only in Python\n\t\tresults.append ((lambda j: lambda: j) (i))\t# Works in Python and Trancrypt\n\n\tautoTester.check ([result () for result in results])"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AAEA;AAGA;AACA;AAGA;AAGA;AAKA;AAEA;AAGA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

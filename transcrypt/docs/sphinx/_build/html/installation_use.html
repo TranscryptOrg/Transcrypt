@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.142 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.144 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.142',
+        VERSION:     '3.5.144',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.142 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.144 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.142 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.144 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,15 +53,16 @@
 <h1>2. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
 <h2>2.1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Transcrypt is currently tested under Windows, Linux and OSX, with Chrome and IE. To be able to use it, Python 3.5 has to be installed. To install Transcrypt itself, make sure the Scripts directory of your Python installation is in your system path. Then type:</p>
+<p>Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.5 has to be installed. After that, install <em>virtualenv</em> as explained in <a class="reference external" href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/">Jamie Matthews very clear and brief introducion</a>. Be sure to install virtualenv for the right Python version, by using the right <em>pip</em>. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, <em>activate</em> the environment as also described there, and then type:</p>
 <p><em>pip install transcrypt</em></p>
-<p>from the command prompt. This is the recommended way to install Transcrypt.</p>
+<p>from the command prompt. This is the recommended way to install Transcrypt. It is flexible and sets the proper access rights.</p>
 <p>Alternatively, for manual installation under Windows or Linux, follow the steps below:</p>
 <ol class="arabic simple">
 <li>Download the Transcrypt zip and unpack it anywhere you like</li>
 <li>Add <em>../Transcrypt-&lt;version&gt;/transcrypt</em> to your system path</li>
 </ol>
 <p>N.B. If you install Transcrypt manually, Trancrypt is started by typing <em>run_transcrypt</em> rather than <em>transcrypt</em>. This allows a pip installed Transcrypt and a manually installed Transcrypt to by used side by side selectively.</p>
+<p>N.B.2 If you also use Numscrypt under Linux or OSX, use the MiniConda installer rather than <em>virtualenv</em>, as described in the Numscrypt documentation, since it will allow you to obtain the right version of NumPy.</p>
 <p>You can test your installation as follows (replacing <em>transcrypt</em> by <em>run_transcrypt</em> if you installed manually rather than with pip):</p>
 <ol class="arabic simple">
 <li>Go to directory <em>../Transcrypt-&lt;version&gt;/transcrypt/development/automated_tests/transcrypt</em></li>
@@ -113,7 +114,41 @@ Note that JavaScript functions like document.getElementById can be called from P
 </div>
 <div class="literal-block-wrapper container" id="in-hello-py-javascript-function-document-getelementbyid-is-called-directly-from-python-using-plain-python-values">
 <div class="code-block-caption"><span class="caption-text">In hello.py, JavaScript function document.getElementById is called directly from Python, using plain Python values</span><a class="headerlink" href="#in-hello-py-javascript-function-document-getelementbyid-is-called-directly-from-python-using-plain-python-values" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 
 <span class="k">class</span> <span class="nc">SolarSystem</span><span class="p">:</span>
     <span class="n">planets</span> <span class="o">=</span> <span class="p">[</span><span class="n">chain</span> <span class="p">(</span><span class="n">planet</span><span class="p">,</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,))</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">planet</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">((</span>
@@ -149,63 +184,65 @@ Note that JavaScript functions like document.getElementById can be called from P
         
 <span class="n">solarSystem</span> <span class="o">=</span> <span class="n">SolarSystem</span> <span class="p">()</span>
 </pre></div>
+</td></tr></table></div>
 </div>
 </div>
+<div class="section" id="using-sourcemaps-and-annotated-target-code">
+<h2>2.3. Using sourcemaps and annotated target code<a class="headerlink" href="#using-sourcemaps-and-annotated-target-code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sourcemaps">
+<h3>2.3.1. Sourcemaps<a class="headerlink" href="#sourcemaps" title="Permalink to this headline">¶</a></h3>
+<p>Sourcemaps enable debugging from the original Python source code rather then from the generated JavaScript. Transcrypt supports the use of single- and multi-level sourcemaps, using the <em>-m</em> switch. This means that you can source-level debug both non-minified and minified JavaScript target code. Sourcemaps are routinely tested for Google Chrome only, both under Windows and Linux, but they also have been observed to work for Firefox. Combined with the high readability of the JavaScript code generated by Transcrypt, this enables efficient debugging for real-world projects consisting of many modules.</p>
 </div>
-<div class="section" id="command-line-switches">
-<span id="id1"></span><h2>2.3. Command line switches<a class="headerlink" href="#command-line-switches" title="Permalink to this headline">¶</a></h2>
-<p>The available command line switches will be shown if you run transcript -h.
-They are specified in the source code of Transcrypt as follows:</p>
-<div class="literal-block-wrapper container" id="transcrypt-command-line-switches-as-specified-in-module-orgs-transcrypt-utils-py">
-<div class="code-block-caption"><span class="caption-text">Transcrypt command line switches as specified in module/orgs/transcrypt/utils.py</span><a class="headerlink" href="#transcrypt-command-line-switches-as-specified-in-module-orgs-transcrypt-utils-py" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">CommandArgs</span><span class="p">:</span>      
-    <span class="k">def</span> <span class="nf">parse</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span> <span class="p">()</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;.py file containing source code of main module&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--anno&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;annotate target files that were compiled from Python with source file names and source line numbers&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="s">&#39;--build&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;rebuild all target files from scratch&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--check&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--fcall&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable fastcall mechanism by default. You can also use __pragma__ (&#39;fcal&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">nofcall</span><span class="se">\&#39;</span><span class="s">)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="s">&#39;--iconv&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferable use __pragma__ (&#39;iconv&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">noiconv</span><span class="se">\&#39;</span><span class="s">) to enable automatic conversion locally&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-j&#39;</span><span class="p">,</span> <span class="s">&#39;--jskeys&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;interpret {key: &#39;value&#39;} as {&#39;key&#39;: &#39;value&#39;} and forbid {key (): &#39;value&#39;}, as JavaScript does. DISADVISED, since it&#39;s less flexible than the Python interpretation. Use {&#39;key&#39;: &#39;value&#39;} explicitly if you want literal keys&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>        
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="s">&#39;--kwargs&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (&#39;kwargs&#39;) and __pragma__(&#39;nokwargs&#39;) locally instead to prevent bloated code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;--license&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show license&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--map&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;generate source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="s">&#39;--nomin&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;no minification&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-o&#39;</span><span class="p">,</span> <span class="s">&#39;--opov&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable operator overloading by default. In general this is DISADVISED, use __pragma__ (&#39;opov&#39;) and __pragma__(&#39;noopov&#39;) locally instead to prevent slow code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="s">&#39;--parent&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;object that will hold module, default is window, use -p . to generate self contained module, e.g. for use in node.js&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-r&#39;</span><span class="p">,</span> <span class="s">&#39;--run&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;run source file rather than compiling it&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="s">&#39;--tree&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;dump syntax tree&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="s">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show all messages&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">parse_args</span> <span class="p">()</span> <span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">license</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">):</span>
-            <span class="n">log</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">format_usage</span> <span class="p">()</span> <span class="o">.</span><span class="n">capitalize</span> <span class="p">())</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="section" id="annotated-target-code">
+<h3>2.3.2. Annotated target code<a class="headerlink" href="#annotated-target-code" title="Permalink to this headline">¶</a></h3>
+<p>In addition to generating sourcemaps, you can use the <em>-a</em> switch to annotate non-minified JavaScript files with comments, referring to the original Python file names and line numbers. So even if your browser doesn&#8217;t support sourcemaps, it&#8217;s easy to find back the original Python source code location from any JavaScript statement.</p>
+<div class="literal-block-wrapper container" id="annotated-target-code-for-hello-py">
+<div class="code-block-caption"><span class="caption-text">Annotated target code for hello.py</span><a class="headerlink" href="#annotated-target-code-for-hello-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>// ============ Source: D:/activ_tosh/geatec/transcrypt/transcrypt/demos/hello/hello.py ============
 
-        <span class="k">global</span> <span class="n">extraLines</span>
-        <span class="n">extraLines</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="c"># Make identifier __pragma__ known to static checker</span>
-            <span class="c"># It was only known in JavaScript from __core__.mod.js, which the checker doesn&#39;t see</span>
-            <span class="c"># __pragma__ (&#39;&lt;all&gt;&#39;) in JavaScript requires it to remain a function, as it was in the core</span>
-            <span class="c"># It can&#39;t be skipped, since it has to precede __pragma__ (&#39;skip&#39;), to make the checker accept that</span>
-            <span class="s">&#39;def __pragma__ (): pass&#39;</span><span class="p">,</span>
-        
-            <span class="c"># Make __include__ known to the static checker</span>
-            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">skip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>            
-            <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>    
-            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">noskip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>
-            <span class="s">&#39;&#39;</span>
-        <span class="p">]</span> <span class="k">if</span> <span class="n">commandArgs</span><span class="o">.</span><span class="n">check</span> <span class="k">else</span> <span class="p">[]</span>
-        <span class="k">global</span> <span class="n">nrOfExtraLines</span>
-        <span class="n">nrOfExtraLines</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Last line only serves to force linefeed</span>
-        <span class="n">extraLines</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span>
+/* 000001 */    (function () {
+/* 000001 */        var chain = __init__ (__world__.itertools).chain;
+/* 000003 */        var SolarSystem = __class__ (&#39;SolarSystem&#39;, [object], {
+/* 000021 */            get __init__ () {return __get__ (this, function (self) {
+/* 000022 */                self.lineIndex = 0;
+/* 000022 */            });},
+/* 000024 */            get greet () {return __get__ (this, function (self) {
+/* 000025 */                self.planet = self.planets [int (Math.random () * len (self.planets))];
+/* 000026 */                document.getElementById (&#39;greet&#39;).innerHTML = &#39;Hello {}&#39;.format (self.planet [0]);
+/* 000027 */                self.explain ();
+/* 000027 */            });},
+/* 000029 */            get explain () {return __get__ (this, function (self) {
+/* 000031 */                document.getElementById (&#39;explain&#39;).innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
+/* 000033 */                self.lineIndex = (self.lineIndex + 1) % 3;
+/* 000033 */            });}
+/* 000033 */        });
+/* 000004 */        SolarSystem.planets = function () {
+/* 000004 */            var __accu0__ = [];
+/* 000004 */            var __iter0__ = enumerate (tuple ([tuple ([&#39;Mercury&#39;, &#39;hot&#39;, 2240]), tuple ([&#39;Venus&#39;, &#39;sulphurous&#39;, 6052]), tuple ([&#39;Earth&#39;, &#39;fertile&#39;, 6378]), tuple ([&#39;Mars&#39;, &#39;reddish&#39;, 3397]), tuple ([&#39;Jupiter&#39;, &#39;stormy&#39;, 71492]), tuple ([&#39;Saturn&#39;, &#39;ringed&#39;, 60268]), tuple ([&#39;Uranus&#39;, &#39;cold&#39;, 25559]), tuple ([&#39;Neptune&#39;, &#39;very cold&#39;, 24766])]));
+/* 000004 */            for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+/* 000012 */                var __left0__ = __iter0__ [__index0__];
+/* 000012 */                var index = __left0__ [0];
+/* 000012 */                var planet = __left0__ [1];
+/* 000004 */                __accu0__.append (chain (planet, tuple ([index + 1])));
+/* 000004 */            }
+/* 000004 */            return __accu0__;
+/* 000004 */        } ();
+/* 000015 */        SolarSystem.lines = tuple ([&#39;{} is a {} planet&#39;, &#39;The radius of {} is {} km&#39;, &#39;{} is planet nr. {} counting from the sun&#39;]);
+/* 000035 */        var solarSystem = SolarSystem ();
+/* 000035 */        __pragma__ (&#39;&lt;use&gt;&#39; +
+/* 000035 */            &#39;itertools&#39; +
+/* 000035 */        &#39;&lt;/use&gt;&#39;)
+/* 000035 */        __pragma__ (&#39;&lt;all&gt;&#39;)
+/* 000035 */            __all__.SolarSystem = SolarSystem;
+/* 000035 */            __all__.solarSystem = solarSystem;
+/* 000035 */        __pragma__ (&#39;&lt;/all&gt;&#39;)
+/* 000035 */    }) ();
+/* 000035 */    return __all__;
 </pre></div>
 </div>
 </div>
-<p>If static checking is enabled, insert dummy definitions of global JavaScript variables between <a class="reference internal" href="special_facilities.html#skipping-fragments"><span>__pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</span></a> to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.</p>
+<p>Source code annotation only happens for Python sources, not for JavaScript-only modules, that have a trivial correspondence between non-minified target code and source code.</p>
+</div>
 </div>
 <div class="section" id="compiling-for-node-js">
 <h2>2.4. Compiling for node.js<a class="headerlink" href="#compiling-for-node-js" title="Permalink to this headline">¶</a></h2>
@@ -266,6 +303,62 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you&#8217;ll 
 <li>Repeatedly reload the page to see the text change (Google Chrome may actually reload twice)</li>
 </ul>
 </div>
+<div class="section" id="available-command-line-switches">
+<span id="command-line-switches"></span><h2>2.5. Available command line switches<a class="headerlink" href="#available-command-line-switches" title="Permalink to this headline">¶</a></h2>
+<p>The available command line switches will be shown if you run transcript -h.
+They are specified in the source code of Transcrypt as follows:</p>
+<div class="literal-block-wrapper container" id="transcrypt-command-line-switches-as-specified-in-module-orgs-transcrypt-utils-py">
+<div class="code-block-caption"><span class="caption-text">Transcrypt command line switches as specified in module/orgs/transcrypt/utils.py</span><a class="headerlink" href="#transcrypt-command-line-switches-as-specified-in-module-orgs-transcrypt-utils-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">CommandArgs</span><span class="p">:</span>      
+    <span class="k">def</span> <span class="nf">parse</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span> <span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;.py file containing source code of main module&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--anno&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;annotate target files that were compiled from Python with source file names and source line numbers&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="s">&#39;--build&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;rebuild all target files from scratch&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--check&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--dmap&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;dump human readable source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--fcall&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable fastcall mechanism by default. You can also use __pragma__ (&#39;fcal&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">nofcall</span><span class="se">\&#39;</span><span class="s">)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="s">&#39;--iconv&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferable use __pragma__ (&#39;iconv&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">noiconv</span><span class="se">\&#39;</span><span class="s">) to enable automatic conversion locally&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-j&#39;</span><span class="p">,</span> <span class="s">&#39;--jskeys&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;interpret {key: &#39;value&#39;} as {&#39;key&#39;: &#39;value&#39;} and forbid {key (): &#39;value&#39;}, as JavaScript does. DISADVISED, since it&#39;s less flexible than the Python interpretation. Use {&#39;key&#39;: &#39;value&#39;} explicitly if you want literal keys&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="s">&#39;--kwargs&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable keyword arguments by default. In general this is DISADVISED, use __pragma__ (&#39;kwargs&#39;) and __pragma__(&#39;nokwargs&#39;) locally instead to prevent bloated code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;--license&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show license&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--map&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;generate source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="s">&#39;--nomin&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;no minification&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-o&#39;</span><span class="p">,</span> <span class="s">&#39;--opov&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable operator overloading by default. In general this is DISADVISED, use __pragma__ (&#39;opov&#39;) and __pragma__(&#39;noopov&#39;) locally instead to prevent slow code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="s">&#39;--parent&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;object that will hold module, default is window, use -p . to generate self contained module, e.g. for use in node.js&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-r&#39;</span><span class="p">,</span> <span class="s">&#39;--run&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;run source file rather than compiling it&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="s">&#39;--tree&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;dump syntax tree&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="s">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show all messages&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">parse_args</span> <span class="p">()</span> <span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">license</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">):</span>
+            <span class="n">log</span> <span class="p">(</span><span class="bp">True</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">format_usage</span> <span class="p">()</span> <span class="o">.</span><span class="n">capitalize</span> <span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">global</span> <span class="n">extraLines</span>
+        <span class="n">extraLines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c"># Make identifier __pragma__ known to static checker</span>
+            <span class="c"># It was only known in JavaScript from __core__.mod.js, which the checker doesn&#39;t see</span>
+            <span class="c"># __pragma__ (&#39;&lt;all&gt;&#39;) in JavaScript requires it to remain a function, as it was in the core</span>
+            <span class="c"># It can&#39;t be skipped, since it has to precede __pragma__ (&#39;skip&#39;), to make the checker accept that</span>
+            <span class="s">&#39;def __pragma__ (): pass&#39;</span><span class="p">,</span>
+        
+            <span class="c"># Make __include__ known to the static checker</span>
+            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">skip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>            
+            <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>    
+            <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">noskip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;&#39;</span>
+        <span class="p">]</span> <span class="k">if</span> <span class="n">commandArgs</span><span class="o">.</span><span class="n">check</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">global</span> <span class="n">nrOfExtraLines</span>
+        <span class="n">nrOfExtraLines</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Last line only serves to force linefeed</span>
+        <span class="n">extraLines</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If static checking is enabled, insert dummy definitions of global JavaScript variables between <a class="reference internal" href="special_facilities.html#skipping-fragments"><span>__pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</span></a> to prevent needless complaints of the checker. The static checks are geared towards avoiding false alarms, and mainly check undefined names and unused variables. Style checks are deliberately avoided.</p>
+</div>
 </div>
 
 
@@ -285,8 +378,13 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you&#8217;ll 
 </ul>
 </li>
 <li><a class="reference internal" href="#your-first-transcrypt-program">2.2. Your first Transcrypt program</a></li>
-<li><a class="reference internal" href="#command-line-switches">2.3. Command line switches</a></li>
+<li><a class="reference internal" href="#using-sourcemaps-and-annotated-target-code">2.3. Using sourcemaps and annotated target code</a><ul>
+<li><a class="reference internal" href="#sourcemaps">2.3.1. Sourcemaps</a></li>
+<li><a class="reference internal" href="#annotated-target-code">2.3.2. Annotated target code</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#compiling-for-node-js">2.4. Compiling for node.js</a></li>
+<li><a class="reference internal" href="#available-command-line-switches">2.5. Available command line switches</a></li>
 </ul>
 </li>
 </ul>
@@ -333,7 +431,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you&#8217;ll 
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.142 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.144 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
