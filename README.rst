@@ -4,6 +4,7 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
 - Simple relation between Python source and generated JavaScript code for easy debugging
+- Multi-level sourcemaps and optional annotation of target code with source references
 - Compact downloads, kB's rather than MB's
 - Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
 - Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
@@ -21,14 +22,22 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status
 ======
 
-First release!
-Extensive tests on both Windows and Linux have lead to the conclusion that Transcrypt is ready for production use.
-Any remaining bugs can reported as GitHub issues at: https://github.com/JdeH/Transcrypt .
+Second release:
+
+- Multi-level sourcemaps, annotated target code, virtualenv installation.
+- Automated tests of functionality of compiled code OK.
+- Reasonable amount of manual testing of the use of sourcemaps done by author.
+- Further tests and feedback very welcome, especially of the source maps part.
+- Sourcemaps were tested on Chrome under Windows and Linux, but seem to work on Firefox under Linux as well.
 
 What's new
 ==========
 
-- Status moved to Production/Stable
+- Installation procedure changed to benefit from virtualenv
+- Optional annotation of target code with source file names and source line numbers
+- Multi-level sourcemaps: Python source level debugging of both formatted and minified JavaScript code
+- Source code included in map rather than separate as was the case earlier
+- Switched from sectored V3 sourcemaps to monolithic V3 sourcemaps since they seem more mature and accepted
 
 Known restrictions
 ==================

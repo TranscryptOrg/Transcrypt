@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/__javascript__/modules.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/__init__.py"
+	],
+	"sourcesContent": [
+		"import modules.mod1.mod11.mod111\nimport modules.mod3\nimport modules.mod1.mod11.mod112\nimport modules.mod1\nimport modules.mod1.mod11\nimport modules.mod2\nimport modules.mod2.mod21\nimport modules.mod2.mod22\n\nimport modules.mod1.mod11.mod111 as aliasMod111\nimport modules.mod1 as aMod1\n\nfrom modules.mod1.mod11 import mod111, mod112\n\nfrom modules.mod2 import mod21 as aMod21, mod22 as aMod22\n\nfrom modules.mod3 import *\n\nfrom modules.mod1.mod11.mod111 import A\n\na = modules.mod1.mod11.mod111.A (12345)\npi = modules.mod1.pi\nf = modules.mod2.f\n\ndef run (autoTester):\n\t# Import without 'as'\n\tautoTester.check ('modules')\n\tautoTester.check (a.f ())\n\tautoTester.check (modules.mod1.mod11.mod112.f ())\n\tautoTester.check (modules.mod1.mod11.e)\n\tautoTester.check (pi)\n\tautoTester.check (f (102030))\n\tautoTester.check (modules.mod2.mod21.f ())\n\tB = modules.mod2.mod22.B\n\tb = B ()\n\tautoTester.check (b.x)\n\tautoTester.check (modules.mod3.x)\n\t\n\t# Import with 'as'\n\ta2 = aliasMod111.A (6789101112)\n\tautoTester.check (a2.f ())\n\tautoTester.check (aMod1.pi)\n\t\n\t# From ... import without 'as'\n\ta3 = mod111.A (100.001)\n\tautoTester.check (a3.f ())\n\tautoTester.check (mod112.f ())\n\t\n\t# From ... import with 'as'\n\tautoTester.check (aMod21.f ())\n\tautoTester.check (aMod22.B () .x)\n\t\n\t# From ... import *\n\tautoTester.check (mod3Hundred)\n\tautoTester.check (mod3GetTwoHundred ())\n\tautoTester.check (A (123.321) .f ())\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AA2DA;AAvDA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AAAA;AAEA;AAAA;AAEA;AAAA;AAAA;AAEA;AAEA;AACA;AACA;AAEA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAGA;AACA;AACA;AAGA;AACA;AACA;AAGA;AACA;AAGA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

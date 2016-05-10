@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/org.transcrypt.__base__.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__base__.py"
+	],
+	"sourcesContent": [
+		"# This module is avaible both in the Python and Transcrypt environments\n# It is included in-between the __core__ and the __builtin__ module, so the latter can adapt __envir__\n# In Transcrypt, __base__ is available inline, it isn't nested and cannot be imported in the normal way\n\nclass __Envir__:\n\tdef __init__ (self):\n\t\tself.transpiler_name = 'transcrypt'\n\t\tself.transpiler_version = '3.5.142'\n\t\tself.target_subdir = '__javascript__'\n\t\t\n__envir__ = __Envir__ ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAQA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

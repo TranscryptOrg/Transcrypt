@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/demos/hello/__javascript__/hello.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/demos/hello/hello.py"
+	],
+	"sourcesContent": [
+		"from itertools import chain\n\nclass SolarSystem:\n\tplanets = [chain (planet, (index + 1,)) for index, planet in enumerate ((\n\t\t('Mercury', 'hot', 2240),\n\t\t('Venus', 'sulphurous', 6052),\n\t\t('Earth', 'fertile', 6378),\n\t\t('Mars', 'reddish', 3397),\n\t\t('Jupiter', 'stormy', 71492),\n\t\t('Saturn', 'ringed', 60268),\n\t\t('Uranus', 'cold', 25559),\n\t\t('Neptune', 'very cold', 24766)\t\n\t))]\n\t\n\tlines = (\n\t\t'{} is a {} planet',\n\t\t'The radius of {} is {} km',\n\t\t'{} is planet nr. {} counting from the sun'\n\t)\n\t\n\tdef __init__ (self):\n\t\tself.lineIndex = 0\n\t\n\tdef greet (self):\n\t\tself.planet = self.planets [int (Math.random () * len (self.planets))]\n\t\tdocument.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])\n\t\tself.explain ()\n\t\t\n\tdef explain (self):\n\t\tdocument.getElementById ('explain').innerHTML = (\n\t\t\tself.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])\n\t\t)\n\t\tself.lineIndex = (self.lineIndex + 1) % 3\n\t\t\nsolarSystem = SolarSystem ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAEA;AAkBA;AACA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAEA;AAEA;AAEA;AAAA;AAAA;AA7BA;AAAA;AAAA;AAAA;AAQA;AAAA;AAAA;AARA;AAAA;AAAA;AAAA;AAWA;AAoBA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
