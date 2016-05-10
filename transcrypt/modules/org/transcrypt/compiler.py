@@ -47,6 +47,7 @@ class ModuleMetadata:
 				self.sourcePath = self.targetPath	# For a Javascript-only module, source and target are the same and a source map can be faked
 										
 			self.extraSubdir = 'extra'
+<<<<<<< HEAD
 			self.extraDir = '{}/{}'.format (self.targetDir, self.extraSubdir)
 			
 			self.treePath = '{}/{}.mod.tree'.format (self.extraDir, self.filePrename)
@@ -61,6 +62,9 @@ class ModuleMetadata:
 				self.mapSourceFileName = '...' + self.mapSourceFileName [-61 : ]
 				
 			self.mapSourcePath = '{}/{}'.format (self.mapDir, self.mapSourceFileName)
+=======
+			self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
+>>>>>>> develop
 			
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
@@ -101,7 +105,7 @@ class ModuleMetadata:
 					
 		return youngestPath == self.sourcePath
 	
-class Program (sourcemaps.ProgramMapperMixin):
+class Program:
 	def __init__ (self, moduleSearchDirs):
 		self.rawModuleCaption = '\n\n// ============ Source: {} ============\n\n' if utils.commandArgs.anno else ''
 		self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
@@ -140,10 +144,30 @@ class Program (sourcemaps.ProgramMapperMixin):
 
 		# Set paths that require the module dict
 		self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-		self.mapUrl = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.sourceMapSubdir, self.mainModuleName)
-		self.mapPath = '{}/{}.js.map'.format (self.moduleDict [self.mainModuleName] .metadata.mapDir, self.mainModuleName)
-		self.miniPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		self.miniTargetPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
+		
+		# Set sourcemaps
+		if utils.commandArgs.map:
+			self.prettyMap = sourcemaps.SourceMap (
+				self.moduleDict [self.mainModuleName] .metadata.targetDir,
+				'{}.js'.format (self.mainModuleName),
+				self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
+				
+			)
 			
+			if not utils.commandArgs.nomin:
+				self.shrinkMap = sourcemaps.SourceMap (
+					self.moduleDict [self.mainModuleName] .metadata.targetDir,
+					'{}.shrink.js'.format (self.mainModuleName),
+					self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
+				)
+				
+				self.miniMap = sourcemaps.SourceMap (
+					self.moduleDict [self.mainModuleName] .metadata.targetDir,
+					'{}.min.js'.format (self.mainModuleName),
+					self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
+				)
+							
 		# Round up imported modules
 		importedModules = [
 			self.moduleDict [moduleName]
@@ -184,18 +208,28 @@ class Program (sourcemaps.ProgramMapperMixin):
 			aFile.write (targetCode)
 			
 			if utils.commandArgs.map:
-				aFile.write ('\n//# sourceMappingURL={}\n'.format (self.mapUrl))		
+				aFile.write (self.prettyMap.mapRef)
 		
 		# Join and save source maps
 		if utils.commandArgs.map:
-			utils.log (False, 'Saving overall sourcemap to: {}\n', self.mapPath)
-			self.generateMap ()
+			utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMap.mapPath)
+			self.prettyMap.concatenate ([module.modMap for module in self.allModules], self.moduleCaptionSkip)
+			self.prettyMap.save ()
 		
 		# Minify
 		if not utils.commandArgs.nomin:
-			utils.log (True, 'Saving minified result in: {}\n', self.miniPath)
-			minify.run (self.targetPath, self.miniPath)
-			
+			utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
+			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map 
+			else None)
+			if utils.commandArgs.map:
+				utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
+				self.shrinkMap.load ()
+				self.prettyMap.cascade (self.shrinkMap, self.miniMap)
+				self.miniMap.save ()
+				
+				with open (self.miniTargetPath, 'a') as miniFile:
+					miniFile.write (self.miniMap.mapRef)
+					
 	def provide (self, moduleName):
 		if moduleName == '__main__':
 			moduleName = self.mainModuleName
@@ -207,11 +241,19 @@ class Program (sourcemaps.ProgramMapperMixin):
 		else:										# If not, provide by loading or compiling
 			return Module (self, moduleMetadata)
 						
-class Module (sourcemaps.ModuleMapperMixin):
+class Module:
 	def __init__ (self, program, moduleMetadata, strip = False):
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
 		self.program.moduleDict [self.metadata.name] = self
+		
+		# Set sourcemap
+		if utils.commandArgs.map:
+			self.modMap = sourcemaps.SourceMap (
+				self.metadata.targetDir,
+				'{}.mod.js'.format (self.metadata.name),
+				self.metadata.extraSubdir
+			)
 		
 		if self.metadata.dirty ():
 			self.parse ()
@@ -229,7 +271,9 @@ class Module (sourcemaps.ModuleMapperMixin):
 		else:
 			self.loadJavascript ()
 			self.extractPropertiesFromJavascript ()
-			self.loadOrFakeMap ()
+			
+			if utils.commandArgs.map:
+				self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
 			
 	def getModuleCaption (self):
 		return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''			
@@ -291,17 +335,22 @@ class Module (sourcemaps.ModuleMapperMixin):
 		
 		if utils.commandArgs.map or generator.allowDmap:	# Generation of source map and / or prefix map required
 			instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')	
-			
+						
 			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
 			targetLines = []
 			self.sourceLineNrs = []
 				
 			for targetLine in instrumentedTargetLines:
 				sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
+<<<<<<< HEAD
 				try:
 					sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
 				except:
 					print ('111', self.metadata.sourcePath, '222', targetLine)
+=======
+				sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+				
+>>>>>>> develop
 				targetLine = targetLine [ : -sourcemaps.lineNrLength]
 				
 				# Only append non-emptpy statements and their number info
@@ -314,9 +363,9 @@ class Module (sourcemaps.ModuleMapperMixin):
 					
 			# Generate per module sourcemap and copy sourcefile
 			if utils.commandArgs.map:
-				utils.log (False, 'Generating source map for module: {}\n', self.metadata.mapPath)				
-				self.generateMap ()
-
+				utils.log (False, 'Generating source map for module: {}\n', self.metadata.sourcePath)				
+				self.modMap.generate (self.metadata.sourcePath, self.sourceLineNrs)
+				self.modMap.save ()
 		else:	# No maps needed, shortcut for speed
 			targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']		
 		
@@ -1584,11 +1633,15 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 		
 		self.targetFragments.insert (importHeadsIndex, ''.join ([
+<<<<<<< HEAD
 			'{}var {} = {{}};{}\n'.format (
 				self.tabs (importHeadsLevel),
 				self.filterId (head),
 				importHeadsLineNrString
 			)
+=======
+			'{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
+>>>>>>> develop
 			for head in sorted (self.importHeads)
 		]))
 		self.descope ()

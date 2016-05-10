@@ -1,5 +1,9 @@
 "use strict";
+<<<<<<< HEAD
 // Transcrypt'ed from Python, 2016-04-27 15:59:59
+=======
+// Transcrypt'ed from Python, 2016-05-10 16:36:58
+>>>>>>> develop
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -144,9 +148,13 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
+<<<<<<< HEAD
 							self.transpiler_version = '3.5.146';
+=======
+							self.transpiler_version = '3.5.143';
+>>>>>>> develop
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -167,7 +175,7 @@ function jquery_demo () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -175,7 +183,7 @@ function jquery_demo () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -188,7 +196,7 @@ function jquery_demo () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});

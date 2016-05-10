@@ -52,7 +52,7 @@ In the JavaScript world, components are gathered from everywhere on the web duri
 Debuggability
 -------------
 
-In order to debug a transpiled web app, it helps a lot if there's a simple correspondence between the Python source code and the generated JavaScript. In Transcrypt this is the case, as is illustrated by the following code fragments:
+In order to debug a transpiled web app, multi-level sourcemaps as supported by Transcrypt are a great asset. Apart from that it helps a lot if there's a simple correspondence between the Python source code and the generated JavaScript. In Transcrypt this is the case, as is illustrated by the following code fragments:
 
 +--------------------------------------------+--------------------------------------------+
 |    .. literalinclude:: ../code/classes.py  |    .. literalinclude:: ../code/classes.js  |

@@ -3,7 +3,12 @@ Transcrypt is a tool to precompile a fairly extensive subset of Python into comp
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
+<<<<<<< HEAD
 - Simple relation between Python source and generated JavaScript code, combined with sourcemap support, for easy debugging
+=======
+- Simple relation between Python source and generated JavaScript code for easy debugging
+- Multi-level sourcemaps and optional annotation of target code with source references
+>>>>>>> develop
 - Compact downloads, kB's rather than MB's
 - Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
 - Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
@@ -21,17 +26,35 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status
 ======
 
+<<<<<<< HEAD
 First release with sourcemaps!
 Single level sourcemap support for Google Chrome has been added, allowing you to debug Python sources from non-minified JS target code.
 Extensive tests on both Windows and Linux have lead to the conclusion that Transcrypt is ready for production use.
 Thanks to everyone who filed bug reports! You submit them as GitHub issues at: https://github.com/JdeH/Transcrypt .
+=======
+Second release:
+
+- Multi-level sourcemaps, annotated target code, virtualenv installation.
+- Automated tests of functionality of compiled code OK.
+- Reasonable amount of manual testing of the use of sourcemaps done by author.
+- Further tests and feedback very welcome, especially of the source maps part.
+- Sourcemaps were tested on Chrome under Windows and Linux, but seem to work on Firefox under Linux as well.
+>>>>>>> develop
 
 What's new
 ==========
 
+<<<<<<< HEAD
 - Debug mode switched off to prevent bloated syntax error reports
 - Single level sourcemaps
 - Div. bug fixes guided by submitted issues + autotest-cases added for them
+=======
+- Installation procedure changed to benefit from virtualenv
+- Optional annotation of target code with source file names and source line numbers
+- Multi-level sourcemaps: Python source level debugging of both formatted and minified JavaScript code
+- Source code included in map rather than separate as was the case earlier
+- Switched from sectored V3 sourcemaps to monolithic V3 sourcemaps since they seem more mature and accepted
+>>>>>>> develop
 
 Known restrictions
 ==================

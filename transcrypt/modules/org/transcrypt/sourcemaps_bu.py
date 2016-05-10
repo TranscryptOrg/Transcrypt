@@ -95,7 +95,7 @@ class SourceMap:
 		self.sourcePaths = []
 		self.sourceCodes = []
 		self.sourceIndex = 0
-		self.mappings = []		# Exactly one mapping per target line?
+		self.mappings = []
 		
 	def addMapping (self, mapping):
 		if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
@@ -133,37 +133,32 @@ class SourceMap:
 		else:	
 			self.load ()
 		
-	def concatenate (self, modMaps, moduleCaptionSkip):								# Result in self
+	def concatenate (self, modMaps, moduleCaptionSkip):	# Result in self
 		self.clear ()
-		baseLineIndex = 0
+		moduleCaptionSkip = 0
+		offset = moduleCaptionSkip
 		
 		padMap = SourceMap (None, None, None)
-		for padLineIndex in range (4):
-			padMap.addMapping ([baseLineIndex, 0, '', 0, 0])
-			baseLineIndex += 1
+		for targetLineIndex in range (4):
+			padMap.addMapping ([targetLineIndex, 0, '', 0, 0])
 		
 		for modMap in [padMap] + modMaps:
-			if modMap != padMap:
-				for captionLineIndex in range (moduleCaptionSkip):
-					self.addMapping ([baseLineIndex, 0, '', 0, 0])
-					baseLineIndex += 1
-		
 			for mapping in modMap.mappings [ : -1]:
-				lineIndex = baseLineIndex + mapping [iTargetLine]
-				self.addMapping ([
+				lineIndex = offset + mapping [iTargetLine]
+				self.addMapping ([							# One mapping added for each target line, why needed???
 					lineIndex,
 					mapping [iTargetColumn],
 					modMap.sourcePaths [mapping [iSourceIndex]],
 					mapping [iSourceLine],
 					mapping [iTargetColumn]
 				])
-			baseLineIndex = lineIndex + 1
+			offset = lineIndex + moduleCaptionSkip + 1
 			
 		for sourcePath in self.sourcePaths:
 			try:
 				with open (sourcePath) as sourceFile:
 					self.sourceCodes.append (
-						(utils.extraLines if sourcePath.endswith ('.py') else '') +		# Check causes extra lines
+						(utils.extraLines if sourcePath.endswith ('.py') else '') +		# Static check causes extra lines, also add them to source included in sourcemap
 						sourceFile.read ()
 					)
 			except:
@@ -282,22 +277,12 @@ class SourceMap:
 			]))
 		])
 				
-<<<<<<< HEAD
-				
-				if module.metadata.mapDir != self.moduleDict [self.mainModuleName] .metadata.mapDir:
-					shutil.copy (module.metadata.mapSourcePath, self.moduleDict [self.mainModuleName] .metadata.mapDir)
-
-			startLineNr += module.targetCode.count ('\n')
-=======
 		with utils.create (self.mapPath) as mapFile:
 			mapFile.write (json.dumps (self.rawMap, indent = '\t'))
->>>>>>> develop
 			
 		if utils.commandArgs.dmap:
 			self.dump ()
 			
-<<<<<<< HEAD
-=======
 	def dump (self):
 		with utils.create (self.mapdumpPath) as mapdumpFile:
 			mapdumpFile.write ('mapVersion: {}\n\n'.format (mapVersion))
@@ -315,4 +300,3 @@ class SourceMap:
 
 		
 				
->>>>>>> develop
