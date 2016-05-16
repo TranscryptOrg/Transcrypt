@@ -4,7 +4,7 @@ Getting started
 Installation
 ------------
 
-Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.5 has to be installed. After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introducion <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, *activate* the environment as also described there, and then type:
+Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.5 has to be installed. After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introduction <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, *activate* the environment as also described there, and then type:
 
 *pip install transcrypt*
 
@@ -99,7 +99,7 @@ Follow the steps below to run this demo:
 - Install node.js from *https://nodejs.org*
 - Open a node.js command prompt
 - Go to the *demo/nodejs_demo* directory
-- Compile the demo with *transcrypt -b -p. nodejs_demo.py* (note the dot after the p switch)
+- Compile the demo with *transcrypt -b -p .none nodejs_demo.py*, to generate an orphan module rather than a child of *window*
 - Go to *demo/nodejs_demo/__javascript__* directory
 - Type *node nodejs_demo.js* (or *node nodejs_demo.min.js* if you want to run the minified version)
 - In your browser, view the result at *http://localhost:8080*

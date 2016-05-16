@@ -36,6 +36,7 @@
 	var __init__ = function (module) {
 		if (!module.__inited__) {
 			module.__all__.__init__ (module.__all__);
+			module.__inited__ = true;
 		}
 		return module.__all__;
 	};

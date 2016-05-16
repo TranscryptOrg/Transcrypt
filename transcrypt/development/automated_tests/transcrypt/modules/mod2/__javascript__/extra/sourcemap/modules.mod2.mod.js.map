@@ -7,5 +7,5 @@
 	"sourcesContent": [
 		"def f (p):\n\treturn 2 * p\n\t"
 	],
-	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 }

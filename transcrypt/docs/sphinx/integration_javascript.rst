@@ -1,3 +1,50 @@
+Seamless interoperation with the DOM
+====================================
+
+Practical example: a simple, responsive website using no HTML or CSS at all
+---------------------------------------------------------------------------
+
+To many programmers, using 'static' HTML and CSS feels like being locked up in a closet.
+As an alternative, responsiveness can simply be programmed using Transcrypt, as can be seen on `this site written in Transcrypt <http://www.wiskundeles.com>`_.
+Note that it features sourcemaps.
+The site adapts to diverse screen formats, device types and landscape vs. portrait mode.
+
+SVG example: Turtle graphics
+----------------------------
+
+*Turtle graphics* are a way to teach computer programming to children, invented by Seymour Papert in the 1960's.
+Lines are drawn as 'track' of a walking turtle, that can move ahead and turn.
+Children use turtle graphics intuitively by imagining what they would do if they were the turtle.
+This leads to a *recipe of motion*, indeed an *algorithm*, which is the basis of imperative (as opposed to e.g. declarative) programming.
+
+*SVG* or *Scalable Vector Graphics* are a way to display high quality graphs, e.g. in the browser.
+SVG, as opposed to e.g. the HTML Canvas, bypasses the pixel paradigm and works with floating point coordinates directly.
+As a consequence, SVG plots can be zoomed without becoming ragged or 'pixelated'.
+
+When looking under the hood of SVG, there's an amazing correspondence between the primitives in an SVG *path* and the primitives of turtle graphics.
+So both from an aestethical and from a conceptual point of view, turtle graphics and SVG form a happy mariage.
+
+Turtle graphics in Transcrypt do not require the use of any graphics libraries. Below are two turtle graphics examples and the source code of Transcrypt's *turtle* module, which is quite compact. As can be seen from the code integration between Transcrypt and JavaScript is trivial.
+
+.. literalinclude:: ../../demos/turtle_demos/star.py
+	:tab-width: 4
+	:caption: Drawing a alternatingly floodfilled star
+	
+`Click here to view the resulting zoomable star <http://www.transcrypt.org/live/demos/turtle_demos/star.html>`_.
+	
+.. literalinclude:: ../../demos/turtle_demos/snowflake.py
+	:tab-width: 4
+	:caption: Drawing the contours of a snowflake
+
+`Click here to view the resulting zoomable snowflake <http://www.transcrypt.org/live/demos/turtle_demos/snowflake.html>`_.
+	
+.. literalinclude:: ../../modules/turtle/__init__.py
+	:tab-width: 4
+	:caption: Transcrypt's turtle graphics module sits directly on top of SVG, no libraries needed, so a very compact download
+	
+Remark: In a later stage animation may be added. As a further step, for complicated fractals, transparent server side compilation of a relatively simple algorithm would allow on-line editing combined with fast client side rendering of high-resolution graphics.
+
+
 Integration with JavaScript libraries
 =====================================
 

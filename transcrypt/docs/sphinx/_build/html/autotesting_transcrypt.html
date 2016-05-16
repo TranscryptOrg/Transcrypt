@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. Autotesting Transcrypt code &mdash; Transcrypt 3.5.151 documentation</title>
+    <title>7. Autotesting Transcrypt code &mdash; Transcrypt 3.5.154 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.151',
+        VERSION:     '3.5.154',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.151 documentation" href="index.html" />
-    <link rel="prev" title="5. Integration with JavaScript libraries" href="integration_javascript.html" /> 
+    <link rel="top" title="Transcrypt 3.5.154 documentation" href="index.html" />
+    <link rel="prev" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -34,9 +34,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="integration_javascript.html" title="5. Integration with JavaScript libraries"
+          <a href="integration_javascript.html" title="5. Seamless interoperation with the DOM"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.151 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,9 +46,9 @@
           <div class="body" role="main">
             
   <div class="section" id="autotesting-transcrypt-code">
-<h1>6. Autotesting Transcrypt code<a class="headerlink" href="#autotesting-transcrypt-code" title="Permalink to this headline">¶</a></h1>
+<h1>7. Autotesting Transcrypt code<a class="headerlink" href="#autotesting-transcrypt-code" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="why-it-s-needed">
-<h2>6.1. Why it&#8217;s needed<a class="headerlink" href="#why-it-s-needed" title="Permalink to this headline">¶</a></h2>
+<h2>7.1. Why it&#8217;s needed<a class="headerlink" href="#why-it-s-needed" title="Permalink to this headline">¶</a></h2>
 <p>An simple autotest feature has been added to Transcrypt right from the start for the following reasons:</p>
 <ol class="arabic simple">
 <li>Any programming language compiler has to be reliable, since a large investment in code may come to depend upon it. Languages and libraries should be able to evolve without regression bugs being introduced. In a rich language many constructs are possible which all should be tested with each new release. This can only be done if testing is automated.</li>
@@ -56,7 +56,7 @@
 </ol>
 </div>
 <div class="section" id="how-it-works">
-<h2>6.2. How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<h2>7.2. How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>When code is being tested, a reference is needed of what is considered to be correct. With Transcrypt that reference is CPython. Autotesting Transcrypt code is simple and boils down to the following.</p>
 <ol class="arabic simple">
 <li>Along with developing production code, a growing set of <em>testlets</em> is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method <em>org.transcrypt.autotester.AutoTester.check (self, *args)</em> to build a well defined sequence of output data.</li>
@@ -130,16 +130,16 @@
             </a></p>
   <h3><a href="index.html">Subjects</a></h3>
   <ul>
-<li><a class="reference internal" href="#">6. Autotesting Transcrypt code</a><ul>
-<li><a class="reference internal" href="#why-it-s-needed">6.1. Why it&#8217;s needed</a></li>
-<li><a class="reference internal" href="#how-it-works">6.2. How it works</a></li>
+<li><a class="reference internal" href="#">7. Autotesting Transcrypt code</a><ul>
+<li><a class="reference internal" href="#why-it-s-needed">7.1. Why it&#8217;s needed</a></li>
+<li><a class="reference internal" href="#how-it-works">7.2. How it works</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="integration_javascript.html"
-                        title="previous chapter">5. Integration with JavaScript libraries</a></p>
+                        title="previous chapter">5. Seamless interoperation with the DOM</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -171,9 +171,9 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="integration_javascript.html" title="5. Integration with JavaScript libraries"
+          <a href="integration_javascript.html" title="5. Seamless interoperation with the DOM"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.151 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

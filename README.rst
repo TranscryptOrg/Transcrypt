@@ -33,6 +33,9 @@ Second release:
 What's new
 ==========
 
+- SVG based turtle graphics module added
+- Multiple module initialization bug fixed
+- Alias py_name (in JS) for name (in Python) added
 - Installation procedure changed to benefit from virtualenv
 - Optional annotation of target code with source file names and source line numbers
 - Multi-level sourcemaps: Python source level debugging of both formatted and minified JavaScript code

@@ -174,15 +174,26 @@ class Program:
 		header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
 			__base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
 		)
-		parent = 'window' if utils.commandArgs.parent == None else utils.commandArgs.parent		
+
+		if utils.commandArgs.parent == '.none':
+			initializer = '{0} ();\n' .format (self.mainModuleName)
+		elif utils.commandArgs.parent == '.user':
+			initializer = ''
+		else:
+			if utils.commandArgs.parent == None:
+				parent = 'window'
+			else:
+				parent = utils.commandArgs.parent
+				
+			initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
+			
 		targetCode = (
 			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
 			''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
-			('' if parent == '.' else '{} [\'{}\'] = ' .format (parent, self.mainModuleName)) +
-			'{0} ();\n' .format (self.mainModuleName)
+			initializer
 		)	
 						
 		# Write encapsulated target code
@@ -400,23 +411,16 @@ class Generator (ast.NodeVisitor):
 
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
-			('arguments', 'py_arguments'),
-			('js_arguments', 'arguments'),
-			('del', 'py_del'),
-			('js_del', 'del'),
+			('arguments', 'py_arguments'),	('js_arguments', 'arguments'),
+			('del', 'py_del'),				('js_del', 'del'),
 			('js_from', 'from'),
-			('items', 'py_items'),
-			('js_items', 'items'),
-			('keys', 'py_keys'),
-			('js_keys', 'keys'),
-			('pop', 'py_pop'),
-			('js_pop', 'pop'),
-			('replace', 'py_replace'),
-			('js_replace', 'replace'),
-			('sort', 'py_sort'),
-			('js_sort', 'sort'),
-			('switch', 'py_switch'),
-			('split', 'py_split'),
+			('items', 'py_items'),			('js_items', 'items'),
+			('keys', 'py_keys'),			('js_keys', 'keys'),
+			('name', 'py_name'),			('js_name', 'name'),
+			('pop', 'py_pop'),				('js_pop', 'pop'),
+			('replace', 'py_replace'),		('js_replace', 'replace'),
+			('sort', 'py_sort'),			('js_sort', 'sort'),
+			('switch', 'py_switch'),		('split', 'py_split'),
 			('js_split', 'split')
 # END predef_aliases
 		)]
@@ -502,7 +506,7 @@ class Generator (ast.NodeVisitor):
 	def getAliaser (self, pyFragment, jsFragment):
 		return (pyFragment, re.compile ('''
 			(^{0}$)|			# Whole word
-			(__{0}__)|			# Contains __<pyFragment>__
+			(.+__{0}__.+)|		# Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
 			(^{0}__)|			# Starts with <pyFragment>__
 			(__{0}$)|			# Ends with __<pyFragment>
 			((?<=\.){0}__)|		# Starts with '.<pyFragment>__'

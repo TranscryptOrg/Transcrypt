@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/demos/jquery_demo/__javascript__/jquery_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/demos/jquery_demo/jquery_demo.py"
+	],
+	"sourcesContent": [
+		"__pragma__ ('alias', 'S', '$')\n\ndef start ():\n\tdef changeColors ():\n\t\tfor div in S__divs:\n\t\t\tS (div) .css ({\n\t\t\t\t'color': 'rgb({},{},{})'.format (* [int (256 * Math.random ()) for i in range (3)]),\n\t\t\t})\n\n\tS__divs = S ('div')\n\tchangeColors ()\n\twindow.setInterval (changeColors, 500)\n"
+	],
+	"mappings": "AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

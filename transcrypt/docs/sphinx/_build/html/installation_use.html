@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.151 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.154 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.151',
+        VERSION:     '3.5.154',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.151 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.154 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.151 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,7 @@
 <h1>2. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
 <h2>2.1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.5 has to be installed. After that, install <em>virtualenv</em> as explained in <a class="reference external" href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/">Jamie Matthews very clear and brief introducion</a>. Be sure to install virtualenv for the right Python version, by using the right <em>pip</em>. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, <em>activate</em> the environment as also described there, and then type:</p>
+<p>Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.5 has to be installed. After that, install <em>virtualenv</em> as explained in <a class="reference external" href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/">Jamie Matthews very clear and brief introduction</a>. Be sure to install virtualenv for the right Python version, by using the right <em>pip</em>. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, <em>activate</em> the environment as also described there, and then type:</p>
 <p><em>pip install transcrypt</em></p>
 <p>from the command prompt. This is the recommended way to install Transcrypt. It is flexible and sets the proper access rights.</p>
 <p>Alternatively, for manual installation under Windows or Linux, follow the steps below:</p>
@@ -296,7 +296,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you&#8217;ll 
 <li>Install node.js from <em>https://nodejs.org</em></li>
 <li>Open a node.js command prompt</li>
 <li>Go to the <em>demo/nodejs_demo</em> directory</li>
-<li>Compile the demo with <em>transcrypt -b -p. nodejs_demo.py</em> (note the dot after the p switch)</li>
+<li>Compile the demo with <em>transcrypt -b -p .none nodejs_demo.py</em>, to generate an orphan module rather than a child of <em>window</em></li>
 <li>Go to <em>demo/nodejs_demo/__javascript__</em> directory</li>
 <li>Type <em>node nodejs_demo.js</em> (or <em>node nodejs_demo.min.js</em> if you want to run the minified version)</li>
 <li>In your browser, view the result at <em>http://localhost:8080</em></li>
@@ -326,7 +326,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--map&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;generate source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="s">&#39;--nomin&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;no minification&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-o&#39;</span><span class="p">,</span> <span class="s">&#39;--opov&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable operator overloading by default. In general this is DISADVISED, use __pragma__ (&#39;opov&#39;) and __pragma__(&#39;noopov&#39;) locally instead to prevent slow code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="s">&#39;--parent&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;object that will hold module, default is window, use -p . to generate self contained module, e.g. for use in node.js&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="s">&#39;--parent&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;object that will hold module, default is window. Use -p .none to generate orphan module, e.g. for use in node.js. Use -p .user to generate module that has to be explicitly initialized by calling &lt;modulename&gt; (), e.g. after the full page has loaded&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-r&#39;</span><span class="p">,</span> <span class="s">&#39;--run&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;run source file rather than compiling it&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="s">&#39;--tree&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;dump syntax tree&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="s">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show all messages&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
@@ -431,7 +431,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.151 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

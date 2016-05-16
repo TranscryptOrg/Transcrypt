@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/hello/__javascript__/autotest.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/hello/autotest.py"
+	],
+	"sourcesContent": [
+		"import org.transcrypt.autotester\n\nimport testlet0\nimport testlet1\n\nautoTester = org.transcrypt.autotester.AutoTester ()\n\nautoTester.run (testlet0, 'testlet0')\nautoTester.run (testlet1, 'testlet1')\n\nautoTester.done ()\n"
+	],
+	"mappings": "AAAA;AAUA;AAAA;AAAA;AAVA;AAEA;AACA;AAEA;AAEA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -7,5 +7,5 @@
 	"sourcesContent": [
 		"x = 'Toen wij uit Rotterdam vertrokken, vertrokken wij uit Rotterdam\\n'\nmod3Hundred = 100\n\ndef mod3GetTwoHundred ():\n\treturn 200\n\t"
 	],
-	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 }

@@ -7,5 +7,5 @@
 	"sourcesContent": [
 		"class B:\n\tdef __init__ (self):\n\t\tself.x = 'Geef mij maar Amsterdam\\n'\n\t\t"
 	],
-	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 }

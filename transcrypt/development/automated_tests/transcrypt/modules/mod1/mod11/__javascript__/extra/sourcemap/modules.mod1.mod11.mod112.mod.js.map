@@ -7,5 +7,5 @@
 	"sourcesContent": [
 		"def f ():\n\treturn ('Paris, c\\'est la vie\\n')\n\t"
 	],
-	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 }

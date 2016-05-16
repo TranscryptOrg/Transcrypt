@@ -7,9 +7,10 @@ rootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
 	return '{}/{}'.format (rootDir, relPath)
 
-def test (relPath, fileNamePrefix, run = False):
+def test (relPath, fileNamePrefix, run = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
-	os.system ('run_transcrypt -b {}{}.py'.format (fcallSwitch, fileNamePrefix))	
+	
+	os.system ('run_transcrypt -b -m {}{}.py'.format (switches, fileNamePrefix))	
 
 	if run:
 		os.chdir (getAbsPath (relPath))
@@ -17,17 +18,17 @@ def test (relPath, fileNamePrefix, run = False):
 	
 	webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
 	webbrowser.open ('file://{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
-
-def autoTest (*args):
-	test (*args, True)
 	
 for fcallSwitch in ('', '-f '):
-	autoTest ('development/automated_tests/hello', 'autotest')
-	autoTest ('development/automated_tests/transcrypt', 'autotest')
-	test ('demos/hello', 'hello')
-	test ('demos/jquery_demo', 'jquery_demo')
-	test ('demos/d3js_demo', 'd3js_demo')
-	test ('demos/pong', 'pong')
+	test ('development/automated_tests/hello', 'autotest', True, fcallSwitch)
+	test ('development/automated_tests/transcrypt', 'autotest', True, fcallSwitch)
+	test ('demos/hello', 'hello', False, fcallSwitch)
+	test ('demos/jquery_demo', 'jquery_demo', False, fcallSwitch)
+	test ('demos/d3js_demo', 'd3js_demo', False, fcallSwitch)
+	test ('demos/pong', 'pong', False, fcallSwitch)
+	test ('demos/turtle_demos', 'star', False, fcallSwitch + '-p .user ')
+	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
+	
 	if fcallSwitch:
 		print ('Shipment test completed')
 	else:
