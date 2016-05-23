@@ -1,6 +1,6 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-23 16:03:32
-function snowflake () {
+// Transcrypt'ed from Python, 2016-05-23 16:03:36
+function mandala () {
 	var __all__ = {};
 	var __world__ = __all__;
 	
@@ -1497,44 +1497,41 @@ function snowflake () {
 		var right = __init__ (__world__.turtle).right;
 		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
 		var up = __init__ (__world__.turtle).up;
-		var josh = Turtle ();
-		var draw = function (length) {
-			if (length > 9) {
-				draw (length / 3);
-				josh.left (60);
-				draw (length / 3);
-				josh.right (120);
-				draw (length / 3);
-				josh.left (60);
-				draw (length / 3);
+		bgcolor ('black');
+		var __iter0__ = tuple ([tuple (['green', 1, 82, 40, -(6)]), tuple (['red', 1, 84, 40, -(6)]), tuple (['white', 2, 98, 50, -(5)]), tuple (['yellow', 2, 70, 50, -(5)]), tuple (['blue', 2, 97, 70, -(5)]), tuple (['orange', 2, 87, 40, -(17)]), tuple (['pink', 3, 102, 60, -(17)])]);
+		for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+			var __left0__ = __iter0__ [__index0__];
+			var a_color = __left0__ [0];
+			var a_pensize = __left0__ [1];
+			var start_radius = __left0__ [2];
+			var stop_radius = __left0__ [3];
+			var radius_step = __left0__ [4];
+			pensize (a_pensize);
+			color (a_color);
+			for (var angle_index = 0; angle_index < 10; angle_index++) {
+				var __iter1__ = range (start_radius, stop_radius, radius_step);
+				for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
+					var radius = __iter1__ [__index1__];
+					circle (radius);
+				}
+				right (36);
 			}
-			else {
-				josh.forward (length);
-			}
-		};
-		var length = 150;
-		josh.up ();
-		josh.forward (length / 2);
-		josh.left (90);
-		josh.forward (length / 4);
-		josh.right (90);
-		josh.down ();
-		for (var i = 0; i < 3; i++) {
-			josh.right (120);
-			draw (length);
 		}
-		josh.done ();
+		done ();
 		__pragma__ ('<use>' +
 			'turtle' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.draw = draw;
-			__all__.i = i;
-			__all__.josh = josh;
-			__all__.length = length;
+			__all__.a_color = a_color;
+			__all__.a_pensize = a_pensize;
+			__all__.angle_index = angle_index;
+			__all__.radius = radius;
+			__all__.radius_step = radius_step;
+			__all__.start_radius = start_radius;
+			__all__.stop_radius = stop_radius;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
 }
 
-//# sourceMappingURL=extra/sourcemap/snowflake.js.map
+//# sourceMappingURL=extra/sourcemap/mandala.js.map

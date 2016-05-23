@@ -45,7 +45,7 @@ class ModuleMetadata:
 			self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
 			if not os.path.isfile (self.sourcePath):
 				self.sourcePath = self.targetPath	# For a Javascript-only module, source and target are the same and a source map can be faked
-										
+				
 			self.extraSubdir = 'extra'
 			self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
 			

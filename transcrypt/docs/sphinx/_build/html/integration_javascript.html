@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.154 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.156 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.154',
+        VERSION:     '3.5.156',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.154 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.156 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.156 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -72,11 +72,15 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <p>Turtle graphics in Transcrypt do not require the use of any graphics libraries. Below are two turtle graphics examples and the source code of Transcrypt&#8217;s <em>turtle</em> module, which is quite compact. As can be seen from the code integration between Transcrypt and JavaScript is trivial.</p>
 <div class="literal-block-wrapper container" id="drawing-a-alternatingly-floodfilled-star">
 <div class="code-block-caption"><span class="caption-text">Drawing a alternatingly floodfilled star</span><a class="headerlink" href="#drawing-a-alternatingly-floodfilled-star" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Free after the example from the Python 3.5 manual</span>
 
-<span class="n">goto</span> <span class="p">(</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">75</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">up</span> <span class="p">()</span>
+<span class="n">goto</span> <span class="p">(</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">)</span>
 <span class="n">startPos</span> <span class="o">=</span> <span class="n">pos</span> <span class="p">()</span>
 
+<span class="n">down</span> <span class="p">()</span>
 <span class="n">color</span> <span class="p">(</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="s">&#39;yellow&#39;</span><span class="p">)</span>
 <span class="n">begin_fill</span> <span class="p">()</span>
 <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
@@ -127,68 +131,117 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <p><a class="reference external" href="http://www.transcrypt.org/live/demos/turtle_demos/snowflake.html">Click here to view the resulting zoomable snowflake</a>.</p>
 <div class="literal-block-wrapper container" id="transcrypt-s-turtle-graphics-module-sits-directly-on-top-of-svg-no-libraries-needed-so-a-very-compact-download">
 <div class="code-block-caption"><span class="caption-text">Transcrypt&#8217;s turtle graphics module sits directly on top of SVG, no libraries needed, so a very compact download</span><a class="headerlink" href="#transcrypt-s-turtle-graphics-module-sits-directly-on-top-of-svg-no-libraries-needed-so-a-very-compact-download" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">abs</span> <span class="p">(</span><span class="n">vec2D</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
+<span class="n">document</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="n">_debug</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">abs</span> <span class="p">(</span><span class="n">vec2D</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">Math</span><span class="o">.</span><span class="n">sqrt</span> <span class="p">(</span><span class="n">vec2D</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec2D</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec2D</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec2D</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="n">_ns</span> <span class="o">=</span> <span class="s">&#39;http://www.w3.org/2000/svg&#39;</span>
 <span class="n">_svg</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElementNS</span> <span class="p">(</span><span class="n">_ns</span><span class="p">,</span> <span class="s">&#39;svg&#39;</span><span class="p">)</span>
-<span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">_svg</span><span class="p">)</span>
 
-<span class="n">_width</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">_height</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">_offset</span> <span class="o">=</span> <span class="mi">0</span>
-        
-<span class="k">def</span> <span class="nf">rightSize</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="n">_defaultElement</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">body</span>
+<span class="n">_defaultElement</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">_svg</span><span class="p">)</span>
+
+<span class="n">_width</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">_height</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">_offset</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">_rightSize</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">nonlocal</span> <span class="n">_width</span>
     <span class="n">nonlocal</span> <span class="n">_height</span>
     <span class="n">nonlocal</span> <span class="n">_offset</span>
     
-    <span class="n">_width</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerWidth</span>
-    <span class="n">_height</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerHeight</span>
+    <span class="n">_width</span> <span class="o">=</span> <span class="n">_defaultElement</span><span class="o">.</span><span class="n">offsetWidth</span>
+    <span class="n">_height</span> <span class="o">=</span> <span class="n">_defaultElement</span><span class="o">.</span><span class="n">offsetHeight</span>
     <span class="n">_offset</span> <span class="o">=</span> <span class="p">[</span><span class="n">_width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">_height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
     
     <span class="n">_svg</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="n">_width</span><span class="p">)</span>
     <span class="n">_svg</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;height&#39;</span><span class="p">,</span> <span class="n">_height</span><span class="p">)</span>
     
-<span class="n">window</span><span class="o">.</span><span class="n">onresize</span> <span class="o">=</span> <span class="n">rightSize</span>
-<span class="n">rightSize</span> <span class="p">()</span>
+<span class="n">window</span><span class="o">.</span><span class="n">onresize</span> <span class="o">=</span> <span class="n">_rightSize</span>
+
+<span class="n">_rightSize</span> <span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">bgcolor</span> <span class="p">(</span><span class="n">color</span><span class="p">):</span>
+    <span class="n">nonlocal</span> <span class="n">_defaultElement</span>
+
+    <span class="n">_bgcolor</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="n">_defaultElement</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">_bgcolor</span>
+
+<span class="n">bgcolor</span> <span class="p">(</span><span class="s">&#39;white&#39;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">setDefaultElement</span> <span class="p">(</span><span class="n">element</span><span class="p">):</span>
+    <span class="n">nonlocal</span> <span class="n">_defaultElement</span>
+
+    <span class="n">_defaultElement</span><span class="o">.</span><span class="n">removeChild</span> <span class="p">(</span><span class="n">_svg</span><span class="p">)</span>
+    <span class="n">_defaultElement</span> <span class="o">=</span> <span class="n">element</span>
+    <span class="n">element</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">_svg</span><span class="p">)</span>
+    
+    <span class="n">_rightSize</span> <span class="p">()</span>
+    <span class="n">bgcolor</span> <span class="p">(</span><span class="s">&#39;white&#39;</span><span class="p">)</span>
+
+<span class="n">_allTurtles</span> <span class="o">=</span> <span class="p">[]</span>
     
 <span class="k">class</span> <span class="nc">Turtle</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_allTurtles</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>   
-        <span class="bp">self</span><span class="o">.</span><span class="n">pensize</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_heading</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="n">PI</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">home</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pensize</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;black&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span> <span class="o">=</span> <span class="p">[]</span>    <span class="c"># Need to make track explicitly because:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">home</span> <span class="p">()</span>        <span class="c">#   Makes a position but needs a track to put in in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>       <span class="c">#   Makes a track but needs a position to initialize it with</span>
         
     <span class="k">def</span> <span class="nf">clear</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span><span class="p">:</span>
+            <span class="n">_svg</span><span class="o">.</span><span class="n">removeChild</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_moveto</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_flush</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_debug</span><span class="p">:</span>
+            <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Flush:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElementNS</span> <span class="p">(</span><span class="n">_ns</span><span class="p">,</span> <span class="s">&#39;path&#39;</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="p">))</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;stroke&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pencolor</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pencolor</span> <span class="o">!=</span> <span class="bp">None</span> <span class="k">else</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;stroke-width&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pensize</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;fill&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="o">!=</span> <span class="bp">None</span> <span class="k">else</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>           
+            <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;fill-rule&#39;</span><span class="p">,</span> <span class="s">&#39;evenodd&#39;</span><span class="p">)</span>
+            <span class="n">_svg</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                
+            <span class="bp">self</span><span class="o">.</span><span class="n">_track</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_moveto</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>   <span class="c"># _track should start with a move command</span>
         
     <span class="k">def</span> <span class="nf">done</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElementNS</span> <span class="p">(</span><span class="n">_ns</span><span class="p">,</span> <span class="s">&#39;path&#39;</span><span class="p">)</span>
-        <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;stroke&#39;</span><span class="p">,</span> <span class="s">&#39;none&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pencolor</span> <span class="o">==</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pencolor</span><span class="p">)</span>
-        <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;fill&#39;</span><span class="p">,</span> <span class="s">&#39;none&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="o">==</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span><span class="p">)</span>          
-        <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;fill-rule&#39;</span><span class="p">,</span> <span class="s">&#39;evenodd&#39;</span><span class="p">)</span>
-            
-        <span class="n">path</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
-        <span class="n">_svg</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">pensize</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
         <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pensize</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pensize</span> <span class="o">=</span> <span class="n">width</span>
     
     <span class="k">def</span> <span class="nf">color</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pencolor</span><span class="p">,</span> <span class="n">fillcolor</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pencolor</span> <span class="o">=</span> <span class="n">pencolor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="o">=</span> <span class="n">fillcolor</span>
-    
-    <span class="k">def</span> <span class="nf">home</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">goto</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">fillcolor</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fillcolor</span> <span class="o">=</span> <span class="n">fillcolor</span>
     
     <span class="k">def</span> <span class="nf">goto</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
@@ -196,8 +249,22 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="s">&#39;L&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_down</span> <span class="k">else</span> <span class="s">&#39;M&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_moveto</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">wasdown</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isdown</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goto</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wasdown</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="p">()</span>
             
+    <span class="k">def</span> <span class="nf">home</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_moveto</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        
     <span class="k">def</span> <span class="nf">position</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[:]</span>
         
@@ -221,16 +288,51 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
     <span class="k">def</span> <span class="nf">down</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_down</span> <span class="o">=</span> <span class="bp">True</span>
         
-    <span class="k">def</span> <span class="nf">forward</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">Math</span><span class="o">.</span><span class="n">sin</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heading</span><span class="p">),</span> <span class="n">Math</span><span class="o">.</span><span class="n">cos</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heading</span><span class="p">)]</span>            
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">length</span> <span class="o">*</span> <span class="n">delta</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">length</span> <span class="o">*</span> <span class="n">delta</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">isdown</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_down</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="s">&#39;L&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_down</span> <span class="k">else</span> <span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">def</span> <span class="nf">_predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">Math</span><span class="o">.</span><span class="n">sin</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heading</span><span class="p">),</span> <span class="n">Math</span><span class="o">.</span><span class="n">cos</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heading</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">length</span> <span class="o">*</span> <span class="n">delta</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">length</span> <span class="o">*</span> <span class="n">delta</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        
+    <span class="k">def</span> <span class="nf">forward</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="s">&#39;L&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_down</span> <span class="k">else</span> <span class="s">&#39;M&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">back</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="p">(</span><span class="o">-</span><span class="n">length</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">circle</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">opposite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {} {} {} {} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="s">&#39;A&#39;</span><span class="p">,</span>
+            <span class="n">radius</span><span class="p">,</span>
+            <span class="n">radius</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">opposite</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">opposite</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_track</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="s">&#39;{} {} {} {} {} {} {} {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="s">&#39;A&#39;</span><span class="p">,</span>
+            <span class="n">radius</span><span class="p">,</span>
+            <span class="n">radius</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">_offset</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">))</span>
         
     <span class="k">def</span> <span class="nf">left</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_heading</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heading</span> <span class="o">+</span> <span class="n">Math</span><span class="o">.</span><span class="n">PI</span> <span class="o">*</span> <span class="n">angle</span> <span class="o">/</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="n">PI</span><span class="p">)</span>
@@ -239,15 +341,27 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="p">(</span><span class="o">-</span><span class="n">angle</span><span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">begin_fill</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span> <span class="o">=</span> <span class="bp">True</span>
     
     <span class="k">def</span> <span class="nf">end_fill</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span> <span class="o">=</span> <span class="bp">False</span>
         
 <span class="n">_defaultTurtle</span> <span class="o">=</span> <span class="n">Turtle</span> <span class="p">()</span>
     
-<span class="k">def</span> <span class="nf">reset</span> <span class="p">():</span>                           <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>
-<span class="k">def</span> <span class="nf">clear</span> <span class="p">():</span>                           <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>
+<span class="k">def</span> <span class="nf">reset</span> <span class="p">():</span>
+    <span class="n">nonlocal</span> <span class="n">_allTurtles</span>
+    <span class="n">bgcolor</span> <span class="p">(</span><span class="s">&#39;white&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">turtle</span> <span class="ow">in</span> <span class="n">_allTurtles</span><span class="p">:</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
+        
+<span class="k">def</span> <span class="nf">clear</span> <span class="p">():</span>
+    <span class="n">nonlocal</span> <span class="n">_allTurtles</span>
+    <span class="k">for</span> <span class="n">turtle</span> <span class="ow">in</span> <span class="n">_allTurtles</span><span class="p">:</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>
+
 <span class="k">def</span> <span class="nf">done</span> <span class="p">():</span>                            <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
 <span class="k">def</span> <span class="nf">pensize</span> <span class="p">(</span><span class="n">width</span><span class="p">):</span>                    <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">pensize</span> <span class="p">(</span><span class="n">width</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">color</span> <span class="p">(</span><span class="n">pencolor</span><span class="p">,</span> <span class="n">fillcolor</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span> <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">color</span> <span class="p">(</span><span class="n">pencolor</span><span class="p">,</span> <span class="n">fillcolor</span><span class="p">)</span>
@@ -259,7 +373,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <span class="k">def</span> <span class="nf">up</span> <span class="p">():</span>                              <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">up</span> <span class="p">()</span>
 <span class="k">def</span> <span class="nf">down</span> <span class="p">():</span>                            <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">down</span> <span class="p">()</span>
 <span class="k">def</span> <span class="nf">forward</span> <span class="p">(</span><span class="n">length</span><span class="p">):</span>                   <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">forward</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">back</span> <span class="p">(</span><span class="n">length</span><span class="p">):</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">back</span> <span class="p">(</span><span class="n">lenght</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">back</span> <span class="p">(</span><span class="n">length</span><span class="p">):</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">back</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">circle</span> <span class="p">(</span><span class="n">radius</span><span class="p">):</span>                    <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">circle</span> <span class="p">(</span><span class="n">radius</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">left</span> <span class="p">(</span><span class="n">angle</span><span class="p">):</span>                       <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">left</span> <span class="p">(</span><span class="n">angle</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">right</span> <span class="p">(</span><span class="n">angle</span><span class="p">):</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">right</span> <span class="p">(</span><span class="n">angle</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">begin_fill</span> <span class="p">():</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">begin_fill</span> <span class="p">()</span>
@@ -1238,7 +1353,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.154 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.156 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

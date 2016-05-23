@@ -1,14 +1,20 @@
 	(function () {
 		var Turtle = __init__ (__world__.turtle).Turtle;
+		var _allTurtles = __init__ (__world__.turtle)._allTurtles;
+		var _debug = __init__ (__world__.turtle)._debug;
+		var _defaultElement = __init__ (__world__.turtle)._defaultElement;
 		var _defaultTurtle = __init__ (__world__.turtle)._defaultTurtle;
 		var _height = __init__ (__world__.turtle)._height;
 		var _ns = __init__ (__world__.turtle)._ns;
 		var _offset = __init__ (__world__.turtle)._offset;
+		var _rightSize = __init__ (__world__.turtle)._rightSize;
 		var _svg = __init__ (__world__.turtle)._svg;
 		var _width = __init__ (__world__.turtle)._width;
 		var abs = __init__ (__world__.turtle).abs;
 		var back = __init__ (__world__.turtle).back;
 		var begin_fill = __init__ (__world__.turtle).begin_fill;
+		var bgcolor = __init__ (__world__.turtle).bgcolor;
+		var circle = __init__ (__world__.turtle).circle;
 		var clear = __init__ (__world__.turtle).clear;
 		var color = __init__ (__world__.turtle).color;
 		var distance = __init__ (__world__.turtle).distance;
@@ -24,10 +30,12 @@
 		var position = __init__ (__world__.turtle).position;
 		var reset = __init__ (__world__.turtle).reset;
 		var right = __init__ (__world__.turtle).right;
-		var rightSize = __init__ (__world__.turtle).rightSize;
+		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
 		var up = __init__ (__world__.turtle).up;
-		goto (-(300), -(75));
+		up ();
+		goto (-(300), -(25));
 		var startPos = pos ();
+		down ();
 		color ('red', 'yellow');
 		begin_fill ();
 		while (true) {

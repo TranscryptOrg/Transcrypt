@@ -1,8 +1,12 @@
+# Free after the example from the Python 3.5 manual
+
 from turtle import *
 
-goto (-300, -75)
+up ()
+goto (-300, -25)
 startPos = pos ()
 
+down ()
 color ('red', 'yellow')
 begin_fill ()
 while True:

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-16 19:05:04
+// Transcrypt'ed from Python, 2016-05-23 16:03:27
 function star () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function star () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.154';
+							self.transpiler_version = '3.5.155';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1162,48 +1162,86 @@ function star () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					var _debug = false;
 					var abs = function (vec2D) {
 						return Math.sqrt (vec2D [0] * vec2D [0] + vec2D [1] * vec2D [1]);
 					};
 					var _ns = 'http://www.w3.org/2000/svg';
 					var _svg = document.createElementNS (_ns, 'svg');
-					document.body.appendChild (_svg);
-					var _width = 0;
-					var _height = 0;
-					var _offset = 0;
-					var rightSize = function (self) {
-						_width = window.innerWidth;
-						_height = window.innerHeight;
+					var _defaultElement = document.body;
+					_defaultElement.appendChild (_svg);
+					var _width = null;
+					var _height = null;
+					var _offset = null;
+					var _rightSize = function (self) {
+						_width = _defaultElement.offsetWidth;
+						_height = _defaultElement.offsetHeight;
 						_offset = list ([Math.floor (_width / 2), Math.floor (_height / 2)]);
 						_svg.setAttribute ('width', _width);
 						_svg.setAttribute ('height', _height);
 					};
-					window.onresize = rightSize;
-					rightSize ();
+					window.onresize = _rightSize;
+					_rightSize ();
+					var bgcolor = function (color) {
+						var _bgcolor = color;
+						_defaultElement.style.backgroundColor = _bgcolor;
+					};
+					bgcolor ('white');
+					var setDefaultElement = function (element) {
+						_defaultElement.removeChild (_svg);
+						_defaultElement = element;
+						element.appendChild (_svg);
+						_rightSize ();
+						bgcolor ('white');
+					};
+					var _allTurtles = list ([]);
 					var Turtle = __class__ ('Turtle', [object], {
 						get __init__ () {return __get__ (this, function (self) {
+							_allTurtles.append (self);
+							self._paths = list ([]);
 							self.reset ();
 						});},
 						get reset () {return __get__ (this, function (self) {
-							self.clear ();
-							self.pensize (1);
-							self.color ('black');
 							self._heading = Math.PI / 2;
-							self.home ();
+							self.pensize (1);
+							self.color ('black', 'black');
 							self.down ();
+							self._track = list ([]);
+							self.home ();
+							self.clear ();
 						});},
 						get clear () {return __get__ (this, function (self) {
-							self._path = list ([]);
+							var __iter0__ = self._paths;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var path = __iter0__ [__index0__];
+								_svg.removeChild (path);
+							}
+							self._paths = list ([]);
+							self._track = list ([]);
+							self._moveto (self._position);
+						});},
+						get _flush () {return __get__ (this, function (self) {
+							if (_debug) {
+								print ('Flush:', self._track);
+							}
+							if (len (self._track) > 1) {
+								var path = document.createElementNS (_ns, 'path');
+								path.setAttribute ('d', ' '.join (self._track));
+								path.setAttribute ('stroke', (self._pencolor != null ? self._pencolor : 'none'));
+								path.setAttribute ('stroke-width', self._pensize);
+								path.setAttribute ('fill', (self._fill && self._fillcolor != null ? self._fillcolor : 'none'));
+								path.setAttribute ('fill-rule', 'evenodd');
+								_svg.appendChild (path);
+								self._paths.append (path);
+								self._track = list ([]);
+								self._moveto (self._position);
+							}
 						});},
 						get done () {return __get__ (this, function (self) {
-							var path = document.createElementNS (_ns, 'path');
-							path.setAttribute ('stroke', (self._pencolor == null ? 'none' : self._pencolor));
-							path.setAttribute ('fill', (self._fillcolor == null ? 'none' : self._fillcolor));
-							path.setAttribute ('fill-rule', 'evenodd');
-							path.setAttribute ('d', self._path);
-							_svg.appendChild (path);
+							self._flush ();
 						});},
 						get pensize () {return __get__ (this, function (self, width) {
+							self._flush ();
 							if (width == null) {
 								return self._pensize;
 							}
@@ -1215,11 +1253,11 @@ function star () {
 							if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
 								var fillcolor = null;
 							};
+							self._flush ();
 							self._pencolor = pencolor;
-							self._fillcolor = fillcolor;
-						});},
-						get home () {return __get__ (this, function (self) {
-							self.goto (0, 0);
+							if (fillcolor != null) {
+								self._fillcolor = fillcolor;
+							}
 						});},
 						get goto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
@@ -1231,7 +1269,21 @@ function star () {
 							else {
 								self._position = list ([x, y]);
 							}
-							self._path.append ('{} {} {}'.format ('M', self._position [0] + _offset [0], self._position [1] + _offset [1]));
+							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
+						});},
+						get _moveto () {return __get__ (this, function (self, x, y) {
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = null;
+							};
+							var wasdown = self.isdown ();
+							self.up ();
+							self.goto (x, y);
+							if (wasdown) {
+								self.down ();
+							}
+						});},
+						get home () {return __get__ (this, function (self) {
+							self._moveto (0, 0);
 						});},
 						get position () {return __get__ (this, function (self) {
 							return self._position.__getslice__ (0, null, 1);
@@ -1259,14 +1311,26 @@ function star () {
 						get down () {return __get__ (this, function (self) {
 							self._down = true;
 						});},
-						get forward () {return __get__ (this, function (self, length) {
+						get isdown () {return __get__ (this, function (self) {
+							return self._down;
+						});},
+						get _predict () {return __get__ (this, function (self, length) {
 							var delta = list ([Math.sin (self._heading), Math.cos (self._heading)]);
-							self._position [0] += length * delta [0];
-							self._position [1] += length * delta [1];
-							self._path.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
+							return list ([self._position [0] + length * delta [0], self._position [1] + length * delta [1]]);
+						});},
+						get forward () {return __get__ (this, function (self, length) {
+							self._position = self._predict (length);
+							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
 						});},
 						get back () {return __get__ (this, function (self, length) {
 							self.forward (-(length));
+						});},
+						get circle () {return __get__ (this, function (self, radius) {
+							self.left (90);
+							var opposite = self._predict (2 * (radius + 1) + 1);
+							self.right (90);
+							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, opposite [0] + _offset [0], opposite [1] + _offset [1]));
+							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, self._position [0] + _offset [0], self._position [1] + _offset [1]));
 						});},
 						get left () {return __get__ (this, function (self, angle) {
 							self._heading = (self._heading + (Math.PI * angle) / 180) % (2 * Math.PI);
@@ -1275,18 +1339,30 @@ function star () {
 							self.left (-(angle));
 						});},
 						get begin_fill () {return __get__ (this, function (self) {
-							// pass;
+							self._flush ();
+							self._fill = true;
 						});},
 						get end_fill () {return __get__ (this, function (self) {
-							// pass;
+							self._flush ();
+							self._fill = false;
 						});}
 					});
 					var _defaultTurtle = Turtle ();
 					var reset = function () {
-						_defaultTurtle.reset ();
+						bgcolor ('white');
+						var __iter0__ = _allTurtles;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var turtle = __iter0__ [__index0__];
+							turtle.reset ();
+							turtle.done ();
+						}
 					};
 					var clear = function () {
-						_defaultTurtle.clear ();
+						var __iter0__ = _allTurtles;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var turtle = __iter0__ [__index0__];
+							turtle.clear ();
+						}
 					};
 					var done = function () {
 						_defaultTurtle.done ();
@@ -1331,7 +1407,10 @@ function star () {
 						_defaultTurtle.forward (length);
 					};
 					var back = function (length) {
-						_defaultTurtle.back (lenght);
+						_defaultTurtle.back (length);
+					};
+					var circle = function (radius) {
+						_defaultTurtle.circle (radius);
 					};
 					var left = function (angle) {
 						_defaultTurtle.left (angle);
@@ -1347,15 +1426,21 @@ function star () {
 					};
 					__pragma__ ('<all>')
 						__all__.Turtle = Turtle;
+						__all__._allTurtles = _allTurtles;
+						__all__._debug = _debug;
+						__all__._defaultElement = _defaultElement;
 						__all__._defaultTurtle = _defaultTurtle;
 						__all__._height = _height;
 						__all__._ns = _ns;
 						__all__._offset = _offset;
+						__all__._rightSize = _rightSize;
 						__all__._svg = _svg;
 						__all__._width = _width;
 						__all__.abs = abs;
 						__all__.back = back;
 						__all__.begin_fill = begin_fill;
+						__all__.bgcolor = bgcolor;
+						__all__.circle = circle;
 						__all__.clear = clear;
 						__all__.color = color;
 						__all__.distance = distance;
@@ -1371,7 +1456,7 @@ function star () {
 						__all__.position = position;
 						__all__.reset = reset;
 						__all__.right = right;
-						__all__.rightSize = rightSize;
+						__all__.setDefaultElement = setDefaultElement;
 						__all__.up = up;
 					__pragma__ ('</all>')
 				}
@@ -1380,15 +1465,21 @@ function star () {
 	);
 	(function () {
 		var Turtle = __init__ (__world__.turtle).Turtle;
+		var _allTurtles = __init__ (__world__.turtle)._allTurtles;
+		var _debug = __init__ (__world__.turtle)._debug;
+		var _defaultElement = __init__ (__world__.turtle)._defaultElement;
 		var _defaultTurtle = __init__ (__world__.turtle)._defaultTurtle;
 		var _height = __init__ (__world__.turtle)._height;
 		var _ns = __init__ (__world__.turtle)._ns;
 		var _offset = __init__ (__world__.turtle)._offset;
+		var _rightSize = __init__ (__world__.turtle)._rightSize;
 		var _svg = __init__ (__world__.turtle)._svg;
 		var _width = __init__ (__world__.turtle)._width;
 		var abs = __init__ (__world__.turtle).abs;
 		var back = __init__ (__world__.turtle).back;
 		var begin_fill = __init__ (__world__.turtle).begin_fill;
+		var bgcolor = __init__ (__world__.turtle).bgcolor;
+		var circle = __init__ (__world__.turtle).circle;
 		var clear = __init__ (__world__.turtle).clear;
 		var color = __init__ (__world__.turtle).color;
 		var distance = __init__ (__world__.turtle).distance;
@@ -1404,10 +1495,12 @@ function star () {
 		var position = __init__ (__world__.turtle).position;
 		var reset = __init__ (__world__.turtle).reset;
 		var right = __init__ (__world__.turtle).right;
-		var rightSize = __init__ (__world__.turtle).rightSize;
+		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
 		var up = __init__ (__world__.turtle).up;
-		goto (-(300), -(75));
+		up ();
+		goto (-(300), -(25));
 		var startPos = pos ();
+		down ();
 		color ('red', 'yellow');
 		begin_fill ();
 		while (true) {

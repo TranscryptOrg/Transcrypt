@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/demos/turtle_demos/__javascript__/mandala.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/demos/turtle_demos/mandala.py"
+	],
+	"sourcesContent": [
+		"# Inspired by \"Georgia's Spirals\"\n\nfrom turtle import *\n\nbgcolor ('black')\n\nfor a_color, a_pensize, start_radius, stop_radius, radius_step in (\n\t('green', 1, 82, 40, -6),\t\t\n\t('red', 1, 84, 40, -6),\t\n\t('white', 2, 98, 50, -5),\n\t('yellow', 2, 70, 50, -5),\n\t('blue', 2, 97, 70, -5),\n\t('orange', 2, 87, 40, -17),\n\t('pink', 3, 102, 60, -17),\t\n):\n\tpensize (a_pensize)\n\tcolor (a_color)\n\tfor angle_index in range (10):\n\t\tfor radius in range (start_radius, stop_radius, radius_step):\n\t\t\tcircle (radius)\n\t\tright (36)\n\t\t\ndone ()\n"
+	],
+	"mappings": "AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AAAA;AAOA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AACA;AAAA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

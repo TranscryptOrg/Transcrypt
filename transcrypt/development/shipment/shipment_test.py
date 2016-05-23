@@ -28,6 +28,7 @@ for fcallSwitch in ('', '-f '):
 	test ('demos/pong', 'pong', False, fcallSwitch)
 	test ('demos/turtle_demos', 'star', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
+	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
 	
 	if fcallSwitch:
 		print ('Shipment test completed')
