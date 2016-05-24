@@ -13,6 +13,7 @@
 		var indices_and_slices = {};
 		var lambda_functions = {};
 		var list_comprehensions = {};
+		var math_module = {};
 		var modules = {};
 		var nonlocals = {};
 		var operator_overloading = {};
@@ -37,6 +38,7 @@
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
 		__nest__ (modules, '', __init__ (__world__.modules));
+		__nest__ (math_module, '', __init__ (__world__.math_module));
 		__nest__ (nonlocals, '', __init__ (__world__.nonlocals));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
@@ -59,6 +61,7 @@
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
 		autoTester.run (modules, 'modules');
+		autoTester.run (math_module, 'math_module');
 		autoTester.run (nonlocals, 'nonlocals');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
@@ -81,6 +84,7 @@
 			'indices_and_slices' +
 			'lambda_functions' +
 			'list_comprehensions' +
+			'math_module' +
 			'modules' +
 			'nonlocals' +
 			'operator_overloading' +

@@ -33,13 +33,13 @@
 		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
 		var up = __init__ (__world__.turtle).up;
 		up ();
-		goto (-(300), -(25));
+		goto (-(250), -(21));
 		var startPos = pos ();
 		down ();
 		color ('red', 'yellow');
 		begin_fill ();
 		while (true) {
-			forward (600);
+			forward (500);
 			right (170);
 			if (distance (startPos) < 1) {
 				break;

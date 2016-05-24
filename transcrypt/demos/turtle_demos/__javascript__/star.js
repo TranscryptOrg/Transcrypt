@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-23 16:03:27
+// Transcrypt'ed from Python, 2016-05-24 16:33:56
 function star () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function star () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.155';
+							self.transpiler_version = '3.5.156';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1498,13 +1498,13 @@ function star () {
 		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
 		var up = __init__ (__world__.turtle).up;
 		up ();
-		goto (-(300), -(25));
+		goto (-(250), -(21));
 		var startPos = pos ();
 		down ();
 		color ('red', 'yellow');
 		begin_fill ();
 		while (true) {
-			forward (600);
+			forward (500);
 			right (170);
 			if (distance (startPos) < 1) {
 				break;

@@ -3,14 +3,14 @@
 from turtle import *
 
 up ()
-goto (-300, -25)
+goto (-250, -21)
 startPos = pos ()
 
 down ()
 color ('red', 'yellow')
 begin_fill ()
 while True:
-	forward (600)
+	forward (500)
 	right (170)
 	if distance (startPos) < 1:
 		break

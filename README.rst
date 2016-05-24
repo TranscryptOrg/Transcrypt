@@ -33,6 +33,7 @@ Second release:
 What's new
 ==========
 
+- Python math module added
 - Live on-line SVG based turtle graphics added to website + demo's
 - Turtle graphics improved and expanded
 - SVG based turtle graphics module added
