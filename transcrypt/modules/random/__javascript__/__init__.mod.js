@@ -55,6 +55,7 @@
 					var random = function () {
 						return _random_integer () / _bitmask3;
 					};
+					seed ();
 					__pragma__ ('<all>')
 						__all__._array = _array;
 						__all__._bitmask1 = _bitmask1;

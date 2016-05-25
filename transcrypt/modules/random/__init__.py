@@ -45,4 +45,5 @@ def choice (seq):
 
 def random ():
 	return _random_integer () / _bitmask3
-
+	
+seed ()

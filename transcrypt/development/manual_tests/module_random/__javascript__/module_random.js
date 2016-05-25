@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-25 13:59:03
+// Transcrypt'ed from Python, 2016-05-25 15:14:05
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function module_random () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.158';
+							self.transpiler_version = '3.5.159';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1213,6 +1213,7 @@ function module_random () {
 					var random = function () {
 						return _random_integer () / _bitmask3;
 					};
+					seed ();
 					__pragma__ ('<all>')
 						__all__._array = _array;
 						__all__._bitmask1 = _bitmask1;

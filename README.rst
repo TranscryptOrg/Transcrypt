@@ -33,6 +33,8 @@ Second release:
 What's new
 ==========
 
+- Bug in random module fixed
+- Bug in Linux compilation path bug fixed
 - Python random module added, only most important functionality: *seed, randint, choice, random*
 - Python math module added, almost all functionality
 - Live on-line SVG based turtle graphics added to website + demo's
