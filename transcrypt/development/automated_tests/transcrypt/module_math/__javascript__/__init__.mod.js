@@ -1,6 +1,6 @@
 	__nest__ (
 		__all__,
-		'math_module', {
+		'module_math', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {

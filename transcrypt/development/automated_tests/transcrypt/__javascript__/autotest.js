@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-24 16:33:25
+// Transcrypt'ed from Python, 2016-05-25 11:40:01
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.156';
+							self.transpiler_version = '3.5.157';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -2221,6 +2221,7 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					print ('Transcrypt math');
 					var pi = Math.PI;
 					var e = Math.E;
 					var exp = Math.exp;
@@ -2291,7 +2292,7 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
-		'math_module', {
+		'module_math', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
@@ -3248,7 +3249,7 @@ function autotest () {
 		var indices_and_slices = {};
 		var lambda_functions = {};
 		var list_comprehensions = {};
-		var math_module = {};
+		var module_math = {};
 		var modules = {};
 		var nonlocals = {};
 		var operator_overloading = {};
@@ -3272,8 +3273,8 @@ function autotest () {
 		__nest__ (indices_and_slices, '', __init__ (__world__.indices_and_slices));
 		__nest__ (lambda_functions, '', __init__ (__world__.lambda_functions));
 		__nest__ (list_comprehensions, '', __init__ (__world__.list_comprehensions));
+		__nest__ (module_math, '', __init__ (__world__.module_math));
 		__nest__ (modules, '', __init__ (__world__.modules));
-		__nest__ (math_module, '', __init__ (__world__.math_module));
 		__nest__ (nonlocals, '', __init__ (__world__.nonlocals));
 		__nest__ (operator_overloading, '', __init__ (__world__.operator_overloading));
 		__nest__ (properties, '', __init__ (__world__.properties));
@@ -3295,8 +3296,8 @@ function autotest () {
 		autoTester.run (indices_and_slices, 'indices_and_slices');
 		autoTester.run (lambda_functions, 'lambda_functions');
 		autoTester.run (list_comprehensions, 'list_comprehensions');
+		autoTester.run (module_math, 'module_math');
 		autoTester.run (modules, 'modules');
-		autoTester.run (math_module, 'math_module');
 		autoTester.run (nonlocals, 'nonlocals');
 		autoTester.run (operator_overloading, 'operator_overloading');
 		autoTester.run (properties, 'properties');
@@ -3319,7 +3320,7 @@ function autotest () {
 			'indices_and_slices' +
 			'lambda_functions' +
 			'list_comprehensions' +
-			'math_module' +
+			'module_math' +
 			'modules' +
 			'nonlocals' +
 			'operator_overloading' +

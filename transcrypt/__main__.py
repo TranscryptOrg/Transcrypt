@@ -53,6 +53,9 @@ def main ():
 			
 	if not utils.commandArgs.source:
 		return
+		
+	if utils.commandArgs.glof:
+		sys.path.append (sys.path.pop (1))
 			
 	if utils.commandArgs.run:
 		with open (utils.commandArgs.source) as sourceFile:

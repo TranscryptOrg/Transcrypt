@@ -15,6 +15,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-c', '--check', help = "perform static check as part of compilation", action = 'store_true')
 		self.argParser.add_argument ('-d', '--dmap', help = "dump human readable source map", action = 'store_true')
 		self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
+		self.argParser.add_argument ('-g', '--glof', help = "search for globally installed modules first", action = 'store_true')
 		self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferable use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
 		self.argParser.add_argument ('-j', '--jskeys', help = "interpret {key: 'value'} as {'key': 'value'} and forbid {key (): 'value'}, as JavaScript does. DISADVISED, since it's less flexible than the Python interpretation. Use {'key': 'value'} explicitly if you want literal keys", action = 'store_true')		
 		self.argParser.add_argument ('-k', '--kwargs', help = "enable keyword arguments by default. In general this is DISADVISED, use __pragma__ ('kwargs') and __pragma__('nokwargs') locally instead to prevent bloated code", action = 'store_true')

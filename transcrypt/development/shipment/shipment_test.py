@@ -22,6 +22,7 @@ def test (relPath, fileNamePrefix, run = False, switches = ''):
 for fcallSwitch in ('', '-f '):
 	test ('development/automated_tests/hello', 'autotest', True, fcallSwitch)
 	test ('development/automated_tests/transcrypt', 'autotest', True, fcallSwitch)
+	test ('development/manual_tests/module_random', 'module_random', False, fcallSwitch)
 	test ('demos/hello', 'hello', False, fcallSwitch)
 	test ('demos/jquery_demo', 'jquery_demo', False, fcallSwitch)
 	test ('demos/d3js_demo', 'd3js_demo', False, fcallSwitch)

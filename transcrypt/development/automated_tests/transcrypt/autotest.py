@@ -14,8 +14,8 @@ import general_functions
 import indices_and_slices
 import lambda_functions
 import list_comprehensions
+import module_math
 import modules
-import math_module
 import nonlocals
 import operator_overloading
 import properties
@@ -39,8 +39,8 @@ autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
+autoTester.run (module_math, 'module_math')
 autoTester.run (modules, 'modules')
-autoTester.run (math_module, 'math_module')
 autoTester.run (nonlocals, 'nonlocals')
 autoTester.run (operator_overloading, 'operator_overloading')
 autoTester.run (properties, 'properties')

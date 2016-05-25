@@ -33,7 +33,8 @@ Second release:
 What's new
 ==========
 
-- Python math module added
+- Python random module added, only most important functionality: *seed, randint, choice, random*
+- Python math module added, almost all functionality
 - Live on-line SVG based turtle graphics added to website + demo's
 - Turtle graphics improved and expanded
 - SVG based turtle graphics module added

@@ -1375,11 +1375,13 @@ class Generator (ast.NodeVisitor):
 				self.emit (');}}')
 				
 	def visit_Global (self, node):
-		raise utils.Error (
-			moduleName = self.module.metadata.name,
-			lineNr = self.lineNr,
-			message = 'Keyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
-		)
+		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
+
+		# raise utils.Error (
+			# moduleName = self.module.metadata.name,
+			# lineNr = self.lineNr,
+			# message = 'Keyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
+		# )
 		
 	def visit_If (self, node):
 		self.adaptLineNrString (node)
