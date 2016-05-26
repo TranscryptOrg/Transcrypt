@@ -10,6 +10,8 @@ fieldHeight = 650
 
 enter, esc, space = 13, 27, 32
 
+window.onkeydown = lambda event: event.keyCode != space	# Prevent scrolldown on spacebar press
+
 class Attribute:	# Attribute in the gaming sense of the word, rather than of an object
 	def __init__ (self, game):
 		self.game = game					# Attribute knows game it's part of
@@ -82,16 +84,17 @@ class Paddle (Sprite):
 		
 	def predict (self): # Let paddle react on keys
 		self.vY = 0
-	
+		
 		if self.index:							# Right player
-			if ord ('K') in self.game.keySet:		# Letter k pressed
+			if self.game.keyCode == ord ('K'):	# Letter K pressed
+				print (111)
 				self.vY = self.speed
-			elif ord ('M') in self.game.keySet:
+			elif self.game.keyCode == ord ('M'):
 				self.vY = -self.speed
 		else:			  						# Left player
-			if ord ('A') in self.game.keySet:
+			if self.game.keyCode == ord ('A'):
 				self.vY = self.speed
-			elif ord ('Z') in self.game.keySet:
+			elif self.game.keyCode == ord ('Z'):
 				self.vY = -self.speed
 				
 		Sprite.predict (self)					# Do not yet commit, paddle may bounce with walls
@@ -201,7 +204,7 @@ class Game:
 	def __init__ (self):
 		self.serviceIndex = 1 if Math.random () > 0.5 else 0	# Index of player that has initial service
 		self.pause = True							# Start game in paused state
-		self.keySet = set ()
+		self.keyCode = None
 		
 		self.canvas = __new__ (fabric.Canvas ('canvas', {'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}))
 		self.canvas.onWindowResize = self.resize	# Install draw callback, will be called asynch
@@ -219,7 +222,26 @@ class Game:
 		window.addEventListener ('keydown', self.keydown)
 		window.addEventListener ('keyup', self.keyup)
 		
+		for key in ('A', 'Z', 'K', 'M', 'space', 'enter'):
+			element = document.getElementById (key)
+			element.addEventListener ('mousedown', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
+			element.addEventListener ('touchstart', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
+			element.addEventListener ('mouseup', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
+			element.addEventListener ('touchend', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
+			element.style.cursor = 'pointer'
+			
 		self.time = + __new__ (Date)
+		
+	def mouseOrTouch (self, key, down):
+		if down:
+			if key == 'space':
+				self.keyCode = space
+			elif key == 'enter':
+				self.keyCode = enter
+			else:
+				self.keyCode = ord (key)
+		else:
+			self.keyCode = None
  
 	def update (self):							# Note that update and draw are not synchronized
 		oldTime = self.time
@@ -227,9 +249,9 @@ class Game:
 		self.deltaT = (self.time - oldTime) / 1000.
 		
 		if self.pause:							# If in paused state
-			if space in self.keySet:			#	If spacebar hit
+			if self.keyCode == space:			#	If spacebar hit
 				self.pause = False				#		  Start playing
-			elif enter in self.keySet:		#	Else if enter hit
+			elif self.keyCode == enter:			#	Else if enter hit
 				self.scoreboard.reset ()		#		  Reset score
 		else:									# Else, so if in active state
 			for attribute in self.attributes:	#	Compute predicted values
@@ -272,9 +294,9 @@ class Game:
 		return self.scaleY (orthoHeight - fieldHeight // 2 - y)
 				
 	def keydown (self, event):
-		self.keySet.add (event.keyCode)
+		self.keyCode = event.keyCode
 		
 	def keyup (self, event):
-		self.keySet.remove (event.keyCode)
+		self.keyCode = None	
 		
 game = Game ()	# Create and run game

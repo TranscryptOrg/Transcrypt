@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-25 15:14:25
+// Transcrypt'ed from Python, 2016-05-26 19:19:05
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.159';
+							self.transpiler_version = '3.5.160';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -16145,6 +16145,8 @@ function pong () {
 		var enter = __left0__ [0];
 		var esc = __left0__ [1];
 		var space = __left0__ [2];
+		window.onkeydown = (function __lambda__ (event) {
+			return event.keyCode != space;});
 		var Attribute = __class__ ('Attribute', [object], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				self.game = game;
@@ -16231,21 +16233,22 @@ function pong () {
 			get predict () {return __get__ (this, function (self) {
 				self.vY = 0;
 				if (self.index) {
-					if (__in__ (ord ('K'), self.game.keySet)) {
+					if (self.game.keyCode == ord ('K')) {
+						print (111);
 						self.vY = self.speed;
 					}
 					else {
-						if (__in__ (ord ('M'), self.game.keySet)) {
+						if (self.game.keyCode == ord ('M')) {
 							self.vY = -(self.speed);
 						}
 					}
 				}
 				else {
-					if (__in__ (ord ('A'), self.game.keySet)) {
+					if (self.game.keyCode == ord ('A')) {
 						self.vY = self.speed;
 					}
 					else {
-						if (__in__ (ord ('Z'), self.game.keySet)) {
+						if (self.game.keyCode == ord ('Z')) {
 							self.vY = -(self.speed);
 						}
 					}
@@ -16359,7 +16362,7 @@ function pong () {
 			get __init__ () {return __get__ (this, function (self) {
 				self.serviceIndex = (Math.random () > 0.5 ? 1 : 0);
 				self.pause = true;
-				self.keySet = set ();
+				self.keyCode = null;
 				self.canvas = new fabric.Canvas ('canvas', dict ({'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}));
 				self.canvas.onWindowResize = self.resize;
 				self.canvas.onWindowDraw = self.draw;
@@ -16379,18 +16382,54 @@ function pong () {
 				window.setInterval (self.draw, 20);
 				window.addEventListener ('keydown', self.keydown);
 				window.addEventListener ('keyup', self.keyup);
+				var __iter0__ = tuple (['A', 'Z', 'K', 'M', 'space', 'enter']);
+				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+					var key = __iter0__ [__index0__];
+					var element = document.getElementById (key);
+					element.addEventListener ('mousedown', (function __lambda__ (aKey) {
+						return (function __lambda__ () {
+							return self.mouseOrTouch (aKey, true);});}) (key));
+					element.addEventListener ('touchstart', (function __lambda__ (aKey) {
+						return (function __lambda__ () {
+							return self.mouseOrTouch (aKey, true);});}) (key));
+					element.addEventListener ('mouseup', (function __lambda__ (aKey) {
+						return (function __lambda__ () {
+							return self.mouseOrTouch (aKey, false);});}) (key));
+					element.addEventListener ('touchend', (function __lambda__ (aKey) {
+						return (function __lambda__ () {
+							return self.mouseOrTouch (aKey, false);});}) (key));
+					element.style.cursor = 'pointer';
+				}
 				self.time = +(new Date);
+			});},
+			get mouseOrTouch () {return __get__ (this, function (self, key, down) {
+				if (down) {
+					if (key == 'space') {
+						self.keyCode = space;
+					}
+					else {
+						if (key == 'enter') {
+							self.keyCode = enter;
+						}
+						else {
+							self.keyCode = ord (key);
+						}
+					}
+				}
+				else {
+					self.keyCode = null;
+				}
 			});},
 			get update () {return __get__ (this, function (self) {
 				var oldTime = self.time;
 				self.time = +(new Date);
 				self.deltaT = (self.time - oldTime) / 1000.0;
 				if (self.pause) {
-					if (__in__ (space, self.keySet)) {
+					if (self.keyCode == space) {
 						self.pause = false;
 					}
 					else {
-						if (__in__ (enter, self.keySet)) {
+						if (self.keyCode == enter) {
 							self.scoreboard.reset ();
 						}
 					}
@@ -16448,10 +16487,10 @@ function pong () {
 				return self.scaleY ((orthoHeight - Math.floor (fieldHeight / 2)) - y);
 			});},
 			get keydown () {return __get__ (this, function (self, event) {
-				self.keySet.add (event.keyCode);
+				self.keyCode = event.keyCode;
 			});},
 			get keyup () {return __get__ (this, function (self, event) {
-				self.keySet.remove (event.keyCode);
+				self.keyCode = null;
 			});}
 		});
 		var game = Game ();
