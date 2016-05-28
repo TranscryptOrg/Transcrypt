@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.160 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.161 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.160',
+        VERSION:     '3.5.161',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.160 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.161 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.160 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.161 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -439,6 +439,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 
 <span class="n">enter</span><span class="p">,</span> <span class="n">esc</span><span class="p">,</span> <span class="n">space</span> <span class="o">=</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">32</span>
 
+<span class="n">window</span><span class="o">.</span><span class="n">onkeydown</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">!=</span> <span class="n">space</span> <span class="c"># Prevent scrolldown on spacebar press</span>
+
 <span class="k">class</span> <span class="nc">Attribute</span><span class="p">:</span>    <span class="c"># Attribute in the gaming sense of the word, rather than of an object</span>
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>                    <span class="c"># Attribute knows game it&#39;s part of</span>
@@ -511,16 +513,17 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         
     <span class="k">def</span> <span class="nf">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Let paddle react on keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="mi">0</span>
-    
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>                          <span class="c"># Right player</span>
-            <span class="k">if</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;K&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>       <span class="c"># Letter k pressed</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;K&#39;</span><span class="p">):</span>  <span class="c"># Letter K pressed</span>
+                <span class="k">print</span> <span class="p">(</span><span class="mi">111</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
-            <span class="k">elif</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
         <span class="k">else</span><span class="p">:</span>                                   <span class="c"># Left player</span>
-            <span class="k">if</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
-            <span class="k">elif</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;Z&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;Z&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
                 
         <span class="n">Sprite</span><span class="o">.</span><span class="n">predict</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>                   <span class="c"># Do not yet commit, paddle may bounce with walls</span>
@@ -630,7 +633,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
     <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">serviceIndex</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">Math</span><span class="o">.</span><span class="n">random</span> <span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span>    <span class="c"># Index of player that has initial service</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">True</span>                           <span class="c"># Start game in paused state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span> <span class="o">=</span> <span class="nb">set</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="bp">None</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Canvas</span> <span class="p">(</span><span class="s">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;backgroundColor&#39;</span><span class="p">:</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;originX&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;originY&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">}))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowResize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>    <span class="c"># Install draw callback, will be called asynch</span>
@@ -648,7 +651,26 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keydown&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keydown</span><span class="p">)</span>
         <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keyup&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyup</span><span class="p">)</span>
         
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;Z&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="s">&#39;space&#39;</span><span class="p">,</span> <span class="s">&#39;enter&#39;</span><span class="p">):</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mouseup&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchend&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="s">&#39;pointer&#39;</span>
+            
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="o">+</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Date</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">mouseOrTouch</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">down</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">down</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;space&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="n">space</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;enter&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="n">enter</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="nb">ord</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="bp">None</span>
  
     <span class="k">def</span> <span class="nf">update</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>                          <span class="c"># Note that update and draw are not synchronized</span>
         <span class="n">oldTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
@@ -656,9 +678,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">deltaT</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">-</span> <span class="n">oldTime</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pause</span><span class="p">:</span>                          <span class="c"># If in paused state</span>
-            <span class="k">if</span> <span class="n">space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>            <span class="c">#   If spacebar hit</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="n">space</span><span class="p">:</span>           <span class="c">#   If spacebar hit</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">False</span>              <span class="c">#         Start playing</span>
-            <span class="k">elif</span> <span class="n">enter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="p">:</span>      <span class="c">#   Else if enter hit</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="n">enter</span><span class="p">:</span>         <span class="c">#   Else if enter hit</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">scoreboard</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>        <span class="c">#         Reset score</span>
         <span class="k">else</span><span class="p">:</span>                                   <span class="c"># Else, so if in active state</span>
             <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>   <span class="c">#   Compute predicted values</span>
@@ -701,10 +723,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaleY</span> <span class="p">(</span><span class="n">orthoHeight</span> <span class="o">-</span> <span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
                 
     <span class="k">def</span> <span class="nf">keydown</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">keyCode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">keyCode</span>
         
     <span class="k">def</span> <span class="nf">keyup</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keySet</span><span class="o">.</span><span class="n">remove</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">keyCode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="bp">None</span> 
         
 <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span> <span class="p">()</span>  <span class="c"># Create and run game</span>
 </pre></div>
@@ -722,6 +744,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         var enter = __left0__ [0];
         var esc = __left0__ [1];
         var space = __left0__ [2];
+        window.onkeydown = (function __lambda__ (event) {
+            return event.keyCode != space;});
         var Attribute = __class__ (&#39;Attribute&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, game) {
                 self.game = game;
@@ -808,21 +832,22 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get predict () {return __get__ (this, function (self) {
                 self.vY = 0;
                 if (self.index) {
-                    if (__in__ (ord (&#39;K&#39;), self.game.keySet)) {
+                    if (self.game.keyCode == ord (&#39;K&#39;)) {
+                        print (111);
                         self.vY = self.speed;
                     }
                     else {
-                        if (__in__ (ord (&#39;M&#39;), self.game.keySet)) {
+                        if (self.game.keyCode == ord (&#39;M&#39;)) {
                             self.vY = -(self.speed);
                         }
                     }
                 }
                 else {
-                    if (__in__ (ord (&#39;A&#39;), self.game.keySet)) {
+                    if (self.game.keyCode == ord (&#39;A&#39;)) {
                         self.vY = self.speed;
                     }
                     else {
-                        if (__in__ (ord (&#39;Z&#39;), self.game.keySet)) {
+                        if (self.game.keyCode == ord (&#39;Z&#39;)) {
                             self.vY = -(self.speed);
                         }
                     }
@@ -936,7 +961,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get __init__ () {return __get__ (this, function (self) {
                 self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
                 self.pause = true;
-                self.keySet = set ();
+                self.keyCode = null;
                 self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ({&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;}));
                 self.canvas.onWindowResize = self.resize;
                 self.canvas.onWindowDraw = self.draw;
@@ -956,18 +981,54 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.setInterval (self.draw, 20);
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
+                var __iter0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var key = __iter0__ [__index0__];
+                    var element = document.getElementById (key);
+                    element.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, true);});}) (key));
+                    element.addEventListener (&#39;touchstart&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, true);});}) (key));
+                    element.addEventListener (&#39;mouseup&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, false);});}) (key));
+                    element.addEventListener (&#39;touchend&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, false);});}) (key));
+                    element.style.cursor = &#39;pointer&#39;;
+                }
                 self.time = +(new Date);
+            });},
+            get mouseOrTouch () {return __get__ (this, function (self, key, down) {
+                if (down) {
+                    if (key == &#39;space&#39;) {
+                        self.keyCode = space;
+                    }
+                    else {
+                        if (key == &#39;enter&#39;) {
+                            self.keyCode = enter;
+                        }
+                        else {
+                            self.keyCode = ord (key);
+                        }
+                    }
+                }
+                else {
+                    self.keyCode = null;
+                }
             });},
             get update () {return __get__ (this, function (self) {
                 var oldTime = self.time;
                 self.time = +(new Date);
                 self.deltaT = (self.time - oldTime) / 1000.0;
                 if (self.pause) {
-                    if (__in__ (space, self.keySet)) {
+                    if (self.keyCode == space) {
                         self.pause = false;
                     }
                     else {
-                        if (__in__ (enter, self.keySet)) {
+                        if (self.keyCode == enter) {
                             self.scoreboard.reset ();
                         }
                     }
@@ -1025,10 +1086,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 return self.scaleY ((orthoHeight - Math.floor (fieldHeight / 2)) - y);
             });},
             get keydown () {return __get__ (this, function (self, event) {
-                self.keySet.add (event.keyCode);
+                self.keyCode = event.keyCode;
             });},
             get keyup () {return __get__ (this, function (self, event) {
-                self.keySet.remove (event.keyCode);
+                self.keyCode = null;
             });}
         });
         var game = Game ();
@@ -1353,7 +1414,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.160 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.161 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

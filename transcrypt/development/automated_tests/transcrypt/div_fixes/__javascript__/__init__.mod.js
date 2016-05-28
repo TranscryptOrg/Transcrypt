@@ -25,6 +25,7 @@
 							}
 							return __accu0__;
 						} ());
+						autoTester.check ((Math.floor (((240 + 30) - 1) / 30)) * 30);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;

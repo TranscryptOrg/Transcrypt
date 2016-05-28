@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-25 15:13:59
+// Transcrypt'ed from Python, 2016-05-28 15:34:52
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.159';
+							self.transpiler_version = '3.5.160';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -858,6 +858,39 @@ function autotest () {
 		}
 	};
 	
+	Array.prototype.__eq__ = function (other) {	// Also used for list
+		if (this.__class__ == set) {
+			this.sort ();
+			other.sort ();
+		}	
+		for (var i = 0; i < this.length; i++) {
+			if (this [i] != other [i]) {
+				return false
+			}
+		}
+		return true
+	};
+	
+	Array.prototype.__ne__ = function (other) {	// Also used for list
+		return !this.__eq__ (other);
+	}
+		
+	Array.prototype.__le__ = function (other) {
+		return this.issubset (other);
+	}
+		
+	Array.prototype.__ge__ = function (other) {
+		return this.issuperset (other);
+	}
+		
+	Array.prototype.__lt__ = function (other) {
+		return this.issubset (other) && !this.issuperset (other);
+	}
+		
+	Array.prototype.__gt__ = function (other) {
+		return this.issuperset (other) && !this.issubset (other);
+	}
+	
 	// Dict extensions to object
 	
 	function __keys__ () {
@@ -1105,6 +1138,66 @@ function autotest () {
 	};  
 	__all__.__sub__ = __sub__;
 	
+	var __eq__ = function (a, b) {
+		if (typeof a == 'object' && '__eq__' in a) {
+			return a.__eq__ (b);
+		}
+		else {
+			return a == b
+		}
+	};
+	__all__.__eq__ = __eq__;
+		
+	var __ne__ = function (a, b) {
+		if (typeof a == 'object' && '__ne__' in a) {
+			return a.__ne__ (b);
+		}
+		else {
+			return a != b
+		}
+	};
+	__all__.__ne__ = __ne__;
+		
+	var __lt__ = function (a, b) {
+		if (typeof a == 'object' && '__lt__' in a) {
+			return a.__lt__ (b);
+		}
+		else {
+			return a < b
+		}
+	};
+	__all__.__lt__ = __lt__;
+		
+	var __le__ = function (a, b) {
+		if (typeof a == 'object' && '__le__' in a) {
+			return a.__le__ (b);
+		}
+		else {
+			return a <= b
+		}
+	};
+	__all__.__le__ = __le__;
+		
+	var __gt__ = function (a, b) {
+		if (typeof a == 'object' && '__gt__' in a) {
+			return a.__gt__ (b);
+		}
+		else {
+			return a > b
+		}
+	};
+	__all__.__gt__ = __gt__;
+		
+	var __ge__ = function (a, b) {
+		if (typeof a == 'object' && '__ge__' in a) {
+			return a.__ge__ (b);
+		}
+		else {
+			return a >= b
+		}
+	};
+	__all__.__ge__ = __ge__;
+		
 	var __getitem__ = function (container, key) {
 		if (typeof container == 'object' && '__getitem__' in container) {
 			return container.__getitem__ (key);
@@ -1800,6 +1893,7 @@ function autotest () {
 							}
 							return __accu0__;
 						} ());
+						autoTester.check ((Math.floor (((240 + 30) - 1) / 30)) * 30);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -2221,7 +2315,6 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					print ('Transcrypt math');
 					var pi = Math.PI;
 					var e = Math.E;
 					var exp = Math.exp;
@@ -2758,6 +2851,22 @@ function autotest () {
 						var x = 'marker';
 						__call__ (autoTester.check, __call__ (f, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
 						__call__ (autoTester.check, __call__ (g, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
+						__call__ (autoTester.check, __eq__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __ne__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __eq__ (__call__ (set, tuple ([1, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __ne__ (__call__ (set, tuple ([1, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __le__ (__call__ (set, tuple ([1, 2])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __le__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __gt__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([2, 1]))));
+						__call__ (autoTester.check, __ge__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __eq__ (tuple ([1, 2, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (list ([1, 2, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (tuple ([1, 2, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (list ([1, 2, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (tuple ([2, 1, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (list ([2, 1, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (tuple ([2, 1, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (list ([2, 1, 3]), list ([1, 2, 3])));
 					};
 					__pragma__ ('<all>')
 						__all__.Functor = Functor;

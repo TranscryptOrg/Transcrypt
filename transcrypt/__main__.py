@@ -27,8 +27,8 @@ def main ():
 	# Both CPython and Transcrypt will use all dirs in sys.path as search roots for modules
 	# CPython will also search relatively from each module, Transcrypt only from the main module
 	
-	compilerPath = [programDir, modulesDir] + sys.path	# Used by Transcrypt rather than CPython
-	sys.path = sys.path	+ [modulesDir]					# Under Linux sys.path does not always contain programDir
+	compilerPath = [programDir, modulesDir] + sys.path	# Used by Transcrypt rather than CPython, programDir isn't always part of the path under Linux
+	sys.path = sys.path	[1:] + [modulesDir]				# Used by CPython, leave out current dir to prevent importing modules root if there's a module by that name
 	sys.modules.pop ('org', None)						# Unload org from a packages dir, if it's there.
 
 	from org.transcrypt import __base__					# May reload org from a packages dir (or load org from different location)

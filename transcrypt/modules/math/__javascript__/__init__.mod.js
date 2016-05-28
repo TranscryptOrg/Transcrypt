@@ -4,7 +4,6 @@
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					print ('Transcrypt math');
 					var pi = Math.PI;
 					var e = Math.E;
 					var exp = Math.exp;

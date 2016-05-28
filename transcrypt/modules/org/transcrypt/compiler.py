@@ -938,18 +938,21 @@ class Generator (ast.NodeVisitor):
 	def visit_BinOp (self, node):
 		if type (node.op) == ast.FloorDiv:
 			self.emit ('Math.floor (')
-			self.visit (node.left)
+			self.visitSubExpr (node, node.left)
 			self.emit (' / ')
-			self.visit (node.right)
+			self.visitSubExpr (node, node.right)
 			self.emit (')')
-		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub)):
+		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (
+			ast.Mult, ast.Div, ast.Add, ast.Sub
+		)):
 			self.emit ('{} ('.format (self.filterId (
 				'Math.pow' if type (node.op) == ast.Pow else
 				'__matmul__' if type (node.op) == ast.MatMult else
 				'__mul__' if type (node.op) == ast.Mult else
 				'__div__' if type (node.op) == ast.Div else
 				'__add__' if type (node.op) == ast.Add else
-				'__sub__' # if type (node.op) == ast.Sub else
+				'__sub__' if type (node.op) == ast.Sub else
+				'Never here'
 			)))
 			self.visit (node.left)
 			self.emit (', ')
@@ -1184,19 +1187,31 @@ class Generator (ast.NodeVisitor):
 			self.emit ('(')
 			
 		left = node.left
-		for index, (operand, right) in enumerate (zip (node.ops, node.comparators)):
+		for index, (op, right) in enumerate (zip (node.ops, node.comparators)):
 			if index:
 				self.emit (' && ')
-				
-			if type (operand) in (ast.In, ast.NotIn):
-				self.emit ('{}__in__ (', '!' if type (operand) == ast.NotIn else '')
+			
+			if type (op) in (ast.In, ast.NotIn) or (self.allowOperatorOverloading and type (op) in (
+				ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
+			)):
+				self.emit ('{} ('.format (self.filterId (
+					'__in__' if type (op) == ast.In else
+					'!__in__' if type (op) == ast.NotIn else
+					'__eq__' if type (op) == ast.Eq else
+					'__ne__' if type (op) == ast.NotEq else
+					'__lt__' if type (op) == ast.Lt else
+					'__le__' if type (op) == ast.LtE else
+					'__gt__' if type (op) == ast.Gt else
+					'__ge__' if type (op) == ast.GtE else
+					'Never here'
+				)))
 				self.visitSubExpr (node, left)
 				self.emit (', ')
 				self.visitSubExpr (node, right)
 				self.emit (')')
 			else:						
 				self.visitSubExpr (node, left)
-				self.emit (' {0} '.format (self.operators [type (operand)][0]))
+				self.emit (' {0} '.format (self.operators [type (op)][0]))
 				self.visitSubExpr (node, right)
 				
 			left = right

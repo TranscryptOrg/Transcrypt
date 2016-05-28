@@ -1,5 +1,3 @@
-print ('Transcrypt math')
-
 pi = Math.PI
 e = Math.E
 

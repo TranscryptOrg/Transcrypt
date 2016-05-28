@@ -33,6 +33,7 @@ Second release:
 What's new
 ==========
 
+- Fixes for issues 50 and 51
 - Bug in random module fixed
 - Bug in Linux compilation path bug fixed
 - Python random module added, only most important functionality: *seed, randint, choice, random*

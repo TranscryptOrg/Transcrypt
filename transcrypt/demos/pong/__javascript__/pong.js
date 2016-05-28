@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-26 19:19:05
+// Transcrypt'ed from Python, 2016-05-28 15:35:17
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -858,6 +858,39 @@ function pong () {
 		}
 	};
 	
+	Array.prototype.__eq__ = function (other) {	// Also used for list
+		if (this.__class__ == set) {
+			this.sort ();
+			other.sort ();
+		}	
+		for (var i = 0; i < this.length; i++) {
+			if (this [i] != other [i]) {
+				return false
+			}
+		}
+		return true
+	};
+	
+	Array.prototype.__ne__ = function (other) {	// Also used for list
+		return !this.__eq__ (other);
+	}
+		
+	Array.prototype.__le__ = function (other) {
+		return this.issubset (other);
+	}
+		
+	Array.prototype.__ge__ = function (other) {
+		return this.issuperset (other);
+	}
+		
+	Array.prototype.__lt__ = function (other) {
+		return this.issubset (other) && !this.issuperset (other);
+	}
+		
+	Array.prototype.__gt__ = function (other) {
+		return this.issuperset (other) && !this.issubset (other);
+	}
+	
 	// Dict extensions to object
 	
 	function __keys__ () {
@@ -1105,6 +1138,66 @@ function pong () {
 	};  
 	__all__.__sub__ = __sub__;
 	
+	var __eq__ = function (a, b) {
+		if (typeof a == 'object' && '__eq__' in a) {
+			return a.__eq__ (b);
+		}
+		else {
+			return a == b
+		}
+	};
+	__all__.__eq__ = __eq__;
+		
+	var __ne__ = function (a, b) {
+		if (typeof a == 'object' && '__ne__' in a) {
+			return a.__ne__ (b);
+		}
+		else {
+			return a != b
+		}
+	};
+	__all__.__ne__ = __ne__;
+		
+	var __lt__ = function (a, b) {
+		if (typeof a == 'object' && '__lt__' in a) {
+			return a.__lt__ (b);
+		}
+		else {
+			return a < b
+		}
+	};
+	__all__.__lt__ = __lt__;
+		
+	var __le__ = function (a, b) {
+		if (typeof a == 'object' && '__le__' in a) {
+			return a.__le__ (b);
+		}
+		else {
+			return a <= b
+		}
+	};
+	__all__.__le__ = __le__;
+		
+	var __gt__ = function (a, b) {
+		if (typeof a == 'object' && '__gt__' in a) {
+			return a.__gt__ (b);
+		}
+		else {
+			return a > b
+		}
+	};
+	__all__.__gt__ = __gt__;
+		
+	var __ge__ = function (a, b) {
+		if (typeof a == 'object' && '__ge__' in a) {
+			return a.__ge__ (b);
+		}
+		else {
+			return a >= b
+		}
+	};
+	__all__.__ge__ = __ge__;
+		
 	var __getitem__ = function (container, key) {
 		if (typeof container == 'object' && '__getitem__' in container) {
 			return container.__getitem__ (key);

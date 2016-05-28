@@ -159,6 +159,22 @@
 						var x = 'marker';
 						__call__ (autoTester.check, __call__ (f, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
 						__call__ (autoTester.check, __call__ (g, 3, 4, 30, 40, __kwargdict__ ({m: 300, n: 400, p: 3000, q: 4000})));
+						__call__ (autoTester.check, __eq__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __ne__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __eq__ (__call__ (set, tuple ([1, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __ne__ (__call__ (set, tuple ([1, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __le__ (__call__ (set, tuple ([1, 2])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __le__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __gt__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([2, 1]))));
+						__call__ (autoTester.check, __ge__ (__call__ (set, tuple ([1, 2, 3])), __call__ (set, tuple ([3, 2, 1]))));
+						__call__ (autoTester.check, __eq__ (tuple ([1, 2, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (list ([1, 2, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (tuple ([1, 2, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (list ([1, 2, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (tuple ([2, 1, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __eq__ (list ([2, 1, 3]), list ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (tuple ([2, 1, 3]), tuple ([1, 2, 3])));
+						__call__ (autoTester.check, __ne__ (list ([2, 1, 3]), list ([1, 2, 3])));
 					};
 					__pragma__ ('<all>')
 						__all__.Functor = Functor;
