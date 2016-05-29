@@ -22,20 +22,23 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status
 ======
 
-Second release:
+Release 4 (version 3.5.161):
 
+- Almost all of the math module and most important part of random module added
+- Most important part of turtle module added. Uses SVG, see editable examples at: http://www.transcrypt.org/live/turtle_site/turtle_site.html
 - Multi-level sourcemaps, annotated target code, virtualenv installation.
 - Automated tests of functionality of compiled code OK.
-- Reasonable amount of manual testing of the use of sourcemaps done by author.
-- Further tests and feedback very welcome, especially of the source maps part.
+- Manual tests of sourcemaps and random module OK.
+- Further tests and feedback very welcome.
 - Sourcemaps were tested on Chrome under Windows and Linux, but seem to work on Firefox under Linux as well.
 
 What's new
 ==========
 
-- Fixes for issues 50 and 51
+- Readme adapted
+- Fixes for wrong evaluation order when using // (issue 50) and for error in set and array compare (issue 15)
 - Bug in random module fixed
-- Bug in Linux compilation path bug fixed
+- Bug in Linux compilation path fixed
 - Python random module added, only most important functionality: *seed, randint, choice, random*
 - Python math module added, almost all functionality
 - Live on-line SVG based turtle graphics added to website + demo's

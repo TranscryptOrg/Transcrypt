@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-28 15:34:59
+// Transcrypt'ed from Python, 2016-05-29 11:24:31
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function module_random () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.160';
+							self.transpiler_version = '3.5.162';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function module_random () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function module_random () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function module_random () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});

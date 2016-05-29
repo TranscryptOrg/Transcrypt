@@ -112,7 +112,7 @@ def run (autoTester):
 	autoTester.check (set ((1, 2, 3)) != set ((3, 2, 1)))
 	autoTester.check (set ((1, 3)) == set ((3, 2, 1)))
 	autoTester.check (set ((1, 3)) != set ((3, 2, 1)))
-	autoTester.check (set ((1, 2)) <= set ((3, 2, 1)))
+	autoTester.check (set ((1, 2)) < set ((3, 2, 1)))
 	autoTester.check (set ((1, 2, 3)) <= set ((3, 2, 1)))
 	autoTester.check (set ((1, 2, 3)) > set ((2, 1)))
 	autoTester.check (set ((1, 2, 3)) >= set ((3, 2, 1)))

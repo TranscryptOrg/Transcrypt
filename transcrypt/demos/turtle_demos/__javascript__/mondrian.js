@@ -1,6 +1,6 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-29 11:24:20
-function autotest () {
+// Transcrypt'ed from Python, 2016-05-28 19:10:04
+function mondrian () {
 	var __all__ = {};
 	var __world__ = __all__;
 	
@@ -145,9 +145,9 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.162';
+							self.transpiler_version = '3.5.161';
 							self.target_subdir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function autotest () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function autotest () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function autotest () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -1251,260 +1251,502 @@ function autotest () {
 
 	__nest__ (
 		__all__,
-		'itertools', {
+		'random', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					var chain = function () {
-						var args = [] .slice.apply (arguments);
-						var result = [];
-						for (var index = 0; index < args.length; index++) {
-							result = result.concat (args [index]);
+					print ('Transcrypt random');
+					var _array = function () {
+						var __accu0__ = [];
+						for (var i = 0; i < 624; i++) {
+							__accu0__.append (0);
 						}
-						return list (result);
-					}
-					//<all>
-					__all__.chain = chain;
-					//</all>
+						return __accu0__;
+					} ();
+					var _index = 0;
+					var _bitmask1 = Math.pow (2, 32) - 1;
+					var _bitmask2 = Math.pow (2, 31);
+					var _bitmask3 = Math.pow (2, 31) - 1;
+					var _fill_array = function () {
+						for (var i = 0; i < 624; i++) {
+							var y = (_array [i] & _bitmask2) + (_array [(i + 1) % 624] & _bitmask3);
+							_array [i] = _array [(i + 397) % 624] ^ y >> 1;
+							if (y % 2 != 0) {
+								_array [i] ^= 2567483615;
+							}
+						}
+					};
+					var _random_integer = function () {
+						if (_index == 0) {
+							_fill_array ();
+						}
+						var y = _array [_index];
+						y ^= y >> 11;
+						y ^= y << 7 & 2636928640;
+						y ^= y << 15 & 4022730752;
+						y ^= y >> 18;
+						_index = (_index + 1) % 624;
+						return y;
+					};
+					var seed = function (x) {
+						if (typeof x == 'undefined' || (x != null && x .__class__ == __kwargdict__)) {;
+							var x = int (_bitmask3 * Math.random ());
+						};
+						_array [0] = x;
+						for (var i = 1; i < 624; i++) {
+							_array [i] = (1812433253 * _array [i - 1] ^ (_array [i - 1] >> 30) + i) & _bitmask1;
+						}
+					};
+					var randint = function (a, b) {
+						return a + _random_integer () % ((b - a) + 1);
+					};
+					var choice = function (seq) {
+						return seq [randint (0, len (seq) - 1)];
+					};
+					var random = function () {
+						return _random_integer () / _bitmask3;
+					};
+					seed ();
+					__pragma__ ('<all>')
+						__all__._array = _array;
+						__all__._bitmask1 = _bitmask1;
+						__all__._bitmask2 = _bitmask2;
+						__all__._bitmask3 = _bitmask3;
+						__all__._fill_array = _fill_array;
+						__all__._index = _index;
+						__all__._random_integer = _random_integer;
+						__all__.choice = choice;
+						__all__.randint = randint;
+						__all__.random = random;
+						__all__.seed = seed;
+					__pragma__ ('</all>')
 				}
 			}
 		}
 	);
 	__nest__ (
 		__all__,
-		'org.transcrypt.autotester', {
+		'turtle', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					var itertools = {};
-					__nest__ (itertools, '', __init__ (__world__.itertools));
-					var okColor = 'green';
-					var errorColor = 'red';
-					var highlightColor = 'yellow';
-					var testletNameColor = 'blue';
-					var AutoTester = __class__ ('AutoTester', [object], {
+					var _debug = false;
+					var abs = function (vec2D) {
+						return Math.sqrt (vec2D [0] * vec2D [0] + vec2D [1] * vec2D [1]);
+					};
+					var _ns = 'http://www.w3.org/2000/svg';
+					var _svg = document.createElementNS (_ns, 'svg');
+					var _defaultElement = document.body;
+					_defaultElement.appendChild (_svg);
+					var _width = null;
+					var _height = null;
+					var _offset = null;
+					var _rightSize = function (self) {
+						_width = _defaultElement.offsetWidth;
+						_height = _defaultElement.offsetHeight;
+						_offset = list ([Math.floor (_width / 2), Math.floor (_height / 2)]);
+						_svg.setAttribute ('width', _width);
+						_svg.setAttribute ('height', _height);
+					};
+					window.onresize = _rightSize;
+					_rightSize ();
+					var bgcolor = function (color) {
+						var _bgcolor = color;
+						_defaultElement.style.backgroundColor = _bgcolor;
+					};
+					bgcolor ('white');
+					var setDefaultElement = function (element) {
+						_defaultElement.removeChild (_svg);
+						_defaultElement = element;
+						element.appendChild (_svg);
+						_rightSize ();
+						bgcolor ('white');
+					};
+					var _allTurtles = list ([]);
+					var Turtle = __class__ ('Turtle', [object], {
 						get __init__ () {return __get__ (this, function (self) {
-							self.referenceBuffer = list ([]);
-							self.testBuffer = list ([]);
-							self.messageDivId = 'message';
-							self.referenceDivId = 'python';
-							self.testDivId = 'transcrypt';
-						}, '__init__');},
-						get sortedRepr () {return __get__ (this, function (self, any) {
-							var tryGetNumKey = function (key) {
-								if (type (key) == str) {
-									try {
-										return int (key);
-									}
-									catch (__except__) {
-										try {
-											return float (key);
-										}
-										catch (__except__) {
-											return key;
-										}
-									}
-								}
-								else {
-									return key;
-								}
-							};
-							if (type (any) == dict) {
-								return ('{' + ', '.join (function () {
-									var __accu0__ = [];
-									var __iter0__ = enumerate (sorted (function () {
-										var __accu1__ = [];
-										var __iter1__ = any.py_keys ();
-										for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
-											var key = __iter1__ [__index0__];
-											__accu1__.append (tryGetNumKey (key));
-										}
-										return __accu1__;
-									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
-										return str (aKey);})})));
-									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-										var __left0__ = __iter0__ [__index0__];
-										var index = __left0__ [0];
-										var key = __left0__ [1];
-										__accu0__.append ('{}: {}'.format (repr (key), repr (any [key])));
-									}
-									return __accu0__;
-								} ())) + '}';
-							}
-							else {
-								if (type (any) == set) {
-									if (len (any)) {
-										return ('{' + ', '.join (sorted (function () {
-											var __accu0__ = [];
-											var __iter0__ = list (any);
-											for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-												var item = __iter0__ [__index0__];
-												__accu0__.append (str (item));
-											}
-											return __accu0__;
-										} ()))) + '}';
-									}
-									else {
-										return repr (any);
-									}
-								}
-								else {
-									if (type (any) == range) {
-										return repr (list (any));
-									}
-									else {
-										return repr (any);
-									}
-								}
-							}
-						}, 'sortedRepr');},
-						get check () {return __get__ (this, function (self) {
-							var args = tuple ([].slice.apply (arguments).slice (1));
-							var item = ' '.join (function () {
-								var __accu0__ = [];
-								var __iter0__ = args;
-								for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-									var arg = __iter0__ [__index0__];
-									__accu0__.append (self.sortedRepr (arg));
-								}
-								return __accu0__;
-							} ());
-							if (__envir__.executor_name == __envir__.transpiler_name) {
-								self.testBuffer.append (item);
-							}
-							else {
-								self.referenceBuffer.append (item);
-							}
-						}, 'check');},
-						get dump () {return __get__ (this, function (self, filePrename) {
-							var __iter0__ = tuple ([false, true]);
+							_allTurtles.append (self);
+							self._paths = list ([]);
+							self.reset ();
+						});},
+						get reset () {return __get__ (this, function (self) {
+							self._heading = Math.PI / 2;
+							self.pensize (1);
+							self.color ('black', 'black');
+							self.down ();
+							self._track = list ([]);
+							self.home ();
+							self.clear ();
+						});},
+						get clear () {return __get__ (this, function (self) {
+							var __iter0__ = self._paths;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var minified = __iter0__ [__index0__];
-								var miniInfix = (minified ? '.min' : '');
-								aFile = open ('{}{}.html'.format (filePrename, miniInfix), 'w');
-								aFile.write ('<b>Status:</b>\n');
-								aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId));
-								aFile.write ('<b>CPython output:</b>\n');
-								aFile.write ('<div id="{}">{}</div><br><br>\n\n'.format (self.referenceDivId, ' | '.join (self.referenceBuffer)));
-								aFile.write ('<b>Transcrypt output:</b>\n');
-								aFile.write ('<div id="{}"></div>\n\n'.format (self.testDivId));
-								aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix));
-								aFile.close ();
+								var path = __iter0__ [__index0__];
+								_svg.removeChild (path);
 							}
-						}, 'dump');},
-						get compare () {return __get__ (this, function (self) {
-							self.referenceBuffer = document.getElementById (self.referenceDivId).innerHTML.py_split (' | ');
-							var __break0__ = false;
-							var __iter0__ = enumerate (zip (self.testBuffer, self.referenceBuffer));
-							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
-								var __left0__ = __iter0__ [__index0__];
-								var index = __left0__ [0];
-								var testItem = __left0__ [1][0];
-								var referenceItem = __left0__ [1][1];
-								if (testItem != referenceItem) {
-									document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor);
-									var __iter1__ = tuple ([tuple ([self.referenceBuffer, self.referenceDivId, okColor]), tuple ([self.testBuffer, self.testDivId, errorColor])]);
-									for (var __index1__ = 0; __index1__ < __iter1__.length; __index1__++) {
-										var __left0__ = __iter1__ [__index1__];
-										var buffer = __left0__ [0];
-										var divId = __left0__ [1];
-										var accentColor = __left0__ [2];
-										var buffer = itertools.chain (buffer.__getslice__ (0, index, 1), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.__getslice__ (index + 1, null, 1));
-										document.getElementById (divId).innerHTML = ' | '.join (buffer);
-									}
-									__break0__ = true;
-									break;
-								}
+							self._paths = list ([]);
+							self._track = list ([]);
+							self._moveto (self._position);
+						});},
+						get _flush () {return __get__ (this, function (self) {
+							if (_debug) {
+								print ('Flush:', self._track);
 							}
-							if (!__break0__) {
-								document.getElementById (self.messageDivId).innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor);
-								document.getElementById (self.testDivId).innerHTML = ' | '.join (self.testBuffer);
+							if (len (self._track) > 1) {
+								var path = document.createElementNS (_ns, 'path');
+								path.setAttribute ('d', ' '.join (self._track));
+								path.setAttribute ('stroke', (self._pencolor != null ? self._pencolor : 'none'));
+								path.setAttribute ('stroke-width', self._pensize);
+								path.setAttribute ('fill', (self._fill && self._fillcolor != null ? self._fillcolor : 'none'));
+								path.setAttribute ('fill-rule', 'evenodd');
+								_svg.appendChild (path);
+								self._paths.append (path);
+								self._track = list ([]);
+								self._moveto (self._position);
 							}
-						}, 'compare');},
-						get run () {return __get__ (this, function (self, testlet, testletName) {
-							self.check ('<div style="display: inline; color: {}"> --- Testlet: {} --- </div><br>'.format (testletNameColor, testletName));
-							testlet.run (self);
-							self.check ('<br><br>');
-						}, 'run');},
+						});},
 						get done () {return __get__ (this, function (self) {
-							if (__envir__.executor_name == __envir__.transpiler_name) {
-								self.compare ();
+							self._flush ();
+						});},
+						get pensize () {return __get__ (this, function (self, width) {
+							self._flush ();
+							if (width == null) {
+								return self._pensize;
 							}
 							else {
-								self.dump (__main__.__file__.__getslice__ (0, -(3), 1).py_replace ('\\', '/').rsplit ('/', 1) [-(1)]);
+								self._pensize = width;
 							}
-						}, 'done');}
+						});},
+						get color () {return __get__ (this, function (self, pencolor, fillcolor) {
+							if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
+								var fillcolor = null;
+							};
+							self._flush ();
+							self._pencolor = pencolor;
+							if (fillcolor != null) {
+								self._fillcolor = fillcolor;
+							}
+						});},
+						get goto () {return __get__ (this, function (self, x, y) {
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = null;
+							};
+							if (y == null) {
+								self._position = x;
+							}
+							else {
+								self._position = list ([x, y]);
+							}
+							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
+						});},
+						get _moveto () {return __get__ (this, function (self, x, y) {
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = null;
+							};
+							var wasdown = self.isdown ();
+							self.up ();
+							self.goto (x, y);
+							if (wasdown) {
+								self.down ();
+							}
+						});},
+						get home () {return __get__ (this, function (self) {
+							self._moveto (0, 0);
+						});},
+						get position () {return __get__ (this, function (self) {
+							return self._position.__getslice__ (0, null, 1);
+						});},
+						get pos () {return __get__ (this, function (self) {
+							return self.position ();
+						});},
+						get distance () {return __get__ (this, function (self, x, y) {
+							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+								var y = null;
+							};
+							if (y == null) {
+								var other = x;
+							}
+							else {
+								var other = list ([x, y]);
+							}
+							var dX = other [0] - self._position [0];
+							var dY = other [1] - self._position [1];
+							return Math.sqrt (dX * dX + dY * dY);
+						});},
+						get up () {return __get__ (this, function (self) {
+							self._down = false;
+						});},
+						get down () {return __get__ (this, function (self) {
+							self._down = true;
+						});},
+						get isdown () {return __get__ (this, function (self) {
+							return self._down;
+						});},
+						get _predict () {return __get__ (this, function (self, length) {
+							var delta = list ([Math.sin (self._heading), Math.cos (self._heading)]);
+							return list ([self._position [0] + length * delta [0], self._position [1] + length * delta [1]]);
+						});},
+						get forward () {return __get__ (this, function (self, length) {
+							self._position = self._predict (length);
+							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
+						});},
+						get back () {return __get__ (this, function (self, length) {
+							self.forward (-(length));
+						});},
+						get circle () {return __get__ (this, function (self, radius) {
+							self.left (90);
+							var opposite = self._predict (2 * (radius + 1) + 1);
+							self.right (90);
+							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, opposite [0] + _offset [0], opposite [1] + _offset [1]));
+							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, self._position [0] + _offset [0], self._position [1] + _offset [1]));
+						});},
+						get left () {return __get__ (this, function (self, angle) {
+							self._heading = (self._heading + (Math.PI * angle) / 180) % (2 * Math.PI);
+						});},
+						get right () {return __get__ (this, function (self, angle) {
+							self.left (-(angle));
+						});},
+						get begin_fill () {return __get__ (this, function (self) {
+							self._flush ();
+							self._fill = true;
+						});},
+						get end_fill () {return __get__ (this, function (self) {
+							self._flush ();
+							self._fill = false;
+						});}
 					});
-					__pragma__ ('<use>' +
-						'itertools' +
-					'</use>')
-					__pragma__ ('<all>')
-						__all__.AutoTester = AutoTester;
-						__all__.errorColor = errorColor;
-						__all__.highlightColor = highlightColor;
-						__all__.okColor = okColor;
-						__all__.testletNameColor = testletNameColor;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'testlet0', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var run = function (autoTester) {
-						autoTester.check ('hello');
-						autoTester.check ('world');
+					var _defaultTurtle = Turtle ();
+					var reset = function () {
+						bgcolor ('white');
+						var __iter0__ = _allTurtles;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var turtle = __iter0__ [__index0__];
+							turtle.reset ();
+							turtle.done ();
+						}
+					};
+					var clear = function () {
+						var __iter0__ = _allTurtles;
+						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+							var turtle = __iter0__ [__index0__];
+							turtle.clear ();
+						}
+					};
+					var done = function () {
+						_defaultTurtle.done ();
+					};
+					var pensize = function (width) {
+						_defaultTurtle.pensize (width);
+					};
+					var color = function (pencolor, fillcolor) {
+						if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
+							var fillcolor = null;
+						};
+						_defaultTurtle.color (pencolor, fillcolor);
+					};
+					var home = function () {
+						_defaultTurtle.home ();
+					};
+					var goto = function (x, y) {
+						if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+							var y = null;
+						};
+						_defaultTurtle.goto (x, y);
+					};
+					var position = function () {
+						return _defaultTurtle.position ();
+					};
+					var pos = function () {
+						return _defaultTurtle.pos ();
+					};
+					var distance = function (x, y) {
+						if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
+							var y = null;
+						};
+						return _defaultTurtle.distance (x, y);
+					};
+					var up = function () {
+						_defaultTurtle.up ();
+					};
+					var down = function () {
+						_defaultTurtle.down ();
+					};
+					var forward = function (length) {
+						_defaultTurtle.forward (length);
+					};
+					var back = function (length) {
+						_defaultTurtle.back (length);
+					};
+					var circle = function (radius) {
+						_defaultTurtle.circle (radius);
+					};
+					var left = function (angle) {
+						_defaultTurtle.left (angle);
+					};
+					var right = function (angle) {
+						_defaultTurtle.right (angle);
+					};
+					var begin_fill = function () {
+						_defaultTurtle.begin_fill ();
+					};
+					var end_fill = function () {
+						_defaultTurtle.end_fill ();
 					};
 					__pragma__ ('<all>')
-						__all__.run = run;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		'testlet1', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var run = function (autoTester) {
-						autoTester.check ('goodbye');
-						autoTester.check ('moon');
-					};
-					__pragma__ ('<all>')
-						__all__.run = run;
+						__all__.Turtle = Turtle;
+						__all__._allTurtles = _allTurtles;
+						__all__._debug = _debug;
+						__all__._defaultElement = _defaultElement;
+						__all__._defaultTurtle = _defaultTurtle;
+						__all__._height = _height;
+						__all__._ns = _ns;
+						__all__._offset = _offset;
+						__all__._rightSize = _rightSize;
+						__all__._svg = _svg;
+						__all__._width = _width;
+						__all__.abs = abs;
+						__all__.back = back;
+						__all__.begin_fill = begin_fill;
+						__all__.bgcolor = bgcolor;
+						__all__.circle = circle;
+						__all__.clear = clear;
+						__all__.color = color;
+						__all__.distance = distance;
+						__all__.done = done;
+						__all__.down = down;
+						__all__.end_fill = end_fill;
+						__all__.forward = forward;
+						__all__.goto = goto;
+						__all__.home = home;
+						__all__.left = left;
+						__all__.pensize = pensize;
+						__all__.pos = pos;
+						__all__.position = position;
+						__all__.reset = reset;
+						__all__.right = right;
+						__all__.setDefaultElement = setDefaultElement;
+						__all__.up = up;
 					__pragma__ ('</all>')
 				}
 			}
 		}
 	);
 	(function () {
-		var org = {};
-		var testlet0 = {};
-		var testlet1 = {};
-		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
-		__nest__ (testlet0, '', __init__ (__world__.testlet0));
-		__nest__ (testlet1, '', __init__ (__world__.testlet1));
-		var autoTester = org.transcrypt.autotester.AutoTester ();
-		autoTester.run (testlet0, 'testlet0');
-		autoTester.run (testlet1, 'testlet1');
-		autoTester.done ();
+		var random = {};
+		var turtle_graphics =  __init__ (__world__.turtle);
+		__nest__ (random, '', __init__ (__world__.random));
+		var Bounds = __class__ ('Bounds', [object], {
+			get __init__ () {return __get__ (this, function (self, x, y, width, height) {
+				self.x = x;
+				self.y = y;
+				self.width = width;
+				self.height = height;
+			});}
+		});
+		var BORDER_COLOR = 'black';
+		var BORDER_WIDTH = 10;
+		var MINIMUM_DIVISIBLE_PORTION = 0.2;
+		var COLORS = tuple (['white', 'white', 'red', 'white', 'blue', 'yellow']);
+		var PICTURE_BOUNDS = Bounds (__kwargdict__ ({x: -(250), y: -(300), width: 500, height: 600}));
+		var fill_rectangle = function (turtle, bounds, color) {
+			if (typeof color == 'undefined' || (color != null && color .__class__ == __kwargdict__)) {;
+				var color = BORDER_COLOR;
+			};
+			' Fill a rectangle with the border color (by default) and then fill the center with a bright color ';
+			turtle.up ();
+			turtle.goto (bounds.x, bounds.y);
+			turtle.color (color);
+			turtle.down ();
+			turtle.begin_fill ();
+			for (var _ = 0; _ < 2; _++) {
+				turtle.forward (bounds.width);
+				turtle.left (90);
+				turtle.forward (bounds.height);
+				turtle.left (90);
+			}
+			turtle.end_fill ();
+			turtle.up ();
+			if (color == BORDER_COLOR) {
+				fill_rectangle (turtle, Bounds (bounds.x + BORDER_WIDTH, bounds.y + BORDER_WIDTH, bounds.width - BORDER_WIDTH * 2, bounds.height - BORDER_WIDTH * 2), random.choice (COLORS));
+			}
+		};
+		var mondrian = function (piet, bounds) {
+			' Divide, fill and divide & fill some more.  Intuitively and recursively ';
+			if (bounds.width < bounds.height) {
+				var random_dimension = random.randint (Math.floor (bounds.height / 5), Math.floor ((2 * bounds.height) / 3));
+				var bounds_yin = Bounds (bounds.x, bounds.y + random_dimension, bounds.width, bounds.height - random_dimension);
+				var bounds_yang = Bounds (bounds.x, bounds.y, bounds.width, random_dimension);
+				if (bounds_yin.height > bounds_yang.height) {
+					var __left0__ = tuple ([bounds_yang, bounds_yin]);
+					var bounds_paint = __left0__ [0];
+					var bounds_divide = __left0__ [1];
+				}
+				else {
+					var __left0__ = tuple ([bounds_yin, bounds_yang]);
+					var bounds_paint = __left0__ [0];
+					var bounds_divide = __left0__ [1];
+				}
+				print (111, bounds_paint);
+				fill_rectangle (piet, bounds_paint);
+				if (bounds_divide.height < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.height) {
+					fill_rectangle (piet, bounds_divide);
+				}
+				else {
+					// pass;
+				}
+			}
+			else {
+				var random_dimension = random.randint (Math.floor (bounds.width / 5), Math.floor ((2 * bounds.width) / 3));
+				var bounds_yin = Bounds (bounds.x, bounds.y, random_dimension, bounds.height);
+				var bounds_yang = Bounds (bounds.x + random_dimension, bounds.y, bounds.width - random_dimension, bounds.height);
+				if (bounds_yin.width > bounds_yang.width) {
+					var __left0__ = tuple ([bounds_yang, bounds_yin]);
+					var bounds_paint = __left0__ [0];
+					var bounds_divide = __left0__ [1];
+				}
+				else {
+					var __left0__ = tuple ([bounds_yin, bounds_yang]);
+					var bounds_paint = __left0__ [0];
+					var bounds_divide = __left0__ [1];
+				}
+				print (222, bounds_paint);
+				fill_rectangle (piet, bounds_paint);
+				if (bounds_divide.width < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.width) {
+					fill_rectangle (piet, bounds_divide);
+				}
+				else {
+					// pass;
+				}
+			}
+		};
+		var paint_canvas = function (dummy_x, dummy_y) {
+			if (typeof dummy_x == 'undefined' || (dummy_x != null && dummy_x .__class__ == __kwargdict__)) {;
+				var dummy_x = 0;
+			};
+			if (typeof dummy_y == 'undefined' || (dummy_y != null && dummy_y .__class__ == __kwargdict__)) {;
+				var dummy_y = 0;
+			};
+			' Runs the program and can be used as an event handler ';
+			mondrian (turtle_graphics, PICTURE_BOUNDS);
+		};
+		paint_canvas ();
 		__pragma__ ('<use>' +
-			'org.transcrypt.autotester' +
-			'testlet0' +
-			'testlet1' +
+			'random' +
+			'turtle' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.autoTester = autoTester;
+			__all__.BORDER_COLOR = BORDER_COLOR;
+			__all__.BORDER_WIDTH = BORDER_WIDTH;
+			__all__.Bounds = Bounds;
+			__all__.COLORS = COLORS;
+			__all__.MINIMUM_DIVISIBLE_PORTION = MINIMUM_DIVISIBLE_PORTION;
+			__all__.PICTURE_BOUNDS = PICTURE_BOUNDS;
+			__all__.fill_rectangle = fill_rectangle;
+			__all__.mondrian = mondrian;
+			__all__.paint_canvas = paint_canvas;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
 }
-window ['autotest'] = autotest ();
 
-//# sourceMappingURL=extra/sourcemap/autotest.js.map
+//# sourceMappingURL=extra/sourcemap/mondrian.js.map
