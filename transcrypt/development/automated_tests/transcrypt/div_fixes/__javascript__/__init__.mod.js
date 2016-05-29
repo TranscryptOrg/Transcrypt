@@ -26,6 +26,11 @@
 							return __accu0__;
 						} ());
 						autoTester.check ((Math.floor (((240 + 30) - 1) / 30)) * 30);
+						var __left0__ = tuple (['switch', 'case', 'default']);
+						var py_switch = __left0__ [0];
+						var py_case = __left0__ [1];
+						var py_default = __left0__ [2];
+						autoTester.check (py_switch, py_case, py_default);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;

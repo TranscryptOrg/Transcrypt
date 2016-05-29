@@ -420,8 +420,10 @@ class Generator (ast.NodeVisitor):
 			('pop', 'py_pop'),				('js_pop', 'pop'),
 			('replace', 'py_replace'),		('js_replace', 'replace'),
 			('sort', 'py_sort'),			('js_sort', 'sort'),
-			('switch', 'py_switch'),		('split', 'py_split'),
-			('js_split', 'split')
+			('switch', 'py_switch'),
+			('case', 'py_case'),
+			('default', 'py_default'),			
+			('split', 'py_split'),			('js_split', 'split')
 # END predef_aliases
 		)]
 		

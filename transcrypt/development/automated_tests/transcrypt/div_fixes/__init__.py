@@ -24,4 +24,7 @@ def run (autoTester):
 	# Issue 50
 	autoTester.check ((240 + 30 - 1) // 30 * 30)
 	
+	# Issue 52
+	switch, case, default = 'switch', 'case', 'default'
+	autoTester.check (switch, case, default)
 	
