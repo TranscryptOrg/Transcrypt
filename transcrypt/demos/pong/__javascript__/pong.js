@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-29 12:08:49
+// Transcrypt'ed from Python, 2016-05-30 14:16:59
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -16327,7 +16327,6 @@ function pong () {
 				self.vY = 0;
 				if (self.index) {
 					if (self.game.keyCode == ord ('K')) {
-						print (111);
 						self.vY = self.speed;
 					}
 					else {
@@ -16409,11 +16408,11 @@ function pong () {
 						var __left0__ = __iter0__ [__index0__];
 						var py_name = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('Player {}'.format (py_name), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+						__accu0__.append (new fabric.Text ('Player {}'.format (py_name), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 30), 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
 					}
 					return __accu0__;
 				} ();
-				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12', 'left': self.game.orthoX ((-(7) / 16) * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
+				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 70), 'left': self.game.orthoX ((-(7) / 16) * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
 				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-(orthoWidth) / 2)), self.game.orthoY (Math.floor (fieldHeight / 2)), self.game.orthoX (Math.floor (orthoWidth / 2)), self.game.orthoY (Math.floor (fieldHeight / 2))]), dict ({'stroke': 'white'}));
 			});},
 			get increment () {return __get__ (this, function (self, playerIndex) {
@@ -16431,7 +16430,7 @@ function pong () {
 						var __left0__ = __iter0__ [__index0__];
 						var score = __left0__ [0];
 						var position = __left0__ [1];
-						__accu0__.append (new fabric.Text ('{}'.format (score), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30', 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+						__accu0__.append (new fabric.Text ('{}'.format (score), dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 30), 'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
 					}
 					return __accu0__;
 				} ();
@@ -16456,8 +16455,10 @@ function pong () {
 				self.serviceIndex = (Math.random () > 0.5 ? 1 : 0);
 				self.pause = true;
 				self.keyCode = null;
+				self.textFrame = document.getElementById ('text_frame');
+				self.canvasFrame = document.getElementById ('canvas_frame');
+				self.buttonsFrame = document.getElementById ('buttons_frame');
 				self.canvas = new fabric.Canvas ('canvas', dict ({'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}));
-				self.canvas.onWindowResize = self.resize;
 				self.canvas.onWindowDraw = self.draw;
 				self.canvas.lineWidth = 2;
 				self.canvas.clear ();
@@ -16475,25 +16476,37 @@ function pong () {
 				window.setInterval (self.draw, 20);
 				window.addEventListener ('keydown', self.keydown);
 				window.addEventListener ('keyup', self.keyup);
+				self.buttons = list ([]);
 				var __iter0__ = tuple (['A', 'Z', 'K', 'M', 'space', 'enter']);
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 					var key = __iter0__ [__index0__];
-					var element = document.getElementById (key);
-					element.addEventListener ('mousedown', (function __lambda__ (aKey) {
+					var button = document.getElementById (key);
+					button.addEventListener ('mousedown', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
 							return self.mouseOrTouch (aKey, true);});}) (key));
-					element.addEventListener ('touchstart', (function __lambda__ (aKey) {
+					button.addEventListener ('touchstart', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
 							return self.mouseOrTouch (aKey, true);});}) (key));
-					element.addEventListener ('mouseup', (function __lambda__ (aKey) {
+					button.addEventListener ('mouseup', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
 							return self.mouseOrTouch (aKey, false);});}) (key));
-					element.addEventListener ('touchend', (function __lambda__ (aKey) {
+					button.addEventListener ('touchend', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
 							return self.mouseOrTouch (aKey, false);});}) (key));
-					element.style.cursor = 'pointer';
+					button.style.cursor = 'pointer';
+					button.style.userSelect = 'none';
+					self.buttons.append (button);
 				}
 				self.time = +(new Date);
+				window.onresize = self.resize;
+				self.resize ();
+			});},
+			get install () {return __get__ (this, function (self) {
+				var __iter0__ = self.attributes;
+				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+					var attribute = __iter0__ [__index0__];
+					attribute.install ();
+				}
 			});},
 			get mouseOrTouch () {return __get__ (this, function (self, key, down) {
 				if (down) {
@@ -16556,6 +16569,13 @@ function pong () {
 				self.ball.reset ();
 				self.pause = true;
 			});},
+			get commit () {return __get__ (this, function (self) {
+				var __iter0__ = self.attributes;
+				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+					var attribute = __iter0__ [__index0__];
+					attribute.commit ();
+				}
+			});},
 			get draw () {return __get__ (this, function (self) {
 				self.canvas.clear ();
 				var __iter0__ = self.attributes;
@@ -16564,8 +16584,34 @@ function pong () {
 					attribute.draw ();
 				}
 			});},
-			get resize () {return __get__ (this, function (self, width, height) {
-				// pass;
+			get resize () {return __get__ (this, function (self) {
+				self.pageWidth = window.innerWidth;
+				self.pageHeight = window.innerHeight;
+				self.textTop = 0;
+				if (self.pageHeight > 1.2 * self.pageWidth) {
+					self.canvasWidth = self.pageWidth;
+					self.canvasTop = self.textTop + 300;
+				}
+				else {
+					self.canvasWidth = 0.6 * self.pageWidth;
+					self.canvasTop = self.textTop + 200;
+				}
+				self.canvasLeft = 0.5 * (self.pageWidth - self.canvasWidth);
+				self.canvasHeight = 0.6 * self.canvasWidth;
+				self.buttonsTop = (self.canvasTop + self.canvasHeight) + 50;
+				self.buttonsWidth = 500;
+				self.textFrame.style.top = self.textTop;
+				self.textFrame.style.left = self.canvasLeft + 0.05 * self.canvasWidth;
+				self.textFrame.style.width = 0.9 * self.canvasWidth;
+				self.canvasFrame.style.top = self.canvasTop;
+				self.canvasFrame.style.left = self.canvasLeft;
+				self.canvas.setDimensions (dict ({'width': self.canvasWidth, 'height': self.canvasHeight}));
+				self.buttonsFrame.style.top = self.buttonsTop;
+				self.buttonsFrame.style.left = 0.5 * (self.pageWidth - self.buttonsWidth);
+				self.buttonsFrame.style.width = self.canvasWidth;
+				self.install ();
+				self.commit ();
+				self.draw ();
 			});},
 			get scaleX () {return __get__ (this, function (self, x) {
 				return x * (self.canvas.width / orthoWidth);

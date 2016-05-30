@@ -1,5 +1,5 @@
 __pragma__ ('skip')
-window = Math = Date = 0	# Prevent complaints by optional static checker
+document = window = Math = Date = 0	# Prevent complaints by optional static checker
 __pragma__ ('noskip')
 
 from com.fabricjs import fabric
@@ -18,7 +18,7 @@ class Attribute:	# Attribute in the gaming sense of the word, rather than of an 
 		self.game.attributes.append (self)	# Game knows all its attributes
 		self.install ()						# Put in place graphical representation of attribute
 		self.reset ()						# Reset attribute to start position
-					
+				
 	def reset (self):		# Restore starting positions or score, then commit to fabric
 		self.commit ()		# Nothing to restore for the Attribute base class
 				
@@ -87,7 +87,6 @@ class Paddle (Sprite):
 		
 		if self.index:							# Right player
 			if self.game.keyCode == ord ('K'):	# Letter K pressed
-				print (111)
 				self.vY = self.speed
 			elif self.game.keyCode == ord ('M'):
 				self.vY = -self.speed
@@ -164,12 +163,12 @@ class Scoreboard (Attribute):
 			
 	def install (self): # Graphical representation of scoreboard are four labels and a separator line
 		self.playerLabels = [__new__ (fabric.Text ('Player {}'.format (name), {
-				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30',
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}' .format (self.game.canvas.width / 30),
 				'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.nameShift)
 		})) for name, position in (('AZ keys:', -7/16), ('KM keys:', 1/16))]
  		
 		self.hintLabel = __new__ (fabric.Text ('[spacebar] starts game, [enter] resets score', {
-				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '12',
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 70),
 				'left': self.game.orthoX (-7/16 * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.hintShift)
 		}))
 		
@@ -189,7 +188,7 @@ class Scoreboard (Attribute):
 		
 	def commit (self):			# Committing labels is adapting their texts
 		self.scoreLabels = [__new__ (fabric.Text ('{}'.format (score), {
-				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '30',
+				'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 30),
 				'left': self.game.orthoX (position * orthoWidth), 'top': self.game.orthoY (fieldHeight // 2 + self.nameShift)
 		})) for score, position in zip (self.scores, (-2/16, 6/16))]
 
@@ -206,9 +205,12 @@ class Game:
 		self.pause = True							# Start game in paused state
 		self.keyCode = None
 		
+		self.textFrame = document.getElementById ('text_frame')
+		self.canvasFrame = document.getElementById ('canvas_frame')
+		self.buttonsFrame = document.getElementById ('buttons_frame')
+		
 		self.canvas = __new__ (fabric.Canvas ('canvas', {'backgroundColor': 'black', 'originX': 'center', 'originY': 'center'}))
-		self.canvas.onWindowResize = self.resize	# Install draw callback, will be called asynch
-		self.canvas.onWindowDraw = self.draw		# Install resize callback, will be called if resized
+		self.canvas.onWindowDraw = self.draw		# Install draw callback, will be called asynch
 		self.canvas.lineWidth = 2
 		self.canvas.clear ()	
 
@@ -222,15 +224,26 @@ class Game:
 		window.addEventListener ('keydown', self.keydown)
 		window.addEventListener ('keyup', self.keyup)
 		
+		self.buttons = []
+		
 		for key in ('A', 'Z', 'K', 'M', 'space', 'enter'):
-			element = document.getElementById (key)
-			element.addEventListener ('mousedown', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
-			element.addEventListener ('touchstart', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
-			element.addEventListener ('mouseup', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
-			element.addEventListener ('touchend', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
-			element.style.cursor = 'pointer'
+			button = document.getElementById (key)
+			button.addEventListener ('mousedown', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
+			button.addEventListener ('touchstart', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
+			button.addEventListener ('mouseup', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
+			button.addEventListener ('touchend', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
+			button.style.cursor = 'pointer'
+			button.style.userSelect = 'none'
+			self.buttons.append (button)
 			
 		self.time = + __new__ (Date)
+		
+		window.onresize = self.resize
+		self.resize ()
+		
+	def install (self):
+		for attribute in self.attributes:
+			attribute.install ()
 		
 	def mouseOrTouch (self, key, down):
 		if down:
@@ -273,13 +286,49 @@ class Game:
 		self.ball.reset ()						# Put ball in rest position
 		self.pause = True						# Wait for next round
 		
+	def commit (self):
+		for attribute in self.attributes:
+			attribute.commit ()
+		
 	def draw (self):
 		self.canvas.clear ()
 		for attribute in self.attributes:
 			attribute.draw ()
 			 
-	def resize (self, width, height):
-		pass
+	def resize (self):
+		self.pageWidth = window.innerWidth
+		self.pageHeight = window.innerHeight
+		
+		self.textTop = 0
+
+		if self.pageHeight > 1.2 * self.pageWidth:
+			self.canvasWidth = self.pageWidth
+			self.canvasTop = self.textTop + 300
+		else:
+			self.canvasWidth = 0.6 * self.pageWidth
+			self.canvasTop = self.textTop + 200
+
+		self.canvasLeft = 0.5 * (self.pageWidth - self.canvasWidth)
+		self.canvasHeight = 0.6 * self.canvasWidth
+
+		self.buttonsTop = self.canvasTop + self.canvasHeight + 50
+		self.buttonsWidth = 500
+			
+		self.textFrame.style.top = self.textTop;
+		self.textFrame.style.left = self.canvasLeft + 0.05 * self.canvasWidth
+		self.textFrame.style.width = 0.9 * self.canvasWidth
+			
+		self.canvasFrame.style.top = self.canvasTop
+		self.canvasFrame.style.left = self.canvasLeft
+		self.canvas.setDimensions ({'width': self.canvasWidth, 'height': self.canvasHeight})
+		
+		self.buttonsFrame.style.top = self.buttonsTop
+		self.buttonsFrame.style.left = 0.5 * (self.pageWidth - self.buttonsWidth)
+		self.buttonsFrame.style.width = self.canvasWidth
+		
+		self.install ()
+		self.commit ()
+		self.draw ()
 		
 	def scaleX (self, x):
 		return x * (self.canvas.width / orthoWidth)

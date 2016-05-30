@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-29 12:09:08
+// Transcrypt'ed from Python, 2016-05-30 14:10:53
 function mandala () {
 	var __all__ = {};
 	var __world__ = __all__;

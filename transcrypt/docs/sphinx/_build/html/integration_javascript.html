@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.164 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.165 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.164',
+        VERSION:     '3.5.165',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.164 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.165 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.164 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.165 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -428,7 +428,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="pong-py">
 <div class="code-block-caption"><span class="caption-text">pong.py</span><a class="headerlink" href="#pong-py" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
-<span class="n">window</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">Date</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c"># Prevent complaints by optional static checker</span>
+<span class="n">document</span> <span class="o">=</span> <span class="n">window</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">Date</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># Prevent complaints by optional static checker</span>
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">com.fabricjs</span> <span class="kn">import</span> <span class="n">fabric</span>
@@ -447,7 +447,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c"># Game knows all its attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">install</span> <span class="p">()</span>                     <span class="c"># Put in place graphical representation of attribute</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>                       <span class="c"># Reset attribute to start position</span>
-                    
+                
     <span class="k">def</span> <span class="nf">reset</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="c"># Restore starting positions or score, then commit to fabric</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commit</span> <span class="p">()</span>      <span class="c"># Nothing to restore for the Attribute base class</span>
                 
@@ -516,7 +516,6 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>                          <span class="c"># Right player</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;K&#39;</span><span class="p">):</span>  <span class="c"># Letter K pressed</span>
-                <span class="k">print</span> <span class="p">(</span><span class="mi">111</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">==</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;M&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">vY</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
@@ -593,12 +592,12 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             
     <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c"># Graphical representation of scoreboard are four labels and a separator line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playerLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;Player {}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">{</span>
-                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;{}&#39;</span> <span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">30</span><span class="p">),</span>
                 <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
         <span class="p">}))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="p">((</span><span class="s">&#39;AZ keys:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;KM keys:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">))]</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">hintLabel</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;[spacebar] starts game, [enter] resets score&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;12&#39;</span><span class="p">,</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">70</span><span class="p">),</span>
                 <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hintShift</span><span class="p">)</span>
         <span class="p">}))</span>
         
@@ -618,7 +617,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         
     <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>          <span class="c"># Committing labels is adapting their texts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scoreLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Text</span> <span class="p">(</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">score</span><span class="p">),</span> <span class="p">{</span>
-                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+                <span class="s">&#39;fill&#39;</span><span class="p">:</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="s">&#39;fontFamily&#39;</span><span class="p">:</span> <span class="s">&#39;arial&#39;</span><span class="p">,</span> <span class="s">&#39;fontSize&#39;</span><span class="p">:</span> <span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">30</span><span class="p">),</span>
                 <span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoX</span> <span class="p">(</span><span class="n">position</span> <span class="o">*</span> <span class="n">orthoWidth</span><span class="p">),</span> <span class="s">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">orthoY</span> <span class="p">(</span><span class="n">fieldHeight</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameShift</span><span class="p">)</span>
         <span class="p">}))</span> <span class="k">for</span> <span class="n">score</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scores</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="o">/</span><span class="mi">16</span><span class="p">))]</span>
 
@@ -635,9 +634,12 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">True</span>                           <span class="c"># Start game in paused state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keyCode</span> <span class="o">=</span> <span class="bp">None</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">textFrame</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;text_frame&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvasFrame</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;canvas_frame&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsFrame</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;buttons_frame&#39;</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">fabric</span><span class="o">.</span><span class="n">Canvas</span> <span class="p">(</span><span class="s">&#39;canvas&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;backgroundColor&#39;</span><span class="p">:</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;originX&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="s">&#39;originY&#39;</span><span class="p">:</span> <span class="s">&#39;center&#39;</span><span class="p">}))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowResize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>    <span class="c"># Install draw callback, will be called asynch</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowDraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span>        <span class="c"># Install resize callback, will be called if resized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">onWindowDraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span>        <span class="c"># Install draw callback, will be called asynch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">lineWidth</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>    
 
@@ -651,15 +653,26 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keydown&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keydown</span><span class="p">)</span>
         <span class="n">window</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;keyup&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyup</span><span class="p">)</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="p">[]</span>
+        
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;Z&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="s">&#39;space&#39;</span><span class="p">,</span> <span class="s">&#39;enter&#39;</span><span class="p">):</span>
-            <span class="n">element</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mouseup&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchend&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="s">&#39;pointer&#39;</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mouseup&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchend&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="s">&#39;pointer&#39;</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">userSelect</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="n">button</span><span class="p">)</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="o">+</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Date</span><span class="p">)</span>
+        
+        <span class="n">window</span><span class="o">.</span><span class="n">onresize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span> <span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">install</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+            <span class="n">attribute</span><span class="o">.</span><span class="n">install</span> <span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">mouseOrTouch</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">down</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">down</span><span class="p">:</span>
@@ -702,13 +715,49 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>                      <span class="c"># Put ball in rest position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="bp">True</span>                       <span class="c"># Wait for next round</span>
         
+    <span class="k">def</span> <span class="nf">commit</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+            <span class="n">attribute</span><span class="o">.</span><span class="n">commit</span> <span class="p">()</span>
+        
     <span class="k">def</span> <span class="nf">draw</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span> <span class="p">()</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
             <span class="n">attribute</span><span class="o">.</span><span class="n">draw</span> <span class="p">()</span>
              
-    <span class="k">def</span> <span class="nf">resize</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">resize</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerHeight</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">textTop</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">&gt;</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvasTop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">textTop</span> <span class="o">+</span> <span class="mi">300</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvasTop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">textTop</span> <span class="o">+</span> <span class="mi">200</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvasLeft</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvasHeight</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsTop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasTop</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasHeight</span> <span class="o">+</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsWidth</span> <span class="o">=</span> <span class="mi">500</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">textFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">textTop</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasLeft</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvasFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasTop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvasFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasLeft</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">setDimensions</span> <span class="p">({</span><span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span><span class="p">,</span> <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasHeight</span><span class="p">})</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttonsTop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttonsWidth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttonsFrame</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvasWidth</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">install</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commit</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span> <span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">scaleX</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">orthoWidth</span><span class="p">)</span>
@@ -833,7 +882,6 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.vY = 0;
                 if (self.index) {
                     if (self.game.keyCode == ord (&#39;K&#39;)) {
-                        print (111);
                         self.vY = self.speed;
                     }
                     else {
@@ -915,11 +963,11 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                         var __left0__ = __iter0__ [__index0__];
                         var py_name = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
-                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;12&#39;, &#39;left&#39;: self.game.orthoX ((-(7) / 16) * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 70), &#39;left&#39;: self.game.orthoX ((-(7) / 16) * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
                 self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-(orthoWidth) / 2)), self.game.orthoY (Math.floor (fieldHeight / 2)), self.game.orthoX (Math.floor (orthoWidth / 2)), self.game.orthoY (Math.floor (fieldHeight / 2))]), dict ({&#39;stroke&#39;: &#39;white&#39;}));
             });},
             get increment () {return __get__ (this, function (self, playerIndex) {
@@ -937,7 +985,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                         var __left0__ = __iter0__ [__index0__];
                         var score = __left0__ [0];
                         var position = __left0__ [1];
-                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;30&#39;, &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
@@ -962,8 +1010,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
                 self.pause = true;
                 self.keyCode = null;
+                self.textFrame = document.getElementById (&#39;text_frame&#39;);
+                self.canvasFrame = document.getElementById (&#39;canvas_frame&#39;);
+                self.buttonsFrame = document.getElementById (&#39;buttons_frame&#39;);
                 self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ({&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;}));
-                self.canvas.onWindowResize = self.resize;
                 self.canvas.onWindowDraw = self.draw;
                 self.canvas.lineWidth = 2;
                 self.canvas.clear ();
@@ -981,25 +1031,37 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.setInterval (self.draw, 20);
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
+                self.buttons = list ([]);
                 var __iter0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
                 for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
                     var key = __iter0__ [__index0__];
-                    var element = document.getElementById (key);
-                    element.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
+                    var button = document.getElementById (key);
+                    button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
                             return self.mouseOrTouch (aKey, true);});}) (key));
-                    element.addEventListener (&#39;touchstart&#39;, (function __lambda__ (aKey) {
+                    button.addEventListener (&#39;touchstart&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
                             return self.mouseOrTouch (aKey, true);});}) (key));
-                    element.addEventListener (&#39;mouseup&#39;, (function __lambda__ (aKey) {
+                    button.addEventListener (&#39;mouseup&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
                             return self.mouseOrTouch (aKey, false);});}) (key));
-                    element.addEventListener (&#39;touchend&#39;, (function __lambda__ (aKey) {
+                    button.addEventListener (&#39;touchend&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
                             return self.mouseOrTouch (aKey, false);});}) (key));
-                    element.style.cursor = &#39;pointer&#39;;
+                    button.style.cursor = &#39;pointer&#39;;
+                    button.style.userSelect = &#39;none&#39;;
+                    self.buttons.append (button);
                 }
                 self.time = +(new Date);
+                window.onresize = self.resize;
+                self.resize ();
+            });},
+            get install () {return __get__ (this, function (self) {
+                var __iter0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var attribute = __iter0__ [__index0__];
+                    attribute.install ();
+                }
             });},
             get mouseOrTouch () {return __get__ (this, function (self, key, down) {
                 if (down) {
@@ -1062,6 +1124,13 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.ball.reset ();
                 self.pause = true;
             });},
+            get commit () {return __get__ (this, function (self) {
+                var __iter0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
+                    var attribute = __iter0__ [__index0__];
+                    attribute.commit ();
+                }
+            });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
                 var __iter0__ = self.attributes;
@@ -1070,8 +1139,34 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     attribute.draw ();
                 }
             });},
-            get resize () {return __get__ (this, function (self, width, height) {
-                // pass;
+            get resize () {return __get__ (this, function (self) {
+                self.pageWidth = window.innerWidth;
+                self.pageHeight = window.innerHeight;
+                self.textTop = 0;
+                if (self.pageHeight &gt; 1.2 * self.pageWidth) {
+                    self.canvasWidth = self.pageWidth;
+                    self.canvasTop = self.textTop + 300;
+                }
+                else {
+                    self.canvasWidth = 0.6 * self.pageWidth;
+                    self.canvasTop = self.textTop + 200;
+                }
+                self.canvasLeft = 0.5 * (self.pageWidth - self.canvasWidth);
+                self.canvasHeight = 0.6 * self.canvasWidth;
+                self.buttonsTop = (self.canvasTop + self.canvasHeight) + 50;
+                self.buttonsWidth = 500;
+                self.textFrame.style.top = self.textTop;
+                self.textFrame.style.left = self.canvasLeft + 0.05 * self.canvasWidth;
+                self.textFrame.style.width = 0.9 * self.canvasWidth;
+                self.canvasFrame.style.top = self.canvasTop;
+                self.canvasFrame.style.left = self.canvasLeft;
+                self.canvas.setDimensions (dict ({&#39;width&#39;: self.canvasWidth, &#39;height&#39;: self.canvasHeight}));
+                self.buttonsFrame.style.top = self.buttonsTop;
+                self.buttonsFrame.style.left = 0.5 * (self.pageWidth - self.buttonsWidth);
+                self.buttonsFrame.style.width = self.canvasWidth;
+                self.install ();
+                self.commit ();
+                self.draw ();
             });},
             get scaleX () {return __get__ (this, function (self, x) {
                 return x * (self.canvas.width / orthoWidth);
@@ -1414,7 +1509,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.164 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.165 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

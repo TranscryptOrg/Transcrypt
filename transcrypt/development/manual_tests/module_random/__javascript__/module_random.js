@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-29 12:08:32
+// Transcrypt'ed from Python, 2016-05-30 14:16:41
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;

@@ -1154,9 +1154,9 @@ class Generator (ast.NodeVisitor):
 			for index, expr in enumerate (node.bases):
 				try:
 					self.emitComma (index)
-					self.visit_Name (expr)
+					self.visit (expr)
 				except Exception as exception:
-					utils.enhanceException (moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Invalid base class')
+					utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Invalid base class')
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
