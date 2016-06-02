@@ -42,7 +42,7 @@
 									var __accu0__ = [];
 									var __iter0__ = enumerate (sorted (function () {
 										var __accu1__ = [];
-										var __iter1__ = any.py_keys ();
+										var __iter1__ = any.keys ();
 										for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
 											var key = __iter1__ [__index0__];
 											__accu1__.append (tryGetNumKey (key));

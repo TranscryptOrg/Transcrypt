@@ -65,7 +65,7 @@ def main ():
 			utils.log (True, '\n{}\n', error)
 			
 			# Don't log anything else, even in verbose mode, since this would only be confusing
-			if utils.debug:
+			if utils.commandArgs.extex:
 				utils.log (True, '{}\n', traceback.format_exc ())
 		except Exception as exception:
 			utils.log (True, '\n{}', exception)

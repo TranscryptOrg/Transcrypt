@@ -35,7 +35,9 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
-- Fixed class def bug: inheriting from qualified ('dotted') classname, and fixed broken error report on this
+- Added clear method to dict + testcase
+- Fixed error in set compare + testcase
+- Fixed class def bug: inheriting from qualified ('dotted') classname, and fixed - Fixed class def bug: inheriting from qualified ('dotted') classname, and fixed broken error report on this
 - Aliases added: case translates to py_case, default translates to py_default (switch already translated to py_switch)
 - Readme adapted
 - Fixes for wrong evaluation order when using // (issue 50) and for error in set and array compare (issue 15)

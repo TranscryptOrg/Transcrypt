@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-30 14:16:41
+// Transcrypt'ed from Python, 2016-06-02 10:17:57
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function module_random () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.164';
+							self.transpiler_version = '3.5.165';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -257,7 +257,7 @@ function module_random () {
 							}
 						}
 						if (type (iterable) == dict) {
-							var result = copy (iterable.py_keys ());
+							var result = copy (iterable.keys ());
 						}
 						else {
 							var result = copy (iterable);
@@ -348,7 +348,7 @@ function module_random () {
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
-			return container.py_keys () .indexOf (element) > -1;
+			return container.keys () .indexOf (element) > -1;
 		}
 		else {
 			return container.indexOf (element) > -1;
@@ -493,18 +493,24 @@ function module_random () {
 	__all__.repr = repr;
 	
 	// Char from Unicode or ASCII
-	
 	var chr = function (charCode) {
 		return String.fromCharCode (charCode);
 	}
 	__all__.chr = chr;
 
 	// Unicode or ASCII from char
-	
 	var ord = function (aChar) {
 		return aChar.charCodeAt (0);
 	}
 	__all__.org = ord;
+	
+	// Maximum of n numbers
+	var max = Math.max;
+	__all__.max = max;
+	
+	// Minimum of n numbers
+	var min = Math.min;
+	__all__.min = min;
 	
 	// Reversed function for arrays
 	var reversed = function (iterable) {
@@ -647,7 +653,7 @@ function module_random () {
 			}
 		}
 	}
-		
+	
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
 			return 'set()';
@@ -859,16 +865,19 @@ function module_random () {
 	};
 	
 	Array.prototype.__eq__ = function (other) {	// Also used for list
+		if (this.length != other.length) {
+			return false;
+		}
 		if (this.__class__ == set) {
 			this.sort ();
 			other.sort ();
 		}	
 		for (var i = 0; i < this.length; i++) {
 			if (this [i] != other [i]) {
-				return false
+				return false;
 			}
 		}
-		return true
+		return true;
 	};
 	
 	Array.prototype.__ne__ = function (other) {	// Also used for list
@@ -918,8 +927,14 @@ function module_random () {
 	function __del__ (key) {
 		delete this [key];
 	}
-	
 	__all__.__del__ = __del__;
+	
+	function __clear__ () {
+		for (var attrib in this) {
+			delete this [attrib];
+		}
+	}
+	__all__.__clear__ = __clear__;
 		
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
@@ -940,9 +955,10 @@ function module_random () {
 		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
 		// So the properties of a dict should be non-enumerable
 		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});			
-		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});		
-		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});			
+		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
 		
 		return instance;
 	}

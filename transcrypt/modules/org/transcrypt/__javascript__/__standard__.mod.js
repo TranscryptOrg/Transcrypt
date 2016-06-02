@@ -97,7 +97,7 @@
 							}
 						}
 						if (type (iterable) == dict) {
-							var result = copy (iterable.py_keys ());
+							var result = copy (iterable.keys ());
 						}
 						else {
 							var result = copy (iterable);

@@ -12,15 +12,15 @@
 						delete tel ['sape'];
 						tel ['irv'] = 4127;
 						autoTester.check (tel);
-						autoTester.check (sorted (list (tel.py_keys ())), false);
-						autoTester.check (sorted (tel.py_keys ()));
+						autoTester.check (sorted (list (tel.keys ())), false);
+						autoTester.check (sorted (tel.keys ()));
 						autoTester.check (__in__ ('guido', tel));
 						autoTester.check (!__in__ ('jack', tel));
 						autoTester.check (dict (list ([tuple (['guido', 4127]), tuple (['jack', 4098]), tuple (['sape', 4139])])));
 						var knights = dict ({'robin': 'the brave', 'gallahad': 'the pure'});
-						var __iter0__ = sorted (knights.py_items ());
+						var __iter0__ = sorted (knights.items ());
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__];
@@ -33,7 +33,7 @@
 						}
 						var __iter0__ = sorted (knights);
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var k = __iter0__ [__index0__];
@@ -42,7 +42,7 @@
 						var knight = dict ({'rudolph': 'the righteous'});
 						var __iter0__ = knight;
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var k = __iter0__ [__index0__];

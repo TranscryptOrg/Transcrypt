@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-30 14:16:34
+// Transcrypt'ed from Python, 2016-06-02 10:17:50
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.164';
+							self.transpiler_version = '3.5.165';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -257,7 +257,7 @@ function autotest () {
 							}
 						}
 						if (type (iterable) == dict) {
-							var result = copy (iterable.py_keys ());
+							var result = copy (iterable.keys ());
 						}
 						else {
 							var result = copy (iterable);
@@ -348,7 +348,7 @@ function autotest () {
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
-			return container.py_keys () .indexOf (element) > -1;
+			return container.keys () .indexOf (element) > -1;
 		}
 		else {
 			return container.indexOf (element) > -1;
@@ -493,18 +493,24 @@ function autotest () {
 	__all__.repr = repr;
 	
 	// Char from Unicode or ASCII
-	
 	var chr = function (charCode) {
 		return String.fromCharCode (charCode);
 	}
 	__all__.chr = chr;
 
 	// Unicode or ASCII from char
-	
 	var ord = function (aChar) {
 		return aChar.charCodeAt (0);
 	}
 	__all__.org = ord;
+	
+	// Maximum of n numbers
+	var max = Math.max;
+	__all__.max = max;
+	
+	// Minimum of n numbers
+	var min = Math.min;
+	__all__.min = min;
 	
 	// Reversed function for arrays
 	var reversed = function (iterable) {
@@ -647,7 +653,7 @@ function autotest () {
 			}
 		}
 	}
-		
+	
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
 			return 'set()';
@@ -859,16 +865,19 @@ function autotest () {
 	};
 	
 	Array.prototype.__eq__ = function (other) {	// Also used for list
+		if (this.length != other.length) {
+			return false;
+		}
 		if (this.__class__ == set) {
 			this.sort ();
 			other.sort ();
 		}	
 		for (var i = 0; i < this.length; i++) {
 			if (this [i] != other [i]) {
-				return false
+				return false;
 			}
 		}
-		return true
+		return true;
 	};
 	
 	Array.prototype.__ne__ = function (other) {	// Also used for list
@@ -918,8 +927,14 @@ function autotest () {
 	function __del__ (key) {
 		delete this [key];
 	}
-	
 	__all__.__del__ = __del__;
+	
+	function __clear__ () {
+		for (var attrib in this) {
+			delete this [attrib];
+		}
+	}
+	__all__.__clear__ = __clear__;
 		
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
@@ -940,9 +955,10 @@ function autotest () {
 		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
 		// So the properties of a dict should be non-enumerable
 		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});			
-		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});		
-		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});			
+		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
 		
 		return instance;
 	}
@@ -1791,7 +1807,7 @@ function autotest () {
 							var __accu0__ = [];
 							var __iter0__ = original;
 							if (type (__iter0__) == dict) {
-								__iter0__ = __iter0__.py_keys ();
+								__iter0__ = __iter0__.keys ();
 							}
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 								var key = __iter0__ [__index0__];
@@ -1822,15 +1838,15 @@ function autotest () {
 						delete tel ['sape'];
 						tel ['irv'] = 4127;
 						autoTester.check (tel);
-						autoTester.check (sorted (list (tel.py_keys ())), false);
-						autoTester.check (sorted (tel.py_keys ()));
+						autoTester.check (sorted (list (tel.keys ())), false);
+						autoTester.check (sorted (tel.keys ()));
 						autoTester.check (__in__ ('guido', tel));
 						autoTester.check (!__in__ ('jack', tel));
 						autoTester.check (dict (list ([tuple (['guido', 4127]), tuple (['jack', 4098]), tuple (['sape', 4139])])));
 						var knights = dict ({'robin': 'the brave', 'gallahad': 'the pure'});
-						var __iter0__ = sorted (knights.py_items ());
+						var __iter0__ = sorted (knights.items ());
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var __left0__ = __iter0__ [__index0__];
@@ -1843,7 +1859,7 @@ function autotest () {
 						}
 						var __iter0__ = sorted (knights);
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var k = __iter0__ [__index0__];
@@ -1852,7 +1868,7 @@ function autotest () {
 						var knight = dict ({'rudolph': 'the righteous'});
 						var __iter0__ = knight;
 						if (type (__iter0__) == dict) {
-							__iter0__ = __iter0__.py_keys ();
+							__iter0__ = __iter0__.keys ();
 						}
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 							var k = __iter0__ [__index0__];
@@ -1873,11 +1889,16 @@ function autotest () {
 				__inited__: false,
 				__init__: function (__all__) {
 					var run = function (autoTester) {
+						autoTester.check ('Issue 40');
 						autoTester.check (65 / (5 * 2));
+						autoTester.check ('Issue 24');
 						var py_switch = false;
 						autoTester.check (py_switch);
+						autoTester.check ('Issue 37');
 						autoTester.check (Math.floor (15 / 7));
+						autoTester.check ('Issue 27');
 						autoTester.check (list (['zero', 'one', 'two', 'three', 'four']).index ('three'));
+						autoTester.check ('Issue 36');
 						var results = list ([]);
 						for (var i = 0; i < 10; i++) {
 							results.append ((function __lambda__ (j) {
@@ -1893,12 +1914,23 @@ function autotest () {
 							}
 							return __accu0__;
 						} ());
+						autoTester.check ('Issue 50');
 						autoTester.check ((Math.floor (((240 + 30) - 1) / 30)) * 30);
+						autoTester.check ('Issue 51');
+						var a = 1;
+						var b = 1;
+						autoTester.check (a, b, new set ([a, b]) == new set ([1, 2]));
+						autoTester.check ('Issue 52');
 						var __left0__ = tuple (['switch', 'case', 'default']);
 						var py_switch = __left0__ [0];
 						var py_case = __left0__ [1];
 						var py_default = __left0__ [2];
 						autoTester.check (py_switch, py_case, py_default);
+						autoTester.check ('Issue 54');
+						var aDict = dict ({1: 11, 2: 22, 3: 33});
+						autoTester.check (aDict);
+						aDict.clear ();
+						autoTester.check (aDict);
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -2928,7 +2960,7 @@ function autotest () {
 									var __accu0__ = [];
 									var __iter0__ = enumerate (sorted (function () {
 										var __accu1__ = [];
-										var __iter1__ = any.py_keys ();
+										var __iter1__ = any.keys ();
 										for (var __index0__ = 0; __index0__ < __iter1__.length; __index0__++) {
 											var key = __iter1__ [__index0__];
 											__accu1__.append (tryGetNumKey (key));

@@ -412,10 +412,7 @@ class Generator (ast.NodeVisitor):
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
 			('arguments', 'py_arguments'),	('js_arguments', 'arguments'),
-			('del', 'py_del'),				('js_del', 'del'),
 			('js_from', 'from'),
-			('items', 'py_items'),			('js_items', 'items'),
-			('keys', 'py_keys'),			('js_keys', 'keys'),
 			('name', 'py_name'),			('js_name', 'name'),
 			('pop', 'py_pop'),				('js_pop', 'pop'),
 			('replace', 'py_replace'),		('js_replace', 'replace'),
