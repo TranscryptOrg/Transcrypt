@@ -3,16 +3,16 @@
 		var SolarSystem = __class__ ('SolarSystem', [object], {
 			get __init__ () {return __get__ (this, function (self) {
 				self.lineIndex = 0;
-			});},
+			}, '__init__');},
 			get greet () {return __get__ (this, function (self) {
 				self.planet = self.planets [int (Math.random () * len (self.planets))];
 				document.getElementById ('greet').innerHTML = 'Hello {}'.format (self.planet [0]);
 				self.explain ();
-			});},
+			}, 'greet');},
 			get explain () {return __get__ (this, function (self) {
 				document.getElementById ('explain').innerHTML = self.lines [self.lineIndex].format (self.planet [0], self.planet [self.lineIndex + 1]);
 				self.lineIndex = (self.lineIndex + 1) % 3;
-			});}
+			}, 'explain');}
 		});
 		SolarSystem.planets = function () {
 			var __accu0__ = [];
@@ -32,6 +32,7 @@
 		'</use>')
 		__pragma__ ('<all>')
 			__all__.SolarSystem = SolarSystem;
+			__all__.chain = chain;
 			__all__.solarSystem = solarSystem;
 		__pragma__ ('</all>')
 	}) ();

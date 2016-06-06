@@ -512,7 +512,7 @@ class Generator (ast.NodeVisitor):
 			(__{0}(?=\.))		# Ends with '__<pyFragment>.'
 		'''.format (pyFragment), re.VERBOSE), jsFragment)
 			
-	def filterId (self, qualifiedId):
+	def filterId (self, qualifiedId):	# Convention: only called at emission time
 		for aliaser in self.aliasers:
 			qualifiedId = re.sub (aliaser [1], aliaser [2], qualifiedId)
 		return qualifiedId
@@ -1474,7 +1474,10 @@ class Generator (ast.NodeVisitor):
 						self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (name), self.filterId (node.module))
 						if index < len (module.all) - 1:
 							self.emit (';\n')
+							
+					self.all.update (module.all)
 				else:
+					# N.B. The emits in the try and except clauses have different placement of brackets
 					try:														# Try if alias.name denotes a module
 						self.useModule ('{}.{}'.format (node.module, alias.name))
 												
@@ -1488,7 +1491,13 @@ class Generator (ast.NodeVisitor):
 						if alias.asname:
 							self.emit ('var {} = __init__ (__world__.{}).{}', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
 						else:
-							self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))						
+							self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))
+							
+					if alias.asname:
+						self.all.add (alias.asname)
+					else:
+						self.all.add (alias.name)
+					
 					if index < len (node.names) - 1:
 						self.emit (';\n')
 		except Exception as exception:

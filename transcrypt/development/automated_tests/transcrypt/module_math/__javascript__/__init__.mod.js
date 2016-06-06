@@ -68,7 +68,36 @@
 						'math' +
 					'</use>')
 					__pragma__ ('<all>')
+						__all__.acos = acos;
+						__all__.acosh = acosh;
+						__all__.asin = asin;
+						__all__.asinh = asinh;
+						__all__.atan = atan;
+						__all__.atan2 = atan2;
+						__all__.atanh = atanh;
+						__all__.ceil = ceil;
+						__all__.cos = cos;
+						__all__.cosh = cosh;
+						__all__.degrees = degrees;
+						__all__.e = e;
+						__all__.exp = exp;
+						__all__.expm1 = expm1;
+						__all__.floor = floor;
+						__all__.hypot = hypot;
+						__all__.log = log;
+						__all__.log10 = log10;
+						__all__.log1p = log1p;
+						__all__.log2 = log2;
+						__all__.pi = pi;
+						__all__.pow = pow;
+						__all__.radians = radians;
 						__all__.run = run;
+						__all__.sin = sin;
+						__all__.sinh = sinh;
+						__all__.sqrt = sqrt;
+						__all__.tan = tan;
+						__all__.tanh = tanh;
+						__all__.trunc = trunc;
 					__pragma__ ('</all>')
 				}
 			}

@@ -61,10 +61,18 @@
 						'modules.mod3' +
 					'</use>')
 					__pragma__ ('<all>')
+						__all__.A = A;
 						__all__.a = a;
+						__all__.aMod21 = aMod21;
+						__all__.aMod22 = aMod22;
 						__all__.f = f;
+						__all__.mod111 = mod111;
+						__all__.mod112 = mod112;
+						__all__.mod3GetTwoHundred = mod3GetTwoHundred;
+						__all__.mod3Hundred = mod3Hundred;
 						__all__.pi = pi;
 						__all__.run = run;
+						__all__.x = x;
 					__pragma__ ('</all>')
 				}
 			}

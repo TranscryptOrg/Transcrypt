@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-02 10:18:30
+// Transcrypt'ed from Python, 2016-06-06 14:12:48
 function snowflake () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function snowflake () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.165';
+							self.transpiler_version = '3.5.167';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function snowflake () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function snowflake () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function snowflake () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -1309,7 +1309,7 @@ function snowflake () {
 							_allTurtles.append (self);
 							self._paths = list ([]);
 							self.reset ();
-						});},
+						}, '__init__');},
 						get reset () {return __get__ (this, function (self) {
 							self._heading = Math.PI / 2;
 							self.pensize (1);
@@ -1318,7 +1318,7 @@ function snowflake () {
 							self._track = list ([]);
 							self.home ();
 							self.clear ();
-						});},
+						}, 'reset');},
 						get clear () {return __get__ (this, function (self) {
 							var __iter0__ = self._paths;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -1328,7 +1328,7 @@ function snowflake () {
 							self._paths = list ([]);
 							self._track = list ([]);
 							self._moveto (self._position);
-						});},
+						}, 'clear');},
 						get _flush () {return __get__ (this, function (self) {
 							if (_debug) {
 								print ('Flush:', self._track);
@@ -1345,10 +1345,10 @@ function snowflake () {
 								self._track = list ([]);
 								self._moveto (self._position);
 							}
-						});},
+						}, '_flush');},
 						get done () {return __get__ (this, function (self) {
 							self._flush ();
-						});},
+						}, 'done');},
 						get pensize () {return __get__ (this, function (self, width) {
 							self._flush ();
 							if (width == null) {
@@ -1357,7 +1357,7 @@ function snowflake () {
 							else {
 								self._pensize = width;
 							}
-						});},
+						}, 'pensize');},
 						get color () {return __get__ (this, function (self, pencolor, fillcolor) {
 							if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
 								var fillcolor = null;
@@ -1367,7 +1367,7 @@ function snowflake () {
 							if (fillcolor != null) {
 								self._fillcolor = fillcolor;
 							}
-						});},
+						}, 'color');},
 						get goto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1379,7 +1379,7 @@ function snowflake () {
 								self._position = list ([x, y]);
 							}
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						});},
+						}, 'goto');},
 						get _moveto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1390,16 +1390,16 @@ function snowflake () {
 							if (wasdown) {
 								self.down ();
 							}
-						});},
+						}, '_moveto');},
 						get home () {return __get__ (this, function (self) {
 							self._moveto (0, 0);
-						});},
+						}, 'home');},
 						get position () {return __get__ (this, function (self) {
 							return self._position.__getslice__ (0, null, 1);
-						});},
+						}, 'position');},
 						get pos () {return __get__ (this, function (self) {
 							return self.position ();
-						});},
+						}, 'pos');},
 						get distance () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1413,48 +1413,48 @@ function snowflake () {
 							var dX = other [0] - self._position [0];
 							var dY = other [1] - self._position [1];
 							return Math.sqrt (dX * dX + dY * dY);
-						});},
+						}, 'distance');},
 						get up () {return __get__ (this, function (self) {
 							self._down = false;
-						});},
+						}, 'up');},
 						get down () {return __get__ (this, function (self) {
 							self._down = true;
-						});},
+						}, 'down');},
 						get isdown () {return __get__ (this, function (self) {
 							return self._down;
-						});},
+						}, 'isdown');},
 						get _predict () {return __get__ (this, function (self, length) {
 							var delta = list ([Math.sin (self._heading), Math.cos (self._heading)]);
 							return list ([self._position [0] + length * delta [0], self._position [1] + length * delta [1]]);
-						});},
+						}, '_predict');},
 						get forward () {return __get__ (this, function (self, length) {
 							self._position = self._predict (length);
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						});},
+						}, 'forward');},
 						get back () {return __get__ (this, function (self, length) {
 							self.forward (-(length));
-						});},
+						}, 'back');},
 						get circle () {return __get__ (this, function (self, radius) {
 							self.left (90);
 							var opposite = self._predict (2 * (radius + 1) + 1);
 							self.right (90);
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, opposite [0] + _offset [0], opposite [1] + _offset [1]));
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						});},
+						}, 'circle');},
 						get left () {return __get__ (this, function (self, angle) {
 							self._heading = (self._heading + (Math.PI * angle) / 180) % (2 * Math.PI);
-						});},
+						}, 'left');},
 						get right () {return __get__ (this, function (self, angle) {
 							self.left (-(angle));
-						});},
+						}, 'right');},
 						get begin_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = true;
-						});},
+						}, 'begin_fill');},
 						get end_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = false;
-						});}
+						}, 'end_fill');}
 					});
 					var _defaultTurtle = Turtle ();
 					var reset = function () {
@@ -1637,10 +1637,43 @@ function snowflake () {
 			'turtle' +
 		'</use>')
 		__pragma__ ('<all>')
+			__all__.Turtle = Turtle;
+			__all__._allTurtles = _allTurtles;
+			__all__._debug = _debug;
+			__all__._defaultElement = _defaultElement;
+			__all__._defaultTurtle = _defaultTurtle;
+			__all__._height = _height;
+			__all__._ns = _ns;
+			__all__._offset = _offset;
+			__all__._rightSize = _rightSize;
+			__all__._svg = _svg;
+			__all__._width = _width;
+			__all__.abs = abs;
+			__all__.back = back;
+			__all__.begin_fill = begin_fill;
+			__all__.bgcolor = bgcolor;
+			__all__.circle = circle;
+			__all__.clear = clear;
+			__all__.color = color;
+			__all__.distance = distance;
+			__all__.done = done;
+			__all__.down = down;
 			__all__.draw = draw;
+			__all__.end_fill = end_fill;
+			__all__.forward = forward;
+			__all__.goto = goto;
+			__all__.home = home;
 			__all__.i = i;
 			__all__.josh = josh;
+			__all__.left = left;
 			__all__.length = length;
+			__all__.pensize = pensize;
+			__all__.pos = pos;
+			__all__.position = position;
+			__all__.reset = reset;
+			__all__.right = right;
+			__all__.setDefaultElement = setDefaultElement;
+			__all__.up = up;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

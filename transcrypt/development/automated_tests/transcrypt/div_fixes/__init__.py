@@ -1,3 +1,5 @@
+from div_fixes.issue55 import *
+
 def run (autoTester):
 	autoTester.check ('Issue 40')
 	autoTester.check (65 / (5 * 2))
@@ -39,4 +41,7 @@ def run (autoTester):
 	autoTester.check (aDict)
 	aDict.clear ()
 	autoTester.check (aDict)
+	
+	autoTester.check ('Issue 55')
+	autoTester.check (f1 (), p, q, r, anA, aB, y)
 	

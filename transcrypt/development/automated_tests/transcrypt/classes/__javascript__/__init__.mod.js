@@ -9,13 +9,13 @@
 							get __init__ () {return __get__ (this, function (self, x) {
 								self.x = x;
 								autoTester.check (self.p);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show', label, self.x);
-							});},
+							}, 'show');},
 							get show2 () {return __get__ (this, function (self, label) {
 								autoTester.check ('A.show2', label, self.x);
-							});}
+							}, 'show2');}
 						});
 						A.p = 123;
 						var B = __class__ ('B', [object], {
@@ -23,10 +23,10 @@
 								autoTester.check ('In B constructor');
 								self.y = y;
 								autoTester.check (self.p);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								autoTester.check ('B.show', label, self.y);
-							});}
+							}, 'show');}
 						});
 						var __left0__ = tuple ([456, 789]);
 						B.p = __left0__ [0];
@@ -36,12 +36,12 @@
 								autoTester.check ('In C constructor');
 								A.__init__ (self, x);
 								B.__init__ (self, y);
-							});},
+							}, '__init__');},
 							get show () {return __get__ (this, function (self, label) {
 								A.show (self, label);
 								B.show (self, label);
 								autoTester.check ('C.show', label, self.x, self.y);
-							});}
+							}, 'show');}
 						});
 						var a = A (1001);
 						a.show ('america');

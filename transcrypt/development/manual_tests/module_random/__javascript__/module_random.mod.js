@@ -43,9 +43,20 @@
 			'random' +
 		'</use>')
 		__pragma__ ('<all>')
+			__all__._array = _array;
+			__all__._bitmask1 = _bitmask1;
+			__all__._bitmask2 = _bitmask2;
+			__all__._bitmask3 = _bitmask3;
+			__all__._fill_array = _fill_array;
+			__all__._index = _index;
+			__all__._random_integer = _random_integer;
+			__all__.choice = choice;
 			__all__.fixedSeed = fixedSeed;
 			__all__.i = i;
 			__all__.output = output;
+			__all__.randint = randint;
+			__all__.random = random;
 			__all__.result = result;
+			__all__.seed = seed;
 		__pragma__ ('</all>')
 	}) ();

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-02 10:17:57
+// Transcrypt'ed from Python, 2016-06-06 14:12:14
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function module_random () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.165';
+							self.transpiler_version = '3.5.167';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function module_random () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function module_random () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function module_random () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -1385,10 +1385,21 @@ function module_random () {
 			'random' +
 		'</use>')
 		__pragma__ ('<all>')
+			__all__._array = _array;
+			__all__._bitmask1 = _bitmask1;
+			__all__._bitmask2 = _bitmask2;
+			__all__._bitmask3 = _bitmask3;
+			__all__._fill_array = _fill_array;
+			__all__._index = _index;
+			__all__._random_integer = _random_integer;
+			__all__.choice = choice;
 			__all__.fixedSeed = fixedSeed;
 			__all__.i = i;
 			__all__.output = output;
+			__all__.randint = randint;
+			__all__.random = random;
 			__all__.result = result;
+			__all__.seed = seed;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
