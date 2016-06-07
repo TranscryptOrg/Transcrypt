@@ -1,83 +1,60 @@
-import turtle as turtle_graphics
-import random
+# Inspired by Piet Mondrian
 
-class Bounds:
-	def __init__ (self, x, y, width, height):
-		self.x = x
-		self.y = y
-		self.width = width
-		self.height = height
+from turtle import *
+from random import *
 
-BORDER_COLOR = 'black'  # so you can add 'black' to COLORS below
+colors = ('gray', 'green', 'red', 'white', 'blue', 'yellow')
+delta = 8
+threshold = 100
+color ('black', 'black')
 
-BORDER_WIDTH = 10
+def maybe (bias = None):
+	return choice ([False, True, bias, bias] if bias != None else [False, True])	
 
-MINIMUM_DIVISIBLE_PORTION = .2	# limits recursion
+def between (a, b):
+	return a + (0.2 + 0.3 * random ()) * (b - a)
 
-COLORS = ('gray', 'green', 'red', 'white', 'blue', 'yellow')  # multiple 'white' to increase probability
-
-PICTURE_BOUNDS = Bounds(x=-250, y=-300, width=500, height=600)
-
-def fill_rectangle(turtle, bounds, color=BORDER_COLOR):
-	""" Fill a rectangle with the border color (by default) and then fill the center with a bright color """
-	turtle.up()
-	turtle.goto(bounds.x, bounds.y)
-	turtle.color(color)
-	turtle.down()
-	turtle.begin_fill()
-	for _ in range(2):
-		turtle.forward(bounds.width)
-		turtle.left(90)
-		turtle.forward(bounds.height)
-		turtle.left(90)
-	turtle.end_fill()
-	turtle.up()
-
-	if color == BORDER_COLOR:
-		fill_rectangle(turtle, Bounds(bounds.x + BORDER_WIDTH, bounds.y + BORDER_WIDTH, bounds.width - BORDER_WIDTH*2, bounds.height - BORDER_WIDTH*2), random.choice(COLORS))
-
-
-def mondrian(piet, bounds):
-	""" Divide, fill and divide & fill some more.  Intuitively and recursively """
-
-	if bounds.width < bounds.height:
-		random_dimension = random.randint (bounds.height // 5, 2 * bounds.height // 3)
-		bounds_yin = Bounds(bounds.x, bounds.y + random_dimension, bounds.width, bounds.height - random_dimension)
-		bounds_yang = Bounds(bounds.x, bounds.y, bounds.width, random_dimension)
+def rect (xMin, yMin, xMax, yMax):
+	for aColor in ('black', choice (colors)):
+		color (aColor, aColor)
 		
-		if bounds_yin.height > bounds_yang.height:
-			bounds_paint, bounds_divide = bounds_yang, bounds_yin
+		up ()
+		goto (xMin, yMin)
+		down ()
+		
+		begin_fill ()
+		goto (xMax, yMin)
+		goto (xMax, yMax)
+		goto (xMin, yMax)
+		goto (xMin, yMin)
+		end_fill ()
+		
+		xMin += delta
+		yMin += delta
+		xMax -= delta
+		yMax -= delta
+	
+def draw (xMin, yMin, xMax, yMax):
+	if xMax - xMin > threshold and yMax - yMin > threshold:
+		if maybe (xMax - xMin > yMax - yMin):
+			xMid = between (xMin, xMax)
+			if maybe ():
+				draw (xMin, yMin, xMid, yMax)
+				rect (xMid, yMin, xMax, yMax)
+			else:
+				rect (xMin, yMin, xMid, yMax)
+				draw (xMid, yMin, xMax, yMax)
 		else:
-			bounds_paint, bounds_divide = bounds_yin, bounds_yang
-
-		fill_rectangle(piet, bounds_paint)
-
-		if bounds_divide.height < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.height:
-			fill_rectangle(piet, bounds_divide)
-		else:
-			pass
-			mondrian(piet, bounds_divide)
+			yMid = between (yMin, yMax)
+			if maybe ():
+				draw (xMin, yMin, xMax, yMid)
+				rect (xMin, yMid, xMax, yMax)
+			else:
+				rect (xMin, yMin, xMax, yMid)
+				draw (xMin, yMid, xMax, yMax)
 	else:
-		random_dimension = random.randint(bounds.width // 5, 2 * bounds.width // 3)
-		bounds_yin = Bounds(bounds.x, bounds.y, random_dimension, bounds.height)
-		bounds_yang = Bounds(bounds.x + random_dimension, bounds.y, bounds.width - random_dimension, bounds.height)
-		if bounds_yin.width > bounds_yang.width:
-			bounds_paint, bounds_divide = bounds_yang, bounds_yin
-		else:
-			bounds_paint, bounds_divide = bounds_yin, bounds_yang
+		rect (xMin, yMin, xMax, yMax)
+		done ()				
 
-		fill_rectangle(piet, bounds_paint)
+timer = setInterval (lambda: draw (-250, -300, 250, 300), 1000)
 
-		if bounds_divide.width < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.width:
-			fill_rectangle(piet, bounds_divide)
-		else:
-			pass
-			mondrian(piet, bounds_divide)
-
-
-def paint_canvas(dummy_x=0, dummy_y=0):
-	""" Runs the program and can be used as an event handler """
-	#fill_rectangle(turtle_graphics, PICTURE_BOUNDS, 'black')
-	mondrian(turtle_graphics, PICTURE_BOUNDS)
-
-paint_canvas()

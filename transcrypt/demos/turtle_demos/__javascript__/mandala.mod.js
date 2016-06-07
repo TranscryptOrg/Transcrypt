@@ -57,45 +57,12 @@
 			'turtle' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.Turtle = Turtle;
-			__all__._allTurtles = _allTurtles;
-			__all__._debug = _debug;
-			__all__._defaultElement = _defaultElement;
-			__all__._defaultTurtle = _defaultTurtle;
-			__all__._height = _height;
-			__all__._ns = _ns;
-			__all__._offset = _offset;
-			__all__._rightSize = _rightSize;
-			__all__._svg = _svg;
-			__all__._width = _width;
 			__all__.a_color = a_color;
 			__all__.a_pensize = a_pensize;
-			__all__.abs = abs;
 			__all__.angle_index = angle_index;
-			__all__.back = back;
-			__all__.begin_fill = begin_fill;
-			__all__.bgcolor = bgcolor;
-			__all__.circle = circle;
-			__all__.clear = clear;
-			__all__.color = color;
-			__all__.distance = distance;
-			__all__.done = done;
-			__all__.down = down;
-			__all__.end_fill = end_fill;
-			__all__.forward = forward;
-			__all__.goto = goto;
-			__all__.home = home;
-			__all__.left = left;
-			__all__.pensize = pensize;
-			__all__.pos = pos;
-			__all__.position = position;
 			__all__.radius = radius;
 			__all__.radius_step = radius_step;
-			__all__.reset = reset;
-			__all__.right = right;
-			__all__.setDefaultElement = setDefaultElement;
 			__all__.start_radius = start_radius;
 			__all__.stop_radius = stop_radius;
-			__all__.up = up;
 		__pragma__ ('</all>')
 	}) ();

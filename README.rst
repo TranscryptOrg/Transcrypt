@@ -35,6 +35,8 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- "Mondrian" turtle demo added
+- Other modules not exporting their imports anymore (fell over during previous fix)
 - A module's __init__ now exports all of its imports to importers of that module
 - Added clear method to dict + testcase
 - Fixed error in set compare + testcase

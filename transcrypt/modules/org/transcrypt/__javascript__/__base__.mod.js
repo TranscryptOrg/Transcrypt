@@ -9,7 +9,7 @@
 							self.transpiler_name = 'transcrypt';
 							self.transpiler_version = '3.5.167';
 							self.target_subdir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')

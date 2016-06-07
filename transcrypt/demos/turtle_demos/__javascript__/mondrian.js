@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-05-28 19:10:04
+// Transcrypt'ed from Python, 2016-06-07 14:10:22
 function mondrian () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function mondrian () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.161';
+							self.transpiler_version = '3.5.167';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -257,7 +257,7 @@ function mondrian () {
 							}
 						}
 						if (type (iterable) == dict) {
-							var result = copy (iterable.py_keys ());
+							var result = copy (iterable.keys ());
 						}
 						else {
 							var result = copy (iterable);
@@ -348,7 +348,7 @@ function mondrian () {
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
-			return container.py_keys () .indexOf (element) > -1;
+			return container.keys () .indexOf (element) > -1;
 		}
 		else {
 			return container.indexOf (element) > -1;
@@ -493,18 +493,24 @@ function mondrian () {
 	__all__.repr = repr;
 	
 	// Char from Unicode or ASCII
-	
 	var chr = function (charCode) {
 		return String.fromCharCode (charCode);
 	}
 	__all__.chr = chr;
 
 	// Unicode or ASCII from char
-	
 	var ord = function (aChar) {
 		return aChar.charCodeAt (0);
 	}
 	__all__.org = ord;
+	
+	// Maximum of n numbers
+	var max = Math.max;
+	__all__.max = max;
+	
+	// Minimum of n numbers
+	var min = Math.min;
+	__all__.min = min;
 	
 	// Reversed function for arrays
 	var reversed = function (iterable) {
@@ -647,7 +653,7 @@ function mondrian () {
 			}
 		}
 	}
-		
+	
 	Array.prototype.__repr__ = function () {
 		if (this.__class__ == set && !this.length) {
 			return 'set()';
@@ -859,16 +865,19 @@ function mondrian () {
 	};
 	
 	Array.prototype.__eq__ = function (other) {	// Also used for list
+		if (this.length != other.length) {
+			return false;
+		}
 		if (this.__class__ == set) {
 			this.sort ();
 			other.sort ();
 		}	
 		for (var i = 0; i < this.length; i++) {
 			if (this [i] != other [i]) {
-				return false
+				return false;
 			}
 		}
-		return true
+		return true;
 	};
 	
 	Array.prototype.__ne__ = function (other) {	// Also used for list
@@ -918,8 +927,14 @@ function mondrian () {
 	function __del__ (key) {
 		delete this [key];
 	}
-	
 	__all__.__del__ = __del__;
+	
+	function __clear__ () {
+		for (var attrib in this) {
+			delete this [attrib];
+		}
+	}
+	__all__.__clear__ = __clear__;
 		
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
@@ -940,9 +955,10 @@ function mondrian () {
 		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
 		// So the properties of a dict should be non-enumerable
 		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});			
-		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});		
-		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});			
+		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
 		
 		return instance;
 	}
@@ -1632,118 +1648,128 @@ function mondrian () {
 		}
 	);
 	(function () {
-		var random = {};
-		var turtle_graphics =  __init__ (__world__.turtle);
-		__nest__ (random, '', __init__ (__world__.random));
-		var Bounds = __class__ ('Bounds', [object], {
-			get __init__ () {return __get__ (this, function (self, x, y, width, height) {
-				self.x = x;
-				self.y = y;
-				self.width = width;
-				self.height = height;
-			});}
-		});
-		var BORDER_COLOR = 'black';
-		var BORDER_WIDTH = 10;
-		var MINIMUM_DIVISIBLE_PORTION = 0.2;
-		var COLORS = tuple (['white', 'white', 'red', 'white', 'blue', 'yellow']);
-		var PICTURE_BOUNDS = Bounds (__kwargdict__ ({x: -(250), y: -(300), width: 500, height: 600}));
-		var fill_rectangle = function (turtle, bounds, color) {
-			if (typeof color == 'undefined' || (color != null && color .__class__ == __kwargdict__)) {;
-				var color = BORDER_COLOR;
+		var Turtle = __init__ (__world__.turtle).Turtle;
+		var _allTurtles = __init__ (__world__.turtle)._allTurtles;
+		var _debug = __init__ (__world__.turtle)._debug;
+		var _defaultElement = __init__ (__world__.turtle)._defaultElement;
+		var _defaultTurtle = __init__ (__world__.turtle)._defaultTurtle;
+		var _height = __init__ (__world__.turtle)._height;
+		var _ns = __init__ (__world__.turtle)._ns;
+		var _offset = __init__ (__world__.turtle)._offset;
+		var _rightSize = __init__ (__world__.turtle)._rightSize;
+		var _svg = __init__ (__world__.turtle)._svg;
+		var _width = __init__ (__world__.turtle)._width;
+		var abs = __init__ (__world__.turtle).abs;
+		var back = __init__ (__world__.turtle).back;
+		var begin_fill = __init__ (__world__.turtle).begin_fill;
+		var bgcolor = __init__ (__world__.turtle).bgcolor;
+		var circle = __init__ (__world__.turtle).circle;
+		var clear = __init__ (__world__.turtle).clear;
+		var color = __init__ (__world__.turtle).color;
+		var distance = __init__ (__world__.turtle).distance;
+		var done = __init__ (__world__.turtle).done;
+		var down = __init__ (__world__.turtle).down;
+		var end_fill = __init__ (__world__.turtle).end_fill;
+		var forward = __init__ (__world__.turtle).forward;
+		var goto = __init__ (__world__.turtle).goto;
+		var home = __init__ (__world__.turtle).home;
+		var left = __init__ (__world__.turtle).left;
+		var pensize = __init__ (__world__.turtle).pensize;
+		var pos = __init__ (__world__.turtle).pos;
+		var position = __init__ (__world__.turtle).position;
+		var reset = __init__ (__world__.turtle).reset;
+		var right = __init__ (__world__.turtle).right;
+		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
+		var up = __init__ (__world__.turtle).up;
+		var _array = __init__ (__world__.random)._array;
+		var _bitmask1 = __init__ (__world__.random)._bitmask1;
+		var _bitmask2 = __init__ (__world__.random)._bitmask2;
+		var _bitmask3 = __init__ (__world__.random)._bitmask3;
+		var _fill_array = __init__ (__world__.random)._fill_array;
+		var _index = __init__ (__world__.random)._index;
+		var _random_integer = __init__ (__world__.random)._random_integer;
+		var choice = __init__ (__world__.random).choice;
+		var randint = __init__ (__world__.random).randint;
+		var random = __init__ (__world__.random).random;
+		var seed = __init__ (__world__.random).seed;
+		var colors = tuple (['gray', 'green', 'red', 'white', 'blue', 'yellow']);
+		var delta = 8;
+		var threshold = 100;
+		color ('black', 'black');
+		var maybe = function (bias) {
+			if (typeof bias == 'undefined' || (bias != null && bias .__class__ == __kwargdict__)) {;
+				var bias = null;
 			};
-			' Fill a rectangle with the border color (by default) and then fill the center with a bright color ';
-			turtle.up ();
-			turtle.goto (bounds.x, bounds.y);
-			turtle.color (color);
-			turtle.down ();
-			turtle.begin_fill ();
-			for (var _ = 0; _ < 2; _++) {
-				turtle.forward (bounds.width);
-				turtle.left (90);
-				turtle.forward (bounds.height);
-				turtle.left (90);
-			}
-			turtle.end_fill ();
-			turtle.up ();
-			if (color == BORDER_COLOR) {
-				fill_rectangle (turtle, Bounds (bounds.x + BORDER_WIDTH, bounds.y + BORDER_WIDTH, bounds.width - BORDER_WIDTH * 2, bounds.height - BORDER_WIDTH * 2), random.choice (COLORS));
+			return choice ((bias != null ? list ([false, true, bias, bias]) : list ([false, true])));
+		};
+		var between = function (a, b) {
+			return a + (0.2 + 0.3 * random ()) * (b - a);
+		};
+		var rect = function (xMin, yMin, xMax, yMax) {
+			var __iter0__ = tuple (['black', choice (colors)]);
+			for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+				var aColor = __iter0__ [__index0__];
+				color (aColor, aColor);
+				up ();
+				goto (xMin, yMin);
+				down ();
+				begin_fill ();
+				goto (xMax, yMin);
+				goto (xMax, yMax);
+				goto (xMin, yMax);
+				goto (xMin, yMin);
+				end_fill ();
+				xMin += delta;
+				yMin += delta;
+				xMax -= delta;
+				yMax -= delta;
 			}
 		};
-		var mondrian = function (piet, bounds) {
-			' Divide, fill and divide & fill some more.  Intuitively and recursively ';
-			if (bounds.width < bounds.height) {
-				var random_dimension = random.randint (Math.floor (bounds.height / 5), Math.floor ((2 * bounds.height) / 3));
-				var bounds_yin = Bounds (bounds.x, bounds.y + random_dimension, bounds.width, bounds.height - random_dimension);
-				var bounds_yang = Bounds (bounds.x, bounds.y, bounds.width, random_dimension);
-				if (bounds_yin.height > bounds_yang.height) {
-					var __left0__ = tuple ([bounds_yang, bounds_yin]);
-					var bounds_paint = __left0__ [0];
-					var bounds_divide = __left0__ [1];
+		var draw = function (xMin, yMin, xMax, yMax) {
+			if (xMax - xMin > threshold && yMax - yMin > threshold) {
+				if (maybe (xMax - xMin > yMax - yMin)) {
+					var xMid = between (xMin, xMax);
+					if (maybe ()) {
+						draw (xMin, yMin, xMid, yMax);
+						rect (xMid, yMin, xMax, yMax);
+					}
+					else {
+						rect (xMin, yMin, xMid, yMax);
+						draw (xMid, yMin, xMax, yMax);
+					}
 				}
 				else {
-					var __left0__ = tuple ([bounds_yin, bounds_yang]);
-					var bounds_paint = __left0__ [0];
-					var bounds_divide = __left0__ [1];
-				}
-				print (111, bounds_paint);
-				fill_rectangle (piet, bounds_paint);
-				if (bounds_divide.height < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.height) {
-					fill_rectangle (piet, bounds_divide);
-				}
-				else {
-					// pass;
+					var yMid = between (yMin, yMax);
+					if (maybe ()) {
+						draw (xMin, yMin, xMax, yMid);
+						rect (xMin, yMid, xMax, yMax);
+					}
+					else {
+						rect (xMin, yMin, xMax, yMid);
+						draw (xMin, yMid, xMax, yMax);
+					}
 				}
 			}
 			else {
-				var random_dimension = random.randint (Math.floor (bounds.width / 5), Math.floor ((2 * bounds.width) / 3));
-				var bounds_yin = Bounds (bounds.x, bounds.y, random_dimension, bounds.height);
-				var bounds_yang = Bounds (bounds.x + random_dimension, bounds.y, bounds.width - random_dimension, bounds.height);
-				if (bounds_yin.width > bounds_yang.width) {
-					var __left0__ = tuple ([bounds_yang, bounds_yin]);
-					var bounds_paint = __left0__ [0];
-					var bounds_divide = __left0__ [1];
-				}
-				else {
-					var __left0__ = tuple ([bounds_yin, bounds_yang]);
-					var bounds_paint = __left0__ [0];
-					var bounds_divide = __left0__ [1];
-				}
-				print (222, bounds_paint);
-				fill_rectangle (piet, bounds_paint);
-				if (bounds_divide.width < MINIMUM_DIVISIBLE_PORTION * PICTURE_BOUNDS.width) {
-					fill_rectangle (piet, bounds_divide);
-				}
-				else {
-					// pass;
-				}
+				rect (xMin, yMin, xMax, yMax);
+				done ();
 			}
 		};
-		var paint_canvas = function (dummy_x, dummy_y) {
-			if (typeof dummy_x == 'undefined' || (dummy_x != null && dummy_x .__class__ == __kwargdict__)) {;
-				var dummy_x = 0;
-			};
-			if (typeof dummy_y == 'undefined' || (dummy_y != null && dummy_y .__class__ == __kwargdict__)) {;
-				var dummy_y = 0;
-			};
-			' Runs the program and can be used as an event handler ';
-			mondrian (turtle_graphics, PICTURE_BOUNDS);
-		};
-		paint_canvas ();
+		var timer = setInterval ((function __lambda__ () {
+			return draw (-(250), -(300), 250, 300);}), 1000);
 		__pragma__ ('<use>' +
 			'random' +
 			'turtle' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.BORDER_COLOR = BORDER_COLOR;
-			__all__.BORDER_WIDTH = BORDER_WIDTH;
-			__all__.Bounds = Bounds;
-			__all__.COLORS = COLORS;
-			__all__.MINIMUM_DIVISIBLE_PORTION = MINIMUM_DIVISIBLE_PORTION;
-			__all__.PICTURE_BOUNDS = PICTURE_BOUNDS;
-			__all__.fill_rectangle = fill_rectangle;
-			__all__.mondrian = mondrian;
-			__all__.paint_canvas = paint_canvas;
+			__all__.between = between;
+			__all__.colors = colors;
+			__all__.delta = delta;
+			__all__.draw = draw;
+			__all__.maybe = maybe;
+			__all__.rect = rect;
+			__all__.threshold = threshold;
+			__all__.timer = timer;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;

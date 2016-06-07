@@ -33,14 +33,14 @@
 					var Test = __class__ ('Test', [object], {
 						get __init__ () {return __get__ (this, function (self, autoTester) {
 							self.autoTester = autoTester;
-						}, '__init__');},
+						});},
 						get __getitem__ () {return __get__ (this, function (self, key) {
 							self.autoTester.check ('getitem (', indices (key), ')');
 							return 1234567;
-						}, '__getitem__');},
+						});},
 						get __setitem__ () {return __get__ (this, function (self, key, value) {
 							self.autoTester.check ('setitem (', indices (key), ')', value);
-						}, '__setitem__');}
+						});}
 					});
 					var run = function (autoTester) {
 						var __left0__ = Test (autoTester);

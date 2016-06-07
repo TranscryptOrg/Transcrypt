@@ -1475,7 +1475,8 @@ class Generator (ast.NodeVisitor):
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 							
-					self.all.update (module.all)
+					if self.module.metadata.filePrename == '__init__':
+						self.all.update (module.all)
 				else:
 					# N.B. The emits in the try and except clauses have different placement of brackets
 					try:														# Try if alias.name denotes a module
@@ -1493,10 +1494,11 @@ class Generator (ast.NodeVisitor):
 						else:
 							self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))
 							
-					if alias.asname:
-						self.all.add (alias.asname)
-					else:
-						self.all.add (alias.name)
+					if self.module.metadata.filePrename == '__init__':
+						if alias.asname:
+							self.all.add (alias.asname)
+						else:
+							self.all.add (alias.name)
 					
 					if index < len (node.names) - 1:
 						self.emit (';\n')
