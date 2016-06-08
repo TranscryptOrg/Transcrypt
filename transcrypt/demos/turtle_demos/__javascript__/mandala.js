@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-07 14:10:26
+// Transcrypt'ed from Python, 2016-06-08 13:25:19
 function mandala () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function mandala () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.167';
+							self.transpiler_version = '3.5.168';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1457,7 +1457,11 @@ function mandala () {
 						});}
 					});
 					var _defaultTurtle = Turtle ();
+					var _timer = null;
 					var reset = function () {
+						if (_timer) {
+							clearInterval (_timer);
+						}
 						bgcolor ('white');
 						var __iter0__ = _allTurtles;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -1472,6 +1476,12 @@ function mandala () {
 							var turtle = __iter0__ [__index0__];
 							turtle.clear ();
 						}
+					};
+					var ontimer = function (fun, t) {
+						if (typeof t == 'undefined' || (t != null && t .__class__ == __kwargdict__)) {;
+							var t = 0;
+						};
+						_timer = setInterval (fun, t);
 					};
 					var done = function () {
 						_defaultTurtle.done ();
@@ -1544,6 +1554,7 @@ function mandala () {
 						__all__._offset = _offset;
 						__all__._rightSize = _rightSize;
 						__all__._svg = _svg;
+						__all__._timer = _timer;
 						__all__._width = _width;
 						__all__.abs = abs;
 						__all__.back = back;
@@ -1560,6 +1571,7 @@ function mandala () {
 						__all__.goto = goto;
 						__all__.home = home;
 						__all__.left = left;
+						__all__.ontimer = ontimer;
 						__all__.pensize = pensize;
 						__all__.pos = pos;
 						__all__.position = position;
@@ -1583,6 +1595,7 @@ function mandala () {
 		var _offset = __init__ (__world__.turtle)._offset;
 		var _rightSize = __init__ (__world__.turtle)._rightSize;
 		var _svg = __init__ (__world__.turtle)._svg;
+		var _timer = __init__ (__world__.turtle)._timer;
 		var _width = __init__ (__world__.turtle)._width;
 		var abs = __init__ (__world__.turtle).abs;
 		var back = __init__ (__world__.turtle).back;
@@ -1599,6 +1612,7 @@ function mandala () {
 		var goto = __init__ (__world__.turtle).goto;
 		var home = __init__ (__world__.turtle).home;
 		var left = __init__ (__world__.turtle).left;
+		var ontimer = __init__ (__world__.turtle).ontimer;
 		var pensize = __init__ (__world__.turtle).pensize;
 		var pos = __init__ (__world__.turtle).pos;
 		var position = __init__ (__world__.turtle).position;

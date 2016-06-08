@@ -4,7 +4,6 @@
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					print ('Transcrypt random');
 					var _array = function () {
 						var __accu0__ = [];
 						for (var i = 0; i < 624; i++) {

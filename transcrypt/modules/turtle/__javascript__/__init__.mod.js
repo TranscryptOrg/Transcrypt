@@ -190,7 +190,11 @@
 						});}
 					});
 					var _defaultTurtle = Turtle ();
+					var _timer = null;
 					var reset = function () {
+						if (_timer) {
+							clearInterval (_timer);
+						}
 						bgcolor ('white');
 						var __iter0__ = _allTurtles;
 						for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -205,6 +209,12 @@
 							var turtle = __iter0__ [__index0__];
 							turtle.clear ();
 						}
+					};
+					var ontimer = function (fun, t) {
+						if (typeof t == 'undefined' || (t != null && t .__class__ == __kwargdict__)) {;
+							var t = 0;
+						};
+						_timer = setInterval (fun, t);
 					};
 					var done = function () {
 						_defaultTurtle.done ();
@@ -277,6 +287,7 @@
 						__all__._offset = _offset;
 						__all__._rightSize = _rightSize;
 						__all__._svg = _svg;
+						__all__._timer = _timer;
 						__all__._width = _width;
 						__all__.abs = abs;
 						__all__.back = back;
@@ -293,6 +304,7 @@
 						__all__.goto = goto;
 						__all__.home = home;
 						__all__.left = left;
+						__all__.ontimer = ontimer;
 						__all__.pensize = pensize;
 						__all__.pos = pos;
 						__all__.position = position;

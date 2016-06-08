@@ -1,7 +1,5 @@
 # Mersenne-Twister algorithm
 
-print ('Transcrypt random')
-
 _array = [0 for i in range (624)]
 _index = 0
 _bitmask1 = (2 ** 32) - 1

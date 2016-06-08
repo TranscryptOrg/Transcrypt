@@ -1,5 +1,5 @@
 __pragma__ ('skip')
-document = Math = 0
+document = Math = setInterval = clearInterval = 0
 __pragma__ ('noskip')
 
 _debug = False
@@ -216,9 +216,12 @@ class Turtle:
 		self._fill = False
 		
 _defaultTurtle = Turtle ()
+_timer = None
 	
 def reset ():
-	nonlocal _allTurtles
+	nonlocal _timer, _allTurtles
+	if _timer:
+		clearInterval (_timer)
 	bgcolor ('white')
 	for turtle in _allTurtles:
 		turtle.reset ()
@@ -228,6 +231,10 @@ def clear ():
 	nonlocal _allTurtles
 	for turtle in _allTurtles:
 		turtle.clear ()
+		
+def ontimer (fun, t = 0):
+	nonlocal _timer
+	_timer = setInterval (fun, t)
 
 def done ():							_defaultTurtle.done ()
 def pensize (width):					_defaultTurtle.pensize (width)

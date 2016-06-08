@@ -9,6 +9,7 @@
 		var _offset = __init__ (__world__.turtle)._offset;
 		var _rightSize = __init__ (__world__.turtle)._rightSize;
 		var _svg = __init__ (__world__.turtle)._svg;
+		var _timer = __init__ (__world__.turtle)._timer;
 		var _width = __init__ (__world__.turtle)._width;
 		var abs = __init__ (__world__.turtle).abs;
 		var back = __init__ (__world__.turtle).back;
@@ -25,6 +26,7 @@
 		var goto = __init__ (__world__.turtle).goto;
 		var home = __init__ (__world__.turtle).home;
 		var left = __init__ (__world__.turtle).left;
+		var ontimer = __init__ (__world__.turtle).ontimer;
 		var pensize = __init__ (__world__.turtle).pensize;
 		var pos = __init__ (__world__.turtle).pos;
 		var position = __init__ (__world__.turtle).position;
@@ -56,8 +58,18 @@
 		var between = function (a, b) {
 			return a + (0.2 + 0.3 * random ()) * (b - a);
 		};
+		var recentColors = list (['black', 'black']);
+		var originalColor = function () {
+			while (true) {
+				var result = choice (colors);
+				if (!(__in__ (result, recentColors))) {
+					recentColors = list ([result, recentColors [0]]);
+					return result;
+				}
+			}
+		};
 		var rect = function (xMin, yMin, xMax, yMax) {
-			var __iter0__ = tuple (['black', choice (colors)]);
+			var __iter0__ = tuple (['black', originalColor ()]);
 			for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 				var aColor = __iter0__ [__index0__];
 				color (aColor, aColor);
@@ -106,8 +118,8 @@
 				done ();
 			}
 		};
-		var timer = setInterval ((function __lambda__ () {
-			return draw (-(250), -(300), 250, 300);}), 1000);
+		ontimer ((function __lambda__ () {
+			return draw (-(250), -(300), 250, 300);}), 800);
 		__pragma__ ('<use>' +
 			'random' +
 			'turtle' +
@@ -118,8 +130,9 @@
 			__all__.delta = delta;
 			__all__.draw = draw;
 			__all__.maybe = maybe;
+			__all__.originalColor = originalColor;
+			__all__.recentColors = recentColors;
 			__all__.rect = rect;
 			__all__.threshold = threshold;
-			__all__.timer = timer;
 		__pragma__ ('</all>')
 	}) ();

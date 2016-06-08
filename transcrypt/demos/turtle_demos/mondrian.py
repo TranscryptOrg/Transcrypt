@@ -1,5 +1,3 @@
-# Inspired by Piet Mondrian
-
 from turtle import *
 from random import *
 
@@ -14,8 +12,17 @@ def maybe (bias = None):
 def between (a, b):
 	return a + (0.2 + 0.3 * random ()) * (b - a)
 
+recentColors = ['black', 'black']
+def originalColor ():
+	global recentColors
+	while True:
+		result = choice (colors)
+		if not result in recentColors:
+			recentColors = [result, recentColors [0]]
+			return result
+	
 def rect (xMin, yMin, xMax, yMax):
-	for aColor in ('black', choice (colors)):
+	for aColor in ('black', originalColor ()):
 		color (aColor, aColor)
 		
 		up ()
@@ -56,5 +63,4 @@ def draw (xMin, yMin, xMax, yMax):
 		rect (xMin, yMin, xMax, yMax)
 		done ()				
 
-timer = setInterval (lambda: draw (-250, -300, 250, 300), 1000)
-
+ontimer (lambda: draw (-250, -300, 250, 300), 800)

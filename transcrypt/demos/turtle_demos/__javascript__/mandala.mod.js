@@ -9,6 +9,7 @@
 		var _offset = __init__ (__world__.turtle)._offset;
 		var _rightSize = __init__ (__world__.turtle)._rightSize;
 		var _svg = __init__ (__world__.turtle)._svg;
+		var _timer = __init__ (__world__.turtle)._timer;
 		var _width = __init__ (__world__.turtle)._width;
 		var abs = __init__ (__world__.turtle).abs;
 		var back = __init__ (__world__.turtle).back;
@@ -25,6 +26,7 @@
 		var goto = __init__ (__world__.turtle).goto;
 		var home = __init__ (__world__.turtle).home;
 		var left = __init__ (__world__.turtle).left;
+		var ontimer = __init__ (__world__.turtle).ontimer;
 		var pensize = __init__ (__world__.turtle).pensize;
 		var pos = __init__ (__world__.turtle).pos;
 		var position = __init__ (__world__.turtle).position;

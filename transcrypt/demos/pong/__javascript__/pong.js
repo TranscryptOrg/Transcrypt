@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-07 14:10:01
+// Transcrypt'ed from Python, 2016-06-08 13:24:55
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.167';
+							self.transpiler_version = '3.5.168';
 							self.target_subdir = '__javascript__';
 						});}
 					});
