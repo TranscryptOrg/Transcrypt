@@ -723,6 +723,30 @@
 		return this.indexOf (sub, start);
 	};
 	
+	String.prototype.__getslice__ = function (start, stop, step) {
+		if (start < 0) {
+			start = this.length + start;
+		}
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + stop;
+		}
+		
+		var result = '';
+		if (step == 1) {
+			result = this.substring(start, stop);
+		}
+		else {
+			for (var index = start; index < stop; index += step) {
+				result = result.concat(this.charAt(index));
+			}
+	    	}
+	    	return result;
+	}	
+	
 	// Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
 	// __get__ will produce a bound function if there's something before the dot
 	// Since a call using *args is compiled to e.g. <object>.<function>.apply (null, args), the function has to be bound already
