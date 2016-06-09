@@ -215,13 +215,16 @@ class Turtle:
 		self._flush ()
 		self._fill = False
 		
+	def speed (speed = None):
+		pass
+		
 _defaultTurtle = Turtle ()
 _timer = None
 	
 def reset ():
 	nonlocal _timer, _allTurtles
 	if _timer:
-		clearInterval (_timer)
+		clearTimeout (_timer)
 	bgcolor ('white')
 	for turtle in _allTurtles:
 		turtle.reset ()
@@ -234,7 +237,7 @@ def clear ():
 		
 def ontimer (fun, t = 0):
 	nonlocal _timer
-	_timer = setInterval (fun, t)
+	_timer = setTimeout (fun, t)
 
 def done ():							_defaultTurtle.done ()
 def pensize (width):					_defaultTurtle.pensize (width)
@@ -253,3 +256,4 @@ def left (angle):						_defaultTurtle.left (angle)
 def right (angle):						_defaultTurtle.right (angle)
 def begin_fill ():						_defaultTurtle.begin_fill ()
 def end_fill ():						_defaultTurtle.end_fill ()
+def speed (speed):						_defaultTurtle.speed (speed)

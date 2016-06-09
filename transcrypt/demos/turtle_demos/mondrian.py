@@ -1,5 +1,9 @@
+# Inspired by our cat Pietje
+
 from turtle import *
 from random import *
+
+speed (0)
 
 colors = ('gray', 'green', 'red', 'white', 'blue', 'yellow')
 delta = 8
@@ -17,7 +21,7 @@ def originalColor ():
 	global recentColors
 	while True:
 		result = choice (colors)
-		if not result in recentColors:
+		if result == 'white' or not result in recentColors:
 			recentColors = [result, recentColors [0]]
 			return result
 	
@@ -41,7 +45,7 @@ def rect (xMin, yMin, xMax, yMax):
 		xMax -= delta
 		yMax -= delta
 	
-def draw (xMin, yMin, xMax, yMax):
+def draw (xMin = -250, yMin = -300, xMax = 250, yMax = 300):
 	if xMax - xMin > threshold and yMax - yMin > threshold:
 		if maybe (xMax - xMin > yMax - yMin):
 			xMid = between (xMin, xMax)
@@ -61,6 +65,7 @@ def draw (xMin, yMin, xMax, yMax):
 				draw (xMin, yMid, xMax, yMax)
 	else:
 		rect (xMin, yMin, xMax, yMax)
-		done ()				
+		ontimer (lambda: (clear (), draw ()), 2000)
+draw ()
+done ()		
 
-ontimer (lambda: draw (-250, -300, 250, 300), 800)

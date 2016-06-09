@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-08 13:25:15
+// Transcrypt'ed from Python, 2016-06-08 14:55:18
 function mondrian () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function mondrian () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.168';
+							self.transpiler_version = '3.5.169';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1528,13 +1528,19 @@ function mondrian () {
 						get end_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = false;
+						});},
+						get speed () {return __get__ (this, function (speed) {
+							if (typeof speed == 'undefined' || (speed != null && speed .__class__ == __kwargdict__)) {;
+								var speed = null;
+							};
+							// pass;
 						});}
 					});
 					var _defaultTurtle = Turtle ();
 					var _timer = null;
 					var reset = function () {
 						if (_timer) {
-							clearInterval (_timer);
+							clearTimeout (_timer);
 						}
 						bgcolor ('white');
 						var __iter0__ = _allTurtles;
@@ -1555,7 +1561,7 @@ function mondrian () {
 						if (typeof t == 'undefined' || (t != null && t .__class__ == __kwargdict__)) {;
 							var t = 0;
 						};
-						_timer = setInterval (fun, t);
+						_timer = setTimeout (fun, t);
 					};
 					var done = function () {
 						_defaultTurtle.done ();
@@ -1617,6 +1623,9 @@ function mondrian () {
 					var end_fill = function () {
 						_defaultTurtle.end_fill ();
 					};
+					var speed = function (speed) {
+						_defaultTurtle.speed (speed);
+					};
 					__pragma__ ('<all>')
 						__all__.Turtle = Turtle;
 						__all__._allTurtles = _allTurtles;
@@ -1652,6 +1661,7 @@ function mondrian () {
 						__all__.reset = reset;
 						__all__.right = right;
 						__all__.setDefaultElement = setDefaultElement;
+						__all__.speed = speed;
 						__all__.up = up;
 					__pragma__ ('</all>')
 				}
@@ -1693,6 +1703,7 @@ function mondrian () {
 		var reset = __init__ (__world__.turtle).reset;
 		var right = __init__ (__world__.turtle).right;
 		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
+		var speed = __init__ (__world__.turtle).speed;
 		var up = __init__ (__world__.turtle).up;
 		var _array = __init__ (__world__.random)._array;
 		var _bitmask1 = __init__ (__world__.random)._bitmask1;
@@ -1705,6 +1716,7 @@ function mondrian () {
 		var randint = __init__ (__world__.random).randint;
 		var random = __init__ (__world__.random).random;
 		var seed = __init__ (__world__.random).seed;
+		speed (0);
 		var colors = tuple (['gray', 'green', 'red', 'white', 'blue', 'yellow']);
 		var delta = 8;
 		var threshold = 100;
@@ -1749,6 +1761,18 @@ function mondrian () {
 			}
 		};
 		var draw = function (xMin, yMin, xMax, yMax) {
+			if (typeof xMin == 'undefined' || (xMin != null && xMin .__class__ == __kwargdict__)) {;
+				var xMin = -(250);
+			};
+			if (typeof yMin == 'undefined' || (yMin != null && yMin .__class__ == __kwargdict__)) {;
+				var yMin = -(300);
+			};
+			if (typeof xMax == 'undefined' || (xMax != null && xMax .__class__ == __kwargdict__)) {;
+				var xMax = 250;
+			};
+			if (typeof yMax == 'undefined' || (yMax != null && yMax .__class__ == __kwargdict__)) {;
+				var yMax = 300;
+			};
 			if (xMax - xMin > threshold && yMax - yMin > threshold) {
 				if (maybe (xMax - xMin > yMax - yMin)) {
 					var xMid = between (xMin, xMax);
@@ -1775,11 +1799,12 @@ function mondrian () {
 			}
 			else {
 				rect (xMin, yMin, xMax, yMax);
-				done ();
+				ontimer ((function __lambda__ () {
+					return tuple ([clear (), draw ()]);}), 2000);
 			}
 		};
-		ontimer ((function __lambda__ () {
-			return draw (-(250), -(300), 250, 300);}), 800);
+		draw ();
+		done ();
 		__pragma__ ('<use>' +
 			'random' +
 			'turtle' +

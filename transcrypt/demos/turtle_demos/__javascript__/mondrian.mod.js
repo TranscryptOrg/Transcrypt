@@ -33,6 +33,7 @@
 		var reset = __init__ (__world__.turtle).reset;
 		var right = __init__ (__world__.turtle).right;
 		var setDefaultElement = __init__ (__world__.turtle).setDefaultElement;
+		var speed = __init__ (__world__.turtle).speed;
 		var up = __init__ (__world__.turtle).up;
 		var _array = __init__ (__world__.random)._array;
 		var _bitmask1 = __init__ (__world__.random)._bitmask1;
@@ -45,6 +46,7 @@
 		var randint = __init__ (__world__.random).randint;
 		var random = __init__ (__world__.random).random;
 		var seed = __init__ (__world__.random).seed;
+		speed (0);
 		var colors = tuple (['gray', 'green', 'red', 'white', 'blue', 'yellow']);
 		var delta = 8;
 		var threshold = 100;
@@ -89,6 +91,18 @@
 			}
 		};
 		var draw = function (xMin, yMin, xMax, yMax) {
+			if (typeof xMin == 'undefined' || (xMin != null && xMin .__class__ == __kwargdict__)) {;
+				var xMin = -(250);
+			};
+			if (typeof yMin == 'undefined' || (yMin != null && yMin .__class__ == __kwargdict__)) {;
+				var yMin = -(300);
+			};
+			if (typeof xMax == 'undefined' || (xMax != null && xMax .__class__ == __kwargdict__)) {;
+				var xMax = 250;
+			};
+			if (typeof yMax == 'undefined' || (yMax != null && yMax .__class__ == __kwargdict__)) {;
+				var yMax = 300;
+			};
 			if (xMax - xMin > threshold && yMax - yMin > threshold) {
 				if (maybe (xMax - xMin > yMax - yMin)) {
 					var xMid = between (xMin, xMax);
@@ -115,11 +129,12 @@
 			}
 			else {
 				rect (xMin, yMin, xMax, yMax);
-				done ();
+				ontimer ((function __lambda__ () {
+					return tuple ([clear (), draw ()]);}), 2000);
 			}
 		};
-		ontimer ((function __lambda__ () {
-			return draw (-(250), -(300), 250, 300);}), 800);
+		draw ();
+		done ();
 		__pragma__ ('<use>' +
 			'random' +
 			'turtle' +

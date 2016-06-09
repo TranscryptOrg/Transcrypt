@@ -187,13 +187,19 @@
 						get end_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = false;
+						});},
+						get speed () {return __get__ (this, function (speed) {
+							if (typeof speed == 'undefined' || (speed != null && speed .__class__ == __kwargdict__)) {;
+								var speed = null;
+							};
+							// pass;
 						});}
 					});
 					var _defaultTurtle = Turtle ();
 					var _timer = null;
 					var reset = function () {
 						if (_timer) {
-							clearInterval (_timer);
+							clearTimeout (_timer);
 						}
 						bgcolor ('white');
 						var __iter0__ = _allTurtles;
@@ -214,7 +220,7 @@
 						if (typeof t == 'undefined' || (t != null && t .__class__ == __kwargdict__)) {;
 							var t = 0;
 						};
-						_timer = setInterval (fun, t);
+						_timer = setTimeout (fun, t);
 					};
 					var done = function () {
 						_defaultTurtle.done ();
@@ -276,6 +282,9 @@
 					var end_fill = function () {
 						_defaultTurtle.end_fill ();
 					};
+					var speed = function (speed) {
+						_defaultTurtle.speed (speed);
+					};
 					__pragma__ ('<all>')
 						__all__.Turtle = Turtle;
 						__all__._allTurtles = _allTurtles;
@@ -311,6 +320,7 @@
 						__all__.reset = reset;
 						__all__.right = right;
 						__all__.setDefaultElement = setDefaultElement;
+						__all__.speed = speed;
 						__all__.up = up;
 					__pragma__ ('</all>')
 				}
