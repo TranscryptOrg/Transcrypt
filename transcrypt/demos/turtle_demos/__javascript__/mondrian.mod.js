@@ -64,7 +64,7 @@
 		var originalColor = function () {
 			while (true) {
 				var result = choice (colors);
-				if (!(__in__ (result, recentColors))) {
+				if (result == 'white' || !(__in__ (result, recentColors))) {
 					recentColors = list ([result, recentColors [0]]);
 					return result;
 				}

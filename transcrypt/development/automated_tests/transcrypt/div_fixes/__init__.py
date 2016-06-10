@@ -41,7 +41,3 @@ def run (autoTester):
 	autoTester.check (aDict)
 	aDict.clear ()
 	autoTester.check (aDict)
-	
-	autoTester.check ('Issue 55')
-	autoTester.check (f1 (), p, q, r, anA, aB, y)
-	

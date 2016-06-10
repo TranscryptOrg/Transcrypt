@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-08 14:55:18
+// Transcrypt'ed from Python, 2016-06-10 11:01:07
 function mondrian () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function mondrian () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.169';
+							self.transpiler_version = '3.5.170';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -1000,6 +1000,30 @@ function mondrian () {
 		return this.indexOf (sub, start);
 	};
 	
+	String.prototype.__getslice__ = function (start, stop, step) {
+		if (start < 0) {
+			start = this.length + start;
+		}
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + stop;
+		}
+		
+		var result = '';
+		if (step == 1) {
+			result = this.substring (start, stop);
+		}
+		else {
+			for (var index = start; index < stop; index += step) {
+				result = result.concat (this.charAt(index));
+			}
+	    }
+	    return result;
+	}	
+	
 	// Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
 	// __get__ will produce a bound function if there's something before the dot
 	// Since a call using *args is compiled to e.g. <object>.<function>.apply (null, args), the function has to be bound already
@@ -1734,7 +1758,7 @@ function mondrian () {
 		var originalColor = function () {
 			while (true) {
 				var result = choice (colors);
-				if (!(__in__ (result, recentColors))) {
+				if (result == 'white' || !(__in__ (result, recentColors))) {
 					recentColors = list ([result, recentColors [0]]);
 					return result;
 				}

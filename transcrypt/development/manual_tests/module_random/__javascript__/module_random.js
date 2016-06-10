@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-08 13:24:37
+// Transcrypt'ed from Python, 2016-06-10 11:00:29
 function module_random () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function module_random () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.168';
+							self.transpiler_version = '3.5.170';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -999,6 +999,30 @@ function module_random () {
 	String.prototype.find  = function (sub, start) {
 		return this.indexOf (sub, start);
 	};
+	
+	String.prototype.__getslice__ = function (start, stop, step) {
+		if (start < 0) {
+			start = this.length + start;
+		}
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + stop;
+		}
+		
+		var result = '';
+		if (step == 1) {
+			result = this.substring (start, stop);
+		}
+		else {
+			for (var index = start; index < stop; index += step) {
+				result = result.concat (this.charAt(index));
+			}
+	    }
+	    return result;
+	}	
 	
 	// Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
 	// __get__ will produce a bound function if there's something before the dot

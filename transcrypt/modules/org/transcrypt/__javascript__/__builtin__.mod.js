@@ -737,14 +737,14 @@
 		
 		var result = '';
 		if (step == 1) {
-			result = this.substring(start, stop);
+			result = this.substring (start, stop);
 		}
 		else {
 			for (var index = start; index < stop; index += step) {
-				result = result.concat(this.charAt(index));
+				result = result.concat (this.charAt(index));
 			}
-	    	}
-	    	return result;
+	    }
+	    return result;
 	}	
 	
 	// Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property

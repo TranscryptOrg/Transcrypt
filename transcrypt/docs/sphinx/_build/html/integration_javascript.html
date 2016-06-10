@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.169 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.170 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.169',
+        VERSION:     '3.5.170',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.169 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.170 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.169 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.170 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -348,13 +348,16 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <span class="bp">self</span><span class="o">.</span><span class="n">_flush</span> <span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span> <span class="o">=</span> <span class="bp">False</span>
         
+    <span class="k">def</span> <span class="nf">speed</span> <span class="p">(</span><span class="n">speed</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+        
 <span class="n">_defaultTurtle</span> <span class="o">=</span> <span class="n">Turtle</span> <span class="p">()</span>
 <span class="n">_timer</span> <span class="o">=</span> <span class="bp">None</span>
     
 <span class="k">def</span> <span class="nf">reset</span> <span class="p">():</span>
     <span class="n">nonlocal</span> <span class="n">_timer</span><span class="p">,</span> <span class="n">_allTurtles</span>
     <span class="k">if</span> <span class="n">_timer</span><span class="p">:</span>
-        <span class="n">clearInterval</span> <span class="p">(</span><span class="n">_timer</span><span class="p">)</span>
+        <span class="n">clearTimeout</span> <span class="p">(</span><span class="n">_timer</span><span class="p">)</span>
     <span class="n">bgcolor</span> <span class="p">(</span><span class="s">&#39;white&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">turtle</span> <span class="ow">in</span> <span class="n">_allTurtles</span><span class="p">:</span>
         <span class="n">turtle</span><span class="o">.</span><span class="n">reset</span> <span class="p">()</span>
@@ -367,7 +370,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         
 <span class="k">def</span> <span class="nf">ontimer</span> <span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
     <span class="n">nonlocal</span> <span class="n">_timer</span>
-    <span class="n">_timer</span> <span class="o">=</span> <span class="n">setInterval</span> <span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">_timer</span> <span class="o">=</span> <span class="n">setTimeout</span> <span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">done</span> <span class="p">():</span>                            <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
 <span class="k">def</span> <span class="nf">pensize</span> <span class="p">(</span><span class="n">width</span><span class="p">):</span>                    <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">pensize</span> <span class="p">(</span><span class="n">width</span><span class="p">)</span>
@@ -386,6 +389,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <span class="k">def</span> <span class="nf">right</span> <span class="p">(</span><span class="n">angle</span><span class="p">):</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">right</span> <span class="p">(</span><span class="n">angle</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">begin_fill</span> <span class="p">():</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">begin_fill</span> <span class="p">()</span>
 <span class="k">def</span> <span class="nf">end_fill</span> <span class="p">():</span>                        <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">end_fill</span> <span class="p">()</span>
+<span class="k">def</span> <span class="nf">speed</span> <span class="p">(</span><span class="n">speed</span><span class="p">):</span>                      <span class="n">_defaultTurtle</span><span class="o">.</span><span class="n">speed</span> <span class="p">(</span><span class="n">speed</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1516,7 +1520,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.169 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.170 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

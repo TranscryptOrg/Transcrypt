@@ -7,6 +7,7 @@
 		var dict_comprehensions = {};
 		var dictionaries = {};
 		var div_fixes = {};
+		var div_pulls = {};
 		var exceptions = {};
 		var extended_slices = {};
 		var general_functions = {};
@@ -31,6 +32,7 @@
 		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (div_fixes, '', __init__ (__world__.div_fixes));
+		__nest__ (div_pulls, '', __init__ (__world__.div_pulls));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (extended_slices, '', __init__ (__world__.extended_slices));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
@@ -54,6 +56,7 @@
 		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (div_fixes, 'div_fixes');
+		autoTester.run (div_pulls, 'div_pulls');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (extended_slices, 'extended_slices');
 		autoTester.run (general_functions, 'general_functions');
@@ -78,6 +81,7 @@
 			'dict_comprehensions' +
 			'dictionaries' +
 			'div_fixes' +
+			'div_pulls' +
 			'exceptions' +
 			'extended_slices' +
 			'general_functions' +

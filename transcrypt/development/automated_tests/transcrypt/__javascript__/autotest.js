@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-08 13:24:30
+// Transcrypt'ed from Python, 2016-06-10 11:00:22
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.168';
+							self.transpiler_version = '3.5.170';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -999,6 +999,30 @@ function autotest () {
 	String.prototype.find  = function (sub, start) {
 		return this.indexOf (sub, start);
 	};
+	
+	String.prototype.__getslice__ = function (start, stop, step) {
+		if (start < 0) {
+			start = this.length + start;
+		}
+		
+		if (stop == null) {
+			stop = this.length;
+		}
+		else if (stop < 0) {
+			stop = this.length + stop;
+		}
+		
+		var result = '';
+		if (step == 1) {
+			result = this.substring (start, stop);
+		}
+		else {
+			for (var index = start; index < stop; index += step) {
+				result = result.concat (this.charAt(index));
+			}
+	    }
+	    return result;
+	}	
 	
 	// Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
 	// __get__ will produce a bound function if there's something before the dot
@@ -1938,8 +1962,6 @@ function autotest () {
 						autoTester.check (aDict);
 						aDict.clear ();
 						autoTester.check (aDict);
-						autoTester.check ('Issue 55');
-						autoTester.check (f1 (), p, q, r, anA, aB, y);
 					};
 					__pragma__ ('<use>' +
 						'div_fixes.issue55' +
@@ -2049,6 +2071,44 @@ function autotest () {
 					var x = 'x';
 					__pragma__ ('<all>')
 						__all__.x = x;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'div_pulls', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var aB = __init__ (__world__.div_fixes.issue55).aB;
+					var anA = __init__ (__world__.div_fixes.issue55).anA;
+					var f1 = __init__ (__world__.div_fixes.issue55).f1;
+					var p = __init__ (__world__.div_fixes.issue55).p;
+					var q = __init__ (__world__.div_fixes.issue55).q;
+					var r = __init__ (__world__.div_fixes.issue55).r;
+					var y = __init__ (__world__.div_fixes.issue55).y;
+					var run = function (autoTester) {
+						autoTester.check ('Pull 56');
+						var s = 'abcdefghij';
+						autoTester.check (s.__getslice__ (2, 3, 1));
+						autoTester.check (s.__getslice__ (0, 3, 1));
+						autoTester.check (s.__getslice__ (2, null, 1));
+						autoTester.check (s.__getslice__ (0, null, 2));
+					};
+					__pragma__ ('<use>' +
+						'div_fixes.issue55' +
+					'</use>')
+					__pragma__ ('<all>')
+						__all__.aB = aB;
+						__all__.anA = anA;
+						__all__.f1 = f1;
+						__all__.p = p;
+						__all__.q = q;
+						__all__.r = r;
+						__all__.run = run;
+						__all__.y = y;
 					__pragma__ ('</all>')
 				}
 			}
@@ -3541,6 +3601,7 @@ function autotest () {
 		var dict_comprehensions = {};
 		var dictionaries = {};
 		var div_fixes = {};
+		var div_pulls = {};
 		var exceptions = {};
 		var extended_slices = {};
 		var general_functions = {};
@@ -3565,6 +3626,7 @@ function autotest () {
 		__nest__ (dict_comprehensions, '', __init__ (__world__.dict_comprehensions));
 		__nest__ (dictionaries, '', __init__ (__world__.dictionaries));
 		__nest__ (div_fixes, '', __init__ (__world__.div_fixes));
+		__nest__ (div_pulls, '', __init__ (__world__.div_pulls));
 		__nest__ (exceptions, '', __init__ (__world__.exceptions));
 		__nest__ (extended_slices, '', __init__ (__world__.extended_slices));
 		__nest__ (general_functions, '', __init__ (__world__.general_functions));
@@ -3588,6 +3650,7 @@ function autotest () {
 		autoTester.run (dict_comprehensions, 'dict_comprehensions');
 		autoTester.run (dictionaries, 'dictionaries');
 		autoTester.run (div_fixes, 'div_fixes');
+		autoTester.run (div_pulls, 'div_pulls');
 		autoTester.run (exceptions, 'exceptions');
 		autoTester.run (extended_slices, 'extended_slices');
 		autoTester.run (general_functions, 'general_functions');
@@ -3612,6 +3675,7 @@ function autotest () {
 			'dict_comprehensions' +
 			'dictionaries' +
 			'div_fixes' +
+			'div_pulls' +
 			'exceptions' +
 			'extended_slices' +
 			'general_functions' +

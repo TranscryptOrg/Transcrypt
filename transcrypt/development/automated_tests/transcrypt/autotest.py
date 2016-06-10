@@ -8,6 +8,7 @@ import data_structures
 import dict_comprehensions
 import dictionaries
 import div_fixes
+import div_pulls
 import exceptions
 import extended_slices
 import general_functions
@@ -33,6 +34,7 @@ autoTester.run (data_structures, 'data_structures')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')
 autoTester.run (dictionaries, 'dictionaries')
 autoTester.run (div_fixes, 'div_fixes')
+autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (general_functions, 'general_functions')
