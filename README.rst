@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- Functions getattr, setattr, hasattr, delattr added + test case
 - String slicing + testcase added (pull)
 - On-line "Mondrian" demo added using timer
 - Timer added to turtle module

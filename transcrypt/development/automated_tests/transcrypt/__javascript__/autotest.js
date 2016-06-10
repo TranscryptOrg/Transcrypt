@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-10 11:00:22
+// Transcrypt'ed from Python, 2016-06-10 14:08:05
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -345,6 +345,30 @@ function autotest () {
 		print ([] .slice.apply (arguments) .slice (1));
 	};
 
+	// Manipulating attributes by name
+	
+	var setattr = function (obj, name, value) {
+		obj [name] = value;
+	};
+		
+	__all__.setattr = setattr;
+	
+	var getattr = function (obj, name) {
+		return obj [name];
+	};
+	
+	__all__.getattr= getattr
+	
+	var hasattr = function (obj, name) {
+		return name in obj;
+	};
+	__all__.hasattr = hasattr;
+	
+	var delattr = function (obj, name) {
+		delete obj [name];
+	};
+	__all__.delattr = (delattr);
+	
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
@@ -1505,6 +1529,36 @@ function autotest () {
 	);
 	__nest__ (
 		__all__,
+		'attribs_by_name', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var A = __class__ ('A', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							self.s = 'hello';
+						});}
+					});
+					var a = A ();
+					var run = function (autoTester) {
+						autoTester.check (a.s, getattr (a, 's'));
+						setattr (a, 's', 'goodbye');
+						autoTester.check (a.s, getattr (a, 's'));
+						setattr (a, 't', 'exists');
+						autoTester.check (hasattr (a, 't'), a.t, getattr (a, 't'));
+						delattr (a, 't');
+						autoTester.check (hasattr (a, 't'));
+					};
+					__pragma__ ('<all>')
+						__all__.A = A;
+						__all__.a = a;
+						__all__.run = run;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
 		'classes', {
 			__all__: {
 				__inited__: false,
@@ -2082,13 +2136,6 @@ function autotest () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-					var aB = __init__ (__world__.div_fixes.issue55).aB;
-					var anA = __init__ (__world__.div_fixes.issue55).anA;
-					var f1 = __init__ (__world__.div_fixes.issue55).f1;
-					var p = __init__ (__world__.div_fixes.issue55).p;
-					var q = __init__ (__world__.div_fixes.issue55).q;
-					var r = __init__ (__world__.div_fixes.issue55).r;
-					var y = __init__ (__world__.div_fixes.issue55).y;
 					var run = function (autoTester) {
 						autoTester.check ('Pull 56');
 						var s = 'abcdefghij';
@@ -2097,18 +2144,8 @@ function autotest () {
 						autoTester.check (s.__getslice__ (2, null, 1));
 						autoTester.check (s.__getslice__ (0, null, 2));
 					};
-					__pragma__ ('<use>' +
-						'div_fixes.issue55' +
-					'</use>')
 					__pragma__ ('<all>')
-						__all__.aB = aB;
-						__all__.anA = anA;
-						__all__.f1 = f1;
-						__all__.p = p;
-						__all__.q = q;
-						__all__.r = r;
 						__all__.run = run;
-						__all__.y = y;
 					__pragma__ ('</all>')
 				}
 			}
@@ -3594,6 +3631,7 @@ function autotest () {
 	);
 	(function () {
 		var py_arguments = {};
+		var attribs_by_name = {};
 		var classes = {};
 		var conditional_expressions = {};
 		var control_structures = {};
@@ -3619,6 +3657,7 @@ function autotest () {
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (py_arguments, '', __init__ (__world__.py_arguments));
+		__nest__ (attribs_by_name, '', __init__ (__world__.attribs_by_name));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
@@ -3643,6 +3682,7 @@ function autotest () {
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
 		autoTester.run (py_arguments, 'arguments');
+		autoTester.run (attribs_by_name, 'attribs_by_name');
 		autoTester.run (classes, 'classes');
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
@@ -3668,6 +3708,7 @@ function autotest () {
 		autoTester.done ();
 		__pragma__ ('<use>' +
 			'arguments' +
+			'attribs_by_name' +
 			'classes' +
 			'conditional_expressions' +
 			'control_structures' +

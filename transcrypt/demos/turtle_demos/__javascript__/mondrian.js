@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-10 11:01:07
+// Transcrypt'ed from Python, 2016-06-10 14:08:50
 function mondrian () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -345,6 +345,30 @@ function mondrian () {
 		print ([] .slice.apply (arguments) .slice (1));
 	};
 
+	// Manipulating attributes by name
+	
+	var setattr = function (obj, name, value) {
+		obj [name] = value;
+	};
+		
+	__all__.setattr = setattr;
+	
+	var getattr = function (obj, name) {
+		return obj [name];
+	};
+	
+	__all__.getattr= getattr
+	
+	var hasattr = function (obj, name) {
+		return name in obj;
+	};
+	__all__.hasattr = hasattr;
+	
+	var delattr = function (obj, name) {
+		delete obj [name];
+	};
+	__all__.delattr = (delattr);
+	
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {

@@ -1,5 +1,6 @@
 	(function () {
 		var py_arguments = {};
+		var attribs_by_name = {};
 		var classes = {};
 		var conditional_expressions = {};
 		var control_structures = {};
@@ -25,6 +26,7 @@
 		var tuple_assignment = {};
 		__nest__ (org, 'transcrypt.autotester', __init__ (__world__.org.transcrypt.autotester));
 		__nest__ (py_arguments, '', __init__ (__world__.py_arguments));
+		__nest__ (attribs_by_name, '', __init__ (__world__.attribs_by_name));
 		__nest__ (classes, '', __init__ (__world__.classes));
 		__nest__ (conditional_expressions, '', __init__ (__world__.conditional_expressions));
 		__nest__ (control_structures, '', __init__ (__world__.control_structures));
@@ -49,6 +51,7 @@
 		__nest__ (tuple_assignment, '', __init__ (__world__.tuple_assignment));
 		var autoTester = org.transcrypt.autotester.AutoTester ();
 		autoTester.run (py_arguments, 'arguments');
+		autoTester.run (attribs_by_name, 'attribs_by_name');
 		autoTester.run (classes, 'classes');
 		autoTester.run (conditional_expressions, 'conditional_expressions');
 		autoTester.run (control_structures, 'control_structures');
@@ -74,6 +77,7 @@
 		autoTester.done ();
 		__pragma__ ('<use>' +
 			'arguments' +
+			'attribs_by_name' +
 			'classes' +
 			'conditional_expressions' +
 			'control_structures' +

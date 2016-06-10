@@ -1,6 +1,7 @@
 import org.transcrypt.autotester
 
 import arguments
+import attribs_by_name
 import classes
 import conditional_expressions
 import control_structures
@@ -27,6 +28,7 @@ import tuple_assignment
 autoTester = org.transcrypt.autotester.AutoTester ()
 
 autoTester.run (arguments, 'arguments')
+autoTester.run (attribs_by_name, 'attribs_by_name')
 autoTester.run (classes, 'classes')
 autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')

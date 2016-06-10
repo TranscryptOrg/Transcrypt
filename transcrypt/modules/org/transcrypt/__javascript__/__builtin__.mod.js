@@ -68,6 +68,30 @@
 		print ([] .slice.apply (arguments) .slice (1));
 	};
 
+	// Manipulating attributes by name
+	
+	var setattr = function (obj, name, value) {
+		obj [name] = value;
+	};
+		
+	__all__.setattr = setattr;
+	
+	var getattr = function (obj, name) {
+		return obj [name];
+	};
+	
+	__all__.getattr= getattr
+	
+	var hasattr = function (obj, name) {
+		return name in obj;
+	};
+	__all__.hasattr = hasattr;
+	
+	var delattr = function (obj, name) {
+		delete obj [name];
+	};
+	__all__.delattr = (delattr);
+	
 	// In function, used to mimic Python's in operator
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
