@@ -271,6 +271,10 @@
 	var min = Math.min;
 	__all__.min = min;
 	
+	// Absolute value
+	var abs = Math.abs;
+	__all__.abs = abs;
+	
 	// Reversed function for arrays
 	var reversed = function (iterable) {
 		iterable = iterable.slice ();

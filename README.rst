@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- Builtins min, max and abs added for convenience
 - Correct evaluation of expressions like '[] or [] or [1, 2, 3]' added for tuples, arrays, sets and dicts
 - Optional Python truthyness evaluation for tuples, arrays, sets and dicts added
 - Functions getattr, setattr, hasattr, delattr added + test case

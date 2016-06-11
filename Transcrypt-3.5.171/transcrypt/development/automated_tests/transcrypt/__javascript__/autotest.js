@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-11 17:38:27
+// Transcrypt'ed from Python, 2016-06-11 17:55:09
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.171';
+							self.transpiler_version = '3.5.172';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -547,6 +547,10 @@ function autotest () {
 	// Minimum of n numbers
 	var min = Math.min;
 	__all__.min = min;
+	
+	// Absolute value
+	var abs = Math.abs;
+	__all__.abs = abs;
 	
 	// Reversed function for arrays
 	var reversed = function (iterable) {
