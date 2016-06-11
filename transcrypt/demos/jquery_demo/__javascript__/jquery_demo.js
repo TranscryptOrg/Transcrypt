@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-11 17:55:23
+// Transcrypt'ed from Python, 2016-06-11 20:52:46
 function jquery_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function jquery_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.172';
+							self.transpiler_version = '3.5.173';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -470,10 +470,10 @@ function jquery_demo () {
 	__all__.isinstance = isinstance;
 	
 	// Truthyness conversion
-	function __truthy__ (any) {
+	function __ (any) {
 		return ['boolean', 'number'] .indexOf (typeof (any)) >= 0 ? any : len (any) ? any : false;
 	}
-	__all__.__truthy__ = __truthy__;
+	__all__.__ = __;
 	
 	// Repr function uses __repr__ method, then __str__ then toString
 	var repr = function (anObject) {

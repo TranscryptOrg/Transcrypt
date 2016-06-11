@@ -193,10 +193,10 @@
 	__all__.isinstance = isinstance;
 	
 	// Truthyness conversion
-	function __truthy__ (any) {
+	function __ (any) {
 		return ['boolean', 'number'] .indexOf (typeof (any)) >= 0 ? any : len (any) ? any : false;
 	}
-	__all__.__truthy__ = __truthy__;
+	__all__.__ = __;
 	
 	// Repr function uses __repr__ method, then __str__ then toString
 	var repr = function (anObject) {

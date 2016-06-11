@@ -559,7 +559,7 @@ class Generator (ast.NodeVisitor):
 			
 	def emitBeginTruthy (self):
 		if self.allowConversionToTruthValue:
-			self.emit ('__truthy__ (')
+			self.emit ('__ (')
 	
 	def emitEndTruthy (self):
 		if self.allowConversionToTruthValue:
