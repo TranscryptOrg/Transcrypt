@@ -1,0 +1,361 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pi
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = PI
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = e
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = E
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = exp
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = exp
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = expm1
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = expm1
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = log
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = log
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = log1p
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = log1p
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = log2
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = log2
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = log10
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = log10
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pow
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = pow
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sqrt
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sqrt
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sin
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sin
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cos
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = cos
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tan
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = tan
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = asin
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = asin
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = acos
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = acos
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atan
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atan
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atan2
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atan2
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = hypot
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = hypot
+				ctx: Load 
+		element: FunctionDef 
+			name: str = degrees
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Mult 
+							right: Num 
+								n: int = 180
+						op: Div 
+						right: Attribute 
+							value: Name 
+								id: str = Math
+								ctx: Load 
+							attr: str = PI
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = radians
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Mult 
+							right: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = PI
+								ctx: Load 
+						op: Div 
+						right: Num 
+							n: int = 180
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sinh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sinh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cosh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = cosh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tanh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = tanh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = asinh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = asinh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = acosh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = acosh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atanh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atanh
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = floor
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = floor
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ceil
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = ceil
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = trunc
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = trunc
+				ctx: Load 

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/list_comprehensions/__javascript__/list_comprehensions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/list_comprehensions/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\tsquares = [i * i for i in range (10) if i % 2]\n\tautoTester.check (squares)\n\t\n\ttuples = [\n\t\t(x, y, z)\n\t\tfor x in (100, 200, 300, 400, 500, 600, 700)\n\t\t\tfor y in (10, 20, 30, 40, 50, 60, 70) if 20 < y  < 60\n\t\t\t\tfor z in (1, 2, 3, 4, 5, 6, 7) if 200 < x < 600 if 2 < z < 6\n\t]\n\tautoTester.check (tuples)\n\t\n\ttricky = [(2 * x, 3 * y) for x, y in ((10, 11), (20, 21))]\n\tautoTester.check (tricky)\n\t\n\tnested = [2 * x for x in [x * x for x in range (3)]]\n\tautoTester.check (nested)\n\t\n\ta = 100\n\tx = 5\n\tscopeTest = [x + a for x in range (5)]\n\tautoTester.check (x)\n\tautoTester.check (scopeTest)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AACA;AAAA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

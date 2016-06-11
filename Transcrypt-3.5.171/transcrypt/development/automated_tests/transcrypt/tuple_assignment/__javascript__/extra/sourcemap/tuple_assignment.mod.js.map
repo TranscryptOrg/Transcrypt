@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/tuple_assignment/__javascript__/tuple_assignment.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/tuple_assignment/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\t((a, b), santa, [c, d], e) = ((1, 2), 'santa-claus', {3, 4}, 5)\n\tautoTester.check (a, b, c, d, e, santa)\n\t\n\tfor i, x in enumerate ((0.5, 1.5, 2.5, 3.5)):\n\t\tautoTester.check (i, x)\n\t\n\te, pi = 3.14, 2.74\n\te, pi = pi, e\n\tautoTester.check (e, pi)\n\t\n\tdef f ():\n\t\treturn [(i, 2 * i) for i in range (7000, 10000, 1000)]\n\t\t\n\tdef g ():\n\t\treturn f\n\t\t\n\t[k, l], [m, n], (o, p) = g () ()\n\t\n\tautoTester.check (k, l, m, n, o, p)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAEA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

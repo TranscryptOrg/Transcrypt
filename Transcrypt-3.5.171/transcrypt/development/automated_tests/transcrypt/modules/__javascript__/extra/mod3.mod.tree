@@ -1,0 +1,32 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = x
+					ctx: Store 
+			value: Str 
+				s: str = Toen wij uit Rotterdam vertrokken, vertrokken wij uit Rotterdam
+
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = mod3Hundred
+					ctx: Store 
+			value: Num 
+				n: int = 100
+		element: FunctionDef 
+			name: str = mod3GetTwoHundred
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Num 
+						n: int = 200
+			decorator_list: list 
+			returns: NoneType = None

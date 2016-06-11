@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/lambda_functions/__javascript__/lambda_functions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/lambda_functions/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\tz = 1000\n\tautoTester.check ((lambda x, y: x + y + z) (111, 222))\n\n\tdef f (list0, list1, aFunc):\n\t\treturn [aFunc (*elem) for elem in zip (list0, list1)]\n\n\tx = f (range (10), range (0, 100, 10), lambda x, y: x + y + z)\n\tautoTester.check (x)\n\t\n\tautoTester.check (f (range (10, 20), range (100, 200, 10), lambda x, y: x * y + 100 * z))\n\tautoTester.check (f (range (10, 20), range (100, 200, 10), lambda *args: args [0] * args [1] + 100 * z))\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AACA;AAEA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

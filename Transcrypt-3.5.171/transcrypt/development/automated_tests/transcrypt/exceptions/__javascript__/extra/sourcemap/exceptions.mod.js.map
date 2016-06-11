@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/exceptions/__javascript__/exceptions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/exceptions/__init__.py"
+	],
+	"sourcesContent": [
+		"class Ex1 (Exception):\n\tpass\n\t\t\nclass Ex2 (Ex1):\n\tpass\n\t\nclass Ex3 (Exception):\n\tpass\n\t\ndef test1 ():\n\traise (Exception ('mary'))\n\t\ndef test2 (autoTester):\n\ttry:\n\t\ttest1 ()\n\texcept Ex1 as exception:\n\t\tautoTester.check (111)\n\t\tautoTester.check (exception)\n\texcept Exception as exception:\n\t\tautoTester.check (222)\n\t\tautoTester.check (exception)\n\t\t\ndef run (autoTester):\n\ttest2 (autoTester)\n\t\n\ttry:\n\t\traise Ex2 ('had')\n\texcept Ex1 as exception:\n\t\tautoTester.check ('a')\n\texcept Exception as exception:\n\t\tautoTester.check ('little')\n\t\tautoTester.check (exception)\n\t\t\n\tautoTester.check (333)\n\t\t\n\ttry:\n\t\traise Ex1 ('lamb')\n\texcept Ex2 as exception:\n\t\tautoTester.check ('his')\n\t\tautoTester.check (exception)\n\texcept Ex1 as exception:\n\t\tautoTester.check ('fleece')\n\t\tautoTester.check (exception)\n\texcept Exception as exception:\n\t\tautoTester.check ('was')\n\t\tautoTester.check (exception)\n\tfinally:\n\t\tautoTester.check ('white')\n\t\t\n\tautoTester.check (444)\n\n\tdef test3 ():\n\t\traise Ex3 ('as')\n\t\t\n\tautoTester.check (555)\n\n\ttry:\n\t\ttest3 ()\n\texcept Ex1 as exception:\n\t\tautoTester.check ('snow')\n\t\tautoTester.check (exception)\n\texcept Exception as exception:\n\t\tautoTester.check ('and')\n\t\tautoTester.check (exception)\n\tfinally:\n\t\tautoTester.check ('everywhere')\n\t\t\n\tautoTester.check (666)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AAAA;AAGA;AAAA;AAGA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAAA;AAEA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

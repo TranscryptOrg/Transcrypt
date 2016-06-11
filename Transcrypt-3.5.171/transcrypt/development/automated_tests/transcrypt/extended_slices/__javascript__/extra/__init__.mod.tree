@@ -1,0 +1,534 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+				element: alias 
+					name: str = __envir__
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = indices
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = key
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: Compare 
+						left: Attribute 
+							value: Name 
+								id: str = __envir__
+								ctx: Load 
+							attr: str = executor_name
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Attribute 
+								value: Name 
+									id: str = __envir__
+									ctx: Load 
+								attr: str = transpiler_name
+								ctx: Load 
+					body: list 
+						element: Return 
+							value: IfExp 
+								test: Compare 
+									left: Call 
+										func: Name 
+											id: str = type
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = key
+												ctx: Load 
+										keywords: list 
+									ops: list 
+										element: Eq 
+									comparators: list 
+										element: Name 
+											id: str = list
+											ctx: Load 
+								body: Call 
+									func: Name 
+										id: str = tuple
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = key
+											ctx: Load 
+									keywords: list 
+								orelse: Name 
+									id: str = key
+									ctx: Load 
+					orelse: list 
+						element: Try 
+							body: list 
+								element: Return 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = key
+												ctx: Load 
+											attr: str = indices
+											ctx: Load 
+										args: list 
+											element: Num 
+												n: int = 1000000000
+										keywords: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: NoneType = None
+									name: NoneType = None
+									body: list 
+										element: Try 
+											body: list 
+												element: Return 
+													value: Call 
+														func: Name 
+															id: str = tuple
+															ctx: Load 
+														args: list 
+															element: ListComp 
+																elt: Call 
+																	func: Name 
+																		id: str = indices
+																		ctx: Load 
+																	args: list 
+																		element: Name 
+																			id: str = subkey
+																			ctx: Load 
+																	keywords: list 
+																generators: list 
+																	element: comprehension 
+																		target: Name 
+																			id: str = subkey
+																			ctx: Store 
+																		iter: Name 
+																			id: str = key
+																			ctx: Load 
+																		ifs: list 
+														keywords: list 
+											handlers: list 
+												element: ExceptHandler 
+													type: NoneType = None
+													name: NoneType = None
+													body: list 
+														element: Return 
+															value: Name 
+																id: str = key
+																ctx: Load 
+											orelse: list 
+											finalbody: list 
+							orelse: list 
+							finalbody: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = Test
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = autoTester
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = autoTester
+									ctx: Store 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __getitem__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = getitem (
+									element: Call 
+										func: Name 
+											id: str = indices
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = key
+												ctx: Load 
+										keywords: list 
+									element: Str 
+										s: str = )
+								keywords: list 
+						element: Return 
+							value: Num 
+								n: int = 1234567
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __setitem__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = setitem (
+									element: Call 
+										func: Name 
+											id: str = indices
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = key
+												ctx: Load 
+										keywords: list 
+									element: Str 
+										s: str = )
+									element: Name 
+										id: str = value
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a
+							ctx: Store 
+						element: Name 
+							id: str = b
+							ctx: Store 
+						element: Name 
+							id: str = c
+							ctx: Store 
+						element: Name 
+							id: str = d
+							ctx: Store 
+						element: Name 
+							id: str = e
+							ctx: Store 
+						element: Name 
+							id: str = f
+							ctx: Store 
+						element: Name 
+							id: str = g
+							ctx: Store 
+						element: Name 
+							id: str = h
+							ctx: Store 
+						element: Name 
+							id: str = i
+							ctx: Store 
+						element: Name 
+							id: str = j
+							ctx: Store 
+						element: Name 
+							id: str = k
+							ctx: Store 
+						element: Name 
+							id: str = l
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = Test
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = autoTester
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = opov
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = a
+								ctx: Load 
+							slice: ExtSlice 
+								dims: list 
+									element: Slice 
+										lower: Num 
+											n: int = 1
+										upper: Num 
+											n: int = 2
+										step: Num 
+											n: int = 3
+									element: Slice 
+										lower: Num 
+											n: int = 4
+										upper: Num 
+											n: int = 5
+										step: Num 
+											n: int = 6
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = b
+							ctx: Load 
+						slice: Slice 
+							lower: Num 
+								n: int = 7
+							upper: Num 
+								n: int = 8
+							step: Num 
+								n: int = 9
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = c
+								ctx: Load 
+							slice: Slice 
+								lower: Num 
+									n: int = 1
+								upper: Num 
+									n: int = 2
+								step: Num 
+									n: int = 3
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = d
+							ctx: Load 
+						slice: ExtSlice 
+							dims: list 
+								element: Slice 
+									lower: Num 
+										n: int = 4
+									upper: Num 
+										n: int = 5
+									step: Num 
+										n: int = 6
+								element: Slice 
+									lower: Num 
+										n: int = 7
+									upper: Num 
+										n: int = 8
+									step: Num 
+										n: int = 9
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = e
+								ctx: Load 
+							slice: ExtSlice 
+								dims: list 
+									element: Index 
+										value: Num 
+											n: int = 1
+									element: Slice 
+										lower: Num 
+											n: int = 1
+										upper: Num 
+											n: int = 2
+										step: Num 
+											n: int = 3
+									element: Index 
+										value: Num 
+											n: int = 3
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = f
+							ctx: Load 
+						slice: ExtSlice 
+							dims: list 
+								element: Index 
+									value: Num 
+										n: int = 4
+								element: Slice 
+									lower: Num 
+										n: int = 4
+									upper: Num 
+										n: int = 5
+									step: Num 
+										n: int = 6
+								element: Index 
+									value: Num 
+										n: int = 6
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = g
+								ctx: Load 
+							slice: Index 
+								value: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 2
+										element: Num 
+											n: int = 3
+									ctx: Load 
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = h
+							ctx: Load 
+						slice: Index 
+							value: Tuple 
+								elts: list 
+									element: Num 
+										n: int = 1
+									element: Num 
+										n: int = 2
+									element: Num 
+										n: int = 3
+								ctx: Load 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = i
+								ctx: Load 
+							slice: Index 
+								value: Num 
+									n: int = 1
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = j
+							ctx: Load 
+						slice: Index 
+							value: Num 
+								n: int = 1
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = k
+								ctx: Load 
+							slice: Slice 
+								lower: Num 
+									n: int = 1
+								upper: Num 
+									n: int = 2
+								step: Num 
+									n: int = 3
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = l
+							ctx: Load 
+						slice: Slice 
+							lower: Num 
+								n: int = 1
+							upper: Num 
+								n: int = 2
+							step: Num 
+								n: int = 3
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None

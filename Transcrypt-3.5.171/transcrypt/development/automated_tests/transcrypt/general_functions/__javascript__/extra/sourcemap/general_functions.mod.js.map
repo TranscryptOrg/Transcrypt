@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/general_functions/__javascript__/general_functions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/general_functions/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\ta = [1, 5, 3, 2, -1]\n\tb = ['sun', 'earth', 'moon']\n\t\n\tautoTester.check (sorted (a))\n\tautoTester.check (sorted (b))\n\t\n\ta.sort ()\n\tautoTester.check (a)\n\t\n\tb.sort ()\n\tautoTester.check (b)\n\n\tautoTester.check (sorted (a, reverse = True))\n\tautoTester.check (sorted (b, reverse = True))\n\t\n\ta.sort (reverse = True)\n\tautoTester.check (a)\n\t\n\tb.sort (reverse = True)\n\tautoTester.check (b)\n\t\n\tb.sort (key = lambda x: len (x)) \n\tautoTester.check (b)\n\n\tb.sort (key = lambda x: len (x), reverse = True) \n\tautoTester.check (b)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AAAA;AACA;AAEA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

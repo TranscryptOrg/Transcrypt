@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/indices_and_slices/__javascript__/indices_and_slices.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/indices_and_slices/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\t# Right hand side slices\n\tall = range (32)\n\tautoTester.check (all)\n\t\n\tautoTester.check (all [8 : 24])\n\tautoTester.check (all [8 : 24 : 2])\t\n\t\n\t# Left hand side slices\n\taList = [3, 4, 7, 8]\n\tautoTester.check (aList)\n\t\n\taList [4 : 4] = [9, 10]\n\tautoTester.check (aList)\n\t\n\taList [2 : 2] = [5, 6]\n\tautoTester.check (aList)\n\t\n\taList [0 : 0] = [1, 2]\n\tautoTester.check (aList)\n\t\n\taList [ : : 2] = [x + 0.001 for x in range (10) if x % 2]\n\tautoTester.check (aList)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AAEA;AACA;AAGA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/attribs_by_name/__javascript__/attribs_by_name.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/attribs_by_name/__init__.py"
+	],
+	"sourcesContent": [
+		"class A:\n\tdef __init__ (self):\n\t\tself.s = 'hello'\n\t\t\na = A ()\n\ndef run (autoTester):\n\tautoTester.check (a.s, getattr (a, 's'))\n\t\n\tsetattr (a, 's', 'goodbye')\n\tautoTester.check (a.s, getattr (a, 's'))\n\t\n\tsetattr (a, 't', 'exists')\n\tautoTester.check (hasattr (a, 't'), a.t, getattr (a, 't'))\n\t\n\tdelattr (a, 't')\n\tautoTester.check (hasattr (a, 't'))\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

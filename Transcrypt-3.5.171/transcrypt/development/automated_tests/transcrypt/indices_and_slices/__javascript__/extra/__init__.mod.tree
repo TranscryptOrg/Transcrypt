@@ -1,0 +1,268 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = all
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 32
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = all
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = all
+									ctx: Load 
+								slice: Slice 
+									lower: Num 
+										n: int = 8
+									upper: Num 
+										n: int = 24
+									step: NoneType = None
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = all
+									ctx: Load 
+								slice: Slice 
+									lower: Num 
+										n: int = 8
+									upper: Num 
+										n: int = 24
+									step: Num 
+										n: int = 2
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aList
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Num 
+								n: int = 3
+							element: Num 
+								n: int = 4
+							element: Num 
+								n: int = 7
+							element: Num 
+								n: int = 8
+						ctx: Load 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aList
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = aList
+								ctx: Load 
+							slice: Slice 
+								lower: Num 
+									n: int = 4
+								upper: Num 
+									n: int = 4
+								step: NoneType = None
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Num 
+								n: int = 9
+							element: Num 
+								n: int = 10
+						ctx: Load 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aList
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = aList
+								ctx: Load 
+							slice: Slice 
+								lower: Num 
+									n: int = 2
+								upper: Num 
+									n: int = 2
+								step: NoneType = None
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Num 
+								n: int = 5
+							element: Num 
+								n: int = 6
+						ctx: Load 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aList
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = aList
+								ctx: Load 
+							slice: Slice 
+								lower: Num 
+									n: int = 0
+								upper: Num 
+									n: int = 0
+								step: NoneType = None
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 2
+						ctx: Load 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aList
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = aList
+								ctx: Load 
+							slice: Slice 
+								lower: NoneType = None
+								upper: NoneType = None
+								step: Num 
+									n: int = 2
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Add 
+							right: Num 
+								n: float = 0.001
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 10
+									keywords: list 
+								ifs: list 
+									element: BinOp 
+										left: Name 
+											id: str = x
+											ctx: Load 
+										op: Mod 
+										right: Num 
+											n: int = 2
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aList
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

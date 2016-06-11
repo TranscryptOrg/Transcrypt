@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/module_random/__javascript__/module_random.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/module_random/module_random.py"
+	],
+	"sourcesContent": [
+		"from random import *\n\nresult = ''\n\ndef output (any):\n\tresult += any + '<br>\\n'\n\nfor fixedSeed in (false, true):\n\tif fixedSeed:\n\t\tseed (3)\n\telse:\n\t\tseed ()\n\n\toutput ('------ {} ------'.format ('fixed seed' if fixedSeed else 'auto seed'))\n\t\t\n\toutput ('--- randint ---')\n\tfor i in range (20):\n\t\toutput (randint (10, 20))\n\n\toutput ('<br>\\n--- choice ---')\n\tfor i in range (20):\n\t\toutput (choice ([1, 2, 3, 4, 5]))\n\n\toutput ('<br>\\n--- random ---')\n\tfor i in range (20):\n\t\toutput (random ())\n\t\t\n\toutput ('<br>\\n')\n\t\ndocument.getElementById ('output') .innerHTML = result\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AAAA;AAAA;AAGA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAEA;AAEA;AACA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAEA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

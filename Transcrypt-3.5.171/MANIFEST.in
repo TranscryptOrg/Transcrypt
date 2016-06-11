@@ -1,0 +1,9 @@
+global-include *.py *.js *.rst *.html *.css *.lyx *.pdf *.png *.gif *.jpg *.txt *.jar *.bat *
+global-exclude *.pyc .gitignore
+
+prune .git
+prune dist
+prune transcrypt.egg-info
+prune transcrypt/development/attic
+prune transcrypt/development/docs
+prune transcrypt/development/experiments

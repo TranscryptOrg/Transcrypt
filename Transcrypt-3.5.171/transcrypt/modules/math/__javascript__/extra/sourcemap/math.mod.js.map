@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/math/__javascript__/math.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/modules/math/__init__.py"
+	],
+	"sourcesContent": [
+		"pi = Math.PI\ne = Math.E\n\nexp = Math.exp\nexpm1 = Math.expm1\n\nlog = Math.log\t\t# Simplified\nlog1p = Math.log1p\nlog2 = Math.log2\nlog10 = Math.log10\n\npow = Math.pow\nsqrt = Math.sqrt\n\nsin = Math.sin\ncos = Math.cos\ntan = Math.tan\n\nasin = Math.asin\nacos = Math.acos\natan = Math.atan\natan2 = Math.atan2\n\nhypot = Math.hypot\n\t\ndef degrees (x):\n\treturn x * 180 / Math.PI\n\t\ndef radians (x):\n\treturn x * Math.PI / 180\n\t\nsinh = Math.sinh\ncosh = Math.cosh\ntanh = Math.tanh\n\nasinh = Math.asinh\nacosh = Math.acosh\natanh = Math.atanh\n\nfloor = Math.floor\nceil = Math.ceil\ntrunc = Math.trunc\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AAEA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

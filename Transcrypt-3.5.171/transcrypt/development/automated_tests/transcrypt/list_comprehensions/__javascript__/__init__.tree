@@ -1,0 +1,387 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = squares
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Name 
+								id: str = i
+								ctx: Load 
+							op: Mult 
+							right: Name 
+								id: str = i
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 10
+									keywords: list 
+								ifs: list 
+									element: BinOp 
+										left: Name 
+											id: str = i
+											ctx: Load 
+										op: Mod 
+										right: Num 
+											n: int = 2
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = squares
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tuples
+							ctx: Store 
+					value: ListComp 
+						elt: Tuple 
+							elts: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+								element: Name 
+									id: str = y
+									ctx: Load 
+								element: Name 
+									id: str = z
+									ctx: Load 
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 100
+										element: Num 
+											n: int = 200
+										element: Num 
+											n: int = 300
+										element: Num 
+											n: int = 400
+										element: Num 
+											n: int = 500
+										element: Num 
+											n: int = 600
+										element: Num 
+											n: int = 700
+									ctx: Load 
+								ifs: list 
+							element: comprehension 
+								target: Name 
+									id: str = y
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 10
+										element: Num 
+											n: int = 20
+										element: Num 
+											n: int = 30
+										element: Num 
+											n: int = 40
+										element: Num 
+											n: int = 50
+										element: Num 
+											n: int = 60
+										element: Num 
+											n: int = 70
+									ctx: Load 
+								ifs: list 
+									element: Compare 
+										left: Num 
+											n: int = 20
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = y
+												ctx: Load 
+											element: Num 
+												n: int = 60
+							element: comprehension 
+								target: Name 
+									id: str = z
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 2
+										element: Num 
+											n: int = 3
+										element: Num 
+											n: int = 4
+										element: Num 
+											n: int = 5
+										element: Num 
+											n: int = 6
+										element: Num 
+											n: int = 7
+									ctx: Load 
+								ifs: list 
+									element: Compare 
+										left: Num 
+											n: int = 200
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = x
+												ctx: Load 
+											element: Num 
+												n: int = 600
+									element: Compare 
+										left: Num 
+											n: int = 2
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = z
+												ctx: Load 
+											element: Num 
+												n: int = 6
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tuples
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tricky
+							ctx: Store 
+					value: ListComp 
+						elt: Tuple 
+							elts: list 
+								element: BinOp 
+									left: Num 
+										n: int = 2
+									op: Mult 
+									right: Name 
+										id: str = x
+										ctx: Load 
+								element: BinOp 
+									left: Num 
+										n: int = 3
+									op: Mult 
+									right: Name 
+										id: str = y
+										ctx: Load 
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Tuple 
+									elts: list 
+										element: Name 
+											id: str = x
+											ctx: Store 
+										element: Name 
+											id: str = y
+											ctx: Store 
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Tuple 
+											elts: list 
+												element: Num 
+													n: int = 10
+												element: Num 
+													n: int = 11
+											ctx: Load 
+										element: Tuple 
+											elts: list 
+												element: Num 
+													n: int = 20
+												element: Num 
+													n: int = 21
+											ctx: Load 
+									ctx: Load 
+								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tricky
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = nested
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Num 
+								n: int = 2
+							op: Mult 
+							right: Name 
+								id: str = x
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: ListComp 
+									elt: BinOp 
+										left: Name 
+											id: str = x
+											ctx: Load 
+										op: Mult 
+										right: Name 
+											id: str = x
+											ctx: Load 
+									generators: list 
+										element: comprehension 
+											target: Name 
+												id: str = x
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Num 
+														n: int = 3
+												keywords: list 
+											ifs: list 
+								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = nested
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a
+							ctx: Store 
+					value: Num 
+						n: int = 100
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = x
+							ctx: Store 
+					value: Num 
+						n: int = 5
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = scopeTest
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Add 
+							right: Name 
+								id: str = a
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 5
+									keywords: list 
+								ifs: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = x
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = scopeTest
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

@@ -1,0 +1,212 @@
+file: Module 
+	body: list 
+		element: ClassDef 
+			name: str = A
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = s
+									ctx: Store 
+							value: Str 
+								s: str = hello
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = a
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = A
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = a
+									ctx: Load 
+								attr: str = s
+								ctx: Load 
+							element: Call 
+								func: Name 
+									id: str = getattr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = a
+										ctx: Load 
+									element: Str 
+										s: str = s
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = setattr
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = a
+								ctx: Load 
+							element: Str 
+								s: str = s
+							element: Str 
+								s: str = goodbye
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = a
+									ctx: Load 
+								attr: str = s
+								ctx: Load 
+							element: Call 
+								func: Name 
+									id: str = getattr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = a
+										ctx: Load 
+									element: Str 
+										s: str = s
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = setattr
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = a
+								ctx: Load 
+							element: Str 
+								s: str = t
+							element: Str 
+								s: str = exists
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = hasattr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = a
+										ctx: Load 
+									element: Str 
+										s: str = t
+								keywords: list 
+							element: Attribute 
+								value: Name 
+									id: str = a
+									ctx: Load 
+								attr: str = t
+								ctx: Load 
+							element: Call 
+								func: Name 
+									id: str = getattr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = a
+										ctx: Load 
+									element: Str 
+										s: str = t
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = delattr
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = a
+								ctx: Load 
+							element: Str 
+								s: str = t
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = hasattr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = a
+										ctx: Load 
+									element: Str 
+										s: str = t
+								keywords: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

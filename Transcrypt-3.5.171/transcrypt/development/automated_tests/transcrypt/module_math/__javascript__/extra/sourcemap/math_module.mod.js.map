@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/math_module/__javascript__/math_module.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/math_module/__init__.py"
+	],
+	"sourcesContent": [
+		"from math import *\n\ndef run (autoTester):\n\tautoTester.check (pi)\n\tautoTester.check (e)\n\t\n\tautoTester.check (exp (3))\n\tautoTester.check (expm1 (4))\n\t\n\tautoTester.check (log (0.2))\n\tautoTester.check (log1p (5))\n\tautoTester.check (log2 (257))\n\tautoTester.check (log10 (1001))\n\t\n\tautoTester.check (pow (3, 4.5))\n\tautoTester.check (sqrt (25.1))\n\t\n\tautoTester.check (sin (10))\n\tautoTester.check (cos (10))\n\tautoTester.check (tan (10))\n\n\tautoTester.check (asin (0.5))\n\tautoTester.check (acos (0.5))\n\tautoTester.check (atan (0.5))\n\tautoTester.check (atan2 (1, 2))\n\t\n\tautoTester.check (hypot (3, 4.1))\n\t\n\tautoTester.check (degrees (pi/2.1))\n\tautoTester.check (radians (90))\n\t\n\tautoTester.check (sinh (1))\n\tautoTester.check (cosh (1))\n\tautoTester.check (tan (1))\n\t\n\tautoTester.check (asinh (70))\n\tautoTester.check (acosh (70))\n\tautoTester.check (atan (70))\n\t\n\tautoTester.check (floor (3.5))\n\tautoTester.check (ceil (3.5))\n\tautoTester.check (trunc (3.5))\n\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AAEA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

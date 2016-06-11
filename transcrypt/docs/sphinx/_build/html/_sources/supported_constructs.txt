@@ -52,7 +52,21 @@ Dict comprehensions
 .. literalinclude:: ../../development/automated_tests/transcrypt/dict_comprehensions/__init__.py
 	:tab-width: 4
 	:caption: Testlet: dict_comprehensions
+	
+Diverse fixes
+-------------
 
+.. literalinclude:: ../../development/automated_tests/transcrypt/div_fixes/__init__.py
+	:tab-width: 4
+	:caption: Testlet: div_fixes
+	
+Diverse pulls
+-------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/div_pulls/__init__.py
+	:tab-width: 4
+	:caption: Testlet: div_pulls
+	
 Dictionaries: dict revisited
 ----------------------------
 
@@ -102,6 +116,20 @@ List comprehensions: multi-loop and nested with multiple if's
 	:tab-width: 4
 	:caption: Testlet: list_comprehensions
 
+Module math: allmost all of Python's math module
+------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/module_math/__init__.py
+	:tab-width: 4
+	:caption: Testlet: module_math
+
+Module random: most important functions of Python's random module
+-----------------------------------------------------------------
+
+.. literalinclude:: ../../development/manual_tests/module_random/module_random.py
+	:tab-width: 4
+	:caption: Manual_test: module_random
+
 Operator overloading
 --------------------
 
@@ -130,6 +158,13 @@ Simple and augmented assignment
 	:tab-width: 4
 	:caption: Testlet: simple_and_augmented_assignment
 		
+Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection
+-------------------------------------------------------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/truthyness/__init__.py
+	:tab-width: 4
+	:caption: Testlet: truthyness
+	
 Tuple assignment: recursive and in for-headers using enumerate
 --------------------------------------------------------------
 

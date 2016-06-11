@@ -130,7 +130,8 @@ Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv'
 In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a *dict* without explicitly calling its *keys ()* member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, *__pragma__ ('iconv')* and *__pragma__ ('noiconv')* can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each *for .. in ..* loop. When designing numerical processing libraries, it's advisable to use *__pragma__ ('noiconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won't suffer.
 
 Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------
+
 During compilation the *__pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
 
 An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *include (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
@@ -157,3 +158,8 @@ On some occasions it's handy to be able to skip code generation for fragments of
 	:end-before: class Attribute:
 	:tab-width: 4
 	:caption: Preventing complaints of the static checker about unknown global JavaScript names in pong.py
+
+Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')
+------------------------------------------------------------------------------------
+
+When automatic conversion to truth value is activated, an empty array, dict or set has truth value False just as in CPyton, rather than True, as would be the case natively in JavaScript. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. To switch on automatic conversion to truth values locally, *__pragma__ ('tconv')* and *__pragma__ ('notconv')* can be used. The alternative is to switch on automatic conversion globally using the -t command line switch. Use of this switch is disadvised if a lot of boolean expressions are computed in inner loops, since it would result in many extra typechecks. When designing performance sensitive libraries, it's advisable to use *__pragma__ ('notconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -t switch, performance of won't suffer.

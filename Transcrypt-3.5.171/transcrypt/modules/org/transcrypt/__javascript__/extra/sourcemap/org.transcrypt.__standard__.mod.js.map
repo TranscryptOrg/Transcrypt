@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__javascript__/org.transcrypt.__standard__.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__standard__.py"
+	],
+	"sourcesContent": [
+		"# This module is avaible solely in the Transcrypt environment\n# It is included after the __builtin__ module, since it uses its facilities\n# In Transcrypt, __standard__ is available inline, it isn't nested and cannot be imported in the normal way\n\n__pragma__ ('skip')\ncopy = 0\n__pragma__ ('noskip')\n\nfrom org.transcrypt.stubs.browser import __pragma__\n\n__pragma__ ('nokwargs')\n__pragma__ ('noalias', 'sort')\n\nclass Exception:\n\tdef __init__ (self, *args):\n\t\tself.args = args\n\t\t\n\tdef __repr__ (self):\n\t\tif len (self.args):\n\t\t\treturn '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)))\n\t\telse:\n\t\t\treturn '???'\n\t\t\t\n\tdef __str__ (self):\n\t\tif len (self.args) > 1:\n\t\t\treturn str (tuple (self.args))\n\t\telif len (self.args):\n\t\t\treturn str (self.args [0])\n\t\telse:\n\t\t\treturn '???'\n\t\t\t\nclass ValueError (Exception):\n\tpass\n\t\t\t\n__pragma__ ('kwargs')\n\t\t\t\ndef __sort__ (iterable, key = None, reverse = False):\t# Used by py_sort, can deal with kwargs\n\tif key:\n\t\titerable.sort (lambda a, b: key (a) > key (b))\t# JavaScript sort\n\telse:\n\t\titerable.sort ()\t\t\t\t\t\t\t\t# JavaScript sort\n\t\t\n\tif reverse:\n\t\titerable.reverse ()\n\t\t\ndef sorted (iterable, key = None, reverse = False):\n\tif type (iterable) == dict:\n\t\tresult = copy (iterable.keys ()) \n\telse:\t\t\n\t\tresult = copy (iterable)\n\t\t\n\t__sort__ (result, key, reverse)\n\treturn result"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAaA;AACA;AAAA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAKA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
