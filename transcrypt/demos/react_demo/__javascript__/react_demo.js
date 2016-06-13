@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 15:35:07
+// Transcrypt'ed from Python, 2016-06-13 17:47:02
 function react_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -1330,11 +1330,33 @@ function react_demo () {
 	__all__.__call__ = __call__;
 
 	(function () {
-		var Hello = React.createClass (dict ({'displayName': 'Hello', 'render': (function __lambda__ () {
-			return React.createElement ('div', null, 'Hello ', this.props ['name']);})}));
-		ReactDOM.render (React.createElement (Hello, dict ({'name': 'World'})), document.getElementById ('container'));
+		var h = function (elm_type, props) {
+			if (typeof props == 'undefined' || (props != null && props .__class__ == __kwargdict__)) {;
+				var props = '';
+			};
+			var args = tuple ([].slice.apply (arguments).slice (2));
+			return React.createElement.apply (null, [elm_type].concat ([props]).concat (args));
+		};
+		var render = function (react_element, destination_id, callback) {
+			if (typeof callback == 'undefined' || (callback != null && callback .__class__ == __kwargdict__)) {;
+				var callback = (function __lambda__ () {
+					return null;});
+			};
+			var container = document.getElementById (destination_id);
+			ReactDOM.render (react_element, container, callback);
+		};
+		var Hello = React.createClass (dict ({'displayName': 'Hello', 'getInitialState': (function __lambda__ () {
+			return dict ({'counter': 0});}), 'updateCounter': (function __lambda__ () {
+			return this.setState (dict ({'counter': this.state ['counter'] + 1}));}), 'componentDidMount': (function __lambda__ () {
+			return setInterval (this.updateCounter, 1000);}), 'render': (function __lambda__ () {
+			return h ('div', dict ({'className': 'maindiv'}), h ('h1', null, 'Hello ', this.props ['name']), h ('p', null, 'Lorem ipsum dolor sit ame:'), h ('p', null, 'Counter:', this.state ['counter']));})}));
+		var element = React.createElement (Hello, dict ({'name': 'World'}));
+		render (element, 'container');
 		__pragma__ ('<all>')
 			__all__.Hello = Hello;
+			__all__.element = element;
+			__all__.h = h;
+			__all__.render = render;
 		__pragma__ ('</all>')
 	}) ();
 	return __all__;
