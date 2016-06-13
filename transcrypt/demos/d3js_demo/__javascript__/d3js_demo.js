@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-11 20:52:50
+// Transcrypt'ed from Python, 2016-06-13 20:11:47
 function d3js_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function d3js_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.173';
+							self.transpiler_version = '3.5.174';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function d3js_demo () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function d3js_demo () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function d3js_demo () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -1347,10 +1347,10 @@ function d3js_demo () {
 				self.node = __left0__ [2];
 				self.link = __left0__ [3];
 				self.restart ();
-			});},
+			}, '__init__');},
 			get mousemove () {return __get__ (this, function (self) {
 				self.cursor.attr ('transform', ('translate (' + d3.mouse (self.svg.node ())) + ')');
-			});},
+			}, 'mousemove');},
 			get mousedown () {return __get__ (this, function (self) {
 				var pushLink = function (target) {
 					var __left0__ = tuple ([target.x - node.x, target.y - node.y]);
@@ -1365,7 +1365,7 @@ function d3js_demo () {
 				self.nodes.push (node);
 				self.nodes.forEach (pushLink);
 				self.restart ();
-			});},
+			}, 'mousedown');},
 			get tick () {return __get__ (this, function (self) {
 				self.link.attr ('x1', (function __lambda__ (d) {
 					return d.source.x;})).attr ('y1', (function __lambda__ (d) {
@@ -1375,14 +1375,14 @@ function d3js_demo () {
 				self.node.attr ('cx', (function __lambda__ (d) {
 					return d.x;})).attr ('cy', (function __lambda__ (d) {
 					return d.y;}));
-			});},
+			}, 'tick');},
 			get restart () {return __get__ (this, function (self) {
 				self.link = self.link.data (self.links);
 				self.link.enter ().insert ('line', '.node').attr ('class', 'link');
 				self.node = self.node.data (self.nodes);
 				self.node.enter ().insert ('circle', '.cursor').attr ('class', 'node').attr ('r', 7).call (self.force.drag);
 				self.force.start ();
-			});}
+			}, 'restart');}
 		});
 		var spawn = Spawn (window.innerWidth, window.innerHeight);
 		__pragma__ ('<all>')

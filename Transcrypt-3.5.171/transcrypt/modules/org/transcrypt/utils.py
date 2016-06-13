@@ -3,9 +3,27 @@ import sys
 import argparse
 import inspect
 
-class CommandArgs:		
+class CommandArgsError (BaseException):
+	pass
+	
+class CommandArgsExit (BaseException):
+	pass
+	
+class ArgumentParser (argparse.ArgumentParser):
+	def error (self, message):
+		if message:
+			log (True, 'Error: {}', message)
+		self.print_help (sys.stderr)
+		raise CommandArgsError ()
+		
+	def exit (self, status = 0, message = None):
+		if message:
+			log (True, 'Exit: {}', message)
+		raise CommandArgsExit ()
+
+class CommandArgs:
 	def parse (self):
-		self.argParser = argparse.ArgumentParser ()
+		self.argParser = ArgumentParser ()
 		
 		self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
 		self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
