@@ -51,3 +51,12 @@ def sorted (iterable, key = None, reverse = False):
 		
 	__sort__ (result, key, reverse)
 	return result
+
+
+def map(func, iterable):
+	return [func(item) for item in iterable]
+
+
+def filter(func, iterable):
+	return [item for item in iterable if func(item)]
+
