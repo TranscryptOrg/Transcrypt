@@ -17,7 +17,7 @@ class CommandArgs:
 commandArgs = CommandArgs ()
 		
 if commandArgs.clean:
-	answer0 = input ('\nWARNING: THIS PROGRAM MAY ERRONEOUSLY DELETE MANY VALUABLE FILES!\nUsing it is entirely at your own risk.\nRead the sourcecode if you want to know what it does.\nIf you\'re not sure that its harmless in your situation, DON\'T USE IT!!!\n\nARE YOU SURE YOU WANT TO CONTINUE? (y = yes, n = no)')
+	answer0 = input ('\nWARNING: THIS PROGRAM MAY ERRONEOUSLY DELETE MANY VALUABLE FILES!\nUsing it is entirely at your own risk.\nRead the sourcecode if you want to know what it does.\nIf you\'re not sure that its harmless in your situation, DON\'T USE IT!!!\n\nARE YOU SURE YOU WANT TO CONTINUE? (y = yes, n = no) ')
 	if answer0 != 'y':
 		print ('\nShipment test aborted')
 		sys.exit (1)
@@ -25,10 +25,10 @@ if commandArgs.clean:
 cleanFromTime = datetime.datetime.now ()
 
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
-rootDir = '/'.join  (shipDir.split ('/')[ : -2])
+appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
 def getAbsPath (relPath):
-	return '{}/{}'.format (rootDir, relPath)
+	return '{}/{}'.format (appRootDir, relPath)
 
 def test (relPath, fileNamePrefix, run = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
@@ -45,6 +45,7 @@ def test (relPath, fileNamePrefix, run = False, switches = ''):
 	if os.path.isfile (filePath):
 		webbrowser.open ('file://{}'.format (filePath), new = 2)
 	
+# Perform all tests
 for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('development/automated_tests/hello', 'autotest', True, fcallSwitch)
 	test ('development/automated_tests/transcrypt', 'autotest', True, fcallSwitch)
@@ -58,22 +59,32 @@ for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mondrian', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
-			
+	
+# Make documentation before target files are erased, since they are to be included
+sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
+os.chdir (sphinxDir)
+os.system ('touch -R')
+os.system ('make html')
+
+# Optionally remove all targets	except documentation
 if commandArgs.clean:
 	removalList = []
 	
-	for rootPath, dirNames, fileNames in os.walk (rootDir):
-		for fileName in fileNames:
-			filePath = '{}/{}'.format (rootPath.replace ('\\', '/'), fileName)
-			if filePath.endswith ('.pyc') or datetime.datetime.fromtimestamp (os.path.getmtime (filePath)) >= cleanFromTime:
-				removalList.append (filePath)
+	for rootDir, dirNames, fileNames in os.walk (appRootDir):
+		rootDir = rootDir.replace ('\\', '/')
+		
+		if not '/docs/' in rootDir:
+			for fileName in fileNames:
+				filePath = '{}/{}'.format (rootDir.replace ('\\', '/'), fileName)
+				if filePath.endswith ('.pyc') or datetime.datetime.fromtimestamp (os.path.getmtime (filePath)) >= cleanFromTime:
+					removalList.append (filePath)
 				
 	print ('THE FOLLOWING FILES WILL ALL BE REMOVED:\n')
 
 	for filePath in removalList:
 		print (filePath)
 		
-	answer1 = input ('\nARE YOU SURE YOU WANT TO REMOVE ALL OF THE ABOVE FILES? (y = yes, n = no)')
+	answer1 = input ('\nARE YOU SURE YOU WANT TO REMOVE ALL OF THE ABOVE FILES? (y = yes, n = no) ')
 
 	if answer1 == 'y':
 		for filePath in removalList:
