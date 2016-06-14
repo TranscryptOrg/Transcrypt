@@ -63,7 +63,7 @@ for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 # Make documentation before target files are erased, since they are to be included
 sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
 os.chdir (sphinxDir)
-os.system ('touch *.rst')
+# os.system ('touch *.rst')
 os.system ('make html')
 
 # Optionally remove all targets	except documentation
