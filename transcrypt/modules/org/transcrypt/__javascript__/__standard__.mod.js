@@ -67,7 +67,8 @@
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();

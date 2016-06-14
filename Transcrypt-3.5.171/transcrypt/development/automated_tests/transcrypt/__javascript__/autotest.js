@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 20:11:28
+// Transcrypt'ed from Python, 2016-06-14 11:07:42
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.174';
+							self.transpiler_version = '3.5.175';
 							self.target_subdir = '__javascript__';
 						}, '__init__');}
 					});
@@ -227,7 +227,8 @@ function autotest () {
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();
@@ -1528,7 +1529,8 @@ function autotest () {
 								}
 								var args = tuple ([].slice.apply (arguments).slice (2, __ilastarg0__ + 1));
 							}
-							return autoTester.check (x, y, args, m, n, kwargs);}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
+							return autoTester.check (x, y, args, m, n, kwargs);
+						}) (1, 2, 8, 16, __kwargdict__ ({m: 128, n: 256.3, p: 1024.3, q: 2048.3}));
 						autoTester.check (C ().tricky.apply (null, range (4)));
 						autoTester.check ('{}-{}'.format (1, 3, 5, 7, 9));
 						autoTester.check ('{}-{}'.format.apply (null, range (4)));
@@ -2004,7 +2006,9 @@ function autotest () {
 						for (var i = 0; i < 10; i++) {
 							results.append ((function __lambda__ (j) {
 								return (function __lambda__ () {
-									return j;});}) (i));
+									return j;
+								});
+							}) (i));
 						}
 						autoTester.check (function () {
 							var __accu0__ = [];
@@ -2378,10 +2382,12 @@ function autotest () {
 						b.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (b);
 						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
-							return len (x);})}));
+							return len (x);
+						})}));
 						autoTester.check (b);
 						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
-							return len (x);}), reverse: true}));
+							return len (x);
+						}), reverse: true}));
 						autoTester.check (b);
 					};
 					__pragma__ ('<all>')
@@ -2458,7 +2464,8 @@ function autotest () {
 					var run = function (autoTester) {
 						var z = 1000;
 						autoTester.check ((function __lambda__ (x, y) {
-							return (x + y) + z;}) (111, 222));
+							return (x + y) + z;
+						}) (111, 222));
 						var f = function (list0, list1, aFunc) {
 							return function () {
 								var __accu0__ = [];
@@ -2471,13 +2478,16 @@ function autotest () {
 							} ();
 						};
 						var x = f (range (10), range (0, 100, 10), (function __lambda__ (x, y) {
-							return (x + y) + z;}));
+							return (x + y) + z;
+						}));
 						autoTester.check (x);
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ (x, y) {
-							return x * y + 100 * z;})));
+							return x * y + 100 * z;
+						})));
 						autoTester.check (f (range (10, 20), range (100, 200, 10), (function __lambda__ () {
 							var args = tuple ([].slice.apply (arguments).slice (0));
-							return args [0] * args [1] + 100 * z;})));
+							return args [0] * args [1] + 100 * z;
+						})));
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -3232,7 +3242,8 @@ function autotest () {
 										}
 										return __accu1__;
 									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
-										return str (aKey);})})));
+										return str (aKey);
+									})})));
 									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 										var __left0__ = __iter0__ [__index0__];
 										var index = __left0__ [0];

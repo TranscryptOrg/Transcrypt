@@ -49,7 +49,8 @@
 										}
 										return __accu1__;
 									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
-										return str (aKey);})})));
+										return str (aKey);
+									})})));
 									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 										var __left0__ = __iter0__ [__index0__];
 										var index = __left0__ [0];

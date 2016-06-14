@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 20:11:52
+// Transcrypt'ed from Python, 2016-06-14 11:08:10
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.174';
+							self.transpiler_version = '3.5.175';
 							self.target_subdir = '__javascript__';
 						}, '__init__');}
 					});
@@ -227,7 +227,8 @@ function pong () {
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();
@@ -16319,7 +16320,8 @@ function pong () {
 		var esc = __left0__ [1];
 		var space = __left0__ [2];
 		window.onkeydown = (function __lambda__ (event) {
-			return event.keyCode != space;});
+			return event.keyCode != space;
+		});
 		var Attribute = __class__ ('Attribute', [object], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				self.game = game;
@@ -16563,16 +16565,24 @@ function pong () {
 					var button = document.getElementById (key);
 					button.addEventListener ('mousedown', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, true);});}) (key));
+							return self.mouseOrTouch (aKey, true);
+						});
+					}) (key));
 					button.addEventListener ('touchstart', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, true);});}) (key));
+							return self.mouseOrTouch (aKey, true);
+						});
+					}) (key));
 					button.addEventListener ('mouseup', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, false);});}) (key));
+							return self.mouseOrTouch (aKey, false);
+						});
+					}) (key));
 					button.addEventListener ('touchend', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, false);});}) (key));
+							return self.mouseOrTouch (aKey, false);
+						});
+					}) (key));
 					button.style.cursor = 'pointer';
 					button.style.userSelect = 'none';
 					self.buttons.append (button);

@@ -26,7 +26,9 @@
 						for (var i = 0; i < 10; i++) {
 							results.append ((function __lambda__ (j) {
 								return (function __lambda__ () {
-									return j;});}) (i));
+									return j;
+								});
+							}) (i));
 						}
 						autoTester.check (function () {
 							var __accu0__ = [];

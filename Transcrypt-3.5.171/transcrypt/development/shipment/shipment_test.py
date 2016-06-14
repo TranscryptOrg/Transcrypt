@@ -26,6 +26,7 @@ for fcallSwitch in ('', '-f '):
 	test ('demos/hello', 'hello', False, fcallSwitch)
 	test ('demos/jquery_demo', 'jquery_demo', False, fcallSwitch)
 	test ('demos/d3js_demo', 'd3js_demo', False, fcallSwitch)
+	test ('demos/react_demo', 'react_demo', False, fcallSwitch)
 	test ('demos/pong', 'pong', False, fcallSwitch)
 	test ('demos/turtle_demos', 'star', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')

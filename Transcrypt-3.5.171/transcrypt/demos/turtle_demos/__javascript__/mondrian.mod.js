@@ -130,7 +130,8 @@
 			else {
 				rect (xMin, yMin, xMax, yMax);
 				ontimer ((function __lambda__ () {
-					return tuple ([clear (), draw ()]);}), 2000);
+					return tuple ([clear (), draw ()]);
+				}), 2000);
 			}
 		};
 		draw ();

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 20:11:22
+// Transcrypt'ed from Python, 2016-06-14 11:07:36
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.174';
+							self.transpiler_version = '3.5.175';
 							self.target_subdir = '__javascript__';
 						}, '__init__');}
 					});
@@ -227,7 +227,8 @@ function autotest () {
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();
@@ -1401,7 +1402,8 @@ function autotest () {
 										}
 										return __accu1__;
 									} (), __kwargdict__ ({key: (function __lambda__ (aKey) {
-										return str (aKey);})})));
+										return str (aKey);
+									})})));
 									for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 										var __left0__ = __iter0__ [__index0__];
 										var index = __left0__ [0];

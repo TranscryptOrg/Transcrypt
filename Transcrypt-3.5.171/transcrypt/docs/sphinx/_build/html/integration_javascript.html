@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.175 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.176 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.175',
+        VERSION:     '3.5.176',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.175 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.176 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.175 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.176 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -805,7 +805,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         var esc = __left0__ [1];
         var space = __left0__ [2];
         window.onkeydown = (function __lambda__ (event) {
-            return event.keyCode != space;});
+            return event.keyCode != space;
+        });
         var Attribute = __class__ (&#39;Attribute&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, game) {
                 self.game = game;
@@ -1049,16 +1050,24 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
-                            return self.mouseOrTouch (aKey, true);});}) (key));
+                            return self.mouseOrTouch (aKey, true);
+                        });
+                    }) (key));
                     button.addEventListener (&#39;touchstart&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
-                            return self.mouseOrTouch (aKey, true);});}) (key));
+                            return self.mouseOrTouch (aKey, true);
+                        });
+                    }) (key));
                     button.addEventListener (&#39;mouseup&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
-                            return self.mouseOrTouch (aKey, false);});}) (key));
+                            return self.mouseOrTouch (aKey, false);
+                        });
+                    }) (key));
                     button.addEventListener (&#39;touchend&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
-                            return self.mouseOrTouch (aKey, false);});}) (key));
+                            return self.mouseOrTouch (aKey, false);
+                        });
+                    }) (key));
                     button.style.cursor = &#39;pointer&#39;;
                     button.style.userSelect = &#39;none&#39;;
                     self.buttons.append (button);
@@ -1420,13 +1429,19 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             }, &#39;mousedown&#39;);},
             get tick () {return __get__ (this, function (self) {
                 self.link.attr (&#39;x1&#39;, (function __lambda__ (d) {
-                    return d.source.x;})).attr (&#39;y1&#39;, (function __lambda__ (d) {
-                    return d.source.y;})).attr (&#39;x2&#39;, (function __lambda__ (d) {
-                    return d.target.x;})).attr (&#39;y2&#39;, (function __lambda__ (d) {
-                    return d.target.y;}));
+                    return d.source.x;
+                })).attr (&#39;y1&#39;, (function __lambda__ (d) {
+                    return d.source.y;
+                })).attr (&#39;x2&#39;, (function __lambda__ (d) {
+                    return d.target.x;
+                })).attr (&#39;y2&#39;, (function __lambda__ (d) {
+                    return d.target.y;
+                }));
                 self.node.attr (&#39;cx&#39;, (function __lambda__ (d) {
-                    return d.x;})).attr (&#39;cy&#39;, (function __lambda__ (d) {
-                    return d.y;}));
+                    return d.x;
+                })).attr (&#39;cy&#39;, (function __lambda__ (d) {
+                    return d.y;
+                }));
             }, &#39;tick&#39;);},
             get restart () {return __get__ (this, function (self) {
                 self.link = self.link.data (self.links);
@@ -1440,6 +1455,102 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         __pragma__ (&#39;&lt;all&gt;&#39;)
             __all__.Spawn = Spawn;
             __all__.spawn = spawn;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="integration-example-react">
+<h2>6.6. Integration example: React<a class="headerlink" href="#integration-example-react" title="Permalink to this headline">¶</a></h2>
+<p><em>React</em> is a JavaScript library for easy creation of interactive UI&#8217;s. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &#8220;parallel&#8221; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="react-demo-py">
+<div class="code-block-caption"><span class="caption-text">react_demo.py</span><a class="headerlink" href="#react-demo-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Helper functions</span>
+
+
+<span class="k">def</span> <span class="nf">h</span><span class="p">(</span><span class="n">elm_type</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">React</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="n">elm_type</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">react_element</span><span class="p">,</span> <span class="n">destination_id</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="n">container</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="n">destination_id</span><span class="p">)</span>
+    <span class="n">ReactDOM</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">react_element</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+
+
+<span class="c"># Create a component</span>
+
+
+<span class="n">Hello</span> <span class="o">=</span> <span class="n">React</span><span class="o">.</span><span class="n">createClass</span><span class="p">({</span>
+    <span class="s">&#39;displayName&#39;</span><span class="p">:</span> <span class="s">&#39;Hello&#39;</span><span class="p">,</span>
+
+    <span class="s">&#39;getInitialState&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;counter&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+
+    <span class="s">&#39;updateCounter&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">setState</span><span class="p">({</span><span class="s">&#39;counter&#39;</span><span class="p">:</span> <span class="n">this</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s">&#39;counter&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">})),</span>
+
+    <span class="s">&#39;componentDidMount&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">setInterval</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">updateCounter</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)),</span>
+
+    <span class="s">&#39;render&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">h</span><span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;className&#39;</span><span class="p">:</span> <span class="s">&#39;maindiv&#39;</span><span class="p">},</span>
+                          <span class="n">h</span><span class="p">(</span><span class="s">&#39;h1&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;Hello &#39;</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]),</span>
+                          <span class="n">h</span><span class="p">(</span><span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;Lorem ipsum dolor sit ame.&#39;</span><span class="p">),</span>
+                          <span class="n">h</span><span class="p">(</span><span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;Counter: &#39;</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="s">&#39;counter&#39;</span><span class="p">])</span>
+                        <span class="p">)</span>
+<span class="p">})</span>
+
+
+<span class="c"># Render the component in a &#39;container&#39; div</span>
+
+<span class="n">element</span> <span class="o">=</span> <span class="n">React</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="n">Hello</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;React!&#39;</span><span class="p">})</span>
+<span class="n">render</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="s">&#39;container&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var h = function (elm_type, props) {
+            if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
+                var props = &#39;&#39;;
+            };
+            var args = tuple ([].slice.apply (arguments).slice (2));
+            return React.createElement.apply (null, [elm_type].concat ([props]).concat (args));
+        };
+        var render = function (react_element, destination_id, callback) {
+            if (typeof callback == &#39;undefined&#39; || (callback != null &amp;&amp; callback .__class__ == __kwargdict__)) {;
+                var callback = (function __lambda__ () {
+                    return null;
+                });
+            };
+            var container = document.getElementById (destination_id);
+            ReactDOM.render (react_element, container, callback);
+        };
+        var Hello = React.createClass (dict ({&#39;displayName&#39;: &#39;Hello&#39;, &#39;getInitialState&#39;: (function __lambda__ () {
+            return dict ({&#39;counter&#39;: 0});
+        }), &#39;updateCounter&#39;: (function __lambda__ () {
+            return this.setState (dict ({&#39;counter&#39;: this.state [&#39;counter&#39;] + 1}));
+        }), &#39;componentDidMount&#39;: (function __lambda__ () {
+            return setInterval (this.updateCounter, 1000);
+        }), &#39;render&#39;: (function __lambda__ () {
+            return h (&#39;div&#39;, dict ({&#39;className&#39;: &#39;maindiv&#39;}), h (&#39;h1&#39;, null, &#39;Hello &#39;, this.props [&#39;name&#39;]), h (&#39;p&#39;, null, &#39;Lorem ipsum dolor sit ame.&#39;), h (&#39;p&#39;, null, &#39;Counter: &#39;, this.state [&#39;counter&#39;]));
+        })}));
+        var element = React.createElement (Hello, dict ({&#39;name&#39;: &#39;React!&#39;}));
+        render (element, &#39;container&#39;);
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Hello = Hello;
+            __all__.element = element;
+            __all__.h = h;
+            __all__.render = render;
         __pragma__ (&#39;&lt;/all&gt;&#39;)
     }) ();
 </pre></div>
@@ -1474,6 +1585,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <li><a class="reference internal" href="#joined-minification">6.3. Joined minification</a></li>
 <li><a class="reference internal" href="#integration-example-jquery">6.4. Integration example: jQuery</a></li>
 <li><a class="reference internal" href="#integration-example-d3-js">6.5. Integration example: D3.js</a></li>
+<li><a class="reference internal" href="#integration-example-react">6.6. Integration example: React</a></li>
 </ul>
 </li>
 </ul>
@@ -1520,7 +1632,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.175 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.176 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

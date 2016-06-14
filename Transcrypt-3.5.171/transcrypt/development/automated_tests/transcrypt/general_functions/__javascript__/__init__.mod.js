@@ -20,10 +20,12 @@
 						b.py_sort (__kwargdict__ ({reverse: true}));
 						autoTester.check (b);
 						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
-							return len (x);})}));
+							return len (x);
+						})}));
 						autoTester.check (b);
 						b.py_sort (__kwargdict__ ({key: (function __lambda__ (x) {
-							return len (x);}), reverse: true}));
+							return len (x);
+						}), reverse: true}));
 						autoTester.check (b);
 					};
 					__pragma__ ('<all>')

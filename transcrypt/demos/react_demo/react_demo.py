@@ -24,16 +24,13 @@ Hello = React.createClass({
 
     'render': lambda: h('div', {'className': 'maindiv'},
                           h('h1', None, 'Hello ', this.props['name']),
-                          h('p', None, 'Lorem ipsum dolor sit ame:'),
-                          h('p', None, 'Counter:', this.state['counter'])
+                          h('p', None, 'Lorem ipsum dolor sit ame.'),
+                          h('p', None, 'Counter: ', this.state['counter'])
                         )
 })
 
 
 # Render the component in a 'container' div
 
-element = React.createElement(Hello, {'name': 'World'})
+element = React.createElement(Hello, {'name': 'React!'})
 render(element, 'container')
-
-
-

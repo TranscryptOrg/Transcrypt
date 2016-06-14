@@ -8,7 +8,8 @@
 		var esc = __left0__ [1];
 		var space = __left0__ [2];
 		window.onkeydown = (function __lambda__ (event) {
-			return event.keyCode != space;});
+			return event.keyCode != space;
+		});
 		var Attribute = __class__ ('Attribute', [object], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				self.game = game;
@@ -252,16 +253,24 @@
 					var button = document.getElementById (key);
 					button.addEventListener ('mousedown', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, true);});}) (key));
+							return self.mouseOrTouch (aKey, true);
+						});
+					}) (key));
 					button.addEventListener ('touchstart', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, true);});}) (key));
+							return self.mouseOrTouch (aKey, true);
+						});
+					}) (key));
 					button.addEventListener ('mouseup', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, false);});}) (key));
+							return self.mouseOrTouch (aKey, false);
+						});
+					}) (key));
 					button.addEventListener ('touchend', (function __lambda__ (aKey) {
 						return (function __lambda__ () {
-							return self.mouseOrTouch (aKey, false);});}) (key));
+							return self.mouseOrTouch (aKey, false);
+						});
+					}) (key));
 					button.style.cursor = 'pointer';
 					button.style.userSelect = 'none';
 					self.buttons.append (button);

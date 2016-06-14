@@ -1535,7 +1535,7 @@ class Generator (ast.NodeVisitor):
 		self.emit ('return ')
 		self.visit (node.body)
 		self.dedent ()
-		self.emit (';}})')
+		self.emit (';\n}})')
 	
 	def visit_List (self, node):
 		self.emit ('list ([')

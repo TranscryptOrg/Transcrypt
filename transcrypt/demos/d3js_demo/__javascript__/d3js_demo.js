@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 20:11:47
+// Transcrypt'ed from Python, 2016-06-14 11:08:01
 function d3js_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function d3js_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.174';
+							self.transpiler_version = '3.5.175';
 							self.target_subdir = '__javascript__';
 						}, '__init__');}
 					});
@@ -227,7 +227,8 @@ function d3js_demo () {
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();
@@ -1368,13 +1369,19 @@ function d3js_demo () {
 			}, 'mousedown');},
 			get tick () {return __get__ (this, function (self) {
 				self.link.attr ('x1', (function __lambda__ (d) {
-					return d.source.x;})).attr ('y1', (function __lambda__ (d) {
-					return d.source.y;})).attr ('x2', (function __lambda__ (d) {
-					return d.target.x;})).attr ('y2', (function __lambda__ (d) {
-					return d.target.y;}));
+					return d.source.x;
+				})).attr ('y1', (function __lambda__ (d) {
+					return d.source.y;
+				})).attr ('x2', (function __lambda__ (d) {
+					return d.target.x;
+				})).attr ('y2', (function __lambda__ (d) {
+					return d.target.y;
+				}));
 				self.node.attr ('cx', (function __lambda__ (d) {
-					return d.x;})).attr ('cy', (function __lambda__ (d) {
-					return d.y;}));
+					return d.x;
+				})).attr ('cy', (function __lambda__ (d) {
+					return d.y;
+				}));
 			}, 'tick');},
 			get restart () {return __get__ (this, function (self) {
 				self.link = self.link.data (self.links);

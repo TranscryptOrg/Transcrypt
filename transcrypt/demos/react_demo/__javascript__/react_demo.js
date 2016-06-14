@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-13 17:47:02
+// Transcrypt'ed from Python, 2016-06-14 11:08:05
 function react_demo () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function react_demo () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.174';
+							self.transpiler_version = '3.5.175';
 							self.target_subdir = '__javascript__';
-						});}
+						}, '__init__');}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function react_demo () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						});},
+						}, '__init__');},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function react_demo () {
 							else {
 								return '???';
 							}
-						});},
+						}, '__repr__');},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function react_demo () {
 									return '???';
 								}
 							}
-						});}
+						}, '__str__');}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -227,7 +227,8 @@ function react_demo () {
 										}
 									}
 								}
-								return key (a) > key (b);}));
+								return key (a) > key (b);
+							}));
 						}
 						else {
 							iterable.sort ();
@@ -1340,17 +1341,22 @@ function react_demo () {
 		var render = function (react_element, destination_id, callback) {
 			if (typeof callback == 'undefined' || (callback != null && callback .__class__ == __kwargdict__)) {;
 				var callback = (function __lambda__ () {
-					return null;});
+					return null;
+				});
 			};
 			var container = document.getElementById (destination_id);
 			ReactDOM.render (react_element, container, callback);
 		};
 		var Hello = React.createClass (dict ({'displayName': 'Hello', 'getInitialState': (function __lambda__ () {
-			return dict ({'counter': 0});}), 'updateCounter': (function __lambda__ () {
-			return this.setState (dict ({'counter': this.state ['counter'] + 1}));}), 'componentDidMount': (function __lambda__ () {
-			return setInterval (this.updateCounter, 1000);}), 'render': (function __lambda__ () {
-			return h ('div', dict ({'className': 'maindiv'}), h ('h1', null, 'Hello ', this.props ['name']), h ('p', null, 'Lorem ipsum dolor sit ame:'), h ('p', null, 'Counter:', this.state ['counter']));})}));
-		var element = React.createElement (Hello, dict ({'name': 'World'}));
+			return dict ({'counter': 0});
+		}), 'updateCounter': (function __lambda__ () {
+			return this.setState (dict ({'counter': this.state ['counter'] + 1}));
+		}), 'componentDidMount': (function __lambda__ () {
+			return setInterval (this.updateCounter, 1000);
+		}), 'render': (function __lambda__ () {
+			return h ('div', dict ({'className': 'maindiv'}), h ('h1', null, 'Hello ', this.props ['name']), h ('p', null, 'Lorem ipsum dolor sit ame.'), h ('p', null, 'Counter: ', this.state ['counter']));
+		})}));
+		var element = React.createElement (Hello, dict ({'name': 'React!'}));
 		render (element, 'container');
 		__pragma__ ('<all>')
 			__all__.Hello = Hello;
@@ -1362,3 +1368,5 @@ function react_demo () {
 	return __all__;
 }
 window ['react_demo'] = react_demo ();
+
+//# sourceMappingURL=extra/sourcemap/react_demo.js.map

@@ -110,3 +110,14 @@ The *D3.js* graphics library offers animation by data driven DOM manipulation. I
 |    :tab-width: 4                                       |    :tab-width: 4                                                          |
 |    :caption: d3js_demo.py                              |    :caption: d3js_demo.mod.js                                             |
 +--------------------------------------------------------+---------------------------------------------------------------------------+
+
+Integration example: React
+--------------------------
+
+*React* is a JavaScript library for easy creation of interactive UI's. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a "parallel" universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.
+
++----------------------------------------------------------+-----------------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/react_demo/react_demo.py | .. literalinclude:: ../../demos/react_demo/__javascript__/react_demo.mod.js |
+|    :tab-width: 4                                         |    :tab-width: 4                                                            |
+|    :caption: react_demo.py                               |    :caption: react_demo.mod.js                                              |
++----------------------------------------------------------+-----------------------------------------------------------------------------+

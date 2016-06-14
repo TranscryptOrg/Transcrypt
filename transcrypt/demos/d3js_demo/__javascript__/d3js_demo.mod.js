@@ -37,13 +37,19 @@
 			}, 'mousedown');},
 			get tick () {return __get__ (this, function (self) {
 				self.link.attr ('x1', (function __lambda__ (d) {
-					return d.source.x;})).attr ('y1', (function __lambda__ (d) {
-					return d.source.y;})).attr ('x2', (function __lambda__ (d) {
-					return d.target.x;})).attr ('y2', (function __lambda__ (d) {
-					return d.target.y;}));
+					return d.source.x;
+				})).attr ('y1', (function __lambda__ (d) {
+					return d.source.y;
+				})).attr ('x2', (function __lambda__ (d) {
+					return d.target.x;
+				})).attr ('y2', (function __lambda__ (d) {
+					return d.target.y;
+				}));
 				self.node.attr ('cx', (function __lambda__ (d) {
-					return d.x;})).attr ('cy', (function __lambda__ (d) {
-					return d.y;}));
+					return d.x;
+				})).attr ('cy', (function __lambda__ (d) {
+					return d.y;
+				}));
 			}, 'tick');},
 			get restart () {return __get__ (this, function (self) {
 				self.link = self.link.data (self.links);
