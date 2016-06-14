@@ -9,8 +9,9 @@ class CommandArgs:
 	def __init__ (self):
 		self.argParser = argparse.ArgumentParser ()
 	
-		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
 		self.argParser.add_argument ('-c', '--clean', help = 'clean source tree', action = 'store_true')
+		self.argParser.add_argument ('-d', '--docs', help = 'make docs', action = 'store_true')
+		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 
@@ -59,12 +60,14 @@ for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mondrian', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
-	
-# Make documentation before target files are erased, since they are to be included
-sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
-os.chdir (sphinxDir)
-# os.system ('touch *.rst')
-os.system ('make html')
+
+# Make docs optionally since they cause a lot of diffs	
+# Make them before target files are erased, since they are to be included in the docs
+if commandArgs.docs:
+	sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
+	os.chdir (sphinxDir)
+	os.system ('touch *.rst')
+	os.system ('make html')
 
 # Optionally remove all targets	except documentation
 if commandArgs.clean:
