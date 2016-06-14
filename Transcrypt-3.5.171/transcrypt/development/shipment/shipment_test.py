@@ -1,5 +1,28 @@
 import os
+import os.path
+import sys
+import datetime
 import webbrowser
+import argparse
+
+class CommandArgs:
+	def __init__ (self):
+		self.argParser = argparse.ArgumentParser ()
+	
+		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
+		self.argParser.add_argument ('-c', '--clean', help = 'clean source tree', action = 'store_true')
+		
+		self.__dict__.update (self.argParser.parse_args () .__dict__)
+
+commandArgs = CommandArgs ()
+		
+if commandArgs.clean:
+	answer0 = input ('\nWARNING: THIS PROGRAM MAY ERRONEOUSLY DELETE MANY VALUABLE FILES!\nUsing it is entirely at your own risk.\nRead the sourcecode if you want to know what it does.\nIf you\'re not sure that its harmless in your situation, DON\'T USE IT!!!\n\nARE YOU SURE YOU WANT TO CONTINUE? (y = yes, n = no)')
+	if answer0 != 'y':
+		print ('\nShipment test aborted')
+		sys.exit (1)
+		
+cleanFromTime = datetime.datetime.now ()
 
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 rootDir = '/'.join  (shipDir.split ('/')[ : -2])
@@ -10,16 +33,19 @@ def getAbsPath (relPath):
 def test (relPath, fileNamePrefix, run = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
 	
-	os.system ('run_transcrypt -b -m {}{}.py'.format (switches, fileNamePrefix))	
+	os.system ('run_transcrypt -b -m -dm -dt {}{}.py'.format (switches, fileNamePrefix))
 
 	if run:
 		os.chdir (getAbsPath (relPath))
 		os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
 	
 	webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
-	webbrowser.open ('file://{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
 	
-for fcallSwitch in ('', '-f '):
+	filePath = '{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix)
+	if os.path.isfile (filePath):
+		webbrowser.open ('file://{}'.format (filePath), new = 2)
+	
+for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('development/automated_tests/hello', 'autotest', True, fcallSwitch)
 	test ('development/automated_tests/transcrypt', 'autotest', True, fcallSwitch)
 	test ('development/manual_tests/module_random', 'module_random', False, fcallSwitch)
@@ -32,8 +58,28 @@ for fcallSwitch in ('', '-f '):
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mondrian', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
+			
+if commandArgs.clean:
+	removalList = []
 	
-	if fcallSwitch:
-		print ('Shipment test completed')
+	for rootPath, dirNames, fileNames in os.walk (rootDir):
+		for fileName in fileNames:
+			filePath = '{}/{}'.format (rootPath.replace ('\\', '/'), fileName)
+			if filePath.endswith ('.pyc') or datetime.datetime.fromtimestamp (os.path.getmtime (filePath)) >= cleanFromTime:
+				removalList.append (filePath)
+				
+	print ('THE FOLLOWING FILES WILL ALL BE REMOVED:\n')
+
+	for filePath in removalList:
+		print (filePath)
+		
+	answer1 = input ('\nARE YOU SURE YOU WANT TO REMOVE ALL OF THE ABOVE FILES? (y = yes, n = no)')
+
+	if answer1 == 'y':
+		for filePath in removalList:
+			os.remove (filePath)
 	else:
-		input ('Close browser tabs opened by shipment test and press [enter] for fcall test')
+		print ('\nShipment test aborted')
+		sys.exit (1)
+		
+print ('\nShipment test ready')

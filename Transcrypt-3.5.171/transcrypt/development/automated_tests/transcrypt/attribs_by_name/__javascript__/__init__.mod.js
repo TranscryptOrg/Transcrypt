@@ -7,7 +7,7 @@
 					var A = __class__ ('A', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.s = 'hello';
-						}, '__init__');}
+						});}
 					});
 					var a = A ();
 					var run = function (autoTester) {

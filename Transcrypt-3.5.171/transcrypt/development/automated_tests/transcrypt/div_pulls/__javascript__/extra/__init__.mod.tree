@@ -113,5 +113,124 @@ file: Module
 										n: int = 2
 								ctx: Load 
 						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = Pull 59
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = list
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = filter
+											ctx: Load 
+										args: list 
+											element: Lambda 
+												args: arguments 
+													args: list 
+														element: arg 
+															arg: str = x
+															annotation: NoneType = None
+													vararg: NoneType = None
+													kwonlyargs: list 
+													kw_defaults: list 
+													kwarg: NoneType = None
+													defaults: list 
+												body: Compare 
+													left: BinOp 
+														left: Name 
+															id: str = x
+															ctx: Load 
+														op: Mod 
+														right: Num 
+															n: int = 2
+													ops: list 
+														element: Eq 
+													comparators: list 
+														element: Num 
+															n: int = 0
+											element: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Num 
+														n: int = 10
+												keywords: list 
+										keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = list
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = map
+											ctx: Load 
+										args: list 
+											element: Lambda 
+												args: arguments 
+													args: list 
+														element: arg 
+															arg: str = x
+															annotation: NoneType = None
+													vararg: NoneType = None
+													kwonlyargs: list 
+													kw_defaults: list 
+													kwarg: NoneType = None
+													defaults: list 
+												body: BinOp 
+													left: Name 
+														id: str = x
+														ctx: Load 
+													op: Mult 
+													right: Name 
+														id: str = x
+														ctx: Load 
+											element: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Num 
+														n: int = 0
+													element: Num 
+														n: int = 31
+													element: Num 
+														n: int = 3
+												keywords: list 
+										keywords: list 
+								keywords: list 
+						keywords: list 
 			decorator_list: list 
 			returns: NoneType = None

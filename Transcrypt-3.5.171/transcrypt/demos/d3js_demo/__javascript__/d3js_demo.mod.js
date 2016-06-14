@@ -16,10 +16,10 @@
 				self.node = __left0__ [2];
 				self.link = __left0__ [3];
 				self.restart ();
-			}, '__init__');},
+			});},
 			get mousemove () {return __get__ (this, function (self) {
 				self.cursor.attr ('transform', ('translate (' + d3.mouse (self.svg.node ())) + ')');
-			}, 'mousemove');},
+			});},
 			get mousedown () {return __get__ (this, function (self) {
 				var pushLink = function (target) {
 					var __left0__ = tuple ([target.x - node.x, target.y - node.y]);
@@ -34,7 +34,7 @@
 				self.nodes.push (node);
 				self.nodes.forEach (pushLink);
 				self.restart ();
-			}, 'mousedown');},
+			});},
 			get tick () {return __get__ (this, function (self) {
 				self.link.attr ('x1', (function __lambda__ (d) {
 					return d.source.x;
@@ -50,14 +50,14 @@
 				})).attr ('cy', (function __lambda__ (d) {
 					return d.y;
 				}));
-			}, 'tick');},
+			});},
 			get restart () {return __get__ (this, function (self) {
 				self.link = self.link.data (self.links);
 				self.link.enter ().insert ('line', '.node').attr ('class', 'link');
 				self.node = self.node.data (self.nodes);
 				self.node.enter ().insert ('circle', '.cursor').attr ('class', 'node').attr ('r', 7).call (self.force.drag);
 				self.force.start ();
-			}, 'restart');}
+			});}
 		});
 		var spawn = Spawn (window.innerWidth, window.innerHeight);
 		__pragma__ ('<all>')

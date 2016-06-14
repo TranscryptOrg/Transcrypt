@@ -466,3 +466,82 @@ file: Module
 						ctx: Load 
 			decorator_list: list 
 			returns: NoneType = None
+		element: FunctionDef 
+			name: str = map
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = func
+						annotation: NoneType = None
+					element: arg 
+						arg: str = iterable
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: ListComp 
+						elt: Call 
+							func: Name 
+								id: str = func
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = item
+									ctx: Load 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = item
+									ctx: Store 
+								iter: Name 
+									id: str = iterable
+									ctx: Load 
+								ifs: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = filter
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = func
+						annotation: NoneType = None
+					element: arg 
+						arg: str = iterable
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: ListComp 
+						elt: Name 
+							id: str = item
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = item
+									ctx: Store 
+								iter: Name 
+									id: str = iterable
+									ctx: Load 
+								ifs: list 
+									element: Call 
+										func: Name 
+											id: str = func
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = item
+												ctx: Load 
+										keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

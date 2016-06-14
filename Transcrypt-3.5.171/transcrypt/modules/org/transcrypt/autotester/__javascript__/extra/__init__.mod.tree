@@ -1058,7 +1058,7 @@ file: Module
 																	element: Call 
 																		func: Attribute 
 																			value: Str 
-																				s: str = !!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>
+																				s: str = <div style="display: inline; color: {}; background-color: {}">!!!<b><i>{}</i></b></div>
 																			attr: str = format
 																			ctx: Load 
 																		args: list 
