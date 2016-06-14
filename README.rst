@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- More unneeded files removed from repo and distro
 - Documentation fix
 - All compilation results removed from repo and distro, making dif'ing easier
 - Builtins map and filter added for one iterable (pull) + testcase
