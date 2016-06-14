@@ -42,7 +42,7 @@
 							_allTurtles.append (self);
 							self._paths = list ([]);
 							self.reset ();
-						}, '__init__');},
+						});},
 						get reset () {return __get__ (this, function (self) {
 							self._heading = Math.PI / 2;
 							self.pensize (1);
@@ -51,7 +51,7 @@
 							self._track = list ([]);
 							self.home ();
 							self.clear ();
-						}, 'reset');},
+						});},
 						get clear () {return __get__ (this, function (self) {
 							var __iter0__ = self._paths;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -61,7 +61,7 @@
 							self._paths = list ([]);
 							self._track = list ([]);
 							self._moveto (self._position);
-						}, 'clear');},
+						});},
 						get _flush () {return __get__ (this, function (self) {
 							if (_debug) {
 								print ('Flush:', self._track);
@@ -78,10 +78,10 @@
 								self._track = list ([]);
 								self._moveto (self._position);
 							}
-						}, '_flush');},
+						});},
 						get done () {return __get__ (this, function (self) {
 							self._flush ();
-						}, 'done');},
+						});},
 						get pensize () {return __get__ (this, function (self, width) {
 							self._flush ();
 							if (width == null) {
@@ -90,7 +90,7 @@
 							else {
 								self._pensize = width;
 							}
-						}, 'pensize');},
+						});},
 						get color () {return __get__ (this, function (self, pencolor, fillcolor) {
 							if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
 								var fillcolor = null;
@@ -100,7 +100,7 @@
 							if (fillcolor != null) {
 								self._fillcolor = fillcolor;
 							}
-						}, 'color');},
+						});},
 						get goto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -112,7 +112,7 @@
 								self._position = list ([x, y]);
 							}
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'goto');},
+						});},
 						get _moveto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -123,16 +123,16 @@
 							if (wasdown) {
 								self.down ();
 							}
-						}, '_moveto');},
+						});},
 						get home () {return __get__ (this, function (self) {
 							self._moveto (0, 0);
-						}, 'home');},
+						});},
 						get position () {return __get__ (this, function (self) {
 							return self._position.__getslice__ (0, null, 1);
-						}, 'position');},
+						});},
 						get pos () {return __get__ (this, function (self) {
 							return self.position ();
-						}, 'pos');},
+						});},
 						get distance () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -146,54 +146,54 @@
 							var dX = other [0] - self._position [0];
 							var dY = other [1] - self._position [1];
 							return Math.sqrt (dX * dX + dY * dY);
-						}, 'distance');},
+						});},
 						get up () {return __get__ (this, function (self) {
 							self._down = false;
-						}, 'up');},
+						});},
 						get down () {return __get__ (this, function (self) {
 							self._down = true;
-						}, 'down');},
+						});},
 						get isdown () {return __get__ (this, function (self) {
 							return self._down;
-						}, 'isdown');},
+						});},
 						get _predict () {return __get__ (this, function (self, length) {
 							var delta = list ([Math.sin (self._heading), Math.cos (self._heading)]);
 							return list ([self._position [0] + length * delta [0], self._position [1] + length * delta [1]]);
-						}, '_predict');},
+						});},
 						get forward () {return __get__ (this, function (self, length) {
 							self._position = self._predict (length);
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'forward');},
+						});},
 						get back () {return __get__ (this, function (self, length) {
 							self.forward (-(length));
-						}, 'back');},
+						});},
 						get circle () {return __get__ (this, function (self, radius) {
 							self.left (90);
 							var opposite = self._predict (2 * (radius + 1) + 1);
 							self.right (90);
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, opposite [0] + _offset [0], opposite [1] + _offset [1]));
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'circle');},
+						});},
 						get left () {return __get__ (this, function (self, angle) {
 							self._heading = (self._heading + (Math.PI * angle) / 180) % (2 * Math.PI);
-						}, 'left');},
+						});},
 						get right () {return __get__ (this, function (self, angle) {
 							self.left (-(angle));
-						}, 'right');},
+						});},
 						get begin_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = true;
-						}, 'begin_fill');},
+						});},
 						get end_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = false;
-						}, 'end_fill');},
+						});},
 						get speed () {return __get__ (this, function (speed) {
 							if (typeof speed == 'undefined' || (speed != null && speed .__class__ == __kwargdict__)) {;
 								var speed = null;
 							};
 							// pass;
-						}, 'speed');}
+						});}
 					});
 					var _defaultTurtle = Turtle ();
 					var _timer = null;

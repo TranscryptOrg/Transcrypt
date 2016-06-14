@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-14 11:08:21
+// Transcrypt'ed from Python, 2016-06-14 12:56:58
 function star () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function star () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.175';
+							self.transpiler_version = '3.5.176';
 							self.target_subdir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function star () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function star () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function star () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -266,10 +266,60 @@ function star () {
 						__sort__ (result, key, reverse);
 						return result;
 					};
+					var map = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								__accu0__.append (func (item));
+							}
+							return __accu0__;
+						} ();
+					};
+					var filter = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								if (func (item)) {
+									__accu0__.append (item);
+								}
+							}
+							return __accu0__;
+						} ();
+					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
 						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
+						__all__.filter = filter;
+						__all__.map = map;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
@@ -289,6 +339,8 @@ function star () {
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
+	var map = __all__.map;
+	var filter = __all__.filter;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executor_name = __envir__.transpiler_name;
@@ -1374,7 +1426,7 @@ function star () {
 							_allTurtles.append (self);
 							self._paths = list ([]);
 							self.reset ();
-						}, '__init__');},
+						});},
 						get reset () {return __get__ (this, function (self) {
 							self._heading = Math.PI / 2;
 							self.pensize (1);
@@ -1383,7 +1435,7 @@ function star () {
 							self._track = list ([]);
 							self.home ();
 							self.clear ();
-						}, 'reset');},
+						});},
 						get clear () {return __get__ (this, function (self) {
 							var __iter0__ = self._paths;
 							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -1393,7 +1445,7 @@ function star () {
 							self._paths = list ([]);
 							self._track = list ([]);
 							self._moveto (self._position);
-						}, 'clear');},
+						});},
 						get _flush () {return __get__ (this, function (self) {
 							if (_debug) {
 								print ('Flush:', self._track);
@@ -1410,10 +1462,10 @@ function star () {
 								self._track = list ([]);
 								self._moveto (self._position);
 							}
-						}, '_flush');},
+						});},
 						get done () {return __get__ (this, function (self) {
 							self._flush ();
-						}, 'done');},
+						});},
 						get pensize () {return __get__ (this, function (self, width) {
 							self._flush ();
 							if (width == null) {
@@ -1422,7 +1474,7 @@ function star () {
 							else {
 								self._pensize = width;
 							}
-						}, 'pensize');},
+						});},
 						get color () {return __get__ (this, function (self, pencolor, fillcolor) {
 							if (typeof fillcolor == 'undefined' || (fillcolor != null && fillcolor .__class__ == __kwargdict__)) {;
 								var fillcolor = null;
@@ -1432,7 +1484,7 @@ function star () {
 							if (fillcolor != null) {
 								self._fillcolor = fillcolor;
 							}
-						}, 'color');},
+						});},
 						get goto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1444,7 +1496,7 @@ function star () {
 								self._position = list ([x, y]);
 							}
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'goto');},
+						});},
 						get _moveto () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1455,16 +1507,16 @@ function star () {
 							if (wasdown) {
 								self.down ();
 							}
-						}, '_moveto');},
+						});},
 						get home () {return __get__ (this, function (self) {
 							self._moveto (0, 0);
-						}, 'home');},
+						});},
 						get position () {return __get__ (this, function (self) {
 							return self._position.__getslice__ (0, null, 1);
-						}, 'position');},
+						});},
 						get pos () {return __get__ (this, function (self) {
 							return self.position ();
-						}, 'pos');},
+						});},
 						get distance () {return __get__ (this, function (self, x, y) {
 							if (typeof y == 'undefined' || (y != null && y .__class__ == __kwargdict__)) {;
 								var y = null;
@@ -1478,54 +1530,54 @@ function star () {
 							var dX = other [0] - self._position [0];
 							var dY = other [1] - self._position [1];
 							return Math.sqrt (dX * dX + dY * dY);
-						}, 'distance');},
+						});},
 						get up () {return __get__ (this, function (self) {
 							self._down = false;
-						}, 'up');},
+						});},
 						get down () {return __get__ (this, function (self) {
 							self._down = true;
-						}, 'down');},
+						});},
 						get isdown () {return __get__ (this, function (self) {
 							return self._down;
-						}, 'isdown');},
+						});},
 						get _predict () {return __get__ (this, function (self, length) {
 							var delta = list ([Math.sin (self._heading), Math.cos (self._heading)]);
 							return list ([self._position [0] + length * delta [0], self._position [1] + length * delta [1]]);
-						}, '_predict');},
+						});},
 						get forward () {return __get__ (this, function (self, length) {
 							self._position = self._predict (length);
 							self._track.append ('{} {} {}'.format ((self._down ? 'L' : 'M'), self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'forward');},
+						});},
 						get back () {return __get__ (this, function (self, length) {
 							self.forward (-(length));
-						}, 'back');},
+						});},
 						get circle () {return __get__ (this, function (self, radius) {
 							self.left (90);
 							var opposite = self._predict (2 * (radius + 1) + 1);
 							self.right (90);
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, opposite [0] + _offset [0], opposite [1] + _offset [1]));
 							self._track.append ('{} {} {} {} {} {} {} {}'.format ('A', radius, radius, 0, 1, 0, self._position [0] + _offset [0], self._position [1] + _offset [1]));
-						}, 'circle');},
+						});},
 						get left () {return __get__ (this, function (self, angle) {
 							self._heading = (self._heading + (Math.PI * angle) / 180) % (2 * Math.PI);
-						}, 'left');},
+						});},
 						get right () {return __get__ (this, function (self, angle) {
 							self.left (-(angle));
-						}, 'right');},
+						});},
 						get begin_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = true;
-						}, 'begin_fill');},
+						});},
 						get end_fill () {return __get__ (this, function (self) {
 							self._flush ();
 							self._fill = false;
-						}, 'end_fill');},
+						});},
 						get speed () {return __get__ (this, function (speed) {
 							if (typeof speed == 'undefined' || (speed != null && speed .__class__ == __kwargdict__)) {;
 								var speed = null;
 							};
 							// pass;
-						}, 'speed');}
+						});}
 					});
 					var _defaultTurtle = Turtle ();
 					var _timer = null;

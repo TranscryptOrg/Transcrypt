@@ -106,10 +106,60 @@
 						__sort__ (result, key, reverse);
 						return result;
 					};
+					var map = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								__accu0__.append (func (item));
+							}
+							return __accu0__;
+						} ();
+					};
+					var filter = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								if (func (item)) {
+									__accu0__.append (item);
+								}
+							}
+							return __accu0__;
+						} ();
+					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
 						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
+						__all__.filter = filter;
+						__all__.map = map;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}

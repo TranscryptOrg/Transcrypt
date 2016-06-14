@@ -5,7 +5,7 @@
 		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/div_pulls/__init__.py"
 	],
 	"sourcesContent": [
-		"def run (autoTester):\t\n\tautoTester.check ('Pull 56')\n\ts = 'abcdefghij'\n\tautoTester.check (s [2:3])\n\tautoTester.check (s [:3])\n\tautoTester.check (s [2:])\n\tautoTester.check (s [::2])\n\t"
+		"def run (autoTester):\t\n\tautoTester.check ('Pull 56')\n\ts = 'abcdefghij'\n\tautoTester.check (s [2:3])\n\tautoTester.check (s [:3])\n\tautoTester.check (s [2:])\n\tautoTester.check (s [::2])\n\t\n\tautoTester.check ('Pull 59')\n\tautoTester.check (list (filter (lambda x: x % 2 == 0, range (10))))\n\tautoTester.check (list (map (lambda x: x*x, range (0, 31, 3))))\n"
 	],
-	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
 }

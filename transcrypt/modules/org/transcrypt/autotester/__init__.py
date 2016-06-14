@@ -85,7 +85,7 @@ class AutoTester:
 				document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor)
 				for buffer, divId, accentColor in ((self.referenceBuffer, self.referenceDivId, okColor), (self.testBuffer, self.testDivId, errorColor)):
 					buffer = itertools.chain (buffer [ : index], [
-						'!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])
+						'<div style="display: inline; color: {}; background-color: {}">!!!<b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])
 					], buffer [index + 1 : ])
 					document.getElementById (divId) .innerHTML = ' | '.join (buffer)
 				break

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-14 11:07:42
+// Transcrypt'ed from Python, 2016-06-14 12:57:31
 function autotest () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,7 +145,7 @@ function autotest () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.175';
+							self.transpiler_version = '3.5.176';
 							self.target_subdir = '__javascript__';
 						}, '__init__');}
 					});
@@ -266,10 +266,60 @@ function autotest () {
 						__sort__ (result, key, reverse);
 						return result;
 					};
+					var map = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								__accu0__.append (func (item));
+							}
+							return __accu0__;
+						} ();
+					};
+					var filter = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								if (func (item)) {
+									__accu0__.append (item);
+								}
+							}
+							return __accu0__;
+						} ();
+					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
 						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
+						__all__.filter = filter;
+						__all__.map = map;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
@@ -289,6 +339,8 @@ function autotest () {
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
+	var map = __all__.map;
+	var filter = __all__.filter;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executor_name = __envir__.transpiler_name;
@@ -2163,6 +2215,13 @@ function autotest () {
 						autoTester.check (s.__getslice__ (0, 3, 1));
 						autoTester.check (s.__getslice__ (2, null, 1));
 						autoTester.check (s.__getslice__ (0, null, 2));
+						autoTester.check ('Pull 59');
+						autoTester.check (list (filter ((function __lambda__ (x) {
+							return x % 2 == 0;
+						}), range (10))));
+						autoTester.check (list (map ((function __lambda__ (x) {
+							return x * x;
+						}), range (0, 31, 3))));
 					};
 					__pragma__ ('<all>')
 						__all__.run = run;
@@ -3331,7 +3390,7 @@ function autotest () {
 										var buffer = __left0__ [0];
 										var divId = __left0__ [1];
 										var accentColor = __left0__ [2];
-										var buffer = itertools.chain (buffer.__getslice__ (0, index, 1), list (['!!! <div style="display: inline; color: {}; background-color: {}"><b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.__getslice__ (index + 1, null, 1));
+										var buffer = itertools.chain (buffer.__getslice__ (0, index, 1), list (['<div style="display: inline; color: {}; background-color: {}">!!!<b><i>{}</i></b></div>'.format (accentColor, highlightColor, buffer [index])]), buffer.__getslice__ (index + 1, null, 1));
 										document.getElementById (divId).innerHTML = ' | '.join (buffer);
 									}
 									__break0__ = true;

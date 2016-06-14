@@ -53,10 +53,10 @@ def sorted (iterable, key = None, reverse = False):
 	return result
 
 
-def map(func, iterable):
-	return [func(item) for item in iterable]
+def map (func, iterable):
+	return [func (item) for item in iterable]
 
 
-def filter(func, iterable):
-	return [item for item in iterable if func(item)]
+def filter (func, iterable):
+	return [item for item in iterable if func (item)]
 

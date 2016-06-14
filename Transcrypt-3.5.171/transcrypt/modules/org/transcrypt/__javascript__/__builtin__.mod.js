@@ -11,6 +11,8 @@
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
+	var map = __all__.map;
+	var filter = __all__.filter;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executor_name = __envir__.transpiler_name;

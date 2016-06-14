@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-06-14 11:08:10
+// Transcrypt'ed from Python, 2016-06-14 12:56:48
 function pong () {
 	var __all__ = {};
 	var __world__ = __all__;
@@ -145,9 +145,9 @@ function pong () {
 					var __Envir__ = __class__ ('__Envir__', [object], {
 						get __init__ () {return __get__ (this, function (self) {
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.5.175';
+							self.transpiler_version = '3.5.176';
 							self.target_subdir = '__javascript__';
-						}, '__init__');}
+						});}
 					});
 					var __envir__ = __Envir__ ();
 					__pragma__ ('<all>')
@@ -168,7 +168,7 @@ function pong () {
 						get __init__ () {return __get__ (this, function (self) {
 							var args = tuple ([].slice.apply (arguments).slice (1));
 							self.args = args;
-						}, '__init__');},
+						});},
 						get __repr__ () {return __get__ (this, function (self) {
 							if (len (self.args)) {
 								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)));
@@ -176,7 +176,7 @@ function pong () {
 							else {
 								return '???';
 							}
-						}, '__repr__');},
+						});},
 						get __str__ () {return __get__ (this, function (self) {
 							if (len (self.args) > 1) {
 								return str (tuple (self.args));
@@ -189,7 +189,7 @@ function pong () {
 									return '???';
 								}
 							}
-						}, '__str__');}
+						});}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
 					});
@@ -266,10 +266,60 @@ function pong () {
 						__sort__ (result, key, reverse);
 						return result;
 					};
+					var map = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								__accu0__.append (func (item));
+							}
+							return __accu0__;
+						} ();
+					};
+					var filter = function (func, iterable) {
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].__class__ == __kwargdict__) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'func': var func = __allkwargs0__ [__attrib0__]; break;
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iter0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
+								var item = __iter0__ [__index0__];
+								if (func (item)) {
+									__accu0__.append (item);
+								}
+							}
+							return __accu0__;
+						} ();
+					};
 					__pragma__ ('<all>')
 						__all__.Exception = Exception;
 						__all__.ValueError = ValueError;
 						__all__.__sort__ = __sort__;
+						__all__.filter = filter;
+						__all__.map = map;
 						__all__.sorted = sorted;
 					__pragma__ ('</all>')
 				}
@@ -289,6 +339,8 @@ function pong () {
 	var Exception = __all__.Exception;
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
+	var map = __all__.map;
+	var filter = __all__.filter;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executor_name = __envir__.transpiler_name;
@@ -16328,29 +16380,29 @@ function pong () {
 				self.game.attributes.append (self);
 				self.install ();
 				self.reset ();
-			}, '__init__');},
+			});},
 			get reset () {return __get__ (this, function (self) {
 				self.commit ();
-			}, 'reset');},
+			});},
 			get predict () {return __get__ (this, function (self) {
 				// pass;
-			}, 'predict');},
+			});},
 			get interact () {return __get__ (this, function (self) {
 				// pass;
-			}, 'interact');},
+			});},
 			get commit () {return __get__ (this, function (self) {
 				// pass;
-			}, 'commit');}
+			});}
 		});
 		var Sprite = __class__ ('Sprite', [Attribute], {
 			get __init__ () {return __get__ (this, function (self, game, width, height) {
 				self.width = width;
 				self.height = height;
 				Attribute.__init__ (self, game);
-			}, '__init__');},
+			});},
 			get install () {return __get__ (this, function (self) {
 				self.image = new fabric.Rect (dict ({'width': self.game.scaleX (self.width), 'height': self.game.scaleY (self.height), 'originX': 'center', 'originY': 'center', 'fill': 'white'}));
-			}, 'install');},
+			});},
 			get reset () {return __get__ (this, function (self, vX, vY, x, y) {
 				if (typeof vX == 'undefined' || (vX != null && vX .__class__ == __kwargdict__)) {;
 					var vX = 0;
@@ -16384,27 +16436,27 @@ function pong () {
 				self.x = x;
 				self.y = y;
 				Attribute.reset (self);
-			}, 'reset');},
+			});},
 			get predict () {return __get__ (this, function (self) {
 				self.x += self.vX * self.game.deltaT;
 				self.y += self.vY * self.game.deltaT;
-			}, 'predict');},
+			});},
 			get commit () {return __get__ (this, function (self) {
 				self.image.left = self.game.orthoX (self.x);
 				self.image.top = self.game.orthoY (self.y);
-			}, 'commit');},
+			});},
 			get draw () {return __get__ (this, function (self) {
 				self.game.canvas.add (self.image);
-			}, 'draw');}
+			});}
 		});
 		var Paddle = __class__ ('Paddle', [Sprite], {
 			get __init__ () {return __get__ (this, function (self, game, index) {
 				self.index = index;
 				Sprite.__init__ (self, game, self.width, self.height);
-			}, '__init__');},
+			});},
 			get reset () {return __get__ (this, function (self) {
 				Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth / 2) - self.margin : Math.floor (-(orthoWidth) / 2) + self.margin), y: 0}));
-			}, 'reset');},
+			});},
 			get predict () {return __get__ (this, function (self) {
 				self.vY = 0;
 				if (self.index) {
@@ -16428,7 +16480,7 @@ function pong () {
 					}
 				}
 				Sprite.predict (self);
-			}, 'predict');},
+			});},
 			get interact () {return __get__ (this, function (self) {
 				self.y = Math.max (Math.floor (self.height / 2) - Math.floor (fieldHeight / 2), Math.min (self.y, Math.floor (fieldHeight / 2) - Math.floor (self.height / 2)));
 				if ((self.y - Math.floor (self.height / 2) < self.game.ball.y && self.game.ball.y < self.y + Math.floor (self.height / 2)) && (self.index == 0 && self.game.ball.x < self.x || self.index == 1 && self.game.ball.x > self.x)) {
@@ -16436,7 +16488,7 @@ function pong () {
 					self.game.ball.vX = -(self.game.ball.vX);
 					self.game.ball.speedUp (self);
 				}
-			}, 'interact');}
+			});}
 		});
 		Paddle.margin = 30;
 		Paddle.width = 10;
@@ -16445,11 +16497,11 @@ function pong () {
 		var Ball = __class__ ('Ball', [Sprite], {
 			get __init__ () {return __get__ (this, function (self, game) {
 				Sprite.__init__ (self, game, self.side, self.side);
-			}, '__init__');},
+			});},
 			get reset () {return __get__ (this, function (self) {
 				var angle = self.game.serviceIndex * Math.PI + ((Math.random () > 0.5 ? 1 : -(1)) * Math.random ()) * Math.atan (fieldHeight / orthoWidth);
 				Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
-			}, 'reset');},
+			});},
 			get predict () {return __get__ (this, function (self) {
 				Sprite.predict (self);
 				if (self.x < Math.floor (-(orthoWidth) / 2)) {
@@ -16470,14 +16522,14 @@ function pong () {
 						self.vY = -(self.vY);
 					}
 				}
-			}, 'predict');},
+			});},
 			get speedUp () {return __get__ (this, function (self, bat) {
 				var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / (Math.floor (bat.height / 2)), 2);
 				if (Math.abs (self.vX) < 3 * self.speed) {
 					self.vX *= factor;
 					self.vY *= factor;
 				}
-			}, 'speedUp');}
+			});}
 		});
 		Ball.side = 8;
 		Ball.speed = 300;
@@ -16496,14 +16548,14 @@ function pong () {
 				} ();
 				self.hintLabel = new fabric.Text ('[spacebar] starts game, [enter] resets score', dict ({'fill': 'white', 'fontFamily': 'arial', 'fontSize': '{}'.format (self.game.canvas.width / 70), 'left': self.game.orthoX ((-(7) / 16) * orthoWidth), 'top': self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
 				self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-(orthoWidth) / 2)), self.game.orthoY (Math.floor (fieldHeight / 2)), self.game.orthoX (Math.floor (orthoWidth / 2)), self.game.orthoY (Math.floor (fieldHeight / 2))]), dict ({'stroke': 'white'}));
-			}, 'install');},
+			});},
 			get increment () {return __get__ (this, function (self, playerIndex) {
 				self.scores [playerIndex]++;
-			}, 'increment');},
+			});},
 			get reset () {return __get__ (this, function (self) {
 				self.scores = list ([0, 0]);
 				Attribute.reset (self);
-			}, 'reset');},
+			});},
 			get commit () {return __get__ (this, function (self) {
 				self.scoreLabels = function () {
 					var __accu0__ = [];
@@ -16516,7 +16568,7 @@ function pong () {
 					}
 					return __accu0__;
 				} ();
-			}, 'commit');},
+			});},
 			get draw () {return __get__ (this, function (self) {
 				var __iter0__ = zip (self.playerLabels, self.scoreLabels);
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
@@ -16528,7 +16580,7 @@ function pong () {
 					self.game.canvas.add (self.hintLabel);
 				}
 				self.game.canvas.add (self.image);
-			}, 'draw');}
+			});}
 		});
 		Scoreboard.nameShift = 75;
 		Scoreboard.hintShift = 25;
@@ -16590,14 +16642,14 @@ function pong () {
 				self.time = +(new Date);
 				window.onresize = self.resize;
 				self.resize ();
-			}, '__init__');},
+			});},
 			get install () {return __get__ (this, function (self) {
 				var __iter0__ = self.attributes;
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 					var attribute = __iter0__ [__index0__];
 					attribute.install ();
 				}
-			}, 'install');},
+			});},
 			get mouseOrTouch () {return __get__ (this, function (self, key, down) {
 				if (down) {
 					if (key == 'space') {
@@ -16615,7 +16667,7 @@ function pong () {
 				else {
 					self.keyCode = null;
 				}
-			}, 'mouseOrTouch');},
+			});},
 			get update () {return __get__ (this, function (self) {
 				var oldTime = self.time;
 				self.time = +(new Date);
@@ -16647,7 +16699,7 @@ function pong () {
 						attribute.commit ();
 					}
 				}
-			}, 'update');},
+			});},
 			get scored () {return __get__ (this, function (self, playerIndex) {
 				self.scoreboard.increment (playerIndex);
 				self.serviceIndex = 1 - playerIndex;
@@ -16658,14 +16710,14 @@ function pong () {
 				}
 				self.ball.reset ();
 				self.pause = true;
-			}, 'scored');},
+			});},
 			get commit () {return __get__ (this, function (self) {
 				var __iter0__ = self.attributes;
 				for (var __index0__ = 0; __index0__ < __iter0__.length; __index0__++) {
 					var attribute = __iter0__ [__index0__];
 					attribute.commit ();
 				}
-			}, 'commit');},
+			});},
 			get draw () {return __get__ (this, function (self) {
 				self.canvas.clear ();
 				var __iter0__ = self.attributes;
@@ -16673,7 +16725,7 @@ function pong () {
 					var attribute = __iter0__ [__index0__];
 					attribute.draw ();
 				}
-			}, 'draw');},
+			});},
 			get resize () {return __get__ (this, function (self) {
 				self.pageWidth = window.innerWidth;
 				self.pageHeight = window.innerHeight;
@@ -16702,25 +16754,25 @@ function pong () {
 				self.install ();
 				self.commit ();
 				self.draw ();
-			}, 'resize');},
+			});},
 			get scaleX () {return __get__ (this, function (self, x) {
 				return x * (self.canvas.width / orthoWidth);
-			}, 'scaleX');},
+			});},
 			get scaleY () {return __get__ (this, function (self, y) {
 				return y * (self.canvas.height / orthoHeight);
-			}, 'scaleY');},
+			});},
 			get orthoX () {return __get__ (this, function (self, x) {
 				return self.scaleX (x + Math.floor (orthoWidth / 2));
-			}, 'orthoX');},
+			});},
 			get orthoY () {return __get__ (this, function (self, y) {
 				return self.scaleY ((orthoHeight - Math.floor (fieldHeight / 2)) - y);
-			}, 'orthoY');},
+			});},
 			get keydown () {return __get__ (this, function (self, event) {
 				self.keyCode = event.keyCode;
-			}, 'keydown');},
+			});},
 			get keyup () {return __get__ (this, function (self, event) {
 				self.keyCode = null;
-			}, 'keyup');}
+			});}
 		});
 		var game = Game ();
 		__pragma__ ('<use>' +
