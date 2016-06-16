@@ -228,7 +228,7 @@ class Game:
 		
 		for key in ('A', 'Z', 'K', 'M', 'space', 'enter'):
 			button = document.getElementById (key)
-			button.addEventListener ('mousedown', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
+			button.addEventListener ('mousedown', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))	# Returns inner lambda
 			button.addEventListener ('touchstart', (lambda aKey: lambda: self.mouseOrTouch (aKey, True)) (key))
 			button.addEventListener ('mouseup', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))
 			button.addEventListener ('touchend', (lambda aKey: lambda: self.mouseOrTouch (aKey, False)) (key))

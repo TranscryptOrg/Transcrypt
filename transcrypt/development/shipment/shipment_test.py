@@ -54,6 +54,7 @@ for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('demos/hello', 'hello', False, fcallSwitch)
 	test ('demos/jquery_demo', 'jquery_demo', False, fcallSwitch)
 	test ('demos/d3js_demo', 'd3js_demo', False, fcallSwitch)
+	test ('demos/ios_app', 'ios_app', False, fcallSwitch)
 	test ('demos/react_demo', 'react_demo', False, fcallSwitch)
 	test ('demos/pong', 'pong', False, fcallSwitch)
 	test ('demos/turtle_demos', 'star', False, fcallSwitch + '-p .user ')

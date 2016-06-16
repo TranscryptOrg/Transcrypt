@@ -100,6 +100,43 @@ In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* 
 |    :caption: jquery_demo.py                                |    :caption: jquery_demo.mod.js                                               |
 +------------------------------------------------------------+-------------------------------------------------------------------------------+
 
+Integration example: iOS web app with native look and feel
+----------------------------------------------------------
+
+You can write full screen iOS web apps in Transcrypt with native look and feel. As example here's an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.
+
+.. figure:: ../images/ios_app.png
+	:height: 500px
+	:alt: A simple dice web app for iOS
+
+.. figure:: ../images/ios_app_icon.png
+	:height: 500px
+	:alt: The prepacked dice icon on the homescreen
+
+You can install this app on your iPhone from http://www.transcrypt.org/live/transcrypt/demos/ios_app/ios_app.html .
+
++----------------------------------------------------+
+| .. literalinclude:: ../../demos/ios_app/ios_app.py |
+|    :tab-width: 4                                   |
+|    :caption: ios_app.py                            |
++----------------------------------------------------+
+
++------------------------------------------------------+
+| .. literalinclude:: ../../demos/ios_app/ios_app.html |
+|    :tab-width: 4                                     |
+|    :caption: ios_app.html                            |
++------------------------------------------------------+
+
++--------------------------------------------------------+
+| .. literalinclude:: ../../demos/ios_app/cache.manifest |
+|    :tab-width: 4                                       |
+|    :caption: cache.manifest                            |
++--------------------------------------------------------+
+
+N.B.1 Cache manifests have to be served with mime type *text/cache-manifest*.
+
+N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be added to the home screen of your iOS device.
+
 Integration example: D3.js
 --------------------------
 

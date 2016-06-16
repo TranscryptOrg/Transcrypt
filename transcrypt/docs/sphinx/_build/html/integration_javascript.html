@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.185 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.187 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.185',
+        VERSION:     '3.5.187',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.185 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.187 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.185 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.187 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -668,7 +668,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;Z&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="s">&#39;M&#39;</span><span class="p">,</span> <span class="s">&#39;space&#39;</span><span class="p">,</span> <span class="s">&#39;enter&#39;</span><span class="p">):</span>
             <span class="n">button</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>  <span class="c"># Returns inner lambda</span>
             <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mouseup&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="n">button</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchend&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aKey</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseOrTouch</span> <span class="p">(</span><span class="n">aKey</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span> <span class="p">(</span><span class="n">key</span><span class="p">))</span>
@@ -1300,8 +1300,208 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </tbody>
 </table>
 </div>
+<div class="section" id="integration-example-ios-web-app-with-native-look-and-feel">
+<h2>6.5. Integration example: iOS web app with native look and feel<a class="headerlink" href="#integration-example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
+<p>You can write full screen iOS web apps in Transcrypt with native look and feel. As example here&#8217;s an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/ios_app.png"><img alt="A simple dice web app for iOS" src="_images/ios_app.png" style="height: 500px;" /></a>
+</div>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/ios_app_icon.png"><img alt="The prepacked dice icon on the homescreen" src="_images/ios_app_icon.png" style="height: 500px;" /></a>
+</div>
+<p>You can install this app on your iPhone from <a class="reference external" href="http://www.transcrypt.org/live/transcrypt/demos/ios_app/ios_app.html">http://www.transcrypt.org/live/transcrypt/demos/ios_app/ios_app.html</a> .</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="ios-app-py">
+<div class="code-block-caption"><span class="caption-text">ios_app.py</span><a class="headerlink" href="#ios-app-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">class</span> <span class="nc">Dice</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">preventDefault</span> <span class="p">())</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">preventDefault</span> <span class="p">())</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">overflow</span> <span class="o">=</span> <span class="s">&#39;hidden&#39;</span><span class="p">;</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="s">&#39;100%&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s">&#39;100%&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dices</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+            <span class="n">dice</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">normalColor</span> <span class="o">=</span> <span class="s">&#39;#770000&#39;</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="s">&#39;#0000ff&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="s">&#39;absolute&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">dice</span><span class="o">.</span><span class="n">normalColor</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aDice</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="p">(</span><span class="n">aDice</span><span class="p">))</span> <span class="p">(</span><span class="n">dice</span><span class="p">))</span>  <span class="c"># Returns inner lambda</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">aDice</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="p">(</span><span class="n">aDice</span><span class="p">))</span> <span class="p">(</span><span class="n">dice</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dices</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="n">dice</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">dice</span><span class="p">)</span>
+            
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">setAttribute</span> <span class="p">(</span><span class="s">&#39;unselectable&#39;</span><span class="p">,</span> <span class="s">&#39;on&#39;</span><span class="p">)</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontWeight</span> <span class="o">=</span> <span class="s">&#39;bold&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">textAlign</span> <span class="o">=</span> <span class="s">&#39;center&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="s">&#39;absolute&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="s">&#39;?&#39;</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span> <span class="p">(</span><span class="s">&#39;div&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="s">&#39;absolute&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="s">&#39;pointer&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;touchstart&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gotoTranscryptSite</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">addEventListener</span> <span class="p">(</span><span class="s">&#39;mousedown&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gotoTranscryptSite</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontFamily</span> <span class="o">=</span> <span class="s">&#39;arial&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;&lt;span id=&quot;bannerLarge&quot;&gt;&lt;font color=&quot;777777&quot;&gt;www.&lt;b&gt;&lt;i&gt;&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;&lt;font color=&quot;ff4422&quot;&gt;T&lt;font color=&quot;ffb000&quot;&gt;r&lt;font color=&quot;228822&quot;&gt;a&lt;font color=&quot;3366ff&quot;&gt;n&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;&lt;font color=&quot;ff4422&quot;&gt;s&lt;font color=&quot;ffb000&quot;&gt;c&lt;font color=&quot;228822&quot;&gt;r&lt;font color=&quot;3366ff&quot;&gt;y&lt;font color=&quot;ffb000&quot;&gt;p&lt;font color=&quot;228822&quot;&gt;t&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;&lt;/i&gt;&lt;/b&gt;&lt;font color=&quot;777777&quot;&gt;.org&lt;font size={}&gt;&lt;font color=&quot;cccccc&quot;&gt;&lt;/span&gt;&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;&lt;span id=&quot;bannerSmall&quot;&gt;&lt;i&gt; Write your apps in Python for free!&lt;/i&gt;&lt;/span&gt;&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bannerLarge</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;bannerLarge&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bannerSmall</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;bannerSmall&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span> <span class="o">=</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Audio</span> <span class="p">(</span><span class="s">&#39;ios_app.mp3&#39;</span><span class="p">))</span>
+        
+        <span class="n">window</span><span class="o">.</span><span class="n">onresize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rightSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rightSize</span> <span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">gotoTranscryptSite</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">href</span> <span class="o">=</span> <span class="s">&#39;http://www.transcrypt.org&#39;</span>
+        
+    <span class="k">def</span> <span class="nf">roll</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dice</span><span class="p">):</span>
+        <span class="n">frameIndex</span> <span class="o">=</span> <span class="mi">10</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">play</span> <span class="p">()</span>
+        
+        <span class="k">def</span> <span class="nf">frame</span> <span class="p">():</span>
+            <span class="n">nonlocal</span> <span class="n">frameIndex</span>
+            <span class="n">frameIndex</span> <span class="o">-=</span> <span class="mi">1</span>
+            
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">frameIndex</span><span class="p">:</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span> <span class="p">((</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="s">&#39;yellow&#39;</span><span class="p">))</span>
+                <span class="n">setTimeout</span> <span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">dice</span><span class="o">.</span><span class="n">normalColor</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span>
+                
+        <span class="n">frame</span> <span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">rightSize</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">innerHeight</span>
+        <span class="n">portrait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+        
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">dice</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dices</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span><span class="p">:</span>    <span class="c"># Portrait</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.03</span> <span class="o">+</span> <span class="p">(</span><span class="n">index</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.32</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.06</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mf">0.54</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                
+                <span class="n">charBoxSide</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">-</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">charBoxSide</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">charBoxSide</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mf">0.975</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.06</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>              
+                <span class="bp">self</span><span class="o">.</span><span class="n">bannerLarge</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="mf">0.017</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bannerSmall</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="mf">0.014</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+            <span class="k">else</span><span class="p">:</span>                                   <span class="c"># Landscape</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.06</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mf">0.54</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.03</span> <span class="o">+</span> <span class="p">(</span><span class="n">index</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.32</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                
+                <span class="n">charBoxSide</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span> <span class="o">-</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">charBoxSide</span>
+                <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">charBoxSide</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mf">0.95</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageHeight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.03</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bannerLarge</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="mf">0.015</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bannerSmall</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="mf">0.012</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pageWidth</span>
+                
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">charBoxSide</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">charBoxSide</span>
+            <span class="n">dice</span><span class="o">.</span><span class="n">inner</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="n">charBoxSide</span>
+            
+<span class="n">dice</span> <span class="o">=</span> <span class="n">Dice</span> <span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="ios-app-html">
+<div class="code-block-caption"><span class="caption-text">ios_app.html</span><a class="headerlink" href="#ios-app-html" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;html manifest=&quot;cache.manifest&quot;
+    &lt;!-- v45 --&gt;
+    &lt;head&gt;
+        &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+        &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot;&gt;
+        &lt;meta name=&quot;apple-mobile-web-app-title&quot; content=&quot;Dice&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, user-scalable=no&quot;&gt;
+        &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;ios_app.png&quot;&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script src=&quot;__javascript__/ios_app.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt; 
+&lt;/html&gt;
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="cache-manifest">
+<div class="code-block-caption"><span class="caption-text">cache.manifest</span><a class="headerlink" href="#cache-manifest" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>CACHE MANIFEST
+
+# v45
+
+CACHE:
+ios_app.html
+ios_app.mp3
+__javascript__/ios_app.js
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>N.B.1 Cache manifests have to be served with mime type <em>text/cache-manifest</em>.</p>
+<p>N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be added to the home screen of your iOS device.</p>
+</div>
 <div class="section" id="integration-example-d3-js">
-<h2>6.5. Integration example: D3.js<a class="headerlink" href="#integration-example-d3-js" title="Permalink to this headline">¶</a></h2>
+<h2>6.6. Integration example: D3.js<a class="headerlink" href="#integration-example-d3-js" title="Permalink to this headline">¶</a></h2>
 <p>The <em>D3.js</em> graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1466,7 +1666,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </table>
 </div>
 <div class="section" id="integration-example-react">
-<h2>6.6. Integration example: React<a class="headerlink" href="#integration-example-react" title="Permalink to this headline">¶</a></h2>
+<h2>6.7. Integration example: React<a class="headerlink" href="#integration-example-react" title="Permalink to this headline">¶</a></h2>
 <p><em>React</em> is a JavaScript library for easy creation of interactive UI&#8217;s. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &#8220;parallel&#8221; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1584,8 +1784,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <li><a class="reference internal" href="#integration-example-pong">6.2. Integration example: Pong</a></li>
 <li><a class="reference internal" href="#joined-minification">6.3. Joined minification</a></li>
 <li><a class="reference internal" href="#integration-example-jquery">6.4. Integration example: jQuery</a></li>
-<li><a class="reference internal" href="#integration-example-d3-js">6.5. Integration example: D3.js</a></li>
-<li><a class="reference internal" href="#integration-example-react">6.6. Integration example: React</a></li>
+<li><a class="reference internal" href="#integration-example-ios-web-app-with-native-look-and-feel">6.5. Integration example: iOS web app with native look and feel</a></li>
+<li><a class="reference internal" href="#integration-example-d3-js">6.6. Integration example: D3.js</a></li>
+<li><a class="reference internal" href="#integration-example-react">6.7. Integration example: React</a></li>
 </ul>
 </li>
 </ul>
@@ -1632,7 +1833,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.185 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.187 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

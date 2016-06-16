@@ -35,43 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
-- More unneeded files removed from repo and distro
-- Documentation fix
-- All compilation results removed from repo and distro, making dif'ing easier
-- Builtins map and filter added for one iterable (pull) + testcase
-- React demo added (pull) + paragraph in docs
-- Correct exit codes are now returned
-- Cosmetic fix to optional truthyness conversion
-- Builtins min, max and abs added for convenience
-- Correct evaluation of expressions like '[] or [] or [1, 2, 3]' added for tuples, arrays, sets and dicts
-- Optional Python truthyness evaluation for tuples, arrays, sets and dicts added
-- Functions getattr, setattr, hasattr, delattr added + test case
-- String slicing + testcase added (pull)
-- On-line "Mondrian" demo added using timer
-- Timer added to turtle module
-- "Mondrian" turtle demo added
-- Other modules not exporting their imports anymore (fell over during previous fix)
-- A module's __init__ now exports all of its imports to importers of that module
-- Added clear method to dict + testcase
-- Fixed error in set compare + testcase
-- Fixed class def bug: inheriting from qualified ('dotted') classname, and fixed - Fixed class def bug: inheriting from qualified ('dotted') classname, and fixed broken error report on this
-- Aliases added: case translates to py_case, default translates to py_default (switch already translated to py_switch)
-- Readme adapted
-- Fixes for wrong evaluation order when using // (issue 50) and for error in set and array compare (issue 51)
-- Bug in random module fixed
-- Bug in Linux compilation path fixed
-- Python random module added, only most important functionality: *seed, randint, choice, random*
-- Python math module added, almost all functionality
-- Live on-line SVG based turtle graphics added to website + demo's
-- Turtle graphics improved and expanded
-- SVG based turtle graphics module added
-- Multiple module initialization bug fixed
-- Alias py_name (in JS) for name (in Python) added
-- Installation procedure changed to benefit from virtualenv
-- Optional annotation of target code with source file names and source line numbers
-- Multi-level sourcemaps: Python source level debugging of both formatted and minified JavaScript code
-- Source code included in map rather than separate as was the case earlier
-- Switched from sectored V3 sourcemaps to monolithic V3 sourcemaps since they seem more mature and accepted
+- iOS web app demo added, full screen, native look and feel, also works off-line. Add it to the home screen of your iPhone and click the prepacked icon. Tested on iPhone 5 and 6. Also works in any browser. Write once...
 
 Known restrictions
 ==================
