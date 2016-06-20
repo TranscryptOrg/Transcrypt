@@ -420,7 +420,9 @@ class Generator (ast.NodeVisitor):
 			('switch', 'py_switch'),
 			('case', 'py_case'),
 			('default', 'py_default'),			
-			('split', 'py_split'),			('js_split', 'split')
+			('split', 'py_split'),			('js_split', 'split'),
+			('true', 'py_true'),
+			('false', 'py_false')
 # END predef_aliases
 		)]
 		

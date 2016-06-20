@@ -134,7 +134,10 @@
 	}
 	__all__.len = len;
 	
-	var bool = {__name__: 'bool'}
+	var bool = function (any) {	// Subtly different from __ (any), always truly returns a bool, rather than something truthy or falsy
+		return typeof (any) == 'boolean' ? any : typeof (any) == 'number' ? any != 0 : len (any) ? true : false;
+	}
+	bool.__name__ = 'bool'	// So it can be used as a type with a name
 	__all__.bool = bool;
 	
 	var float = function (any) {
@@ -195,7 +198,7 @@
 	__all__.isinstance = isinstance;
 	
 	// Truthyness conversion
-	function __ (any) {
+	function __ (any) {	// Subtly different from bool (any), __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2
 		return ['boolean', 'number'] .indexOf (typeof (any)) >= 0 ? any : len (any) ? any : false;
 	}
 	__all__.__ = __;

@@ -5,7 +5,7 @@ result = ''
 def output (any):
 	result += any + '<br>\n'
 
-for fixedSeed in (false, true):
+for fixedSeed in (False, True):
 	if fixedSeed:
 		seed (3)
 	else:

@@ -41,3 +41,14 @@ def run (autoTester):
 	autoTester.check (aDict)
 	aDict.clear ()
 	autoTester.check (aDict)
+	
+	autoTester.check ('Issue 60')
+	three = 3
+	one = three & 1
+	seven = three | 4
+	eight = one << 3
+	four = eight >> 1
+	aTrue = bool (three & one)
+	aFalse = bool (three & four)
+	autoTester.check (3, three, 1, one, 7, seven, 8, eight, 4, four, True, aTrue, False, aFalse)
+	
