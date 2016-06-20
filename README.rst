@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- EXPERIMENTAL fix for issue #61: '-h produces traceback'
 - iOS web app demo added, full screen, native look and feel, also works off-line. Add it to the home screen of your iPhone and click the prepacked icon. Tested on iPhone 5 and 6. Also works in any browser. Write once...
 
 Known restrictions

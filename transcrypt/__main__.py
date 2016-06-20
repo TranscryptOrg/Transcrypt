@@ -41,56 +41,6 @@ for exitCode, exitCodeName in enumerate (exitCodeNames):
 	vars () [exitCodeName] = exitCode
 
 def main ():
-	licensePath = '{}/{}'.format (transpilerDir, 'license_reference.txt')	
-	if not os.path.isfile (licensePath):
-		utils.log (True, 'Error: missing license reference file\n')
-		return exitNoLicense
-		
-	utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __base__.__envir__.transpiler_name.capitalize (), __base__.__envir__.transpiler_version)
-	utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
-		
-	utils.commandArgs.parse ()
-		
-	if utils.commandArgs.license:
-		with open (licensePath) as licenseFile:
-			bar = 80 * '*'
-			utils.log (True, '\n{}\n\n', bar)
-			utils.log (True, '{}\n', licenseFile.read ())
-			utils.log (True, '{}\n\n', bar)
-			
-	if not utils.commandArgs.source:
-		return exitSourceNotGiven	# Should never be here, dealth with by command arg checks already
-			
-	if utils.commandArgs.run:
-		try:
-			with open (utils.commandArgs.source) as sourceFile:
-				exec (sourceFile.read ())
-				return exitSuccess
-		except Exception as exception:
-			utils.log (True, 'Error: cannot run {} using CPython: {}\n'.format (utils.commandArgs.source, str (exception) .replace (' (<string>', '') .replace (')', '')))
-			return exitCannotRunSource
-	else:
-		try:
-			compiler.Program (compilerPath)
-			return exitSuccess
-		except utils.Error as error:
-			utils.log (True, '\n{}\n', error)
-			
-			# Don't log anything else, even in verbose mode, since this would only be confusing
-			if utils.commandArgs.dextex:
-				utils.log (True, '{}\n', traceback.format_exc ())
-				
-			return exitSpecificCompileError
-		except Exception as exception:
-			utils.log (True, '\n{}', exception)
-			
-			# Have to log something else, because a general exception isn't informative enough
-			utils.log (True, '{}\n', traceback.format_exc ())
-			
-			return exitGeneralCompileError
-			
-if __name__ == '__main__':
-
 	exitCode = exitCommandArgsError
 
 	def exitHandler ():
@@ -101,11 +51,65 @@ if __name__ == '__main__':
 			
 	atexit.register (exitHandler)
 	
-	try:
-		exitCode = main ()
-	except utils.CommandArgsError:
-		exitCode = exitCommandArgsError
-	except utils.CommandArgsExit:
-		exitCode = exitSuccess
+	def setExitCode (anExitCode):
+		nonlocal exitCode
+		exitCode = anExitCode
+		return exitCode
 	
-	sys.exit (exitCode)
+	try:
+		licensePath = '{}/{}'.format (transpilerDir, 'license_reference.txt')	
+		if not os.path.isfile (licensePath):
+			utils.log (True, 'Error: missing license reference file\n')
+			return setExitCode (exitNoLicense)
+			
+		utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __base__.__envir__.transpiler_name.capitalize (), __base__.__envir__.transpiler_version)
+		utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
+		
+		utils.commandArgs.parse ()
+		
+		if utils.commandArgs.license:
+			with open (licensePath) as licenseFile:
+				bar = 80 * '*'
+				utils.log (True, '\n{}\n\n', bar)
+				utils.log (True, '{}\n', licenseFile.read ())
+				utils.log (True, '{}\n\n', bar)
+				
+		if not utils.commandArgs.source:
+			return setExitCode (exitSourceNotGiven)	# Should never be here, dealth with by command arg checks already
+				
+		if utils.commandArgs.run:
+			try:
+				with open (utils.commandArgs.source) as sourceFile:
+					exec (sourceFile.read ())
+					return setExitCode (exitSuccess)
+			except Exception as exception:
+				utils.log (True, 'Error: cannot run {} using CPython: {}\n'.format (utils.commandArgs.source, str (exception) .replace (' (<string>', '') .replace (')', '')))
+				return setExitCode (exitCannotRunSource)
+		else:
+			try:
+				compiler.Program (compilerPath)
+				return setExitCode (exitSuccess)
+			except utils.Error as error:
+				utils.log (True, '\n{}\n', error)
+				
+				# Don't log anything else, even in verbose mode, since this would only be confusing
+				if utils.commandArgs.dextex:
+					utils.log (True, '{}\n', traceback.format_exc ())
+					
+				return setExitCode (exitSpecificCompileError)
+			except Exception as exception:
+				utils.log (True, '\n{}', exception)
+				
+				# Have to log something else, because a general exception isn't informative enough
+				utils.log (True, '{}\n', traceback.format_exc ())
+				
+				return setExitCode (exitGeneralCompileError)
+				
+	except utils.CommandArgsError:
+		return setExitCode (exitCommandArgsError)
+		
+	except utils.CommandArgsExit:
+		return setExitCode (exitSuccess)
+			
+if __name__ == '__main__':
+	sys.exit (main ())

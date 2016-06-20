@@ -11,9 +11,9 @@ class CommandArgsExit (BaseException):
 	
 class ArgumentParser (argparse.ArgumentParser):
 	def error (self, message):
+		self.print_help (sys.stdout)
 		if message:
-			log (True, 'Error: {}', message)
-		self.print_help (sys.stderr)
+			log (True, '\nError: {}\n', message)
 		raise CommandArgsError ()
 		
 	def exit (self, status = 0, message = None):
