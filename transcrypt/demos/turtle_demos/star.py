@@ -2,17 +2,26 @@
 
 from turtle import *
 
-up ()
-goto (-250, -21)
-startPos = pos ()
+fillColor = 'yellow'
 
-down ()
-color ('red', 'yellow')
-begin_fill ()
-while True:
-	forward (500)
-	right (170)
-	if distance (startPos) < 1:
-		break
-end_fill ()
-done ()
+while fillColor:
+	print ('Will plot star with fill color: ', fillColor)
+	print ()
+
+	up ()
+	goto (-250, -21)
+	startPos = pos ()
+
+	down ()
+	color ('red', fillColor)
+	begin_fill ()
+	while True:
+		forward (500)
+		right (170)
+		if distance (startPos) < 1:
+			break
+	end_fill ()
+	done ()
+	
+	fillColor = input ('Give new fill color (blue, green, orange, lightblue, ...) :')
+	

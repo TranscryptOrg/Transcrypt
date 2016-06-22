@@ -23,6 +23,7 @@ def originalColor ():
 		result = choice (colors)
 		if result == 'white' or not result in recentColors:
 			recentColors = [result, recentColors [0]]
+			print (result, end = ' ')
 			return result
 	
 def rect (xMin, yMin, xMax, yMax):
@@ -65,7 +66,7 @@ def draw (xMin = -250, yMin = -300, xMax = 250, yMax = 300):
 				draw (xMin, yMid, xMax, yMax)
 	else:
 		rect (xMin, yMin, xMax, yMax)
-		ontimer (lambda: (clear (), draw ()), 2000)
+		ontimer (lambda: (print (), clear (), draw ()), 2000)
 draw ()
 done ()		
 

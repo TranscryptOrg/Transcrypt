@@ -10,7 +10,9 @@ def abs (vec2D):
 _ns = 'http://www.w3.org/2000/svg'
 _svg = document.createElementNS (_ns, 'svg')
 
-_defaultElement = document.body
+_defaultElement = document.getElementById ('__turtlegraph__')
+if not _defaultElement:
+	_defaultElement = document.body
 _defaultElement.appendChild (_svg)
 
 _width = None

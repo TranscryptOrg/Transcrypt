@@ -67,6 +67,8 @@ class __Terminal__:
 		self.element = document.getElementById ('__terminal__')
 		if self.element:
 			self.buffer = ''
+			self.element.style.overflowX = 'auto'
+			self.element.style.padding = '5px'
 			self.element.innerHTML = '_'
 		
 	__pragma__ ('kwargs')
