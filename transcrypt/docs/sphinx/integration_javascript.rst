@@ -45,11 +45,11 @@ Turtle graphics in Transcrypt do not require the use of any graphics libraries. 
 Remark: In a later stage animation may be added. As a further step, for complicated fractals, transparent server side compilation of a relatively simple algorithm would allow on-line editing combined with fast client side rendering of high-resolution graphics.
 
 
-Integration with JavaScript libraries
-=====================================
+Mixed examples
+==============
 
-Three ways of integration
--------------------------
+Three ways of integration with JavaScript libraries
+---------------------------------------------------
 
 There are three ways to integrate Transcrypt applications with existing JavaScript libraries.
 
@@ -67,10 +67,10 @@ In the Pong example below, approach 2 is choosen to encapsulate the fabric.js gr
 	:tab-width: 4
 	:caption: The encapsulation layer for fabric.js
 	
-Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replaces the *fabric.js* in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.
+Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the *fabric.js* in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.
 
-Integration example: Pong
--------------------------
+Example: Pong
+-------------
 
 In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that *new <constructor>* is replaced by *__new__ (<constructor>)*.
 
@@ -89,8 +89,8 @@ Minification is currently performed by the Google closure compiler, that's also 
 
 As can be seen from the listings, *pong.mod.js* without libraries is only slightly longer than *pong.py* without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from *fabric.js*. From this example it becomes clear that Transcrypt is extremely lightweight.
 
-Integration example: jQuery
----------------------------
+Example: jQuery
+---------------
 
 In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* hasn't been encapsulated at all. It's just downloaded on the fly from a content delivery network and used as-is. Instead of the *$* (that is not a valid Python identifier), an *S* is used as :ref:`alias <pragma_alias>`. This might have been any character sequence.
 
@@ -100,8 +100,8 @@ In contrast to the use of the *fabric.js* library in the Pong example, *jQuery* 
 |    :caption: jquery_demo.py                                |    :caption: jquery_demo.mod.js                                               |
 +------------------------------------------------------------+-------------------------------------------------------------------------------+
 
-Integration example: iOS web app with native look and feel
-----------------------------------------------------------
+Example: iOS web app with native look and feel
+----------------------------------------------
 
 You can write full screen iOS web apps in Transcrypt with native look and feel. As example here's an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.
 
@@ -137,8 +137,8 @@ N.B.1 Cache manifests have to be served with mime type *text/cache-manifest*.
 
 N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be added to the home screen of your iOS device.
 
-Integration example: D3.js
---------------------------
+Example: D3.js
+--------------
 
 The *D3.js* graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.
 
@@ -148,8 +148,8 @@ The *D3.js* graphics library offers animation by data driven DOM manipulation. I
 |    :caption: d3js_demo.py                              |    :caption: d3js_demo.mod.js                                             |
 +--------------------------------------------------------+---------------------------------------------------------------------------+
 
-Integration example: React
---------------------------
+Example: React
+--------------
 
 *React* is a JavaScript library for easy creation of interactive UI's. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a "parallel" universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.
 
@@ -158,3 +158,22 @@ Integration example: React
 |    :tab-width: 4                                         |    :tab-width: 4                                                            |
 |    :caption: react_demo.py                               |    :caption: react_demo.mod.js                                              |
 +----------------------------------------------------------+-----------------------------------------------------------------------------+
+
+Example: Using input and print in a DOM __terminal__ element in your browser
+----------------------------------------------------------------------------
+
+Without special measures, Transcrypt's *print* function prints to the debugging console. However if there's an element with id *__terminal__* in your DOM tree, the *print* function prints to this element. Moreover, the *input* function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.
+
+This means that you can write applications with blocking I/O, rather than event driven behaviour, e.g. for simple activities or, since they are intuitively easy to comprehend, for educational purposes.
+
++------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/terminal_demo/terminal_demo.html |
+|    :tab-width: 4                                                 |
+|    :caption: terminal_demo.html                                  |
++------------------------------------------------------------------+
+
++----------------------------------------------------------------+
+| .. literalinclude:: ../../demos/terminal_demo/terminal_demo.py |
+|    :tab-width: 4                                               |
+|    :caption: terminal_demo.py                                  |
++----------------------------------------------------------------+

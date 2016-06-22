@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.187 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.189 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.187',
+        VERSION:     '3.5.189',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.187 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.189 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.187 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -396,10 +396,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <p>Remark: In a later stage animation may be added. As a further step, for complicated fractals, transparent server side compilation of a relatively simple algorithm would allow on-line editing combined with fast client side rendering of high-resolution graphics.</p>
 </div>
 </div>
-<div class="section" id="integration-with-javascript-libraries">
-<h1>6. Integration with JavaScript libraries<a class="headerlink" href="#integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="three-ways-of-integration">
-<h2>6.1. Three ways of integration<a class="headerlink" href="#three-ways-of-integration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mixed-examples">
+<h1>6. Mixed examples<a class="headerlink" href="#mixed-examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="three-ways-of-integration-with-javascript-libraries">
+<h2>6.1. Three ways of integration with JavaScript libraries<a class="headerlink" href="#three-ways-of-integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h2>
 <p>There are three ways to integrate Transcrypt applications with existing JavaScript libraries.</p>
 <ol class="arabic simple">
 <li>The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don&#8217;t seem to mind that, many Python programmers do.</li>
@@ -425,10 +425,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </pre></div>
 </div>
 </div>
-<p>Note that __pragma__ (&#8216;js&#8217;, &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replaces the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
+<p>Note that __pragma__ (&#8216;js&#8217;, &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
 </div>
-<div class="section" id="integration-example-pong">
-<h2>6.2. Integration example: Pong<a class="headerlink" href="#integration-example-pong" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-pong">
+<h2>6.2. Example: Pong<a class="headerlink" href="#example-pong" title="Permalink to this headline">¶</a></h2>
 <p>In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that <em>new &lt;constructor&gt;</em> is replaced by <em>__new__ (&lt;constructor&gt;)</em>.</p>
 <table border="1" class="docutils" id="code-pong">
 <colgroup>
@@ -1240,8 +1240,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <p>Minification is currently performed by the Google closure compiler, that&#8217;s also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
 <p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
 </div>
-<div class="section" id="integration-example-jquery">
-<h2>6.4. Integration example: jQuery<a class="headerlink" href="#integration-example-jquery" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-jquery">
+<h2>6.4. Example: jQuery<a class="headerlink" href="#example-jquery" title="Permalink to this headline">¶</a></h2>
 <p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1300,8 +1300,8 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </tbody>
 </table>
 </div>
-<div class="section" id="integration-example-ios-web-app-with-native-look-and-feel">
-<h2>6.5. Integration example: iOS web app with native look and feel<a class="headerlink" href="#integration-example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-ios-web-app-with-native-look-and-feel">
+<h2>6.5. Example: iOS web app with native look and feel<a class="headerlink" href="#example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
 <p>You can write full screen iOS web apps in Transcrypt with native look and feel. As example here&#8217;s an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.</p>
 <div class="figure">
 <a class="reference internal image-reference" href="_images/ios_app.png"><img alt="A simple dice web app for iOS" src="_images/ios_app.png" style="height: 500px;" /></a>
@@ -1500,8 +1500,8 @@ __javascript__/ios_app.js
 <p>N.B.1 Cache manifests have to be served with mime type <em>text/cache-manifest</em>.</p>
 <p>N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be added to the home screen of your iOS device.</p>
 </div>
-<div class="section" id="integration-example-d3-js">
-<h2>6.6. Integration example: D3.js<a class="headerlink" href="#integration-example-d3-js" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-d3-js">
+<h2>6.6. Example: D3.js<a class="headerlink" href="#example-d3-js" title="Permalink to this headline">¶</a></h2>
 <p>The <em>D3.js</em> graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1665,8 +1665,8 @@ __javascript__/ios_app.js
 </tbody>
 </table>
 </div>
-<div class="section" id="integration-example-react">
-<h2>6.7. Integration example: React<a class="headerlink" href="#integration-example-react" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-react">
+<h2>6.7. Example: React<a class="headerlink" href="#example-react" title="Permalink to this headline">¶</a></h2>
 <p><em>React</em> is a JavaScript library for easy creation of interactive UI&#8217;s. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &#8220;parallel&#8221; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1761,6 +1761,66 @@ __javascript__/ios_app.js
 </tbody>
 </table>
 </div>
+<div class="section" id="example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">
+<h2>6.8. Example: Using input and print in a DOM __terminal__ element in your browser<a class="headerlink" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser" title="Permalink to this headline">¶</a></h2>
+<p>Without special measures, Transcrypt&#8217;s <em>print</em> function prints to the debugging console. However if there&#8217;s an element with id <em>__terminal__</em> in your DOM tree, the <em>print</em> function prints to this element. Moreover, the <em>input</em> function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.</p>
+<p>This means that you can write applications with blocking I/O, rather than event driven behaviour, e.g. for simple activities or, since they are intuitively easy to comprehend, for educational purposes.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="terminal-demo-html">
+<div class="code-block-caption"><span class="caption-text">terminal_demo.html</span><a class="headerlink" href="#terminal-demo-html" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;html&gt;
+    &lt;head&gt;
+        &lt;style&gt;
+            #__terminal__ {
+                background-color:black;
+                color:white;
+                font-family:arial;
+                font-size:12px;
+                height: 400px;
+                width: 640px;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;__terminal__&quot;&gt;&lt;/div&gt;
+        &lt;script src=&quot;__javascript__/terminal_demo.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="terminal-demo-py">
+<div class="code-block-caption"><span class="caption-text">terminal_demo.py</span><a class="headerlink" href="#terminal-demo-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">name</span> <span class="o">=</span> <span class="nb">input</span> <span class="p">(</span><span class="s">&#39;What&#39;&#39;s your name? &#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="p">(</span><span class="s">&#39;Hi &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">&#39;I am your computer.&#39;</span><span class="p">)</span>
+
+<span class="n">age</span> <span class="o">=</span> <span class="nb">float</span> <span class="p">(</span><span class="nb">input</span> <span class="p">(</span><span class="s">&#39;How old are you? &#39;</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Sorry &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is to young to drive a car in the Netherands.&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;OK &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is old enough to drive a car in the Netherands.&#39;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -1779,14 +1839,15 @@ __javascript__/ios_app.js
 <li><a class="reference internal" href="#svg-example-turtle-graphics">5.2. SVG example: Turtle graphics</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#integration-with-javascript-libraries">6. Integration with JavaScript libraries</a><ul>
-<li><a class="reference internal" href="#three-ways-of-integration">6.1. Three ways of integration</a></li>
-<li><a class="reference internal" href="#integration-example-pong">6.2. Integration example: Pong</a></li>
+<li><a class="reference internal" href="#mixed-examples">6. Mixed examples</a><ul>
+<li><a class="reference internal" href="#three-ways-of-integration-with-javascript-libraries">6.1. Three ways of integration with JavaScript libraries</a></li>
+<li><a class="reference internal" href="#example-pong">6.2. Example: Pong</a></li>
 <li><a class="reference internal" href="#joined-minification">6.3. Joined minification</a></li>
-<li><a class="reference internal" href="#integration-example-jquery">6.4. Integration example: jQuery</a></li>
-<li><a class="reference internal" href="#integration-example-ios-web-app-with-native-look-and-feel">6.5. Integration example: iOS web app with native look and feel</a></li>
-<li><a class="reference internal" href="#integration-example-d3-js">6.6. Integration example: D3.js</a></li>
-<li><a class="reference internal" href="#integration-example-react">6.7. Integration example: React</a></li>
+<li><a class="reference internal" href="#example-jquery">6.4. Example: jQuery</a></li>
+<li><a class="reference internal" href="#example-ios-web-app-with-native-look-and-feel">6.5. Example: iOS web app with native look and feel</a></li>
+<li><a class="reference internal" href="#example-d3-js">6.6. Example: D3.js</a></li>
+<li><a class="reference internal" href="#example-react">6.7. Example: React</a></li>
+<li><a class="reference internal" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">6.8. Example: Using input and print in a DOM __terminal__ element in your browser</a></li>
 </ul>
 </li>
 </ul>
@@ -1833,7 +1894,7 @@ __javascript__/ios_app.js
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.187 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -4,15 +4,28 @@
 	// The compiler recognizes its their namesand generates them inline rather than nesting them
 	// In this way it isn't needed to import them everywhere
 	 	
+	// __base__
+	
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
 	var __envir__ = __all__.__envir__;
 
+	// __standard__
+	
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
+	
 	var Exception = __all__.Exception;
+	
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
+	
 	var map = __all__.map;
 	var filter = __all__.filter;
+	
+	__all__.print = __all__.__terminal__.print;
+	__all__.input = __all__.__terminal__.input;
+	
+	var print = __all__.print;
+	var input = __all__.input;
 
 	// Complete __envir__, that was created in __base__, for non-stub mode
 	__envir__.executor_name = __envir__.transpiler_name;
@@ -53,17 +66,6 @@
 		return result;
 	}
 	__all__.__merge__ = __merge__;
-	
-	// Console message
-	var print = function () {
-		var args = [] .slice.apply (arguments)
-		var result = ''
-		for (var i = 0; i < args.length; i++) {
-			result += str (args [i]) + ' ';
-		}
-		console.log (result);
-	};
-	__all__.print = print;
 	
 	// Make console.log understand apply
 	console.log.apply = function () {

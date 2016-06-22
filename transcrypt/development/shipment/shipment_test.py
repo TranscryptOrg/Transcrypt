@@ -61,6 +61,7 @@ for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mondrian', False, fcallSwitch + '-p .user ')
 	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
+	test ('demos/terminal_demo', 'terminal_demo', False, fcallSwitch)
 
 # Make docs optionally since they cause a lot of diffs	
 # Make them before target files are erased, since they are to be included in the docs

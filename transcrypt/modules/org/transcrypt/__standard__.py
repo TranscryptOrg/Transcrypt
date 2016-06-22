@@ -53,10 +53,39 @@ def sorted (iterable, key = None, reverse = False):
 	return result
 
 
+__pragma__ ('nokwargs')
+
 def map (func, iterable):
 	return [func (item) for item in iterable]
 
 
 def filter (func, iterable):
 	return [item for item in iterable if func (item)]
-
+	
+class __Terminal__:
+	def __init__ (self):
+		self.element = document.getElementById ('__terminal__')
+		if self.element:
+			self.buffer = ''
+			self.element.innerHTML = '_'
+		
+	__pragma__ ('kwargs')
+		
+	def print (self, *args, sep = ' ', end = '\n'):
+		if self.element:
+			self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ]	
+			self.element.innerHTML = self.buffer.replace ('\n', '<br>')
+			self.element.scrollTop = self.element.scrollHeight
+		else:
+			console.log (sep.join (args))
+		
+	def input (self, question):
+		self.print ('{}_'.format (question), end = '')
+		answer = window.prompt (question)
+		self.buffer = self.buffer [:-1]
+		self.print (answer)
+		return answer
+		
+	__pragma__ ('nokwargs')
+	
+__terminal__ = __Terminal__ ()

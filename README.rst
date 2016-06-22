@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- Functions print and input can now use DOM element with id __terminal__, blocking I/O done with popup dialog and echoed to __terminal__
 - Fix for issue #60: Python bool () not translated, testcase added, bitwise ops tested as well
 - Fix for issue #61: '-h produces traceback', tested
 - iOS web app demo added, full screen, native look and feel, also works off-line. Add it to the home screen of your iPhone and click the prepacked icon. Tested on iPhone 5 and 6. Also works in any browser. Write once...
