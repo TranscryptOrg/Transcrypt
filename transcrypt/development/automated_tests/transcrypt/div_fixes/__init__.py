@@ -1,3 +1,5 @@
+from org.transcrypt.stubs.browser import __pragma__
+
 from div_fixes.issue55 import *
 
 def run (autoTester):
@@ -51,4 +53,16 @@ def run (autoTester):
 	aTrue = bool (three & one)
 	aFalse = bool (three & four)
 	autoTester.check (3, three, 1, one, 7, seven, 8, eight, 4, four, True, aTrue, False, aFalse)
+	
+	autoTester.check ('Issue 65')
+	__pragma__ ('opov')
+	aList = [4, 5, 6]
+	autoTester.check ([1, 2, 3,] + aList + [4, 5, 6])
+	autoTester.check (3 * [1, 2, 3])
+	autoTester.check ([1, 2, 3] * 3)
+	aString = 'Crocodile'
+	autoTester.check ('Tiger' + aString + 'Elephant')
+	autoTester.check (3 * aString)
+	autoTester.check (aString * 3)
+	__pragma__ ('noopov')
 	

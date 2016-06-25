@@ -137,7 +137,7 @@
 	__all__.len = len;
 	
 	var bool = function (any) {	// Subtly different from __ (any), always truly returns a bool, rather than something truthy or falsy
-		return typeof (any) == 'boolean' ? any : typeof (any) == 'number' ? any != 0 : len (any) ? true : false;
+		return typeof any == 'boolean' ? any : typeof any == 'number' ? any != 0 : len (any) ? true : false;
 	}
 	bool.__name__ = 'bool'	// So it can be used as a type with a name
 	__all__.bool = bool;
@@ -497,6 +497,20 @@
 		// __sort__ is def'ed with the Transcrypt kwargs mechanism
 	};
 	
+	Array.prototype.__add__ = function (aList) {
+		return list (this.concat (aList))
+	}
+	
+	Array.prototype.__mul__ = function (scalar) {
+		var result = this;
+		for (var i = 1; i < scalar; i++) {
+			result = result.concat (this);
+		}
+		return result;
+	}
+	
+	Array.prototype.__rmul__ = Array.prototype.__mul__;
+		
 	// Tuple extensions to Array
 	
 	function tuple (iterable) {
@@ -879,6 +893,16 @@
 		return this.toUpperCase ();
 	};
 	
+	String.prototype.__mul__ = function (scalar) {
+		var result = this;
+		for (var i = 1; i < scalar; i++) {
+			result = result + this;
+		}
+		return result;
+	}
+	
+	String.prototype.__rmul__ = String.prototype.__mul__;
+	
 	// Operator overloading, only the ones that make most sense in matrix operations
 	
 	var __neg__ = function (a) {
@@ -901,6 +925,12 @@
 			return a.__mul__ (b);
 		}
 		else if (typeof b == 'object' && '__rmul__' in b) {
+			return b.__rmul__ (a);
+		}
+		else if (typeof a == 'string') {
+			return a.__mul__ (b);
+		}
+		else if (typeof b == 'string') {
 			return b.__rmul__ (a);
 		}
 		else {
