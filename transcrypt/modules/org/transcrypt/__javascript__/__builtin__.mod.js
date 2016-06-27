@@ -281,13 +281,72 @@
 	// Absolute value
 	var abs = Math.abs;
 	__all__.abs = abs;
+				
+	// Iterator protocol functions
 	
+	function py_StopIteration () {
+		name = 'StopIteration';
+		message = 'Iterator exhausted';
+	};
+	
+	__all__.py_StopIteration = py_StopIteration;
+	
+	function py_iter (iterable) {
+		if ('__iter__' in iterable) {
+			return iterable.__iter__ ();
+		}
+		else {	// Assume it's array-like, needed for JQuery. N.B. JQuery array-like objects are no true Array's
+			return list (iterable) .__iter__ ();
+		}
+	}
+	__all__.py_iter = py_iter;
+	
+	function py_next (py_iterator) {
+		var result = py_iterator.__next__ ();
+		if (typeof result == 'undefined') {
+			throw new py_StopIteration ();
+		}
+		return result;
+	}
+	__all__.py_next = py_next;
+	
+	function __SeqIterator__ (iterable) {
+		this.iterable = iterable;
+		this.index = 0;
+	}
+	
+	__all__.__SeqIterator__ = __SeqIterator__;
+	
+	__SeqIterator__.prototype.__this__ = function () {
+		return this;
+	}
+	
+	__SeqIterator__.prototype.__next__ = function () {
+		return this.iterable [this.index++];
+	}
+	
+	function __KeyIterator__ (iterable) {
+		this.iterable = iterable;
+		this.index = 0;
+	}
+
+	__all__.__KeyIterator__ = __KeyIterator__;
+	
+	__KeyIterator__.prototype.__this__ = function () {
+		return this;
+	}
+	
+	__KeyIterator__.prototype.__next__ = function () {
+		return this.iterable.keys () [this.index++];
+	}
+			
 	// Reversed function for arrays
-	var reversed = function (iterable) {
+	var py_reversed = function (iterable) {
 		iterable = iterable.slice ();
 		iterable.reverse ();
 		return iterable;
 	}
+	__all__.py_reversed = py_reversed;
 	
 	// Zip method for arrays
 	var zip = function () {
@@ -380,6 +439,10 @@
 	__all__.list = list;
 	Array.prototype.__class__ = list;	// All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
 	list.__name__ = 'list';
+	
+	Array.prototype.__iter__ = function () {
+		return new __SeqIterator__ (this);
+	}
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
@@ -686,6 +749,10 @@
 	
 	// Dict extensions to object
 	
+	function __keyIterator__ () {
+		return new __KeyIterator__ (this);
+	}
+	
 	function __keys__ () {
 		var keys = []
 		for (var attrib in this) {
@@ -695,7 +762,6 @@
 		}
 		return keys;
 	}
-	__all__.__keys__ = __keys__;
 		
 	function __items__ () {
 		var items = []
@@ -706,19 +772,16 @@
 		}
 		return items;
 	}
-	__all__.__items__ = __items__;
 		
 	function __del__ (key) {
 		delete this [key];
 	}
-	__all__.__del__ = __del__;
 	
 	function __clear__ () {
 		for (var attrib in this) {
 			delete this [attrib];
 		}
 	}
-	__all__.__clear__ = __clear__;
 		
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
@@ -739,7 +802,8 @@
 		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
 		// So the properties of a dict should be non-enumerable
 		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});			
+		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});
+		Object.defineProperty (instance, '__iter__', {value: __keyIterator__, enumerable: false});
 		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
 		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
@@ -750,7 +814,7 @@
 	dict.__name__ = 'dict';
 	
 	// String extensions
-		
+	
 	function str (stringable) {
 		try {
 			return stringable.__str__ ();
@@ -764,6 +828,10 @@
 	String.prototype.__class__ = str;	// All strings are str
 	str.__name__ = 'str';
 	
+	String.prototype.__iter__ = function () {
+		return new __SeqIterator__ (this);
+	}
+		
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
 	};

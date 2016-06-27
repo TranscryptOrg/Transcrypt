@@ -411,16 +411,20 @@ class Generator (ast.NodeVisitor):
 
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
-			('arguments', 'py_arguments'),	('js_arguments', 'arguments'),
+			('arguments', 'py_arguments'),			('js_arguments', 'arguments'),
 			('js_from', 'from'),
-			('name', 'py_name'),			('js_name', 'name'),
-			('pop', 'py_pop'),				('js_pop', 'pop'),
-			('replace', 'py_replace'),		('js_replace', 'replace'),
-			('sort', 'py_sort'),			('js_sort', 'sort'),
+			('iter', 'py_iter'),					('js_iter', 'iter'),
+			('name', 'py_name'),					('js_name', 'name'),
+			('next', 'py_next'),					('js_next', 'next'),
+			('pop', 'py_pop'),						('js_pop', 'pop'),
+			('replace', 'py_replace'),				('js_replace', 'replace'),
+			('sort', 'py_sort'),					('js_sort', 'sort'),
+			('StopIteration', 'py_StopIteration'),	('js_StopIteration', 'StopIteration'),	# Used in legacy JS iterator protocol
 			('switch', 'py_switch'),
 			('case', 'py_case'),
-			('default', 'py_default'),			
-			('split', 'py_split'),			('js_split', 'split'),
+			('default', 'py_default'),
+			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
+			('split', 'py_split'),					('js_split', 'split'),
 			('true', 'py_true'),
 			('false', 'py_false')
 # END predef_aliases
@@ -472,6 +476,7 @@ class Generator (ast.NodeVisitor):
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
+		self.allowGeneratorsAndIterators = utils.commandArgs.gen
 		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.codeGeneration = True
@@ -1072,6 +1077,10 @@ class Generator (ast.NodeVisitor):
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
 					self.memoizeCalls = False
+				elif node.args [0] .s == 'gen':			# Compile for-loop with __iterator<i>__ rather than __iterable<i>__
+					self.allowGeneratorsAndIterators = True
+				elif node.args [0] .s == 'nogen':		# Compile for-loop with __iterable<i>__ ratther than __iterator<i>__
+					self.allowGeneratorsAndIterators = False
 				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
 					self.allowConversionToIterable = True
 				elif node.args [0] .s == 'noiconv':		# Automatic conversion to iterable not supported
@@ -1121,8 +1130,10 @@ class Generator (ast.NodeVisitor):
 					
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add __call__ node on the fly and visit it
 			self.visit (ast.Call (
-				func = ast.Name (id = '__call__', ctx = node.func.ctx), args = [node.func] + node.args, keywords = node.keywords)
-			)
+				func = ast.Name (id = '__call__', ctx = node.func.ctx),
+				args = [node.func] + node.args,
+				keywords = node.keywords
+			))
 			return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit. 
 				
 		self.visit (node.func)
@@ -1326,44 +1337,76 @@ class Generator (ast.NodeVisitor):
 				self.emit ( ' += {}', step)
 			else:
 				self.emit ( ' -= {}', -step)
+				
 			self.emit (') {{\n')
-			
 			self.indent ()
+			
+		elif self.allowGeneratorsAndIterators:
+			self.emit ('var {} = {} (', self.nextTemp ('iterator'), self.filterId ('iter'))
+			self.visit (node.iter)
+			self.emit (');\n')
+			
+			self.emit ('while (true) {{\n')
+			self.indent ()
+	
+			# Create and visit Assign node on the fly to benefit from tupple assignment
+			self.emit ('try {{')
+			self.indent ()
+			self.visit (ast.Assign (
+				[node.target],
+				ast.Call (
+					func = ast.Name (id = 'next', ctx = ast.Load),
+					args = [ast.Name (id = self.getTemp ('iterator'), ctx = ast.Load)],
+					keywords = []
+				)
+			))
+			self.emit (';')
+			self.dedent ()
+			self.emit ('}} ')
+			self.emit ('catch (exception) {{')
+			self.indent ()
+			self.emit ('break;')
+			self.dedent ()
+			self.emit ('}}\n')
+			
 		else:
-			self.emit ('var {} = ', self.nextTemp ('iter'))
+			self.emit ('var {} = ', self.nextTemp ('iterable'))
 			self.visit (node.iter)
 			self.emit (';\n')
 			
 			if self.allowConversionToIterable:
-				self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iter'))
+				self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iterable'))
 				self.indent ()
-				self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iter'), self.filterId ('keys'))
+				self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iterable'), self.filterId ('keys'))
 				self.dedent ()
 				self.emit ('}}\n')
-		
-			self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iter'))
+				
+			self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iterable'))
 			self.indent ()
-		
+
 			# Create and visit Assign node on the fly to benefit from tupple assignment
 			self.visit (ast.Assign (
 				[node.target],
 				ast.Subscript (
-					value = ast.Name (id = self.getTemp ('iter'), ctx = ast.Load),
+					value = ast.Name (id = self.getTemp ('iterable'), ctx = ast.Load),
 					slice = ast.Index (ast.Num (n = self.getTemp ('index'))),
 					ctx = ast.Load
 				)
 			))
-			
 			self.emit (';\n')
+			
 						
 		self.emitBody (node.body)
 		self.dedent ()
 		self.emit ('}}\n')
-
+		
 		if not optimize:
-			self.prevTemp ('index')
-			self.prevTemp ('iter')
-			
+			if self.allowGeneratorsAndIterators:
+				self.prevTemp ('iterator')
+			else:
+				self.prevTemp ('index')
+				self.prevTemp ('iterable')
+
 		if node.orelse:
 			self.adaptLineNrString (node.orelse)
 				

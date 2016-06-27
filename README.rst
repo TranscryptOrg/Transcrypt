@@ -35,6 +35,7 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- EXPERIMENTAL: Iterator protocol added, no generators yet, not yet doc'ed or demo'ed, use the -g switch
 - Operator overloading added for <list> + <list2>, <integer> * <list>, <list> * <integer>, <integer> * <string>, <string> * <integer>, directed by __pragma__ ('opov'), + testcases
 - Turtle demos 'star' and 'mondrian' now use terminal I/O, completing a simple example of zero-installation graphically oriented Python programming for schools
 - Functions print and input can now use DOM element with id __terminal__, blocking I/O done with popup dialog and echoed to __terminal__

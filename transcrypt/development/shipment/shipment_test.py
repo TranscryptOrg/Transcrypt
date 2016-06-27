@@ -12,6 +12,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-c', '--clean', help = 'clean source tree', action = 'store_true')
 		self.argParser.add_argument ('-d', '--docs', help = 'make docs', action = 'store_true')
 		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
+		self.argParser.add_argument ('-g', '--gen', help = 'test iterators and generators', action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 
@@ -47,21 +48,24 @@ def test (relPath, fileNamePrefix, run = False, switches = ''):
 		webbrowser.open ('file://{}'.format (filePath), new = 2)
 	
 # Perform all tests
-for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
-	test ('development/automated_tests/hello', 'autotest', True, fcallSwitch)
-	test ('development/automated_tests/transcrypt', 'autotest', True, fcallSwitch)
-	test ('development/manual_tests/module_random', 'module_random', False, fcallSwitch)
-	test ('demos/hello', 'hello', False, fcallSwitch)
-	test ('demos/jquery_demo', 'jquery_demo', False, fcallSwitch)
-	test ('demos/d3js_demo', 'd3js_demo', False, fcallSwitch)
-	test ('demos/ios_app', 'ios_app', False, fcallSwitch)
-	test ('demos/react_demo', 'react_demo', False, fcallSwitch)
-	test ('demos/pong', 'pong', False, fcallSwitch)
-	test ('demos/turtle_demos', 'star', False, fcallSwitch + '-p .user ')
-	test ('demos/turtle_demos', 'snowflake', False, fcallSwitch + '-p .user ')
-	test ('demos/turtle_demos', 'mondrian', False, fcallSwitch + '-p .user ')
-	test ('demos/turtle_demos', 'mandala', False, fcallSwitch + '-p .user ')
-	test ('demos/terminal_demo', 'terminal_demo', False, fcallSwitch)
+
+for genSwitch in (('', '-g ' ) if commandArgs.gen else ('',)):
+	for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
+		switches = fcallSwitch + genSwitch
+		test ('development/automated_tests/hello', 'autotest', True, switches)
+		test ('development/automated_tests/transcrypt', 'autotest', True, switches)
+		test ('development/manual_tests/module_random', 'module_random', False, switches)
+		test ('demos/hello', 'hello', False, switches)
+		test ('demos/jquery_demo', 'jquery_demo', False, switches)
+		test ('demos/d3js_demo', 'd3js_demo', False, switches)
+		test ('demos/ios_app', 'ios_app', False, switches)
+		test ('demos/react_demo', 'react_demo', False, switches)
+		test ('demos/pong', 'pong', False, switches)
+		test ('demos/turtle_demos', 'star', False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'snowflake', False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'mondrian', False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'mandala', False, switches + '-p .user ')
+		test ('demos/terminal_demo', 'terminal_demo', False, switches)
 
 # Make docs optionally since they cause a lot of diffs	
 # Make them before target files are erased, since they are to be included in the docs
