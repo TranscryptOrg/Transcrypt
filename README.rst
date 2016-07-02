@@ -35,6 +35,14 @@ Release 4 (version 3.5.161):
 What's new
 ==========
 
+- Doc's updated, empty your browser cache and read about the newest facilities on-line
+- Shipment test expanded with es6 compilation
+- Conditional compilation pragma's added to facilitate optional es6 autotesting
+- Generators, yield and es6 compilation added + testcases, while retaining es5 compatible minified output
+- Compilation for node.js fixed
+- Blending between Python and JavaScript exceptions
+- Swallowing of unrecognized exceptions fixed
+- Iterator protocol no longer experimental, improved, test case added
 - EXPERIMENTAL: Iterator protocol added, no generators yet, not yet doc'ed or demo'ed, use the -g switch
 - Operator overloading added for <list> + <list2>, <integer> * <list>, <list> * <integer>, <integer> * <string>, <string> * <integer>, directed by __pragma__ ('opov'), + testcases
 - Turtle demos 'star' and 'mondrian' now use terminal I/O, completing a simple example of zero-installation graphically oriented Python programming for schools

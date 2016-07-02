@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.189 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.195 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.189',
+        VERSION:     '3.5.195',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.189 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.195 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -76,20 +76,29 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 
 <span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">up</span> <span class="p">()</span>
-<span class="n">goto</span> <span class="p">(</span><span class="o">-</span><span class="mi">250</span><span class="p">,</span> <span class="o">-</span><span class="mi">21</span><span class="p">)</span>
-<span class="n">startPos</span> <span class="o">=</span> <span class="n">pos</span> <span class="p">()</span>
+<span class="n">fillColor</span> <span class="o">=</span> <span class="s">&#39;yellow&#39;</span>
 
-<span class="n">down</span> <span class="p">()</span>
-<span class="n">color</span> <span class="p">(</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="s">&#39;yellow&#39;</span><span class="p">)</span>
-<span class="n">begin_fill</span> <span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">forward</span> <span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-    <span class="n">right</span> <span class="p">(</span><span class="mi">170</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">distance</span> <span class="p">(</span><span class="n">startPos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">break</span>
-<span class="n">end_fill</span> <span class="p">()</span>
-<span class="n">done</span> <span class="p">()</span>
+<span class="k">while</span> <span class="n">fillColor</span><span class="p">:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Will plot star with fill color: &#39;</span><span class="p">,</span> <span class="n">fillColor</span><span class="p">)</span>
+    <span class="k">print</span> <span class="p">()</span>
+
+    <span class="n">up</span> <span class="p">()</span>
+    <span class="n">goto</span> <span class="p">(</span><span class="o">-</span><span class="mi">250</span><span class="p">,</span> <span class="o">-</span><span class="mi">21</span><span class="p">)</span>
+    <span class="n">startPos</span> <span class="o">=</span> <span class="n">pos</span> <span class="p">()</span>
+
+    <span class="n">down</span> <span class="p">()</span>
+    <span class="n">color</span> <span class="p">(</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">fillColor</span><span class="p">)</span>
+    <span class="n">begin_fill</span> <span class="p">()</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">forward</span> <span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">right</span> <span class="p">(</span><span class="mi">170</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="p">(</span><span class="n">startPos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">end_fill</span> <span class="p">()</span>
+    <span class="n">done</span> <span class="p">()</span>
+    
+    <span class="n">fillColor</span> <span class="o">=</span> <span class="nb">input</span> <span class="p">(</span><span class="s">&#39;Give new fill color (blue, green, orange, lightblue, ...) :&#39;</span><span class="p">)</span>
+    
 </pre></div>
 </div>
 </div>
@@ -143,7 +152,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <span class="n">_ns</span> <span class="o">=</span> <span class="s">&#39;http://www.w3.org/2000/svg&#39;</span>
 <span class="n">_svg</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElementNS</span> <span class="p">(</span><span class="n">_ns</span><span class="p">,</span> <span class="s">&#39;svg&#39;</span><span class="p">)</span>
 
-<span class="n">_defaultElement</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">body</span>
+<span class="n">_defaultElement</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;__turtlegraph__&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_defaultElement</span><span class="p">:</span>
+    <span class="n">_defaultElement</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">body</span>
 <span class="n">_defaultElement</span><span class="o">.</span><span class="n">appendChild</span> <span class="p">(</span><span class="n">_svg</span><span class="p">)</span>
 
 <span class="n">_width</span> <span class="o">=</span> <span class="bp">None</span>
@@ -796,6 +807,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __switches__ = [];
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -970,11 +982,11 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get install () {return __get__ (this, function (self) {
                 self.playerLabels = function () {
                     var __accu0__ = [];
-                    var __iter0__ = tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]);
-                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                        var __left0__ = __iter0__ [__index0__];
-                        var py_name = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var py_name = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
@@ -992,22 +1004,22 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
-                    var __iter0__ = zip (self.scores, tuple ([-(2) / 16, 6 / 16]));
-                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                        var __left0__ = __iter0__ [__index0__];
-                        var score = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (zip (self.scores, tuple ([-(2) / 16, 6 / 16])));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var score = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
             });},
             get draw () {return __get__ (this, function (self) {
-                var __iter0__ = zip (self.playerLabels, self.scoreLabels);
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var __left0__ = __iter0__ [__index0__];
-                    var playerLabel = __left0__ [0];
-                    var scoreLabel = __left0__ [1];
+                var __iterator0__ = py_iter (zip (self.playerLabels, self.scoreLabels));
+                while (true) {
+                    try {var __left0__ = py_next (__iterator0__);
+                        var playerLabel = __left0__ [0];
+                        var scoreLabel = __left0__ [1];} catch (exception) {break;}
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -1044,9 +1056,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.buttons = list ([]);
-                var __iter0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var key = __iter0__ [__index0__];
+                var __iterator0__ = py_iter (tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]));
+                while (true) {
+                    try {var key = py_next (__iterator0__);} catch (exception) {break;}
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
@@ -1077,9 +1089,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.resize ();
             });},
             get install () {return __get__ (this, function (self) {
-                var __iter0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var attribute = __iter0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.install ();
                 }
             });},
@@ -1116,19 +1128,19 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     }
                 }
                 else {
-                    var __iter0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                        var attribute = __iter0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.predict ();
                     }
-                    var __iter0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                        var attribute = __iter0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.interact ();
                     }
-                    var __iter0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                        var attribute = __iter0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.commit ();
                     }
                 }
@@ -1136,26 +1148,26 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
-                var __iter0__ = self.paddles;
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var paddle = __iter0__ [__index0__];
+                var __iterator0__ = py_iter (self.paddles);
+                while (true) {
+                    try {var paddle = py_next (__iterator0__);} catch (exception) {break;}
                     paddle.reset ();
                 }
                 self.ball.reset ();
                 self.pause = true;
             });},
             get commit () {return __get__ (this, function (self) {
-                var __iter0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var attribute = __iter0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.commit ();
                 }
             });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
-                var __iter0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var attribute = __iter0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.draw ();
                 }
             });},
@@ -1270,11 +1282,12 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __switches__ = [];
         var start = function () {
             var changeColors = function () {
-                var __iter0__ = $divs;
-                for (var __index0__ = 0; __index0__ &lt; __iter0__.length; __index0__++) {
-                    var div = __iter0__ [__index0__];
+                var __iterator0__ = py_iter ($divs);
+                while (true) {
+                    try {var div = py_next (__iterator0__);} catch (exception) {break;}
                     $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
                         var __accu0__ = [];
                         for (var i = 0; i &lt; 3; i++) {
@@ -1591,6 +1604,7 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="d3js-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">d3js_demo.mod.js</span><a class="headerlink" href="#d3js-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __switches__ = [];
         var Spawn = __class__ (&#39;Spawn&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, width, height) {
                 var __left0__ = tuple ([width, height, 100, d3.scale.category20 ()]);
@@ -1719,6 +1733,7 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __switches__ = [];
         var h = function (elm_type, props) {
             if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
                 var props = &#39;&#39;;
@@ -1894,7 +1909,7 @@ __javascript__/ios_app.js
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

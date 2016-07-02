@@ -129,6 +129,21 @@ Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv'
 
 In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a *dict* without explicitly calling its *keys ()* member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, *__pragma__ ('iconv')* and *__pragma__ ('noiconv')* can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each *for .. in ..* loop. When designing numerical processing libraries, it's advisable to use *__pragma__ ('noiconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won't suffer.
 
+Conditional compilation: __pragma__ ('ifdef', <symbol>) and __pragma__ ('endif')
+--------------------------------------------------------------------------------
+
+This pragma works in combination with the *-s* / *--symbols <names joined by $>* command line option.
+
+A piece of code in between __pragma__ ('ifdef', <symbol>) and __pragma__ ('endif') will only be compiled if <symbol> occurs in <names joined by $> (so if e.g. 'es6' occurs in 'es5$es6$es7', which is the case).
+
+An example of the use of this pragma is found the autotest code below:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
+	:tab-width: 4
+	:caption: Use of conditional compilation to prevent Transcrypt code that requires JavaScript 6 from being compiled in the JavaScript 5 mode.
+	
+Note that in the example above, the compilation command is *transcrypt -e 6 -s e6 autotest.py*. The *-e 6* switch forces compilation in JavaScript 6 mode. The *-s e6* switch defines the *e6* symbol that blocks compilation of Transcrypt code that needs JavaScript 6 mode, by use of the *__pragma__ ('ifdef', 'e6')* and *__pragma__ ('endif')*.
+
 Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
 ----------------------------------------------------------------------
 

@@ -5,12 +5,12 @@ def run (autoTester):
 	autoTester.check (e)
 	
 	autoTester.check (exp (3))
-	autoTester.check (expm1 (4))
+	autoTester.check (int (expm1 (5)))
 	
 	autoTester.check (log (0.2))
 	autoTester.check (log1p (5))
-	autoTester.check (log2 (257))
-	autoTester.check (log10 (1001))
+	autoTester.check (int (log2 (257)))
+	autoTester.check (int (log10 (1001)))
 	
 	autoTester.check (pow (3, 4.5))
 	autoTester.check (sqrt (25.1))

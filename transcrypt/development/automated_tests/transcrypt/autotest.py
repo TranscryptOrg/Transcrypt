@@ -1,3 +1,4 @@
+from org.transcrypt.stubs.browser import __pragma__
 import org.transcrypt.autotester
 
 import arguments
@@ -14,6 +15,12 @@ import exceptions
 import extended_slices
 import general_functions
 import indices_and_slices
+
+__pragma__ ('ifdef', 'e6')	# Needed because Transcrypt imports are compile time
+if 'e6' in __symbols__:	# Needed because CPython doesn't understand pragma's
+	import iterators_and_generators
+__pragma__ ('endif')
+
 import lambda_functions
 import list_comprehensions
 import module_math
@@ -42,6 +49,12 @@ autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
+
+__pragma__ ('ifdef', 'e6')
+if 'e6' in __symbols__:
+	autoTester.run (iterators_and_generators, 'iterators_and_generators')
+__pragma__ ('endif')
+	
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
 autoTester.run (module_math, 'module_math')

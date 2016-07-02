@@ -76,7 +76,8 @@ def main ():
 				
 		if not utils.commandArgs.source:
 			return setExitCode (exitSourceNotGiven)	# Should never be here, dealth with by command arg checks already
-				
+						
+		__symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
 		if utils.commandArgs.run:
 			try:
 				with open (utils.commandArgs.source) as sourceFile:
@@ -87,7 +88,7 @@ def main ():
 				return setExitCode (exitCannotRunSource)
 		else:
 			try:
-				compiler.Program (compilerPath)
+				compiler.Program (compilerPath, __symbols__)
 				return setExitCode (exitSuccess)
 			except utils.Error as error:
 				utils.log (True, '\n{}\n', error)

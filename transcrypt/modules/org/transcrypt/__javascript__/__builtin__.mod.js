@@ -195,7 +195,13 @@
 			}
 			return false;
 		}
-		return isA (anObject.__class__)
+		try {
+			return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
+		}
+		catch (exception) {
+			console.log (exception);
+			console.dir (anObject);
+		}
 	};
 	__all__.isinstance = isinstance;
 	
@@ -291,18 +297,57 @@
 	
 	__all__.py_StopIteration = py_StopIteration;
 	
-	function py_iter (iterable) {
-		if ('__iter__' in iterable) {
-			return iterable.__iter__ ();
+	function wrap_py_next () {		// Add as 'next' method to make Python iterator JavaScript compatible
+		var result = this.__next__ ();
+		return {value: result, done: result == 'undefined'};		
+	}
+	
+	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
+		var result = this.next ();
+		if (result.done) {
+			throw new py_StopIteration ();
 		}
-		else {	// Assume it's array-like, needed for JQuery. N.B. JQuery array-like objects are no true Array's
-			return list (iterable) .__iter__ ();
+		else {
+			return result.value;
+		}
+	}
+	
+	function py_iter (iterable) {	// Produces universal iterator with Python '__next__' as well as JavaScript 'next'
+		if ('__iter__' in iterable) {	// It's a Python iterable (incl. JavaScript Arrays and strings)
+			var iterator = iterable.__iter__ ();
+			iterator.next = wrap_py_next;
+			return iterator;
+		}
+		else if ('selector' in iterable) { // Assume it's a JQuery iterator
+			var iterator = list (iterable) .__iter__ ();
+			iterator.next = wrap_py_next;
+			return iterator;
+		}
+		else if ('next' in iterable) {	// It's a JavaScript generator
+			// It should have an iterator field, but doesn't in Chrome
+			// So we just return the generator itself, which is both an iterable and an iterator
+			iterable.__next__ = wrap_js_next;
+			return iterable;
+		}
+		else {
+			return null;
 		}
 	}
 	__all__.py_iter = py_iter;
 	
-	function py_next (py_iterator) {
-		var result = py_iterator.__next__ ();
+	function py_next (iterator) {				// Called only in a Python context, could receive Python or JavaScript iterator
+		try {									// Primarily assume Python iterator, for max speed
+			var result = iterator.__next__ ();
+		}
+		catch (exception) {						// JavaScript iterators are the exception here
+			var result = iterator.next ();
+			if (result.done) {
+				throw new py_StopIteration ();
+			}
+			else {
+				return result.value;
+			}
+		}	
 		if (typeof result == 'undefined') {
 			throw new py_StopIteration ();
 		}
@@ -317,13 +362,15 @@
 	
 	__all__.__SeqIterator__ = __SeqIterator__;
 	
-	__SeqIterator__.prototype.__this__ = function () {
+	__SeqIterator__.prototype.__iter__ = function () {
 		return this;
 	}
 	
 	__SeqIterator__.prototype.__next__ = function () {
 		return this.iterable [this.index++];
 	}
+	
+	__SeqIterator__.prototype.next = wrap_py_next;
 	
 	function __KeyIterator__ (iterable) {
 		this.iterable = iterable;
@@ -332,7 +379,7 @@
 
 	__all__.__KeyIterator__ = __KeyIterator__;
 	
-	__KeyIterator__.prototype.__this__ = function () {
+	__KeyIterator__.prototype.__iter__ = function () {
 		return this;
 	}
 	
@@ -340,6 +387,8 @@
 		return this.iterable.keys () [this.index++];
 	}
 			
+	__KeyIterator__.prototype.next = wrap_py_next;
+	
 	// Reversed function for arrays
 	var py_reversed = function (iterable) {
 		iterable = iterable.slice ();

@@ -2,12 +2,20 @@ pi = Math.PI
 e = Math.E
 
 exp = Math.exp
-expm1 = Math.expm1
+
+def expm1 (x):		# IE workaround
+	return Math.exp (x) - 1
 
 log = Math.log		# Simplified
-log1p = Math.log1p
-log2 = Math.log2
-log10 = Math.log10
+
+def log1p (x):		# IE workaround
+	return Math.log (x + 1)
+
+def log2 (x):		# IE workaround
+	return Math.log (x) / Math.LN2
+	
+def log10 (x):		# IE workaround
+	return Math.log (x) / Math.LN10
 
 pow = Math.pow
 sqrt = Math.sqrt

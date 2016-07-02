@@ -21,7 +21,8 @@ highlightColor = 'yellow'
 testletNameColor = 'blue'
 
 class AutoTester:
-	def __init__ (self):
+	def __init__ (self, symbols = []):
+		self.symbols = symbols
 		self.referenceBuffer = []
 		self.testBuffer = []
 		self.messageDivId = 'message'
@@ -66,7 +67,7 @@ class AutoTester:
 	def dump (self, filePrename):
 		for minified in (False, True):
 			miniInfix = '.min' if minified else ''
-			with open ('{}{}.html'.format (filePrename, miniInfix), 'w') as aFile:				
+			with open ('{}{}.html'.format (filePrename, miniInfix), 'w') as aFile:			
 				aFile.write ('<b>Status:</b>\n')
 				aFile.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId))
 				

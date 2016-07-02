@@ -89,13 +89,20 @@ class ModuleMetadata:
 		return youngestPath == self.sourcePath
 	
 class Program:
-	def __init__ (self, moduleSearchDirs):
+	def __init__ (self, moduleSearchDirs, symbols):
+		self.moduleSearchDirs = moduleSearchDirs
+		self.symbols = symbols
+		
+		if utils.commandArgs.esv == None:
+			self.javaScriptVersion = 5
+		else:
+			self.javaScriptVersion = int (utils.commandArgs.esv)
+			
 		self.rawModuleCaption = '\n\n// ============ Source: {} ============\n\n' if utils.commandArgs.anno else ''
 		self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
 	
-		self.moduleSearchDirs = moduleSearchDirs
 		self.moduleDict = {}
-
+		
 		# Set paths that don't require the module dict
 		self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
 		self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
@@ -213,8 +220,7 @@ class Program:
 		# Minify
 		if not utils.commandArgs.nomin:
 			utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
-			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map 
-			else None)
+			minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None, 6)	# Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
 			if utils.commandArgs.map:
 				utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
 				self.shrinkMap.load ()
@@ -236,7 +242,7 @@ class Program:
 			return Module (self, moduleMetadata)
 						
 class Module:
-	def __init__ (self, program, moduleMetadata, strip = False):
+	def __init__ (self, program, moduleMetadata):
 		self.program = program
 		self.metadata = moduleMetadata	# May contain dots if it's imported
 		self.program.moduleDict [self.metadata.name] = self
@@ -393,6 +399,7 @@ class Scope:
 	def __init__ (self, node):
 		self.node = node
 		self.nonlocals = set ()
+		self.containsYield = False
 	
 class Generator (ast.NodeVisitor):
 # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
@@ -412,11 +419,13 @@ class Generator (ast.NodeVisitor):
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
 			('arguments', 'py_arguments'),			('js_arguments', 'arguments'),
+			('false', 'py_false'),
 			('js_from', 'from'),
 			('iter', 'py_iter'),					('js_iter', 'iter'),
 			('name', 'py_name'),					('js_name', 'name'),
 			('next', 'py_next'),					('js_next', 'next'),
 			('pop', 'py_pop'),						('js_pop', 'pop'),
+			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
 			('sort', 'py_sort'),					('js_sort', 'sort'),
 			('StopIteration', 'py_StopIteration'),	('js_StopIteration', 'StopIteration'),	# Used in legacy JS iterator protocol
@@ -426,7 +435,6 @@ class Generator (ast.NodeVisitor):
 			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
 			('split', 'py_split'),					('js_split', 'split'),
 			('true', 'py_true'),
-			('false', 'py_false')
 # END predef_aliases
 		)]
 		
@@ -476,10 +484,10 @@ class Generator (ast.NodeVisitor):
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
-		self.allowGeneratorsAndIterators = utils.commandArgs.gen
 		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.memoizeCalls = utils.commandArgs.fcall
-		self.codeGeneration = True
+		self.noskipCodeGeneration = True
+		self.conditionalCodeGeneration = True
 		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices
 		
 		try:
@@ -623,9 +631,9 @@ class Generator (ast.NodeVisitor):
 	def isCall (self, node, name):
 		return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
 		
-	def getPragmaKindFromExpr (self, node):
+	def getPragmaFromExpr (self, node):
 		return (
-			node.value.args [0] .s
+			node.value.args
 			if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else
 			None
 		)
@@ -636,14 +644,20 @@ class Generator (ast.NodeVisitor):
 		except:
 			pass
 			
-		pragmaKind = self.getPragmaKindFromExpr (node)
+		pragma = self.getPragmaFromExpr (node)
 		
-		if pragmaKind == 'skip':
-			self.codeGeneration = False
-		elif pragmaKind == 'noskip':
-			self.codeGeneration = True
+		if pragma:
+			if pragma [0] .s == 'skip':
+				self.noskipCodeGeneration = False
+			elif pragma [0] .s == 'noskip':
+				self.noskipCodeGeneration = True
+			
+			if pragma [0] .s == 'ifdef' and not pragma [1] .s in self.module.program.symbols:
+				self.conditionalCodeGeneration = False
+			elif pragma [0] .s == 'endif':
+				self.conditionalCodeGeneration = True
 		
-		if self.codeGeneration:
+		if self.noskipCodeGeneration and self.conditionalCodeGeneration:
 			ast.NodeVisitor.visit (self, node)
 		
 	def visit_arg (self, node):
@@ -1077,10 +1091,6 @@ class Generator (ast.NodeVisitor):
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
 					self.memoizeCalls = False
-				elif node.args [0] .s == 'gen':			# Compile for-loop with __iterator<i>__ rather than __iterable<i>__
-					self.allowGeneratorsAndIterators = True
-				elif node.args [0] .s == 'nogen':		# Compile for-loop with __iterable<i>__ ratther than __iterator<i>__
-					self.allowGeneratorsAndIterators = False
 				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
 					self.allowConversionToIterable = True
 				elif node.args [0] .s == 'noiconv':		# Automatic conversion to iterable not supported
@@ -1112,8 +1122,8 @@ class Generator (ast.NodeVisitor):
 					self.allowOperatorOverloading = True
 				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
 					self.allowOperatorOverloading = False
-				elif node.args [0] .s in ('skip', 'noskip'):
-					pass						# Easier dealth with on statement / expression level in self.visit
+				elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'endif'):
+					pass								# Easier dealth with on statement / expression level in self.visit
 				else:
 					raise utils.Error (
 						moduleName = self.module.metadata.name,
@@ -1202,8 +1212,8 @@ class Generator (ast.NodeVisitor):
 				index += 1
 			elif type (stmt) == ast.Assign:
 				classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
-			elif self.getPragmaKindFromExpr (stmt):
-				self.visit (stmt)
+			elif self.getPragmaFromExpr (stmt):
+				self.visit (stmt)				# If it's a pragma, just visit it
 		self.dedent ()
 				
 		self.emit ('\n}})')
@@ -1341,7 +1351,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (') {{\n')
 			self.indent ()
 			
-		elif self.allowGeneratorsAndIterators:
+		elif self.module.program.javaScriptVersion >= 6:
 			self.emit ('var {} = {} (', self.nextTemp ('iterator'), self.filterId ('iter'))
 			self.visit (node.iter)
 			self.emit (');\n')
@@ -1401,7 +1411,7 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if not optimize:
-			if self.allowGeneratorsAndIterators:
+			if self.module.program.javaScriptVersion >= 6:
 				self.prevTemp ('iterator')
 			else:
 				self.prevTemp ('index')
@@ -1424,8 +1434,13 @@ class Generator (ast.NodeVisitor):
 	def visit_FunctionDef (self, node):
 		def emitScopedBody ():
 			self.inscope (node)
+			
 			self.emitBody (node.body)
 			self.dedent ()
+			
+			if self.getscope (ast.FunctionDef) .containsYield:
+				self.targetFragments.insert (yieldStarIndex, '*')
+				
 			self.descope ()
 			
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
@@ -1436,14 +1451,24 @@ class Generator (ast.NodeVisitor):
 					self.all.add (node.name)
 					
 				self.adaptLineNrString (node)
-				self.emit ('var {} = function ', self.filterId (node.name))
+				self.emit ('var {} = function', self.filterId (node.name))
+				
+				yieldStarIndex = len (self.targetFragments)
+				yieldStarLevel = self.indentLevel
+
+				self.emit (' ')
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
 			else:															# Class scope, so it's a method and needs the currying mechanism
 				self.emit ('\n')
 				self.adaptLineNrString (node)
-				self.emit ('get {} () {{return __get__ (this, function ', self.filterId (node.name))	
+				self.emit ('get {} () {{return __get__ (this, function', self.filterId (node.name))	
+
+				yieldStarIndex = len (self.targetFragments)
+				yieldStarLevel = self.indentLevel
+
+				self.emit (' ')
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
@@ -1452,7 +1477,15 @@ class Generator (ast.NodeVisitor):
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
 				self.emit (');}}')
-				
+		
+	def visit_GeneratorExp (self, node):
+		# Currently generator expressions are just iterators on lists.
+		# It's important that they aren't just lists,
+		# because the each for ... in ... would create a fresh iterator from it, prevening exhaustion.
+		# Since a list comp is an iterator itself, just copies will be created,
+		# which will exhaust together.
+		self.visit_ListComp (node, isGenExp = True)
+		
 	def visit_Global (self, node):
 		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
 
@@ -1589,7 +1622,7 @@ class Generator (ast.NodeVisitor):
 			self.visit (elt)
 		self.emit ('])')
 		
-	def visit_ListComp (self, node, isSet = False, isDict = False):
+	def visit_ListComp (self, node, isSet = False, isDict = False, isGenExp = False):
 		elts = []
 		bodies = [[]]
 		
@@ -1639,9 +1672,9 @@ class Generator (ast.NodeVisitor):
 		nestLoops (node.generators [:])	# Leave original in intact, just for neatness
 		self.emit (
 			'return {}{}{};\n',
-			'set (' if isSet else 'dict (' if isDict else '',
+			'set (' if isSet else 'dict (' if isDict else '{} ('.format (self.filterId ('iter')) if isGenExp else '' ,
 			self.getTemp ('accu'),
-			')' if isSet or isDict else ''		
+			')' if isSet or isDict or isGenExp else ''		
 		)
 		self.prevTemp ('accu')
 		self.dedent ()
@@ -1656,6 +1689,8 @@ class Generator (ast.NodeVisitor):
 			
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
+			self.indent ()
+			self.emit ('var __symbols__ = {};\n'.format (self.module.program.symbols))
 		else:
 			self.emit ('__nest__ (\n')
 			self.indent ()
@@ -1666,8 +1701,7 @@ class Generator (ast.NodeVisitor):
 			self.indent ()
 			self.emit ('__inited__: false,\n')
 			self.emit ('__init__: function (__all__) {{\n')
-			
-		self.indent ()
+			self.indent ()
 		
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
@@ -1851,7 +1885,7 @@ class Generator (ast.NodeVisitor):
 					
 	def visit_Try (self, node):
 		self.adaptLineNrString (node)
-			
+
 		self.emit ('try {{\n')
 		self.indent ()	
 		self.emitBody (node.body)
@@ -1860,27 +1894,33 @@ class Generator (ast.NodeVisitor):
 		
 		self.emit ('catch (__except__) {{\n')
 		self.indent ()
+		
 		for index, excepthandler in enumerate (node.handlers):
-			if excepthandler.type:	# One 'if' and possible several 'else if' clauses
-				if index:
-					self.emit ('else ')
+			if index:
+				self.emit ('else ')				# Never here after a catch all
+							
+			if excepthandler.type:
 				self.emit ('if (isinstance (__except__, ')
 				self.visit (excepthandler.type)
 				self.emit (')) {{\n')
-			else:					# Nothing caught yet
-				if index:
-					self.emit ('else {{\n')
-			
-			if excepthandler.type or index:
 				self.indent ()
 				
-			if excepthandler.name:
-				self.emit ('var {} = __except__;\n', excepthandler.name)				
-			self.emitBody (excepthandler.body)
-
-			if excepthandler.type or index:
-				self.dedent ()	
+				if excepthandler.name:
+					self.emit ('var {} = __except__;\n', excepthandler.name)
+					
+				self.emitBody (excepthandler.body)
+				
+				self.dedent ()
 				self.emit ('}}\n')
+			else:								# Catch all, swallowing no problem
+				self.emitBody (excepthandler.body)
+				break
+		else:									# No catch all, avoid swallowing exception
+			self.emit ('else {{\n')
+			self.indent ()
+			self.emit ('throw __except__;\n')
+			self.dedent ()
+			self.emit ('}}\n')
 				
 		self.dedent ()
 		self.emit ('}}\n')
@@ -1967,3 +2007,8 @@ class Generator (ast.NodeVisitor):
 			self.visit (withitem.optional_vars)
 			self.emit ('.close ()')
 			
+	def visit_Yield (self, node):
+		self.getscope (ast.FunctionDef) .containsYield = True
+		self.emit ('yield ')
+		self.visit (node.value)
+		

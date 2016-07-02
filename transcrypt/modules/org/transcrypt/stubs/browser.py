@@ -34,3 +34,5 @@ def print (*args):
 def __pragma__ (*args):
 	pass
 	
+def __new__ (constructedObject):
+	return constructedObject

@@ -4,6 +4,7 @@ import sys
 import datetime
 import webbrowser
 import argparse
+import time
 
 class CommandArgs:
 	def __init__ (self):
@@ -12,7 +13,6 @@ class CommandArgs:
 		self.argParser.add_argument ('-c', '--clean', help = 'clean source tree', action = 'store_true')
 		self.argParser.add_argument ('-d', '--docs', help = 'make docs', action = 'store_true')
 		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
-		self.argParser.add_argument ('-g', '--gen', help = 'test iterators and generators', action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 
@@ -32,40 +32,50 @@ appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
 	return '{}/{}'.format (appRootDir, relPath)
 
-def test (relPath, fileNamePrefix, run = False, switches = ''):
+def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
 	
 	os.system ('run_transcrypt -b -m -dm -dt {}{}.py'.format (switches, fileNamePrefix))
 
 	if run:
 		os.chdir (getAbsPath (relPath))
-		os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
+		
+		if ' -s e6 ' in (' ' + switches + ' '):
+			os.system ('run_transcrypt -r -s e6 {}.py'.format (fileNamePrefix))
+		else:
+			os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
 	
-	webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
-	
-	filePath = '{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix)
-	if os.path.isfile (filePath):
-		webbrowser.open ('file://{}'.format (filePath), new = 2)
+	if nodejs:
+		os.system ('start cmd /k node __javascript__/{}.js'.format (fileNamePrefix))
+		time.sleep (5)
+		webbrowser.open ('http://localhost:8080', new = 2)
+	else:
+		webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
+		
+		filePath = '{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix)
+		if os.path.isfile (filePath):
+			webbrowser.open ('file://{}'.format (filePath), new = 2)
 	
 # Perform all tests
 
-for genSwitch in (('', '-g ' ) if commandArgs.gen else ('',)):
+for esvSwitch in ('', '-e 6 '):
 	for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
-		switches = fcallSwitch + genSwitch
-		test ('development/automated_tests/hello', 'autotest', True, switches)
-		test ('development/automated_tests/transcrypt', 'autotest', True, switches)
-		test ('development/manual_tests/module_random', 'module_random', False, switches)
-		test ('demos/hello', 'hello', False, switches)
-		test ('demos/jquery_demo', 'jquery_demo', False, switches)
-		test ('demos/d3js_demo', 'd3js_demo', False, switches)
-		test ('demos/ios_app', 'ios_app', False, switches)
-		test ('demos/react_demo', 'react_demo', False, switches)
-		test ('demos/pong', 'pong', False, switches)
-		test ('demos/turtle_demos', 'star', False, switches + '-p .user ')
-		test ('demos/turtle_demos', 'snowflake', False, switches + '-p .user ')
-		test ('demos/turtle_demos', 'mondrian', False, switches + '-p .user ')
-		test ('demos/turtle_demos', 'mandala', False, switches + '-p .user ')
-		test ('demos/terminal_demo', 'terminal_demo', False, switches)
+		switches = fcallSwitch + esvSwitch
+		test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
+		test ('development/automated_tests/hello', 'autotest', True, False, switches)
+		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches + '-s e6 ' if esvSwitch else '')	
+		test ('development/manual_tests/module_random', 'module_random', False, False, switches)
+		test ('demos/hello', 'hello', False, False, switches)
+		test ('demos/jquery_demo', 'jquery_demo', False, False, switches)
+		test ('demos/d3js_demo', 'd3js_demo', False, False, switches)
+		test ('demos/ios_app', 'ios_app', False, False, switches)
+		test ('demos/react_demo', 'react_demo', False, False, switches)
+		test ('demos/pong', 'pong', False, False, switches)
+		test ('demos/turtle_demos', 'star', False, False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'snowflake', False, False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'mondrian', False, False, switches + '-p .user ')
+		test ('demos/turtle_demos', 'mandala', False, False, switches + '-p .user ')
+		test ('demos/terminal_demo', 'terminal_demo', False, False, switches)
 
 # Make docs optionally since they cause a lot of diffs	
 # Make them before target files are erased, since they are to be included in the docs

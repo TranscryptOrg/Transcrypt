@@ -6,8 +6,6 @@ __pragma__ ('skip')
 copy = 0
 __pragma__ ('noskip')
 
-from org.transcrypt.stubs.browser import __pragma__
-
 __pragma__ ('nokwargs')
 __pragma__ ('noalias', 'sort')
 
@@ -64,7 +62,10 @@ def filter (func, iterable):
 	
 class __Terminal__:
 	def __init__ (self):
-		self.element = document.getElementById ('__terminal__')
+		try:
+			self.element = document.getElementById ('__terminal__')
+		except:	# node.js
+			self.element = None
 		if self.element:
 			self.buffer = ''
 			self.element.style.overflowX = 'auto'
@@ -83,7 +84,10 @@ class __Terminal__:
 		
 	def input (self, question):
 		self.print ('{}_'.format (question), end = '')
-		answer = window.prompt (question)
+		try:
+			answer = window.prompt (question)
+		except:
+			console.log ('Error: Blocking input not yet implemented outside browser')
 		self.buffer = self.buffer [:-1]
 		self.print (answer)
 		return answer

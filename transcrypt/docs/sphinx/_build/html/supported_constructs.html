@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.189 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.195 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.189',
+        VERSION:     '3.5.195',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.189 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.195 documentation" href="index.html" />
     <link rel="next" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,8 @@
 Since they systematically cover all language constructs, they are also very effective as a learning tool. The testlets are arranged alphabetically by subject.</p>
 <div class="literal-block-wrapper container" id="autotest-transcrypt-autotest-demo-suite">
 <div class="code-block-caption"><span class="caption-text">Autotest: Transcrypt autotest demo suite</span><a class="headerlink" href="#autotest-transcrypt-autotest-demo-suite" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
+<span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
 
 <span class="kn">import</span> <span class="nn">arguments</span>
 <span class="kn">import</span> <span class="nn">attribs_by_name</span>
@@ -71,6 +72,12 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="kn">import</span> <span class="nn">extended_slices</span>
 <span class="kn">import</span> <span class="nn">general_functions</span>
 <span class="kn">import</span> <span class="nn">indices_and_slices</span>
+
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;ifdef&#39;</span><span class="p">,</span> <span class="s">&#39;e6&#39;</span><span class="p">)</span>  <span class="c"># Needed because Transcrypt imports are compile time</span>
+<span class="k">if</span> <span class="s">&#39;e6&#39;</span> <span class="ow">in</span> <span class="n">__symbols__</span><span class="p">:</span> <span class="c"># Needed because CPython doesn&#39;t understand pragma&#39;s</span>
+    <span class="kn">import</span> <span class="nn">iterators_and_generators</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;endif&#39;</span><span class="p">)</span>
+
 <span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">module_math</span>
@@ -99,6 +106,12 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">extended_slices</span><span class="p">,</span> <span class="s">&#39;extended_slices&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">general_functions</span><span class="p">,</span> <span class="s">&#39;general_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">indices_and_slices</span><span class="p">,</span> <span class="s">&#39;indices_and_slices&#39;</span><span class="p">)</span>
+
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;ifdef&#39;</span><span class="p">,</span> <span class="s">&#39;e6&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="s">&#39;e6&#39;</span> <span class="ow">in</span> <span class="n">__symbols__</span><span class="p">:</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">iterators_and_generators</span><span class="p">,</span> <span class="s">&#39;iterators_and_generators&#39;</span><span class="p">)</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;endif&#39;</span><span class="p">)</span>
+    
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_math</span><span class="p">,</span> <span class="s">&#39;module_math&#39;</span><span class="p">)</span>
@@ -425,7 +438,9 @@ Since they systematically cover all language constructs, they are also very effe
 <h2>4.7. Diverse fixes<a class="headerlink" href="#diverse-fixes" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-div-fixes">
 <div class="code-block-caption"><span class="caption-text">Testlet: div_fixes</span><a class="headerlink" href="#testlet-div-fixes" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">div_fixes.issue55</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
+
+<span class="kn">from</span> <span class="nn">div_fixes.issue55</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;Issue 40&#39;</span><span class="p">)</span>
@@ -478,6 +493,18 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">aTrue</span> <span class="o">=</span> <span class="nb">bool</span> <span class="p">(</span><span class="n">three</span> <span class="o">&amp;</span> <span class="n">one</span><span class="p">)</span>
     <span class="n">aFalse</span> <span class="o">=</span> <span class="nb">bool</span> <span class="p">(</span><span class="n">three</span> <span class="o">&amp;</span> <span class="n">four</span><span class="p">)</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">three</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">seven</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">eight</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">four</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">aTrue</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">aFalse</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;Issue 65&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,]</span> <span class="o">+</span> <span class="n">aList</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">aString</span> <span class="o">=</span> <span class="s">&#39;Crocodile&#39;</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;Tiger&#39;</span> <span class="o">+</span> <span class="n">aString</span> <span class="o">+</span> <span class="s">&#39;Elephant&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">aString</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aString</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noopov&#39;</span><span class="p">)</span>
     
 </pre></div>
 </div>
@@ -550,7 +577,9 @@ Since they systematically cover all language constructs, they are also very effe
 <h2>4.10. Exceptions: exception class hierarchy, finally<a class="headerlink" href="#exceptions-exception-class-hierarchy-finally" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-exceptions">
 <div class="code-block-caption"><span class="caption-text">Testlet: exceptions</span><a class="headerlink" href="#testlet-exceptions" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Ex1</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__envir__</span><span class="p">,</span> <span class="n">__new__</span><span class="p">,</span> <span class="n">__pragma__</span>
+
+<span class="k">class</span> <span class="nc">Ex1</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span>
         
 <span class="k">class</span> <span class="nc">Ex2</span> <span class="p">(</span><span class="n">Ex1</span><span class="p">):</span>
@@ -559,6 +588,25 @@ Since they systematically cover all language constructs, they are also very effe
 <span class="k">class</span> <span class="nc">Ex3</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span>
     
+<span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="s">&#39;python&#39;</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Table</span> <span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">args</span>
+            
+        <span class="k">def</span> <span class="nf">__repr__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&#39;Table&#39;</span> <span class="o">+</span> <span class="nb">repr</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">        function _Table () {</span>
+<span class="s">            this.fields = [] .slice.apply (arguments);</span>
+<span class="s">        }</span>
+<span class="s">        </span>
+<span class="s">        _Table.prototype.__str__ = function () {</span>
+<span class="s">            return (&#39;Table(&#39; + this.fields.toString () + &#39;)&#39;);</span>
+<span class="s">        };</span>
+<span class="s">    &#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">Table</span> <span class="o">=</span> <span class="n">_Table</span>
+
 <span class="k">def</span> <span class="nf">test1</span> <span class="p">():</span>
     <span class="k">raise</span> <span class="p">(</span><span class="ne">Exception</span> <span class="p">(</span><span class="s">&#39;mary&#39;</span><span class="p">))</span>
     
@@ -618,6 +666,46 @@ Since they systematically cover all language constructs, they are also very effe
         <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;everywhere&#39;</span><span class="p">)</span>
         
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">666</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Ex3</span> <span class="p">(</span><span class="s">&#39;that&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;mary&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;went&#39;</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;the&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">777</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Ex3</span> <span class="p">(</span><span class="s">&#39;lamb&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;was&#39;</span><span class="p">)</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;to&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex3</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>    <span class="c"># We should get here, exception not swallowed</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;go&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">__new__</span> <span class="p">(</span><span class="n">Table</span> <span class="p">(</span><span class="s">&#39;he&#39;</span><span class="p">,</span> <span class="s">&#39;followed&#39;</span><span class="p">,</span> <span class="s">&#39;her&#39;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">Ex1</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;to&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Table</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>  <span class="c"># Pure JavaScript exception, if no Python __class__</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;school&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Ex3</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;one&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">888</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -814,12 +902,12 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span>
     
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exp</span> <span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">expm1</span> <span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">expm1</span> <span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
     
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log1p</span> <span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log2</span> <span class="p">(</span><span class="mi">257</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log10</span> <span class="p">(</span><span class="mi">1001</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log2</span> <span class="p">(</span><span class="mi">257</span><span class="p">)))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log10</span> <span class="p">(</span><span class="mi">1001</span><span class="p">)))</span>
     
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">pow</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sqrt</span> <span class="p">(</span><span class="mf">25.1</span><span class="p">))</span>
@@ -1485,7 +1573,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

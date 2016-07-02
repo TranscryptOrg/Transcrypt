@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 3.5.189 documentation</title>
+    <title>Welcome to Transcrypt’s documentation! &mdash; Transcrypt 3.5.195 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.189',
+        VERSION:     '3.5.195',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.189 documentation" href="#" />
+    <link rel="top" title="Transcrypt 3.5.195 documentation" href="#" />
     <link rel="next" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
   <body role="document">
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,9 +64,10 @@ The <a class="reference external" href="http://sterlicht.alwaysdata.net/transcry
 <li class="toctree-l1"><a class="reference internal" href="installation_use.html">2. Getting started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation_use.html#installation">2.1. Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_use.html#your-first-transcrypt-program">2.2. Your first Transcrypt program</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation_use.html#using-sourcemaps-and-annotated-target-code">2.3. Using sourcemaps and annotated target code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation_use.html#compiling-for-node-js">2.4. Compiling for node.js</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation_use.html#available-command-line-switches">2.5. Available command line switches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_use.html#available-command-line-switches">2.3. Available command line switches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_use.html#compiling-to-javascript-6">2.4. Compiling to JavaScript 6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_use.html#compiling-for-node-js">2.5. Compiling for node.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_use.html#using-sourcemaps-and-annotated-target-code">2.6. Using sourcemaps and annotated target code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="special_facilities.html">3. Special facilities</a><ul>
@@ -77,11 +78,12 @@ The <a class="reference external" href="http://sterlicht.alwaysdata.net/transcry
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#preventing-target-annotation-pragma-noanno">3.5. Preventing target annotation: __pragma__ (&#8216;noanno&#8217;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#surpassing-the-speed-of-native-javascript-pragma-fcall-and-pragma-nofcall">3.6. Surpassing the speed of native JavaScript: __pragma__ (&#8216;fcall&#8217;) and __pragma (&#8216;nofcall&#8217;)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_facilities.html#automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv">3.7. Automatic conversion to iterable: __pragma__ (&#8216;iconv&#8217;) and __pragma__ (&#8216;noiconv&#8217;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#inserting-literal-javascript-pragma-js-and-include">3.8. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.9. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#operator-overloading-pragma-opov-and-pragma-noopov">3.10. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.11. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv">3.12. Automatic conversion to truth value: __pragma__ (&#8216;tconv&#8217;) and __pragma__ (&#8216;notconv&#8217;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#conditional-compilation-pragma-ifdef-symbol-and-pragma-endif">3.8. Conditional compilation: __pragma__ (&#8216;ifdef&#8217;, &lt;symbol&gt;) and __pragma__ (&#8216;endif&#8217;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#inserting-literal-javascript-pragma-js-and-include">3.9. Inserting literal JavaScript: __pragma__ (&#8216;js&#8217;, ...) and include (...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.10. Keeping your code lean: __pragma__ (&#8216;kwargs&#8217;) and __pragma__ (&#8216;nokwargs&#8217;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#operator-overloading-pragma-opov-and-pragma-noopov">3.11. Operator overloading: __pragma__ (&#8216;opov&#8217;) and __pragma__ (&#8216;noopov&#8217;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.12. Skipping fragments while generating code : __pragma__ (&#8216;skip&#8217;) and __pragma__ (&#8216;noskip&#8217;)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_facilities.html#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv">3.13. Automatic conversion to truth value: __pragma__ (&#8216;tconv&#8217;) and __pragma__ (&#8216;notconv&#8217;)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="supported_constructs.html">4. Systematic code examples: a guided tour of Transcrypt</a><ul>
@@ -189,7 +191,7 @@ The <a class="reference external" href="http://sterlicht.alwaysdata.net/transcry
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.189 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Transcrypt 3.5.195 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

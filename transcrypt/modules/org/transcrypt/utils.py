@@ -32,6 +32,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
 		self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
 		self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
+		self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5")
 		self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
 		self.argParser.add_argument ('-g', '--gen', help = "enable generators and iterators. DISADVISED, since it will result in a function call for each loop iteration. Preferably use __pragma__ ('gen') and __pragma__ ('nogen')", action = 'store_true')
 		self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferably use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
@@ -43,6 +44,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is DISADVISED, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
 		self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold module, default is window. Use -p .none to generate orphan module, e.g. for use in node.js. Use -p .user to generate module that has to be explicitly initialized by calling <modulename> (), e.g. after the full page has loaded")
 		self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
+		self.argParser.add_argument ('-s', '--symbols', nargs='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
 		self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. DISADVISED, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
 		self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
 		
