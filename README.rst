@@ -65,8 +65,8 @@ What's new
 Known restrictions
 ==================
 
-- Only a very limited selection of standard libs have been chosen for inclusion in the Transcrypt distribution. Use or encapsulate the JavaScript ones, that's part of the concept. Some more standard libs may be ported though.
-- A few methods of builtin types are currently left out, especially when they (almost) dupplicate functionality of other methods. This results from a deliberate choice to keep Transcrypt lean.
+- Only a very limited selection of standard libs have been chosen for inclusion in the Transcrypt distribution. Use or encapsulate the JavaScript ones, that's part of the concept. Some additional standard libs may be ported in the future though.
+- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. This results from a deliberate choice to keep Transcrypt lean.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect it's design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offer Pythonically clean, modular structure and maintainability.
 - No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
 
