@@ -24,7 +24,7 @@ def run (autoTester):
 	autoTester.check (atan (0.5))
 	autoTester.check (atan2 (1, 2))
 	
-	autoTester.check (hypot (3, 4.1))
+	autoTester.check (int (hypot (3, 4.1)))
 	
 	autoTester.check (degrees (pi/2.1))
 	autoTester.check (radians (90))

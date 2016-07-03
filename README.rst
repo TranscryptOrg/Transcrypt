@@ -22,19 +22,37 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status
 ======
 
-Release 4 (version 3.5.161):
+Release 5 (version 3.5.196):
 
-- Almost all of the math module and most important part of random module added
-- Most important part of turtle module added. Uses SVG, see editable examples at: http://www.transcrypt.org/live/turtle_site/turtle_site.html
-- Multi-level sourcemaps, annotated target code, virtualenv installation.
-- Automated tests of functionality of compiled code OK.
-- Manual tests of sourcemaps and random module OK.
-- Further tests and feedback very welcome.
-- Sourcemaps were tested on Chrome under Windows and Linux, but seem to work on Firefox under Linux as well.
+Thanks to everyone that has contributed ideas, bug reports and code examples. Without your cooperation this release would not be have been possible. Your work is much appreciated.
+
+This release features iterators, generators and JavaScript 6 code generation for some crucial facilities, e.g. iterator-controlled for-loops and yield. Even if JavaScript 6 code is generated, the minifier will turn it into JavaScript 5 code, so it will run on most browsers.
+
+The Python exception mechanism now blends with the JavaScript exception mechanism.
+Almost all of the 'math' module and a small but essential path of the 'random' module have been added.
+
+Also in this release is a simple example of how to make an iPhone/iPad web app. This is a full screen app that is freely distributed via the Internet and available off-line, represented by an icon on the home screen. It also runs in any PC browser.
+
+Some simple facilities have been added to emulate blocking I/O in the browser using 'print' and 'input', obtaining input via JavaScript's 'prompt' dialog. This makes it possible to use Transcrypt for textbook examples in a learning environment, in combination with use of the the 'turtle' module already present.
+
+Transcrypt is primarily a tool for professional production of web applications, retaining a clear structure and, by that, maintainability and flexibility. To that end, blending seamlessly with any JavaScript library, but also with node.js, remains a primary goal. It is possible to write large applications in Transcrypt that are every bit as fast as their JavaScript counterparts.
+
+Still, explicitly drawing educational institutions into the game is not without reason. While suitable for large, professional projects, Python is also currently the nr. 1 language used in teaching kids and students to program. Being able to program for the browser in Python is very attractive for a generation where the Internet is a basic fact of life. The fact that Transcrypt also has excellent space and time efficiency makes it possible to 'grow' from education into professional application.
+
+I am very curious about even the most modest uses of Transcrypt in this area. You can always mail me your experiences or ask questions, request features etc. I teach programming myself at the Hogeschool Rotterdam but also to kids, and I consider this an important inroad to future innovative power.
+
+C-preprocessor-like conditional compilation was added using __pragma__ ('ifdef', ) and __pragma__ ('endif'). This facilitates optionally including autotestcode for JavaScript 6 but can also be used for production code.
+
+The -s switch makes it possible to define symbols that can be used for conditional compilation but also for other purposes. The symbols are available at runtime in __main__.__symbols__.
+
+Many bug fixes were applied as suggested by the issues contributed by several people.
+
+Jacques de Hooge
 
 What's new
 ==========
 
+- Released via GitHub as release 5
 - Doc's updated, empty your browser cache and read about the newest facilities on-line
 - Shipment test expanded with es6 compilation
 - Conditional compilation pragma's added to facilitate optional es6 autotesting
@@ -42,28 +60,20 @@ What's new
 - Compilation for node.js fixed
 - Blending between Python and JavaScript exceptions
 - Swallowing of unrecognized exceptions fixed
-- Iterator protocol no longer experimental, improved, test case added
-- EXPERIMENTAL: Iterator protocol added, no generators yet, not yet doc'ed or demo'ed, use the -g switch
-- Operator overloading added for <list> + <list2>, <integer> * <list>, <list> * <integer>, <integer> * <string>, <string> * <integer>, directed by __pragma__ ('opov'), + testcases
-- Turtle demos 'star' and 'mondrian' now use terminal I/O, completing a simple example of zero-installation graphically oriented Python programming for schools
-- Functions print and input can now use DOM element with id __terminal__, blocking I/O done with popup dialog and echoed to __terminal__
-- Fix for issue #60: Python bool () not translated, testcase added, bitwise ops tested as well
-- Fix for issue #61: '-h produces traceback', tested
-- iOS web app demo added, full screen, native look and feel, also works off-line. Add it to the home screen of your iPhone and click the prepacked icon. Tested on iPhone 5 and 6. Also works in any browser. Write once...
+- Iterator protocol supported
 
 Known restrictions
 ==================
 
-- No standard libs, use or encapsulate the JavaScript ones, that's part of the concept. Some may be ported though.
-- Not all methods of builtin types are there by default. This results from a deliberate choice to keep Transcrypt lean. Such things can be distributed in separate libs.
-- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads.
+- Only a very limited selection of standard libs have been selected for inclusion in the Transcrypt distribution. Use or encapsulate the JavaScript ones, that's part of the concept. Some more standard libs may be ported though.
+- A few methods of builtin types are currently left out, especially when they (almost) dupplicate functionality of other methods. This results from a deliberate choice to keep Transcrypt lean.
+- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect it's design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offer Pythonically clean, modular structure and maintainability.
 - No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
-- No iterator, generator, xrange stuff. Maybe in the future if a broadly installed version of JavaScript suppports it.
 
 Known bugs
 ==========
 
-- None
+- //= operator not yet implemented.
 
 Readability
 ===========
