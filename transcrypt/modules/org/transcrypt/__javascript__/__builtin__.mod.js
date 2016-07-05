@@ -481,7 +481,11 @@
 	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
+__pragma__ ('ifdef', 'e6')
+		var instance = iterable ? Array.from (iterable) : [];
+__pragma__ ('else')
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
+__pragma__ ('endif')
 		// Sort is the normal JavaScript sort, Python sort is a non-member function
 		return instance;
 	}
@@ -868,7 +872,7 @@
 		try {
 			return stringable.__str__ ();
 		}
-		catch (e) {
+		catch (exception) {
 			return new String (stringable);
 		}
 	}
@@ -962,8 +966,11 @@
 		return !isNaN (parseFloat (this)) && isFinite (this);
 	};
 	
-	String.prototype.join = function (aList) {
-		return aList.join (this);
+	String.prototype.join = function (strings) {
+__pragma__ ('ifdef', 'e6')
+		strings = Array.from (strings);	// Much faster than iterating through strings char by char
+__pragma__ ('endif')
+		return strings.join (this);
 	};
 	
 	String.prototype.lower = function () {

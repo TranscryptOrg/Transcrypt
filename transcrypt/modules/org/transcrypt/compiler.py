@@ -323,10 +323,40 @@ class Module:
 			treeFile.write (self.textTree)
 			
 	def loadJavascript (self):
+		conditionalLoading = True
+	
+		def loadConditionally (targetLine):
+			nonlocal conditionalLoading
+		
+			def __pragma__ (name, *args):
+				nonlocal conditionalLoading
+				
+				if name == 'ifdef':
+					conditionalLoading = args [0] in self.program.symbols
+				elif name == 'ifndef':
+					conditionalLoading = not args [0] in self.program.symbols
+				elif name == 'else':
+					conditionalLoading = not conditionalLoading
+				elif name == 'endif':
+					conditionalLoading = True
+				else:
+					raise utils.Error (
+						moduleName = self.metadata.name,
+						message = '\n\tPragma {} unknown in this context\n'.format (name)
+					)
+
+			if targetLine.startswith ('__pragma__'):
+				exec (targetLine)
+				return False							# Pragma line, skip anyhow
+			else:
+				return conditionalLoading				# Normal line
+			
 		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
 		
-		with open (self.metadata.targetPath) as aFile:
-			self.targetCode = aFile.read ()
+		with open (self.metadata.targetPath) as targetFile:
+			targetLines = [targetLine for targetLine in targetFile.read () .split ('\n') if loadConditionally (targetLine)]
+			
+			self.targetCode = '\n'.join (targetLines) 
 			
 	def generateJavascriptAndMap (self):
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
@@ -418,12 +448,15 @@ class Generator (ast.NodeVisitor):
 
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
+			('js_and', 'and'),
 			('arguments', 'py_arguments'),			('js_arguments', 'arguments'),
 			('false', 'py_false'),
 			('js_from', 'from'),
 			('iter', 'py_iter'),					('js_iter', 'iter'),
 			('name', 'py_name'),					('js_name', 'name'),
 			('next', 'py_next'),					('js_next', 'next'),
+			('js_not', 'not'),
+			('js_or', 'or'),
 			('pop', 'py_pop'),						('js_pop', 'pop'),
 			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
@@ -652,8 +685,12 @@ class Generator (ast.NodeVisitor):
 			elif pragma [0] .s == 'noskip':
 				self.noskipCodeGeneration = True
 			
-			if pragma [0] .s == 'ifdef' and not pragma [1] .s in self.module.program.symbols:
-				self.conditionalCodeGeneration = False
+			if pragma [0] .s == 'ifdef':
+				self.conditionalCodeGeneration = pragma [1] .s in self.module.program.symbols
+			elif pragma [0] .s == 'ifndef':
+				self.conditionalCodeGeneration = not pragma [1] .s in self.module.program.symbols
+			elif pragma [0] .s == 'else':
+				self.conditionalCodeGeneration = not self.conditionalCodeGeneration
 			elif pragma [0] .s == 'endif':
 				self.conditionalCodeGeneration = True
 		

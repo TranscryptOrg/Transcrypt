@@ -23,6 +23,12 @@ __pragma__ ('endif')
 
 import lambda_functions
 import list_comprehensions
+
+__pragma__ ('ifdef', 'e6')
+if 'e6' in __symbols__:
+	import module_itertools
+__pragma__ ('endif')
+
 import module_math
 import modules
 import nonlocals
@@ -57,6 +63,12 @@ __pragma__ ('endif')
 	
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
+
+__pragma__ ('ifdef', 'e6')
+if 'e6' in __symbols__:
+	autoTester.run (module_itertools, 'module_itertools')
+__pragma__ ('endif')
+	
 autoTester.run (module_math, 'module_math')
 autoTester.run (modules, 'modules')
 autoTester.run (nonlocals, 'nonlocals')
