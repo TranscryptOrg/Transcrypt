@@ -1,6 +1,6 @@
 # RiotJs Demo
 
-Riot is a 'one way binding' component framework, comparable to React but with
+[Riot](https://github.com/riot/riot) is a 'one way binding' component framework, comparable to React but with
 a far simpler API.
 
 If features a template engine, lifecycle events and tag local namespacing,
