@@ -1,7 +1,6 @@
 # RiotJs Demo
 
-[Riot](https://github.com/riot/riot) is a 'one way binding' component framework, comparable to React but with
-a far simpler API.
+[Riot](https://github.com/riot/riot) is a 'one way binding' component framework, comparable to React but with a far simpler API.
 
 If features a template engine, lifecycle events and tag local namespacing,
 all based on HTML5, js and css only.
@@ -37,3 +36,4 @@ I'm for sure no JS expert, there might be a far more elegant way to
 have riot's 'this' and Transcrypt's self in sync, e.g. via JS 'inheritance'
 mechanics - or maybe using Transcrypt's object extension methods itself.
 
+Gunther Klessinger, gk@axiros.com, Germany

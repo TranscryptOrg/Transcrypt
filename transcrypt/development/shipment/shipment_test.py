@@ -40,8 +40,8 @@ def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = ''):
 	if run:
 		os.chdir (getAbsPath (relPath))
 		
-		if ' -s e6 ' in (' ' + switches + ' '):
-			os.system ('run_transcrypt -r -s e6 {}.py'.format (fileNamePrefix))
+		if ' -e 6 ' in (' ' + switches + ' '):
+			os.system ('run_transcrypt -r -e 6 {}.py'.format (fileNamePrefix))
 		else:
 			os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
 	
@@ -63,7 +63,7 @@ for esvSwitch in ('', '-e 6 '):
 		switches = fcallSwitch + esvSwitch
 		test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
 		test ('development/automated_tests/hello', 'autotest', True, False, switches)
-		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches + '-s e6 ' if esvSwitch else '')	
+		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches)	
 		test ('development/manual_tests/module_random', 'module_random', False, False, switches)
 		test ('demos/hello', 'hello', False, False, switches)
 		test ('demos/jquery_demo', 'jquery_demo', False, False, switches)

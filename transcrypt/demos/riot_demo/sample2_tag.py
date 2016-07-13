@@ -12,7 +12,7 @@ class P(RiotTag):
     # answer: yes, perfect:
     counter = 1
 
-    template = ''' <div><h1>Riot Transcript Tag Instance {label}</h1>
+    template = ''' <div><h1>Riot Transcrypt Tag Instance {label}</h1>
                          <div>INNER</div></div> '''
     def count_up(self):
         self.counter = self.counter + 1
@@ -36,6 +36,7 @@ class Sample2(P):
     def __init__(self, tag, opts):
         self.label = opts.label.capitalize()  # this rocks so much.
         # super does not seem to work yet (?)
+		# JdeH: No, ideed, but you can call parent class ctor like: <ParentClassName>.__init__ (self, <otherParams>)
         self._setup_tag(tag)
         # uncomment next line and chrome will stop:
         # debugger

@@ -78,6 +78,11 @@ def main ():
 			return setExitCode (exitSourceNotGiven)	# Should never be here, dealth with by command arg checks already
 						
 		__symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
+		if utils.commandArgs.esv:
+			__symbols__.append ('e{}'.format (utils.commandArgs.esv))
+		else:
+			__symbols__.append ('e{}'.format (utils.defaultJavaScriptVersion))
+			
 		if utils.commandArgs.run:
 			try:
 				with open (utils.commandArgs.source) as sourceFile:

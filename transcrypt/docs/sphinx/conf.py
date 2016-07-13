@@ -26,6 +26,8 @@ import sys, os
 
 # -- General configuration -----------------------------------------------------
 
+html_use_smartypants = False	# ... Don't use fancy quotes
+
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 

@@ -132,9 +132,9 @@ In CPython sometimes automatic conversion from a non-iterable to an iterable typ
 Conditional compilation: __pragma__ ('ifdef', <symbol>), __pragma__ ('ifndef', <symbol>), __pragma__ ('else') and __pragma__ ('endif')
 --------------------------------------------------------------------------------------------------------------------------------------
 
-This pragma works in combination with the *-s* / *--symbols <names joined by $>* command line option.
+A piece of code in between *__pragma__ ('ifdef', <symbol>)* and *__pragma__ ('endif')* will only be compiled if <symbol> occurs in the global list of defined symbols.
 
-A piece of code in between *__pragma__ ('ifdef', <symbol>)* and *__pragma__ ('endif')* will only be compiled if <symbol> occurs in <names joined by $> (so if e.g. 'es6' occurs in 'es5$es6$es7', which is the case).
+This pragma works mainly in combination with the *-s* / *--symbols <names joined by $>* command line option. On top of that, some command line options automatically add symbols, without using the *-s* switch. An example is *-e 6* option, which adds the symbol *e6* to the global list of defined symbols.
 
 An example of the use of this pragma is found the autotest code below:
 
@@ -142,7 +142,7 @@ An example of the use of this pragma is found the autotest code below:
 	:tab-width: 4
 	:caption: Use of conditional compilation to prevent Transcrypt code that requires JavaScript 6 from being compiled in the JavaScript 5 mode.
 	
-Note that in the example above, the compilation command is *transcrypt -e 6 -s e6 autotest.py*. The *-e 6* switch forces compilation in JavaScript 6 mode. The *-s e6* switch defines the *e6* symbol that blocks compilation of Transcrypt code that needs JavaScript 6 mode, by use of the *__pragma__ ('ifdef', 'e6')* and *__pragma__ ('endif')*.
+Note that in the example above, the compilation command is *transcrypt -e 6 autotest.py*. The *-e 6* switch forces compilation in JavaScript 6 mode and automatically adds *e6* to the global list of defined symbols. The presence of the *e6* symbol activates compilation of Transcrypt code that needs JavaScript 6 mode, by use of the *__pragma__ ('ifdef', 'e6')* and *__pragma__ ('endif')*.
 
 Code after *__pragma__ ('ifndef', <symbol>)* is compiled if <symbol> is NOT defined. To choose between two alternative source code blocks, precede the second block with *__pragma__ ('else')* and terminate it with *__pragma__ ('endif')*.
 

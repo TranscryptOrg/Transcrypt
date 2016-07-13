@@ -94,7 +94,7 @@ class Program:
 		self.symbols = symbols
 		
 		if utils.commandArgs.esv == None:
-			self.javaScriptVersion = 5
+			self.javaScriptVersion = utils.defaultJavaScriptVersion
 		else:
 			self.javaScriptVersion = int (utils.commandArgs.esv)
 			

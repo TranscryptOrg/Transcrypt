@@ -3,6 +3,8 @@ import sys
 import argparse
 import inspect
 
+defaultJavaScriptVersion = 5
+
 class CommandArgsError (BaseException):
 	pass
 	
@@ -32,7 +34,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
 		self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
 		self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
-		self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5")
+		self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol e<versionnr> is added to the global symbol list, e.g. e6.")
 		self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
 		self.argParser.add_argument ('-g', '--gen', help = "enable generators and iterators. DISADVISED, since it will result in a function call for each loop iteration. Preferably use __pragma__ ('gen') and __pragma__ ('nogen')", action = 'store_true')
 		self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferably use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
