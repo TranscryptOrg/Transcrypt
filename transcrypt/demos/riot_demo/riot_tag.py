@@ -65,7 +65,7 @@ class RiotTag:
                 tag.on(ev, f)
 
     def pp(self, *msg):
-        ''' color flash in the console, complete overkill '''
+        # color flash in the console. one color per tag instance.
         col_print(
             #B(self.riot_tag._riot_id),
             L('<', self.my_col(self.node_name, self.my_col), '/> '),
