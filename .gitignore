@@ -7,3 +7,5 @@ transcrypt.egg-info/
 transcrypt/development/attic/
 transcrypt/development/docs/
 transcrypt/development/experiments/
+transcrypt/modules/org/transcrypt/__javascript__/__base__.mod.js
+transcrypt/modules/org/transcrypt/__javascript__/__standard__.mod.js

@@ -25,3 +25,7 @@ def run (autoTester):
 
 	b.sort (key = lambda x: len (x), reverse = True) 
 	autoTester.check (b)
+
+	class A: foo='bar'
+	autoTester.check ('foo' in dir(A))
+	autoTester.check ('foo' in dir(A()))
