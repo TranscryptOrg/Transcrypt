@@ -20,8 +20,15 @@
 # TODO: docstring format not accepted by the transpiler, strange.
 
 __author__ = "Gunther Klessinger, gk@axiros.com, Germany"
-__date__ = "$Date: 2016-07-11 02:17:51 +0100 $"
 
+# just a minihack to get some colors, mainly to test lamdas and imports:
+from color import colors, cprint as col_print
+c = colors
+M, I, L, R, B = c['purple'], c['orange'], c['gray'], c['red'], c['black']
+
+lifecycle_ev = ['before-mount', 'mount', 'update', 'unmount']
+
+cur_tag_col = 0
 class RiotTag:
     """
     taking care for extending the riot tag obj with
@@ -32,58 +39,73 @@ class RiotTag:
     # placeholders:
     template = '<h1>it worx</h1>'
     style = ''
-    node_name = '<no node>'
+    node_name = 'unmounted'
     opts = None
     def __init__(self, tag, opts):
         # opts into the python instance, why not:
         self.opts = opts
         self._setup_tag(tag)
+        # giving ourselves a unique color:
+        global cur_tag_col # working (!)
+        cur_tag_col = (cur_tag_col + 1) % len(colors)
+        # TODO values() on a dict
+        self.my_col = colors.items()[cur_tag_col][1]
 
     def _setup_tag(self, tag):
         # keeping mutual refs
         tag.py_obj = self
         self.riot_tag = tag
         # making the event system call self's methods:
-        __pragma__('js', '{}', '''
-        var evs = ['before-mount', 'update', 'mount', 'unmount']
-        evs.forEach(function(k, i, evs) {
-            var k1 = k.replace('-', '_')
-            tag.on(k, function () {self[k1](this)})
-        })''')
+        handlers = {}
+        for ev in lifecycle_ev:
+            f = getattr(self, ev.replace('-', '_'))
+            if f:
+                # this.on('mount', function() {...}):
+                # whats nicer?
+                tag.on(ev, f)
 
     def pp(self, *msg):
-        print (self.node_name, msg)
+        ''' color flash in the console, complete overkill '''
+        col_print(
+            #B(self.riot_tag._riot_id),
+            L('<', self.my_col(self.node_name, self.my_col), '/> '),
+            M(' '.join([s for s in msg])))
 
     def _lifecycle_ev(self, mode):
         if self.debug:
             self.pp(mode + 'ing')
+
     # overwrite these for your specific one:
-    def update      (self, tag): self._lifecycle_ev('update')
-    def mount       (self, tag): self._lifecycle_ev('mount')
-    def unmount     (self, tag): self._lifecycle_ev('unmount')
+    def update (self): self._lifecycle_ev('update')
+    def mount  (self): self._lifecycle_ev('mount')
+    def unmount(self): self._lifecycle_ev('unmount')
 
-    def before_mount(self, tag):
+    def before_mount(self):
         self._lifecycle_ev('before-mount')
-        return self.bind_vars(tag)
+        return self.bind_vars()
 
-    def bind_vars(self, tag):
-        self.node_name = tag.root.nodeName
+    def bind_vars(self):
+        tag = self.riot_tag
+        self.node_name = tag.root.nodeName.lower()
         self.debug and self.pp('binding vars')
         # binding self's functions into the tag instance
         # binding writable properties to everything else (e.g. ints, strs...)
-        __pragma__('js', '{}', '''
-        tag._immutables = []
-        var nobind = [ 'update', 'mount', 'before_mount', 'unmount']
-        for (var k in self) if (k.indexOf('_') != 0 && nobind.indexOf(k) ==-1){
-            var v = self[k]
-            typeof v === 'function' ? tag[k] = self[k] :
-                                      tag._immutables.push(k)
-            }
-        var i = tag._immutables, py = self
-        i.forEach(function(k, j, i) {
-            Object.defineProperty(tag, k, {
-                get: function()  { return self[k]},
-                set: function(v) { self[k] = v }
-            })
-        })
-        ''')
+        tag._immutables = im = []
+        lc = lifecycle_ev
+        for k in dir(self):
+            # private or lifecycle function? don't bind:
+            if k[0] == '_' or k in lifecycle_ev or k == 'before_mount':
+                continue
+            v = getattr(self, k)
+            # these I can't write in python. Lets use JS then.
+            # TODO there should be, maybe some mocking facility for code
+            # testing w/o a js runtime:
+            __pragma__('js', '{}', '''
+                  typeof v === "function" || typeof v === "object" ?
+                  tag[k] = self[k] : tag._immutables.push(k)''')
+
+        for k in tag._immutables:
+            __pragma__('js', '{}', '''Object.defineProperty(tag, k, {
+                    get: function()  { return self[k]},
+                    set: function(v) { self[k] = v }})''')
+
