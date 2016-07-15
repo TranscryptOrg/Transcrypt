@@ -107,6 +107,14 @@
 	};
 	__all__.__class__ = __class__;
 
+	// Object Introspection
+    var dir = function(obj) {
+        var l = []
+        for (var k in obj) l.push(k)
+        return l
+    }
+	
+	
 	// Create mother of all classes		
 	var object = __all__.__class__ ('object', [], {
 		__init__: function (self) {},
