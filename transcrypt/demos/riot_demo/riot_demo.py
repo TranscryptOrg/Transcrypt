@@ -12,7 +12,7 @@ class P(RiotTag):
     # answer: yes, perfect:
     counter = 1
 
-    template = ''' <div><h1>Riot Transcript Tag Instance {label}</h1>
+    template = ''' <div><h1>Riot Transcrypt Tag Instance {label}</h1>
                          <div>INNER</div></div> '''
     def count_up(self):
         self.counter = self.counter + 1
@@ -20,7 +20,7 @@ class P(RiotTag):
         self.lv.append({'name': 'n' + self.counter})
         return self.counter
 
-# try some inheritence...
+# try some inheritance...
 class Sample2(P):
     # ... and change the state at every update, just for fun:
     template = P.template.replace('INNER', '''
@@ -35,12 +35,16 @@ class Sample2(P):
 
     def __init__(self, tag, opts):
         self.label = opts.label.capitalize()  # this rocks so much.
-        # super does not seem to work yet (?)
-        self._setup_tag(tag)
+        # alternative to super:
+        RiotTag.__init__(self, tag, opts)
         # uncomment next line and chrome will stop:
         # debugger
-        self.pp('tag init, adding 2 lv')
+        self.pp('tag init', 'adding 2 lv')
         # mutating the lv object:
         self.lv.extend([{'name': 'n1'}, {'name': 'n2'}])
 
+
+    def update(self):
+        self.pp('update handler in the custom tag, calling super')
+        RiotTag.update(self)
 

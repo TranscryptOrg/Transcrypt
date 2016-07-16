@@ -74,6 +74,15 @@
 
 	// Manipulating attributes by name
 	
+	var dir = function(obj) {
+		var aList = [];
+		for (var k in obj) {
+			aList.push (k);
+		}
+		aList.sort ();
+		return aList;
+	}
+	
 	var setattr = function (obj, name, value) {
 		obj [name] = value;
 	};
@@ -161,7 +170,8 @@
 	
 	var type = function (anObject) {
 		try {
-			return anObject.__class__;
+			var result = anObject.__class__;
+			return result;
 		}
 		catch (exception) {
 			var aType = typeof anObject;
@@ -299,7 +309,7 @@
 	
 	function wrap_py_next () {		// Add as 'next' method to make Python iterator JavaScript compatible
 		var result = this.__next__ ();
-		return {value: result, done: result == 'undefined'};		
+		return {value: result, done: result == undefined};		
 	}
 	
 	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
@@ -348,7 +358,7 @@
 				return result.value;
 			}
 		}	
-		if (typeof result == 'undefined') {
+		if (result == undefined) {
 			throw new py_StopIteration ();
 		}
 		return result;
@@ -419,12 +429,12 @@
 	
 	// Range method, returning an array
 	function range (start, stop, step) {
-		if (typeof stop == 'undefined') {
+		if (stop == undefined) {
 			// one param defined
 			stop = start;
 			start = 0;
 		}
-		if (typeof step == 'undefined') {
+		if (step == undefined) {
 			step = 1;
 		}
 		if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
@@ -492,6 +502,16 @@ __pragma__ ('endif')
 	__all__.list = list;
 	Array.prototype.__class__ = list;	// All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
 	list.__name__ = 'list';
+	
+	/*
+	Array.from = function (iterator) { // !!! remove
+		result = [];
+		for (item of iterator) {
+			result.push (item);
+		}
+		return result;
+	}
+	*/
 	
 	Array.prototype.__iter__ = function () {
 		return new __SeqIterator__ (this);
@@ -946,12 +966,12 @@ __pragma__ ('endif')
 					key = autoIndex++;
 				}
 				if (key == +key) {	// So key is numerical
-					return args [key] == 'undefined' ? match : args [key];
+					return args [key] == undefined ? match : args [key];
 				}
 				else {				// Key is a string
 					for (var index = 0; index < args.length; index++) {
 						// Find first 'dict' that has that key and the right field
-						if (typeof args [index] == 'object' && typeof args [index][key] != 'undefined') {
+						if (typeof args [index] == 'object' && args [index][key] != undefined) {
 							return args [index][key];	// Return that field field
 						}
 					}

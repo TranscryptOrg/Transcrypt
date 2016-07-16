@@ -53,23 +53,23 @@
 <h1>5. Seamless interoperation with the DOM<a class="headerlink" href="#seamless-interoperation-with-the-dom" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="practical-example-a-simple-responsive-website-using-no-html-or-css-at-all">
 <h2>5.1. Practical example: a simple, responsive website using no HTML or CSS at all<a class="headerlink" href="#practical-example-a-simple-responsive-website-using-no-html-or-css-at-all" title="Permalink to this headline">¶</a></h2>
-<p>To many programmers, using &#8216;static&#8217; HTML and CSS feels like being locked up in a closet.
+<p>To many programmers, using 'static' HTML and CSS feels like being locked up in a closet.
 As an alternative, responsiveness can simply be programmed using Transcrypt, as can be seen on <a class="reference external" href="http://www.wiskundeles.com">this site written in Transcrypt</a>.
 Note that it features sourcemaps.
 The site adapts to diverse screen formats, device types and landscape vs. portrait mode.</p>
 </div>
 <div class="section" id="svg-example-turtle-graphics">
 <h2>5.2. SVG example: Turtle graphics<a class="headerlink" href="#svg-example-turtle-graphics" title="Permalink to this headline">¶</a></h2>
-<p><em>Turtle graphics</em> are a way to teach computer programming to children, invented by Seymour Papert in the 1960&#8217;s.
-Lines are drawn as &#8216;track&#8217; of a walking turtle, that can move ahead and turn.
+<p><em>Turtle graphics</em> are a way to teach computer programming to children, invented by Seymour Papert in the 1960's.
+Lines are drawn as 'track' of a walking turtle, that can move ahead and turn.
 Children use turtle graphics intuitively by imagining what they would do if they were the turtle.
 This leads to a <em>recipe of motion</em>, indeed an <em>algorithm</em>, which is the basis of imperative (as opposed to e.g. declarative) programming.</p>
 <p><em>SVG</em> or <em>Scalable Vector Graphics</em> are a way to display high quality graphs, e.g. in the browser.
 SVG, as opposed to e.g. the HTML Canvas, bypasses the pixel paradigm and works with floating point coordinates directly.
-As a consequence, SVG plots can be zoomed without becoming ragged or &#8216;pixelated&#8217;.</p>
-<p>When looking under the hood of SVG, there&#8217;s an amazing correspondence between the primitives in an SVG <em>path</em> and the primitives of turtle graphics.
+As a consequence, SVG plots can be zoomed without becoming ragged or 'pixelated'.</p>
+<p>When looking under the hood of SVG, there's an amazing correspondence between the primitives in an SVG <em>path</em> and the primitives of turtle graphics.
 So both from an aestethical and from a conceptual point of view, turtle graphics and SVG form a happy mariage.</p>
-<p>Turtle graphics in Transcrypt do not require the use of any graphics libraries. Below are two turtle graphics examples and the source code of Transcrypt&#8217;s <em>turtle</em> module, which is quite compact. As can be seen from the code integration between Transcrypt and JavaScript is trivial.</p>
+<p>Turtle graphics in Transcrypt do not require the use of any graphics libraries. Below are two turtle graphics examples and the source code of Transcrypt's <em>turtle</em> module, which is quite compact. As can be seen from the code integration between Transcrypt and JavaScript is trivial.</p>
 <div class="literal-block-wrapper container" id="drawing-a-alternatingly-floodfilled-star">
 <div class="code-block-caption"><span class="caption-text">Drawing a alternatingly floodfilled star</span><a class="headerlink" href="#drawing-a-alternatingly-floodfilled-star" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Free after the example from the Python 3.5 manual</span>
@@ -139,7 +139,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </div>
 <p><a class="reference external" href="http://www.transcrypt.org/live/demos/turtle_demos/snowflake.html">Click here to view the resulting zoomable snowflake</a>.</p>
 <div class="literal-block-wrapper container" id="transcrypt-s-turtle-graphics-module-sits-directly-on-top-of-svg-no-libraries-needed-so-a-very-compact-download">
-<div class="code-block-caption"><span class="caption-text">Transcrypt&#8217;s turtle graphics module sits directly on top of SVG, no libraries needed, so a very compact download</span><a class="headerlink" href="#transcrypt-s-turtle-graphics-module-sits-directly-on-top-of-svg-no-libraries-needed-so-a-very-compact-download" title="Permalink to this code">¶</a></div>
+<div class="code-block-caption"><span class="caption-text">Transcrypt's turtle graphics module sits directly on top of SVG, no libraries needed, so a very compact download</span><a class="headerlink" href="#transcrypt-s-turtle-graphics-module-sits-directly-on-top-of-svg-no-libraries-needed-so-a-very-compact-download" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;skip&#39;</span><span class="p">)</span>
 <span class="n">document</span> <span class="o">=</span> <span class="n">Math</span> <span class="o">=</span> <span class="n">setInterval</span> <span class="o">=</span> <span class="n">clearInterval</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noskip&#39;</span><span class="p">)</span>
@@ -413,7 +413,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <h2>6.1. Three ways of integration with JavaScript libraries<a class="headerlink" href="#three-ways-of-integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h2>
 <p>There are three ways to integrate Transcrypt applications with existing JavaScript libraries.</p>
 <ol class="arabic simple">
-<li>The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don&#8217;t seem to mind that, many Python programmers do.</li>
+<li>The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.</li>
 <li>Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distibution this is done for the <em>fabric</em> module, that encapsulates <em>fabric.js</em>. In this way the global namespace stays clean.</li>
 <li>The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without</li>
 </ol>
@@ -436,7 +436,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </pre></div>
 </div>
 </div>
-<p>Note that __pragma__ (&#8216;js&#8217;, &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
+<p>Note that __pragma__ ('js', &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
 </div>
 <div class="section" id="example-pong">
 <h2>6.2. Example: Pong<a class="headerlink" href="#example-pong" title="Permalink to this headline">¶</a></h2>
@@ -804,19 +804,457 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="pong-mod-js">
+<div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;e5&#39;];
+        var fabric = __init__ (__world__.com.fabricjs).fabric;
+        var orthoWidth = 1000;
+        var orthoHeight = 750;
+        var fieldHeight = 650;
+        var __left0__ = tuple ([13, 27, 32]);
+        var enter = __left0__ [0];
+        var esc = __left0__ [1];
+        var space = __left0__ [2];
+        window.onkeydown = (function __lambda__ (event) {
+            return event.keyCode != space;
+        });
+        var Attribute = __class__ (&#39;Attribute&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self, game) {
+                self.game = game;
+                self.game.attributes.append (self);
+                self.install ();
+                self.reset ();
+            });},
+            get reset () {return __get__ (this, function (self) {
+                self.commit ();
+            });},
+            get predict () {return __get__ (this, function (self) {
+                // pass;
+            });},
+            get interact () {return __get__ (this, function (self) {
+                // pass;
+            });},
+            get commit () {return __get__ (this, function (self) {
+                // pass;
+            });}
+        });
+        var Sprite = __class__ (&#39;Sprite&#39;, [Attribute], {
+            get __init__ () {return __get__ (this, function (self, game, width, height) {
+                self.width = width;
+                self.height = height;
+                Attribute.__init__ (self, game);
+            });},
+            get install () {return __get__ (this, function (self) {
+                self.image = new fabric.Rect (dict ({&#39;width&#39;: self.game.scaleX (self.width), &#39;height&#39;: self.game.scaleY (self.height), &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;, &#39;fill&#39;: &#39;white&#39;}));
+            });},
+            get reset () {return __get__ (this, function (self, vX, vY, x, y) {
+                if (typeof vX == &#39;undefined&#39; || (vX != null &amp;&amp; vX .__class__ == __kwargdict__)) {;
+                    var vX = 0;
+                };
+                if (typeof vY == &#39;undefined&#39; || (vY != null &amp;&amp; vY .__class__ == __kwargdict__)) {;
+                    var vY = 0;
+                };
+                if (typeof x == &#39;undefined&#39; || (x != null &amp;&amp; x .__class__ == __kwargdict__)) {;
+                    var x = 0;
+                };
+                if (typeof y == &#39;undefined&#39; || (y != null &amp;&amp; y .__class__ == __kwargdict__)) {;
+                    var y = 0;
+                };
+                if (arguments.length) {
+                    var __ilastarg0__ = arguments.length - 1;
+                    if (arguments [__ilastarg0__] &amp;&amp; arguments [__ilastarg0__].__class__ == __kwargdict__) {
+                        var __allkwargs0__ = arguments [__ilastarg0__--];
+                        for (var __attrib0__ in __allkwargs0__) {
+                            switch (__attrib0__) {
+                                case &#39;self&#39;: var self = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;vX&#39;: var vX = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;vY&#39;: var vY = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;x&#39;: var x = __allkwargs0__ [__attrib0__]; break;
+                                case &#39;y&#39;: var y = __allkwargs0__ [__attrib0__]; break;
+                            }
+                        }
+                    }
+                }
+                self.vX = vX;
+                self.vY = vY;
+                self.x = x;
+                self.y = y;
+                Attribute.reset (self);
+            });},
+            get predict () {return __get__ (this, function (self) {
+                self.x += self.vX * self.game.deltaT;
+                self.y += self.vY * self.game.deltaT;
+            });},
+            get commit () {return __get__ (this, function (self) {
+                self.image.left = self.game.orthoX (self.x);
+                self.image.top = self.game.orthoY (self.y);
+            });},
+            get draw () {return __get__ (this, function (self) {
+                self.game.canvas.add (self.image);
+            });}
+        });
+        var Paddle = __class__ (&#39;Paddle&#39;, [Sprite], {
+            get __init__ () {return __get__ (this, function (self, game, index) {
+                self.index = index;
+                Sprite.__init__ (self, game, self.width, self.height);
+            });},
+            get reset () {return __get__ (this, function (self) {
+                Sprite.reset (self, __kwargdict__ ({x: (self.index ? Math.floor (orthoWidth / 2) - self.margin : Math.floor (-(orthoWidth) / 2) + self.margin), y: 0}));
+            });},
+            get predict () {return __get__ (this, function (self) {
+                self.vY = 0;
+                if (self.index) {
+                    if (self.game.keyCode == ord (&#39;K&#39;)) {
+                        self.vY = self.speed;
+                    }
+                    else {
+                        if (self.game.keyCode == ord (&#39;M&#39;)) {
+                            self.vY = -(self.speed);
+                        }
+                    }
+                }
+                else {
+                    if (self.game.keyCode == ord (&#39;A&#39;)) {
+                        self.vY = self.speed;
+                    }
+                    else {
+                        if (self.game.keyCode == ord (&#39;Z&#39;)) {
+                            self.vY = -(self.speed);
+                        }
+                    }
+                }
+                Sprite.predict (self);
+            });},
+            get interact () {return __get__ (this, function (self) {
+                self.y = Math.max (Math.floor (self.height / 2) - Math.floor (fieldHeight / 2), Math.min (self.y, Math.floor (fieldHeight / 2) - Math.floor (self.height / 2)));
+                if ((self.y - Math.floor (self.height / 2) &lt; self.game.ball.y &amp;&amp; self.game.ball.y &lt; self.y + Math.floor (self.height / 2)) &amp;&amp; (self.index == 0 &amp;&amp; self.game.ball.x &lt; self.x || self.index == 1 &amp;&amp; self.game.ball.x &gt; self.x)) {
+                    self.game.ball.x = self.x;
+                    self.game.ball.vX = -(self.game.ball.vX);
+                    self.game.ball.speedUp (self);
+                }
+            });}
+        });
+        Paddle.margin = 30;
+        Paddle.width = 10;
+        Paddle.height = 100;
+        Paddle.speed = 400;
+        var Ball = __class__ (&#39;Ball&#39;, [Sprite], {
+            get __init__ () {return __get__ (this, function (self, game) {
+                Sprite.__init__ (self, game, self.side, self.side);
+            });},
+            get reset () {return __get__ (this, function (self) {
+                var angle = self.game.serviceIndex * Math.PI + ((Math.random () &gt; 0.5 ? 1 : -(1)) * Math.random ()) * Math.atan (fieldHeight / orthoWidth);
+                Sprite.reset (self, __kwargdict__ ({vX: self.speed * Math.cos (angle), vY: self.speed * Math.sin (angle)}));
+            });},
+            get predict () {return __get__ (this, function (self) {
+                Sprite.predict (self);
+                if (self.x &lt; Math.floor (-(orthoWidth) / 2)) {
+                    self.game.scored (1);
+                }
+                else {
+                    if (self.x &gt; Math.floor (orthoWidth / 2)) {
+                        self.game.scored (0);
+                    }
+                }
+                if (self.y &gt; Math.floor (fieldHeight / 2)) {
+                    self.y = Math.floor (fieldHeight / 2);
+                    self.vY = -(self.vY);
+                }
+                else {
+                    if (self.y &lt; Math.floor (-(fieldHeight) / 2)) {
+                        self.y = Math.floor (-(fieldHeight) / 2);
+                        self.vY = -(self.vY);
+                    }
+                }
+            });},
+            get speedUp () {return __get__ (this, function (self, bat) {
+                var factor = 1 + 0.15 * Math.pow (1 - Math.abs (self.y - bat.y) / (Math.floor (bat.height / 2)), 2);
+                if (Math.abs (self.vX) &lt; 3 * self.speed) {
+                    self.vX *= factor;
+                    self.vY *= factor;
+                }
+            });}
+        });
+        Ball.side = 8;
+        Ball.speed = 300;
+        var Scoreboard = __class__ (&#39;Scoreboard&#39;, [Attribute], {
+            get install () {return __get__ (this, function (self) {
+                self.playerLabels = function () {
+                    var __accu0__ = [];
+                    var __iterable0__ = tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]);
+                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                        var __left0__ = __iterable0__ [__index0__];
+                        var py_name = __left0__ [0];
+                        var position = __left0__ [1];
+                        __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+                    }
+                    return __accu0__;
+                } ();
+                self.hintLabel = new fabric.Text (&#39;[spacebar] starts game, [enter] resets score&#39;, dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 70), &#39;left&#39;: self.game.orthoX ((-(7) / 16) * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.hintShift)}));
+                self.image = new fabric.Line (list ([self.game.orthoX (Math.floor (-(orthoWidth) / 2)), self.game.orthoY (Math.floor (fieldHeight / 2)), self.game.orthoX (Math.floor (orthoWidth / 2)), self.game.orthoY (Math.floor (fieldHeight / 2))]), dict ({&#39;stroke&#39;: &#39;white&#39;}));
+            });},
+            get increment () {return __get__ (this, function (self, playerIndex) {
+                self.scores [playerIndex]++;
+            });},
+            get reset () {return __get__ (this, function (self) {
+                self.scores = list ([0, 0]);
+                Attribute.reset (self);
+            });},
+            get commit () {return __get__ (this, function (self) {
+                self.scoreLabels = function () {
+                    var __accu0__ = [];
+                    var __iterable0__ = zip (self.scores, tuple ([-(2) / 16, 6 / 16]));
+                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                        var __left0__ = __iterable0__ [__index0__];
+                        var score = __left0__ [0];
+                        var position = __left0__ [1];
+                        __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
+                    }
+                    return __accu0__;
+                } ();
+            });},
+            get draw () {return __get__ (this, function (self) {
+                var __iterable0__ = zip (self.playerLabels, self.scoreLabels);
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var __left0__ = __iterable0__ [__index0__];
+                    var playerLabel = __left0__ [0];
+                    var scoreLabel = __left0__ [1];
+                    self.game.canvas.add (playerLabel);
+                    self.game.canvas.add (scoreLabel);
+                    self.game.canvas.add (self.hintLabel);
+                }
+                self.game.canvas.add (self.image);
+            });}
+        });
+        Scoreboard.nameShift = 75;
+        Scoreboard.hintShift = 25;
+        var Game = __class__ (&#39;Game&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self) {
+                self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
+                self.pause = true;
+                self.keyCode = null;
+                self.textFrame = document.getElementById (&#39;text_frame&#39;);
+                self.canvasFrame = document.getElementById (&#39;canvas_frame&#39;);
+                self.buttonsFrame = document.getElementById (&#39;buttons_frame&#39;);
+                self.canvas = new fabric.Canvas (&#39;canvas&#39;, dict ({&#39;backgroundColor&#39;: &#39;black&#39;, &#39;originX&#39;: &#39;center&#39;, &#39;originY&#39;: &#39;center&#39;}));
+                self.canvas.onWindowDraw = self.draw;
+                self.canvas.lineWidth = 2;
+                self.canvas.clear ();
+                self.attributes = list ([]);
+                self.paddles = function () {
+                    var __accu0__ = [];
+                    for (var index = 0; index &lt; 2; index++) {
+                        __accu0__.append (Paddle (self, index));
+                    }
+                    return __accu0__;
+                } ();
+                self.ball = Ball (self);
+                self.scoreboard = Scoreboard (self);
+                window.setInterval (self.update, 10);
+                window.setInterval (self.draw, 20);
+                window.addEventListener (&#39;keydown&#39;, self.keydown);
+                window.addEventListener (&#39;keyup&#39;, self.keyup);
+                self.buttons = list ([]);
+                var __iterable0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var key = __iterable0__ [__index0__];
+                    var button = document.getElementById (key);
+                    button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, true);
+                        });
+                    }) (key));
+                    button.addEventListener (&#39;touchstart&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, true);
+                        });
+                    }) (key));
+                    button.addEventListener (&#39;mouseup&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, false);
+                        });
+                    }) (key));
+                    button.addEventListener (&#39;touchend&#39;, (function __lambda__ (aKey) {
+                        return (function __lambda__ () {
+                            return self.mouseOrTouch (aKey, false);
+                        });
+                    }) (key));
+                    button.style.cursor = &#39;pointer&#39;;
+                    button.style.userSelect = &#39;none&#39;;
+                    self.buttons.append (button);
+                }
+                self.time = +(new Date);
+                window.onresize = self.resize;
+                self.resize ();
+            });},
+            get install () {return __get__ (this, function (self) {
+                var __iterable0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var attribute = __iterable0__ [__index0__];
+                    attribute.install ();
+                }
+            });},
+            get mouseOrTouch () {return __get__ (this, function (self, key, down) {
+                if (down) {
+                    if (key == &#39;space&#39;) {
+                        self.keyCode = space;
+                    }
+                    else {
+                        if (key == &#39;enter&#39;) {
+                            self.keyCode = enter;
+                        }
+                        else {
+                            self.keyCode = ord (key);
+                        }
+                    }
+                }
+                else {
+                    self.keyCode = null;
+                }
+            });},
+            get update () {return __get__ (this, function (self) {
+                var oldTime = self.time;
+                self.time = +(new Date);
+                self.deltaT = (self.time - oldTime) / 1000.0;
+                if (self.pause) {
+                    if (self.keyCode == space) {
+                        self.pause = false;
+                    }
+                    else {
+                        if (self.keyCode == enter) {
+                            self.scoreboard.reset ();
+                        }
+                    }
+                }
+                else {
+                    var __iterable0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                        var attribute = __iterable0__ [__index0__];
+                        attribute.predict ();
+                    }
+                    var __iterable0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                        var attribute = __iterable0__ [__index0__];
+                        attribute.interact ();
+                    }
+                    var __iterable0__ = self.attributes;
+                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                        var attribute = __iterable0__ [__index0__];
+                        attribute.commit ();
+                    }
+                }
+            });},
+            get scored () {return __get__ (this, function (self, playerIndex) {
+                self.scoreboard.increment (playerIndex);
+                self.serviceIndex = 1 - playerIndex;
+                var __iterable0__ = self.paddles;
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var paddle = __iterable0__ [__index0__];
+                    paddle.reset ();
+                }
+                self.ball.reset ();
+                self.pause = true;
+            });},
+            get commit () {return __get__ (this, function (self) {
+                var __iterable0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var attribute = __iterable0__ [__index0__];
+                    attribute.commit ();
+                }
+            });},
+            get draw () {return __get__ (this, function (self) {
+                self.canvas.clear ();
+                var __iterable0__ = self.attributes;
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var attribute = __iterable0__ [__index0__];
+                    attribute.draw ();
+                }
+            });},
+            get resize () {return __get__ (this, function (self) {
+                self.pageWidth = window.innerWidth;
+                self.pageHeight = window.innerHeight;
+                self.textTop = 0;
+                if (self.pageHeight &gt; 1.2 * self.pageWidth) {
+                    self.canvasWidth = self.pageWidth;
+                    self.canvasTop = self.textTop + 300;
+                }
+                else {
+                    self.canvasWidth = 0.6 * self.pageWidth;
+                    self.canvasTop = self.textTop + 200;
+                }
+                self.canvasLeft = 0.5 * (self.pageWidth - self.canvasWidth);
+                self.canvasHeight = 0.6 * self.canvasWidth;
+                self.buttonsTop = (self.canvasTop + self.canvasHeight) + 50;
+                self.buttonsWidth = 500;
+                self.textFrame.style.top = self.textTop;
+                self.textFrame.style.left = self.canvasLeft + 0.05 * self.canvasWidth;
+                self.textFrame.style.width = 0.9 * self.canvasWidth;
+                self.canvasFrame.style.top = self.canvasTop;
+                self.canvasFrame.style.left = self.canvasLeft;
+                self.canvas.setDimensions (dict ({&#39;width&#39;: self.canvasWidth, &#39;height&#39;: self.canvasHeight}));
+                self.buttonsFrame.style.top = self.buttonsTop;
+                self.buttonsFrame.style.left = 0.5 * (self.pageWidth - self.buttonsWidth);
+                self.buttonsFrame.style.width = self.canvasWidth;
+                self.install ();
+                self.commit ();
+                self.draw ();
+            });},
+            get scaleX () {return __get__ (this, function (self, x) {
+                return x * (self.canvas.width / orthoWidth);
+            });},
+            get scaleY () {return __get__ (this, function (self, y) {
+                return y * (self.canvas.height / orthoHeight);
+            });},
+            get orthoX () {return __get__ (this, function (self, x) {
+                return self.scaleX (x + Math.floor (orthoWidth / 2));
+            });},
+            get orthoY () {return __get__ (this, function (self, y) {
+                return self.scaleY ((orthoHeight - Math.floor (fieldHeight / 2)) - y);
+            });},
+            get keydown () {return __get__ (this, function (self, event) {
+                self.keyCode = event.keyCode;
+            });},
+            get keyup () {return __get__ (this, function (self, event) {
+                self.keyCode = null;
+            });}
+        });
+        var game = Game ();
+        __pragma__ (&#39;&lt;use&gt;&#39; +
+            &#39;com.fabricjs&#39; +
+        &#39;&lt;/use&gt;&#39;)
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Attribute = Attribute;
+            __all__.Ball = Ball;
+            __all__.Game = Game;
+            __all__.Paddle = Paddle;
+            __all__.Scoreboard = Scoreboard;
+            __all__.Sprite = Sprite;
+            __all__.enter = enter;
+            __all__.esc = esc;
+            __all__.fieldHeight = fieldHeight;
+            __all__.game = game;
+            __all__.orthoHeight = orthoHeight;
+            __all__.orthoWidth = orthoWidth;
+            __all__.space = space;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="joined-minification">
 <h2>6.3. Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
-<p>Minification is currently performed by the Google closure compiler, that&#8217;s also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
-<p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ (&#8216;kargs&#8217;)</em> and <em>__pragma__ (&#8216;nokwargs&#8217;)</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
+<p>Minification is currently performed by the Google closure compiler, that's also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
+<p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ ('kargs')</em> and <em>__pragma__ ('nokwargs')</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
 </div>
 <div class="section" id="example-jquery">
 <h2>6.4. Example: jQuery<a class="headerlink" href="#example-jquery" title="Permalink to this headline">¶</a></h2>
-<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn&#8217;t been encapsulated at all. It&#8217;s just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
+<p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn't been encapsulated at all. It's just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="43%" />
@@ -841,14 +1279,43 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;e5&#39;];
+        var start = function () {
+            var changeColors = function () {
+                var __iterable0__ = $divs;
+                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
+                    var div = __iterable0__ [__index0__];
+                    $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
+                        var __accu0__ = [];
+                        for (var i = 0; i &lt; 3; i++) {
+                            __accu0__.append (int (256 * Math.random ()));
+                        }
+                        return __accu0__;
+                    } ())}));
+                }
+            };
+            var $divs = $ (&#39;div&#39;);
+            changeColors ();
+            window.setInterval (changeColors, 500);
+        };
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.start = start;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="example-ios-web-app-with-native-look-and-feel">
 <h2>6.5. Example: iOS web app with native look and feel<a class="headerlink" href="#example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
-<p>You can write full screen iOS web apps in Transcrypt with native look and feel. As example here&#8217;s an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.</p>
+<p>You can write full screen iOS web apps in Transcrypt with native look and feel. As example here's an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.</p>
 <div class="figure">
 <a class="reference internal image-reference" href="_images/ios_app.png"><img alt="A simple dice web app for iOS" src="_images/ios_app.png" style="height: 500px;" /></a>
 </div>
@@ -1134,14 +1601,87 @@ __javascript__/ios_app.js
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="d3js-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">d3js_demo.mod.js</span><a class="headerlink" href="#d3js-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;e5&#39;];
+        var Spawn = __class__ (&#39;Spawn&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self, width, height) {
+                var __left0__ = tuple ([width, height, 100, d3.scale.category20 ()]);
+                self.width = __left0__ [0];
+                self.height = __left0__ [1];
+                self.spacing = __left0__ [2];
+                self.fill = __left0__;
+                self.svg = d3.select (&#39;body&#39;).append (&#39;svg&#39;).attr (&#39;width&#39;, self.width).attr (&#39;height&#39;, self.height).on (&#39;mousemove&#39;, self.mousemove).on (&#39;mousedown&#39;, self.mousedown);
+                self.svg.append (&#39;rect&#39;).attr (&#39;width&#39;, self.width).attr (&#39;height&#39;, self.height);
+                self.cursor = self.svg.append (&#39;circle&#39;).attr (&#39;r&#39;, self.spacing).attr (&#39;transform&#39;, &#39;translate ({}, {})&#39;.format (self.width / 2, self.height / 2)).attr (&#39;class&#39;, &#39;cursor&#39;);
+                self.force = d3.layout.force ().size (list ([self.width, self.height])).nodes (list ([dict ({})])).linkDistance (self.spacing).charge (-(1000)).on (&#39;tick&#39;, self.tick);
+                var __left0__ = tuple ([self.force.nodes (), self.force.links (), self.svg.selectAll (&#39;.node&#39;), self.svg.selectAll (&#39;.link&#39;)]);
+                self.nodes = __left0__ [0];
+                self.links = __left0__ [1];
+                self.node = __left0__ [2];
+                self.link = __left0__ [3];
+                self.restart ();
+            });},
+            get mousemove () {return __get__ (this, function (self) {
+                self.cursor.attr (&#39;transform&#39;, (&#39;translate (&#39; + d3.mouse (self.svg.node ())) + &#39;)&#39;);
+            });},
+            get mousedown () {return __get__ (this, function (self) {
+                var pushLink = function (target) {
+                    var __left0__ = tuple ([target.x - node.x, target.y - node.y]);
+                    var x = __left0__ [0];
+                    var y = __left0__ [1];
+                    if (Math.sqrt (x * x + y * y) &lt; self.spacing) {
+                        spawn.links.push (dict ({&#39;source&#39;: node, &#39;target&#39;: target}));
+                    }
+                };
+                var point = d3.mouse (self.svg.node ());
+                var node = dict ({&#39;x&#39;: point [0], &#39;y&#39;: point [1]});
+                self.nodes.push (node);
+                self.nodes.forEach (pushLink);
+                self.restart ();
+            });},
+            get tick () {return __get__ (this, function (self) {
+                self.link.attr (&#39;x1&#39;, (function __lambda__ (d) {
+                    return d.source.x;
+                })).attr (&#39;y1&#39;, (function __lambda__ (d) {
+                    return d.source.y;
+                })).attr (&#39;x2&#39;, (function __lambda__ (d) {
+                    return d.target.x;
+                })).attr (&#39;y2&#39;, (function __lambda__ (d) {
+                    return d.target.y;
+                }));
+                self.node.attr (&#39;cx&#39;, (function __lambda__ (d) {
+                    return d.x;
+                })).attr (&#39;cy&#39;, (function __lambda__ (d) {
+                    return d.y;
+                }));
+            });},
+            get restart () {return __get__ (this, function (self) {
+                self.link = self.link.data (self.links);
+                self.link.enter ().insert (&#39;line&#39;, &#39;.node&#39;).attr (&#39;class&#39;, &#39;link&#39;);
+                self.node = self.node.data (self.nodes);
+                self.node.enter ().insert (&#39;circle&#39;, &#39;.cursor&#39;).attr (&#39;class&#39;, &#39;node&#39;).attr (&#39;r&#39;, 7).call (self.force.drag);
+                self.force.start ();
+            });}
+        });
+        var spawn = Spawn (window.innerWidth, window.innerHeight);
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Spawn = Spawn;
+            __all__.spawn = spawn;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="example-react">
 <h2>6.7. Example: React<a class="headerlink" href="#example-react" title="Permalink to this headline">¶</a></h2>
-<p><em>React</em> is a JavaScript library for easy creation of interactive UI&#8217;s. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &#8220;parallel&#8221; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
+<p><em>React</em> is a JavaScript library for easy creation of interactive UI's. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &quot;parallel&quot; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="43%" />
@@ -1190,14 +1730,464 @@ __javascript__/ios_app.js
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;e5&#39;];
+        var h = function (elm_type, props) {
+            if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
+                var props = &#39;&#39;;
+            };
+            var args = tuple ([].slice.apply (arguments).slice (2));
+            return React.createElement.apply (null, [elm_type].concat ([props]).concat (args));
+        };
+        var render = function (react_element, destination_id, callback) {
+            if (typeof callback == &#39;undefined&#39; || (callback != null &amp;&amp; callback .__class__ == __kwargdict__)) {;
+                var callback = (function __lambda__ () {
+                    return null;
+                });
+            };
+            var container = document.getElementById (destination_id);
+            ReactDOM.render (react_element, container, callback);
+        };
+        var Hello = React.createClass (dict ({&#39;displayName&#39;: &#39;Hello&#39;, &#39;getInitialState&#39;: (function __lambda__ () {
+            return dict ({&#39;counter&#39;: 0});
+        }), &#39;updateCounter&#39;: (function __lambda__ () {
+            return this.setState (dict ({&#39;counter&#39;: this.state [&#39;counter&#39;] + 1}));
+        }), &#39;componentDidMount&#39;: (function __lambda__ () {
+            return setInterval (this.updateCounter, 1000);
+        }), &#39;render&#39;: (function __lambda__ () {
+            return h (&#39;div&#39;, dict ({&#39;className&#39;: &#39;maindiv&#39;}), h (&#39;h1&#39;, null, &#39;Hello &#39;, this.props [&#39;name&#39;]), h (&#39;p&#39;, null, &#39;Lorem ipsum dolor sit ame.&#39;), h (&#39;p&#39;, null, &#39;Counter: &#39;, this.state [&#39;counter&#39;]));
+        })}));
+        var element = React.createElement (Hello, dict ({&#39;name&#39;: &#39;React!&#39;}));
+        render (element, &#39;container&#39;);
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Hello = Hello;
+            __all__.element = element;
+            __all__.h = h;
+            __all__.render = render;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="example-riot">
+<h2>6.8. Example: Riot<a class="headerlink" href="#example-riot" title="Permalink to this headline">¶</a></h2>
+<p><em>Riot</em> is a UI framework that combines the use of custom tags and a virtual DOM, much like the one in React. Custom tags look like ordinary HTML tags, but whereas HTML tags only define structure, Riot tags define structure, style and behaviour. Custom tags are compiled to JavaScript by a compiler that comes with Riot. With these custom tags as reusable components, web pages can be built. Riot itself is tiny, and the virtual DOM allows for fast adaptation of page content.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="riot-demo-html">
+<div class="code-block-caption"><span class="caption-text">riot_demo.html</span><a class="headerlink" href="#riot-demo-html" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;title&gt;Hello PyRiot ;-)&lt;/title&gt;
+    &lt;!-- for transcrypted version we do not need the compiler.
+         for the classic version you can use riot+compiler --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/riot/2.5/riot.js&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;
+        body {font-family:arial;font-size:30px;padding:50px;}
+        h1 {font-size:50px;color:#0000ff;}
+    &lt;/style&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+  &lt;!-- classic riot (compiled on server, could be done in browser)         --&gt;
+        &lt;sample id=&quot;s1&quot;&gt;&lt;/sample&gt;
+        &lt;script src=&quot;tags/sample.js&quot;&gt;&lt;/script&gt;
+        &lt;script&gt;riot.mount(&#39;sample&#39;)&lt;/script&gt;
+
+
+  &lt;!-- transcrypted version (transpiled on server, using python)           --&gt;
+        &lt;sample2 id=&#39;s2&#39; label=&quot;nr1&quot;&gt;&lt;/sample2&gt;
+        &lt;mp2     id=&#39;s3&#39; label=&quot;nr2&quot;&gt;&lt;/mp2&gt;
+        &lt;!-- the transpiled tag&#39;s js --&gt;
+        &lt;script src=&quot;__javascript__/sample2_tag.js&quot;&gt;&lt;/script&gt;
+        &lt;script&gt;
+            // register
+            var cls = sample2_tag.Sample2
+            riot.tag2(&#39;sample2&#39;, cls.template, cls.style, &#39;&#39;, function(opts) {
+                new cls(this, opts)})
+            document.t1 = riot.mount(&#39;sample2&#39;)[0].update()
+            document.t2 = riot.mount(&#39;#s3&#39;, &#39;sample2&#39;)[0]
+            document.t2.update()
+        &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="sample-tag-a-classic-riot-tag">
+<div class="code-block-caption"><span class="caption-text">sample.tag, a classic Riot tag</span><a class="headerlink" href="#sample-tag-a-classic-riot-tag" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>// vim: ft=html
+&lt;sample&gt;
+
+    &lt;h1&gt;Riot Native Tag&lt;/h1&gt;
+
+    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {this.count()}&lt;/h5&gt;
+
+    &lt;script&gt;
+        this.counter = 0
+
+        // riot&#39;s synctactic sugar:
+        count() { this.counter += 1; return this.counter }
+
+        // to test stuff on console:
+        window.native_tag = this
+
+        this.on(&#39;update&#39;, function() {
+            this.lv = [{name: &#39;n1&#39;}, {&#39;name&#39;: &#39;n2&#39;}]
+            this.update()
+        })
+    &lt;/script&gt;
+    &lt;style scoped&gt;
+    h1 {color: red}
+    &lt;/style&gt;
+
+&lt;/sample&gt;
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="sample-js-compiled-by-riot">
+<div class="code-block-caption"><span class="caption-text">sample.js, compiled by Riot</span><a class="headerlink" href="#sample-js-compiled-by-riot" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>// vim: ft=html
+riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {this.count()}&lt;/h5&gt;&#39;, 
+&#39;sample h1,[riot-tag=&quot;sample&quot;] h1,[data-is=&quot;sample&quot;] h1{color: red}&#39;, &#39;&#39;, function(opts) {
+        this.counter = 0
+
+        this.count = function() { this.counter += 1; return this.counter }.bind(this)
+
+        window.native_tag = this
+
+        this.on(&#39;update&#39;, function() {
+            this.lv = [{name: &#39;n1&#39;}, {&#39;name&#39;: &#39;n2&#39;}]
+            this.update()
+        })
+});
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="riot-tag-py-baseclass-of-all-transcrypt-riot-tags">
+<div class="code-block-caption"><span class="caption-text">riot_tag.py, baseclass of all Transcrypt Riot tags</span><a class="headerlink" href="#riot-tag-py-baseclass-of-all-transcrypt-riot-tags" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Parent Class for a Transcrypt Riot Tag</span>
+<span class="c">#</span>
+<span class="c"># This binds the namespace of a riot tag at before-mount event 100% to that of</span>
+<span class="c"># the a transcrypt instance, except members which begin with an underscore, those</span>
+<span class="c"># are private to the transcrypt object.</span>
+<span class="c">#</span>
+<span class="c"># The 4 riot lifecycle events are bound to overwritable python functions.</span>
+<span class="c">#</span>
+<span class="c"># Immutables (strings, ints, ...) are bound to property functions within the tag,</span>
+<span class="c"># so the templates work, based on state in the transcrypt tag.</span>
+<span class="c"># State can be changed in the riot tag as well but take care to not create new</span>
+<span class="c"># references - you won&#39;t find them in the Transcrypt tag.</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># Best Practices:</span>
+<span class="c">#  - mutate state only in the transcrypt tag.</span>
+<span class="c">#  - declare all variables so they are bound into the riot tag</span>
+<span class="c">#  - IF you declare new variables to be used in templates, run</span>
+<span class="c">#    self.bind_vars(self.riot_tag)</span>
+<span class="c"># TODO: docstring format not accepted by the transpiler, strange.</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Gunther Klessinger, gk@axiros.com, Germany&quot;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s">&quot;$Date: 2016-07-11 02:17:51 +0100 $&quot;</span>
+
+<span class="k">class</span> <span class="nc">RiotTag</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    taking care for extending the riot tag obj with</span>
+<span class="sd">    functions and immutable(!) properties of derivations of us</span>
+<span class="sd">    See counter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c"># placeholders:</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s">&#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">node_name</span> <span class="o">=</span> <span class="s">&#39;&lt;no node&gt;&#39;</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+        <span class="c"># opts into the python instance, why not:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span> <span class="o">=</span> <span class="n">opts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="c"># keeping mutual refs</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">py_obj</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">riot_tag</span> <span class="o">=</span> <span class="n">tag</span>
+        <span class="c"># making the event system call self&#39;s methods:</span>
+        <span class="n">__pragma__</span><span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">        var evs = [&#39;before-mount&#39;, &#39;update&#39;, &#39;mount&#39;, &#39;unmount&#39;]</span>
+<span class="s">        evs.forEach(function(k, i, evs) {</span>
+<span class="s">            var k1 = k.replace(&#39;-&#39;, &#39;_&#39;)</span>
+<span class="s">            tag.on(k, function () {self[k1](this)})</span>
+<span class="s">        })&#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">msg</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_lifecycle_ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="n">mode</span> <span class="o">+</span> <span class="s">&#39;ing&#39;</span><span class="p">)</span>
+    <span class="c"># overwrite these for your specific one:</span>
+    <span class="k">def</span> <span class="nf">update</span>      <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;update&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mount</span>       <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;mount&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">unmount</span>     <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;unmount&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">before_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;before-mount&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind_vars</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">bind_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">nodeName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;binding vars&#39;</span><span class="p">)</span>
+        <span class="c"># binding self&#39;s functions into the tag instance</span>
+        <span class="c"># binding writable properties to everything else (e.g. ints, strs...)</span>
+        <span class="n">__pragma__</span><span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">        tag._immutables = []</span>
+<span class="s">        var nobind = [ &#39;update&#39;, &#39;mount&#39;, &#39;before_mount&#39;, &#39;unmount&#39;]</span>
+<span class="s">        for (var k in self) if (k.indexOf(&#39;_&#39;) != 0 &amp;&amp; nobind.indexOf(k) ==-1){</span>
+<span class="s">            var v = self[k]</span>
+<span class="s">            typeof v === &#39;function&#39; ? tag[k] = self[k] :</span>
+<span class="s">                                      tag._immutables.push(k)</span>
+<span class="s">            }</span>
+<span class="s">        var i = tag._immutables, py = self</span>
+<span class="s">        i.forEach(function(k, j, i) {</span>
+<span class="s">            Object.defineProperty(tag, k, {</span>
+<span class="s">                get: function()  { return self[k]},</span>
+<span class="s">                set: function(v) { self[k] = v }</span>
+<span class="s">            })</span>
+<span class="s">        })</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="riot-tag-mod-js-compiled-by-transcrypt">
+<div class="code-block-caption"><span class="caption-text">riot_tag.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#riot-tag-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    __nest__ (
+        __all__,
+        &#39;riot_tag&#39;, {
+            __all__: {
+                __inited__: false,
+                __init__: function (__all__) {
+                    var __author__ = &#39;Gunther Klessinger, gk@axiros.com, Germany&#39;;
+                    var __date__ = &#39;$Date: 2016-07-11 02:17:51 +0100 $&#39;;
+                    var RiotTag = __class__ (&#39;RiotTag&#39;, [object], {
+                        get __init__ () {return __get__ (this, function (self, tag, opts) {
+                            self.opts = opts;
+                            self._setup_tag (tag);
+                        });},
+                        get _setup_tag () {return __get__ (this, function (self, tag) {
+                            tag.py_obj = self;
+                            self.riot_tag = tag;
+                            
+                                    var evs = [&#39;before-mount&#39;, &#39;update&#39;, &#39;mount&#39;, &#39;unmount&#39;]
+                                    evs.forEach(function(k, i, evs) {
+                                        var k1 = k.replace(&#39;-&#39;, &#39;_&#39;)
+                                        tag.on(k, function () {self[k1](this)})
+                                    })
+                        });},
+                        get pp () {return __get__ (this, function (self) {
+                            var msg = tuple ([].slice.apply (arguments).slice (1));
+                            print (self.node_name, msg);
+                        });},
+                        get _lifecycle_ev () {return __get__ (this, function (self, mode) {
+                            if (self.debug) {
+                                self.pp (mode + &#39;ing&#39;);
+                            }
+                        });},
+                        get update () {return __get__ (this, function (self, tag) {
+                            self._lifecycle_ev (&#39;update&#39;);
+                        });},
+                        get mount () {return __get__ (this, function (self, tag) {
+                            self._lifecycle_ev (&#39;mount&#39;);
+                        });},
+                        get unmount () {return __get__ (this, function (self, tag) {
+                            self._lifecycle_ev (&#39;unmount&#39;);
+                        });},
+                        get before_mount () {return __get__ (this, function (self, tag) {
+                            self._lifecycle_ev (&#39;before-mount&#39;);
+                            return self.bind_vars (tag);
+                        });},
+                        get bind_vars () {return __get__ (this, function (self, tag) {
+                            self.node_name = tag.root.nodeName;
+                            self.debug &amp;&amp; self.pp (&#39;binding vars&#39;);
+                            
+                                    tag._immutables = []
+                                    var nobind = [ &#39;update&#39;, &#39;mount&#39;, &#39;before_mount&#39;, &#39;unmount&#39;]
+                                    for (var k in self) if (k.indexOf(&#39;_&#39;) != 0 &amp;&amp; nobind.indexOf(k) ==-1){
+                                        var v = self[k]
+                                        typeof v === &#39;function&#39; ? tag[k] = self[k] :
+                                                                  tag._immutables.push(k)
+                                        }
+                                    var i = tag._immutables, py = self
+                                    i.forEach(function(k, j, i) {
+                                        Object.defineProperty(tag, k, {
+                                            get: function()  { return self[k]},
+                                            set: function(v) { self[k] = v }
+                                        })
+                                    })
+                                    
+                        });}
+                    });
+                    RiotTag.debug = null;
+                    RiotTag.template = &#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;;
+                    RiotTag.style = &#39;&#39;;
+                    RiotTag.node_name = &#39;&lt;no node&gt;&#39;;
+                    RiotTag.opts = null;
+                    __pragma__ (&#39;&lt;all&gt;&#39;)
+                        __all__.RiotTag = RiotTag;
+                        __all__.__author__ = __author__;
+                        __all__.__date__ = __date__;
+                    __pragma__ (&#39;&lt;/all&gt;&#39;)
+                }
+            }
+        }
+    );
+</pre></div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="sample2-tag-py-a-derived-transcrypt-riot-tag-class">
+<div class="code-block-caption"><span class="caption-text">sample2_tag.py, a derived Transcrypt Riot tag class</span><a class="headerlink" href="#sample2-tag-py-a-derived-transcrypt-riot-tag-class" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># an example user tag, using RiotTag</span>
+
+<span class="kn">from</span> <span class="nn">riot_tag</span> <span class="kn">import</span> <span class="n">RiotTag</span>
+
+<span class="k">class</span> <span class="nc">P</span><span class="p">(</span><span class="n">RiotTag</span><span class="p">):</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c"># never do mutables on class level. this is just to check if transpiler</span>
+    <span class="c"># creates the same behaviour - and it does, a second tag instance gets</span>
+    <span class="c"># the same lv object:</span>
+    <span class="n">lv</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n0&#39;</span><span class="p">}]</span>
+    <span class="c"># immuatble on class level. does a second instance start at 1?</span>
+    <span class="c"># answer: yes, perfect:</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39; &lt;div&gt;&lt;h1&gt;Riot Transcrypt Tag Instance {label}&lt;/h1&gt;</span>
+<span class="s">                         &lt;div&gt;INNER&lt;/div&gt;&lt;/div&gt; &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">count_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;counter:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="s">&#39;len lv:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lv</span><span class="p">),</span> <span class="s">&#39;adding one lv&#39;</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lv</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span>
+
+<span class="c"># try some inheritence...</span>
+<span class="k">class</span> <span class="nc">Sample2</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+    <span class="c"># ... and change the state at every update, just for fun:</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;INNER&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">    &lt;div&gt;</span>
+<span class="s">    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;</span>
+<span class="s">    &lt;/div&gt;</span>
+<span class="s">    &#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c"># no scoped styles currently</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;sample2 h5 {color: green}&#39;&#39;&#39;</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># this rocks so much.</span>
+        <span class="c"># super does not seem to work yet (?)</span>
+        <span class="c"># JdeH: No, ideed, but you can call parent class ctor like: &lt;ParentClassName&gt;.__init__ (self, &lt;otherParams&gt;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="c"># uncomment next line and chrome will stop:</span>
+        <span class="c"># debugger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;tag init, adding 2 lv&#39;</span><span class="p">)</span>
+        <span class="c"># mutating the lv object:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lv</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n2&#39;</span><span class="p">}])</span>
+
+
+</pre></div>
+</div>
+</div>
+</td>
+<td><div class="literal-block-wrapper first last container" id="sample2-tag-mod-js-compiled-by-transcrypt">
+<div class="code-block-caption"><span class="caption-text">sample2_tag.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#sample2-tag-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;e5&#39;];
+        var RiotTag = __init__ (__world__.riot_tag).RiotTag;
+        var P = __class__ (&#39;P&#39;, [RiotTag], {
+            get count_up () {return __get__ (this, function (self) {
+                self.counter = self.counter + 1;
+                self.pp (&#39;counter:&#39;, self.counter, &#39;len lv:&#39;, len (self.lv), &#39;adding one lv&#39;);
+                self.lv.append (dict ({&#39;name&#39;: &#39;n&#39; + self.counter}));
+                return self.counter;
+            });}
+        });
+        P.debug = 1;
+        P.lv = list ([dict ({&#39;name&#39;: &#39;n0&#39;})]);
+        P.counter = 1;
+        P.template = &#39; &lt;div&gt;&lt;h1&gt;Riot Transcrypt Tag Instance {label}&lt;/h1&gt;\n                         &lt;div&gt;INNER&lt;/div&gt;&lt;/div&gt; &#39;;
+        var Sample2 = __class__ (&#39;Sample2&#39;, [P], {
+            get __init__ () {return __get__ (this, function (self, tag, opts) {
+                self.label = opts.label.capitalize ();
+                self._setup_tag (tag);
+                self.pp (&#39;tag init, adding 2 lv&#39;);
+                self.lv.extend (list ([dict ({&#39;name&#39;: &#39;n1&#39;}), dict ({&#39;name&#39;: &#39;n2&#39;})]));
+            });}
+        });
+        Sample2.template = P.template.py_replace (&#39;INNER&#39;, &#39;\n    &lt;div&gt;\n    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;\n    &lt;/div&gt;\n    &#39;);
+        Sample2.style = &#39;sample2 h5 {color: green}&#39;;
+        __pragma__ (&#39;&lt;use&gt;&#39; +
+            &#39;riot_tag&#39; +
+        &#39;&lt;/use&gt;&#39;)
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.P = P;
+            __all__.Sample2 = Sample2;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">
-<h2>6.8. Example: Using input and print in a DOM __terminal__ element in your browser<a class="headerlink" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser" title="Permalink to this headline">¶</a></h2>
-<p>Without special measures, Transcrypt&#8217;s <em>print</em> function prints to the debugging console. However if there&#8217;s an element with id <em>__terminal__</em> in your DOM tree, the <em>print</em> function prints to this element. Moreover, the <em>input</em> function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.</p>
+<h2>6.9. Example: Using input and print in a DOM __terminal__ element in your browser<a class="headerlink" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser" title="Permalink to this headline">¶</a></h2>
+<p>Without special measures, Transcrypt's <em>print</em> function prints to the debugging console. However if there's an element with id <em>__terminal__</em> in your DOM tree, the <em>print</em> function prints to this element. Moreover, the <em>input</em> function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.</p>
 <p>This means that you can write applications with blocking I/O, rather than event driven behaviour, e.g. for simple activities or, since they are intuitively easy to comprehend, for educational purposes.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1281,7 +2271,8 @@ __javascript__/ios_app.js
 <li><a class="reference internal" href="#example-ios-web-app-with-native-look-and-feel">6.5. Example: iOS web app with native look and feel</a></li>
 <li><a class="reference internal" href="#example-d3-js">6.6. Example: D3.js</a></li>
 <li><a class="reference internal" href="#example-react">6.7. Example: React</a></li>
-<li><a class="reference internal" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">6.8. Example: Using input and print in a DOM __terminal__ element in your browser</a></li>
+<li><a class="reference internal" href="#example-riot">6.8. Example: Riot</a></li>
+<li><a class="reference internal" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">6.9. Example: Using input and print in a DOM __terminal__ element in your browser</a></li>
 </ul>
 </li>
 </ul>

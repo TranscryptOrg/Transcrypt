@@ -1,0 +1,44 @@
+<html>
+	<body> 
+		<font face="arial" >
+		
+		<style>
+			#A, #Z, #K, #M, #space, #enter {
+				-webkit-user-select:none;
+				-khtml-user-drag:none;
+				-khtml-user-select:none;
+				-moz-user-select:none;
+				-moz-user-select:-moz-none;
+				-ms-user-select:none;
+				user-select:none
+			}
+		</style>
+		
+		<div id='text_frame' style="position:absolute">
+			<font color="444444" size="3">
+			<h3><i>Click in this frame</i> to redirect keyboard input to it, then <i>hit the spacebar</i></h3><br>
+
+			<font color="000000" size="3">
+			View the <a href = "http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/integration_javascript.html#integration-example-pong">source code</a> in Python and in JavaScript. This example has sourcemap support for Google Chrome. Press F12, click the source tab and then click somewhere in pong.js to try. N.B. The source of fabric.js has not been included.
+		</div>
+
+		<div id="canvas_frame" style="position:absolute">
+			<canvas id="canvas"></canvas>
+		</div>
+		 
+		<div id="buttons_frame" style="position:absolute; font-size:30">
+			<div id='A' style="position:absolute; background-color: gray; left:0; top:0; width:100; height:90; text-align:center"><br>A</div>
+			<div id='Z' style="position:absolute; background-color: gray; left:0; top:120; width:100; height:90; text-align:center"><br>Z</div>
+			
+			<div id='K' style="position:absolute; background-color: gray; left:400; top:0; width:100; height:90; text-align:center"><br>K</div>
+			<div id='M' style="position:absolute; background-color: gray; left:400; top:120; width:100; height:90; text-align:center"><br>M</div>
+
+			<div id='space' style="position:absolute; background-color: gray; left:0; top:240; width:270; height:90; text-align:center"><br>Space</div>
+			<div id='enter' style="position:absolute; background-color: gray; left:350; top:240; width:150; height:90; text-align:center"><br>Enter</div>
+			
+			<div style="position:absolute; top:300">&nbsp</div>
+		<div>
+		
+		<script src="__javascript__/pong.min.js"></script>
+	</body>
+</html>

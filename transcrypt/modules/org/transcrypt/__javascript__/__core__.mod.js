@@ -106,7 +106,7 @@
 		return cls;
 	};
 	__all__.__class__ = __class__;
-
+	
 	// Create mother of all classes		
 	var object = __all__.__class__ ('object', [], {
 		__init__: function (self) {},

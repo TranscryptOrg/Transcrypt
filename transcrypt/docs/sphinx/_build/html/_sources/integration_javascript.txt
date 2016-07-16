@@ -159,6 +159,35 @@ Example: React
 |    :caption: react_demo.py                               |    :caption: react_demo.mod.js                                              |
 +----------------------------------------------------------+-----------------------------------------------------------------------------+
 
+Example: Riot
+-------------
+
+*Riot* is a UI framework that combines the use of custom tags and a virtual DOM, much like the one in React. Custom tags look like ordinary HTML tags, but whereas HTML tags only define structure, Riot tags define structure, style and behaviour. Custom tags are compiled to JavaScript by a compiler that comes with Riot. With these custom tags as reusable components, web pages can be built. Riot itself is tiny, and the virtual DOM allows for fast adaptation of page content.
+
++----------------------------------------------------------+
+| .. literalinclude:: ../../demos/riot_demo/riot_demo.html |
+|    :tab-width: 4                                         |
+|    :caption: riot_demo.html                              |
++----------------------------------------------------------+
+
++-----------------------------------------------------------+----------------------------------------------------------+
+| .. literalinclude:: ../../demos/riot_demo/tags/sample.tag | .. literalinclude:: ../../demos/riot_demo/tags/sample.js |
+|    :tab-width: 4                                          |    :tab-width: 4                                         |
+|    :caption: sample.tag, a classic Riot tag               |    :caption: sample.js, compiled by Riot                 |
++-----------------------------------------------------------+----------------------------------------------------------+
+
++-----------------------------------------------------------------+--------------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/riot_demo/riot_tag.py           | .. literalinclude:: ../../demos/riot_demo/__javascript__/riot_tag.mod.js |
+|    :tab-width: 4                                                |    :tab-width: 4                                                         |
+|    :caption: riot_tag.py, baseclass of all Transcrypt Riot tags |    :caption: riot_tag.mod.js, compiled by Transcrypt                     |
++-----------------------------------------------------------------+--------------------------------------------------------------------------+
+
++------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/riot_demo/sample2_tag.py         | .. literalinclude:: ../../demos/riot_demo/__javascript__/sample2_tag.mod.js |
+|    :tab-width: 4                                                 |    :tab-width: 4                                                            |
+|    :caption: sample2_tag.py, a derived Transcrypt Riot tag class |    :caption: sample2_tag.mod.js, compiled by Transcrypt                     |
++------------------------------------------------------------------+-----------------------------------------------------------------------------+
+
 Example: Using input and print in a DOM __terminal__ element in your browser
 ----------------------------------------------------------------------------
 
