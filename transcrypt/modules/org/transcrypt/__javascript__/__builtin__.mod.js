@@ -74,6 +74,15 @@
 
 	// Manipulating attributes by name
 	
+	var dir = function(obj) {
+		var aList = [];
+		for (var k in obj) {
+			aList.push (k);
+		}
+		aList.sort ();
+		return aList;
+	}
+	
 	var setattr = function (obj, name, value) {
 		obj [name] = value;
 	};

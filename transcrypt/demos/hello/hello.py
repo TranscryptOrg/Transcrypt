@@ -1,7 +1,7 @@
 from itertools import chain
 
 class SolarSystem:
-	planets = [chain (planet, (index + 1,)) for index, planet in enumerate ((
+	planets = [list (chain (planet, (index + 1,))) for index, planet in enumerate ((
 		('Mercury', 'hot', 2240),
 		('Venus', 'sulphurous', 6052),
 		('Earth', 'fertile', 6378),

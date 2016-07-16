@@ -70,6 +70,7 @@ for esvSwitch in ('', '-e 6 '):
 		test ('demos/d3js_demo', 'd3js_demo', False, False, switches)
 		test ('demos/ios_app', 'ios_app', False, False, switches)
 		test ('demos/react_demo', 'react_demo', False, False, switches)
+		test ('demos/riot_demo', 'riot_demo', False, False, switches)
 		test ('demos/pong', 'pong', False, False, switches)
 		test ('demos/turtle_demos', 'star', False, False, switches + '-p .user ')
 		test ('demos/turtle_demos', 'snowflake', False, False, switches + '-p .user ')

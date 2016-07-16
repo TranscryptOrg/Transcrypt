@@ -20,7 +20,7 @@ class P(RiotTag):
         self.lv.append({'name': 'n' + self.counter})
         return self.counter
 
-# try some inheritence...
+# try some inheritance...
 class Sample2(P):
     # ... and change the state at every update, just for fun:
     template = P.template.replace('INNER', '''
@@ -35,13 +35,16 @@ class Sample2(P):
 
     def __init__(self, tag, opts):
         self.label = opts.label.capitalize()  # this rocks so much.
-        # super does not seem to work yet (?)
-		# JdeH: No, ideed, but you can call parent class ctor like: <ParentClassName>.__init__ (self, <otherParams>)
-        self._setup_tag(tag)
+        # alternative to super:
+        RiotTag.__init__(self, tag, opts)
         # uncomment next line and chrome will stop:
         # debugger
-        self.pp('tag init, adding 2 lv')
+        self.pp('tag init', 'adding 2 lv')
         # mutating the lv object:
         self.lv.extend([{'name': 'n1'}, {'name': 'n2'}])
 
+
+    def update(self):
+        self.pp('update handler in the custom tag, calling super')
+        RiotTag.update(self)
 

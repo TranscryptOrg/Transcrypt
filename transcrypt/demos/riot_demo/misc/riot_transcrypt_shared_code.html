@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello PyRiot ;-)</title>
+    <!-- for transcrypted version we do not need the in-browser compiler.
+         for the classic version you can use riot+compiler -->
+    <script src="https://cdn.jsdelivr.net/riot/2.5/riot.js"></script>
+	<style>
+        body {font-family:arial;font-size:30px;padding:50px;}
+		h1 {font-size:50px;color:#0000ff;}
+	</style>
+  </head>
+
+  <body>
+
+        <!-- the transpiled tag's js -->
+        <script src="__javascript__/sample2_tag.js"></script>
+  <!-- classic riot (compiled on server, could be done in browser)         -->
+        <sample id="s1" label="nr0"></sample>
+        <script>
+            // a registry which tell us which transcrypt objs to mix into which
+            // riot tags:
+            document.transcrypt_tag_mixins = {}
+
+            // patching riot's tag2, to...
+            var orig_riot_tag2 = riot.tag2;
+            var new_riot_tag2 = function(name, t, s, x, tag_fn) {
+                var orig = tag_fn;
+                var t_mixin = document.transcrypt_tag_mixins[name];
+                if (t_mixin) orig._py_mixin = t_mixin
+                var new_fn = function(opts) {
+                    // .... instantiate the registered transcrypt obj, which in
+                    /// turn mixes its functions in:
+                    if (orig._py_mixin) new orig._py_mixin(this, opts)
+                    return orig.apply(this, opts)
+                }
+                tag_fn = new_fn
+                return orig_riot_tag2.apply(this, arguments) }
+
+            riot.tag2 = new_riot_tag2
+
+            // declaring that riot 'sample' tag should see Sample2 logic and
+            // state:
+            document.transcrypt_tag_mixins.sample = sample2_tag.Sample2
+
+        </script>
+        <script src="tags/sample.js"></script>
+        <script>riot.mount('sample')</script>
+  </body>
+</html>
