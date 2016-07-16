@@ -1,0 +1,428 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = os
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = webbrowser
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = shipDir
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Call 
+						func: Attribute 
+							value: Attribute 
+								value: Name 
+									id: str = os
+									ctx: Load 
+								attr: str = path
+								ctx: Load 
+							attr: str = dirname
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = os
+											ctx: Load 
+										attr: str = path
+										ctx: Load 
+									attr: str = abspath
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = __file__
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+					attr: str = replace
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = \
+					element: Str 
+						s: str = /
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = rootDir
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Str 
+						s: str = /
+					attr: str = join
+					ctx: Load 
+				args: list 
+					element: Subscript 
+						value: Call 
+							func: Attribute 
+								value: Name 
+									id: str = shipDir
+									ctx: Load 
+								attr: str = split
+								ctx: Load 
+							args: list 
+								element: Str 
+									s: str = /
+							keywords: list 
+						slice: Slice 
+							lower: NoneType = None
+							upper: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 2
+							step: NoneType = None
+						ctx: Load 
+				keywords: list 
+		element: FunctionDef 
+			name: str = getAbsPath
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = relPath
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Str 
+								s: str = {}/{}
+							attr: str = format
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = rootDir
+								ctx: Load 
+							element: Name 
+								id: str = relPath
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = test
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = relPath
+						annotation: NoneType = None
+					element: arg 
+						arg: str = fileNamePrefix
+						annotation: NoneType = None
+					element: arg 
+						arg: str = run
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: bool = False
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = os
+								ctx: Load 
+							attr: str = chdir
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = getAbsPath
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = relPath
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = os
+								ctx: Load 
+							attr: str = system
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Str 
+										s: str = run_transcrypt -b {}{}.py
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = fcallSwitch
+										ctx: Load 
+									element: Name 
+										id: str = fileNamePrefix
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: If 
+					test: Name 
+						id: str = run
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = os
+										ctx: Load 
+									attr: str = chdir
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = getAbsPath
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = relPath
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = os
+										ctx: Load 
+									attr: str = system
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = run_transcrypt -r {}.py
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = fileNamePrefix
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+					orelse: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = webbrowser
+								ctx: Load 
+							attr: str = open
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Str 
+										s: str = file://{}/{}.html
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = getAbsPath
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = relPath
+												ctx: Load 
+										keywords: list 
+									element: Name 
+										id: str = fileNamePrefix
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+							element: keyword 
+								arg: str = new
+								value: Num 
+									n: int = 2
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = webbrowser
+								ctx: Load 
+							attr: str = open
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Str 
+										s: str = file://{}/{}.min.html
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = getAbsPath
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = relPath
+												ctx: Load 
+										keywords: list 
+									element: Name 
+										id: str = fileNamePrefix
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+							element: keyword 
+								arg: str = new
+								value: Num 
+									n: int = 2
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = autoTest
+			args: arguments 
+				args: list 
+				vararg: arg 
+					arg: str = args
+					annotation: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = test
+							ctx: Load 
+						args: list 
+							element: Starred 
+								value: Name 
+									id: str = args
+									ctx: Load 
+								ctx: Load 
+							element: NameConstant 
+								value: bool = True
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: For 
+			target: Name 
+				id: str = fcallSwitch
+				ctx: Store 
+			iter: Tuple 
+				elts: list 
+					element: Str 
+						s: str = 
+					element: Str 
+						s: str = -f 
+				ctx: Load 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = autoTest
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = development/automated_tests/hello
+							element: Str 
+								s: str = autotest
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = autoTest
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = development/automated_tests/transcrypt
+							element: Str 
+								s: str = autotest
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = test
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = demos/hello
+							element: Str 
+								s: str = hello
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = test
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = demos/jquery_demo
+							element: Str 
+								s: str = jquery_demo
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = test
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = demos/d3js_demo
+							element: Str 
+								s: str = d3js_demo
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = test
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = demos/pong
+							element: Str 
+								s: str = pong
+						keywords: list 
+				element: If 
+					test: Name 
+						id: str = fcallSwitch
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Shipment test completed
+								keywords: list 
+					orelse: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = input
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Close browser tabs opened by shipment test and press [enter] for fcall test
+								keywords: list 
+			orelse: list 

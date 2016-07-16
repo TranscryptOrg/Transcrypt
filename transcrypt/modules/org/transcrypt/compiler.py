@@ -829,7 +829,7 @@ class Generator (ast.NodeVisitor):
 				if type (target.slice) == ast.Index:		# Always overloaded
 					if type (target.slice.value) == ast.Tuple:
 						self.visit (target.value)
-						self.emit ('.__setitem__ (')			# Free function tries .__setitem__ (overload) and [] (native)
+						self.emit ('.__setitem__ (')		# Free function tries .__setitem__ (overload) and [] (native)
 						self.stripTuple = True
 						self.visit (target.slice.value)
 						self.emit (', ')
@@ -1482,7 +1482,7 @@ class Generator (ast.NodeVisitor):
 			
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
-											# The rest of its use is only at compile time at compile time			
+											# The rest of its use is only at compile time			
 			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getscope () .node) == ast.Module:
 					self.all.add (node.name)

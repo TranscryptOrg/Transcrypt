@@ -1,0 +1,77 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = org.transcrypt.autotester
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = testlet0
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = testlet1
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = autoTester
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Attribute 
+						value: Attribute 
+							value: Name 
+								id: str = org
+								ctx: Load 
+							attr: str = transcrypt
+							ctx: Load 
+						attr: str = autotester
+						ctx: Load 
+					attr: str = AutoTester
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = testlet0
+						ctx: Load 
+					element: Str 
+						s: str = testlet0
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = testlet1
+						ctx: Load 
+					element: Str 
+						s: str = testlet1
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = autoTester
+						ctx: Load 
+					attr: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 
