@@ -1,6 +1,7 @@
 from org.transcrypt.stubs.browser import __pragma__
 import org.transcrypt.autotester
 
+import built_ins
 import arguments
 import attribs_by_name
 import classes
@@ -41,6 +42,7 @@ import tuple_assignment
 
 autoTester = org.transcrypt.autotester.AutoTester ()
 
+autoTester.run (built_ins, 'builtins')
 autoTester.run (arguments, 'arguments')
 autoTester.run (attribs_by_name, 'attribs_by_name')
 autoTester.run (classes, 'classes')

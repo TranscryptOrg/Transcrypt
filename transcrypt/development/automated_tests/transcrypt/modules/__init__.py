@@ -1,3 +1,7 @@
+"""
+This docstring is to test if module docstrings are stripped.
+"""
+
 import modules.mod1.mod11.mod111
 import modules.mod3
 import modules.mod1.mod11.mod112
@@ -17,12 +21,15 @@ from modules.mod2 import mod21 as aMod21, mod22 as aMod22
 from modules.mod3 import *
 
 from modules.mod1.mod11.mod111 import A
-
+"""
+another module level docstring
+"""
 a = modules.mod1.mod11.mod111.A (12345)
 pi = modules.mod1.pi
 f = modules.mod2.f
 
 def run (autoTester):
+	''' function level docstring. must be stripped as well. '''
 	# Import without 'as'
 	autoTester.check ('modules')
 	autoTester.check (a.f ())
