@@ -104,8 +104,12 @@ class RiotTag:
                   typeof v === "function" || typeof v === "object" ?
                   tag[k] = self[k] : tag._immutables.push(k)''')
 
-        for k in tag._immutables:
-            __pragma__('js', '{}', '''Object.defineProperty(tag, k, {
-                    get: function()  { return self[k]},
-                    set: function(v) { self[k] = v }})''')
+        __pragma__('js', '{}', '''
+        var i = tag._immutables, py = self
+        i.forEach(function(k, j, i) {
+            Object.defineProperty(tag, k, {
+                get: function()  { return self[k]},
+                set: function(v) { self[k] = v }
+            })
+        })''')
 
