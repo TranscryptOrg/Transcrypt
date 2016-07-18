@@ -52,6 +52,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Readme adapted
+- Workaround for console.log.apply removed
 - Several small fixes
 - Itertools now functionally complete, except for zip_longest. First breed of autotests added for it. Some func's still relies on seq's rather than iter's.
 - Added: __pragma__ ('ifndef'), __pragma__ ('else')
@@ -75,7 +77,7 @@ Known restrictions
 Known bugs
 ==========
 
-- //= operator not yet implemented.
+None
 
 Readability
 ===========

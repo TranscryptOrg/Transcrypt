@@ -67,12 +67,12 @@
 	}
 	__all__.__merge__ = __merge__;
 	
-	
+	/* Not needed anymore?
 	// Make console.log understand apply
 	console.log.apply = function () {
 		print ([] .slice.apply (arguments) .slice (1));
 	};
-	
+	*/
 
 	// Manipulating attributes by name
 	
