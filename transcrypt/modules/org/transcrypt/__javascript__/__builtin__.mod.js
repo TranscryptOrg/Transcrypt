@@ -316,6 +316,14 @@
 	// Absolute value
 	var abs = Math.abs;
 	__all__.abs = abs;
+
+	var round = function(number, ndigits) {
+		if (!ndigits) ndigits = 0
+		var p = Math.pow(10, ndigits)
+		// In Py3 round(1/2.) changed to 0, make js do the same:
+		return Math.round( p * number - 0.1) / p
+	}
+	__all__.round = round;
 				
 	// Iterator protocol functions
 	
