@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.196 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.201 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.196',
+        VERSION:     '3.5.201',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.196 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.201 documentation" href="index.html" />
     <link rel="next" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.196 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -518,6 +518,14 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aString</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noopov&#39;</span><span class="p">)</span>
     
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;Issue 76&#39;</span><span class="p">)</span>
+    <span class="n">initially17</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">initially17</span><span class="p">)</span>
+    <span class="n">initially17</span> <span class="o">//=</span> <span class="mi">2</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">initially17</span><span class="p">)</span>
+    <span class="n">initially17</span> <span class="o">//=</span> <span class="mi">2</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">initially17</span><span class="p">)</span>
+    
 </pre></div>
 </div>
 </div>
@@ -717,6 +725,26 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">)</span>
     
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;Assert error 1&#39;</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;Assert error 2&#39;</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">4</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+        
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">888</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -726,7 +754,20 @@ Since they systematically cover all language constructs, they are also very effe
 <h2>4.11. General functions: sort and sorted<a class="headerlink" href="#general-functions-sort-and-sorted" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-general-functions">
 <div class="code-block-caption"><span class="caption-text">Testlet: general_functions</span><a class="headerlink" href="#testlet-general-functions" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">foo</span><span class="o">=</span><span class="s">&#39;bar&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">foo2</span> <span class="o">=</span> <span class="s">&#39;bar2&#39;</span>
+
+<span class="k">class</span> <span class="nc">B</span> <span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">foo3</span><span class="o">=</span><span class="s">&#39;bar3&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">foo4</span> <span class="o">=</span> <span class="s">&#39;bar4&#39;</span>
+        
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;sort and sorted&lt;br&gt;&#39;</span><span class="p">)</span>
     <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sun&#39;</span><span class="p">,</span> <span class="s">&#39;earth&#39;</span><span class="p">,</span> <span class="s">&#39;moon&#39;</span><span class="p">]</span>
     
@@ -753,6 +794,48 @@ Since they systematically cover all language constructs, they are also very effe
 
     <span class="n">b</span><span class="o">.</span><span class="n">sort</span> <span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span> <span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> 
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;&lt;br&gt;dir&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">dir</span> <span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">&#39;__&#39;</span><span class="p">)])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">dir</span> <span class="p">(</span><span class="n">A</span><span class="p">())</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">&#39;__&#39;</span><span class="p">)])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">dir</span> <span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">&#39;__&#39;</span><span class="p">)])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">dir</span> <span class="p">(</span><span class="n">B</span><span class="p">())</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">&#39;__&#39;</span><span class="p">)])</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;&lt;br&gt;any, all, sum&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ape&#39;</span><span class="p">,</span> <span class="s">&#39;node&#39;</span><span class="p">,</span> <span class="s">&#39;mice&#39;</span><span class="p">]</span>
+    <span class="n">list2</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;vim&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;jet&#39;</span><span class="p">]</span>
+    <span class="n">list3</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">]</span>
+    <span class="n">list4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[]]</span>   <span class="c"># Truthyness into play</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="nb">any</span> <span class="p">(</span><span class="n">list1</span><span class="p">),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">list1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">list2</span><span class="p">,</span> <span class="nb">any</span> <span class="p">(</span><span class="n">list2</span><span class="p">),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">list2</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">list3</span><span class="p">,</span> <span class="nb">any</span> <span class="p">(</span><span class="n">list3</span><span class="p">),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">list3</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">list4</span><span class="p">,</span> <span class="nb">any</span> <span class="p">(</span><span class="n">list4</span><span class="p">),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">list4</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sum</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;ifdef&#39;</span><span class="p">,</span> <span class="s">&#39;e6&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;e6&#39;</span> <span class="ow">in</span> <span class="n">autoTester</span><span class="o">.</span><span class="n">symbols</span><span class="p">:</span>  
+        <span class="k">def</span> <span class="nf">generator1</span> <span class="p">():</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">i</span><span class="p">;</span>
+                
+        <span class="k">def</span> <span class="nf">generator2</span> <span class="p">():</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">i</span><span class="p">;</span>
+                    
+        <span class="k">def</span> <span class="nf">generator3</span> <span class="p">():</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="mi">0</span><span class="p">;</span>
+                
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">generator1</span> <span class="p">(),</span> <span class="nb">any</span> <span class="p">(</span><span class="n">generator1</span> <span class="p">()),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">generator1</span> <span class="p">()))</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">generator2</span> <span class="p">(),</span> <span class="nb">any</span> <span class="p">(</span><span class="n">generator2</span> <span class="p">()),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">generator2</span> <span class="p">()))</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">generator3</span> <span class="p">(),</span> <span class="nb">any</span> <span class="p">(</span><span class="n">generator3</span> <span class="p">()),</span> <span class="nb">all</span> <span class="p">(</span><span class="n">generator3</span> <span class="p">()))</span>
+        
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">sum</span> <span class="p">(</span><span class="n">generator1</span> <span class="p">()))</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;endif&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1585,7 +1668,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.196 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

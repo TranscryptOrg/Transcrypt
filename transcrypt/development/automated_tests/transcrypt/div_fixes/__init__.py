@@ -66,3 +66,11 @@ def run (autoTester):
 	autoTester.check (aString * 3)
 	__pragma__ ('noopov')
 	
+	autoTester.check ('Issue 76')
+	initially17 = 17
+	autoTester.check (initially17)
+	initially17 //= 2
+	autoTester.check (initially17)
+	initially17 //= 2
+	autoTester.check (initially17)
+	

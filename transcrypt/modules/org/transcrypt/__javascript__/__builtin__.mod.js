@@ -14,6 +14,9 @@
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	
 	var Exception = __all__.Exception;
+	var StopIteration = __all__.StopIteration;
+	var ValueError = __all__.ValueError;
+	var AssertionError = __all__.AssertionError;
 	
 	var __sort__ = __all__.__sort__;
 	var sorted = __all__.sorted;
@@ -55,6 +58,20 @@
 	}
 	__all__.property = property;
 	
+	// Assert function, call to it only generated when compiling with --dassert option
+	function assert (condition, message) {
+		if (!condition) {
+			if (message != undefined) {
+				throw AssertionError (message);
+			}
+			else {
+				throw AssertionError ();
+			}
+		}
+	}
+	
+	__all__.assert = assert;
+	
 	var __merge__ = function (object0, object1) {
 		var result = {};
 		for (var attrib in object0) {
@@ -67,17 +84,19 @@
 	}
 	__all__.__merge__ = __merge__;
 	
+	/* Not needed anymore?
 	// Make console.log understand apply
 	console.log.apply = function () {
 		print ([] .slice.apply (arguments) .slice (1));
 	};
+	*/
 
 	// Manipulating attributes by name
 	
-	var dir = function(obj) {
+	var dir = function (obj) {
 		var aList = [];
-		for (var k in obj) {
-			aList.push (k);
+		for (var aKey in obj) {
+			aList.push (aKey);
 		}
 		aList.sort ();
 		return aList;
@@ -300,13 +319,6 @@
 				
 	// Iterator protocol functions
 	
-	function py_StopIteration () {
-		name = 'StopIteration';
-		message = 'Iterator exhausted';
-	};
-	
-	__all__.py_StopIteration = py_StopIteration;
-	
 	function wrap_py_next () {		// Add as 'next' method to make Python iterator JavaScript compatible
 		var result = this.__next__ ();
 		return {value: result, done: result == undefined};		
@@ -315,7 +327,7 @@
 	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
 		var result = this.next ();
 		if (result.done) {
-			throw new py_StopIteration ();
+			throw StopIteration ();
 		}
 		else {
 			return result.value;
@@ -352,14 +364,14 @@
 		catch (exception) {						// JavaScript iterators are the exception here
 			var result = iterator.next ();
 			if (result.done) {
-				throw new py_StopIteration ();
+				throw StopIteration ();
 			}
 			else {
 				return result.value;
 			}
 		}	
 		if (result == undefined) {
-			throw new py_StopIteration ();
+			throw StopIteration ();
 		}
 		return result;
 	}
@@ -447,6 +459,62 @@
 		return result;
 	};
 	__all__.range = range;
+	
+	// Any, all and sum
+	
+__pragma__ ('ifdef', 'e6')
+	function any (iterable) {
+		for (let item of iterable) {
+			if (bool (item)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	function all (iterable) {
+		for (let item of iterable) {
+			if (! bool (item)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	function sum (iterable) {
+		let result = 0;
+		for (let item of iterable) {
+			result += item;
+		}
+		return result;
+	}
+__pragma__ ('else')
+	function any (iterable) {
+		for (var index = 0; index < iterable.length; index++) {
+			if (bool (iterable [index])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	function all (iterable) {
+		for (var index = 0; index < iterable.length; index++) {
+			if (! bool (iterable [index])) {
+				return false;
+			}
+		}
+		return true;
+	}
+	function sum (iterable) {
+		var result = 0;
+		for (var index = 0; index < iterable.length; index++) {
+			result += iterable [index];
+		}
+		return result;
+	}
+__pragma__ ('endif')
+
+	__all__.any = any;
+	__all__.all = all;
+	__all__.sum = sum;
 	
 	// Enumerate method, returning a zipped list
 	function enumerate (iterable) {
@@ -855,7 +923,16 @@ __pragma__ ('endif')
 			delete this [attrib];
 		}
 	}
-		
+	
+	function __setdefault__ (aKey, aDefault) {
+		var result = this [aKey];
+		return result != undefined ? 
+			result :
+			aDefault != undefined ?
+				aDefault :
+				null;
+	}
+	
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
 			var instance = {};
@@ -880,6 +957,7 @@ __pragma__ ('endif')
 		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
 		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
+		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
 		
 		return instance;
 	}

@@ -17,7 +17,7 @@ class Exception:
 		if len (self.args):
 			return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)))
 		else:
-			return '???'
+			return '{}()'.format (self.__class__.__name__)
 			
 	def __str__ (self):
 		if len (self.args) > 1:
@@ -25,9 +25,18 @@ class Exception:
 		elif len (self.args):
 			return str (self.args [0])
 		else:
-			return '???'
-			
+			return ''
+		
+class StopIteration ():
+	def __init__ (self):
+		Exception.__init__ (self, 'Iterator exhausted')
+	
+	__all__.StopIteration = StopIteration;
+		
 class ValueError (Exception):
+	pass
+	
+class AssertionError (Exception):
 	pass
 			
 __pragma__ ('kwargs')

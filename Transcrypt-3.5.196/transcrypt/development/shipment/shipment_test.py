@@ -35,7 +35,7 @@ def getAbsPath (relPath):
 def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
 	
-	os.system ('run_transcrypt -b -m -dm -dt {}{}.py'.format (switches, fileNamePrefix))
+	os.system ('run_transcrypt -b -m -dm -dt -da {}{}.py'.format (switches, fileNamePrefix))
 
 	if run:
 		os.chdir (getAbsPath (relPath))
