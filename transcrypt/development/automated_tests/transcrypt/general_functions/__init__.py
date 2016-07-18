@@ -1,3 +1,5 @@
+from org.transcrypt.stubs.browser import __pragma__
+
 class A:
 	foo='bar'
 	def __init__ (self):
@@ -43,3 +45,38 @@ def run (autoTester):
 	autoTester.check ([entry for entry in dir (B) if not entry.startswith ('__')])
 	autoTester.check ([entry for entry in dir (B()) if not entry.startswith ('__')])
 
+	autoTester.check ('<br><br>any, all, sum<br>')
+	list1 = ['ape', 'node', 'mice']
+	list2 = ['vim', '', 'jet']
+	list3 = ['', '', '']
+	list4 = [[1, 2], [1], []]	# Truthyness into play
+	autoTester.check (list1, any (list1), all (list1))
+	autoTester.check (list2, any (list2), all (list2))
+	autoTester.check (list3, any (list3), all (list3))
+	autoTester.check (list4, any (list4), all (list4))
+	
+	autoTester.check (sum (range (5)))
+	
+	__pragma__ ('ifdef', 'e6')
+	if 'e6' in autoTester.symbols:	
+		def generator1 ():
+			for i in range (5):
+				yield i;
+				
+		def generator2 ():
+			for i in range (5):
+				if i % 2:
+					yield 0
+				else:
+					yield i;
+					
+		def generator3 ():
+			for i in range (5):
+				yield 0;
+				
+		autoTester.check (generator1 (), any (generator1 ()), all (generator1 ()))
+		autoTester.check (generator2 (), any (generator2 ()), all (generator2 ()))
+		autoTester.check (generator3 (), any (generator3 ()), all (generator3 ()))
+		
+		autoTester.check (sum (generator1 ()))
+	__pragma__ ('endif')

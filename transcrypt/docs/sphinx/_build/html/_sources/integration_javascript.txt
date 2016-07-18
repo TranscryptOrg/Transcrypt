@@ -182,11 +182,11 @@ Example: Riot
 |    :caption: riot_tag.py, baseclass of all Transcrypt Riot tags |    :caption: riot_tag.mod.js, compiled by Transcrypt                     |
 +-----------------------------------------------------------------+--------------------------------------------------------------------------+
 
-+------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| .. literalinclude:: ../../demos/riot_demo/sample2_tag.py         | .. literalinclude:: ../../demos/riot_demo/__javascript__/sample2_tag.mod.js |
-|    :tab-width: 4                                                 |    :tab-width: 4                                                            |
-|    :caption: sample2_tag.py, a derived Transcrypt Riot tag class |    :caption: sample2_tag.mod.js, compiled by Transcrypt                     |
-+------------------------------------------------------------------+-----------------------------------------------------------------------------+
++----------------------------------------------------------------+---------------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/riot_demo/riot_demo.py         | .. literalinclude:: ../../demos/riot_demo/__javascript__/riot_demo.mod.js |
+|    :tab-width: 4                                               |    :tab-width: 4                                                          |
+|    :caption: riot_demo.py, a derived Transcrypt Riot tag class |    :caption: riot_demo.mod.js, compiled by Transcrypt                     |
++----------------------------------------------------------------+---------------------------------------------------------------------------+
 
 Example: Using input and print in a DOM __terminal__ element in your browser
 ----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.196 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.201 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.196',
+        VERSION:     '3.5.201',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.196 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.201 documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.196 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -807,7 +807,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;e5&#39;];
+        var __symbols__ = [&#39;e6&#39;];
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -982,11 +982,11 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get install () {return __get__ (this, function (self) {
                 self.playerLabels = function () {
                     var __accu0__ = [];
-                    var __iterable0__ = tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]);
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var __left0__ = __iterable0__ [__index0__];
-                        var py_name = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var py_name = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
@@ -1004,22 +1004,22 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
-                    var __iterable0__ = zip (self.scores, tuple ([-(2) / 16, 6 / 16]));
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var __left0__ = __iterable0__ [__index0__];
-                        var score = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (zip (self.scores, tuple ([-(2) / 16, 6 / 16])));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var score = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
             });},
             get draw () {return __get__ (this, function (self) {
-                var __iterable0__ = zip (self.playerLabels, self.scoreLabels);
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var __left0__ = __iterable0__ [__index0__];
-                    var playerLabel = __left0__ [0];
-                    var scoreLabel = __left0__ [1];
+                var __iterator0__ = py_iter (zip (self.playerLabels, self.scoreLabels));
+                while (true) {
+                    try {var __left0__ = py_next (__iterator0__);
+                        var playerLabel = __left0__ [0];
+                        var scoreLabel = __left0__ [1];} catch (exception) {break;}
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -1056,9 +1056,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.buttons = list ([]);
-                var __iterable0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var key = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]));
+                while (true) {
+                    try {var key = py_next (__iterator0__);} catch (exception) {break;}
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
@@ -1089,9 +1089,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.resize ();
             });},
             get install () {return __get__ (this, function (self) {
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.install ();
                 }
             });},
@@ -1128,19 +1128,19 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     }
                 }
                 else {
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.predict ();
                     }
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.interact ();
                     }
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.commit ();
                     }
                 }
@@ -1148,26 +1148,26 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
-                var __iterable0__ = self.paddles;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var paddle = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.paddles);
+                while (true) {
+                    try {var paddle = py_next (__iterator0__);} catch (exception) {break;}
                     paddle.reset ();
                 }
                 self.ball.reset ();
                 self.pause = true;
             });},
             get commit () {return __get__ (this, function (self) {
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.commit ();
                 }
             });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.draw ();
                 }
             });},
@@ -1282,12 +1282,12 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;e5&#39;];
+        var __symbols__ = [&#39;e6&#39;];
         var start = function () {
             var changeColors = function () {
-                var __iterable0__ = $divs;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var div = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter ($divs);
+                while (true) {
+                    try {var div = py_next (__iterator0__);} catch (exception) {break;}
                     $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format.apply (null, function () {
                         var __accu0__ = [];
                         for (var i = 0; i &lt; 3; i++) {
@@ -1604,7 +1604,7 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="d3js-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">d3js_demo.mod.js</span><a class="headerlink" href="#d3js-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;e5&#39;];
+        var __symbols__ = [&#39;e6&#39;];
         var Spawn = __class__ (&#39;Spawn&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, width, height) {
                 var __left0__ = tuple ([width, height, 100, d3.scale.category20 ()]);
@@ -1733,7 +1733,7 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;e5&#39;];
+        var __symbols__ = [&#39;e6&#39;];
         var h = function (elm_type, props) {
             if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
                 var props = &#39;&#39;;
@@ -1813,10 +1813,10 @@ __javascript__/ios_app.js
         &lt;sample2 id=&#39;s2&#39; label=&quot;nr1&quot;&gt;&lt;/sample2&gt;
         &lt;mp2     id=&#39;s3&#39; label=&quot;nr2&quot;&gt;&lt;/mp2&gt;
         &lt;!-- the transpiled tag&#39;s js --&gt;
-        &lt;script src=&quot;__javascript__/sample2_tag.js&quot;&gt;&lt;/script&gt;
+        &lt;script src=&quot;__javascript__/riot_demo.js&quot;&gt;&lt;/script&gt;
         &lt;script&gt;
             // register
-            var cls = sample2_tag.Sample2
+            var cls = riot_demo.Sample2
             riot.tag2(&#39;sample2&#39;, cls.template, cls.style, &#39;&#39;, function(opts) {
                 new cls(this, opts)})
             document.t1 = riot.mount(&#39;sample2&#39;)[0].update()
@@ -1923,8 +1923,15 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 <span class="c"># TODO: docstring format not accepted by the transpiler, strange.</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Gunther Klessinger, gk@axiros.com, Germany&quot;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s">&quot;$Date: 2016-07-11 02:17:51 +0100 $&quot;</span>
 
+<span class="c"># just a minihack to get some colors, mainly to test lamdas and imports:</span>
+<span class="kn">from</span> <span class="nn">color</span> <span class="kn">import</span> <span class="n">colors</span><span class="p">,</span> <span class="n">cprint</span> <span class="k">as</span> <span class="n">col_print</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">colors</span>
+<span class="n">M</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;purple&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;orange&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;gray&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;red&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;black&#39;</span><span class="p">]</span>
+
+<span class="n">lifecycle_ev</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;before-mount&#39;</span><span class="p">,</span> <span class="s">&#39;mount&#39;</span><span class="p">,</span> <span class="s">&#39;update&#39;</span><span class="p">,</span> <span class="s">&#39;unmount&#39;</span><span class="p">]</span>
+
+<span class="n">cur_tag_col</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">class</span> <span class="nc">RiotTag</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    taking care for extending the riot tag obj with</span>
@@ -1935,61 +1942,80 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
     <span class="c"># placeholders:</span>
     <span class="n">template</span> <span class="o">=</span> <span class="s">&#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;</span>
     <span class="n">style</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-    <span class="n">node_name</span> <span class="o">=</span> <span class="s">&#39;&lt;no node&gt;&#39;</span>
+    <span class="n">node_name</span> <span class="o">=</span> <span class="s">&#39;unmounted&#39;</span>
     <span class="n">opts</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
         <span class="c"># opts into the python instance, why not:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opts</span> <span class="o">=</span> <span class="n">opts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="c"># giving ourselves a unique color:</span>
+        <span class="k">global</span> <span class="n">cur_tag_col</span> <span class="c"># working (!)</span>
+        <span class="n">cur_tag_col</span> <span class="o">=</span> <span class="p">(</span><span class="n">cur_tag_col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="c"># TODO values() on a dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_col</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">items</span><span class="p">()[</span><span class="n">cur_tag_col</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_setup_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
         <span class="c"># keeping mutual refs</span>
         <span class="n">tag</span><span class="o">.</span><span class="n">py_obj</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">riot_tag</span> <span class="o">=</span> <span class="n">tag</span>
         <span class="c"># making the event system call self&#39;s methods:</span>
-        <span class="n">__pragma__</span><span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
-<span class="s">        var evs = [&#39;before-mount&#39;, &#39;update&#39;, &#39;mount&#39;, &#39;unmount&#39;]</span>
-<span class="s">        evs.forEach(function(k, i, evs) {</span>
-<span class="s">            var k1 = k.replace(&#39;-&#39;, &#39;_&#39;)</span>
-<span class="s">            tag.on(k, function () {self[k1](this)})</span>
-<span class="s">        })&#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="n">handlers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">lifecycle_ev</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">f</span><span class="p">:</span>
+                <span class="c"># this.on(&#39;mount&#39;, function() {...}):</span>
+                <span class="c"># whats nicer?</span>
+                <span class="n">tag</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">pp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">msg</span><span class="p">):</span>
-        <span class="k">print</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="c"># color flash in the console. one color per tag instance.</span>
+        <span class="n">col_print</span><span class="p">(</span>
+            <span class="c">#B(self.riot_tag._riot_id),</span>
+            <span class="n">L</span><span class="p">(</span><span class="s">&#39;&lt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_col</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_col</span><span class="p">),</span> <span class="s">&#39;/&gt; &#39;</span><span class="p">),</span>
+            <span class="n">M</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">])))</span>
 
     <span class="k">def</span> <span class="nf">_lifecycle_ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="n">mode</span> <span class="o">+</span> <span class="s">&#39;ing&#39;</span><span class="p">)</span>
+
     <span class="c"># overwrite these for your specific one:</span>
-    <span class="k">def</span> <span class="nf">update</span>      <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;update&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">mount</span>       <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;mount&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">unmount</span>     <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;unmount&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">update</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;update&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mount</span>  <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;mount&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">unmount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;unmount&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">before_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">before_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lifecycle_ev</span><span class="p">(</span><span class="s">&#39;before-mount&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind_vars</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind_vars</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">bind_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">nodeName</span>
+    <span class="k">def</span> <span class="nf">bind_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">riot_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">nodeName</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;binding vars&#39;</span><span class="p">)</span>
         <span class="c"># binding self&#39;s functions into the tag instance</span>
         <span class="c"># binding writable properties to everything else (e.g. ints, strs...)</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">_immutables</span> <span class="o">=</span> <span class="n">im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lc</span> <span class="o">=</span> <span class="n">lifecycle_ev</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c"># private or lifecycle function? don&#39;t bind:</span>
+            <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;_&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">lifecycle_ev</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s">&#39;before_mount&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+            <span class="c"># these I can&#39;t write in python. Lets use JS then.</span>
+            <span class="c"># TODO there should be, maybe some mocking facility for code</span>
+            <span class="c"># testing w/o a js runtime:</span>
+            <span class="n">__pragma__</span><span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">                  typeof v === &quot;function&quot; || typeof v === &quot;object&quot; ?</span>
+<span class="s">                  tag[k] = self[k] : tag._immutables.push(k)&#39;&#39;&#39;</span><span class="p">)</span>
+
         <span class="n">__pragma__</span><span class="p">(</span><span class="s">&#39;js&#39;</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
-<span class="s">        tag._immutables = []</span>
-<span class="s">        var nobind = [ &#39;update&#39;, &#39;mount&#39;, &#39;before_mount&#39;, &#39;unmount&#39;]</span>
-<span class="s">        for (var k in self) if (k.indexOf(&#39;_&#39;) != 0 &amp;&amp; nobind.indexOf(k) ==-1){</span>
-<span class="s">            var v = self[k]</span>
-<span class="s">            typeof v === &#39;function&#39; ? tag[k] = self[k] :</span>
-<span class="s">                                      tag._immutables.push(k)</span>
-<span class="s">            }</span>
 <span class="s">        var i = tag._immutables, py = self</span>
 <span class="s">        i.forEach(function(k, j, i) {</span>
 <span class="s">            Object.defineProperty(tag, k, {</span>
 <span class="s">                get: function()  { return self[k]},</span>
 <span class="s">                set: function(v) { self[k] = v }</span>
 <span class="s">            })</span>
-<span class="s">        })</span>
-<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="s">        })&#39;&#39;&#39;</span><span class="p">)</span>
+
 </pre></div>
 </div>
 </div>
@@ -2003,55 +2029,87 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                 __inited__: false,
                 __init__: function (__all__) {
                     var __author__ = &#39;Gunther Klessinger, gk@axiros.com, Germany&#39;;
-                    var __date__ = &#39;$Date: 2016-07-11 02:17:51 +0100 $&#39;;
+                    var colors = __init__ (__world__.color).colors;
+                    var col_print = __init__ (__world__.color).cprint;
+                    var c = colors;
+                    var __left0__ = tuple ([c [&#39;purple&#39;], c [&#39;orange&#39;], c [&#39;gray&#39;], c [&#39;red&#39;], c [&#39;black&#39;]]);
+                    var M = __left0__ [0];
+                    var I = __left0__ [1];
+                    var L = __left0__ [2];
+                    var R = __left0__ [3];
+                    var B = __left0__ [4];
+                    var lifecycle_ev = list ([&#39;before-mount&#39;, &#39;mount&#39;, &#39;update&#39;, &#39;unmount&#39;]);
+                    var cur_tag_col = 0;
                     var RiotTag = __class__ (&#39;RiotTag&#39;, [object], {
                         get __init__ () {return __get__ (this, function (self, tag, opts) {
                             self.opts = opts;
                             self._setup_tag (tag);
+                            cur_tag_col = (cur_tag_col + 1) % len (colors);
+                            self.my_col = colors.items () [cur_tag_col] [1];
                         });},
                         get _setup_tag () {return __get__ (this, function (self, tag) {
                             tag.py_obj = self;
                             self.riot_tag = tag;
-                            
-                                    var evs = [&#39;before-mount&#39;, &#39;update&#39;, &#39;mount&#39;, &#39;unmount&#39;]
-                                    evs.forEach(function(k, i, evs) {
-                                        var k1 = k.replace(&#39;-&#39;, &#39;_&#39;)
-                                        tag.on(k, function () {self[k1](this)})
-                                    })
+                            var handlers = dict ({});
+                            var __iterator0__ = py_iter (lifecycle_ev);
+                            while (true) {
+                                try {var ev = py_next (__iterator0__);} catch (exception) {break;}
+                                var f = getattr (self, ev.py_replace (&#39;-&#39;, &#39;_&#39;));
+                                if (f) {
+                                    tag.on (ev, f);
+                                }
+                            }
                         });},
                         get pp () {return __get__ (this, function (self) {
                             var msg = tuple ([].slice.apply (arguments).slice (1));
-                            print (self.node_name, msg);
+                            col_print (L (&#39;&lt;&#39;, self.my_col (self.node_name, self.my_col), &#39;/&gt; &#39;), M (&#39; &#39;.join (function () {
+                                var __accu0__ = [];
+                                var __iterator0__ = py_iter (msg);
+                                while (true) {
+                                    try {var s = py_next (__iterator0__);} catch (exception) {break;}
+                                    __accu0__.append (s);
+                                }
+                                return __accu0__;
+                            } ())));
                         });},
                         get _lifecycle_ev () {return __get__ (this, function (self, mode) {
                             if (self.debug) {
                                 self.pp (mode + &#39;ing&#39;);
                             }
                         });},
-                        get update () {return __get__ (this, function (self, tag) {
+                        get update () {return __get__ (this, function (self) {
                             self._lifecycle_ev (&#39;update&#39;);
                         });},
-                        get mount () {return __get__ (this, function (self, tag) {
+                        get mount () {return __get__ (this, function (self) {
                             self._lifecycle_ev (&#39;mount&#39;);
                         });},
-                        get unmount () {return __get__ (this, function (self, tag) {
+                        get unmount () {return __get__ (this, function (self) {
                             self._lifecycle_ev (&#39;unmount&#39;);
                         });},
-                        get before_mount () {return __get__ (this, function (self, tag) {
+                        get before_mount () {return __get__ (this, function (self) {
                             self._lifecycle_ev (&#39;before-mount&#39;);
-                            return self.bind_vars (tag);
+                            return self.bind_vars ();
                         });},
-                        get bind_vars () {return __get__ (this, function (self, tag) {
-                            self.node_name = tag.root.nodeName;
+                        get bind_vars () {return __get__ (this, function (self) {
+                            var tag = self.riot_tag;
+                            self.node_name = tag.root.nodeName.lower ();
                             self.debug &amp;&amp; self.pp (&#39;binding vars&#39;);
+                            var __left0__ = list ([]);
+                            tag._immutables = __left0__;
+                            var im = __left0__;
+                            var lc = lifecycle_ev;
+                            var __iterator0__ = py_iter (dir (self));
+                            while (true) {
+                                try {var k = py_next (__iterator0__);} catch (exception) {break;}
+                                if (k [0] == &#39;_&#39; || __in__ (k, lifecycle_ev) || k == &#39;before_mount&#39;) {
+                                    continue;
+                                }
+                                var v = getattr (self, k);
+                                
+                                                  typeof v === &quot;function&quot; || typeof v === &quot;object&quot; ?
+                                                  tag[k] = self[k] : tag._immutables.push(k)
+                            }
                             
-                                    tag._immutables = []
-                                    var nobind = [ &#39;update&#39;, &#39;mount&#39;, &#39;before_mount&#39;, &#39;unmount&#39;]
-                                    for (var k in self) if (k.indexOf(&#39;_&#39;) != 0 &amp;&amp; nobind.indexOf(k) ==-1){
-                                        var v = self[k]
-                                        typeof v === &#39;function&#39; ? tag[k] = self[k] :
-                                                                  tag._immutables.push(k)
-                                        }
                                     var i = tag._immutables, py = self
                                     i.forEach(function(k, j, i) {
                                         Object.defineProperty(tag, k, {
@@ -2059,18 +2117,27 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                                             set: function(v) { self[k] = v }
                                         })
                                     })
-                                    
                         });}
                     });
                     RiotTag.debug = null;
                     RiotTag.template = &#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;;
                     RiotTag.style = &#39;&#39;;
-                    RiotTag.node_name = &#39;&lt;no node&gt;&#39;;
+                    RiotTag.node_name = &#39;unmounted&#39;;
                     RiotTag.opts = null;
+                    __pragma__ (&#39;&lt;use&gt;&#39; +
+                        &#39;color&#39; +
+                    &#39;&lt;/use&gt;&#39;)
                     __pragma__ (&#39;&lt;all&gt;&#39;)
+                        __all__.B = B;
+                        __all__.I = I;
+                        __all__.L = L;
+                        __all__.M = M;
+                        __all__.R = R;
                         __all__.RiotTag = RiotTag;
                         __all__.__author__ = __author__;
-                        __all__.__date__ = __date__;
+                        __all__.c = c;
+                        __all__.cur_tag_col = cur_tag_col;
+                        __all__.lifecycle_ev = lifecycle_ev;
                     __pragma__ (&#39;&lt;/all&gt;&#39;)
                 }
             }
@@ -2089,8 +2156,8 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 <col width="54%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="sample2-tag-py-a-derived-transcrypt-riot-tag-class">
-<div class="code-block-caption"><span class="caption-text">sample2_tag.py, a derived Transcrypt Riot tag class</span><a class="headerlink" href="#sample2-tag-py-a-derived-transcrypt-riot-tag-class" title="Permalink to this code">¶</a></div>
+<tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="riot-demo-py-a-derived-transcrypt-riot-tag-class">
+<div class="code-block-caption"><span class="caption-text">riot_demo.py, a derived Transcrypt Riot tag class</span><a class="headerlink" href="#riot-demo-py-a-derived-transcrypt-riot-tag-class" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># an example user tag, using RiotTag</span>
 
 <span class="kn">from</span> <span class="nn">riot_tag</span> <span class="kn">import</span> <span class="n">RiotTag</span>
@@ -2113,7 +2180,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
         <span class="bp">self</span><span class="o">.</span><span class="n">lv</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">})</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span>
 
-<span class="c"># try some inheritence...</span>
+<span class="c"># try some inheritance...</span>
 <span class="k">class</span> <span class="nc">Sample2</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
     <span class="c"># ... and change the state at every update, just for fun:</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;INNER&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;&#39;</span>
@@ -2128,24 +2195,27 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>  <span class="c"># this rocks so much.</span>
-        <span class="c"># super does not seem to work yet (?)</span>
-        <span class="c"># JdeH: No, ideed, but you can call parent class ctor like: &lt;ParentClassName&gt;.__init__ (self, &lt;otherParams&gt;)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="c"># alternative to super:</span>
+        <span class="n">RiotTag</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
         <span class="c"># uncomment next line and chrome will stop:</span>
         <span class="c"># debugger</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;tag init, adding 2 lv&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;tag init&#39;</span><span class="p">,</span> <span class="s">&#39;adding 2 lv&#39;</span><span class="p">)</span>
         <span class="c"># mutating the lv object:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lv</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n2&#39;</span><span class="p">}])</span>
 
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pp</span><span class="p">(</span><span class="s">&#39;update handler in the custom tag, calling super&#39;</span><span class="p">)</span>
+        <span class="n">RiotTag</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 </pre></div>
 </div>
 </div>
 </td>
-<td><div class="literal-block-wrapper first last container" id="sample2-tag-mod-js-compiled-by-transcrypt">
-<div class="code-block-caption"><span class="caption-text">sample2_tag.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#sample2-tag-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
+<td><div class="literal-block-wrapper first last container" id="riot-demo-mod-js-compiled-by-transcrypt">
+<div class="code-block-caption"><span class="caption-text">riot_demo.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#riot-demo-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;e5&#39;];
+        var __symbols__ = [&#39;e6&#39;];
         var RiotTag = __init__ (__world__.riot_tag).RiotTag;
         var P = __class__ (&#39;P&#39;, [RiotTag], {
             get count_up () {return __get__ (this, function (self) {
@@ -2162,9 +2232,13 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
         var Sample2 = __class__ (&#39;Sample2&#39;, [P], {
             get __init__ () {return __get__ (this, function (self, tag, opts) {
                 self.label = opts.label.capitalize ();
-                self._setup_tag (tag);
-                self.pp (&#39;tag init, adding 2 lv&#39;);
+                RiotTag.__init__ (self, tag, opts);
+                self.pp (&#39;tag init&#39;, &#39;adding 2 lv&#39;);
                 self.lv.extend (list ([dict ({&#39;name&#39;: &#39;n1&#39;}), dict ({&#39;name&#39;: &#39;n2&#39;})]));
+            });},
+            get update () {return __get__ (this, function (self) {
+                self.pp (&#39;update handler in the custom tag, calling super&#39;);
+                RiotTag.update (self);
             });}
         });
         Sample2.template = P.template.py_replace (&#39;INNER&#39;, &#39;\n    &lt;div&gt;\n    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;\n    &lt;/div&gt;\n    &#39;);
@@ -2233,9 +2307,9 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 
 <span class="n">age</span> <span class="o">=</span> <span class="nb">float</span> <span class="p">(</span><span class="nb">input</span> <span class="p">(</span><span class="s">&#39;How old are you? &#39;</span><span class="p">))</span>
 <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">:</span>
-    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Sorry &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is to young to drive a car in the Netherands.&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Sorry &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is to young to drive a car in the Netherlands.&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;OK &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is old enough to drive a car in the Netherands.&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s">&#39;OK &#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s">&#39;is old enough to drive a car in the Netherlands.&#39;</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -2319,7 +2393,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.196 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

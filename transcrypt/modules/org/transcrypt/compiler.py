@@ -461,7 +461,6 @@ class Generator (ast.NodeVisitor):
 			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
 			('sort', 'py_sort'),					('js_sort', 'sort'),
-			('StopIteration', 'py_StopIteration'),	('js_StopIteration', 'StopIteration'),	# Used in legacy JS iterator protocol
 			('switch', 'py_switch'),
 			('case', 'py_case'),
 			('default', 'py_default'),
@@ -810,7 +809,16 @@ class Generator (ast.NodeVisitor):
 					self.filterId (node.vararg.arg),
 					len (node.args),
 				)
-				
+	
+	def visit_Assert (self, node):
+		if utils.commandArgs.dassert:
+			self.emit ('assert (')
+			self.visit (node.test)
+			if node.msg:
+				self.emit (', ')
+				self.visit (node.msg)
+			self.emit (');\n')
+		
 	def visit_Assign (self, node):
 		self.adaptLineNrString (node)
 	

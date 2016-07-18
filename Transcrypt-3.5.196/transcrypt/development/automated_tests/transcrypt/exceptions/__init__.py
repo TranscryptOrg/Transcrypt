@@ -126,4 +126,24 @@ def run (autoTester):
 	finally:
 		autoTester.check ('day')
 	
+	try:
+		assert 2 * 8 / 4 == 2, 'Assert error 1'
+	except AssertionError as exception:
+		autoTester.check (exception)
+		
+	try:
+		assert 2 * 8 / 4 == 4, 'Assert error 2'
+	except AssertionError as exception:
+		autoTester.check (exception)
+		
+	try:
+		assert 2 * 8 / 4 == 2
+	except AssertionError as exception:
+		autoTester.check (exception)
+		
+	try:
+		assert 2 * 8 / 4 == 4
+	except AssertionError as exception:
+		autoTester.check (exception)
+		
 	autoTester.check (888)

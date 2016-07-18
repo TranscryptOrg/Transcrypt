@@ -52,6 +52,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Added: any, all, assert
 - Readme adapted
 - Workaround for console.log.apply removed
 - Several small fixes
