@@ -965,11 +965,15 @@ class Generator (ast.NodeVisitor):
 		self.emit ('.{}', self.filterId (node.attr))
 		
 	def visit_AugAssign (self, node):
-		if type (node.target) == ast.Subscript and (
-				self.allowOperatorOverloading or
-				type (node.target.slice) != ast.Index or
-				type (node.target.slice.value) == ast.Tuple
-		):	# LHS is a call to __getitem__ or __getslice__, so generating <operator>= won't work
+		if (
+			type (node.op) == ast.FloorDiv or (	# FloorDiv has no operator symbol in JavaSCript, so generationg <operator>= won't work
+				type (node.target) == ast.Subscript and (
+					self.allowOperatorOverloading or
+					type (node.target.slice) != ast.Index or
+					type (node.target.slice.value) == ast.Tuple
+				)
+			)								# LHS is a call to __getitem__ or __getslice__, so generating <operator>= won't work either
+		):	
 			self.visit (ast.Assign ([node.target], ast.BinOp (node.target, node.op, node.value)))
 		else:	
 			self.visit (node.target)		# No need to emit var first, it has to exist already

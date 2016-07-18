@@ -1,6 +1,5 @@
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
-- Bug in hello.py with -e 6 fixed
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Hierarchical URL based module system to prevent name conflicts
@@ -53,6 +52,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Several small fixes
 - Itertools now functionally complete, except for zip_longest. First breed of autotests added for it. Some func's still relies on seq's rather than iter's.
 - Added: __pragma__ ('ifndef'), __pragma__ ('else')
 - Doc's updated, empty your browser cache and read about the newest facilities on-line
