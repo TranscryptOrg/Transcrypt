@@ -53,7 +53,11 @@ classic tags.
 
 ## Disclaimer:
 
+<<<<<<< HEAD
 I am for sure no JS expert, there might be a far more elegant way to
+=======
+In contrast to the Transcrypt author I am for sure no JS expert, there might be a far more elegant way to
+>>>>>>> b5e9a118d3581b9b396f614aa519e10b3340e1e7
 have riot's 'this' and Transcrypt's self in sync, e.g. via JS 'inheritance'
 mechanics - or maybe using Transcrypt's object extension methods itself.
 

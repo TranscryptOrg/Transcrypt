@@ -35,13 +35,22 @@ class Sample2(P):
 
     def __init__(self, tag, opts):
         self.label = opts.label.capitalize()  # this rocks so much.
+<<<<<<< HEAD:Transcrypt-3.5.196/transcrypt/demos/riot_demo/sample2_tag.py
         # super does not seem to work yet (?)
 		# JdeH: No, ideed, but you can call parent class ctor like: <ParentClassName>.__init__ (self, <otherParams>)
         self._setup_tag(tag)
+=======
+        # alternative to super:
+        RiotTag.__init__(self, tag, opts)
+>>>>>>> b5e9a118d3581b9b396f614aa519e10b3340e1e7:transcrypt/demos/riot_demo/sample2_tag.py
         # uncomment next line and chrome will stop:
         # debugger
-        self.pp('tag init, adding 2 lv')
+        self.pp('tag init', 'adding 2 lv')
         # mutating the lv object:
         self.lv.extend([{'name': 'n1'}, {'name': 'n2'}])
 
+
+    def update(self):
+        self.pp('update handler in the custom tag, calling super')
+        RiotTag.update(self)
 

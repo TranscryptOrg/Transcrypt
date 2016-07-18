@@ -855,7 +855,16 @@ __pragma__ ('endif')
 			delete this [attrib];
 		}
 	}
-		
+	
+	function __setdefault__ (aKey, aDefault) {
+		var result = this [aKey];
+		return result != undefined ? 
+			result :
+			aDefault != undefined ?
+				aDefault :
+				null;
+	}
+	
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
 			var instance = {};
@@ -880,6 +889,7 @@ __pragma__ ('endif')
 		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
 		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
+		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
 		
 		return instance;
 	}

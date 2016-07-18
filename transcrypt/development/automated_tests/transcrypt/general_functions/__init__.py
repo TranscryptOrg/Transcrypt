@@ -37,8 +37,14 @@ def run (autoTester):
 	b.sort (key = lambda x: len (x), reverse = True) 
 	autoTester.check (b)
 
+<<<<<<< HEAD
 	autoTester.check ('<br><br>dir<br>')
 	autoTester.check ([entry for entry in dir (A) if not entry.startswith ('__')])
 	autoTester.check ([entry for entry in dir (A()) if not entry.startswith ('__')])
 	autoTester.check ([entry for entry in dir (B) if not entry.startswith ('__')])
 	autoTester.check ([entry for entry in dir (B()) if not entry.startswith ('__')])
+=======
+	class A: foo='bar'
+	autoTester.check ('foo' in dir(A))
+	autoTester.check ('foo' in dir(A()))
+>>>>>>> b5e9a118d3581b9b396f614aa519e10b3340e1e7
