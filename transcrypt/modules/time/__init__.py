@@ -477,7 +477,7 @@ def strftime(format, t):
             v = 12
         elif v > 12:
             v = v - 12
-        elif v < 10:
+        if v < 10:
             v = '0' + str(v)
         f = f.replace('%I', v)
 

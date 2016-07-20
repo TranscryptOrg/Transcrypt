@@ -8,11 +8,7 @@ import time
 def run (autoTester):
     t = [2000, 1, 1, 1, 1, 1, 1, 1, 0]
     def check(fmt):
-        s = time.mktime(tuple(t))
-        autoTester.check('gmtime'   , tuple(time.gmtime(int(s))))
-        autoTester.check('localtime', tuple(time.localtime(int(s))))
-        autoTester.check('mktime'   , int(s))
-        autoTester.check('ctime'    , int(s))
+        autoTester.check(time.strftime(fmt, tuple(t)))
 
     for hour in (0, 1, 12, 14, 23):
         t[3] = hour
@@ -37,6 +33,12 @@ def run (autoTester):
             ,'%a%b%d%H:%Mxx%S%Y +000'
             ,' %a%b%d%H:%Mxx%S%Y +000 '
             ): check(f)
+
+        s = time.mktime(tuple(t))
+        autoTester.check('gmtime'   , tuple(time.gmtime(int(s))))
+        autoTester.check('localtime', tuple(time.localtime(int(s))))
+        autoTester.check('mktime'   , int(s))
+        autoTester.check('ctime'    , int(s))
 
     autoTester.check('asctime', t)
 
