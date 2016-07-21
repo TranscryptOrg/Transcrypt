@@ -133,10 +133,23 @@ def _day_of_year(jd, local):
 def _is_leap(year):
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
 
-def __get_jan_jun(t):
-    __jan = __new__(Date(t.getFullYear(), 0, 1))
-    __jun = __new__(Date(t.getFullYear(), 6, 1))
-    return (__jan, __jun)
+def __jan_jun_tz(t, func):
+    """ information about local jan and jun month of a t's year
+    default is to deliver timezone offset, but a function can be handed to us,
+    which we'll run on those two months
+    """
+    # required to detect dst (daylight saving time) in effect:
+    was = t.getTime() # avoid new date objs
+    t.setDate(1)
+    res = []
+    for m in 0, 6:
+        t.setMonth(m)
+        if not func:
+            res.append(t.getTimezoneOffset())
+        else:
+            res.append(func(t))
+    t.setTime(was)
+    return res
 
 def _daylight(t):
     """
@@ -145,18 +158,16 @@ def _daylight(t):
 
     return 0 or 1 like python
     """
-    jj = __get_jan_jun(t)
+    jj = __jan_jun_tz(t)
     # in southern hemisphere the daylight saving is in winter months!
-    if min(jj[0].getTimezoneOffset(),
-           jj[1].getTimezoneOffset()) == t.getTimezoneOffset():
+    if min(jj[0], jj[1]) == t.getTimezoneOffset():
         return 1
     return 0
 
 def _timezone(t):
-    jj = __get_jan_jun(t)
+    jj = __jan_jun_tz(t)
     # in southern hemisphere the daylight saving is in winter months!
-    return max(jj[0].getTimezoneOffset(),
-               jj[1].getTimezoneOffset())
+    return max(jj[0], jj[1])
 
 
 def __tzn(t):
@@ -170,11 +181,10 @@ def __tzn(t):
 def _tzname(t):
     cn = __tzn(t)
     ret = [cn, cn]
-    jj = __get_jan_jun(t)
+    jj = __jan_jun_tz(t, __tzn)
     for i in jj:
-        r = __tzn(i)
-        if r != cn:
-            ret[0] = r
+        if i != cn:
+            ret[0] = i
     return tuple(ret)
 
 
@@ -377,25 +387,19 @@ def strptime(string, format):
             t[6] = __weekdays.index(v)
 
         elif d == 'A':
-            # funny. the weekday is only set but does not override %d.
-            # -> produces impossible dates but well its how py does it:
             if not v in __weekdays_long:
                 raise ValueError('Weekday unknown in your locale')
             have_weekday = True
             t[6] = __weekdays_long.index(v)
 
         elif d == 'b':
-            # month short. precedence over %m
-            # funny. the weekday is only set but does not override %d.
-            # -> produces impossible dates but well its how py does it:
+            # month short. overruled by m if present
             if not v in __months:
                 raise ValueError('Month unknown in your locale')
             t[1] = __months.index(v) + 1
 
         elif d == 'B':
-            # month short. precedence over %m
-            # funny. the weekday is only set but does not override %d.
-            # -> produces impossible dates but well its how py does it:
+            # month long. overruled by m if present
             if not v in __months_long:
                 raise ValueError('Month unknown in your locale')
             t[1] = __months_long.index(v) + 1
@@ -477,9 +481,7 @@ def strftime(format, t):
             v = 12
         elif v > 12:
             v = v - 12
-        if v < 10:
-            v = '0' + str(v)
-        f = f.replace('%I', v)
+        f = f.replace('%I', zf2(v))
 
     return f
 

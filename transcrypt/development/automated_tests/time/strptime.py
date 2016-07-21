@@ -1,7 +1,8 @@
 '''
 testing strptime.
 
-Note, Py3 bug:
+Note, strptime bug - not in Transcrypt but in Python, since long
+And it is biting us with py3 runtime defaults:
 
 while true; do
     python3.5 -c "import time; print(tuple(time.strptime('nov 1.1.1900', '%b %m.%d.%Y')))"
@@ -9,6 +10,7 @@ done
 
 => we simply cannot test conflicting %b %m switches,
 it decides per run which one it takes(!!!), so autotest would fail randomly.
+Obviously somebody relied on order when iterating over dicts, in the stdlib...
 
 Verified with 3.4, 3.5 on mac and linux.
 
