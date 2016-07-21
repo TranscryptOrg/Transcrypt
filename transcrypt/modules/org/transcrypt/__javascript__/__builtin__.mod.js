@@ -934,11 +934,20 @@ __pragma__ ('endif')
 	
 	function __setdefault__ (aKey, aDefault) {
 		var result = this [aKey];
-		return result != undefined ? 
-			result :
-			aDefault != undefined ?
-				aDefault :
-				null;
+		if (result != undefined) return result
+		var val = aDefault == undefined ? null: aDefault
+		this[aKey] = val
+		return val
+	}
+
+	function __pop__(aKey, aDefault) {
+		var result = this[aKey]
+		if (result != undefined) {
+			delete this[aKey];
+			return result
+		}
+		return aDefault
+
 	}
 	
 	function dict (objectOrPairs) {
@@ -966,6 +975,7 @@ __pragma__ ('endif')
 		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
 		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
+		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
 		
 		return instance;
 	}
