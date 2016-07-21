@@ -431,6 +431,29 @@ class Scope:
 		self.nonlocals = set ()
 		self.containsYield = False
 	
+
+def strip_docstr(body, remove_all=False):
+	"""
+	Scans the ast body list for docstrings and removes them (those should not be sent to the client.)
+	Taken from ast.get_docstring(node).
+	Note: '#' comments are already removed by ast, class defs scanned explicitly anyways.
+	param remove_all:
+		If set we remove *any* tripple quoted expression within the body
+		(is set for modules). Not done for function bodies where it is considered bad style (although valid python)
+	"""
+	ret = []
+	for el in body:
+		if isinstance(el, ast.Expr) and isinstance(el.value, ast.Str):
+			if not remove_all:
+				return body[1:]
+		else:
+			if not remove_all:
+				return body
+			ret.append(el)
+	return ret
+
+
+
 class Generator (ast.NodeVisitor):
 # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 	
@@ -1483,8 +1506,8 @@ class Generator (ast.NodeVisitor):
 	def visit_FunctionDef (self, node):
 		def emitScopedBody ():
 			self.inscope (node)
-			
-			self.emitBody (node.body)
+			body = strip_docstr(node.body)
+			self.emitBody (body)
 			self.dedent ()
 			
 			if self.getscope (ast.FunctionDef) .containsYield:
@@ -1754,8 +1777,9 @@ class Generator (ast.NodeVisitor):
 		
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
-		
-		self.emitBody (node.body)
+		body = strip_docstr(node.body, remove_all=True)
+		self.emitBody (body)
+
 			
 		if self.use:
 			self.use = sorted (self.use)
