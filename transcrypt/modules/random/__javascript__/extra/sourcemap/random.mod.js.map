@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/modules/random/__javascript__/random.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/modules/random/__init__.py"
+	],
+	"sourcesContent": [
+		"# Mersenne-Twister algorithm\n\n_array = [0 for i in range (624)]\n_index = 0\n_bitmask1 = (2 ** 32) - 1\n_bitmask2 = 2 ** 31\n_bitmask3 = (2 ** 31) - 1\n\ndef _fill_array():\n\tglobal _array\n\tfor i in range (624):\n\t\ty = (_array [i] & _bitmask2) + (_array [(i + 1) % 624] & _bitmask3)\n\t\t_array [i] = _array [(i + 397) % 624] ^ (y >> 1)\n\t\tif y % 2 != 0:\n\t\t\t_array[i] ^= 2567483615\n\t\t\t\ndef _random_integer ():\n\tglobal _index\n\tglobal _array\n\tif _index == 0:\n\t\t_fill_array ()\n\ty = _array [_index]\n\ty ^= y >> 11\n\ty ^= (y << 7) & 2636928640\n\ty ^= (y << 15) & 4022730752\n\ty ^= y >> 18\n\n\t_index = (_index + 1) % 624\n\treturn y\n\ndef seed (x = int (_bitmask3 * Math.random ())):\n\tglobal _array\n\tglobal _bitmask1\n\t_array [0] = x\n\tfor i in  range (1, 624):\n\t\t_array [i] = ((1812433253 * _array [i - 1]) ^ ((_array [i - 1] >> 30) + i)) & _bitmask1\n\ndef randint (a, b):\n\treturn a + _random_integer () % (b - a + 1)\n\ndef choice (seq):\n\treturn seq [randint (0, len (seq) - 1)]\n\ndef random ():\n\treturn _random_integer () / _bitmask3\n\t\nseed ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AAEA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAGA;AAGA;AACA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAMA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAGA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

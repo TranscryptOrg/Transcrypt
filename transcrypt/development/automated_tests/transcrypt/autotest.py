@@ -23,6 +23,7 @@ __pragma__ ('endif')
 
 import lambda_functions
 import list_comprehensions
+import module_builtin
 
 __pragma__ ('ifdef', 'e6')
 if 'e6' in __symbols__:
@@ -63,6 +64,7 @@ __pragma__ ('endif')
 	
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
+autoTester.run (module_builtin, 'module_builtin')
 
 __pragma__ ('ifdef', 'e6')
 if 'e6' in __symbols__:

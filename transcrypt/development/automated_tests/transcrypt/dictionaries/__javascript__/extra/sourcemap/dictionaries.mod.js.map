@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/dictionaries/__javascript__/dictionaries.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/dictionaries/__init__.py"
+	],
+	"sourcesContent": [
+		"from org.transcrypt.stubs.browser import __pragma__\n__pragma__ ('iconv')\n\ndef run (autoTester):\n\ttel = {'guido': 4127, 'jack': 4098}\n\ttel ['sape'] = 4139\n\n\tautoTester.check (tel)\n\tautoTester.check (tel ['jack'])\n\n\tdel tel ['sape']\n\ttel ['irv'] = 4127\n\tautoTester.check (tel)\n\n\tautoTester.check (sorted (list (tel.keys ())), False)\n\tautoTester.check (sorted (tel.keys ()))\n\n\tautoTester.check ('guido' in tel)\n\tautoTester.check ('jack' not in tel)\n\n\tautoTester.check (dict ([('guido', 4127), ('jack', 4098), ('sape', 4139)]))\n\n\tknights = {'robin': 'the brave', 'gallahad': 'the pure'}\n\n\tfor k, v in sorted (knights.items ()):\n\t\tautoTester.check (k, v)\n\n\tif 'gallahad' in knights:\n\t\tautoTester.check ('gallahad is a knight') \n\n\tfor k in sorted (knights):\n\t\tautoTester.check (k)\n\t\t\n\tknight = {'rudolph': 'the righteous'}\n\tfor k in knight:\t# Autotest automatic conversion with one knight, since sort order of dict undefined\n\t\tautoTester.check (k)"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AACA;AACA;AAEA;AACA;AAAA;AAGA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AAEA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

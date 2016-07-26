@@ -316,7 +316,27 @@
 	// Absolute value
 	var abs = Math.abs;
 	__all__.abs = abs;
-				
+	
+	// Bankers rounding
+	var round = function (number, ndigits) {
+		if (ndigits) {
+			var scale = Math.pow (10, ndigits);
+			number *= scale;
+		}
+			
+		var rounded = Math.round (number);
+		if (rounded - number == 0.5 && rounded % 2) {	// Has rounded up to odd, should have rounded down to even
+			rounded -= 1;
+		}
+			
+		if (ndigits) {
+			rounded /= scale;
+		}
+		
+		return rounded
+ 	}
+	__all__.round = round;
+		
 	// Iterator protocol functions
 	
 	function wrap_py_next () {		// Add as 'next' method to make Python iterator JavaScript compatible
@@ -1087,20 +1107,47 @@ __pragma__ ('endif')
 		return this.lastIndexOf (sub, start);
 	};
 	
-	String.prototype.rsplit = function (sep, maxsplit) {
-		var split = this.split (sep || /s+/);
-		return maxsplit ? [ split.slice (0, -maxsplit) .join (sep) ].concat (split.slice (-maxsplit)) : split;
+	String.prototype.rsplit = function (sep, maxsplit) {	// Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+		if (sep == undefined || sep == null) {
+			sep = /\s+/;
+		}
+			
+		if (maxsplit == undefined || maxsplit == -1) {
+			return this.split (sep);
+		}
+		else {
+			var result = this.split (sep);
+			if (maxsplit > result.length) {
+				return result;
+			}
+			else {
+				var maxrsplit = result.length - maxsplit;
+				return [result.slice (0, maxrsplit) .join (sep)] .concat (result.slice (maxrsplit));
+			}
+		}
 	};
 	
 	String.prototype.rstrip = function () {
 		return this.replace (/\s*$/g, '');
 	};
 	
-	String.prototype.py_split = function (sep, maxsplit) {
-		if (!sep) {
-			sep = ' ';
+	String.prototype.py_split = function (sep, maxsplit) {	// Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+		if (sep == undefined || sep == null) {
+			sep = /\s+/;
 		}
-		return this.split (sep || /s+/, maxsplit);
+			
+		if (maxsplit == undefined || maxsplit == -1) {
+			return this.split (sep);
+		}
+		else {
+			var result = this.split (sep);
+			if (maxsplit > result.length) {
+				return result;
+			}
+			else {
+				return result.slice (0, maxsplit).concat ([result.slice (maxsplit).join (sep)]);
+			}
+		}
 	};
 	
 	String.prototype.startswith = function (prefix) {

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod1/mod11/__javascript__/modules.mod1.mod11.mod112.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod1/mod11/mod112.py"
+	],
+	"sourcesContent": [
+		"def f ():\n\treturn ('Paris, c\\'est la vie\\n')\n\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

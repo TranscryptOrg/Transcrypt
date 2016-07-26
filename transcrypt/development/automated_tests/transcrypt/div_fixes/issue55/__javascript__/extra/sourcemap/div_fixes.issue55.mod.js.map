@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/div_fixes/issue55/__javascript__/div_fixes.issue55.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/div_fixes/issue55/__init__.py"
+	],
+	"sourcesContent": [
+		"from div_fixes.issue55.a import f1\n\nfrom div_fixes.issue55.sub1 import *\nfrom div_fixes.issue55.sub2 import anA, aB\nfrom div_fixes.issue55.sub3 import x as y\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AACA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -625,6 +625,8 @@ class Generator (ast.NodeVisitor):
 		
 	def emitBody (self, body):
 		for stmt in body:
+			if isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str):
+				continue
 			self.visit (stmt)
 			self.emit (';\n')
 				
@@ -1621,14 +1623,16 @@ class Generator (ast.NodeVisitor):
 						
 					module = self.useModule (node.module)
 
-					for index, name in enumerate (module.all):				
+					# Import everything
+					for index, name in enumerate (module.all):		
 						self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (name), self.filterId (node.module))
 						if index < len (module.all) - 1:
 							self.emit (';\n')
 							
-					if self.module.metadata.filePrename == '__init__':
-						self.all.update (module.all)
+					# And export everything imported
+					self.all.update (module.all)
 				else:
+					# Import something
 					# N.B. The emits in the try and except clauses have different placement of brackets
 					try:														# Try if alias.name denotes a module
 						self.useModule ('{}.{}'.format (node.module, alias.name))
@@ -1645,11 +1649,11 @@ class Generator (ast.NodeVisitor):
 						else:
 							self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))
 							
-					if self.module.metadata.filePrename == '__init__':
-						if alias.asname:
-							self.all.add (alias.asname)
-						else:
-							self.all.add (alias.name)
+					# And export that something imported
+					if alias.asname:
+						self.all.add (alias.asname)
+					else:
+						self.all.add (alias.name)
 					
 					if index < len (node.names) - 1:
 						self.emit (';\n')
@@ -1975,8 +1979,10 @@ class Generator (ast.NodeVisitor):
 		self.emit ('}}\n')
 		
 		if node.finalbody:
-			self.emit ('finally {{')
+			self.emit ('finally {{\n')
+			self.indent ()
 			self.emitBody (node.finalbody)
+			self.dedent ()
 			self.emit ('}}\n')
 		
 	def visit_Tuple (self, node):

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/demos/nodejs_demo/__javascript__/nodejs_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/demos/nodejs_demo/nodejs_demo.py"
+	],
+	"sourcesContent": [
+		"# Compile with p. command line switch (see docs).\n# The example will be served at URL: http://localhost:8080 in your browser\n\nhttp = require ('http')\n\nclass Demo:\n\ttexts = (\n\t\t'Welcome to the world of node.js',\n\t\t'You can have your cake and eat it',\n\t\t'Use node\\'s ecosystem while programming in Python',\n\t\t'Using node.js from Transcrypt is easy',\n\t\t'Take a Python ride into the node.js world'\n\t)\n\n\tdef __init__ (self, port):\n\t\tprint ('Demo server started on port', port)\n\t\tself.server = http.createServer (self.serve)\n\t\tself.server.listen (port)\n\t\tself.oldIndex = 0\n\t\tself.newIndex = 0\n\t\tself.count = 0\n\t\t\n\tdef serve (self, request, response):\n\t\tresponse.writeHead (200)\n\t\t\n\t\tprint ('Serving page', self.count)\n\t\tself.count += 1\n\t\t\n\t\twhile self.newIndex == self.oldIndex:\n\t\t\tself.newIndex = int (Math.random () * len (self.texts))\n\t\tself.oldIndex = self.newIndex\n\t\t\n\t\tresponse.end ('<h1>{}</h1>'.format (\n\t\t\tself.texts [self.newIndex]\n\t\t))\n\ndemo = Demo (8080)\n"
+	],
+	"mappings": "AAAA;AAAA;AAGA;AAEA;AASA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAEA;AACA;AAEA;AAAA;AAGA;AACA;AAAA;AACA;AAEA;AAAA;AAAA;AA1BA;AA8BA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

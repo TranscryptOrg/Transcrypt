@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/data_structures/__javascript__/data_structures.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/data_structures/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\taList = [1, 2, 3, 'moon', 'stars']\n\tautoTester.check (aList)\n\taList.insert (3, 'sun')\n\tautoTester.check (aList)\n\tautoTester.check (aList [2:4:1])\n\tautoTester.check (aList [:])\n\tautoTester.check (aList [2:])\n\tautoTester.check (len (aList))\n\taList.append ('milkyway')\n\tautoTester.check (aList)\n\taList.extend (['m1', 'm31'])\n\tautoTester.check (aList)\n\n\tanotherList = list (('a', 'b', 'c'))\n\tautoTester.check (anotherList)\n\n\taDict = {1: 'plant', 'animal': 2}\n\tautoTester.check (aDict)\n\tautoTester.check (aDict [1], aDict ['animal'])\n\t\n\tdef p ():\n\t\treturn 3\n\t\t\n\tq = 4\n\t\n\tautoTester.check ({p (): 'three', q: 'four'})\n\t\n\taTuple = (1, 2, 3, 4, 5)\n\tautoTester.check(aTuple)\n\tautoTester.check (len (aTuple))\n\n\tanotherTuple = (1,)\n\tautoTester.check (anotherTuple)\n\n\taSet = {1, 2, 2, 3}\n\tautoTester.check\t(aSet)\n\tautoTester.check (len (aSet))\n\n\tanotherSet = set ((4, 5, 5, 6))\n\tautoTester.check (anotherSet)\n\n\temptySet = set ()\n\tautoTester.check (emptySet)\n\tautoTester.check (len (emptySet))\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAAA;AAEA;AAEA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

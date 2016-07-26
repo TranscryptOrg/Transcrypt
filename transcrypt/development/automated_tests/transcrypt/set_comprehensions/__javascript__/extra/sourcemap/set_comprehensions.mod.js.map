@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/set_comprehensions/__javascript__/set_comprehensions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/set_comprehensions/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\teven = {2 * i for i in [0, 9, 1, 7, 2, 8, 3, 6, 4, 5]}\n\tautoTester.check (even)\n\t\n\todd = {2 * i + 1 for i in [5, 6, 7, 8, 9, 4, 3, 1, 2, 0]}\n\tautoTester.check (odd)\n\t\n\teven.add (12)\n\teven.add (12)\n\tautoTester.check (even)\n\t\n\teven.discard (12)\n\teven.discard (12)\n\tautoTester.check (even)\n\t\n\tuni = even.union (odd)\n\tautoTester.check (uni)\n\t\n\tautoTester.check (odd.isdisjoint (even))\n\tautoTester.check (uni.isdisjoint (even))\n\t\t\n\tautoTester.check (even.issuperset (uni))\n\tautoTester.check (uni.issuperset (even))\n\t\n\tautoTester.check (even.issubset (uni))\n\tautoTester.check (uni.issubset (even))\n\t\n\tfirst = {4, 1, 0, 5, 3, 2, 6}\n\tautoTester.check (first)\n\t\n\tsecond = {3, 5, 6, 9, 4, 7, 8}\n\tautoTester.check (second)\n\t\n\tinter = first.intersection (second)\n\tautoTester.check (inter)\n\t\n\tdiff = first.difference (second)\n\tautoTester.check (diff)\n\t\n\tsymDiff = first.symmetric_difference (second)\n\tautoTester.check (symDiff)\n\t\n\taSet = {200, 4, 5, 100}\n\taSet.update (first, symDiff, second)\n\tautoTester.check (aSet)\n\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

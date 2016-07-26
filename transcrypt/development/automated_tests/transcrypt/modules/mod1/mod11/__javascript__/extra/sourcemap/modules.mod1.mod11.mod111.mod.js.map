@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod1/mod11/__javascript__/modules.mod1.mod11.mod111.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod1/mod11/mod111.py"
+	],
+	"sourcesContent": [
+		"class A:\n\tdef __init__ (self, x):\n\t\tself.x = x\n\t\t\n\tdef f (self):\n\t\treturn self.x\n\t\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

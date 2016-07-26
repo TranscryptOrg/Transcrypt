@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/classes/__javascript__/classes.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/classes/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\tclass A:\n\t\tp = 123\n\t\tdef __init__ (self, x):\n\t\t\tself.x = x\n\t\t\tautoTester.check (self.p)\n\n\t\tdef show (self, label):\n\t\t\tautoTester.check ('A.show', label, self.x)\n\t\t\t\n\t\tdef show2 (self, label):\n\t\t\tautoTester.check ('A.show2', label, self.x)\n\t\t\n\tclass B:\n\t\tp, q = 456, 789\n\t\tdef __init__ (self, y):\n\t\t\tautoTester.check ('In B constructor')\n\t\t\tself.y = y\n\t\t\tautoTester.check (self.p)\n\t\t\t\n\t\tdef show (self, label):\n\t\t\tautoTester.check ('B.show', label, self.y)\n\t\t\t\n\tclass C (A, B):\n\t\tdef __init__ (self, x, y):\n\t\t\tautoTester.check ('In C constructor')\n\t\t\tA.__init__ (self, x)\n\t\t\tB.__init__ (self, y)\n\t\t\t\n\t\tdef show (self, label):\n\t\t\tA.show (self, label)\n\t\t\tB.show (self, label)\n\t\t\tautoTester.check ('C.show', label, self.x, self.y)\n\t\t\n\ta = A (1001)\n\ta.show ('america')\n\tautoTester.check (A.p)\n\tautoTester.check (a.p)\n\n\tb = B (2002)\n\tb.show ('russia')\n\tautoTester.check (B.p)\n\tautoTester.check (b.p)\n\tautoTester.check (b.q)\n\n\tautoTester.check (A.p)\n\tautoTester.check (a.p)\n\n\tc = C (3003, 4004)\n\tc.show ('netherlands')\n\tautoTester.check (C.p)\n\tautoTester.check (c.p)\n\tautoTester.check (c.q)\n\n\tc.show2 ('amsterdam')\n\tA.show2 (c, 'rotterdam')\n\n\tshow3 = c.show\n\tshow3 ('copy')\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AATA;AAWA;AAEA;AACA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAPA;AAAA;AAAA;AASA;AACA;AACA;AACA;AACA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAEA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

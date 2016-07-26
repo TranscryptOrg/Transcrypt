@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/extended_slices/__javascript__/extended_slices.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/extended_slices/__init__.py"
+	],
+	"sourcesContent": [
+		"from org.transcrypt.stubs.browser import *\nfrom org.transcrypt.stubs.browser import __pragma__, __envir__\n\ndef indices (key):\n\tif __envir__.executor_name == __envir__.transpiler_name:\n\t\treturn tuple (key) if type (key) == list else key\n\telse:\n\t\ttry:\n\t\t\treturn key.indices (1000000000)\n\t\texcept:\n\t\t\ttry:\n\t\t\t\treturn tuple ([indices (subkey) for subkey in key])\n\t\t\texcept:\n\t\t\t\treturn key\n\nclass Test:\n\tdef __init__ (self, autoTester):\n\t\tself.autoTester = autoTester\n\n\tdef __getitem__ (self, key):\n\t\tself.autoTester.check ('getitem (', indices (key), ')')\n\t\treturn 1234567\n\t\t\n\tdef __setitem__ (self, key, value):\n\t\tself.autoTester.check ('setitem (', indices (key), ')', value)\n\ndef run (autoTester):\n\ta = b = c = d = e = f = g = h = i = j = k = l = Test (autoTester)\n\n\t__pragma__ ('opov')\n\t\t\t\n\ta [1:2:3, 4:5:6] = b [7:8:9]\n\tc [1:2:3] = d [4:5:6, 7:8:9]\n\te [1, 1:2:3, 3] = f [4, 4:5:6, 6]\n\tg [1, 2, 3] = h [1, 2, 3]\n\ti [1] = j [1]\n\tk [1:2:3] = l [1:2:3]\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

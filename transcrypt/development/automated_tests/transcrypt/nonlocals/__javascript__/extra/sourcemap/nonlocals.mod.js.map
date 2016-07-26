@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/nonlocals/__javascript__/nonlocals.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/nonlocals/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n\ttest1 = 1\n\ttest2 = 2\n\t\n\tdef f ():\n\t\ttest1 = 10\n\t\t\n\t\tnonlocal test2\n\t\ttest2 = 20\n\t\t\n\t\tautoTester.check (test1, test2)\n\t\t\n\tf ()\n\tautoTester.check (test1, test2)\t\t\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAEA;AACA;AAGA;AAEA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

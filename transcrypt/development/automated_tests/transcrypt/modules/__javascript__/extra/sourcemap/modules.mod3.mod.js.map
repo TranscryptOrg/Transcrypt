@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/__javascript__/modules.mod3.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod3.py"
+	],
+	"sourcesContent": [
+		"x = 'Toen wij uit Rotterdam vertrokken, vertrokken wij uit Rotterdam\\n'\nmod3Hundred = 100\n\ndef mod3GetTwoHundred ():\n\treturn 200\n\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -30,8 +30,6 @@ class Exception:
 class StopIteration ():
 	def __init__ (self):
 		Exception.__init__ (self, 'Iterator exhausted')
-	
-	__all__.StopIteration = StopIteration;
 		
 class ValueError (Exception):
 	pass

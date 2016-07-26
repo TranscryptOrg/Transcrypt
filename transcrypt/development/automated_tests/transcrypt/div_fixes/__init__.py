@@ -73,4 +73,5 @@ def run (autoTester):
 	autoTester.check (initially17)
 	initially17 //= 2
 	autoTester.check (initially17)
+
 	

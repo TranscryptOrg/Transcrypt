@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/dict_comprehensions/__javascript__/dict_comprehensions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/dict_comprehensions/__init__.py"
+	],
+	"sourcesContent": [
+		"from org.transcrypt.stubs.browser import __pragma__\n\n__pragma__ ('iconv')\t# Convert dict to key list without using keys () method\n\ndef run (autoTester):\n\toriginal = {'Isaac': 'Newton', 'Albert': 'Einstein', 'Paul': 'Dirac'}\n\tautoTester.check (original)\n\n\tinverted = {original [key]: key for key in original}\n\tautoTester.check (inverted)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

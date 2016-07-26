@@ -1,3 +1,33 @@
+'This is a single line docstring'
+class A:
+	'''
+	This
+	is 
+	a 
+	multiline
+	docstring
+	'''
+	def __init__ (self, x):
+		'This is a single line comment'
+		self.x = x
+		'''
+		This
+		is 
+		a 
+		multiline
+		docstring
+		'''
+	'This is a single line docstring'
+'''
+This
+is 
+a 
+multiline
+docstring
+'''
+
+a = A (5.5)
+
 def run (autoTester):	
 	autoTester.check ('Pull 56')
 	s = 'abcdefghij'

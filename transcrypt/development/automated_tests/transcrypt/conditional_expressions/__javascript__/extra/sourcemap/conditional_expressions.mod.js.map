@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/conditional_expressions/__javascript__/conditional_expressions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/transcrypt/development/automated_tests/transcrypt/conditional_expressions/__init__.py"
+	],
+	"sourcesContent": [
+		"def f (x, b):\n\treturn x * x if b else x + x\n\ndef run (autoTester):\n\tbools = (False, True)\n\tfor a in bools:\n\t\tfor b in bools:\n\t\t\tautoTester.check (f (10 if a else 100, b))\n\t\t\t\n\tfor p in bools:\n\t\tfor q in bools:\n\t\t\tfor r in bools:\n\t\t\t\tautoTester.check ('a' if p else 'b' if q else 'c' if r else 'd')\n\t\t\t\t\n\t\t\t\ta = ((('e' if p else 'f') if q else 'g') if r else 'h')\n\t\t\t\tb = ('i' if p else ('j' if q else ('k' if r else 'l')))\n\t\t\t\tc = 'm' if (p if q else r) else 'n'\n\t\t\t\td = 'o' if p < q <= r else 'p'\n\t\t\t\tautoTester.check (a, b, c, d)\n\t\t\t\t\n\todd = [x if x % 2 else x + 1 for x in range (10)]\n\tnoDuplicates = set (odd)\n\tautoTester.check (odd, noDuplicates)\n\t"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAEA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
