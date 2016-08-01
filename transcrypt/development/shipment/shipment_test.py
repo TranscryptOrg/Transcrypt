@@ -64,6 +64,7 @@ for esvSwitch in ('', '-e 6 '):
 		test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
 		test ('development/automated_tests/hello', 'autotest', True, False, switches)
 		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches)	
+		test ('development/automated_tests/time', 'autotest', True, False, switches)	
 		test ('development/manual_tests/module_random', 'module_random', False, False, switches)
 		test ('demos/hello', 'hello', False, False, switches)
 		test ('demos/jquery_demo', 'jquery_demo', False, False, switches)

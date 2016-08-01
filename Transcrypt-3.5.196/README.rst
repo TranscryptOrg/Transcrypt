@@ -52,6 +52,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Time module added + autotest + shipment test
 - String split and rsplit fixed
 - Export all imports
 - Added: any, all, assert
