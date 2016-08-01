@@ -1004,7 +1004,7 @@ __pragma__ ('endif')
 	}
 		
 	String.prototype.__repr__ = function () {
-		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\n', '\\n');
+		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\t', '\\t') .replace ('\n', '\\n');
 	};
 	
 	String.prototype.__str__ = function () {
@@ -1110,19 +1110,23 @@ __pragma__ ('endif')
 	String.prototype.rsplit = function (sep, maxsplit) {	// Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
 		if (sep == undefined || sep == null) {
 			sep = /\s+/;
+			var stripped = this.strip ();
+		}
+		else {
+			var stripped = this;
 		}
 			
 		if (maxsplit == undefined || maxsplit == -1) {
-			return this.split (sep);
+			return stripped.split (sep);
 		}
 		else {
-			var result = this.split (sep);
-			if (maxsplit > result.length) {
-				return result;
-			}
-			else {
+			var result = stripped.split (sep);
+			if (maxsplit < result.length) {
 				var maxrsplit = result.length - maxsplit;
 				return [result.slice (0, maxrsplit) .join (sep)] .concat (result.slice (maxrsplit));
+			}
+			else {
+				return result;
 			}
 		}
 	};
@@ -1133,19 +1137,23 @@ __pragma__ ('endif')
 	
 	String.prototype.py_split = function (sep, maxsplit) {	// Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
 		if (sep == undefined || sep == null) {
-			sep = /\s+/;
+			sep = /\s+/
+			var stripped = this.strip ();
+		}
+		else {
+			var stripped = this;
 		}
 			
 		if (maxsplit == undefined || maxsplit == -1) {
-			return this.split (sep);
+			return stripped.split (sep);
 		}
 		else {
-			var result = this.split (sep);
-			if (maxsplit > result.length) {
-				return result;
+			var result = stripped.split (sep);
+			if (maxsplit < result.length) {
+				return result.slice (0, maxsplit).concat ([result.slice (maxsplit).join (sep)]);
 			}
 			else {
-				return result.slice (0, maxsplit).concat ([result.slice (maxsplit).join (sep)]);
+				return result;
 			}
 		}
 	};

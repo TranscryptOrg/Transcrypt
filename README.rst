@@ -29,7 +29,7 @@ Thanks to everyone that has contributed ideas, bug reports and code examples. Wi
 This release features iterators, generators and JavaScript 6 code generation for some crucial facilities, e.g. iterator-controlled for-loops and yield. Even if JavaScript 6 code is generated, the minifier will turn it into JavaScript 5 code, so it will run on most browsers.
 
 The Python exception mechanism now blends with the JavaScript exception mechanism.
-Almost all of the 'math' module and a small but essential path of the 'random' module have been added.
+Almost all of the 'math' module and a small but essential part of the 'random' module have been added.
 
 Also in this release is a simple example of how to make an iPhone/iPad web app. This is a full screen app that is freely distributed via the Internet and available off-line, represented by an icon on the home screen. It also runs in any PC browser.
 
@@ -52,6 +52,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- String split and rsplit fixed
+- Export all imports
 - Added: any, all, assert
 - Readme adapted
 - Workaround for console.log.apply removed

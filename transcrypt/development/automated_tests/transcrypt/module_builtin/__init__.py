@@ -1,5 +1,16 @@
 # coding: utf-8
 
+from org.transcrypt.stubs.browser import __envir__
+
+def canonizeString (aString):
+	if __envir__.executor_name == 'transcrypt':
+		return aString.replace ('\t', '\\t') .replace ('\n', '\\n')
+	else:
+		return aString
+
+def canonizeStringList (stringList):
+	return [canonizeString (aString) for aString in stringList]
+
 def run (autoTester):
 	autoTester.check ('min', min (-1.1, -1, -3))
 	autoTester.check ('max', max (-1.1, -1, -3))
@@ -48,7 +59,7 @@ def run (autoTester):
 	
 	strings = [
 		'der des dem den die der den die das des dem das',
-		#'an auf	hinter ueber	neben vor	zwischen',
+		'an auf	hinter ueber	neben vor	zwischen',
 		'''
 			durch
 			fuer
@@ -64,32 +75,32 @@ def run (autoTester):
 	autoTester.check ('<br><br>split')
 	for aString in strings:
 		autoTester.check (
-			aString,
-			# aString.split (),
-			# aString.split (' '),
-			# aString.split (' ', 4),
-			# aString.split ('\t'),
-			# aString.split ('\t', 4),
-			# aString.split ('\n'),
-			# aString.split ('\n', 4),
-			# aString.split (','),
-			# aString.split (',', 4),
+			canonizeString (aString),
+			canonizeStringList (aString.split ()),
+			canonizeStringList (aString.split (' ')),
+			canonizeStringList (aString.split (' ', 4)),
+			canonizeStringList (aString.split ('\t')),
+			canonizeStringList (aString.split ('\t', 4)),
+			canonizeStringList (aString.split ('\n')),
+			canonizeStringList (aString.split ('\n', 4)),
+			canonizeStringList (aString.split (',')),
+			canonizeStringList (aString.split (',', 4)),
 			'<br>'
 		)
 		
-	# autoTester.check ('<br>rsplit')
-	# for aString in strings:
-		# autoTester.check (
-			# aString,
-			# aString.rsplit (),
-			# aString.rsplit (' '),
-			# aString.rsplit (' ', 4),
-			# aString.rsplit ('\t'),
-			# aString.rsplit ('\t', 4),
-			# aString.rsplit ('\n'),
-			# aString.rsplit ('\n', 4),
-			# aString.rsplit (','),
-			# aString.rsplit (',', 4),
-			# '<br>'
-		# )
+	autoTester.check ('<br>rsplit')
+	for aString in strings:
+		autoTester.check (
+			canonizeString (aString),
+			canonizeStringList (aString.rsplit ()),
+			canonizeStringList (aString.rsplit (' ')),
+			canonizeStringList (aString.rsplit (' ', 4)),
+			canonizeStringList (aString.rsplit ('\t')),
+			canonizeStringList (aString.rsplit ('\t', 4)),
+			canonizeStringList (aString.rsplit ('\n')),
+			canonizeStringList (aString.rsplit ('\n', 4)),
+			canonizeStringList (aString.rsplit (',')),
+			canonizeStringList (aString.rsplit (',', 4)),
+			'<br>'
+		)
 		
