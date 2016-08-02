@@ -34,3 +34,12 @@ def run (autoTester):
 	knight = {'rudolph': 'the righteous'}
 	for k in knight:	# Autotest automatic conversion with one knight, since sort order of dict undefined
 		autoTester.check (k)
+		
+	tel = {'guido': 123}
+	autoTester.check (tel.setdefault ('linus', 456))
+	autoTester.check (tel ['linus'])
+	autoTester.check (tel.setdefault ('guido', 789))
+	autoTester.check (tel.pop ('guido', 1))
+	autoTester.check (tel.pop ('guido', 1))
+	autoTester.check (tel.pop ('foo', 'bar'))
+	

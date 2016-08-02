@@ -52,6 +52,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Dict method pop added, setdefault fixed + autotest for both
 - Time module added + autotest + shipment test
 - String split and rsplit fixed
 - Export all imports
