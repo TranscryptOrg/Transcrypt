@@ -148,12 +148,12 @@ Code after *__pragma__ ('ifndef', <symbol>)* is compiled if <symbol> is NOT defi
 
 Important: The conditional compilation pragma's also work when placed at the start of a line in precompiled or hand-written JavaScript code.
 
-Inserting literal JavaScript: __pragma__ ('js', ...) and include (...)
-----------------------------------------------------------------------
+Inserting literal JavaScript: __pragma__ ('js', ...) and __include__ (...)
+--------------------------------------------------------------------------
 
 During compilation the *__pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
 
-An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *include (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
+An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *__include__ (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 

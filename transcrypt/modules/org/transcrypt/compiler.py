@@ -592,13 +592,16 @@ class Generator (ast.NodeVisitor):
 	def descope (self):
 		self.scopes.pop ()
 		
-	def getscope (self, nodeType = None):
+	def getScope (self, nodeType = None):
 		if nodeType:
 			for scope in reversed (self.scopes):
 				if type (scope.node) == nodeType:
 					return scope
 		else:
 			return self.scopes [-1]
+			
+	def getClassScopes (self):
+		return [scope for scope in self.scopes if type (scope.node) == ast.ClassDef]
 			
 	def emitComma (self, index, blank = True):
 		if index:
@@ -903,15 +906,15 @@ class Generator (ast.NodeVisitor):
 					self.emit (')')
 			else:
 				if isPropertyAssign and not target.id == self.getTemp ('left'):
-					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getscope () .node.name, target.id))
+					self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getScope () .node.name, target.id))
 					self.visit (value)
 					emitPathIndices ()
 					self.emit (');')
 				else:
 					if type (target) == ast.Name:
-						if type (self.getscope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
-							self.emit ('{}.'.format (self.getscope () .node.name))	# The target is an attribute
-						elif target.id in self.getscope () .nonlocals:
+						if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
+							self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getClassScopes ()])))	# The target is an attribute
+						elif target.id in self.getScope () .nonlocals:
 							pass
 						else:
 							self.emit ('var ')
@@ -950,7 +953,7 @@ class Generator (ast.NodeVisitor):
 				except:	# At this point it wasn't a property and also not a tuple or a list of properties
 					return False
 
-		isPropertyAssign = type (self.getscope () .node) == ast.ClassDef and getIsPropertyAssign (node.value)
+		isPropertyAssign = type (self.getScope () .node) == ast.ClassDef and getIsPropertyAssign (node.value)
 		# In transpiling to efficient JavaScript, we need a special, simplified case for properties
 		# In JavaScript generating '=' for properties won't do, it has to be 'Object.defineProperty'
 		# We can't look out for property installation at runtime, that would make all assignments slow
@@ -1121,9 +1124,9 @@ class Generator (ast.NodeVisitor):
 				
 		if type (node.func) == ast.Name:
 			if node.func.id == 'property':
-				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getscope (ast.ClassDef) .node.name, node.args [0].id))
+				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, node.args [0].id))
 				if len (node.args) > 1:
-					self.emit (', {}.{}'.format (self.getscope (ast.ClassDef) .node.name, node.args [1].id))
+					self.emit (', {}.{}'.format (self.getScope (ast.ClassDef) .node.name, node.args [1].id))
 				self.emit (')')
 				return
 			elif node.func.id == '__pragma__':
@@ -1237,10 +1240,15 @@ class Generator (ast.NodeVisitor):
 	def visit_ClassDef (self, node):
 		self.adaptLineNrString (node)
 		
-		if type (self.getscope () .node) == ast.Module:
+		if type (self.getScope () .node) == ast.Module:
 			self.all.add (node.name)
-
-		self.emit ('var {0} = __class__ (\'{0}\', [', self.filterId (node.name))
+			
+		if type (self.getScope () .node) == ast.ClassDef:
+			self.emit ('{}.{}'.format (self.filterId (self.getScope () .node.name), self.filterId (node.name)))
+		else:
+			self.emit ('var {}'.format (self.filterId (node.name)))
+			
+		self.emit (' = __class__ (\'{}\', [', self.filterId (node.name))
 		if node.bases:
 			for index, expr in enumerate (node.bases):
 				try:
@@ -1261,7 +1269,7 @@ class Generator (ast.NodeVisitor):
 				self.emitComma (index, False)
 				self.visit (stmt)
 				index += 1
-			elif type (stmt) == ast.Assign:
+			elif type (stmt) in (ast.Assign, ast.ClassDef):
 				classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
 			elif self.getPragmaFromExpr (stmt):
 				self.visit (stmt)				# If it's a pragma, just visit it
@@ -1489,7 +1497,7 @@ class Generator (ast.NodeVisitor):
 			self.emitBody (node.body)
 			self.dedent ()
 			
-			if self.getscope (ast.FunctionDef) .containsYield:
+			if self.getScope (ast.FunctionDef) .containsYield:
 				self.targetFragments.insert (yieldStarIndex, '*')
 				
 			self.descope ()
@@ -1497,8 +1505,8 @@ class Generator (ast.NodeVisitor):
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
 											# The rest of its use is only at compile time			
-			if type (self.getscope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
-				if type (self.getscope () .node) == ast.Module:
+			if type (self.getScope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
+				if type (self.getScope () .node) == ast.Module:
 					self.all.add (node.name)
 					
 				self.adaptLineNrString (node)
@@ -1538,7 +1546,7 @@ class Generator (ast.NodeVisitor):
 		self.visit_ListComp (node, isGenExp = True)
 		
 	def visit_Global (self, node):
-		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
+		self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
 
 		# raise utils.Error (
 			# moduleName = self.module.metadata.name,
@@ -1801,7 +1809,7 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_Name (self, node):	
 		if type (node.ctx) == ast.Store:
-			if type (self.getscope () .node) == ast.Module:
+			if type (self.getScope () .node) == ast.Module:
 				self.all.add (node.id)
 				
 		self.emit (self.filterId (node.id))
@@ -1810,7 +1818,7 @@ class Generator (ast.NodeVisitor):
 		self.emit (self.nameConsts [node.value])
 		
 	def visit_Nonlocal (self, node):
-		self.getscope (ast.FunctionDef) .nonlocals.update (node.names)
+		self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
 
 	def visit_Num (self, node):
 		self.emit ('{}', node.n)
@@ -2063,7 +2071,7 @@ class Generator (ast.NodeVisitor):
 			self.emit ('.close ()')
 			
 	def visit_Yield (self, node):
-		self.getscope (ast.FunctionDef) .containsYield = True
+		self.getScope (ast.FunctionDef) .containsYield = True
 		self.emit ('yield ')
 		self.visit (node.value)
 		

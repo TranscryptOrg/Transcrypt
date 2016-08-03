@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.201 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.206 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.201',
+        VERSION:     '3.5.206',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.201 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.206 documentation" href="index.html" />
     <link rel="next" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.206 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -80,6 +80,8 @@ Since they systematically cover all language constructs, they are also very effe
 
 <span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
+<span class="kn">import</span> <span class="nn">local_classes</span>
+<span class="kn">import</span> <span class="nn">module_builtin</span>
 
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;ifdef&#39;</span><span class="p">,</span> <span class="s">&#39;e6&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="s">&#39;e6&#39;</span> <span class="ow">in</span> <span class="n">__symbols__</span><span class="p">:</span>
@@ -120,6 +122,8 @@ Since they systematically cover all language constructs, they are also very effe
     
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">local_classes</span><span class="p">,</span> <span class="s">&#39;local_classes&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_builtin</span><span class="p">,</span> <span class="s">&#39;module_builtin&#39;</span><span class="p">)</span>
 
 <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;ifdef&#39;</span><span class="p">,</span> <span class="s">&#39;e6&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="s">&#39;e6&#39;</span> <span class="ow">in</span> <span class="n">__symbols__</span><span class="p">:</span>
@@ -197,8 +201,33 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
+<div class="section" id="accessing-attributes-by-name-getattr-setattr-hasattr">
+<h2>4.2. Accessing attributes by name: getattr, setattr, hasattr<a class="headerlink" href="#accessing-attributes-by-name-getattr-setattr-hasattr" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-attribs-by-name">
+<div class="code-block-caption"><span class="caption-text">Testlet: attribs_by_name</span><a class="headerlink" href="#testlet-attribs-by-name" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span>
+        
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span> <span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="nb">getattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">))</span>
+    
+    <span class="nb">setattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;goodbye&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="nb">getattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">))</span>
+    
+    <span class="nb">setattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="s">&#39;exists&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">hasattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">),</span> <span class="n">a</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="nb">getattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">))</span>
+    
+    <span class="nb">delattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">hasattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="classes-multiple-inheritance-and-assignment-of-bound-functions">
-<h2>4.2. Classes: multiple inheritance and assignment of bound functions<a class="headerlink" href="#classes-multiple-inheritance-and-assignment-of-bound-functions" title="Permalink to this headline">¶</a></h2>
+<h2>4.3. Classes: multiple inheritance and assignment of bound functions<a class="headerlink" href="#classes-multiple-inheritance-and-assignment-of-bound-functions" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-classes">
 <div class="code-block-caption"><span class="caption-text">Testlet: classes</span><a class="headerlink" href="#testlet-classes" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -265,7 +294,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="conditional-expressions-simple-and-nested">
-<h2>4.3. Conditional expressions: simple and nested<a class="headerlink" href="#conditional-expressions-simple-and-nested" title="Permalink to this headline">¶</a></h2>
+<h2>4.4. Conditional expressions: simple and nested<a class="headerlink" href="#conditional-expressions-simple-and-nested" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-conditional-expressions">
 <div class="code-block-caption"><span class="caption-text">Testlet: conditional_expressions</span><a class="headerlink" href="#testlet-conditional-expressions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -297,7 +326,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="control-structures-for-else-while-else-if-elif-else-break-continue">
-<h2>4.4. Control structures: for...else, while...else, if...elif...else, break, continue<a class="headerlink" href="#control-structures-for-else-while-else-if-elif-else-break-continue" title="Permalink to this headline">¶</a></h2>
+<h2>4.5. Control structures: for...else, while...else, if...elif...else, break, continue<a class="headerlink" href="#control-structures-for-else-while-else-if-elif-else-break-continue" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-control-structures">
 <div class="code-block-caption"><span class="caption-text">Testlet: control_structures</span><a class="headerlink" href="#testlet-control-structures" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -376,7 +405,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="data-structures-tuple-list-dict-set">
-<h2>4.5. Data structures: tuple, list, dict, set<a class="headerlink" href="#data-structures-tuple-list-dict-set" title="Permalink to this headline">¶</a></h2>
+<h2>4.6. Data structures: tuple, list, dict, set<a class="headerlink" href="#data-structures-tuple-list-dict-set" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-data-structures">
 <div class="code-block-caption"><span class="caption-text">Testlet: data_structures</span><a class="headerlink" href="#testlet-data-structures" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -429,7 +458,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="dict-comprehensions">
-<h2>4.6. Dict comprehensions<a class="headerlink" href="#dict-comprehensions" title="Permalink to this headline">¶</a></h2>
+<h2>4.7. Dict comprehensions<a class="headerlink" href="#dict-comprehensions" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-dict-comprehensions">
 <div class="code-block-caption"><span class="caption-text">Testlet: dict_comprehensions</span><a class="headerlink" href="#testlet-dict-comprehensions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -447,7 +476,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="diverse-fixes">
-<h2>4.7. Diverse fixes<a class="headerlink" href="#diverse-fixes" title="Permalink to this headline">¶</a></h2>
+<h2>4.8. Diverse fixes<a class="headerlink" href="#diverse-fixes" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-div-fixes">
 <div class="code-block-caption"><span class="caption-text">Testlet: div_fixes</span><a class="headerlink" href="#testlet-div-fixes" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -525,16 +554,47 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">initially17</span><span class="p">)</span>
     <span class="n">initially17</span> <span class="o">//=</span> <span class="mi">2</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">initially17</span><span class="p">)</span>
+
     
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="diverse-pulls">
-<h2>4.8. Diverse pulls<a class="headerlink" href="#diverse-pulls" title="Permalink to this headline">¶</a></h2>
+<h2>4.9. Diverse pulls<a class="headerlink" href="#diverse-pulls" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-div-pulls">
 <div class="code-block-caption"><span class="caption-text">Testlet: div_pulls</span><a class="headerlink" href="#testlet-div-pulls" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>   
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;This is a single line docstring&#39;</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This</span>
+<span class="sd">    is </span>
+<span class="sd">    a </span>
+<span class="sd">    multiline</span>
+<span class="sd">    docstring</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="s">&#39;This is a single line comment&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This</span>
+<span class="sd">        is </span>
+<span class="sd">        a </span>
+<span class="sd">        multiline</span>
+<span class="sd">        docstring</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+    <span class="s">&#39;This is a single line docstring&#39;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This</span>
+<span class="sd">is </span>
+<span class="sd">a </span>
+<span class="sd">multiline</span>
+<span class="sd">docstring</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span> <span class="p">(</span><span class="mf">5.5</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>   
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;Pull 56&#39;</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;abcdefghij&#39;</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">s</span> <span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
@@ -550,7 +610,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="dictionaries-dict-revisited">
-<h2>4.9. Dictionaries: dict revisited<a class="headerlink" href="#dictionaries-dict-revisited" title="Permalink to this headline">¶</a></h2>
+<h2>4.10. Dictionaries: dict revisited<a class="headerlink" href="#dictionaries-dict-revisited" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-dictionaries">
 <div class="code-block-caption"><span class="caption-text">Testlet: dictionaries</span><a class="headerlink" href="#testlet-dictionaries" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -589,12 +649,21 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">knight</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;rudolph&#39;</span><span class="p">:</span> <span class="s">&#39;the righteous&#39;</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">knight</span><span class="p">:</span>    <span class="c"># Autotest automatic conversion with one knight, since sort order of dict undefined</span>
         <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        
+    <span class="n">tel</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;guido&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">}</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">setdefault</span> <span class="p">(</span><span class="s">&#39;linus&#39;</span><span class="p">,</span> <span class="mi">456</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span> <span class="p">[</span><span class="s">&#39;linus&#39;</span><span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">setdefault</span> <span class="p">(</span><span class="s">&#39;guido&#39;</span><span class="p">,</span> <span class="mi">789</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">pop</span> <span class="p">(</span><span class="s">&#39;guido&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">pop</span> <span class="p">(</span><span class="s">&#39;guido&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tel</span><span class="o">.</span><span class="n">pop</span> <span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">))</span>
+    
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="exceptions-exception-class-hierarchy-finally">
-<h2>4.10. Exceptions: exception class hierarchy, finally<a class="headerlink" href="#exceptions-exception-class-hierarchy-finally" title="Permalink to this headline">¶</a></h2>
+<h2>4.11. Exceptions: exception class hierarchy, finally<a class="headerlink" href="#exceptions-exception-class-hierarchy-finally" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-exceptions">
 <div class="code-block-caption"><span class="caption-text">Testlet: exceptions</span><a class="headerlink" href="#testlet-exceptions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__envir__</span><span class="p">,</span> <span class="n">__new__</span><span class="p">,</span> <span class="n">__pragma__</span>
@@ -750,8 +819,53 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
+<div class="section" id="extended-slices-facilitating-numscrypt-and-such">
+<h2>4.12. Extended slices: facilitating NumScrypt and such<a class="headerlink" href="#extended-slices-facilitating-numscrypt-and-such" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-extended-slices">
+<div class="code-block-caption"><span class="caption-text">Testlet: extended_slices</span><a class="headerlink" href="#testlet-extended-slices" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span><span class="p">,</span> <span class="n">__envir__</span>
+
+<span class="k">def</span> <span class="nf">indices</span> <span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">transpiler_name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span> <span class="nb">type</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span> <span class="k">else</span> <span class="n">key</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">indices</span> <span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">tuple</span> <span class="p">([</span><span class="n">indices</span> <span class="p">(</span><span class="n">subkey</span><span class="p">)</span> <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">key</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">key</span>
+
+<span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoTester</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoTester</span> <span class="o">=</span> <span class="n">autoTester</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;getitem (&#39;</span><span class="p">,</span> <span class="n">indices</span> <span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="s">&#39;)&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1234567</span>
+        
+    <span class="k">def</span> <span class="nf">__setitem__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;setitem (&#39;</span><span class="p">,</span> <span class="n">indices</span> <span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="s">&#39;)&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span> <span class="o">=</span> <span class="n">d</span> <span class="o">=</span> <span class="n">e</span> <span class="o">=</span> <span class="n">f</span> <span class="o">=</span> <span class="n">g</span> <span class="o">=</span> <span class="n">h</span> <span class="o">=</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="n">k</span> <span class="o">=</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Test</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">)</span>
+
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+            
+    <span class="n">a</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+    <span class="n">c</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span> <span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
+    <span class="n">e</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">g</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">i</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">k</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="general-functions-sort-and-sorted">
-<h2>4.11. General functions: sort and sorted<a class="headerlink" href="#general-functions-sort-and-sorted" title="Permalink to this headline">¶</a></h2>
+<h2>4.13. General functions: sort and sorted<a class="headerlink" href="#general-functions-sort-and-sorted" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-general-functions">
 <div class="code-block-caption"><span class="caption-text">Testlet: general_functions</span><a class="headerlink" href="#testlet-general-functions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -840,8 +954,353 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
-<div class="section" id="hierarchical-modules-both-local-to-the-project-and-global-url-based">
-<h2>4.12. Hierarchical modules: both local to the project and global url-based<a class="headerlink" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="indices-and-slices-lhs-rhs-basic-and-extended">
+<h2>4.14. Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-indices-and-slices">
+<div class="code-block-caption"><span class="caption-text">Testlet: indices_and_slices</span><a class="headerlink" href="#testlet-indices-and-slices" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="c"># Right hand side slices</span>
+    <span class="nb">all</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span><span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span> <span class="p">:</span> <span class="mi">2</span><span class="p">])</span> 
+    
+    <span class="c"># Left hand side slices</span>
+    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">4</span> <span class="p">:</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">2</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+    
+    <span class="n">aList</span> <span class="p">[</span> <span class="p">:</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="lambda-functions-with-all-types-of-args">
+<h2>4.15. Lambda functions with all types of args<a class="headerlink" href="#lambda-functions-with-all-types-of-args" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-lambda-functions">
+<div class="code-block-caption"><span class="caption-text">Testlet: lambda_functions</span><a class="headerlink" href="#testlet-lambda-functions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">((</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">,</span> <span class="n">aFunc</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">aFunc</span> <span class="p">(</span><span class="o">*</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">)]</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">args</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-comprehensions-multi-loop-and-nested-with-multiple-if-s">
+<h2>4.16. List comprehensions: multi-loop and nested with multiple if's<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-list-comprehensions">
+<div class="code-block-caption"><span class="caption-text">Testlet: list_comprehensions</span><a class="headerlink" href="#testlet-list-comprehensions" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">squares</span><span class="p">)</span>
+    
+    <span class="n">tuples</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span> <span class="k">if</span> <span class="mi">20</span> <span class="o">&lt;</span> <span class="n">y</span>  <span class="o">&lt;</span> <span class="mi">60</span>
+                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="k">if</span> <span class="mi">200</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">600</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="mi">6</span>
+    <span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tuples</span><span class="p">)</span>
+    
+    <span class="n">tricky</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">))]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tricky</span><span class="p">)</span>
+    
+    <span class="n">nested</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">nested</span><span class="p">)</span>
+    
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">scopeTest</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">scopeTest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="local-classes-inside-other-classes-and-functions">
+<h2>4.17. Local classes: inside other classes and functions<a class="headerlink" href="#local-classes-inside-other-classes-and-functions" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-local-classes">
+<div class="code-block-caption"><span class="caption-text">Testlet: local_classes</span><a class="headerlink" href="#testlet-local-classes" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>       
+    <span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+        <span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+                
+            <span class="k">def</span> <span class="nf">tell</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+                
+            <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+                
+        <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+            
+        <span class="k">def</span> <span class="nf">tell</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">G</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+                
+            <span class="k">def</span> <span class="nf">tell</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                
+            <span class="n">h</span> <span class="o">=</span> <span class="mi">3</span>
+            
+        <span class="n">g</span> <span class="o">=</span> <span class="n">G</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">tell</span> <span class="p">()</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
+        
+        <span class="k">class</span> <span class="nc">P</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
+            <span class="k">pass</span>
+            
+        <span class="n">p</span> <span class="o">=</span> <span class="n">P</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">tell</span> <span class="p">()</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+                
+    <span class="n">a</span> <span class="o">=</span> <span class="n">A</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">B</span> <span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+    <span class="n">a</span><span class="o">.</span><span class="n">tell</span> <span class="p">()</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">tell</span> <span class="p">()</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="n">f</span> <span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-builtin-a-small-part-of-it-demo-ed">
+<h2>4.18. Module builtin: a small part of it demo'ed<a class="headerlink" href="#module-builtin-a-small-part-of-it-demo-ed" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-module-builtin">
+<div class="code-block-caption"><span class="caption-text">Testlet: module_builtin</span><a class="headerlink" href="#testlet-module-builtin" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># coding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__envir__</span>
+
+<span class="k">def</span> <span class="nf">canonizeString</span> <span class="p">(</span><span class="n">aString</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="s">&#39;transcrypt&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">aString</span><span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">t&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">n&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">aString</span>
+
+<span class="k">def</span> <span class="nf">canonizeStringList</span> <span class="p">(</span><span class="n">stringList</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">canonizeString</span> <span class="p">(</span><span class="n">aString</span><span class="p">)</span> <span class="k">for</span> <span class="n">aString</span> <span class="ow">in</span> <span class="n">stringList</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;min&#39;</span><span class="p">,</span> <span class="nb">min</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;max&#39;</span><span class="p">,</span> <span class="nb">max</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;abs&#39;</span><span class="p">,</span> <span class="nb">abs</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="nb">abs</span> <span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nb">abs</span> <span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">abs</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">),</span> <span class="nb">abs</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;ord&#39;</span><span class="p">,</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">),</span> <span class="nb">ord</span> <span class="p">(</span><span class="s">&#39;e´&#39;</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>  <span class="c"># This is the 2 codepoint version</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;round&#39;</span><span class="p">,</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">4.006</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">4.006</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mi">4060</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span>
+        
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">4.006</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">4.006</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mi">4060</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span>
+        
+        <span class="nb">round</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">0.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">1.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">1.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">2.59</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="mf">3.59</span><span class="p">),</span>
+        
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.51</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.59</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">),</span>
+        <span class="nb">round</span> <span class="p">(</span><span class="o">-</span><span class="mf">3.59</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">strings</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&#39;der des dem den die der den die das des dem das&#39;</span><span class="p">,</span>
+        <span class="s">&#39;an auf hinter ueber    neben vor   zwischen&#39;</span><span class="p">,</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            durch</span>
+<span class="sd">            fuer</span>
+<span class="sd">            ohne</span>
+<span class="sd">            um</span>
+<span class="sd">            bis</span>
+<span class="sd">            gegen</span>
+<span class="sd">            entlang</span>
+<span class="sd">        &#39;&#39;&#39;</span><span class="p">,</span>
+        <span class="s">&#39;eins,zwei,drie,vier,fuenf,sechs,sieben&#39;</span>
+    <span class="p">]</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;&lt;br&gt;split&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">aString</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span>
+            <span class="n">canonizeString</span> <span class="p">(</span><span class="n">aString</span><span class="p">),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">()),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">split</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="s">&#39;&lt;br&gt;&#39;</span>
+        <span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;rsplit&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">aString</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span>
+            <span class="n">canonizeString</span> <span class="p">(</span><span class="n">aString</span><span class="p">),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">()),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)),</span>
+            <span class="n">canonizeStringList</span> <span class="p">(</span><span class="n">aString</span><span class="o">.</span><span class="n">rsplit</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="s">&#39;&lt;br&gt;&#39;</span>
+        <span class="p">)</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-math-allmost-all-of-python-s-math-module">
+<h2>4.19. Module math: allmost all of Python's math module<a class="headerlink" href="#module-math-allmost-all-of-python-s-math-module" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-module-math">
+<div class="code-block-caption"><span class="caption-text">Testlet: module_math</span><a class="headerlink" href="#testlet-module-math" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exp</span> <span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">expm1</span> <span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log1p</span> <span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log2</span> <span class="p">(</span><span class="mi">257</span><span class="p">)))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log10</span> <span class="p">(</span><span class="mi">1001</span><span class="p">)))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">pow</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sqrt</span> <span class="p">(</span><span class="mf">25.1</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sin</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">cos</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tan</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">asin</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">acos</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan2</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">hypot</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">)))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">degrees</span> <span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">radians</span> <span class="p">(</span><span class="mi">90</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sinh</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">cosh</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tan</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">asinh</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">acosh</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">floor</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">ceil</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">trunc</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-random-most-important-functions-of-python-s-random-module">
+<h2>4.20. Module random: most important functions of Python's random module<a class="headerlink" href="#module-random-most-important-functions-of-python-s-random-module" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="manual-test-module-random">
+<div class="code-block-caption"><span class="caption-text">Manual_test: module_random</span><a class="headerlink" href="#manual-test-module-random" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+<span class="k">def</span> <span class="nf">output</span> <span class="p">(</span><span class="nb">any</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="nb">any</span> <span class="o">+</span> <span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+<span class="k">for</span> <span class="n">fixedSeed</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fixedSeed</span><span class="p">:</span>
+        <span class="n">seed</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">seed</span> <span class="p">()</span>
+
+    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;------ {} ------&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="s">&#39;fixed seed&#39;</span> <span class="k">if</span> <span class="n">fixedSeed</span> <span class="k">else</span> <span class="s">&#39;auto seed&#39;</span><span class="p">))</span>
+        
+    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;--- randint ---&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">output</span> <span class="p">(</span><span class="n">randint</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+
+    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">--- choice ---&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">output</span> <span class="p">(</span><span class="n">choice</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+
+    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">--- random ---&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">output</span> <span class="p">(</span><span class="n">random</span> <span class="p">())</span>
+        
+    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    
+<span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="modules-hierarchical-both-local-to-the-project-and-global-url-based">
+<h2>4.21. Modules: hierarchical, both local to the project and global url-based<a class="headerlink" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-modules">
 <div class="code-block-caption"><span class="caption-text">Testlet: modules</span><a class="headerlink" href="#testlet-modules" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">modules.mod1.mod11.mod111</span>
@@ -904,179 +1363,30 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
-<div class="section" id="indices-and-slices-lhs-rhs-basic-and-extended">
-<h2>4.13. Indices and slices: LHS, RHS, basic and extended<a class="headerlink" href="#indices-and-slices-lhs-rhs-basic-and-extended" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="testlet-indices-and-slices">
-<div class="code-block-caption"><span class="caption-text">Testlet: indices_and_slices</span><a class="headerlink" href="#testlet-indices-and-slices" title="Permalink to this code">¶</a></div>
+<div class="section" id="nonlocals">
+<h2>4.22. Nonlocals<a class="headerlink" href="#nonlocals" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-nonlocals">
+<div class="code-block-caption"><span class="caption-text">Testlet: nonlocals</span><a class="headerlink" href="#testlet-nonlocals" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
-    <span class="c"># Right hand side slices</span>
-    <span class="nb">all</span> <span class="o">=</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">32</span><span class="p">)</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+    <span class="n">test1</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">test2</span> <span class="o">=</span> <span class="mi">2</span>
     
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span><span class="p">])</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">all</span> <span class="p">[</span><span class="mi">8</span> <span class="p">:</span> <span class="mi">24</span> <span class="p">:</span> <span class="mi">2</span><span class="p">])</span> 
-    
-    <span class="c"># Left hand side slices</span>
-    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-    
-    <span class="n">aList</span> <span class="p">[</span><span class="mi">4</span> <span class="p">:</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-    
-    <span class="n">aList</span> <span class="p">[</span><span class="mi">2</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-    
-    <span class="n">aList</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-    
-    <span class="n">aList</span> <span class="p">[</span> <span class="p">:</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">aList</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="lambda-functions-with-all-types-of-args">
-<h2>4.14. Lambda functions with all types of args<a class="headerlink" href="#lambda-functions-with-all-types-of-args" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="testlet-lambda-functions">
-<div class="code-block-caption"><span class="caption-text">Testlet: lambda_functions</span><a class="headerlink" href="#testlet-lambda-functions" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">((</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">f</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">,</span> <span class="n">aFunc</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">aFunc</span> <span class="p">(</span><span class="o">*</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="n">list0</span><span class="p">,</span> <span class="n">list1</span><span class="p">)]</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">args</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">z</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="list-comprehensions-multi-loop-and-nested-with-multiple-if-s">
-<h2>4.15. List comprehensions: multi-loop and nested with multiple if's<a class="headerlink" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="testlet-list-comprehensions">
-<div class="code-block-caption"><span class="caption-text">Testlet: list_comprehensions</span><a class="headerlink" href="#testlet-list-comprehensions" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
-    <span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">squares</span><span class="p">)</span>
-    
-    <span class="n">tuples</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span> <span class="k">if</span> <span class="mi">20</span> <span class="o">&lt;</span> <span class="n">y</span>  <span class="o">&lt;</span> <span class="mi">60</span>
-                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="k">if</span> <span class="mi">200</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">600</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="mi">6</span>
-    <span class="p">]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tuples</span><span class="p">)</span>
-    
-    <span class="n">tricky</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">))]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tricky</span><span class="p">)</span>
-    
-    <span class="n">nested</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">)]]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">nested</span><span class="p">)</span>
-    
-    <span class="n">a</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">scopeTest</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">scopeTest</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="module-math-allmost-all-of-python-s-math-module">
-<h2>4.16. Module math: allmost all of Python's math module<a class="headerlink" href="#module-math-allmost-all-of-python-s-math-module" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="testlet-module-math">
-<div class="code-block-caption"><span class="caption-text">Testlet: module_math</span><a class="headerlink" href="#testlet-module-math" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">pi</span><span class="p">)</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exp</span> <span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">expm1</span> <span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log1p</span> <span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log2</span> <span class="p">(</span><span class="mi">257</span><span class="p">)))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log10</span> <span class="p">(</span><span class="mi">1001</span><span class="p">)))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">pow</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sqrt</span> <span class="p">(</span><span class="mf">25.1</span><span class="p">))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sin</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">cos</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tan</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">asin</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">acos</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan2</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">hypot</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">)))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">degrees</span> <span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.1</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">radians</span> <span class="p">(</span><span class="mi">90</span><span class="p">))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sinh</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">cosh</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">tan</span> <span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">asinh</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">acosh</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">atan</span> <span class="p">(</span><span class="mi">70</span><span class="p">))</span>
-    
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">floor</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">ceil</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
-    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">trunc</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">))</span>
-    
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="module-random-most-important-functions-of-python-s-random-module">
-<h2>4.17. Module random: most important functions of Python's random module<a class="headerlink" href="#module-random-most-important-functions-of-python-s-random-module" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="manual-test-module-random">
-<div class="code-block-caption"><span class="caption-text">Manual_test: module_random</span><a class="headerlink" href="#manual-test-module-random" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">result</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-
-<span class="k">def</span> <span class="nf">output</span> <span class="p">(</span><span class="nb">any</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">+=</span> <span class="nb">any</span> <span class="o">+</span> <span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">&#39;</span>
-
-<span class="k">for</span> <span class="n">fixedSeed</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">fixedSeed</span><span class="p">:</span>
-        <span class="n">seed</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">seed</span> <span class="p">()</span>
-
-    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;------ {} ------&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="s">&#39;fixed seed&#39;</span> <span class="k">if</span> <span class="n">fixedSeed</span> <span class="k">else</span> <span class="s">&#39;auto seed&#39;</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">f</span> <span class="p">():</span>
+        <span class="n">test1</span> <span class="o">=</span> <span class="mi">10</span>
         
-    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;--- randint ---&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">output</span> <span class="p">(</span><span class="n">randint</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
-
-    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">--- choice ---&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">output</span> <span class="p">(</span><span class="n">choice</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
-
-    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">--- random ---&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">output</span> <span class="p">(</span><span class="n">random</span> <span class="p">())</span>
+        <span class="n">nonlocal</span> <span class="n">test2</span>
+        <span class="n">test2</span> <span class="o">=</span> <span class="mi">20</span>
         
-    <span class="n">output</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-    
-<span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">test1</span><span class="p">,</span> <span class="n">test2</span><span class="p">)</span>
+        
+    <span class="n">f</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">test1</span><span class="p">,</span> <span class="n">test2</span><span class="p">)</span>     
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="operator-overloading">
-<h2>4.18. Operator overloading<a class="headerlink" href="#operator-overloading" title="Permalink to this headline">¶</a></h2>
+<h2>4.23. Operator overloading<a class="headerlink" href="#operator-overloading" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-operator-overloading">
 <div class="code-block-caption"><span class="caption-text">Testlet: operator_overloading</span><a class="headerlink" href="#testlet-operator-overloading" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -1212,7 +1522,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="properties">
-<h2>4.19. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<h2>4.24. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-properties">
 <div class="code-block-caption"><span class="caption-text">Testlet: properties</span><a class="headerlink" href="#testlet-properties" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -1315,7 +1625,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="set-comprehensions">
-<h2>4.20. Set comprehensions<a class="headerlink" href="#set-comprehensions" title="Permalink to this headline">¶</a></h2>
+<h2>4.25. Set comprehensions<a class="headerlink" href="#set-comprehensions" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-set-comprehensions">
 <div class="code-block-caption"><span class="caption-text">Testlet: set_comprehensions</span><a class="headerlink" href="#testlet-set-comprehensions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -1369,7 +1679,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="simple-and-augmented-assignment">
-<h2>4.21. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
+<h2>4.26. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-simple-and-augmented-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: simple_and_augmented_assignment</span><a class="headerlink" href="#testlet-simple-and-augmented-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -1439,7 +1749,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">
-<h2>4.22. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection<a class="headerlink" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection" title="Permalink to this headline">¶</a></h2>
+<h2>4.27. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection<a class="headerlink" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-truthyness">
 <div class="code-block-caption"><span class="caption-text">Testlet: truthyness</span><a class="headerlink" href="#testlet-truthyness" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -1558,7 +1868,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="tuple-assignment-recursive-and-in-for-headers-using-enumerate">
-<h2>4.23. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
+<h2>4.28. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-tuple-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: tuple_assignment</span><a class="headerlink" href="#testlet-tuple-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -1600,28 +1910,33 @@ Since they systematically cover all language constructs, they are also very effe
   <ul>
 <li><a class="reference internal" href="#">4. Systematic code examples: a guided tour of Transcrypt</a><ul>
 <li><a class="reference internal" href="#arguments-kwargs-args-defaults-at-call-and-def-time-also-for-lambda-s">4.1. Arguments: **kwargs, *args, defaults, at call and def time, also for lambda's</a></li>
-<li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">4.2. Classes: multiple inheritance and assignment of bound functions</a></li>
-<li><a class="reference internal" href="#conditional-expressions-simple-and-nested">4.3. Conditional expressions: simple and nested</a></li>
-<li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">4.4. Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
-<li><a class="reference internal" href="#data-structures-tuple-list-dict-set">4.5. Data structures: tuple, list, dict, set</a></li>
-<li><a class="reference internal" href="#dict-comprehensions">4.6. Dict comprehensions</a></li>
-<li><a class="reference internal" href="#diverse-fixes">4.7. Diverse fixes</a></li>
-<li><a class="reference internal" href="#diverse-pulls">4.8. Diverse pulls</a></li>
-<li><a class="reference internal" href="#dictionaries-dict-revisited">4.9. Dictionaries: dict revisited</a></li>
-<li><a class="reference internal" href="#exceptions-exception-class-hierarchy-finally">4.10. Exceptions: exception class hierarchy, finally</a></li>
-<li><a class="reference internal" href="#general-functions-sort-and-sorted">4.11. General functions: sort and sorted</a></li>
-<li><a class="reference internal" href="#hierarchical-modules-both-local-to-the-project-and-global-url-based">4.12. Hierarchical modules: both local to the project and global url-based</a></li>
-<li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">4.13. Indices and slices: LHS, RHS, basic and extended</a></li>
-<li><a class="reference internal" href="#lambda-functions-with-all-types-of-args">4.14. Lambda functions with all types of args</a></li>
-<li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.15. List comprehensions: multi-loop and nested with multiple if's</a></li>
-<li><a class="reference internal" href="#module-math-allmost-all-of-python-s-math-module">4.16. Module math: allmost all of Python's math module</a></li>
-<li><a class="reference internal" href="#module-random-most-important-functions-of-python-s-random-module">4.17. Module random: most important functions of Python's random module</a></li>
-<li><a class="reference internal" href="#operator-overloading">4.18. Operator overloading</a></li>
-<li><a class="reference internal" href="#properties">4.19. Properties</a></li>
-<li><a class="reference internal" href="#set-comprehensions">4.20. Set comprehensions</a></li>
-<li><a class="reference internal" href="#simple-and-augmented-assignment">4.21. Simple and augmented assignment</a></li>
-<li><a class="reference internal" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">4.22. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection</a></li>
-<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.23. Tuple assignment: recursive and in for-headers using enumerate</a></li>
+<li><a class="reference internal" href="#accessing-attributes-by-name-getattr-setattr-hasattr">4.2. Accessing attributes by name: getattr, setattr, hasattr</a></li>
+<li><a class="reference internal" href="#classes-multiple-inheritance-and-assignment-of-bound-functions">4.3. Classes: multiple inheritance and assignment of bound functions</a></li>
+<li><a class="reference internal" href="#conditional-expressions-simple-and-nested">4.4. Conditional expressions: simple and nested</a></li>
+<li><a class="reference internal" href="#control-structures-for-else-while-else-if-elif-else-break-continue">4.5. Control structures: for...else, while...else, if...elif...else, break, continue</a></li>
+<li><a class="reference internal" href="#data-structures-tuple-list-dict-set">4.6. Data structures: tuple, list, dict, set</a></li>
+<li><a class="reference internal" href="#dict-comprehensions">4.7. Dict comprehensions</a></li>
+<li><a class="reference internal" href="#diverse-fixes">4.8. Diverse fixes</a></li>
+<li><a class="reference internal" href="#diverse-pulls">4.9. Diverse pulls</a></li>
+<li><a class="reference internal" href="#dictionaries-dict-revisited">4.10. Dictionaries: dict revisited</a></li>
+<li><a class="reference internal" href="#exceptions-exception-class-hierarchy-finally">4.11. Exceptions: exception class hierarchy, finally</a></li>
+<li><a class="reference internal" href="#extended-slices-facilitating-numscrypt-and-such">4.12. Extended slices: facilitating NumScrypt and such</a></li>
+<li><a class="reference internal" href="#general-functions-sort-and-sorted">4.13. General functions: sort and sorted</a></li>
+<li><a class="reference internal" href="#indices-and-slices-lhs-rhs-basic-and-extended">4.14. Indices and slices: LHS, RHS, basic and extended</a></li>
+<li><a class="reference internal" href="#lambda-functions-with-all-types-of-args">4.15. Lambda functions with all types of args</a></li>
+<li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.16. List comprehensions: multi-loop and nested with multiple if's</a></li>
+<li><a class="reference internal" href="#local-classes-inside-other-classes-and-functions">4.17. Local classes: inside other classes and functions</a></li>
+<li><a class="reference internal" href="#module-builtin-a-small-part-of-it-demo-ed">4.18. Module builtin: a small part of it demo'ed</a></li>
+<li><a class="reference internal" href="#module-math-allmost-all-of-python-s-math-module">4.19. Module math: allmost all of Python's math module</a></li>
+<li><a class="reference internal" href="#module-random-most-important-functions-of-python-s-random-module">4.20. Module random: most important functions of Python's random module</a></li>
+<li><a class="reference internal" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based">4.21. Modules: hierarchical, both local to the project and global url-based</a></li>
+<li><a class="reference internal" href="#nonlocals">4.22. Nonlocals</a></li>
+<li><a class="reference internal" href="#operator-overloading">4.23. Operator overloading</a></li>
+<li><a class="reference internal" href="#properties">4.24. Properties</a></li>
+<li><a class="reference internal" href="#set-comprehensions">4.25. Set comprehensions</a></li>
+<li><a class="reference internal" href="#simple-and-augmented-assignment">4.26. Simple and augmented assignment</a></li>
+<li><a class="reference internal" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">4.27. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection</a></li>
+<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.28. Tuple assignment: recursive and in for-headers using enumerate</a></li>
 </ul>
 </li>
 </ul>
@@ -1668,7 +1983,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.201 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.206 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

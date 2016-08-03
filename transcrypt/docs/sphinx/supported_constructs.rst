@@ -18,6 +18,13 @@ Arguments: \*\*kwargs, \*args, defaults, at call and def time, also for lambda's
 	:tab-width: 4
 	:caption: Testlet: arguments
 
+Accessing attributes by name: getattr, setattr, hasattr
+-------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/attribs_by_name/__init__.py
+	:tab-width: 4
+	:caption: Testlet: attribs_by_name
+
 Classes: multiple inheritance and assignment of bound functions
 ---------------------------------------------------------------
 
@@ -81,19 +88,19 @@ Exceptions: exception class hierarchy, finally
 	:tab-width: 4
 	:caption: Testlet: exceptions
 
+Extended slices: facilitating NumScrypt and such
+------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/extended_slices/__init__.py
+	:tab-width: 4
+	:caption: Testlet: extended_slices
+
 General functions: sort and sorted
 ----------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/general_functions/__init__.py
 	:tab-width: 4
 	:caption: Testlet: general_functions
-
-Hierarchical modules: both local to the project and global url-based
---------------------------------------------------------------------
-
-.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
-	:tab-width: 4
-	:caption: Testlet: modules
 
 Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
@@ -116,6 +123,20 @@ List comprehensions: multi-loop and nested with multiple if's
 	:tab-width: 4
 	:caption: Testlet: list_comprehensions
 
+Local classes: inside other classes and functions
+-------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/local_classes/__init__.py
+	:tab-width: 4
+	:caption: Testlet: local_classes
+
+Module builtin: a small part of it demo'ed
+------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/module_builtin/__init__.py
+	:tab-width: 4
+	:caption: Testlet: module_builtin
+
 Module math: allmost all of Python's math module
 ------------------------------------------------
 
@@ -129,6 +150,20 @@ Module random: most important functions of Python's random module
 .. literalinclude:: ../../development/manual_tests/module_random/module_random.py
 	:tab-width: 4
 	:caption: Manual_test: module_random
+
+Modules: hierarchical, both local to the project and global url-based
+--------------------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
+	:tab-width: 4
+	:caption: Testlet: modules
+
+Nonlocals
+---------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/nonlocals/__init__.py
+	:tab-width: 4
+	:caption: Testlet: nonlocals
 
 Operator overloading
 --------------------
