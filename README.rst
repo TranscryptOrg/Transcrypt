@@ -1,4 +1,6 @@
-<img src="http://www.transcrypt.org/illustrations/spread_the_news.png" alt="Spread the news!" width="512">
+.. figure:: http://www.transcrypt.org/illustrations/spread_the_word.png
+	:alt: Spread the word!
+	:scale: 50 %
 
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
