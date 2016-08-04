@@ -7,6 +7,7 @@ import classes
 import conditional_expressions
 import control_structures
 import data_structures
+import decorators
 import dict_comprehensions
 import dictionaries
 import div_fixes
@@ -49,6 +50,7 @@ autoTester.run (classes, 'classes')
 autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')
 autoTester.run (data_structures, 'data_structures')
+autoTester.run (decorators, 'decorators')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')
 autoTester.run (dictionaries, 'dictionaries')
 autoTester.run (div_fixes, 'div_fixes')

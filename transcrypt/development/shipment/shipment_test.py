@@ -13,10 +13,13 @@ class CommandArgs:
 		self.argParser.add_argument ('-c', '--clean', help = 'clean source tree', action = 'store_true')
 		self.argParser.add_argument ('-d', '--docs', help = 'make docs', action = 'store_true')
 		self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
+		self.argParser.add_argument ('-i', '--inst', help = 'installed version rather than new one', action = 'store_true')
 		
 		self.__dict__.update (self.argParser.parse_args () .__dict__)
 
 commandArgs = CommandArgs ()
+		
+transpileCommand = 'transcrypt' if commandArgs.inst else 'run_transcrypt'
 		
 if commandArgs.clean:
 	answer0 = input ('\nWARNING: THIS PROGRAM MAY ERRONEOUSLY DELETE MANY VALUABLE FILES!\nUsing it is entirely at your own risk.\nRead the sourcecode if you want to know what it does.\nIf you\'re not sure that its harmless in your situation, DON\'T USE IT!!!\n\nARE YOU SURE YOU WANT TO CONTINUE? (y = yes, n = no) ')
@@ -35,15 +38,15 @@ def getAbsPath (relPath):
 def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = ''):
 	os.chdir (getAbsPath (relPath))
 	
-	os.system ('run_transcrypt -b -m -dm -dt -da {}{}.py'.format (switches, fileNamePrefix))
+	os.system ('{} -b -m -dm -dt -da {}{}.py'.format (transpileCommand, switches, fileNamePrefix))
 
 	if run:
 		os.chdir (getAbsPath (relPath))
 		
 		if ' -e 6 ' in (' ' + switches + ' '):
-			os.system ('run_transcrypt -r -e 6 {}.py'.format (fileNamePrefix))
+			os.system ('{} -r -e 6 {}.py'.format (transpileCommand, fileNamePrefix))
 		else:
-			os.system ('run_transcrypt -r {}.py'.format (fileNamePrefix))		
+			os.system ('{} -r {}.py'.format (transpileCommand, fileNamePrefix))		
 	
 	if nodejs:
 		os.system ('start cmd /k node __javascript__/{}.js'.format (fileNamePrefix))

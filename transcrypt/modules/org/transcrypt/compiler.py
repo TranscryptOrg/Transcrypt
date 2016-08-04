@@ -742,6 +742,11 @@ class Generator (ast.NodeVisitor):
 				self.emit (';\n')		
 				
 		if self.allowKeywordArgs:
+			# If there is a **kwargs arg, make a local to hold its calltime contents
+			# This local is needed even if arguments.length == 0, it's just empty then but may be read or passed on
+			if node.kwarg:
+				self.emit ('var {} = {{}};\n', self.filterId (node.kwarg.arg))
+				
 			self.emit ('if (arguments.length) {{\n')
 			self.indent ()
 		
@@ -755,11 +760,7 @@ class Generator (ast.NodeVisitor):
 			self.emit ('if (arguments [{0}] && arguments [{0}].__class__ == __kwargdict__) {{\n', self.getTemp ('ilastarg'))
 			self.indent ()
 			self.emit ('var {} = arguments [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('ilastarg'))
-			
-			# If there is a **kwargs arg, make a local to hold its calltime contents
-			if node.kwarg:
-				self.emit ('var {} = {{}};\n', self.filterId (node.kwarg.arg))
-				
+							
 			# __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
 			self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
 			self.indent ()
@@ -786,7 +787,7 @@ class Generator (ast.NodeVisitor):
 			self.dedent ()
 			self.emit ('}}\n')	# for (__attrib__..
 			
-			# Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there
+			# Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there. Faster than not copying marker.
 			if node.kwarg:
 				self.emit ('{}.__class__ = null;\n', self.filterId (node.kwarg.arg))
 			
@@ -807,6 +808,12 @@ class Generator (ast.NodeVisitor):
 			
 			self.dedent ()
 			self.emit ('}}\n')	# if (arguments.length..
+			self.emit ('else {{\n')
+			self.indent ()
+			if node.vararg:		# if there's a formal vararg param, even if there isn't an actual one
+				self.emit ('var {} = tuple ();\n', self.filterId (node.vararg.arg))
+			self.dedent ()
+			self.emit ('}}\n')
 		else:
 			if node.vararg:	# See above
 				self.emit (
@@ -935,7 +942,10 @@ class Generator (ast.NodeVisitor):
 				self.emit (';\n')
 				
 				# Create and visit RHS node on the fly, to benefit from assignTarget
-				assignTarget (expr, ast.Name (id = self.getTemp ('left'), ctx = ast.Load), pathIndices)
+				assignTarget (expr, ast.Name (
+					id = self.getTemp ('left'),
+					ctx = ast.Load
+				), pathIndices)
 			else:									# It's a sequence
 				pathIndices.append (None)			# Add indexing level for that sequence
 				for index, elt in enumerate (expr.elts):
@@ -966,7 +976,13 @@ class Generator (ast.NodeVisitor):
 			assignTarget (node.targets [0], node.value)			
 		else:
 			# Multiple RHS or tuple assignment, we need __tmp__, create assignment node on the fly and visit it
-			self.visit (ast.Assign ([ast.Name (id = self.nextTemp ('left'), ctx = ast.Store)], node.value))
+			self.visit (ast.Assign (
+				targets = [ast.Name (
+					id = self.nextTemp ('left'),
+					ctx = ast.Store
+				)],
+				value = node.value
+			))
 			
 			for expr in node.targets:
 				walkTarget (expr, [])
@@ -987,7 +1003,10 @@ class Generator (ast.NodeVisitor):
 				)
 			)								# LHS is a call to __getitem__ or __getslice__, so generating <operator>= won't work either
 		):	
-			self.visit (ast.Assign ([node.target], ast.BinOp (node.target, node.op, node.value)))
+			self.visit (ast.Assign (
+				targets = [node.target],
+				value = ast.BinOp (left = node.target, op = node.op, right = node.value)
+			))
 		else:	
 			self.visit (node.target)		# No need to emit var first, it has to exist already
 			
@@ -1194,7 +1213,10 @@ class Generator (ast.NodeVisitor):
 					
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add __call__ node on the fly and visit it
 			self.visit (ast.Call (
-				func = ast.Name (id = '__call__', ctx = node.func.ctx),
+				func = ast.Name (
+					id = '__call__',
+					ctx = node.func.ctx
+				),
 				args = [node.func] + node.args,
 				keywords = node.keywords
 			))
@@ -1422,10 +1444,16 @@ class Generator (ast.NodeVisitor):
 			self.emit ('try {{')
 			self.indent ()
 			self.visit (ast.Assign (
-				[node.target],
-				ast.Call (
-					func = ast.Name (id = 'next', ctx = ast.Load),
-					args = [ast.Name (id = self.getTemp ('iterator'), ctx = ast.Load)],
+				targets = [node.target],
+				value = ast.Call (
+					func = ast.Name (
+						id = 'next',
+						ctx = ast.Load
+					),
+					args = [ast.Name (
+						id = self.getTemp ('iterator'),
+						ctx = ast.Load
+					)],
 					keywords = []
 				)
 			))
@@ -1455,10 +1483,17 @@ class Generator (ast.NodeVisitor):
 
 			# Create and visit Assign node on the fly to benefit from tupple assignment
 			self.visit (ast.Assign (
-				[node.target],
-				ast.Subscript (
-					value = ast.Name (id = self.getTemp ('iterable'), ctx = ast.Load),
-					slice = ast.Index (ast.Num (n = self.getTemp ('index'))),
+				targets = [node.target],
+				value = ast.Subscript (
+					value = ast.Name (
+						id = self.getTemp ('iterable'),
+						ctx = ast.Load
+					),
+					slice = ast.Index (
+						value = ast.Num (
+							n = self.getTemp ('index')
+						)
+					),
 					ctx = ast.Load
 				)
 			))
@@ -1504,7 +1539,8 @@ class Generator (ast.NodeVisitor):
 			
 		if not node.name == '__pragma__':	# Don't generate code for the dummy pragma definition starting the extraLines in utils
 											# Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
-											# The rest of its use is only at compile time			
+											# The rest of its use is only at compile time
+										
 			if type (self.getScope () .node) in (ast.Module, ast.FunctionDef):	# Global or function scope, so it's no method
 				if type (self.getScope () .node) == ast.Module:
 					self.all.add (node.name)
@@ -1536,6 +1572,28 @@ class Generator (ast.NodeVisitor):
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
 				self.emit (');}}')
+				
+			for decorator in node.decorator_list:
+				self.emit ('\n')
+				self.visit (
+					ast.Assign (
+						targets = [ast.Name (
+							id = self.filterId (node.name),
+							ctx = ast.Store
+						)],
+						value = ast.Call (
+							func = ast.Name (
+								id = decorator.id,
+								ctx = ast.Load
+							),
+							args = [ast.Name (
+								id = self.filterId (node.name),
+								ctx = ast.Load
+							)],
+							keywords = []
+						)
+					)
+				)
 		
 	def visit_GeneratorExp (self, node):
 		# Currently generator expressions are just iterators on lists.
@@ -1705,20 +1763,32 @@ class Generator (ast.NodeVisitor):
 					# Make room for body of this if
 					bodies.append ([])
 					# Append this if to previous body
-					bodies [-2].append (ast.If (test, bodies [-1], []))
+					bodies [-2].append (ast.If (
+						test = test,
+						body = bodies [-1],
+						orelse = []
+					))
 					
 			bodies [-1].append (
 				# Nodes to generate __accu<i>__.append (<elt>)
 				ast.Call (
-					ast.Attribute (
-						ast.Name (
-							self.getTemp ('accu'),
-							ast.Load),
-						'append',
-						ast.Load
+					func = ast.Attribute (
+						value = ast.Name (
+							id = self.getTemp ('accu'),
+							ctx = ast.Load),
+						attr = 'append',
+						ctx = ast.Load
 					),
-					[ast.List (elts = [node.key, node.value], ctx = ast.Load) if isDict else node.elt],
-					[]
+					args = [(
+							ast.List (
+								elts = [node.key, node.value],
+								ctx = ast.Load
+							)
+						) if isDict else (
+							node.elt
+						)
+					],
+					keywords = []
 				)
 			)
 			

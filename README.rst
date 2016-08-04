@@ -40,6 +40,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Parameterless function decorators + autotest
+- Release 6
 - Docs updated
 - Local classes added + autotest
 - Dict method pop added, setdefault fixed + autotest for both
