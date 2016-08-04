@@ -29,30 +29,11 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status of latest release
 ========================
 
-Release 5 (version 3.5.196):
+Release 6 (version 3.5.207):
 
-Thanks to everyone that has contributed ideas, bug reports and code examples. Without your cooperation this release would not be have been possible. Your work is much appreciated.
-
-This release features iterators, generators and JavaScript 6 code generation for some crucial facilities, e.g. iterator-controlled for-loops and yield. Even if JavaScript 6 code is generated, the minifier will turn it into JavaScript 5 code, so it will run on most browsers.
-
-The Python exception mechanism now blends with the JavaScript exception mechanism.
-Almost all of the 'math' module and a small but essential part of the 'random' module have been added.
-
-Also in this release is a simple example of how to make an iPhone/iPad web app. This is a full screen app that is freely distributed via the Internet and available off-line, represented by an icon on the home screen. It also runs in any PC browser.
-
-Some simple facilities have been added to emulate blocking I/O in the browser using 'print' and 'input', obtaining input via JavaScript's 'prompt' dialog. This makes it possible to use Transcrypt for textbook examples in a learning environment, in combination with use of the the 'turtle' module already present.
-
-Transcrypt is primarily a tool for professional production of web applications, retaining a clear structure and, by that, maintainability and flexibility. To that end, blending seamlessly with any JavaScript library, but also with node.js, remains a primary goal. It is possible to write large applications in Transcrypt that are every bit as fast as their JavaScript counterparts.
-
-Still, explicitly drawing educational institutions into the game is not without reason. While suitable for large, professional projects, Python is also currently the nr. 1 language used in teaching kids and students to program. Being able to program for the browser in Python is very attractive for a generation where the Internet is a basic fact of life. The fact that Transcrypt also has excellent space and time efficiency makes it possible to 'grow' from education into professional application.
-
-I am very curious about even the most modest uses of Transcrypt in this area. You can always mail me your experiences or ask questions, request features etc. I teach programming myself at the Hogeschool Rotterdam but also to kids, and I consider this an important inroad to future innovative power.
-
-C-preprocessor-like conditional compilation was added using __pragma__ ('ifdef', ) and __pragma__ ('endif'). This facilitates optionally including autotestcode for JavaScript 6 but can also be used for production code.
-
-The -s switch makes it possible to define symbols that can be used for conditional compilation but also for other purposes. The symbols are available at runtime in __main__.__symbols__.
-
-Many bug fixes were applied as suggested by the issues contributed by several people.
+This release features local classes and a CPython-like time module, along with many small improvements and fixes.
+The examples in the docs have been expanded.
+Thanks to anyone who contributed!
 
 Jacques de Hooge
 
