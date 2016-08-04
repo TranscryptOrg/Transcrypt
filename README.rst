@@ -31,7 +31,7 @@ Status of latest release
 
 Release 6 (version 3.5.207):
 
-This release features local classes and a CPython-like time module, along with many small improvements and fixes.
+This release features local classes, CPython-like itertools and time modules, along with many small improvements and fixes.
 The examples in the docs have been expanded.
 Thanks to anyone who contributed!
 
