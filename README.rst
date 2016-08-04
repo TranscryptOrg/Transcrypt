@@ -1,4 +1,4 @@
-** NEW: There's now a Transcrypt tag on StackOverflow, so you're welcome to pose any questions about its use there! **
+**NEW: There's now a Transcrypt tag on StackOverflow, so you're welcome to pose any questions about its use there!**
 
 .. figure:: http://www.transcrypt.org/illustrations/spread_the_word3.png
 	:alt: Spread the word!
