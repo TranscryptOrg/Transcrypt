@@ -40,6 +40,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Class decorators added
 - Function decorators with parameters + autotest
 - Parameterless function decorators + autotest
 - Release 6
