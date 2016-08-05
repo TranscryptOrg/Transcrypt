@@ -62,8 +62,6 @@ Transcrypt supports decorators on methods and classes. A decorator itself can be
 	:tab-width: 4
 	:caption: Testlet: decorators
 
-Limitation: Decorators on methods are not supported, except trivially for @classmethod. Methods decorated with @classmethod can be called on an object as demonstrated in the code above, not on a class. All flavours of properties are fully supported, though directly and not through decorator syntax. Extensive use of properties is demonstrated in the :ref:`properties testlet <autotest_properties>`.
-
 Dict comprehensions
 -------------------
 
