@@ -114,7 +114,7 @@
 		__name__: 'object',
 		__bases__: [],
 			
-		// Object creator function is inherited by all classes (??? Make global?)
+		// Object creator function is inherited by all classes (so in principle it could be made global)
 		__new__: function (args) {	// Args are just the constructor args		
 			// In JavaScript the Python class is the prototype of the Python object
 			// In this way methods and static attributes will be available both with a class and an object before the dot

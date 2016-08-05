@@ -92,3 +92,18 @@ def run (autoTester):
 			self.value = value
 			
 	autoTester.check ('two', Number (1) .value)
+	
+	class Test:	
+		@classmethod
+		def f (cls, x, y):
+			autoTester.check (cls.__name__, x, y)
+			
+		def g (self, x, y):
+			autoTester.check (self.__class__.__name__, x, y)
+			
+	test = Test ()
+
+	test.f (1, 2)
+	test.g (3, 4)
+	
+	

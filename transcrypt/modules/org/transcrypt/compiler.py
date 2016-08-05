@@ -1593,6 +1593,8 @@ class Generator (ast.NodeVisitor):
 				self.visit (node.args)
 				emitScopedBody ()
 				self.emit ('}}')
+				
+				self.emitDecorators (node)
 			else:															# Class scope, so it's a method and needs the currying mechanism
 				self.emit ('\n')
 				self.adaptLineNrString (node)
@@ -1611,8 +1613,9 @@ class Generator (ast.NodeVisitor):
 					
 				self.emit (');}}')
 				
-			self.emitDecorators (node)
-		
+				# Method decorators ignored, but @classmethod trivially works, since the class is the prototype of the object
+				# So the object is an extension of the class, and anything you can do with a class, you can do with an object
+					
 	def visit_GeneratorExp (self, node):
 		# Currently generator expressions are just iterators on lists.
 		# It's important that they aren't just lists,
