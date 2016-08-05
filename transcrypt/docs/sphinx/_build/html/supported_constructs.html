@@ -487,6 +487,20 @@ Since they systematically cover all language constructs, they are also very effe
             <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">innerFunc</span>
         <span class="k">return</span> <span class="n">repeat</span>
+
+    <span class="k">class</span> <span class="nc">Repeater</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+            
+        <span class="k">def</span> <span class="nf">__call__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bareFunc</span><span class="p">):</span>
+            <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;kwargs&#39;</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">innerFunc</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;BEGIN repeat3&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">bareFunc</span> <span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;END repeat3&#39;</span><span class="p">)</span>
+            <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">innerFunc</span>
         
     <span class="nd">@repeatN</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
     <span class="nd">@repeat3</span>
@@ -494,7 +508,6 @@ Since they systematically cover all language constructs, they are also very effe
         <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;spam&#39;</span><span class="p">)</span>
         
     <span class="n">funcNoArg</span> <span class="p">()</span>
-
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
 
     <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;kwargs&#39;</span><span class="p">)</span>
@@ -505,10 +518,45 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
         
     <span class="n">funcArg</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
 
     <span class="n">funcArg</span> <span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
+
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="nd">@Repeater</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">funcNoArg2</span> <span class="p">():</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;toast&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noopov&#39;</span><span class="p">)</span>
+
+    <span class="n">funcNoArg2</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
+
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;kwargs&#39;</span><span class="p">)</span>
+    <span class="nd">@Repeater</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">funcArg2</span> <span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;jam&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nokwargs&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;noopov&#39;</span><span class="p">)</span>
+
+    <span class="n">funcArg2</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
+
+    <span class="n">funcArg2</span> <span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">next</span> <span class="p">(</span><span class="n">bareFunc</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">innerFunc</span> <span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">bareFunc</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">innerFunc</span>
+        
+    <span class="nd">@next</span>
+    <span class="k">class</span> <span class="nc">Number</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;two&#39;</span><span class="p">,</span> <span class="n">Number</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

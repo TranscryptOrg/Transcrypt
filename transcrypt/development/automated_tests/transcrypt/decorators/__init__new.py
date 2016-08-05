@@ -22,7 +22,7 @@ def run (autoTester):
 			__pragma__ ('nokwargs')
 			return innerFunc
 		return repeat
-
+		
 	class Repeater:
 		def __init__ (self, n):
 			self.n = n
@@ -45,12 +45,10 @@ def run (autoTester):
 	funcNoArg ()
 	autoTester.check ()
 
-	__pragma__ ('kwargs')
 	@repeat3
 	@repeatN (2)
 	def funcArg (a):
 		autoTester.check ('eggs', a)
-	__pragma__ ('nokwargs')
 		
 	funcArg (3)
 	autoTester.check ()
@@ -63,32 +61,17 @@ def run (autoTester):
 	def funcNoArg2 ():
 		autoTester.check ('toast')
 	__pragma__ ('noopov')
-
+	
 	funcNoArg2 ()
 	autoTester.check ()
-
-	__pragma__ ('opov')
-	__pragma__ ('kwargs')
+	
 	@Repeater (5)
 	def funcArg2 (a):
 		autoTester.check ('jam', a)
-	__pragma__ ('nokwargs')
 	__pragma__ ('noopov')
-
+	
 	funcArg2 (3)
 	autoTester.check ()
-
+	
 	funcArg2 (a = 4)
-	autoTester.check ()
-
-	def next (bareFunc):
-		def innerFunc (value):
-			return bareFunc (value + 1)
-		return innerFunc
-		
-	@next
-	class Number:
-		def __init__ (self, value):
-			self.value = value
-			
-	autoTester.check ('two', Number (1) .value)
+	

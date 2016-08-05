@@ -632,6 +632,42 @@ class Generator (ast.NodeVisitor):
 				continue
 			self.visit (stmt)
 			self.emit (';\n')
+			
+	def emitDecorators (self, callable):
+		for decorator in reversed (callable.decorator_list):
+			self.emit ('\n')
+			self.visit (
+				ast.Assign (
+					targets = [ast.Name (
+						id = self.filterId (callable.name),			# Rename to original callable
+						ctx = ast.Store
+					)],
+					value = (
+							# Simple decorator
+							ast.Call (								# Call to decorating callable
+								func = ast.Name (					# supplied literally by the name of the decorator
+									id = decorator.id,
+									ctx = ast.Load
+								),
+								args = [ast.Name (					# Original callable as parameter, supplied by name
+									id = self.filterId (callable.name),
+									ctx = ast.Load
+								)],
+								keywords = []
+							)
+						if type (decorator) == ast.Name else
+							# Decorator factory
+							ast.Call (								# Call to decorating callable
+								func = decorator,					# Supplied to call by factory callable which is the decorator
+								args = [ast.Name (					# Original callable as parameter, supplied by name
+									id = self.filterId (callable.name),
+									ctx = ast.Load
+								)],
+								keywords = []
+							)
+					)	
+				)
+			)
 				
 	def nextTemp (self, name):
 		if name in self.tempIndices:
@@ -1211,11 +1247,11 @@ class Generator (ast.NodeVisitor):
 				self.visit (node.args [0])
 				return
 					
-		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add __call__ node on the fly and visit it
+		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
 			self.visit (ast.Call (
 				func = ast.Name (
 					id = '__call__',
-					ctx = node.func.ctx
+					ctx = ast.Load	# Don't use node.func.ctx sicne callable object decorators don't have a ctx
 				),
 				args = [node.func] + node.args,
 				keywords = node.keywords
@@ -1304,6 +1340,8 @@ class Generator (ast.NodeVisitor):
 			self.visit (classVarAssign)
 
 		self.descope ()	# No earlier, class vars need it
+		
+		self.emitDecorators (node)
 		
 	def visit_Compare (self, node):
 		if len (node.comparators) > 1:
@@ -1573,40 +1611,7 @@ class Generator (ast.NodeVisitor):
 					
 				self.emit (');}}')
 				
-			for decorator in reversed (node.decorator_list):
-				self.emit ('\n')
-				self.visit (
-					ast.Assign (
-						targets = [ast.Name (
-							id = self.filterId (node.name),				# Rename to original function
-							ctx = ast.Store
-						)],
-						value = (
-								# Simple decorator
-								ast.Call (								# Call to decorating function
-									func = ast.Name (					# supplied literally by the name of the decorator
-										id = decorator.id,
-										ctx = ast.Load
-									),
-									args = [ast.Name (					# Original function as parameter, supplied by name
-										id = self.filterId (node.name),
-										ctx = ast.Load
-									)],
-									keywords = []
-								)
-							if type (decorator) == ast.Name else
-								# Decorator factory
-								ast.Call (								# Call to decorating function
-									func = decorator,					# Supplied to call by factory function which is the decorator
-									args = [ast.Name (					# Original function as parameter, supplied by name
-										id = self.filterId (node.name),
-										ctx = ast.Load
-									)],
-									keywords = []
-								)
-						)	
-					)
-				)
+			self.emitDecorators (node)
 		
 	def visit_GeneratorExp (self, node):
 		# Currently generator expressions are just iterators on lists.

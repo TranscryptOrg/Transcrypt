@@ -53,8 +53,8 @@ Data structures: tuple, list, dict, set
 	:tab-width: 4
 	:caption: Testlet: data_structures
 
-Decorators: with and without parameters
----------------------------------------
+Decorators: function and class, with and without parameters
+-----------------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/decorators/__init__.py
 	:tab-width: 4
