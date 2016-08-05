@@ -292,12 +292,12 @@ class Module:
 				moduleName = self.metadata.name,
 				lineNr = syntaxError.lineno,
 				message = (
-					'{} <SYNTAX FAULT] {}'.format (
-						syntaxError.text [:syntaxError.offset].lstrip (),
-						syntaxError.text [syntaxError.offset:].rstrip ()
-					)
+						'{} <SYNTAX FAULT] {}'.format (
+							syntaxError.text [:syntaxError.offset].lstrip (),
+							syntaxError.text [syntaxError.offset:].rstrip ()
+						)
 					if syntaxError.text else
-					syntaxError.args [0]
+						syntaxError.args [0]
 				)
 			)
 		
@@ -1573,25 +1573,38 @@ class Generator (ast.NodeVisitor):
 					
 				self.emit (');}}')
 				
-			for decorator in node.decorator_list:
+			for decorator in reversed (node.decorator_list):
 				self.emit ('\n')
 				self.visit (
 					ast.Assign (
 						targets = [ast.Name (
-							id = self.filterId (node.name),
+							id = self.filterId (node.name),				# Rename to original function
 							ctx = ast.Store
 						)],
-						value = ast.Call (
-							func = ast.Name (
-								id = decorator.id,
-								ctx = ast.Load
-							),
-							args = [ast.Name (
-								id = self.filterId (node.name),
-								ctx = ast.Load
-							)],
-							keywords = []
-						)
+						value = (
+								# Simple decorator
+								ast.Call (								# Call to decorating function
+									func = ast.Name (					# supplied literally by the name of the decorator
+										id = decorator.id,
+										ctx = ast.Load
+									),
+									args = [ast.Name (					# Original function as parameter, supplied by name
+										id = self.filterId (node.name),
+										ctx = ast.Load
+									)],
+									keywords = []
+								)
+							if type (decorator) == ast.Name else
+								# Decorator factory
+								ast.Call (								# Call to decorating function
+									func = decorator,					# Supplied to call by factory function which is the decorator
+									args = [ast.Name (					# Original function as parameter, supplied by name
+										id = self.filterId (node.name),
+										ctx = ast.Load
+									)],
+									keywords = []
+								)
+						)	
 					)
 				)
 		
@@ -1779,14 +1792,13 @@ class Generator (ast.NodeVisitor):
 						attr = 'append',
 						ctx = ast.Load
 					),
-					args = [(
+					args = [
 							ast.List (
 								elts = [node.key, node.value],
 								ctx = ast.Load
 							)
-						) if isDict else (
+						if isDict else
 							node.elt
-						)
 					],
 					keywords = []
 				)

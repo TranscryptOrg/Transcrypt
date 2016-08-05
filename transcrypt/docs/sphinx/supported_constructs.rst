@@ -53,6 +53,13 @@ Data structures: tuple, list, dict, set
 	:tab-width: 4
 	:caption: Testlet: data_structures
 
+Decorators: with and without parameters
+---------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/decorators/__init__.py
+	:tab-width: 4
+	:caption: Testlet: decorators
+
 Dict comprehensions
 -------------------
 
@@ -152,7 +159,7 @@ Module random: most important functions of Python's random module
 	:caption: Manual_test: module_random
 
 Modules: hierarchical, both local to the project and global url-based
---------------------------------------------------------------------
+---------------------------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/modules/__init__.py
 	:tab-width: 4

@@ -4,22 +4,43 @@ def run (autoTester):
 	def repeat3 (bareFunc):
 		__pragma__ ('kwargs')
 		def innerFunc (*args, **kwargs):
+			autoTester.check ('BEGIN repeat3')
 			for i in range (3):
 				bareFunc (*args, **kwargs)
+			autoTester.check ('END repeat3')
 		__pragma__ ('nokwargs')
 		return innerFunc
 		
+	def repeatN (n):
+		def repeat (bareFunc):
+			__pragma__ ('kwargs')
+			def innerFunc (*args, **kwargs):
+				autoTester.check ('BEGIN repeatN ({})'.format (n))
+				for i in range (n):
+					bareFunc (*args, **kwargs)
+				autoTester.check ('END repeatN ({})'.format (n))
+			__pragma__ ('nokwargs')
+			return innerFunc
+		return repeat
+		
+	@repeatN (4)
 	@repeat3
-	def bareFuncNoArg ():
+	def funcNoArg ():
 		autoTester.check ('spam')
-			
-	bareFuncNoArg ()
+		
+	funcNoArg ()
+
+	autoTester.check ()
 
 	__pragma__ ('kwargs')
 	@repeat3
-	def bareFuncArg (a):
+	@repeatN (2)
+	def funcArg (a):
 		autoTester.check ('eggs', a)
 	__pragma__ ('nokwargs')
 		
-	bareFuncArg (3)
-	bareFuncArg (a = 4)
+	funcArg (3)
+
+	autoTester.check ()
+
+	funcArg (a = 4)
