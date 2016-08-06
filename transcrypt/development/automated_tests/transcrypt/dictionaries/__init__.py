@@ -36,10 +36,12 @@ def run (autoTester):
 		autoTester.check (k)
 		
 	tel = {'guido': 123}
+	tel.update({'edsger': 42})
 	autoTester.check (tel.setdefault ('linus', 456))
 	autoTester.check (tel ['linus'])
 	autoTester.check (tel.setdefault ('guido', 789))
 	autoTester.check (tel.pop ('guido', 1))
 	autoTester.check (tel.pop ('guido', 1))
+	autoTester.check (tel.pop ('edsger', 2))
 	autoTester.check (tel.pop ('foo', 'bar'))
 	

@@ -639,7 +639,7 @@ class Generator (ast.NodeVisitor):
 			self.visit (
 				ast.Assign (
 					targets = [ast.Name (
-						id = self.filterId (callable.name),			# Rename to original callable
+						id = callable.name,			# Rename to original callable
 						ctx = ast.Store
 					)],
 					value = (
@@ -650,7 +650,7 @@ class Generator (ast.NodeVisitor):
 									ctx = ast.Load
 								),
 								args = [ast.Name (					# Original callable as parameter, supplied by name
-									id = self.filterId (callable.name),
+									id = callable.name,
 									ctx = ast.Load
 								)],
 								keywords = []
@@ -660,7 +660,7 @@ class Generator (ast.NodeVisitor):
 							ast.Call (								# Call to decorating callable
 								func = decorator,					# Supplied to call by factory callable which is the decorator
 								args = [ast.Name (					# Original callable as parameter, supplied by name
-									id = self.filterId (callable.name),
+									id = callable.name,
 									ctx = ast.Load
 								)],
 								keywords = []
@@ -1179,7 +1179,7 @@ class Generator (ast.NodeVisitor):
 				
 		if type (node.func) == ast.Name:
 			if node.func.id == 'property':
-				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, node.args [0].id))
+				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, self.filterId (node.args [0].id)))
 				if len (node.args) > 1:
 					self.emit (', {}.{}'.format (self.getScope (ast.ClassDef) .node.name, node.args [1].id))
 				self.emit (')')

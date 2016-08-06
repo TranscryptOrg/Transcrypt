@@ -57,3 +57,8 @@ def run (autoTester):
 
 	show3 = c.show
 	show3 ('copy')
+	
+	autoTester.check (hasattr (a, 'x'))
+	autoTester.check (hasattr (a, 'y'))
+	autoTester.check (hasattr (a, 'p'))
+	autoTester.check (hasattr (a, 'q'))

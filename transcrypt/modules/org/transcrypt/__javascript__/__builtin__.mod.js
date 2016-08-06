@@ -963,6 +963,12 @@ __pragma__ ('endif')
 		return aDefault;
 	}	
 	
+	function __update__(aDict) {
+		for (var aKey in aDict) {
+			this [aKey] = aDict [aKey];
+		}
+	}
+	
 	function dict (objectOrPairs) {
 		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
 			var instance = {};
@@ -989,7 +995,7 @@ __pragma__ ('endif')
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
 		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
 		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
-		
+		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
 		return instance;
 	}
 	__all__.dict = dict;
