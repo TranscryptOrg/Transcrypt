@@ -53,3 +53,4 @@ def run (autoTester):
 	autoTester.check ('g' in aString)
 	autoTester.check ('bes'  in aString)
 	autoTester.check ('z' in aString)
+	

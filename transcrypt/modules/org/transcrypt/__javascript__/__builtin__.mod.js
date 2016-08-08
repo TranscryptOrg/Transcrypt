@@ -124,13 +124,16 @@
 	};
 	__all__.delattr = (delattr);
 	
-	// In function, used to mimic Python's in operator
+	// The __in__ function, used to mimic Python's 'in' operator
+	// In addition to CPython's semantics, the 'in' operator is also allowed to work on objects, avoiding a counterintuitive separation between Python dicts and JavaScript objects
+	// In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
+	// If only Python objects and Python dicts are dealth with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
-			return container.keys () .indexOf (element) > -1;
+			return container.keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
 		}
 		else {
-			return container.indexOf (element) > -1;
+			return container.indexOf ? container.indexOf (element) > -1 : element in container; // Parameter 'element' itself is an array, string or object
 		}
 	}
 	__all__.__in__ = __in__;

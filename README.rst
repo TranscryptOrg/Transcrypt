@@ -40,6 +40,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Transcrypt's 'in' operator now also works on objects for better integration of Python dicts and JavaScript objects, especially literals
 - Class decorators added + autotest
 - Function decorators with parameters + autotest
 - Parameterless function decorators + autotest
