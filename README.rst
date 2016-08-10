@@ -1,5 +1,3 @@
-**NEW: There's now a Transcrypt tag on StackOverflow, so you're welcome to pose any questions about its use there!**
-
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
