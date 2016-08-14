@@ -257,7 +257,7 @@ class Module:
 		
 		if self.metadata.dirty ():
 			self.parse ()
-			if utils.commandArgs.check:
+			if utils.commandArgs.dcheck:
 				try:
 					static_check.run (self.metadata.sourcePath, self.parseTree)
 				except Exception as exception:
@@ -328,7 +328,7 @@ class Module:
 		def loadConditionally (targetLine):
 			nonlocal conditionalLoading
 		
-			def __pragma__ (name, *args):
+			def __pragma__ (name, *args):	# For use in .js rather than .py files
 				nonlocal conditionalLoading
 				
 				if name == 'ifdef':
@@ -1245,6 +1245,12 @@ class Generator (ast.NodeVisitor):
 			elif node.func.id == '__new__':
 				self.emit ('new ')
 				self.visit (node.args [0])
+				return	
+			elif node.func.id == '__typeof__':
+				self.emit ('typeof ')
+				self.visit (node.args [0])
+				self.emit (' === ')	# Give JavaScript string interning a chance to avoid char by char comparison
+				self.visit (node.args [1])
 				return
 					
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
@@ -1911,7 +1917,7 @@ class Generator (ast.NodeVisitor):
 		self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
 
 	def visit_Num (self, node):
-		self.emit ('{}', node.n)
+		self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
 		
 	def visit_Pass (self, node):
 		self.adaptLineNrString (node)

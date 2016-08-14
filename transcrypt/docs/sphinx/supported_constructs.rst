@@ -32,6 +32,13 @@ Classes: multiple inheritance and assignment of bound functions
 	:tab-width: 4
 	:caption: Testlet: classes
 
+Complex numbers: Python's builtin complex datatype
+--------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/complex_numbers/__init__.py
+	:tab-width: 4
+	:caption: Testlet: complex_numbers
+
 Conditional expressions: simple and nested
 ------------------------------------------
 
@@ -118,6 +125,13 @@ Indices and slices: LHS, RHS, basic and extended
 	:tab-width: 4
 	:caption: Testlet: indices_and_slices
 
+Iterators and generators
+------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/iterators_and_generators/__init__.py
+	:tab-width: 4
+	:caption: Testlet: iterators_and_generators
+
 Lambda functions with all types of args
 ---------------------------------------
 
@@ -145,6 +159,13 @@ Module builtin: a small part of it demo'ed
 .. literalinclude:: ../../development/automated_tests/transcrypt/module_builtin/__init__.py
 	:tab-width: 4
 	:caption: Testlet: module_builtin
+
+Module itertools: allmost all of Python's itertools module
+----------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/module_itertools/__init__.py
+	:tab-width: 4
+	:caption: Testlet: module_itertools
 
 Module math: allmost all of Python's math module
 ------------------------------------------------

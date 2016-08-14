@@ -24,6 +24,10 @@
 	var map = __all__.map;
 	var filter = __all__.filter;
 	
+__pragma__ ('ifdef', '__complex__')
+	var complex = __all__.complex;
+__pragma__ ('endif')
+	
 	__all__.print = __all__.__terminal__.print;
 	__all__.input = __all__.__terminal__.input;
 	
@@ -127,7 +131,7 @@
 	// The __in__ function, used to mimic Python's 'in' operator
 	// In addition to CPython's semantics, the 'in' operator is also allowed to work on objects, avoiding a counterintuitive separation between Python dicts and JavaScript objects
 	// In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
-	// If only Python objects and Python dicts are dealth with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
+	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
 			return container.keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
@@ -317,8 +321,19 @@
 	__all__.min = min;
 	
 	// Absolute value
+__pragma__ ('ifdef', '__complex__')
 	var abs = Math.abs;
 	__all__.abs = abs;
+__pragma__ ('else')
+	var abs = function (x) {
+		try {
+			return Math.abs (x);
+		}
+		catch (exception) {
+			return Math.sqrt (x.real * x.real + x.imag * x.imag);
+		}
+	}
+__pragma__ ('endif')
 	
 	// Bankers rounding
 	var round = function (number, ndigits) {
@@ -485,7 +500,7 @@
 	
 	// Any, all and sum
 	
-__pragma__ ('ifdef', 'e6')
+__pragma__ ('ifdef', '__esv6__')
 	function any (iterable) {
 		for (let item of iterable) {
 			if (bool (item)) {
@@ -582,7 +597,7 @@ __pragma__ ('endif')
 	// List extensions to Array
 	
 	function list (iterable) {										// All such creators should be callable without new
-__pragma__ ('ifdef', 'e6')
+__pragma__ ('ifdef', '__esv6__')
 		var instance = iterable ? Array.from (iterable) : [];
 __pragma__ ('else')
 		var instance = iterable ? [] .slice.apply (iterable) : [];	// Spread iterable, n.b. array.slice (), so array before dot
@@ -1105,7 +1120,7 @@ __pragma__ ('endif')
 	};
 	
 	String.prototype.join = function (strings) {
-__pragma__ ('ifdef', 'e6')
+__pragma__ ('ifdef', '__esv6__')
 		strings = Array.from (strings);	// Much faster than iterating through strings char by char
 __pragma__ ('endif')
 		return strings.join (this);

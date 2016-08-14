@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.209 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.210 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.209',
+        VERSION:     '3.5.210',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.209 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.210 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.209 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.210 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -200,12 +200,13 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;.py file containing source code of main module&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--anno&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;annotate target files that were compiled from Python with source file names and source line numbers&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="s">&#39;--build&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;rebuild all target files from scratch&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--check&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--complex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable complex number support, locally requires operator overloading&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dc&#39;</span><span class="p">,</span> <span class="s">&#39;--dcheck&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-da&#39;</span><span class="p">,</span> <span class="s">&#39;--dassert&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: activate assertions&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-de&#39;</span><span class="p">,</span> <span class="s">&#39;--dextex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: show extended exception reports&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dm&#39;</span><span class="p">,</span> <span class="s">&#39;--dmap&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: dump human readable source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dt&#39;</span><span class="p">,</span> <span class="s">&#39;--dtree&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: dump syntax tree&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-e&#39;</span><span class="p">,</span> <span class="s">&#39;--esv&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;ecma script version of generated code, default = 5. The symbol e&lt;versionnr&gt; is added to the global symbol list, e.g. e6.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-e&#39;</span><span class="p">,</span> <span class="s">&#39;--esv&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;ecma script version of generated code, default = 5. The symbol __esv&lt;versionnr&gt;__ is added to the global symbol list, e.g. __esv6__.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--fcall&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable fastcall mechanism by default. You can also use __pragma__ (&#39;fcal&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">nofcall</span><span class="se">\&#39;</span><span class="s">)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="s">&#39;--gen&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable generators and iterators. DISADVISED, since it will result in a function call for each loop iteration. Preferably use __pragma__ (&#39;gen&#39;) and __pragma__ (&#39;nogen&#39;)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="s">&#39;--iconv&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferably use __pragma__ (&#39;iconv&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">noiconv</span><span class="se">\&#39;</span><span class="s">) to enable automatic conversion locally&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
@@ -240,7 +241,7 @@ They are specified in the source code of Transcrypt as follows:</p>
             <span class="s">&#39;__new__ = __include__ = 0&#39;</span><span class="p">,</span>    
             <span class="s">&#39;__pragma__ (</span><span class="se">\&#39;</span><span class="s">noskip</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">,</span>
             <span class="s">&#39;&#39;</span>
-        <span class="p">]</span> <span class="k">if</span> <span class="n">commandArgs</span><span class="o">.</span><span class="n">check</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">]</span> <span class="k">if</span> <span class="n">commandArgs</span><span class="o">.</span><span class="n">dcheck</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">global</span> <span class="n">nrOfExtraLines</span>
         <span class="n">nrOfExtraLines</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="nb">len</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Last line only serves to force linefeed</span>
         <span class="n">extraLines</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span> <span class="p">(</span><span class="n">extraLines</span><span class="p">)</span>
@@ -448,7 +449,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you'll find t
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.209 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.210 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

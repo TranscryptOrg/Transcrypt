@@ -67,6 +67,64 @@ def map (func, iterable):
 def filter (func, iterable):
 	return [item for item in iterable if func (item)]
 	
+__pragma__ ('ifdef', '__complex__')
+class complex:
+	def __init__ (self, real, imag):
+		self.real = real
+		self.imag = imag
+		
+	def __add__ (self, other):
+		if __typeof__ (other, 'number'):
+			return complex (self.real + other, self.imag)
+		else:	# Assume other is complex
+			return complex (self.real + other.real, self.imag + other.imag)
+		
+	def __radd__ (self, real):	# real + comp -> comp.__radd__ (real)
+		return complex (self.real + real, self.imag)
+		
+	def __sub__ (self, other):
+		if __typeof__ (other, 'number'):
+			return complex (self.real - other, self.imag)
+		else:
+			return complex (self.real - other.real, self.imag - other.imag)
+		
+	def __rsub__ (self, real):	# real - comp -> comp.__rsub__ (real)
+		return complex (real - self.real, -self.imag)
+		
+	def __mul__ (self, other):
+		if __typeof__ (other, 'number'):
+			return complex (self.real * other, self.imag * other)
+		else:
+			return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real)
+		
+	def __rmul__ (self, real):	# real + comp -> comp.__rmul__ (real)
+		return complex (self.real * real, self.imag * real)
+		
+	def __div__ (self, other):
+		if __typeof__ (other, 'number'):
+			return complex (self.real / other, self.imag / other)
+		else:
+			denom = other.real * other.real + other.imag * other.imag
+			return complex (
+				(self.real * other.real + self.imag * other.imag) / denom,
+				(self.imag * other.real - self.real * other.imag) / denom
+			)
+		
+	def __rdiv__ (self, real):	# real / comp -> comp.__rdiv__ (real)
+		denom = self.real * self.real
+		return complex (
+			(real * self.real) / denom,
+			(real * self.imag) / denom
+		)
+		
+	def __repr__ (self):
+		return '({}{}{}j)'.format (self.real, '+' if self.imag >= 0 else '', self.imag)
+			
+	def __str__ (self):
+		return __repr__ (self) [1 : -1]
+		
+__pragma__ ('endif')
+
 class __Terminal__:
 	def __init__ (self):
 		try:

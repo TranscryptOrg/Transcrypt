@@ -57,8 +57,8 @@ def run (autoTester):
 	
 	autoTester.check (sum (range (5)))
 	
-	__pragma__ ('ifdef', 'e6')
-	if 'e6' in autoTester.symbols:	
+	__pragma__ ('ifdef', '__esv6__')
+	if '__esv6__' in autoTester.symbols:	
 		def generator1 ():
 			for i in range (5):
 				yield i;

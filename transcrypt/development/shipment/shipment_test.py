@@ -66,7 +66,7 @@ for esvSwitch in ('', '-e 6 '):
 		switches = fcallSwitch + esvSwitch
 		test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
 		test ('development/automated_tests/hello', 'autotest', True, False, switches)
-		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches)	
+		test ('development/automated_tests/transcrypt', 'autotest', True, False, switches + '-c ')	
 		test ('development/automated_tests/time', 'autotest', True, False, switches)	
 		test ('development/manual_tests/module_random', 'module_random', False, False, switches)
 		test ('development/manual_tests/transcrypt_only', 'transcrypt_only', False, False, switches)

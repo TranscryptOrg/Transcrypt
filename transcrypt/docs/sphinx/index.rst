@@ -17,3 +17,4 @@ Table of Contents:
 	supported_constructs
 	integration_javascript
 	autotesting_transcrypt
+	philosophy_directions

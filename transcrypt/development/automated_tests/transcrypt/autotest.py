@@ -4,6 +4,7 @@ import org.transcrypt.autotester
 import arguments
 import attribs_by_name
 import classes
+import complex_numbers
 import conditional_expressions
 import control_structures
 import data_structures
@@ -17,8 +18,8 @@ import extended_slices
 import general_functions
 import indices_and_slices
 
-__pragma__ ('ifdef', 'e6')	# Needed because Transcrypt imports are compile time
-if 'e6' in __symbols__:	# Needed because CPython doesn't understand pragma's
+__pragma__ ('ifdef', '__esv6__')	# Needed because Transcrypt imports are compile time
+if '__esv6__' in __symbols__:	# Needed because CPython doesn't understand pragma's
 	import iterators_and_generators
 __pragma__ ('endif')
 
@@ -26,9 +27,10 @@ import lambda_functions
 import list_comprehensions
 import local_classes
 import module_builtin
+import module_cmath
 
-__pragma__ ('ifdef', 'e6')
-if 'e6' in __symbols__:
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
 	import module_itertools
 __pragma__ ('endif')
 
@@ -47,6 +49,7 @@ autoTester = org.transcrypt.autotester.AutoTester ()
 autoTester.run (arguments, 'arguments')
 autoTester.run (attribs_by_name, 'attribs_by_name')
 autoTester.run (classes, 'classes')
+autoTester.run (complex_numbers, 'complex_numbers')
 autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')
 autoTester.run (data_structures, 'data_structures')
@@ -60,8 +63,8 @@ autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 
-__pragma__ ('ifdef', 'e6')
-if 'e6' in __symbols__:
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
 	autoTester.run (iterators_and_generators, 'iterators_and_generators')
 __pragma__ ('endif')
 	
@@ -69,9 +72,10 @@ autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
 autoTester.run (local_classes, 'local_classes')
 autoTester.run (module_builtin, 'module_builtin')
+autoTester.run (module_cmath, 'module_cmath')
 
-__pragma__ ('ifdef', 'e6')
-if 'e6' in __symbols__:
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
 	autoTester.run (module_itertools, 'module_itertools')
 __pragma__ ('endif')
 	

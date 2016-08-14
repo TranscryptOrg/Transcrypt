@@ -30,12 +30,13 @@ class CommandArgs:
 		self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
 		self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
 		self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
-		self.argParser.add_argument ('-c', '--check', help = "perform static check as part of compilation", action = 'store_true')
+		self.argParser.add_argument ('-c', '--complex', help = "enable complex number support, locally requires operator overloading", action = 'store_true')
+		self.argParser.add_argument ('-dc', '--dcheck', help = "perform static check as part of compilation", action = 'store_true')
 		self.argParser.add_argument ('-da', '--dassert', help = "debug: activate assertions", action = 'store_true')
 		self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
 		self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
 		self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
-		self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol e<versionnr> is added to the global symbol list, e.g. e6.")
+		self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol __esv<versionnr>__ is added to the global symbol list, e.g. __esv6__.")
 		self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
 		self.argParser.add_argument ('-g', '--gen', help = "enable generators and iterators. DISADVISED, since it will result in a function call for each loop iteration. Preferably use __pragma__ ('gen') and __pragma__ ('nogen')", action = 'store_true')
 		self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. DISADVISED, since it will result in a type check for each for-loop. Preferably use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
@@ -70,7 +71,7 @@ class CommandArgs:
 			'__new__ = __include__ = 0',	
 			'__pragma__ (\'noskip\')',
 			''
-		] if commandArgs.check else []
+		] if commandArgs.dcheck else []
 		global nrOfExtraLines
 		nrOfExtraLines = max (len (extraLines) - 1, 0)	# Last line only serves to force linefeed
 		extraLines = '\n'.join (extraLines)

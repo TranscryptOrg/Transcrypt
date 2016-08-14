@@ -4,7 +4,7 @@
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
-__pragma__ ('ifdef', 'e6')
+__pragma__ ('ifdef', '__esv6__')
 					var count = function* (start, step) {
 						if (start == undefined) {
 							start = 0;
@@ -309,7 +309,7 @@ __pragma__ ('else')
 					}
 __pragma__ ('endif')
 					//<all>
-__pragma__ ('ifdef', 'e6')
+__pragma__ ('ifdef', '__esv6__')
 					__all__.count = count;
 					__all__.cycle = cycle;
 					__all__.repeat = repeat;
