@@ -2046,10 +2046,21 @@ class Generator (ast.NodeVisitor):
 		self.emit ('try {{\n')
 		self.indent ()	
 		self.emitBody (node.body)
+		
+		if node.orelse:
+			self.emit ('try {{\n')
+			self.indent ()
+			self.emitBody (node.orelse)
+			self.dedent ()
+			self.emit ('}}\n')
+			self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
+			self.emit ('}}\n')
+			self.prevTemp ('except')
+			
 		self.dedent ()
 		self.emit ('}}\n')
 		
-		self.emit ('catch (__except__) {{\n')
+		self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
 		self.indent ()
 		
 		for index, excepthandler in enumerate (node.handlers):
@@ -2057,13 +2068,13 @@ class Generator (ast.NodeVisitor):
 				self.emit ('else ')				# Never here after a catch all
 							
 			if excepthandler.type:
-				self.emit ('if (isinstance (__except__, ')
+				self.emit ('if (isinstance ({}, ', self.getTemp ('except'))
 				self.visit (excepthandler.type)
 				self.emit (')) {{\n')
 				self.indent ()
 				
 				if excepthandler.name:
-					self.emit ('var {} = __except__;\n', excepthandler.name)
+					self.emit ('var {} = {};\n', excepthandler.name, self.getTemp ('except'))
 					
 				self.emitBody (excepthandler.body)
 				
@@ -2075,12 +2086,14 @@ class Generator (ast.NodeVisitor):
 		else:									# No catch all, avoid swallowing exception
 			self.emit ('else {{\n')
 			self.indent ()
-			self.emit ('throw __except__;\n')
+			self.emit ('throw {};\n', self.getTemp ('except'))
 			self.dedent ()
 			self.emit ('}}\n')
-				
+
 		self.dedent ()
+		self.prevTemp ('except')
 		self.emit ('}}\n')
+		
 		
 		if node.finalbody:
 			self.emit ('finally {{\n')

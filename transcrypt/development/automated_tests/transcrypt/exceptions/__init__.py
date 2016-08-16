@@ -147,3 +147,20 @@ def run (autoTester):
 		autoTester.check (exception)
 		
 	autoTester.check (888)
+	
+	try:
+		autoTester.check ("hello world 1")
+	except:
+		autoTester.check ("error 1")
+	else:
+		autoTester.check ("no error 1")
+		
+	i = 1 + 2
+	try:
+		autoTester.check ("hello world 2")
+		if i == 3:	# Prevent unreachable code warning
+			raise Exception ()
+	except:
+		autoTester.check ("error 2")
+	else:
+		autoTester.check ("no error 2")
