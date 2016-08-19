@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.210 documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.212 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.210',
+        VERSION:     '3.5.212',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.210 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.212 documentation" href="index.html" />
     <link rel="next" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.210 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.212 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -996,6 +996,23 @@ Since they systematically cover all language constructs, they are also very effe
         <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">exception</span><span class="p">)</span>
         
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="mi">888</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;hello world 1&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;error 1&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;no error 1&quot;</span><span class="p">)</span>
+        
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;hello world 2&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c"># Prevent unreachable code warning</span>
+            <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;error 2&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&quot;no error 2&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1446,8 +1463,93 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 </div>
+<div class="section" id="module-cmath-allmost-all-of-python-s-cmath-module">
+<h2>4.22. Module cmath: allmost all of Python's cmath module<a class="headerlink" href="#module-cmath-allmost-all-of-python-s-cmath-module" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="testlet-module-cmath">
+<div class="code-block-caption"><span class="caption-text">Testlet: module_cmath</span><a class="headerlink" href="#testlet-module-cmath" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
+<span class="kn">from</span> <span class="nn">cmath</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">twoPi</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span>
+<span class="n">nDecs</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;opov&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">phase</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1j</span><span class="p">))</span>
+    
+    <span class="n">aPolar</span> <span class="o">=</span> <span class="n">polar</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">5j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aPolar</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nDecs</span><span class="p">),</span> <span class="n">aPolar</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="n">aRect</span> <span class="o">=</span> <span class="n">rect</span> <span class="p">(</span><span class="o">*</span><span class="n">aPolar</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aRect</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aRect</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">anExp</span> <span class="o">=</span> <span class="n">exp</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.2</span> <span class="o">-</span> <span class="mf">3.3j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anExp</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anExp</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aLog</span> <span class="o">=</span> <span class="n">log</span> <span class="p">(</span><span class="n">anExp</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aLog</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aLog</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">anExp10</span> <span class="o">=</span> <span class="n">aLog</span> <span class="o">**</span> <span class="mi">10</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anExp10</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anExp10</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aLog10</span> <span class="o">=</span> <span class="n">log10</span> <span class="p">(</span><span class="n">anExp10</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aLog10</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aLog10</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">anExpRect</span> <span class="o">=</span> <span class="n">aLog</span> <span class="o">**</span> <span class="n">aRect</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anExpRect</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anExpRect</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aLogRect</span> <span class="o">=</span> <span class="n">log</span> <span class="p">(</span><span class="n">anExpRect</span><span class="p">,</span> <span class="n">aRect</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aLogRect</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aLogRect</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aSqrt</span> <span class="o">=</span> <span class="n">sqrt</span> <span class="p">(</span><span class="mi">1j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aSqrt</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aSqrt</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">sqrt</span> <span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">anotherSqrt</span> <span class="o">=</span> <span class="n">sqrt</span> <span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anotherSqrt</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anotherSqrt</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">anAsin</span> <span class="o">=</span> <span class="n">asin</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAsin</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAsin</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+
+    <span class="n">anAcos</span> <span class="o">=</span> <span class="n">acos</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAcos</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAcos</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">anAtan</span> <span class="o">=</span> <span class="n">atan</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">4j</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAtan</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAtan</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aSin</span> <span class="o">=</span> <span class="n">sin</span> <span class="p">(</span><span class="n">anAsin</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aSin</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aSin</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">aCos</span> <span class="o">=</span> <span class="n">cos</span> <span class="p">(</span><span class="n">anAcos</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aCos</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aCos</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">aTan</span> <span class="o">=</span> <span class="n">tan</span> <span class="p">(</span><span class="n">anAtan</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aTan</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aTan</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">anAsinh</span> <span class="o">=</span> <span class="n">asinh</span> <span class="p">(</span><span class="n">aCos</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAsinh</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAsinh</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+
+    <span class="n">anAcosh</span> <span class="o">=</span> <span class="n">acosh</span> <span class="p">(</span><span class="n">aSin</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAcosh</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAcosh</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">anAtanh</span> <span class="o">=</span> <span class="n">atanh</span> <span class="p">(</span><span class="n">aTan</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">anAtanh</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">anAtanh</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">nDecs</span><span class="p">))</span>
+    
+    <span class="n">aSinh</span> <span class="o">=</span> <span class="n">sinh</span> <span class="p">(</span><span class="n">anAsinh</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aSinh</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aSinh</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">aCosh</span> <span class="o">=</span> <span class="n">cosh</span> <span class="p">(</span><span class="n">anAcosh</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aCosh</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aCosh</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="n">aTanh</span> <span class="o">=</span> <span class="n">tanh</span> <span class="p">(</span><span class="n">anAtanh</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">aTanh</span><span class="o">.</span><span class="n">real</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">aTanh</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="module-itertools-allmost-all-of-python-s-itertools-module">
-<h2>4.22. Module itertools: allmost all of Python's itertools module<a class="headerlink" href="#module-itertools-allmost-all-of-python-s-itertools-module" title="Permalink to this headline">¶</a></h2>
+<h2>4.23. Module itertools: allmost all of Python's itertools module<a class="headerlink" href="#module-itertools-allmost-all-of-python-s-itertools-module" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-module-itertools">
 <div class="code-block-caption"><span class="caption-text">Testlet: module_itertools</span><a class="headerlink" href="#testlet-module-itertools" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1524,7 +1626,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="module-math-allmost-all-of-python-s-math-module">
-<h2>4.23. Module math: allmost all of Python's math module<a class="headerlink" href="#module-math-allmost-all-of-python-s-math-module" title="Permalink to this headline">¶</a></h2>
+<h2>4.24. Module math: allmost all of Python's math module<a class="headerlink" href="#module-math-allmost-all-of-python-s-math-module" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-module-math">
 <div class="code-block-caption"><span class="caption-text">Testlet: module_math</span><a class="headerlink" href="#testlet-module-math" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1537,6 +1639,7 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">expm1</span> <span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
     
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">log</span> <span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">log1p</span> <span class="p">(</span><span class="mi">5</span><span class="p">))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log2</span> <span class="p">(</span><span class="mi">257</span><span class="p">)))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="n">log10</span> <span class="p">(</span><span class="mi">1001</span><span class="p">)))</span>
@@ -1575,7 +1678,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="module-random-most-important-functions-of-python-s-random-module">
-<h2>4.24. Module random: most important functions of Python's random module<a class="headerlink" href="#module-random-most-important-functions-of-python-s-random-module" title="Permalink to this headline">¶</a></h2>
+<h2>4.25. Module random: most important functions of Python's random module<a class="headerlink" href="#module-random-most-important-functions-of-python-s-random-module" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="manual-test-module-random">
 <div class="code-block-caption"><span class="caption-text">Manual_test: module_random</span><a class="headerlink" href="#manual-test-module-random" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1613,7 +1716,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="modules-hierarchical-both-local-to-the-project-and-global-url-based">
-<h2>4.25. Modules: hierarchical, both local to the project and global url-based<a class="headerlink" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
+<h2>4.26. Modules: hierarchical, both local to the project and global url-based<a class="headerlink" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-modules">
 <div class="code-block-caption"><span class="caption-text">Testlet: modules</span><a class="headerlink" href="#testlet-modules" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">modules.mod1.mod11.mod111</span>
@@ -1677,7 +1780,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="nonlocals">
-<h2>4.26. Nonlocals<a class="headerlink" href="#nonlocals" title="Permalink to this headline">¶</a></h2>
+<h2>4.27. Nonlocals<a class="headerlink" href="#nonlocals" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-nonlocals">
 <div class="code-block-caption"><span class="caption-text">Testlet: nonlocals</span><a class="headerlink" href="#testlet-nonlocals" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -1699,7 +1802,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="operator-overloading">
-<h2>4.27. Operator overloading<a class="headerlink" href="#operator-overloading" title="Permalink to this headline">¶</a></h2>
+<h2>4.28. Operator overloading<a class="headerlink" href="#operator-overloading" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-operator-overloading">
 <div class="code-block-caption"><span class="caption-text">Testlet: operator_overloading</span><a class="headerlink" href="#testlet-operator-overloading" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -1835,7 +1938,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="properties">
-<span id="autotest-properties"></span><h2>4.28. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<span id="autotest-properties"></span><h2>4.29. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-properties">
 <div class="code-block-caption"><span class="caption-text">Testlet: properties</span><a class="headerlink" href="#testlet-properties" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -1938,7 +2041,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="set-comprehensions">
-<h2>4.29. Set comprehensions<a class="headerlink" href="#set-comprehensions" title="Permalink to this headline">¶</a></h2>
+<h2>4.30. Set comprehensions<a class="headerlink" href="#set-comprehensions" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-set-comprehensions">
 <div class="code-block-caption"><span class="caption-text">Testlet: set_comprehensions</span><a class="headerlink" href="#testlet-set-comprehensions" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -1992,7 +2095,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="simple-and-augmented-assignment">
-<h2>4.30. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
+<h2>4.31. Simple and augmented assignment<a class="headerlink" href="#simple-and-augmented-assignment" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-simple-and-augmented-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: simple_and_augmented_assignment</span><a class="headerlink" href="#testlet-simple-and-augmented-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
@@ -2062,7 +2165,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">
-<h2>4.31. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection<a class="headerlink" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection" title="Permalink to this headline">¶</a></h2>
+<h2>4.32. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection<a class="headerlink" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-truthyness">
 <div class="code-block-caption"><span class="caption-text">Testlet: truthyness</span><a class="headerlink" href="#testlet-truthyness" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="kn">import</span> <span class="n">__pragma__</span>
@@ -2181,7 +2284,7 @@ Since they systematically cover all language constructs, they are also very effe
 </div>
 </div>
 <div class="section" id="tuple-assignment-recursive-and-in-for-headers-using-enumerate">
-<h2>4.32. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
+<h2>4.33. Tuple assignment: recursive and in for-headers using enumerate<a class="headerlink" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper container" id="testlet-tuple-assignment">
 <div class="code-block-caption"><span class="caption-text">Testlet: tuple_assignment</span><a class="headerlink" href="#testlet-tuple-assignment" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
@@ -2243,17 +2346,18 @@ Since they systematically cover all language constructs, they are also very effe
 <li><a class="reference internal" href="#list-comprehensions-multi-loop-and-nested-with-multiple-if-s">4.19. List comprehensions: multi-loop and nested with multiple if's</a></li>
 <li><a class="reference internal" href="#local-classes-inside-other-classes-and-functions">4.20. Local classes: inside other classes and functions</a></li>
 <li><a class="reference internal" href="#module-builtin-a-small-part-of-it-demo-ed">4.21. Module builtin: a small part of it demo'ed</a></li>
-<li><a class="reference internal" href="#module-itertools-allmost-all-of-python-s-itertools-module">4.22. Module itertools: allmost all of Python's itertools module</a></li>
-<li><a class="reference internal" href="#module-math-allmost-all-of-python-s-math-module">4.23. Module math: allmost all of Python's math module</a></li>
-<li><a class="reference internal" href="#module-random-most-important-functions-of-python-s-random-module">4.24. Module random: most important functions of Python's random module</a></li>
-<li><a class="reference internal" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based">4.25. Modules: hierarchical, both local to the project and global url-based</a></li>
-<li><a class="reference internal" href="#nonlocals">4.26. Nonlocals</a></li>
-<li><a class="reference internal" href="#operator-overloading">4.27. Operator overloading</a></li>
-<li><a class="reference internal" href="#properties">4.28. Properties</a></li>
-<li><a class="reference internal" href="#set-comprehensions">4.29. Set comprehensions</a></li>
-<li><a class="reference internal" href="#simple-and-augmented-assignment">4.30. Simple and augmented assignment</a></li>
-<li><a class="reference internal" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">4.31. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection</a></li>
-<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.32. Tuple assignment: recursive and in for-headers using enumerate</a></li>
+<li><a class="reference internal" href="#module-cmath-allmost-all-of-python-s-cmath-module">4.22. Module cmath: allmost all of Python's cmath module</a></li>
+<li><a class="reference internal" href="#module-itertools-allmost-all-of-python-s-itertools-module">4.23. Module itertools: allmost all of Python's itertools module</a></li>
+<li><a class="reference internal" href="#module-math-allmost-all-of-python-s-math-module">4.24. Module math: allmost all of Python's math module</a></li>
+<li><a class="reference internal" href="#module-random-most-important-functions-of-python-s-random-module">4.25. Module random: most important functions of Python's random module</a></li>
+<li><a class="reference internal" href="#modules-hierarchical-both-local-to-the-project-and-global-url-based">4.26. Modules: hierarchical, both local to the project and global url-based</a></li>
+<li><a class="reference internal" href="#nonlocals">4.27. Nonlocals</a></li>
+<li><a class="reference internal" href="#operator-overloading">4.28. Operator overloading</a></li>
+<li><a class="reference internal" href="#properties">4.29. Properties</a></li>
+<li><a class="reference internal" href="#set-comprehensions">4.30. Set comprehensions</a></li>
+<li><a class="reference internal" href="#simple-and-augmented-assignment">4.31. Simple and augmented assignment</a></li>
+<li><a class="reference internal" href="#truthyness-optional-python-style-evaluation-of-truthyness-falsyness-and-non-empty-container-selection">4.32. Truthyness: optional Python-style evaluation of truthyness, falsyness and non-empty container selection</a></li>
+<li><a class="reference internal" href="#tuple-assignment-recursive-and-in-for-headers-using-enumerate">4.33. Tuple assignment: recursive and in for-headers using enumerate</a></li>
 </ul>
 </li>
 </ul>
@@ -2300,7 +2404,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.210 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.212 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -160,6 +160,13 @@ Module builtin: a small part of it demo'ed
 	:tab-width: 4
 	:caption: Testlet: module_builtin
 
+Module cmath: allmost all of Python's cmath module
+--------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/module_cmath/__init__.py
+	:tab-width: 4
+	:caption: Testlet: module_cmath
+
 Module itertools: allmost all of Python's itertools module
 ----------------------------------------------------------
 

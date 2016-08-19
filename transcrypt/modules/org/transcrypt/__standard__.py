@@ -73,26 +73,24 @@ class complex:
 		self.real = real
 		self.imag = imag
 		
-	def __add__ (self, other):
-		if __typeof__ (other, 'number'):
-			return complex (self.real + other, self.imag)
-		else:	# Assume other is complex
-			return complex (self.real + other.real, self.imag + other.imag)
+	def __neg__ (self):
+		return complex (-self.real, -self.imag)
 		
-	def __radd__ (self, real):	# real + comp -> comp.__radd__ (real)
-		return complex (self.real + real, self.imag)
+	def __exp__ (self):
+		modulus = Math.exp (self.real)
+		return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag))
+	
+	def __log__ (self):
+		return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real))
 		
-	def __sub__ (self, other):
-		if __typeof__ (other, 'number'):
-			return complex (self.real - other, self.imag)
-		else:
-			return complex (self.real - other.real, self.imag - other.imag)
+	def __pow__ (self, other):	# a ** b = exp (b log a)
+		return (self.__log__ () .__mul__ (other)) .__exp__ ()
 		
-	def __rsub__ (self, real):	# real - comp -> comp.__rsub__ (real)
-		return complex (real - self.real, -self.imag)
+	def __rpow__ (self, real):	# real ** comp -> comp.__rpow__ (real)
+		return self.__mul__ (Math.log (real)) .__exp__ ()
 		
 	def __mul__ (self, other):
-		if __typeof__ (other, 'number'):
+		if __typeof__ (other) is 'number':
 			return complex (self.real * other, self.imag * other)
 		else:
 			return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real)
@@ -101,7 +99,7 @@ class complex:
 		return complex (self.real * real, self.imag * real)
 		
 	def __div__ (self, other):
-		if __typeof__ (other, 'number'):
+		if __typeof__ (other) is 'number':
 			return complex (self.real / other, self.imag / other)
 		else:
 			denom = other.real * other.real + other.imag * other.imag
@@ -116,6 +114,24 @@ class complex:
 			(real * self.real) / denom,
 			(real * self.imag) / denom
 		)
+		
+	def __add__ (self, other):
+		if __typeof__ (other) is 'number':
+			return complex (self.real + other, self.imag)
+		else:	# Assume other is complex
+			return complex (self.real + other.real, self.imag + other.imag)
+		
+	def __radd__ (self, real):	# real + comp -> comp.__radd__ (real)
+		return complex (self.real + real, self.imag)
+		
+	def __sub__ (self, other):
+		if __typeof__ (other) is 'number':
+			return complex (self.real - other, self.imag)
+		else:
+			return complex (self.real - other.real, self.imag - other.imag)
+		
+	def __rsub__ (self, real):	# real - comp -> comp.__rsub__ (real)
+		return complex (real - self.real, -self.imag)
 		
 	def __repr__ (self):
 		return '({}{}{}j)'.format (self.real, '+' if self.imag >= 0 else '', self.imag)

@@ -450,10 +450,15 @@ class Generator (ast.NodeVisitor):
 # START predef_aliases
 			('js_and', 'and'),
 			('arguments', 'py_arguments'),			('js_arguments', 'arguments'),
+			('case', 'py_case'),
+			('default', 'py_default'),
 			('false', 'py_false'),
 			('js_from', 'from'),
+			('Infinity', 'py_Infinity'),			('js_Infinity', 'Infinity'),
+			('isNaN', 'py_isNaN'),					('js_isNaN', 'isNaN'),
 			('iter', 'py_iter'),					('js_iter', 'iter'),
 			('name', 'py_name'),					('js_name', 'name'),
+			('NaN', 'py_NaN'),						('js_NaN', 'NaN'),
 			('next', 'py_next'),					('js_next', 'next'),
 			('js_not', 'not'),
 			('js_or', 'or'),
@@ -461,12 +466,11 @@ class Generator (ast.NodeVisitor):
 			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
 			('sort', 'py_sort'),					('js_sort', 'sort'),
-			('switch', 'py_switch'),
-			('case', 'py_case'),
-			('default', 'py_default'),
-			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
 			('split', 'py_split'),					('js_split', 'split'),
+			('switch', 'py_switch'),
+			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
 			('true', 'py_true'),
+			('undefined', 'py_undefined'), 			('js_undefined', 'undefined'),
 # END predef_aliases
 		)]
 		
@@ -1084,7 +1088,7 @@ class Generator (ast.NodeVisitor):
 			ast.Mult, ast.Div, ast.Add, ast.Sub
 		)):
 			self.emit ('{} ('.format (self.filterId (
-				'Math.pow' if type (node.op) == ast.Pow else
+				('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
 				'__matmul__' if type (node.op) == ast.MatMult else
 				'__mul__' if type (node.op) == ast.Mult else
 				'__div__' if type (node.op) == ast.Div else
@@ -1249,8 +1253,6 @@ class Generator (ast.NodeVisitor):
 			elif node.func.id == '__typeof__':
 				self.emit ('typeof ')
 				self.visit (node.args [0])
-				self.emit (' === ')	# Give JavaScript string interning a chance to avoid char by char comparison
-				self.visit (node.args [1])
 				return
 					
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
@@ -1927,16 +1929,17 @@ class Generator (ast.NodeVisitor):
 	def visit_Raise (self, node):
 		self.adaptLineNrString (node)
 			
-		self.emit ('__except__ = ') 
+		self.emit ('var {} = ', self.nextTemp ('except')) 
 		self.visit (node.exc)
 		self.emit (';\n')
-		self.emit ('__except__.__cause__ = ')
+		self.emit ('{}.__cause__ = ', self.getTemp ('except'))
 		if node.cause:
 			self.visit (node.cause)
 		else:
 			self.emit ('null')
 		self.emit (';\n')
-		self.emit ('throw __except__')
+		self.emit ('throw {}', self.getTemp ('except'))
+		self.prevTemp ('except')
 		
 	def visit_Return (self, node):
 		self.adaptLineNrString (node)

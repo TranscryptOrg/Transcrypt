@@ -22,10 +22,18 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status of latest release
 ========================
 
-Release 6 (version 3.5.207):
+Release 7 (version 3.5.213):
 
-This release features local classes, CPython-like itertools and time modules, along with many small improvements and fixes.
-The examples in the docs have been expanded.
+This release features
+
+- Parameterless and parametrized function and class decorators
+- Transcrypt's 'in' operator expanded to work on JavaScript objects as well, for better integration of Python dicts and JavaScript objects, especially literals
+- Else clause for exceptions added
+- Complex numbers
+- The cmath library has been added in preparation of expansion of NumScrypt, a.o. with (I)FFT and in general in making Transcrypt suitable for interactively demonstrating low volume scientific and technical computations in the browser.
+- Documentation and autotest expanded accordingly
+- Several bugs fixed
+
 Thanks to anyone who contributed!
 
 Jacques de Hooge
@@ -33,6 +41,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Release 7
+- Module cmath added + autotest
 - Else-clause for exceptions added
 - Complex numbers added + autotest (no cmath module yet)
 - Transcrypt's 'in' operator now also works on objects for better integration of Python dicts and JavaScript objects, especially literals
@@ -65,7 +75,7 @@ Known restrictions
 ==================
 
 - Only a very limited selection of standard libs have been chosen for inclusion in the Transcrypt distribution. Use or encapsulate the JavaScript ones, that's part of the concept. Some additional standard libs may be ported in the future though.
-- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. This results from a deliberate choice to keep Transcrypt lean.
+- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and simple.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
 - No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
 

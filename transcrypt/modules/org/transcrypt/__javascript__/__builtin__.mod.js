@@ -322,9 +322,6 @@ __pragma__ ('endif')
 	
 	// Absolute value
 __pragma__ ('ifdef', '__complex__')
-	var abs = Math.abs;
-	__all__.abs = abs;
-__pragma__ ('else')
 	var abs = function (x) {
 		try {
 			return Math.abs (x);
@@ -333,6 +330,9 @@ __pragma__ ('else')
 			return Math.sqrt (x.real * x.real + x.imag * x.imag);
 		}
 	}
+__pragma__ ('else')
+	var abs = Math.abs;
+	__all__.abs = abs;
 __pragma__ ('endif')
 	
 	// Bankers rounding
@@ -1214,8 +1214,8 @@ __pragma__ ('endif')
 	}
 	
 	String.prototype.__rmul__ = String.prototype.__mul__;
-	
-	// Operator overloading, only the ones that make most sense in matrix operations
+		
+	// General operator overloading, only the ones that make most sense in matrix and complex operations
 	
 	var __neg__ = function (a) {
 		if (typeof a == 'object' && '__neg__' in a) {
@@ -1231,6 +1231,19 @@ __pragma__ ('endif')
 		return a.__matmul__ (b);
 	};  
 	__all__.__matmul__ = __matmul__;
+	
+	var __pow__ = function (a, b) {
+		if (typeof a == 'object' && '__pow__' in a) {
+			return a.__pow__ (b);
+		}
+		else if (typeof b == 'object' && '__rpow__' in b) {
+			return b.__rpow__ (a);
+		}
+		else {
+			return Math.pow (a, b);
+		}
+	};	
+	__all__.pow = __pow__;
 	
 	var __mul__ = function (a, b) {
 		if (typeof a == 'object' && '__mul__' in a) {

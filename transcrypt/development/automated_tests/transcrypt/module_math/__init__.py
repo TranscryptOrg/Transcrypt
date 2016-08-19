@@ -8,6 +8,7 @@ def run (autoTester):
 	autoTester.check (int (expm1 (5)))
 	
 	autoTester.check (log (0.2))
+	autoTester.check (round (log (1024, 2)))
 	autoTester.check (log1p (5))
 	autoTester.check (int (log2 (257)))
 	autoTester.check (int (log10 (1001)))

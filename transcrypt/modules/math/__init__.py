@@ -6,7 +6,8 @@ exp = Math.exp
 def expm1 (x):		# IE workaround
 	return Math.exp (x) - 1
 
-log = Math.log		# Simplified
+def log (x, base):
+	return Math.log (x) if base is js_undefined else Math.log (x) / Math.log (base)
 
 def log1p (x):		# IE workaround
 	return Math.log (x + 1)
@@ -48,3 +49,6 @@ atanh = Math.atanh
 floor = Math.floor
 ceil = Math.ceil
 trunc = Math.trunc
+
+inf = js_Infinity
+nan = js_NaN
