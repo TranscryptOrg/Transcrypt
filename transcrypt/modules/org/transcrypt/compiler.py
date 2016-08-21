@@ -1235,7 +1235,7 @@ class Generator (ast.NodeVisitor):
 					self.allowOperatorOverloading = True
 				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
 					self.allowOperatorOverloading = False
-				elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'endif'):
+				elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'ifndef', 'else', 'endif'):
 					pass								# Easier dealth with on statement / expression level in self.visit
 				else:
 					raise utils.Error (
@@ -1268,40 +1268,58 @@ class Generator (ast.NodeVisitor):
 				
 		self.visit (node.func)
 		
-		for index, expr in enumerate (node.args):
-			if type (expr) == ast.Starred:
-				self.emit ('.apply (null, ')	# Note that in generated a.b.f (), a.b.f is a bound function already
-				
-				for index, expr in enumerate (node.args):
-					if index:
-						self.emit ('.concat (')
-					if type (expr) == ast.Starred:
-						self.visit (expr)
-					else:
-						self.emit ('[')
-						self.visit (expr)
-						self.emit (']')
-					if index:
-						self.emit (')')
-						
-				if node.keywords:
-					self.emit ('.concat ([')	# At least *args was present before this point
-					emitKwargDict ()
-					self.emit ('])')
-					
-				self.emit (')')			
-				break;
-		else:	
+		if self.module.program.javaScriptVersion >= 6:
 			self.emit (' (')
+			
 			for index, expr in enumerate (node.args):
 				self.emitComma (index)
+				
+				if type (expr) == ast.Starred:
+					self.emit ('...')
+					
 				self.visit (expr)
 				
 			if node.keywords:
 				self.emitComma (len (node.args))
 				emitKwargDict ()
-				
+					
 			self.emit (')')
+		else:
+			for index, expr in enumerate (node.args):
+				if type (expr) == ast.Starred:
+					self.emit ('.apply (null, ')	# Note that in generated a.b.f (), a.b.f is a bound function already
+					
+					for index, expr in enumerate (node.args):
+						if index:
+							self.emit ('.concat (')
+						if type (expr) == ast.Starred:
+							self.visit (expr)
+						else:
+							self.emit ('[')
+							self.visit (expr)
+							self.emit (']')
+						if index:
+							self.emit (')')
+							
+					if node.keywords:
+						self.emit ('.concat ([')	# At least *args was present before this point
+						emitKwargDict ()
+						self.emit ('])')
+						
+					self.emit (')')			
+					break;
+			else:	
+				self.emit (' (')
+				
+				for index, expr in enumerate (node.args):
+					self.emitComma (index)
+					self.visit (expr)
+					
+				if node.keywords:
+					self.emitComma (len (node.args))
+					emitKwargDict ()
+					
+				self.emit (')')
 		
 	def visit_ClassDef (self, node):
 		self.adaptLineNrString (node)

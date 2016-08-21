@@ -1,4 +1,4 @@
-from org.transcrypt.stubs.browser import __pragma__
+from org.transcrypt.stubs.browser import __pragma__, __new__
 
 from div_fixes.issue55 import *
 
@@ -73,5 +73,4 @@ def run (autoTester):
 	autoTester.check (initially17)
 	initially17 //= 2
 	autoTester.check (initially17)
-
 	
