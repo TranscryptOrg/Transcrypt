@@ -161,7 +161,7 @@ class __Terminal__:
 			self.element.innerHTML = self.buffer.replace ('\n', '<br>')
 			self.element.scrollTop = self.element.scrollHeight
 		else:
-			console.log (sep.join (args))
+			console.log (sep.join ([str (arg) for arg in args]))
 		
 	def input (self, question):
 		self.print ('{}_'.format (question), end = '')
