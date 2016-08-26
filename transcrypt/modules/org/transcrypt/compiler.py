@@ -52,7 +52,7 @@ class ModuleMetadata:
 			searchedModulePaths += [self.sourcePath, self.targetPath]
 			
 			if (os.path.isfile (self.sourcePath) or os.path.isfile (self.targetPath)):
-				break;	
+				break;
 		else:
 			# If even the target can't be loaded then there's a problem with this module, root or not
 			raise utils.Error (

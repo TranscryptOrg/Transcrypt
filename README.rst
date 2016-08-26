@@ -41,6 +41,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix to enable Numscript development
 - *args now also can be used in calling pure javascript methods (see issue #102)
 - Pragma's else and elif fixed for use in .py rather than .js files
 - Release 7
