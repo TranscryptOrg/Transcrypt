@@ -934,7 +934,7 @@ class Generator (ast.NodeVisitor):
 					if target.slice.step:
 						self.visit (target.slice.step)
 					else:
-						self.emit ('null')
+						self.emit ('1')
 					self.emit (', ')
 					
 					self.visit (value)
@@ -1254,6 +1254,22 @@ class Generator (ast.NodeVisitor):
 				self.emit ('typeof ')
 				self.visit (node.args [0])
 				return
+			elif node.func.id == '__preinc__':
+				self.emit ('++')
+				self.visit (node.args [0])
+				return
+			elif node.func.id == '__postinc__':
+				self.visit (node.args [0])
+				self.emit ('++')
+				return
+			elif node.func.id == '__predec__':
+				self.emit ('--')
+				self.visit (node.args [0])
+				return
+			elif node.func.id == '__postdec__':
+				self.visit (node.args [0])
+				self.emit ('--')
+				return
 					
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
 			self.visit (ast.Call (
@@ -1452,12 +1468,15 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.skipTemp ('break')
 			
-		optimize = (	# Special case optimization: iterating through range with constant step
+		# Special case optimization: iterating through range with constant literal step, start and stop can be expressions
+		# Starred args not allowed, since what's 'behind' the star is only known at runtime, so there's no saying wether there's a constant literal step
+		optimize = (
 			type (node.target) == ast.Name and	# Since 'var' is emitted, target must not yet exist, so e.g. not be element of array
-			self.isCall (node.iter, 'range') and (
-				len (node.iter.args) < 3 or
-				type (node.iter.args [2]) == ast.Num or (
-					type (node.iter.args [2]) == ast.UnaryOp and
+			self.isCall (node.iter, 'range') and 
+				type (node.iter.args [0]) != ast.Starred and (
+				len (node.iter.args) < 3 or							# Constant step of 1
+				type (node.iter.args [2]) == ast.Num or (			# Positive constant step
+					type (node.iter.args [2]) == ast.UnaryOp and	# Negative constant step
 					type (node.iter.args [2] .operand) == ast.Num
 				)
 			)
@@ -1987,7 +2006,7 @@ class Generator (ast.NodeVisitor):
 		self.emit (', ')
 		
 		if node.upper == None:
-			self.emit ('0')
+			self.emit ('null')
 		else:
 			self.visit (node.upper)
 			

@@ -1363,42 +1363,42 @@ __pragma__ ('endif')
 	};
 	__all__.__ge__ = __ge__;
 		
-	var __getitem__ = function (container, key) {
+	var __getitem__ = function (container, key) {							// Slice c.q. index, direct generated call to runtime switch
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ (key);
+			return container.__getitem__ (key);								// Overloaded on container
 		}
 		else {
-			return container [key];
+			return container [key];											// Container must support bare JavaScript brackets
 		}
 	};
 	__all__.__getitem__ = __getitem__;
 
-	var __setitem__ = function (container, key, value) {
+	var __setitem__ = function (container, key, value) {					// Slice c.q. index, direct generated call to runtime switch
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ (key, value);
+			container.__setitem__ (key, value);								// Overloaded on container
 		}
 		else {
-			container [key] = value;
+			container [key] = value;										// Container must support bare JavaScript brackets
 		}
 	};
 	__all__.__setitem__ = __setitem__;
 
-	var __getslice__ = function (container, lower, upper, step) {
+	var __getslice__ = function (container, lower, upper, step) {			// Slice only, no index, direct generated call to runtime switch
 		if (typeof container == 'object' && '__getitem__' in container) {
-			return container.__getitem__ ([lower, upper, step]);
+			return container.__getitem__ ([lower, upper, step]);			// Container supports overloaded slicing c.q. indexing
 		}
 		else {
-			return container.__getslice__ (lower, upper, step);
+			return container.__getslice__ (lower, upper, step);				// Container only supports slicing injected natively in prototype
 		}
 	};
 	__all__.__getslice__ = __getslice__;
 
-	var __setslice__ = function (container, lower, upper, step, value) {
+	var __setslice__ = function (container, lower, upper, step, value) {	// Slice, no index, direct generated call to runtime switch
 		if (typeof container == 'object' && '__setitem__' in container) {
-			container.__setitem__ ([lower, upper, step], value);
+			container.__setitem__ ([lower, upper, step], value);			// Container supports overloaded slicing c.q. indexing
 		}
 		else {
-			container.__setslice__ (lower, upper, step, value);
+			container.__setslice__ (lower, upper, step, value);				// Container only supports slicing injected natively in prototype
 		}
 	};
 	__all__.__setslice__ = __setslice__;

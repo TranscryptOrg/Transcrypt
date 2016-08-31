@@ -69,10 +69,18 @@ def filter (func, iterable):
 	
 __pragma__ ('ifdef', '__complex__')
 class complex:
-	def __init__ (self, real, imag):
-		self.real = real
-		self.imag = imag
-		
+	def __init__ (self, real, imag = None):
+		if imag == None:
+			if type (real) == complex:
+				self.real = real.real
+				self.imag = real.imag
+			else:
+				self.real = real
+				self.imag = 0
+		else:
+			self.real = real
+			self.imag = imag
+			
 	def __neg__ (self):
 		return complex (-self.real, -self.imag)
 		
