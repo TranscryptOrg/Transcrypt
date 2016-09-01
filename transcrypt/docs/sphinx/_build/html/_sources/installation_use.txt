@@ -15,6 +15,8 @@ Alternatively, for manual installation under Windows or Linux, follow the steps 
 1.	Download the Transcrypt zip and unpack it anywhere you like
 2.	Add *../Transcrypt-<version>/transcrypt* to your system path
 
+To enable minification, additionally the Java Runtime Environment 6 or later has to be installed.
+
 N.B. If you install Transcrypt manually, Trancrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to by used side by side selectively.
 
 N.B.2 If you also use Numscrypt under Linux or OSX, use the MiniConda installer rather than *virtualenv*, as described in the Numscrypt documentation, since it will allow you to obtain the right version of NumPy.

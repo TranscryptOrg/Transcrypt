@@ -807,7 +807,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv5__&#39;];
+        var __symbols__ = [&#39;__esv6__&#39;];
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -984,11 +984,11 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get install () {return __get__ (this, function (self) {
                 self.playerLabels = function () {
                     var __accu0__ = [];
-                    var __iterable0__ = tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]);
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var __left0__ = __iterable0__ [__index0__];
-                        var py_name = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var py_name = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
@@ -1006,22 +1006,22 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
-                    var __iterable0__ = zip (self.scores, tuple ([-(2) / 16, 6 / 16]));
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var __left0__ = __iterable0__ [__index0__];
-                        var score = __left0__ [0];
-                        var position = __left0__ [1];
+                    var __iterator0__ = py_iter (zip (self.scores, tuple ([-(2) / 16, 6 / 16])));
+                    while (true) {
+                        try {var __left0__ = py_next (__iterator0__);
+                            var score = __left0__ [0];
+                            var position = __left0__ [1];} catch (exception) {break;}
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
             });},
             get draw () {return __get__ (this, function (self) {
-                var __iterable0__ = zip (self.playerLabels, self.scoreLabels);
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var __left0__ = __iterable0__ [__index0__];
-                    var playerLabel = __left0__ [0];
-                    var scoreLabel = __left0__ [1];
+                var __iterator0__ = py_iter (zip (self.playerLabels, self.scoreLabels));
+                while (true) {
+                    try {var __left0__ = py_next (__iterator0__);
+                        var playerLabel = __left0__ [0];
+                        var scoreLabel = __left0__ [1];} catch (exception) {break;}
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -1058,9 +1058,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.buttons = list ([]);
-                var __iterable0__ = tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]);
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var key = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]));
+                while (true) {
+                    try {var key = py_next (__iterator0__);} catch (exception) {break;}
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
@@ -1091,9 +1091,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.resize ();
             });},
             get install () {return __get__ (this, function (self) {
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.install ();
                 }
             });},
@@ -1130,19 +1130,19 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     }
                 }
                 else {
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.predict ();
                     }
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.interact ();
                     }
-                    var __iterable0__ = self.attributes;
-                    for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                        var attribute = __iterable0__ [__index0__];
+                    var __iterator0__ = py_iter (self.attributes);
+                    while (true) {
+                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                         attribute.commit ();
                     }
                 }
@@ -1150,26 +1150,26 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
-                var __iterable0__ = self.paddles;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var paddle = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.paddles);
+                while (true) {
+                    try {var paddle = py_next (__iterator0__);} catch (exception) {break;}
                     paddle.reset ();
                 }
                 self.ball.reset ();
                 self.pause = true;
             });},
             get commit () {return __get__ (this, function (self) {
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.commit ();
                 }
             });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
-                var __iterable0__ = self.attributes;
-                for (var __index0__ = 0; __index0__ &lt; __iterable0__.length; __index0__++) {
-                    var attribute = __iterable0__ [__index0__];
+                var __iterator0__ = py_iter (self.attributes);
+                while (true) {
+                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
                     attribute.draw ();
                 }
             });},
@@ -1282,7 +1282,36 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;__esv6__&#39;];
+        var start = function () {
+            var changeColors = function () {
+                var __iterator0__ = py_iter ($divs);
+                while (true) {
+                    try {var div = py_next (__iterator0__);} catch (exception) {break;}
+                    $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format (...function () {
+                        var __accu0__ = [];
+                        for (var i = 0; i &lt; 3; i++) {
+                            __accu0__.append (int (256 * Math.random ()));
+                        }
+                        return __accu0__;
+                    } ())}));
+                }
+            };
+            var $divs = $ (&#39;div&#39;);
+            changeColors ();
+            window.setInterval (changeColors, 500);
+        };
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.start = start;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1575,7 +1604,80 @@ __javascript__/ios_app.js
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="d3js-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">d3js_demo.mod.js</span><a class="headerlink" href="#d3js-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;__esv6__&#39;];
+        var Spawn = __class__ (&#39;Spawn&#39;, [object], {
+            get __init__ () {return __get__ (this, function (self, width, height) {
+                var __left0__ = tuple ([width, height, 100, d3.scale.category20 ()]);
+                self.width = __left0__ [0];
+                self.height = __left0__ [1];
+                self.spacing = __left0__ [2];
+                self.fill = __left0__;
+                self.svg = d3.select (&#39;body&#39;).append (&#39;svg&#39;).attr (&#39;width&#39;, self.width).attr (&#39;height&#39;, self.height).on (&#39;mousemove&#39;, self.mousemove).on (&#39;mousedown&#39;, self.mousedown);
+                self.svg.append (&#39;rect&#39;).attr (&#39;width&#39;, self.width).attr (&#39;height&#39;, self.height);
+                self.cursor = self.svg.append (&#39;circle&#39;).attr (&#39;r&#39;, self.spacing).attr (&#39;transform&#39;, &#39;translate ({}, {})&#39;.format (self.width / 2, self.height / 2)).attr (&#39;class&#39;, &#39;cursor&#39;);
+                self.force = d3.layout.force ().size (list ([self.width, self.height])).nodes (list ([dict ({})])).linkDistance (self.spacing).charge (-(1000)).on (&#39;tick&#39;, self.tick);
+                var __left0__ = tuple ([self.force.nodes (), self.force.links (), self.svg.selectAll (&#39;.node&#39;), self.svg.selectAll (&#39;.link&#39;)]);
+                self.nodes = __left0__ [0];
+                self.links = __left0__ [1];
+                self.node = __left0__ [2];
+                self.link = __left0__ [3];
+                self.restart ();
+            });},
+            get mousemove () {return __get__ (this, function (self) {
+                self.cursor.attr (&#39;transform&#39;, (&#39;translate (&#39; + d3.mouse (self.svg.node ())) + &#39;)&#39;);
+            });},
+            get mousedown () {return __get__ (this, function (self) {
+                var pushLink = function (target) {
+                    var __left0__ = tuple ([target.x - node.x, target.y - node.y]);
+                    var x = __left0__ [0];
+                    var y = __left0__ [1];
+                    if (Math.sqrt (x * x + y * y) &lt; self.spacing) {
+                        spawn.links.push (dict ({&#39;source&#39;: node, &#39;target&#39;: target}));
+                    }
+                };
+                var point = d3.mouse (self.svg.node ());
+                var node = dict ({&#39;x&#39;: point [0], &#39;y&#39;: point [1]});
+                self.nodes.push (node);
+                self.nodes.forEach (pushLink);
+                self.restart ();
+            });},
+            get tick () {return __get__ (this, function (self) {
+                self.link.attr (&#39;x1&#39;, (function __lambda__ (d) {
+                    return d.source.x;
+                })).attr (&#39;y1&#39;, (function __lambda__ (d) {
+                    return d.source.y;
+                })).attr (&#39;x2&#39;, (function __lambda__ (d) {
+                    return d.target.x;
+                })).attr (&#39;y2&#39;, (function __lambda__ (d) {
+                    return d.target.y;
+                }));
+                self.node.attr (&#39;cx&#39;, (function __lambda__ (d) {
+                    return d.x;
+                })).attr (&#39;cy&#39;, (function __lambda__ (d) {
+                    return d.y;
+                }));
+            });},
+            get restart () {return __get__ (this, function (self) {
+                self.link = self.link.data (self.links);
+                self.link.enter ().insert (&#39;line&#39;, &#39;.node&#39;).attr (&#39;class&#39;, &#39;link&#39;);
+                self.node = self.node.data (self.nodes);
+                self.node.enter ().insert (&#39;circle&#39;, &#39;.cursor&#39;).attr (&#39;class&#39;, &#39;node&#39;).attr (&#39;r&#39;, 7).call (self.force.drag);
+                self.force.start ();
+            });}
+        });
+        var spawn = Spawn (window.innerWidth, window.innerHeight);
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Spawn = Spawn;
+            __all__.spawn = spawn;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1631,7 +1733,48 @@ __javascript__/ios_app.js
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
+<div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;__esv6__&#39;];
+        var h = function (elm_type, props) {
+            if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
+                var props = &#39;&#39;;
+            };
+            var args = tuple ([].slice.apply (arguments).slice (2));
+            return React.createElement (elm_type, props, ...args);
+        };
+        var render = function (react_element, destination_id, callback) {
+            if (typeof callback == &#39;undefined&#39; || (callback != null &amp;&amp; callback .__class__ == __kwargdict__)) {;
+                var callback = (function __lambda__ () {
+                    return null;
+                });
+            };
+            var container = document.getElementById (destination_id);
+            ReactDOM.render (react_element, container, callback);
+        };
+        var Hello = React.createClass (dict ({&#39;displayName&#39;: &#39;Hello&#39;, &#39;getInitialState&#39;: (function __lambda__ () {
+            return dict ({&#39;counter&#39;: 0});
+        }), &#39;updateCounter&#39;: (function __lambda__ () {
+            return this.setState (dict ({&#39;counter&#39;: this.state [&#39;counter&#39;] + 1}));
+        }), &#39;componentDidMount&#39;: (function __lambda__ () {
+            return setInterval (this.updateCounter, 1000);
+        }), &#39;render&#39;: (function __lambda__ () {
+            return h (&#39;div&#39;, dict ({&#39;className&#39;: &#39;maindiv&#39;}), h (&#39;h1&#39;, null, &#39;Hello &#39;, this.props [&#39;name&#39;]), h (&#39;p&#39;, null, &#39;Lorem ipsum dolor sit ame.&#39;), h (&#39;p&#39;, null, &#39;Counter: &#39;, this.state [&#39;counter&#39;]));
+        })}));
+        var element = React.createElement (Hello, dict ({&#39;name&#39;: &#39;React!&#39;}));
+        render (element, &#39;container&#39;);
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.Hello = Hello;
+            __all__.element = element;
+            __all__.h = h;
+            __all__.render = render;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1880,7 +2023,135 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="riot-tag-mod-js-compiled-by-transcrypt">
+<div class="code-block-caption"><span class="caption-text">riot_tag.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#riot-tag-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    __nest__ (
+        __all__,
+        &#39;riot_tag&#39;, {
+            __all__: {
+                __inited__: false,
+                __init__: function (__all__) {
+                    var __author__ = &#39;Gunther Klessinger, gk@axiros.com, Germany&#39;;
+                    var colors = __init__ (__world__.color).colors;
+                    var col_print = __init__ (__world__.color).cprint;
+                    var c = colors;
+                    var __left0__ = tuple ([c [&#39;purple&#39;], c [&#39;orange&#39;], c [&#39;gray&#39;], c [&#39;red&#39;], c [&#39;black&#39;]]);
+                    var M = __left0__ [0];
+                    var I = __left0__ [1];
+                    var L = __left0__ [2];
+                    var R = __left0__ [3];
+                    var B = __left0__ [4];
+                    var lifecycle_ev = list ([&#39;before-mount&#39;, &#39;mount&#39;, &#39;update&#39;, &#39;unmount&#39;]);
+                    var cur_tag_col = 0;
+                    var RiotTag = __class__ (&#39;RiotTag&#39;, [object], {
+                        get __init__ () {return __get__ (this, function (self, tag, opts) {
+                            self.opts = opts;
+                            self._setup_tag (tag);
+                            cur_tag_col = (cur_tag_col + 1) % len (colors);
+                            self.my_col = colors.items () [cur_tag_col] [1];
+                        });},
+                        get _setup_tag () {return __get__ (this, function (self, tag) {
+                            tag.py_obj = self;
+                            self.riot_tag = tag;
+                            var handlers = dict ({});
+                            var __iterator0__ = py_iter (lifecycle_ev);
+                            while (true) {
+                                try {var ev = py_next (__iterator0__);} catch (exception) {break;}
+                                var f = getattr (self, ev.py_replace (&#39;-&#39;, &#39;_&#39;));
+                                if (f) {
+                                    tag.on (ev, f);
+                                }
+                            }
+                        });},
+                        get pp () {return __get__ (this, function (self) {
+                            var msg = tuple ([].slice.apply (arguments).slice (1));
+                            col_print (L (&#39;&lt;&#39;, self.my_col (self.node_name, self.my_col), &#39;/&gt; &#39;), M (&#39; &#39;.join (function () {
+                                var __accu0__ = [];
+                                var __iterator0__ = py_iter (msg);
+                                while (true) {
+                                    try {var s = py_next (__iterator0__);} catch (exception) {break;}
+                                    __accu0__.append (s);
+                                }
+                                return __accu0__;
+                            } ())));
+                        });},
+                        get _lifecycle_ev () {return __get__ (this, function (self, mode) {
+                            if (self.debug) {
+                                self.pp (mode + &#39;ing&#39;);
+                            }
+                        });},
+                        get update () {return __get__ (this, function (self) {
+                            self._lifecycle_ev (&#39;update&#39;);
+                        });},
+                        get mount () {return __get__ (this, function (self) {
+                            self._lifecycle_ev (&#39;mount&#39;);
+                        });},
+                        get unmount () {return __get__ (this, function (self) {
+                            self._lifecycle_ev (&#39;unmount&#39;);
+                        });},
+                        get before_mount () {return __get__ (this, function (self) {
+                            self._lifecycle_ev (&#39;before-mount&#39;);
+                            return self.bind_vars ();
+                        });},
+                        get bind_vars () {return __get__ (this, function (self) {
+                            var tag = self.riot_tag;
+                            self.node_name = tag.root.nodeName.lower ();
+                            self.debug &amp;&amp; self.pp (&#39;binding vars&#39;);
+                            var __left0__ = list ([]);
+                            tag._immutables = __left0__;
+                            var im = __left0__;
+                            var lc = lifecycle_ev;
+                            var __iterator0__ = py_iter (dir (self));
+                            while (true) {
+                                try {var k = py_next (__iterator0__);} catch (exception) {break;}
+                                if (k [0] == &#39;_&#39; || __in__ (k, lifecycle_ev) || k == &#39;before_mount&#39;) {
+                                    continue;
+                                }
+                                var v = getattr (self, k);
+                                
+                                                  typeof v === &quot;function&quot; || typeof v === &quot;object&quot; ?
+                                                  tag[k] = self[k] : tag._immutables.push(k)
+                            }
+                            
+                                    var i = tag._immutables, py = self
+                                    i.forEach(function(k, j, i) {
+                                        Object.defineProperty(tag, k, {
+                                            get: function()  { return self[k]},
+                                            set: function(v) { self[k] = v }
+                                        })
+                                    })
+                        });}
+                    });
+                    RiotTag.debug = null;
+                    RiotTag.template = &#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;;
+                    RiotTag.style = &#39;&#39;;
+                    RiotTag.node_name = &#39;unmounted&#39;;
+                    RiotTag.opts = null;
+                    __pragma__ (&#39;&lt;use&gt;&#39; +
+                        &#39;color&#39; +
+                    &#39;&lt;/use&gt;&#39;)
+                    __pragma__ (&#39;&lt;all&gt;&#39;)
+                        __all__.B = B;
+                        __all__.I = I;
+                        __all__.L = L;
+                        __all__.M = M;
+                        __all__.R = R;
+                        __all__.RiotTag = RiotTag;
+                        __all__.__author__ = __author__;
+                        __all__.c = c;
+                        __all__.col_print = col_print;
+                        __all__.colors = colors;
+                        __all__.cur_tag_col = cur_tag_col;
+                        __all__.lifecycle_ev = lifecycle_ev;
+                    __pragma__ (&#39;&lt;/all&gt;&#39;)
+                }
+            }
+        }
+    );
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1946,7 +2217,50 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 </div>
 </div>
 </td>
-<td>&nbsp;</td>
+<td><div class="literal-block-wrapper first last container" id="riot-demo-mod-js-compiled-by-transcrypt">
+<div class="code-block-caption"><span class="caption-text">riot_demo.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#riot-demo-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>    (function () {
+        var __symbols__ = [&#39;__esv6__&#39;];
+        var RiotTag = __init__ (__world__.riot_tag).RiotTag;
+        var P = __class__ (&#39;P&#39;, [RiotTag], {
+            get count_up () {return __get__ (this, function (self) {
+                self.counter = self.counter + 1;
+                self.pp (&#39;counter:&#39;, self.counter, &#39;len lv:&#39;, len (self.lv), &#39;adding one lv&#39;);
+                self.lv.append (dict ({&#39;name&#39;: &#39;n&#39; + self.counter}));
+                return self.counter;
+            });}
+        });
+        P.debug = 1;
+        P.lv = list ([dict ({&#39;name&#39;: &#39;n0&#39;})]);
+        P.counter = 1;
+        P.template = &#39; &lt;div&gt;&lt;h1&gt;Riot Transcrypt Tag Instance {label}&lt;/h1&gt;\n                         &lt;div&gt;INNER&lt;/div&gt;&lt;/div&gt; &#39;;
+        var Sample2 = __class__ (&#39;Sample2&#39;, [P], {
+            get __init__ () {return __get__ (this, function (self, tag, opts) {
+                self.label = opts.label.capitalize ();
+                RiotTag.__init__ (self, tag, opts);
+                self.pp (&#39;tag init&#39;, &#39;adding 2 lv&#39;);
+                self.lv.extend (list ([dict ({&#39;name&#39;: &#39;n1&#39;}), dict ({&#39;name&#39;: &#39;n2&#39;})]));
+            });},
+            get update () {return __get__ (this, function (self) {
+                self.pp (&#39;update handler in the custom tag, calling super&#39;);
+                RiotTag.update (self);
+            });}
+        });
+        Sample2.template = P.template.py_replace (&#39;INNER&#39;, &#39;\n    &lt;div&gt;\n    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;\n    &lt;/div&gt;\n    &#39;);
+        Sample2.style = &#39;sample2 h5 {color: green}&#39;;
+        __pragma__ (&#39;&lt;use&gt;&#39; +
+            &#39;riot_tag&#39; +
+        &#39;&lt;/use&gt;&#39;)
+        __pragma__ (&#39;&lt;all&gt;&#39;)
+            __all__.P = P;
+            __all__.RiotTag = RiotTag;
+            __all__.Sample2 = Sample2;
+        __pragma__ (&#39;&lt;/all&gt;&#39;)
+    }) ();
+</pre></div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>

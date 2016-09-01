@@ -934,7 +934,7 @@ class Generator (ast.NodeVisitor):
 					if target.slice.step:
 						self.visit (target.slice.step)
 					else:
-						self.emit ('1')
+						self.emit ('null')					# Must be null rather than 1, see Array.prototype.__setslice__
 					self.emit (', ')
 					
 					self.visit (value)
