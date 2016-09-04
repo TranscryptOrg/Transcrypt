@@ -22,7 +22,7 @@ import datetime
 import math
 import traceback
 
-from org.transcrypt import __base__, utils, sourcemaps, minify, static_check
+from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, type_check
 
 class ModuleMetadata:
 	def __init__ (self, program, name):
@@ -121,6 +121,15 @@ class Program:
 		Module (self, ModuleMetadata (self, self.baseModuleName))
 		Module (self, ModuleMetadata (self, self.standardModuleName))
 		Module (self, ModuleMetadata (self, self.builtinModuleName))
+		
+		# Optionally perfom static typing validation
+		
+		if utils.commandArgs.dstat:
+			try:
+				type_check.run (self.sourcePath)
+			except Exception as exception:
+				print (exception)
+				utils.log (True, 'Validating: {} and dependencies\n\tInternal error in static typing validator\n', self.sourcePath)		
 
 		# Compile imported modules
 		try:
@@ -261,7 +270,7 @@ class Module:
 				try:
 					static_check.run (self.metadata.sourcePath, self.parseTree)
 				except Exception as exception:
-					utils.log (True, 'Checking: {}\n\tInternal error in static checker, remainder of module skipped\n', self.metadata.sourcePath)
+					utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.metadata.sourcePath)
 					
 			if utils.commandArgs.dtree:
 				self.dumpTree ()

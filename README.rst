@@ -41,6 +41,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Optional static type validation using mypy (experimental)
 - Small doc improvements
 - Some more fixes for Numscrypt
 - Fix to enable Numscrypt development

@@ -1,0 +1,29 @@
+Metadata-Version: 1.1
+Name: mypy-lang
+Version: 0.4.4
+Summary: Optional static typing for Python
+Home-page: http://www.mypy-lang.org/
+Author: Jukka Lehtosalo
+Author-email: jukka.lehtosalo@iki.fi
+License: MIT License
+Description: Mypy -- Optional Static Typing for Python
+        =========================================
+        
+        Add type annotations to your Python programs, and use mypy to type
+        check them.  Mypy is essentially a Python linter on steroids, and it
+        can catch many programming errors by analyzing your program, without
+        actually having to run it.  Mypy has a powerful type system with
+        features such as type inference, gradual typing, generics and union
+        types.
+        
+Platform: POSIX
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: Software Development

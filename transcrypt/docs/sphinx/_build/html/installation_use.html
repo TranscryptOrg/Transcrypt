@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.217 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.218 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.217',
+        VERSION:     '3.5.218',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.217 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.218 documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.217 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.218 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -202,11 +202,12 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--anno&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;annotate target files that were compiled from Python with source file names and source line numbers&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="s">&#39;--build&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;rebuild all target files from scratch&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--complex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable complex number support, locally requires operator overloading&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dc&#39;</span><span class="p">,</span> <span class="s">&#39;--dcheck&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;perform static check as part of compilation&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dc&#39;</span><span class="p">,</span> <span class="s">&#39;--dcheck&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: perform lightweight consistency check&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-da&#39;</span><span class="p">,</span> <span class="s">&#39;--dassert&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: activate assertions&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-de&#39;</span><span class="p">,</span> <span class="s">&#39;--dextex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: show extended exception reports&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dm&#39;</span><span class="p">,</span> <span class="s">&#39;--dmap&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: dump human readable source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dt&#39;</span><span class="p">,</span> <span class="s">&#39;--dtree&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: dump syntax tree&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-ds&#39;</span><span class="p">,</span> <span class="s">&#39;--dstat&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: validate static typing using annotations&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-e&#39;</span><span class="p">,</span> <span class="s">&#39;--esv&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;ecma script version of generated code, default = 5. The symbol __esv&lt;versionnr&gt;__ is added to the global symbol list, e.g. __esv6__.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-f&#39;</span><span class="p">,</span> <span class="s">&#39;--fcall&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable fastcall mechanism by default. You can also use __pragma__ (&#39;fcal&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">nofcall</span><span class="se">\&#39;</span><span class="s">)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="s">&#39;--gen&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable generators and iterators. DISADVISED, since it will result in a function call for each loop iteration. Preferably use __pragma__ (&#39;gen&#39;) and __pragma__ (&#39;nogen&#39;)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
@@ -375,7 +376,117 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you'll find t
 </div>
 </div>
 <p>Source code annotation only happens for Python sources, not for JavaScript-only modules, that have a trivial correspondence between non-minified target code and source code.</p>
-<span class="target" id="command-line-switches"></span></div>
+</div>
+</div>
+<div class="section" id="static-type-validation">
+<span id="command-line-switches"></span><h2>2.7. Static type validation<a class="headerlink" href="#static-type-validation" title="Permalink to this headline">¶</a></h2>
+<p>Static type validation is both a powerful method to catch a variety of bugs and a way to add clear, automatically checked documentation to your source code. Transcrypt includes an experimental version of <cite>Jukka Lehtosalo's mypy static type validator &lt;https://www.http://mypy-lang.org/index.html/&gt;</cite> This validator uses <cite>type hints &lt;https://www.python.org/dev/peps/pep-0484/&gt;</cite> to rigorously cross-check correct use of datatypes all through your application. To activate static type validation use the <em>-ds</em> switch. You can combine static type validation with lightweight consistency checking using both the <em>-ds</em> and <em>-dc</em> switches.</p>
+<p>Below is an example of code with type hints and deliberate inconsistencies, and the output of both the static type validator and the lightweight consistency checker. As can be seen, many errors can be caught in this way.</p>
+<div class="literal-block-wrapper container" id="manual-tests-static-types-static-types-py">
+<div class="code-block-caption"><span class="caption-text">manual_tests/static_types/static_types.py</span><a class="headerlink" href="#manual-tests-static-types-static-types-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+
+<span class="kn">import</span> <span class="nn">mod1</span>
+<span class="kn">import</span> <span class="nn">mod2</span>
+
+<span class="k">def</span> <span class="nf">fib</span> <span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span> <span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="c"># yield a</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        
+    <span class="k">return</span> <span class="mi">3</span>
+        
+<span class="k">def</span> <span class="nf">add</span> <span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;test&#39;</span>
+
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="literal-block-wrapper container" id="manual-tests-static-types-mod1-py">
+<div class="code-block-caption"><span class="caption-text">manual_tests/static_types/mod1.py</span><a class="headerlink" href="#manual-tests-static-types-mod1-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">4.5</span>
+    <span class="k">return</span> <span class="nb">str</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="literal-block-wrapper container" id="manual-tests-static-types-mod2-init-py">
+<div class="code-block-caption"><span class="caption-text">manual_tests/static_types/mod2/__init__.py</span><a class="headerlink" href="#manual-tests-static-types-mod2-init-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test</span> <span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">3</span>
+    
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="literal-block-wrapper container" id="results-of-the-static-type-validation-and-the-lightweight-consistency-check">
+<div class="code-block-caption"><span class="caption-text">Results of the static type validation and the lightweight consistency check</span><a class="headerlink" href="#results-of-the-static-type-validation-and-the-lightweight-consistency-check" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>
+D:\activ_tosh\geatec\transcrypt\transcrypt\development\manual_tests\static_types&gt;C:\Python35\python.exe D:\activ_tosh\geatec\transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 -ds -dc -n static_types.py 
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.5.218
+Copyright (C) Geatec Engineering. License: Apache 2.0
+
+Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/static_types/static_types.py
+    File mod2\__init__.py
+        Line 2: Incompatible return value type (got &quot;int&quot;, expected &quot;str&quot;)
+    File mod1.py
+        Line 3: Incompatible types in assignment (expression has type &quot;float&quot;, variable has type &quot;int&quot;)
+        Line 4: Incompatible return value type (got &quot;str&quot;, expected &quot;int&quot;)
+    File static_types.py
+        Line 12: Incompatible return value type (got &quot;int&quot;, expected Iterator[int])
+        Line 15: No return value expected
+        Line 22: No return value expected
+
+Performing lightweight consistency check on module: D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/static_types/static_types.py
+    Line 3: &#39;mod1&#39; imported but unused
+    Line 4: &#39;mod2&#39; imported but unused
+
+Performing lightweight consistency check on module: D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/static_types/mod1.py
+    Line 3: local variable &#39;a&#39; is assigned to but never used
+
+Saving result in: D:/activ_tosh/geatec/transcrypt/transcrypt/development/manual_tests/static_types/__javascript__/static_types.js
+
+Ready
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -404,6 +515,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you'll find t
 <li><a class="reference internal" href="#annotated-target-code">2.6.2. Annotated target code</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#static-type-validation">2.7. Static type validation</a></li>
 </ul>
 </li>
 </ul>
@@ -450,7 +562,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you'll find t
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.217 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.218 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

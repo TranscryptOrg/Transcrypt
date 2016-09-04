@@ -3,7 +3,7 @@
 # In Transcrypt, __standard__ is available inline, it isn't nested and cannot be imported in the normal way
 
 __pragma__ ('skip')
-copy = 0
+copy = Math = __typeof__ = __repr__ = document = console = window = 0
 __pragma__ ('noskip')
 
 __pragma__ ('nokwargs')

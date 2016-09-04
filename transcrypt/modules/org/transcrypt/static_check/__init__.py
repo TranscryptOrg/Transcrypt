@@ -12,13 +12,13 @@ def run (sourceFile, parseTree):
 		key = lambda messageHolder: 10000 * messageHolder.lineno + messageHolder.col
 	)
 	
-	utils.log (messageHolders or utils.commandArgs.verbose, 'Checking: {}'.format (sourceFile))
+	utils.log (messageHolders or utils.commandArgs.verbose, 'Performing lightweight consistency check on module: {}'.format (sourceFile))
 	if messageHolders:
 		for messageHolder in messageHolders:
 			utils.log (True, '\n\tLine {}: {}'.format  (
 				messageHolder.lineno - utils.nrOfExtraLines,
 				messageHolder.message % messageHolder.message_args
 			))
-		utils.log (True, '\n')
+		utils.log (True, '\n\n')
 	else:
 		utils.log (utils.commandArgs.verbose, ' OK\n')

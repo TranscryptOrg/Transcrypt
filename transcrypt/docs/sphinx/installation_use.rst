@@ -132,4 +132,29 @@ In addition to generating sourcemaps, you can use the *-a* switch to annotate no
 Source code annotation only happens for Python sources, not for JavaScript-only modules, that have a trivial correspondence between non-minified target code and source code.
 
 .. _command_line_switches:
+
+Static type validation
+----------------------
+Static type validation is both a powerful method to catch a variety of bugs and a way to add clear, automatically checked documentation to your source code. Transcrypt includes an experimental version of `Jukka Lehtosalo's mypy static type validator <https://www.http://mypy-lang.org/index.html/>` This validator uses `type hints <https://www.python.org/dev/peps/pep-0484/>` to rigorously cross-check correct use of datatypes all through your application. To activate static type validation use the *-ds* switch. You can combine static type validation with lightweight consistency checking using both the *-ds* and *-dc* switches.
+
+Below is an example of code with type hints and deliberate inconsistencies, and the output of both the static type validator and the lightweight consistency checker. As can be seen, many errors can be caught in this way.
+
+.. literalinclude:: ../../development/manual_tests/static_types/static_types.py
+	:tab-width: 4
+	:linenos:
+	:caption: manual_tests/static_types/static_types.py
+	
+.. literalinclude:: ../../development/manual_tests/static_types/mod1.py
+	:tab-width: 4
+	:linenos:
+	:caption: manual_tests/static_types/mod1.py
+	
+.. literalinclude:: ../../development/manual_tests/static_types/mod2/__init__.py
+	:tab-width: 4
+	:linenos:
+	:caption: manual_tests/static_types/mod2/__init__.py
+	
+.. literalinclude:: ../../development/manual_tests/static_types/static_types.out
+	:tab-width: 4
+	:caption: Results of the static type validation and the lightweight consistency check
 	
