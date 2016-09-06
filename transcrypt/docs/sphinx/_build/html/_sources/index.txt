@@ -14,6 +14,7 @@ Table of Contents:
 	what_why
 	installation_use
 	special_facilities
+	tutorials
 	supported_constructs
 	integration_javascript
 	autotesting_transcrypt

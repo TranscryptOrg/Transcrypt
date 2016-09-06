@@ -41,6 +41,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Source map generation bug fixed (see issue #104)
 - Optional static type validation using mypy (experimental)
 - Small doc improvements
 - Some more fixes for Numscrypt

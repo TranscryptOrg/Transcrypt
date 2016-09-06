@@ -20,24 +20,29 @@ PY_EXTENSIONS = tuple(PYTHON_EXTENSIONS)
 from org.transcrypt import utils
 
 def run (sourcePath):
+	def logHeader (sourcePath):
+		utils.log (True, 'Performing static type validation on application: {}\n', sourcePath)	
+	
 	try:
 		options = Options ()
 		# options.silent_imports = True
 		result = main.type_check_only ([BuildSource (sourcePath, None, None)], None, options)
-		messages = result.errors
-	except CompileError as exception:
-		messages = exception.messages
 		
-	if messages:
-		utils.log (True, 'Performing static type validation on application: {}\n', sourcePath)
-		oldModuleName = ''
-		for message in messages:
-			#utils.log (True, '>>> {}', message)
-			if ': error:' in message:
-				moduleName, lineNr, errorLabel, tail = message.split (':', 4)
-				if moduleName != oldModuleName:
-					utils.log (True, '\tFile {}\n', moduleName)
-					oldModuleName = moduleName
-				utils.log (True, '\t\tLine {}:{}\n', lineNr, tail)
-		utils.log (True, '\n')
+		if result.errors:
+			logHeader (sourcePath)
+			oldModuleName = ''
+			for message in result.errors:
+				if ': error:' in message:
+					moduleName, lineNr, errorLabel, tail = message.split (':', 4)
+					if moduleName != oldModuleName:
+						utils.log (True, '\tFile {}\n', moduleName)
+						oldModuleName = moduleName
+					utils.log (True, '\t\tLine {}:{}\n', lineNr, tail)
+			utils.log (True, '\n')
+	except CompileError as compileError:
+		if compileError.messages:
+			logHeader (sourcePath)
+			for message in compileError.messages:
+				utils.log (True, '\t{}', message)
+			utils.log (True, '\n')
 		
