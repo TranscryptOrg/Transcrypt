@@ -41,6 +41,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Truthyness of instances of custom classes fixed (see issue #110)
 - Source map generation bug fixed (see issue #104)
 - Optional static type validation using mypy (experimental)
 - Small doc improvements

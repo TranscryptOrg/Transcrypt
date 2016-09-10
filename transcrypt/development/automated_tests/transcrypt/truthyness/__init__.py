@@ -25,17 +25,17 @@ def run (autoTester):
 	autoTester.check ([] or [] or [1, 2, 3])
 	autoTester.check ([] or [] or [])
 	
-	autoTester.check ({0} or {1, 2, 3})
-	autoTester.check (set () or {1, 2, 3})
+	autoTester.check ({0} or {1, 2, 3, 4})
+	autoTester.check (set () or {1, 2, 3, 4})
 	autoTester.check (set () or set ())
 	
-	autoTester.check ({-1} or {0} or {1, 2, 3})
-	autoTester.check (set () or {0} or {1, 2, 3})
-	autoTester.check (set () or set () or {1, 2, 3})
+	autoTester.check ({-1} or {0} or {1, 2, 3, 5})
+	autoTester.check (set () or {0} or {1, 2, 3, 6})
+	autoTester.check (set () or set () or {1, 2, 3, 7})
 	autoTester.check (set () or set () or set ())
 	
 	autoTester.check ({0:10} or {1:11, 2:12, 3:13})
-	autoTester.check ({} or {1, 2, 3})
+	autoTester.check ({} or {1, 2, 3, 8})
 	autoTester.check ({} or {})
 	
 	autoTester.check ({-1:-11} or {0:10} or {1:11, 2:12, 3:13})
@@ -108,4 +108,9 @@ def run (autoTester):
 		autoTester.check ('0.1')
 	else:
 		autoTester.check ('Shouldn\'t be here...')
+		
+	class A:
+		pass
+		
+	autoTester.check (not not A ())
 	
