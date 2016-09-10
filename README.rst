@@ -22,25 +22,22 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status of latest release
 ========================
 
-Release 7 (version 3.5.213):
+Release: Athens (PyPi v3.5.222, GitHub #9)
 
-This release features
+This release contains:
 
-- Parameterless and parametrized function and class decorators
-- Transcrypt's 'in' operator expanded to work on JavaScript objects as well, for better integration of Python dicts and JavaScript objects, especially literals
-- Else clause for exceptions added
-- Complex numbers
-- The cmath library has been added in preparation of expansion of NumScrypt, a.o. with (I)FFT and in general in making Transcrypt suitable for interactively demonstrating low volume scientific and technical computations in the browser.
-- Documentation and autotest expanded accordingly
-- Several bugs fixed
+- Improved support for the new, redesigned core of Numscrypt. While Numscrypt is still in its infancy, its scope has been widened from merely educational to general use for computations in the browser. A number of optimizations have been put in place, resulting in performance comparable to pure JS numerical libraries. The difference is that Transcrypt (or rather Python), with its facilities for operator overloading, allows a much more concise and readable notation of numerical algorithms. Plans are to gradually build out Numscrypt with more functionality.
+- Optional static type validation (experimental) using type annotations. Static type validation is activated simply by a command switch. Internally it relies on the mypy project. While this project is still in flux, the resulting productivity improvement is already impressive. Since static type validation is optional and cannot break your code, you can get 90% of the benefits from it rightnow without risk. Even only statically typing the interfaces between modules immediately pays off, especially when working with a team. Don't believe it, try it!
+- Diverse bug fixes.
 
-Thanks to anyone who contributed!
+Thanks to everyone who contributed!
 
 Jacques de Hooge
 
 What's new in the latest commits
 ================================
 
+- Release 9
 - Truthyness of instances of custom classes fixed (see issue #110)
 - Source map generation bug fixed (see issue #104)
 - Optional static type validation using mypy (experimental)
@@ -49,35 +46,6 @@ What's new in the latest commits
 - Fix to enable Numscrypt development
 - \*args now also can be used in calling pure javascript methods (see issue #102)
 - Pragma's else and elif fixed for use in .py rather than .js files
-- Release 7
-- Module cmath added + autotest
-- Else-clause for exceptions added
-- Complex numbers added + autotest (no cmath module yet)
-- Transcrypt's 'in' operator now also works on objects for better integration of Python dicts and JavaScript objects, especially literals
-- Class decorators added + autotest
-- Function decorators with parameters + autotest
-- Parameterless function decorators + autotest
-- Release 6
-- Docs updated
-- Local classes added + autotest
-- Dict method pop added, setdefault fixed + autotest for both
-- Time module added + autotest + shipment test
-- String split and rsplit fixed
-- Export all imports
-- Added: any, all, assert
-- Readme adapted
-- Workaround for console.log.apply removed
-- Several small fixes
-- Itertools now functionally complete, except for zip_longest. First breed of autotests added for it. Some func's still relies on seq's rather than iter's.
-- Added: __pragma__ ('ifndef'), __pragma__ ('else')
-- Doc's updated, empty your browser cache and read about the newest facilities on-line
-- Shipment test expanded with es6 compilation
-- Conditional compilation pragma's added to facilitate optional es6 autotesting
-- Generators, yield and es6 compilation added + testcases, while retaining es5 compatible minified output
-- Compilation for node.js fixed
-- Blending between Python and JavaScript exceptions
-- Swallowing of unrecognized exceptions fixed
-- Iterator protocol supported
 
 Known restrictions
 ==================
