@@ -14,6 +14,7 @@
 	__nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
 	
 	var Exception = __all__.Exception;
+	var IterableError = __all__.IterableError;
 	var StopIteration = __all__.StopIteration;
 	var ValueError = __all__.ValueError;
 	var AssertionError = __all__.AssertionError;
@@ -63,14 +64,9 @@ __pragma__ ('endif')
 	__all__.property = property;
 	
 	// Assert function, call to it only generated when compiling with --dassert option
-	function assert (condition, message) {
+	function assert (condition, message) {	// Message may be undefined
 		if (!condition) {
-			if (message != undefined) {
-				throw AssertionError (message);
-			}
-			else {
-				throw AssertionError ();
-			}
+			throw AssertionError (message, new Error ());
 		}
 	}
 	
@@ -190,7 +186,7 @@ __pragma__ ('endif')
 	
 	var float = function (any) {
 		if (isNaN (any)) {
-			throw ('ValueError');	// !!! Turn into real value error
+			throw ValueError (new Error ());
 		}
 		else {
 			return +any;
@@ -370,33 +366,40 @@ __pragma__ ('endif')
 	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
 		var result = this.next ();
 		if (result.done) {
-			throw StopIteration ();
+			throw StopIteration (Error ());
 		}
 		else {
 			return result.value;
 		}
 	}
 	
-	function py_iter (iterable) {	// Produces universal iterator with Python '__next__' as well as JavaScript 'next'
-		if ('__iter__' in iterable) {	// It's a Python iterable (incl. JavaScript Arrays and strings)
-			var iterator = iterable.__iter__ ();
-			iterator.next = wrap_py_next;
-			return iterator;
+	function py_iter (iterable) {					// Produces universal iterator with Python '__next__' as well as JavaScript 'next'
+		try {
+			if ('__iter__' in iterable) {				// It's a Python iterable (incl. JavaScript Arrays and strings)
+				var iterator = iterable.__iter__ ();
+				iterator.next = wrap_py_next;
+				return iterator;
+			}
+			else if ('selector' in iterable) { 			// Assume it's a JQuery iterator
+				var iterator = list (iterable) .__iter__ ();
+				iterator.next = wrap_py_next;
+				return iterator;
+			}
+			else if ('next' in iterable) {				// It's a JavaScript generator
+				// It should have an iterator field, but doesn't in Chrome
+				// So we just return the generator itself, which is both an iterable and an iterator
+				iterable.__next__ = wrap_js_next;
+				return iterable;
+			}
+			else if (Symbol.iterator in iterable) {		// It's a JavaScript iterable such as a typed array, but not a generator
+				iterator = iterable [Symbol.iterator] ();
+				iterator.__next__ = wrap_js_next;
+				return iterator;
+			}
 		}
-		else if ('selector' in iterable) { // Assume it's a JQuery iterator
-			var iterator = list (iterable) .__iter__ ();
-			iterator.next = wrap_py_next;
-			return iterator;
+		catch (exception) {
 		}
-		else if ('next' in iterable) {	// It's a JavaScript generator
-			// It should have an iterator field, but doesn't in Chrome
-			// So we just return the generator itself, which is both an iterable and an iterator
-			iterable.__next__ = wrap_js_next;
-			return iterable;
-		}
-		else {
-			return null;
-		}
+		throw IterableError (new Error ());	// No iterator at all, 'in' may be false everywhere, or throw an exception
 	}
 	__all__.py_iter = py_iter;
 	
@@ -407,14 +410,14 @@ __pragma__ ('endif')
 		catch (exception) {						// JavaScript iterators are the exception here
 			var result = iterator.next ();
 			if (result.done) {
-				throw StopIteration ();
+				throw StopIteration (new Error ());
 			}
 			else {
 				return result.value;
 			}
 		}	
 		if (result == undefined) {
-			throw StopIteration ();
+			throw StopIteration (new Error ());
 		}
 		return result;
 	}
@@ -719,7 +722,7 @@ __pragma__ ('endif')
 	Array.prototype.remove = function (element) {
 		var index = this.indexOf (element);
 		if (index == -1) {
-			throw ('KeyError');
+			throw KeyError (new Error ());
 		}
 		this.splice (index, 1);
 	};

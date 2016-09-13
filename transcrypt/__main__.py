@@ -78,6 +78,7 @@ def main ():
 			return setExitCode (exitSourceNotGiven)	# Should never be here, dealth with by command arg checks already
 						
 		__symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
+		
 		if utils.commandArgs.complex:
 			__symbols__.append ('__complex__')
 			
@@ -86,6 +87,9 @@ def main ():
 		else:
 			__symbols__.append ('__esv{}__'.format (utils.defaultJavaScriptVersion))
 			
+		from org.transcrypt.stubs.browser import __set_stubsymbols__	# Import (ignored when transpiling) late, since commandArgs must be set already
+		__set_stubsymbols__ (__symbols__)								# Make symbols available to CPython, seems that exec can't do that directly
+		
 		if utils.commandArgs.run:
 			try:
 				with open (utils.commandArgs.source) as sourceFile:

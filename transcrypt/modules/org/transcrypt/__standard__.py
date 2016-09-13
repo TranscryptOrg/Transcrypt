@@ -10,33 +10,52 @@ __pragma__ ('nokwargs')
 __pragma__ ('noalias', 'sort')
 
 class Exception:
-	def __init__ (self, *args):
-		self.args = args
+	__pragma__ ('kwargs')
+	def __init__ (self, *args, **kwargs):
+		self.__args__ = args
+		try:
+			self.stack = kwargs.error.stack	# Integrate with JavaScript Error object
+		except:
+			self.stack = 'No stack trace available'
+	__pragma__ ('nokwargs')
 		
 	def __repr__ (self):
-		if len (self.args):
-			return '{}{}'.format (self.__class__.__name__, repr (tuple (self.args)))
+		if len (self.__args__):
+			return '{}{}'.format (self.__class__.__name__, repr (tuple (self.__args__)))
 		else:
 			return '{}()'.format (self.__class__.__name__)
 			
 	def __str__ (self):
-		if len (self.args) > 1:
-			return str (tuple (self.args))
-		elif len (self.args):
-			return str (self.args [0])
+		if len (self.__args__) > 1:
+			return str (tuple (self.__args__))
+		elif len (self.__args__):
+			return str (self.__args__ [0])
 		else:
 			return ''
 		
-class StopIteration ():
-	def __init__ (self):
-		Exception.__init__ (self, 'Iterator exhausted')
+class IterableError (Exception):
+	def __init__ (self, error):
+		Exception.__init__ (self, 'Can\'t iterate over non-iterable', error = error)
+			
+class StopIteration (Exception):
+	def __init__ (self, error):
+		Exception.__init__ (self, 'Iterator exhausted', error = error)
 		
-class ValueError (Exception):
-	pass
+class ValueError (Exception,):
+	def __init__ (self, error):
+		Exception.__init__ (self, 'Erroneous value', error = error)
+	
+class KeyError (Exception,):
+	def __init__ (self, error):
+		Exception.__init__ (self, 'Invalid key', error = error)
 	
 class AssertionError (Exception):
-	pass
-			
+	def __init__ (self, message, error):
+		if message:
+			Exception.__init__ (self, message, error = error)
+		else:
+			Exception.__init__ (self, error = error)
+	
 __pragma__ ('kwargs')
 			
 def __sort__ (iterable, key = None, reverse = False):	# Used by py_sort, can deal with kwargs

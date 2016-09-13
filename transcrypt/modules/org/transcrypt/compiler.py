@@ -206,6 +206,7 @@ class Program:
 		targetCode = (
 			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
+			'	var __symbols__ = {};\n'.format (self.symbols) +		
 			''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +
@@ -332,40 +333,35 @@ class Module:
 			treeFile.write (self.textTree)
 			
 	def loadJavascript (self):
-		conditionalLoading = True
-	
-		def loadConditionally (targetLine):
-			nonlocal conditionalLoading
-		
-			def __pragma__ (name, *args):	# For use in .js rather than .py files
-				nonlocal conditionalLoading
-				
-				if name == 'ifdef':
-					conditionalLoading = args [0] in self.program.symbols
-				elif name == 'ifndef':
-					conditionalLoading = not args [0] in self.program.symbols
-				elif name == 'else':
-					conditionalLoading = not conditionalLoading
-				elif name == 'endif':
-					conditionalLoading = True
-				else:
-					raise utils.Error (
-						moduleName = self.metadata.name,
-						message = '\n\tPragma {} unknown in this context\n'.format (name)
-					)
+		def strip (code, symbols):
+			loading = True
 
-			if targetLine.startswith ('__pragma__'):
-				exec (targetLine)
-				return False							# Pragma line, skip anyhow
-			else:
-				return conditionalLoading				# Normal line
+			def loadable (targetLine):
+				nonlocal loading
+				
+				def __pragma__ (name, *args):
+					nonlocal loading
+					
+					if name == 'ifdef':
+						loading = args [0] in symbols
+					elif name == 'ifndef':
+						loading = not args [0] in symbols
+					elif name == 'else':
+						loading = not loading
+					elif name == 'endif':
+						loading = True
+						
+				if targetLine.lstrip () .startswith ('__pragma__'):
+					exec (targetLine)
+					return False	# Pragma line, skip anyhow
+				else:
+					return loading	# Normal line
+
+			loadableLines = [line for line in code.split ('\n') if loadable (line)]
+			return '\n'.join (loadableLines)	
 			
-		utils.log (False, 'Loading precompiled module: {}\n', self.metadata.targetPath)
-		
 		with open (self.metadata.targetPath) as targetFile:
-			targetLines = [targetLine for targetLine in targetFile.read () .split ('\n') if loadConditionally (targetLine)]
-			
-			self.targetCode = '\n'.join (targetLines) 
+			self.targetCode = strip (targetFile.read (), self.program.symbols) 
 			
 	def generateJavascriptAndMap (self):
 		utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
@@ -1895,7 +1891,6 @@ class Generator (ast.NodeVisitor):
 		if self.module.metadata.name == self.module.program.mainModuleName:
 			self.emit ('(function () {{\n')
 			self.indent ()
-			self.emit ('var __symbols__ = {};\n'.format (self.module.program.symbols))
 		else:
 			self.emit ('__nest__ (\n')
 			self.indent ()

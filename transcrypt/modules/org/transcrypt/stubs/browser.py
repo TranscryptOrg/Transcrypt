@@ -36,3 +36,9 @@ def __pragma__ (*args):
 	
 def __new__ (constructedObject):
 	return constructedObject
+	
+__symbols__ = []
+def __set_stubsymbols__ (symbols):
+	global __symbols__
+	__symbols__ = symbols
+	

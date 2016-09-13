@@ -1,4 +1,4 @@
-from org.transcrypt.stubs.browser import __pragma__, __new__
+from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbols__
 
 from div_fixes.issue55 import *
 
@@ -74,3 +74,27 @@ def run (autoTester):
 	initially17 //= 2
 	autoTester.check (initially17)
 	
+	autoTester.check ('Issue 112')
+	try:
+		if __envir__.executor_name == __envir__.transpiler_name: # CPython doesn't know Int8Array
+			x = __new__ (Int8Array (2))
+		else:
+			x = [None, None]
+		
+		x [0] = 3
+		x [1] = 2
+		for i in x:
+			autoTester.check (i)
+		
+		# Since JavaScript 5 gives no exception for for a loop over a non-iterable, following code must only be executed for JavaScript 6
+		# Since Transcrypt doesn't get to see all modules loaded by CPython, __ifdef__ cannot be made to do its thing for all modules in an efficient way for CPython
+		# But a normal 'if' will work
+		if '__esv6__' in __symbols__:
+			y = 3
+			for j in y:
+				autoTester.check (j)
+			
+	except Exception as exception:
+		print (exception)
+		autoTester.check ('Detected iterating over non-iterable')
+		

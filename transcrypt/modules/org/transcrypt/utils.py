@@ -143,3 +143,4 @@ def enhanceException (exception, **kwargs):
 	'''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
 
 	raise result
+	

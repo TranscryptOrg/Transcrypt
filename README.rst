@@ -37,6 +37,10 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Exception hierarchy improved, all Transcrypt runtime exceptions now derive from Exception
+- Non-standard attribute 'stack' added to Exception to obtain stack trace in def-facto JavaScript compatible way
+- Attempt to iterate over non-iterable now results in exception (only when using -e 6 switch) (see issue #112))
+- Iterating over TypedArrays and other non-list iterables fixed (only needed for when using -e 6 switch) (see issue #112)
 - Release 9
 - Truthyness of instances of custom classes fixed (see issue #110)
 - Source map generation bug fixed (see issue #104)
