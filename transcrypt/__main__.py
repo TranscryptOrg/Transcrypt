@@ -21,14 +21,19 @@ import site
 import atexit
 
 programDir = os.getcwd () .replace ('\\', '/')
-transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')	
+transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
+print ('transpilerdir:', transpilerDir)
+	
 modulesDir = '{}/modules'.format (transpilerDir)
 
 # Both CPython and Transcrypt will use all dirs in sys.path as search roots for modules
 # CPython will also search relatively from each module, Transcrypt only from the main module
 
+sys.path = [item.replace ('\\', '/') for item in sys.path]
 compilerPath = [programDir, modulesDir] + sys.path	# Used by Transcrypt rather than CPython, programDir isn't always part of the path under Linux
-sys.path = sys.path	[1:] + [modulesDir]				# Used by CPython, leave out current dir to prevent importing modules root if there's a module by that name
+sys.path.remove (transpilerDir)						# Used by CPython, leave out Transcrypt dir to prevent importing modules root if there's a module by that name
+													# It isn't always the first dir in sys.path!
+sys.path += [modulesDir]
 sys.modules.pop ('org', None)						# Unload org from a packages dir, if it's there.
 
 from org.transcrypt import __base__					# May reload org from a packages dir (or load org from different location)

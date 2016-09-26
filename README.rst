@@ -37,6 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for accidentally deleting current path from sys.path in some installations
 - Fix for 'cannot import __symbols__' bug when using -r with autotest.
 - Exception hierarchy improved, all Transcrypt runtime exceptions now derive from Exception
 - Non-standard attribute 'stack' added to Exception to obtain stack trace in def-facto JavaScript compatible way
