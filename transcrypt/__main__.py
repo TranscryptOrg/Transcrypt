@@ -22,7 +22,6 @@ import atexit
 
 programDir = os.getcwd () .replace ('\\', '/')
 transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
-print ('transpilerdir:', transpilerDir)
 	
 modulesDir = '{}/modules'.format (transpilerDir)
 
