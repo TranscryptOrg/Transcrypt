@@ -31,8 +31,12 @@ modulesDir = '{}/modules'.format (transpilerDir)
 
 sys.path = [item.replace ('\\', '/') for item in sys.path]
 compilerPath = [programDir, modulesDir] + sys.path	# Used by Transcrypt rather than CPython, programDir isn't always part of the path under Linux
-sys.path.remove (transpilerDir)						# Used by CPython, leave out Transcrypt dir to prevent importing modules root if there's a module by that name
-													# It isn't always the first dir in sys.path!
+
+try:
+	sys.path.remove (transpilerDir)						# Used by CPython, leave out Transcrypt dir to prevent importing modules root if there's a module by that name
+except:
+	pass
+													
 sys.path += [modulesDir]
 sys.modules.pop ('org', None)						# Unload org from a packages dir, if it's there.
 
