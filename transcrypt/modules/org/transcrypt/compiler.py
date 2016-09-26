@@ -204,9 +204,11 @@ class Program:
 			initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
 			
 		targetCode = (
+			# BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
 			header +
 			'function {} () {{\n'.format (self.mainModuleName) +
-			'	var __symbols__ = {};\n'.format (self.symbols) +		
+			'	var __symbols__ = {};\n'.format (self.symbols) +
+			# END prologue
 			''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +			
 			'	return __all__;\n' +
 			'}\n' +

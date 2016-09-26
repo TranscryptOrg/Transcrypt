@@ -8,6 +8,7 @@ from org.transcrypt import utils
 
 # Tools to embed source map info in target code
 
+nrOfPadLines = 5
 lineNrLength = 6
 maxNrOfSourceLinesPerModule = 1000000
 
@@ -133,12 +134,12 @@ class SourceMap:
 		else:	
 			self.load ()
 		
-	def concatenate (self, modMaps, moduleCaptionSkip):								# Result in self
+	def concatenate (self, modMaps, moduleCaptionSkip):									# Result in self
 		self.clear ()
 		baseLineIndex = 0
 		
 		padMap = SourceMap (None, None, None)
-		for padLineIndex in range (4):
+		for padLineIndex in range (nrOfPadLines):
 			padMap.addMapping ([baseLineIndex, 0, '', 0, 0])
 			baseLineIndex += 1
 		

@@ -22,13 +22,13 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status of latest release
 ========================
 
-Release: Athens (PyPi v3.5.222, GitHub #9)
+Release: Athens (PyPi v3.5.223, GitHub #10)
 
-This release contains:
+This release is a bug fix release for Athens v3.5.222, it contains:
 
 - Improved support for the new, redesigned core of Numscrypt. While Numscrypt is still in its infancy, its scope has been widened from merely educational to general use for computations in the browser. A number of optimizations have been put in place, resulting in performance comparable to pure JS numerical libraries. The difference is that Transcrypt (or rather Python), with its facilities for operator overloading, allows a much more concise and readable notation of numerical algorithms. Plans are to gradually build out Numscrypt with more functionality.
 - Optional static type validation (experimental) using type annotations. Static type validation is activated simply by a command switch. Internally it relies on the mypy project. While this project is still in flux, the resulting productivity improvement is already impressive. Since static type validation is optional and cannot break your code, you can get 90% of the benefits from it rightnow without risk. Even only statically typing the interfaces between modules immediately pays off, especially when working with a team. Don't believe it, try it!
-- Diverse bug fixes.
+- Div. fixes
 
 Thanks to everyone who contributed!
 
@@ -37,6 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for 'cannot import __symbols__' bug when using -r with autotest.
 - Exception hierarchy improved, all Transcrypt runtime exceptions now derive from Exception
 - Non-standard attribute 'stack' added to Exception to obtain stack trace in def-facto JavaScript compatible way
 - Attempt to iterate over non-iterable now results in exception (only when using -e 6 switch) (see issue #112))

@@ -366,7 +366,7 @@ __pragma__ ('endif')
 	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
 		var result = this.next ();
 		if (result.done) {
-			throw StopIteration (Error ());
+			throw StopIteration (new Error ());
 		}
 		else {
 			return result.value;

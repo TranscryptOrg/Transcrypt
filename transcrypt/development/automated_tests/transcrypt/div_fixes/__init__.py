@@ -95,6 +95,5 @@ def run (autoTester):
 				autoTester.check (j)
 			
 	except Exception as exception:
-		print (exception)
 		autoTester.check ('Detected iterating over non-iterable')
 		
