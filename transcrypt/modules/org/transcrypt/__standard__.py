@@ -177,26 +177,31 @@ class __Terminal__:
 		if self.element:
 			self.buffer = ''
 			self.element.style.overflowX = 'auto'
+			self.element.style.boxSizing = 'border-box'
 			self.element.style.padding = '5px'
 			self.element.innerHTML = '_'
 		
 	__pragma__ ('kwargs')
 		
 	def print (self, *args, sep = ' ', end = '\n'):
-		if self.element:
-			self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ]	
-			self.element.innerHTML = self.buffer.replace ('\n', '<br>')
-			self.element.scrollTop = self.element.scrollHeight
-		else:
-			console.log (sep.join ([str (arg) for arg in args]))
+		def printAsync ():
+			if self.element:
+				self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ]	
+				self.element.innerHTML = self.buffer.replace ('\n', '<br>')
+				self.element.scrollTop = self.element.scrollHeight
+			else:
+				console.log (sep.join ([str (arg) for arg in args]))
+		setTimeout (printAsync, 5)
 		
 	def input (self, question):
 		self.print ('{}_'.format (question), end = '')
 		try:
 			answer = window.prompt (question)
 		except:
+			answer = ''
 			console.log ('Error: Blocking input not yet implemented outside browser')
-		self.buffer = self.buffer [:-1]
+		if hasattr (self, 'buffer'):
+			self.buffer = self.buffer [:-1]	# Cut of the underscore
 		self.print (answer)
 		return answer
 		

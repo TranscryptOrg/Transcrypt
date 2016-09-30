@@ -23,7 +23,7 @@ def run (autoTester):
 	for i in range (10):
 		# results.append (lambda: i)				# Works nowhere
 		# results.append (lambda j = i: j)			# Works only in Python
-		results.append ((lambda j: lambda: j) (i))	# Works in Python and Trancrypt
+		results.append ((lambda j: lambda: j) (i))	# Works in Python and Transcrypt
 	autoTester.check ([result () for result in results])		
 
 	autoTester.check ('Issue 50')

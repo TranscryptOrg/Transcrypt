@@ -353,11 +353,17 @@ class Module:
 					elif name == 'endif':
 						loading = True
 						
-				if targetLine.lstrip () .startswith ('__pragma__'):
-					exec (targetLine)
-					return False	# Pragma line, skip anyhow
+				strippedLine = targetLine.lstrip ()	
+				if strippedLine.startswith ('__pragma__') and (
+					'ifdef' in strippedLine or
+					'ifndef' in strippedLine or
+					'else' in strippedLine or
+					'endif' in strippedLine
+				):
+					exec (strippedLine)
+					return False	# Skip line anyhow
 				else:
-					return loading	# Normal line
+					return loading	# Skip line only if not in loading state
 
 			loadableLines = [line for line in code.split ('\n') if loadable (line)]
 			return '\n'.join (loadableLines)	

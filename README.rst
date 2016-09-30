@@ -22,7 +22,7 @@ Take a look at the documentation with code examples at the Transcrypt website: h
 Status of latest release
 ========================
 
-Release: Athens (PyPi v3.5.223, GitHub #10)
+Release: Athens (PyPi v3.5.227, GitHub #11)
 
 This release is a bug fix release for Athens v3.5.222, it contains:
 
@@ -37,6 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for 'unexpected indent' when rebuilding
 - Fix for accidentally deleting current path from sys.path in some installations
 - Fix for 'cannot import __symbols__' bug when using -r with autotest.
 - Exception hierarchy improved, all Transcrypt runtime exceptions now derive from Exception

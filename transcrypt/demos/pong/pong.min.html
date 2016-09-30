@@ -12,14 +12,19 @@
 				-ms-user-select:none;
 				user-select:none
 			}
+			body {
+				visibility: hidden;
+			}
 		</style>
 		
 		<div id='text_frame' style="position:absolute">
 			<font color="444444" size="3">
-			<h3><i>Click in this frame</i> to redirect keyboard input to it, then <i>hit the spacebar</i></h3><br>
+			<h3>Hit the spacebar to start</h3><br>
 
 			<font color="000000" size="3">
-			View the <a href = "http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/integration_javascript.html#integration-example-pong">source code</a> in Python and in JavaScript. This example has sourcemap support for Google Chrome. Press F12, click the source tab and then click somewhere in pong.js to try. N.B. The source of fabric.js has not been included.
+			This example has sourcemap support for Google Chrome. Press F12, click the <i>sources</i> tab and then click <b>somewhere near the end</b> of <i>pong.min.js</i> to try.<br><br>
+			
+			You have to click near the end since 90% of the JS code is the large fabric.js library. Fabric.js is used here just as an example, this simple demo could have been programmed directly on top of the HTML5 canvas.
 		</div>
 
 		<div id="canvas_frame" style="position:absolute">
@@ -40,5 +45,6 @@
 		<div>
 		
 		<script src="__javascript__/pong.min.js"></script>
+		<style>body {visibility: visible;}</style>
 	</body>
 </html>
