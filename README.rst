@@ -28,7 +28,7 @@ This release is mainly a bug fix release for Athens v3.5.222, which contains:
 
 - Improved support for the new, redesigned core of Numscrypt. While Numscrypt is still in its infancy, its scope has been widened from merely educational to general use for computations in the browser. A number of optimizations have been put in place, resulting in performance comparable to pure JS numerical libraries. The difference is that Transcrypt (or rather Python), with its facilities for operator overloading, allows a much more concise and readable notation of numerical algorithms. Plans are to gradually build out Numscrypt with more functionality.
 - Optional static type validation (experimental) using type annotations. Static type validation is activated simply by a command switch. Internally it relies on the mypy project. While this project is still in flux, the resulting productivity improvement is already impressive. Since static type validation is optional and cannot break your code, you can get 90% of the benefits from it rightnow without risk. Even only statically typing the interfaces between modules immediately pays off, especially when working with a team. Don't believe it, try it!
-- Div. fixes
+- Div. fixes.
 
 Thanks to everyone who contributed!
 
