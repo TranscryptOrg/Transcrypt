@@ -42,7 +42,7 @@ What's new in the latest commits
 	
 	**Plotly demo**
 
-- Plotly.js demo added: lim (Numscrypt -> Maturity) Transcrypt + Numscrypt + Plotly = Live Science Demos in the Browser with native JS performance
+- Plotly.js demo added: lim (Numscrypt -> Maturity) Transcrypt + Numscrypt + Plotly = Live Science Demos in the Browser with native JS performance, all Plotly.js plot types are supported
 - __pragma__ ('jskeys'/'nojskeys') added make Plotly.js code match Plotly.js docs for convenience, locally voiding the need for quotes around dir keys
 - 'Star us on GitHub' command line option added
 - Fix for 'unexpected indent' when rebuilding
