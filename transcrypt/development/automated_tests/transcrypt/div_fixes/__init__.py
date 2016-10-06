@@ -97,3 +97,15 @@ def run (autoTester):
 	except Exception as exception:
 		autoTester.check ('Detected iterating over non-iterable')
 		
+	if '__esv6__' in __symbols__:	# "if" rather than "__pragma__ ('ifdef')" because CPython doesn't understand pragma's
+		autoTester.check ('Issue 122')
+		
+		def chunks (aList, chunkLength):
+			for index in range (0, len (aList), chunkLength):
+				yield aList [index : index + chunkLength]
+
+		for chunk in chunks ([chr (index + 97) for index in range (26)], 10):
+			autoTester.check (chunk)
+
+	autoTester.check ('Issue 123')
+	autoTester.check (10 % 3, 10 % -3, -10 % 3, -10 % -3, 10 % 10, 10 % -10, -10 % 10, -10 % -10)

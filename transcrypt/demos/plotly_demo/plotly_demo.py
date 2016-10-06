@@ -190,7 +190,6 @@ Plotly.plot (
 	kind,
 	[
 		{
-			name: 'rare',
 			values: [1, 2, 3, 4, 5, 6],
 			labels: ['least', 'less', 'little', 'much', 'more', 'most'],
 			type: kind

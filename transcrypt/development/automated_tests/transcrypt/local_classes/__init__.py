@@ -1,6 +1,16 @@
 def run (autoTester):		
 	class A:
 		class B:
+			class C:
+				def __init__ (self, x):
+					self.x = x
+					
+				def tell (self):
+					autoTester.check (self.x)
+					autoTester.check (self.e)
+					
+				e = 3
+				
 			def __init__ (self, x):
 				self.x = x
 				
@@ -8,9 +18,9 @@ def run (autoTester):
 				autoTester.check (self.x)
 				autoTester.check (self.d)
 				
-			d = 1
+			d = 2
 				
-		c = 2
+		c = 1
 
 		def __init__ (self, x):
 			self.x = x
@@ -21,30 +31,46 @@ def run (autoTester):
 			
 	def f (x):
 		class G:
+			class H:
+				def __init__ (self, x):
+					self.x = x
+					
+				def tell (self):
+					autoTester.check (self.x)
+					autoTester.check (self.i)
+					
+				i = 5
+		
 			def __init__ (self, x):
 				self.x = x
 				
 			def tell (self):
 				autoTester.check (self.x)
 				
-			h = 3
+			k = 4
 			
-		g = G (4)
+		g = G (6)
 		g.tell ()
-		autoTester.check (g.h)
+		autoTester.check (g.k)
+		
+		h = G.H (7)
+		h.tell ()
+		autoTester.check (h.i)
 		
 		class P (A.B):
 			pass
 			
-		p = P (5)
+		p = P (7)
 		p.tell ()
 		autoTester.check (p.d)
 				
-	a = A (5)
-	b = a.B (6)
+	a = A (8)
+	b = a.B (9)
+	c = b.C (10)
 
 	a.tell ()
 	b.tell ()
+	c.tell ()
 
 	autoTester.check (a.c)
 	autoTester.check (b.d)

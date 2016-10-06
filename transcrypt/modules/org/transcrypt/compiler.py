@@ -508,7 +508,7 @@ class Generator (ast.NodeVisitor):
 			ast.MatMult: (None,	90),	# Dealt with separately
 			ast.Div: ('/', 90),
 			ast.FloorDiv: (None, 90),	# Dealt with separately
-			ast.Mod: ('%', 90), 
+			ast.Mod: (None, 90),		# Dealt with separately, Python % != JavaScript %
 			ast.Add: ('+', 80),
 			ast.Sub: ('-', 80),
 			ast.LShift: ('<<', 70),
@@ -621,9 +621,14 @@ class Generator (ast.NodeVisitor):
 		else:
 			return self.scopes [-1]
 			
-	def getClassScopes (self):
-		return [scope for scope in self.scopes if type (scope.node) == ast.ClassDef]
-			
+	def getAdjacentClassScopes (self):	# Work backward until finding an interruption in the chain
+		reversedClassScopes = []
+		for scope in reversed (self.scopes):
+			if type (scope.node) != ast.ClassDef:
+				break;
+			reversedClassScopes.append (scope)
+		return reversed (reversedClassScopes)
+		
 	def emitComma (self, index, blank = True):
 		if index:
 			self.emit (', ' if blank else ',')
@@ -977,7 +982,7 @@ class Generator (ast.NodeVisitor):
 				else:
 					if type (target) == ast.Name:
 						if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
-							self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getClassScopes ()])))	# The target is an attribute
+							self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()])))	# The target is an attribute
 						elif target.id in self.getScope () .nonlocals:
 							pass
 						else:
@@ -1052,7 +1057,7 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_AugAssign (self, node):
 		if (
-			type (node.op) == ast.FloorDiv or (	# FloorDiv has no operator symbol in JavaSCript, so generationg <operator>= won't work
+			type (node.op) == ast.FloorDiv or (	# FloorDiv has no operator symbol in JavaScript, so generationg <operator>= won't work
 				type (node.target) == ast.Subscript and (
 					self.allowOperatorOverloading or
 					type (node.target.slice) != ast.Index or
@@ -1101,12 +1106,13 @@ class Generator (ast.NodeVisitor):
 			self.emit (' / ')
 			self.visitSubExpr (node, node.right)
 			self.emit (')')
-		elif type (node.op) in (ast.MatMult, ast.Pow) or (self.allowOperatorOverloading and type (node.op) in (
+		elif type (node.op) in (ast.Pow, ast.MatMult, ast.Mod) or (self.allowOperatorOverloading and type (node.op) in (
 			ast.Mult, ast.Div, ast.Add, ast.Sub
 		)):
 			self.emit ('{} ('.format (self.filterId (
 				('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
 				'__matmul__' if type (node.op) == ast.MatMult else
+				'__mod__' if type (node.op) == ast.Mod else
 				'__mul__' if type (node.op) == ast.Mult else
 				'__div__' if type (node.op) == ast.Div else
 				'__add__' if type (node.op) == ast.Add else
@@ -1374,7 +1380,7 @@ class Generator (ast.NodeVisitor):
 			self.all.add (node.name)
 			
 		if type (self.getScope () .node) == ast.ClassDef:
-			self.emit ('{}.{}'.format (self.filterId (self.getScope () .node.name), self.filterId (node.name)))
+			self.emit (self.filterId ('{}.{}'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]), node.name)))
 		else:
 			self.emit ('var {}'.format (self.filterId (node.name)))
 			

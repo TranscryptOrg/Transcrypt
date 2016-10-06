@@ -642,7 +642,10 @@ __pragma__ ('endif')
 		else if (stop < 0) {
 			stop = this.length + stop;
 		}
-		
+		else if (stop > this.length) {
+			stop = this.length;
+		}
+			
 		var result = list ([]);
 		for (var index = start; index < stop; index += step) {
 			result.push (this [index]);
@@ -1249,6 +1252,19 @@ __pragma__ ('endif')
 		}
 		else {
 			return Math.pow (a, b);
+		}
+	};	
+	__all__.pow = __pow__;
+	
+	var __mod__ = function (a, b) {
+		if (typeof a == 'object' && '__mod__' in a) {
+			return a.__mod__ (b);
+		}
+		else if (typeof b == 'object' && '__rpow__' in b) {
+			return b.__rmod__ (a);
+		}
+		else {
+			return ((a % b) + b) % b;
 		}
 	};	
 	__all__.pow = __pow__;
