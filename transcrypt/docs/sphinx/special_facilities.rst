@@ -162,6 +162,10 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
+Keeping your code lean: __pragma__ ('jskeys') and __pragma__ ('nojskeys')
+-------------------------------------------------------------------------
+Normally in Python, dictionary keyws without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -j command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
 Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
 -------------------------------------------------------------------------
 While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.

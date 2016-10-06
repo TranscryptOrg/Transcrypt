@@ -487,6 +487,8 @@ class Generator (ast.NodeVisitor):
 # END predef_aliases
 		)]
 		
+		self.idFiltering = True
+		
 		self.tempIndices = {}
 		self.skippedTemps = set ()
 		self.stubsName = 'org.{}.stubs.'.format (__base__.__envir__.transpiler_name)
@@ -533,6 +535,7 @@ class Generator (ast.NodeVisitor):
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
+		self.allowJavaScriptKeys = utils.commandArgs.jskeys
 		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.noskipCodeGeneration = True
@@ -578,8 +581,9 @@ class Generator (ast.NodeVisitor):
 		'''.format (pyFragment), re.VERBOSE), jsFragment)
 			
 	def filterId (self, qualifiedId):	# Convention: only called at emission time
-		for aliaser in self.aliasers:
-			qualifiedId = re.sub (aliaser [1], aliaser [2], qualifiedId)
+		if self.idFiltering:
+			for aliaser in self.aliasers:
+				qualifiedId = re.sub (aliaser [1], aliaser [2], qualifiedId)
 		return qualifiedId
 		
 	def tabs (self, indentLevel = None):
@@ -1211,20 +1215,30 @@ class Generator (ast.NodeVisitor):
 						for index in reversed (range (len (self.aliasers))):
 							if self.aliasers [index][0] == node.args [1] .s:
 								self.aliasers.pop (index)
+								
 				elif node.args [0] .s == 'noanno':
 					self.allowDmap = False
+					
 				elif node.args [0] .s == 'fcall':
 					self.memoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
 					self.memoizeCalls = False
+					
 				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
 					self.allowConversionToIterable = True
 				elif node.args [0] .s == 'noiconv':		# Automatic conversion to iterable not supported
 					self.allowConversionToIterable = False
+					
+				elif node.args [0] .s == 'jskeys':		# Dictionary keys without quotes are string literals
+					self.allowJavaScriptKeys = True
+				elif node.args [0] .s == 'nojskeys':	# Dictionary keys without quotes are identifiers
+					self.allowJavaScriptKeys = False
+					
 				elif node.args [0] .s == 'tconv':		# Automatic conversion to truth value supported
 					self.allowConversionToTruthValue = True
 				elif node.args [0] .s == 'notconv':		# Automatic conversion to truth value not supported
 					self.allowConversionToTruthValue = False
+					
 				elif node.args [0] .s == 'js':			# Include JavaScript code literally in the output
 					code = node.args [1] .s.format (* [
 						eval (
@@ -1240,14 +1254,17 @@ class Generator (ast.NodeVisitor):
 					])
 					for line in code.split ('\n'):
 						self.emit ('{}\n', line)
+						
 				elif node.args [0] .s == 'kwargs':		# Start emitting kwargs code for FunctionDef's
 					self.allowKeywordArgs = True
 				elif node.args [0] .s == 'nokwargs':	# Stop emitting kwargs code for FunctionDef's
 					self.allowKeywordArgs = False
+					
 				elif node.args [0] .s == 'opov':		# Overloading of a small sane subset of operators allowed
 					self.allowOperatorOverloading = True
 				elif node.args [0] .s == 'noopov':		# Operloading of a small sane subset of operators disallowed
 					self.allowOperatorOverloading = False
+					
 				elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'ifndef', 'else', 'endif'):
 					pass								# Easier dealth with on statement / expression level in self.visit
 				else:
@@ -1445,24 +1462,26 @@ class Generator (ast.NodeVisitor):
 			self.emit (';\n')
 	
 	def visit_Dict (self, node):
-		if not utils.commandArgs.jskeys:
+		if not self.allowJavaScriptKeys:					# If we don't want JavaScript treatment of keys, for literal keys it doesn't make a difference
 			for key in node.keys:
-				if not type (key) in (ast.Str, ast.Num):
+				if not type (key) in (ast.Str, ast.Num):	# but if there's only one non-literal key there's a difference, and all keys are treated the Python way
 					self.emit ('dict ([')
 					for index, (key, value) in enumerate (zip (node.keys, node.values)):
 						self.emitComma (index)
 						self.emit ('[')
-						self.visit (key)	# In a JavaScrip list, name is evaluated as variable or function call to produce a key
+						self.visit (key)					# In a JavaScript list, name is evaluated as variable or function call to produce a key
 						self.emit (', ')
 						self.visit (value)
 						self.emit (']')
 					self.emit ('])')
 					return
 					
-		self.emit ('dict ({{')
+		self.emit ('dict ({{')								# Since we didn't return, we want identifier keys to be treated as string literals
 		for index, (key, value) in enumerate (zip (node.keys, node.values)):
 			self.emitComma (index)
-			self.visit (key)	# In a JavaScript object literal name isn't evaluated but literally taken to be a key ('virtual' quotes added) 
+			self.idFiltering = False						# The key may be a string or an identifier, the latter normally would be filtered, which we don't want
+			self.visit (key)								# In a JavaScript object literal, an identifier isn't evaluated but literally taken to be a key.
+			self.idFiltering = True
 			self.emit (': ')
 			self.visit (value)
 		self.emit ('}})')

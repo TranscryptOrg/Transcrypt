@@ -19,6 +19,7 @@ import sys
 import traceback
 import site
 import atexit
+import webbrowser
 
 programDir = os.getcwd () .replace ('\\', '/')
 transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
@@ -82,6 +83,9 @@ def main ():
 				utils.log (True, '{}\n', licenseFile.read ())
 				utils.log (True, '{}\n\n', bar)
 				
+		if utils.commandArgs.star:
+			webbrowser.open ('https://github.com/JdeH/Transcrypt')
+			
 		if not utils.commandArgs.source:
 			return setExitCode (exitSourceNotGiven)	# Should never be here, dealth with by command arg checks already
 						
