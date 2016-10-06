@@ -37,7 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
-.. figure:: http://www.transcrypt.org/illustrations/plotly_demo_padded.png
+.. figure:: http://www.transcrypt.org/illustrations/plotly_demo.png
 	:alt: Plotly demo
 	
 	**Plotly demo**

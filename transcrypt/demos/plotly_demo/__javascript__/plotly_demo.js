@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2016-10-06 11:44:18
+// Transcrypt'ed from Python, 2016-10-06 12:01:19
 function plotly_demo () {
 	var __symbols__ = ['__esv5__'];
 	var __all__ = {};
