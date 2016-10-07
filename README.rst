@@ -37,9 +37,11 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for issue #125: strings not iterable (js6 only) + autotest
+- Release 12
 - Local classes now arbitrarily nestable, issue #120
-- Operator % has now Python rather than JS behaviour, issue #123
-- Slicing bug fixed (stop beyond list end), issue #122
+- Operator % has now Python rather than JS behaviour, issue #123 + autotest
+- Slicing bug fixed (stop beyond list end), issue #122 + autotest
 
 .. figure:: http://www.transcrypt.org/illustrations/plotly_demo.png
 	:alt: Plotly demo

@@ -1,7 +1,7 @@
 
 	// Initialize non-nested modules __base__ and __standard__ and make its names available directly and via __all__
-	// It can't do that itself, because it is a regular Python module
-	// The compiler recognizes its their namesand generates them inline rather than nesting them
+	// They can't do that itself, because they're regular Python modules
+	// The compiler recognizes their names and generates them inline rather than nesting them
 	// In this way it isn't needed to import them everywhere
 	 	
 	// __base__
@@ -375,7 +375,8 @@ __pragma__ ('endif')
 	
 	function py_iter (iterable) {					// Produces universal iterator with Python '__next__' as well as JavaScript 'next'
 		try {
-			if ('__iter__' in iterable) {				// It's a Python iterable (incl. JavaScript Arrays and strings)
+			if (typeof iterable == 'string' || '__iter__' in iterable) {	// It's a Python iterable (incl. JavaScript Arrays and strings)
+																			// (Can't use 'in' on a JavaScript string)
 				var iterator = iterable.__iter__ ();
 				iterator.next = wrap_py_next;
 				return iterator;

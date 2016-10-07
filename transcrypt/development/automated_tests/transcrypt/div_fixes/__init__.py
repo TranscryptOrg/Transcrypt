@@ -109,3 +109,11 @@ def run (autoTester):
 
 	autoTester.check ('Issue 123')
 	autoTester.check (10 % 3, 10 % -3, -10 % 3, -10 % -3, 10 % 10, 10 % -10, -10 % 10, -10 % -10)
+	
+	autoTester.check ('Issue 125')
+	abc = 'abc'
+	
+	for index in abc:
+		autoTester.check (abc)
+
+			
