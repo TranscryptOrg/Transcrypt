@@ -166,20 +166,23 @@ __pragma__ ('endif')
 		}
 	}
 	__all__.len = len;
-	
 
 	// General conversions
 	
-	function __ (any) {				// Truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
+	function __i__ (any) {	//	Conversion to iterable
+		return type (any) == dict ? any.keys () : any;		
+	}
+	
+	function __t__ (any) {	// Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
 		return (['boolean', 'number'] .indexOf (typeof any) >= 0 || any instanceof Function || len (any)) ? any : false;
 		// JavaScript functions have a length attribute, denoting the number of parameters
 		// Python objects are JavaScript functions, but their length doesn't matter, only their existence
 		// By the term 'any instanceof Function' we make sure that Python objects aren't rejected when their length equals zero
 	}
-	__all__.__ = __;
+	__all__.__t__ = __t__;
 	
 	var bool = function (any) {		// Always truly returns a bool, rather than something truthy or falsy
-		return !!__ (any);
+		return !!__t__ (any);
 	}
 	bool.__name__ = 'bool'			// So it can be used as a type with a name
 	__all__.bool = bool;
@@ -238,13 +241,7 @@ __pragma__ ('endif')
 			}
 			return false;
 		}
-		try {
-			return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
-		}
-		catch (exception) {
-			console.log (exception);
-			console.dir (anObject);
-		}
+		return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
 	};
 	__all__.isinstance = isinstance;
 	
@@ -356,14 +353,19 @@ __pragma__ ('endif')
  	}
 	__all__.round = round;
 		
-	// Iterator protocol functions
+	// BEGIN unified iterator model
 	
-	function wrap_py_next () {		// Add as 'next' method to make Python iterator JavaScript compatible
-		var result = this.__next__ ();
-		return {value: result, done: result == undefined};		
+	function __jsUsePyNext__ () {		// Add as 'next' method to make Python iterator JavaScript compatible
+		try {
+			var result = this.__next__ ();
+			return {value: result, done: false};
+		}
+		catch (exception) {
+			return {value: undefined, done: true};
+		}
 	}
 	
-	function wrap_js_next () {		// Add as '__next__' method to make JavaScript iterator Python compatible
+	function __pyUseJsNext__ () {		// Add as '__next__' method to make JavaScript iterator Python compatible
 		var result = this.next ();
 		if (result.done) {
 			throw StopIteration (new Error ());
@@ -373,36 +375,31 @@ __pragma__ ('endif')
 		}
 	}
 	
-	function py_iter (iterable) {					// Produces universal iterator with Python '__next__' as well as JavaScript 'next'
-		try {
-			if (typeof iterable == 'string' || '__iter__' in iterable) {	// It's a Python iterable (incl. JavaScript Arrays and strings)
-																			// (Can't use 'in' on a JavaScript string)
-				var iterator = iterable.__iter__ ();
-				iterator.next = wrap_py_next;
-				return iterator;
-			}
-			else if ('selector' in iterable) { 			// Assume it's a JQuery iterator
-				var iterator = list (iterable) .__iter__ ();
-				iterator.next = wrap_py_next;
-				return iterator;
-			}
-			else if ('next' in iterable) {				// It's a JavaScript generator
-				// It should have an iterator field, but doesn't in Chrome
-				// So we just return the generator itself, which is both an iterable and an iterator
-				iterable.__next__ = wrap_js_next;
-				return iterable;
-			}
-			else if (Symbol.iterator in iterable) {		// It's a JavaScript iterable such as a typed array, but not a generator
-				iterator = iterable [Symbol.iterator] ();
-				iterator.__next__ = wrap_js_next;
-				return iterator;
+	function py_iter (iterable) {					// Alias for Python's iter function, produces a universal iterator / iterable, usable in Python and JavaScript
+		if (typeof iterable == 'string' || '__iter__' in iterable) {	// JavaScript Array or string or Python iterable (string has no 'in')
+			var result = iterable.__iter__ ();							// Iterator has a __next__
+			result.next = __jsUsePyNext__;								// Give it a next
+		}
+		else if ('selector' in iterable) { 								// Assume it's a JQuery iterator
+			var result = list (iterable) .__iter__ ();					// Has a __next__
+			result.next = __jsUsePyNext__;								// Give it a next
+		}
+		else if ('next' in iterable) {									// It's a JavaScript iterator already,  maybe a generator, has a next and may have a __next__
+			var result = iterable
+			if (! ('__next__' in result)) {								// If there's no danger of recursion
+				result.__next__ = __pyUseJsNext__;						// Give it a __next__
 			}
 		}
-		catch (exception) {
+		else if (Symbol.iterator in iterable) {							// It's a JavaScript iterable such as a typed array, but not an iterator
+			var result = iterable [Symbol.iterator] ();					// Has a next
+			result.__next__ = __pyUseJsNext__;							// Give it a __next__
 		}
-		throw IterableError (new Error ());	// No iterator at all, 'in' may be false everywhere, or throw an exception
+		else {
+			throw IterableError (new Error ());	// No iterator at all
+		}
+		result [Symbol.iterator] = function () {return result;};
+		return result;
 	}
-	__all__.py_iter = py_iter;
 	
 	function py_next (iterator) {				// Called only in a Python context, could receive Python or JavaScript iterator
 		try {									// Primarily assume Python iterator, for max speed
@@ -420,43 +417,40 @@ __pragma__ ('endif')
 		if (result == undefined) {
 			throw StopIteration (new Error ());
 		}
-		return result;
+		else {
+			return result;
+		}
 	}
-	__all__.py_next = py_next;
-	
-	function __SeqIterator__ (iterable) {
+		
+	function __PyIterator__ (iterable) {
 		this.iterable = iterable;
 		this.index = 0;
 	}
 	
-	__all__.__SeqIterator__ = __SeqIterator__;
-	
-	__SeqIterator__.prototype.__iter__ = function () {
-		return this;
+	__PyIterator__.prototype.__next__ = function () {
+		if (this.index < this.iterable.length) {
+			return this.iterable [this.index++];
+		}
+		else {
+			throw StopIteration (new Error ());
+		}
 	}
 	
-	__SeqIterator__.prototype.__next__ = function () {
-		return this.iterable [this.index++];
-	}
-	
-	__SeqIterator__.prototype.next = wrap_py_next;
-	
-	function __KeyIterator__ (iterable) {
+	function __JsIterator__ (iterable) {
 		this.iterable = iterable;
 		this.index = 0;
 	}
 
-	__all__.__KeyIterator__ = __KeyIterator__;
-	
-	__KeyIterator__.prototype.__iter__ = function () {
-		return this;
+	__JsIterator__.prototype.next = function () {
+		if (this.index < this.iterable.keys.length) {
+			return {value: this.index++, done: false};
+		}
+		else {
+			return {value: undefined, done: true};
+		}
 	}
 	
-	__KeyIterator__.prototype.__next__ = function () {
-		return this.iterable.keys () [this.index++];
-	}
-			
-	__KeyIterator__.prototype.next = wrap_py_next;
+	// END unified iterator model
 	
 	// Reversed function for arrays
 	var py_reversed = function (iterable) {
@@ -628,9 +622,7 @@ __pragma__ ('endif')
 	}
 	*/
 	
-	Array.prototype.__iter__ = function () {
-		return new __SeqIterator__ (this);
-	}
+	Array.prototype.__iter__ = function () {return new __PyIterator__ (this);}
 	
 	Array.prototype.__getslice__ = function (start, stop, step) {
 		if (start < 0) {
@@ -938,99 +930,6 @@ __pragma__ ('endif')
 		return this.issuperset (other) && !this.issubset (other);
 	}
 	
-	// Dict extensions to object
-	
-	function __keyIterator__ () {
-		return new __KeyIterator__ (this);
-	}
-	
-	function __keys__ () {
-		var keys = []
-		for (var attrib in this) {
-			if (!__specialattrib__ (attrib)) {
-				keys.push (attrib);
-			}     
-		}
-		return keys;
-	}
-		
-	function __items__ () {
-		var items = []
-		for (var attrib in this) {
-			if (!__specialattrib__ (attrib)) {
-				items.push ([attrib, this [attrib]]);
-			}     
-		}
-		return items;
-	}
-		
-	function __del__ (key) {
-		delete this [key];
-	}
-	
-	function __clear__ () {
-		for (var attrib in this) {
-			delete this [attrib];
-		}
-	}
-	
-	function __setdefault__ (aKey, aDefault) {
-		var result = this [aKey];
-		if (result != undefined) {
-			return result;
-		}
-		var val = aDefault == undefined ? null : aDefault;
-		this [aKey] = val;
-		return val;
-	}
-	
-	function __pop__ (aKey, aDefault) {
-		var result = this [aKey];
-		if (result != undefined) {
-			delete this [aKey];
-			return result;
-		}
-		return aDefault;
-	}	
-	
-	function __update__(aDict) {
-		for (var aKey in aDict) {
-			this [aKey] = aDict [aKey];
-		}
-	}
-	
-	function dict (objectOrPairs) {
-		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
-			var instance = {};
-			if (objectOrPairs) {
-				for (var index = 0; index < objectOrPairs.length; index++) {
-					var pair = objectOrPairs [index];
-					instance [pair [0]] = pair [1];
-				}
-			}
-		}
-		else {													// It's a JavaScript object literal
-			var instance = objectOrPairs;
-		}
-			
-		// Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
-		// So dict literals rather than bare Object literals will be passed to JavaScript libraries
-		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
-		// So the properties of a dict should be non-enumerable
-		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});
-		Object.defineProperty (instance, '__iter__', {value: __keyIterator__, enumerable: false});
-		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
-		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
-		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
-		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
-		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
-		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
-		return instance;
-	}
-	__all__.dict = dict;
-	dict.__name__ = 'dict';
-	
 	// String extensions
 	
 	function str (stringable) {
@@ -1046,9 +945,7 @@ __pragma__ ('endif')
 	String.prototype.__class__ = str;	// All strings are str
 	str.__name__ = 'str';
 	
-	String.prototype.__iter__ = function () {
-		return new __SeqIterator__ (this);
-	}
+	String.prototype.__iter__ = function () {new __PyIterator__ (this);}
 		
 	String.prototype.__repr__ = function () {
 		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\t', '\\t') .replace ('\n', '\\n');
@@ -1226,6 +1123,96 @@ __pragma__ ('endif')
 	}
 	
 	String.prototype.__rmul__ = String.prototype.__mul__;
+	
+	// Dict extensions to object
+	
+	function __keys__ () {
+		var keys = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				keys.push (attrib);
+			}     
+		}
+		return keys;
+	}
+		
+	function __items__ () {
+		var items = []
+		for (var attrib in this) {
+			if (!__specialattrib__ (attrib)) {
+				items.push ([attrib, this [attrib]]);
+			}     
+		}
+		return items;
+	}
+		
+	function __del__ (key) {
+		delete this [key];
+	}
+	
+	function __clear__ () {
+		for (var attrib in this) {
+			delete this [attrib];
+		}
+	}
+	
+	function __setdefault__ (aKey, aDefault) {
+		var result = this [aKey];
+		if (result != undefined) {
+			return result;
+		}
+		var val = aDefault == undefined ? null : aDefault;
+		this [aKey] = val;
+		return val;
+	}
+	
+	function __pop__ (aKey, aDefault) {
+		var result = this [aKey];
+		if (result != undefined) {
+			delete this [aKey];
+			return result;
+		}
+		return aDefault;
+	}	
+	
+	function __update__(aDict) {
+		for (var aKey in aDict) {
+			this [aKey] = aDict [aKey];
+		}
+	}
+	
+	function dict (objectOrPairs) {
+		if (!objectOrPairs || objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
+			var instance = {};
+			if (objectOrPairs) {
+				for (var index = 0; index < objectOrPairs.length; index++) {
+					var pair = objectOrPairs [index];
+					instance [pair [0]] = pair [1];
+				}
+			}
+		}
+		else {													// It's a JavaScript object literal
+			var instance = objectOrPairs;
+		}
+			
+		// Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
+		// So dict literals rather than bare Object literals will be passed to JavaScript libraries
+		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
+		// So the properties of a dict should be non-enumerable
+		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
+		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});
+		Object.defineProperty (instance, '__iter__', {value: function () {new __PyIterator__ (this.keys ());}, enumerable: false});
+		Object.defineProperty (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.keys ());}, enumerable: false});
+		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
+		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
+		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
+		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
+		return instance;
+	}
+	__all__.dict = dict;
+	dict.__name__ = 'dict';
 		
 	// General operator overloading, only the ones that make most sense in matrix and complex operations
 	

@@ -37,6 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Enhancement issue #113: Use for ... of pervasively for js6 + autotest  
 - Fix for issue #125: strings not iterable (js6 only) + autotest
 - Release 12
 - Local classes now arbitrarily nestable, issue #120

@@ -540,7 +540,8 @@ class Generator (ast.NodeVisitor):
 		self.memoizeCalls = utils.commandArgs.fcall
 		self.noskipCodeGeneration = True
 		self.conditionalCodeGeneration = True
-		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices
+		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices. Will autoreset.
+		self.stripTuples = False	# For correctness, tuples are translated to bare JavaScript arrays if they are assignment target in a JavaScript 6 for-loop. Will not autoreset.
 		
 		try:
 			self.visit (module.parseTree)
@@ -635,7 +636,7 @@ class Generator (ast.NodeVisitor):
 			
 	def emitBeginTruthy (self):
 		if self.allowConversionToTruthValue:
-			self.emit ('__ (')
+			self.emit ('__t__ (')
 	
 	def emitEndTruthy (self):
 		if self.allowConversionToTruthValue:
@@ -1553,7 +1554,29 @@ class Generator (ast.NodeVisitor):
 			self.emit (') {{\n')
 			self.indent ()
 			
-		elif self.module.program.javaScriptVersion >= 6:
+		elif self.module.program.javaScriptVersion >= 6:		
+			self.emit ('for (var ')
+			self.stripTuples = True
+			self.visit (node.target)
+			self.stripTuples = False
+			self.emit (' of ')
+			
+			if self.allowConversionToIterable:
+				self.emit ('__i__ (')
+				
+			self.visit (node.iter)
+			
+			if self.allowConversionToIterable:
+				self.emit (')')
+				
+			self.emit ('){{\n')
+			self.indent ()
+		
+			''' (1)
+			# In the code below, destructuring assignment is done explicitly rather than left to JavaScript
+			# It is left here as a comment until it becomes more clear that JavaScript destructuring suffices in all cases
+			
+			# Produce universal iterator (something with a Python '__next__' and a JavaScript 'next') from iterable by calling py_iter from __builtin__
 			self.emit ('var {} = {} (', self.nextTemp ('iterator'), self.filterId ('iter'))
 			self.visit (node.iter)
 			self.emit (');\n')
@@ -1565,8 +1588,8 @@ class Generator (ast.NodeVisitor):
 			self.emit ('try {{')
 			self.indent ()
 			self.visit (ast.Assign (
-				targets = [node.target],
-				value = ast.Call (
+				targets = [node.target],		# As in Python: for <target> in ...
+				value = ast.Call (				# Result of calling 'next' on the just produced universal iterator
 					func = ast.Name (
 						id = 'next',
 						ctx = ast.Load
@@ -1581,11 +1604,12 @@ class Generator (ast.NodeVisitor):
 			self.emit (';')
 			self.dedent ()
 			self.emit ('}} ')
-			self.emit ('catch (exception) {{')
+			self.emit ('catch (exception) {{')	# Assume 'StopIteration' thrown, iterator exhausted
 			self.indent ()
 			self.emit ('break;')
 			self.dedent ()
 			self.emit ('}}\n')
+			'''
 			
 		else:
 			self.emit ('var {} = ', self.nextTemp ('iterable'))
@@ -1593,11 +1617,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (';\n')
 			
 			if self.allowConversionToIterable:
-				self.emit ('if (type ({}) == dict) {{\n', self.getTemp ('iterable'))
-				self.indent ()
-				self.emit ('{0} = {0}.{1} ();\n', self.getTemp ('iterable'), self.filterId ('keys'))
-				self.dedent ()
-				self.emit ('}}\n')
+				self.emit ('{0} = __i__ ({0});\n', self.getTemp ('iterable'))
 				
 			self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iterable'))
 			self.indent ()
@@ -1627,7 +1647,8 @@ class Generator (ast.NodeVisitor):
 		
 		if not optimize:
 			if self.module.program.javaScriptVersion >= 6:
-				self.prevTemp ('iterator')
+				pass
+				# self.prevTemp ('iterator')	# Leave in for now, see outcommented fragment (1) above
 			else:
 				self.prevTemp ('index')
 				self.prevTemp ('iterable')
@@ -1698,6 +1719,12 @@ class Generator (ast.NodeVisitor):
 				
 				# Method decorators ignored, but @classmethod trivially works, since the class is the prototype of the object
 				# So the object is an extension of the class, and anything you can do with a class, you can do with an object
+				
+				if node.name == '__iter__':
+					self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')	
+					
+				if node.name == '__next__':
+					self.emit (',\nnext: __jsUsePyNext__')	# ??? Shouldn't this be a property, to allow bound method pointers
 					
 	def visit_GeneratorExp (self, node):
 		# Currently generator expressions are just iterators on lists.
@@ -2180,9 +2207,9 @@ class Generator (ast.NodeVisitor):
 			self.emit ('}}\n')
 		
 	def visit_Tuple (self, node):
-		keepTuple = not self.stripTuple		# Tuples used as indices are stripped for speed
-		self.stripTuple = False				# Only strip first tuple encountered
-		
+		keepTuple = not (self.stripTuple or self.stripTuples)		# Tuples used as indices are stripped for speed
+		self.stripTuple = False				# Tuples used as indices are stripped for speed, only strip first tuple encountered
+											# Tuples used as assignment target in a JavaScript 6 for-loop are stripped for correctness, not only first
 		if keepTuple:
 			self.emit ('tuple (')
 			

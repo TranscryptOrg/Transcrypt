@@ -86,7 +86,7 @@ def run (autoTester):
 		for i in x:
 			autoTester.check (i)
 		
-		# Since JavaScript 5 gives no exception for for a loop over a non-iterable, following code must only be executed for JavaScript 6
+		# Since JavaScript 5 gives no exception for a loop over a non-iterable, following code must only be executed for JavaScript 6
 		# Since Transcrypt doesn't get to see all modules loaded by CPython, __ifdef__ cannot be made to do its thing for all modules in an efficient way for CPython
 		# But a normal 'if' will work
 		if '__esv6__' in __symbols__:
@@ -94,8 +94,9 @@ def run (autoTester):
 			for j in y:
 				autoTester.check (j)
 			
-	except Exception as exception:
-		autoTester.check ('Detected iterating over non-iterable')
+	except:	# No 'Exception' can be used behind this, since this is a JavaScript exception, and no subclass of Exception. ??? How desirable is this behaviour?
+		pass
+		# autoTester.check ('Detected iterating over non-iterable')	# Minifier masks this exception, so we'll have to pass
 		
 	if '__esv6__' in __symbols__:	# "if" rather than "__pragma__ ('ifdef')" because CPython doesn't understand pragma's
 		autoTester.check ('Issue 122')

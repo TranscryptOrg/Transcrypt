@@ -90,6 +90,14 @@
 				var descrip = Object.getOwnPropertyDescriptor (base, attrib);
 				Object.defineProperty (cls, attrib, descrip);
 			}
+			
+__pragma__ ('ifdef', '__esv6__')
+			for (var symbol of Object.getOwnPropertySymbols (base)) {
+				var descrip = Object.getOwnPropertyDescriptor (base, symbol);
+				Object.defineProperty (cls, symbol, descrip);
+			}
+__pragma__ ('endif')
+
 		}
 		
 		// Add class specific attributes to class object
@@ -101,6 +109,13 @@
 			var descrip = Object.getOwnPropertyDescriptor (extra, attrib);
 			Object.defineProperty (cls, attrib, descrip);
 		}
+		
+__pragma__ ('ifdef', '__esv6__')
+		for (var symbol of Object.getOwnPropertySymbols (extra)) {
+			var descrip = Object.getOwnPropertyDescriptor (extra, symbol);
+			Object.defineProperty (cls, symbol, descrip);
+		}
+__pragma__ ('endif')
 				
 		// Return class object
 		return cls;
