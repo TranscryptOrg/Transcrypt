@@ -4,11 +4,11 @@ result = ''
 
 def output (*any):
 	for item in any:
-		result += item
+		result += str (item)
 		result += ' '
 	result += '<br>\n'
 
-output ('Issue 96')	
+output ('Issue 96')	# Proposal: Allow `in`, when container is an object
 
 class Tolerant:
 	a = 3
@@ -23,7 +23,7 @@ class Tolerant:
 	def g (self):
 		pass
 		
-tolerant = Tolerant ()
+tolerant = Tolerant ()	# Unexpected *args and **kwargs behaviour
 
 output ('T', 'a' in tolerant)
 output ('T', 'f' in tolerant)
@@ -54,5 +54,18 @@ __pragma__ ('else')
 output ('null rather than [object Object] in previous line')
 __pragma__ ('endif')
 
-document.getElementById ('output') .innerHTML = result
+output ('<br>Issue 130')	# Add pragma to optionally handle % the JS way
 
+x = -3 % 8
+
+__pragma__ ('js', '{}', '''
+	var y = -3 % 8
+''')
+
+__pragma__ ('jsmod')
+z = -3 % 8 
+__pragma__ ('nojsmod')
+
+output (x, ' != ', y, '==', z)
+
+document.getElementById ('output') .innerHTML = result

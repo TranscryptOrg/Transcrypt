@@ -37,6 +37,10 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Enhancement for issue #136: dict.get not implemented
+- Fix for issue #134: %= operator translated incorrectly
+- Enhancement for issue #130: Add pragma to optionally handle % the JS way
+- Fix for issue #127: Can't use key 'keys' in a dict 
 - Enhancement issue #113: Use for ... of pervasively for js6 + autotest  
 - Fix for issue #125: strings not iterable (js6 only) + autotest
 - Release 12

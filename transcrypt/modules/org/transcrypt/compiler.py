@@ -128,7 +128,6 @@ class Program:
 			try:
 				type_check.run (self.sourcePath)
 			except Exception as exception:
-				print (exception)
 				utils.log (True, 'Validating: {} and dependencies\n\tInternal error in static typing validator\n', self.sourcePath)		
 
 		# Compile imported modules
@@ -470,6 +469,7 @@ class Generator (ast.NodeVisitor):
 			('Infinity', 'py_Infinity'),			('js_Infinity', 'Infinity'),
 			('isNaN', 'py_isNaN'),					('js_isNaN', 'isNaN'),
 			('iter', 'py_iter'),					('js_iter', 'iter'),
+			('keys', 'py_keys'),					('js_keys', 'keys'),
 			('name', 'py_name'),					('js_name', 'name'),
 			('NaN', 'py_NaN'),						('js_NaN', 'NaN'),
 			('next', 'py_next'),					('js_next', 'next'),
@@ -508,7 +508,7 @@ class Generator (ast.NodeVisitor):
 			ast.MatMult: (None,	90),	# Dealt with separately
 			ast.Div: ('/', 90),
 			ast.FloorDiv: (None, 90),	# Dealt with separately
-			ast.Mod: (None, 90),		# Dealt with separately, Python % != JavaScript %
+			ast.Mod: ('%', 90),			# Used only for JavaScript %, which differs from Python %
 			ast.Add: ('+', 80),
 			ast.Sub: ('-', 80),
 			ast.LShift: ('<<', 70),
@@ -536,8 +536,10 @@ class Generator (ast.NodeVisitor):
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
 		self.allowJavaScriptKeys = utils.commandArgs.jskeys
+		self.allowJavaScriptMod = utils.commandArgs.jsmod
 		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
-		self.memoizeCalls = utils.commandArgs.fcall
+		self.allowMemoizeCalls = utils.commandArgs.fcall
+		
 		self.noskipCodeGeneration = True
 		self.conditionalCodeGeneration = True
 		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices. Will autoreset.
@@ -1058,13 +1060,22 @@ class Generator (ast.NodeVisitor):
 		
 	def visit_AugAssign (self, node):
 		if (
-			type (node.op) == ast.FloorDiv or (	# FloorDiv has no operator symbol in JavaScript, so generationg <operator>= won't work
+			type (node.op) == ast.FloorDiv 				# FloorDiv has no operator symbol in JavaScript, so <operator>= won't work
+			or
+			(											# Python % (as opposed to JavaScript %) has no operator symbol in JavaScript, so <operator>= won't work
+				type (node.op) == ast.Mod and (
+					self.allowOperatorOverloading or
+					not self.allowJavaScriptMod
+				)
+			)
+			or 
+			(											# LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
 				type (node.target) == ast.Subscript and (
 					self.allowOperatorOverloading or
 					type (node.target.slice) != ast.Index or
 					type (node.target.slice.value) == ast.Tuple
 				)
-			)								# LHS is a call to __getitem__ or __getslice__, so generating <operator>= won't work either
+			)								
 		):	
 			self.visit (ast.Assign (
 				targets = [node.target],
@@ -1107,13 +1118,15 @@ class Generator (ast.NodeVisitor):
 			self.emit (' / ')
 			self.visitSubExpr (node, node.right)
 			self.emit (')')
-		elif type (node.op) in (ast.Pow, ast.MatMult, ast.Mod) or (self.allowOperatorOverloading and type (node.op) in (
-			ast.Mult, ast.Div, ast.Add, ast.Sub
-		)):
+		elif (
+			type (node.op) in (ast.Pow, ast.MatMult) or
+			(type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
+			(type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub) and self.allowOperatorOverloading)
+		):
 			self.emit ('{} ('.format (self.filterId (
 				('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
 				'__matmul__' if type (node.op) == ast.MatMult else
-				'__mod__' if type (node.op) == ast.Mod else
+				('__jsmod__' if self.allowJavaScriptMod else '__mod__') if type (node.op) == ast.Mod else
 				'__mul__' if type (node.op) == ast.Mult else
 				'__div__' if type (node.op) == ast.Div else
 				'__add__' if type (node.op) == ast.Add else
@@ -1227,9 +1240,9 @@ class Generator (ast.NodeVisitor):
 					self.allowDmap = False
 					
 				elif node.args [0] .s == 'fcall':
-					self.memoizeCalls = True
+					self.allowMemoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
-					self.memoizeCalls = False
+					self.allowMemoizeCalls = False
 					
 				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
 					self.allowConversionToIterable = True
@@ -1240,6 +1253,11 @@ class Generator (ast.NodeVisitor):
 					self.allowJavaScriptKeys = True
 				elif node.args [0] .s == 'nojskeys':	# Dictionary keys without quotes are identifiers
 					self.allowJavaScriptKeys = False
+					
+				elif node.args [0] .s == 'jsmod':		# % has JavaScript behaviour
+					self.allowJavaScriptMod = True
+				elif node.args [0] .s == 'nojsmod':		# % has Python behaviour
+					self.allowJavaScriptMod = False
 					
 				elif node.args [0] .s == 'tconv':		# Automatic conversion to truth value supported
 					self.allowConversionToTruthValue = True
@@ -1712,7 +1730,7 @@ class Generator (ast.NodeVisitor):
 				emitScopedBody ()
 				self.emit ('}}')
 				
-				if self.memoizeCalls:
+				if self.allowMemoizeCalls:
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
 				self.emit (');}}')

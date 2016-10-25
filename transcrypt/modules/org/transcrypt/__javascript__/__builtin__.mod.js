@@ -130,7 +130,7 @@ __pragma__ ('endif')
 	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
 		if (type (container) == dict) {
-			return container.keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
+			return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
 		}
 		else {
 			return container.indexOf ? container.indexOf (element) > -1 : element in container; // Parameter 'element' itself is an array, string or object
@@ -170,7 +170,7 @@ __pragma__ ('endif')
 	// General conversions
 	
 	function __i__ (any) {	//	Conversion to iterable
-		return type (any) == dict ? any.keys () : any;		
+		return type (any) == dict ? any.py_keys () : any;		
 	}
 	
 	function __t__ (any) {	// Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
@@ -256,7 +256,10 @@ __pragma__ ('endif')
 			}
 			catch (exception) {	// It was a dict in Python, so an Object in JavaScript
 				try {
-					if (anObject.constructor == Object) {
+					if (anObject == null) {
+						return 'None'
+					}
+					else if (anObject.constructor == Object) {
 						var result = '{';
 						var comma = false;
 						for (var attrib in anObject) {
@@ -291,6 +294,7 @@ __pragma__ ('endif')
 				}
 				catch (exception) {
 					console.log ('ERROR: Could not evaluate repr (<object of type ' + typeof anObject + '>)');
+					console.log (exception);
 					return '???';
 				}
 			}
@@ -442,7 +446,7 @@ __pragma__ ('endif')
 	}
 
 	__JsIterator__.prototype.next = function () {
-		if (this.index < this.iterable.keys.length) {
+		if (this.index < this.iterable.py_keys.length) {
 			return {value: this.index++, done: false};
 		}
 		else {
@@ -1156,6 +1160,11 @@ __pragma__ ('endif')
 		}
 	}
 	
+	function __getdefault__ (aKey, aDefault) {	// Each Python object already has a function called __get__, so we call this one __getdefault__
+		var result = this [aKey];
+		return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
+	}
+	
 	function __setdefault__ (aKey, aDefault) {
 		var result = this [aKey];
 		if (result != undefined) {
@@ -1194,18 +1203,19 @@ __pragma__ ('endif')
 		else {													// It's a JavaScript object literal
 			var instance = objectOrPairs;
 		}
-			
+		
 		// Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
 		// So dict literals rather than bare Object literals will be passed to JavaScript libraries
 		// Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
 		// So the properties of a dict should be non-enumerable
 		Object.defineProperty (instance, '__class__', {value: dict, enumerable: false, writable: true});
-		Object.defineProperty (instance, 'keys', {value: __keys__, enumerable: false});
-		Object.defineProperty (instance, '__iter__', {value: function () {new __PyIterator__ (this.keys ());}, enumerable: false});
-		Object.defineProperty (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.keys ());}, enumerable: false});
+		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});
+		Object.defineProperty (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
+		Object.defineProperty (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.py_keys ());}, enumerable: false});
 		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
 		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
 		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
+		Object.defineProperty (instance, 'get', {value: __getdefault__, enumerable: false});
 		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
 		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
 		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
@@ -1243,6 +1253,18 @@ __pragma__ ('endif')
 		}
 	};	
 	__all__.pow = __pow__;
+	
+	var __jsmod__ = function (a, b) {
+		if (typeof a == 'object' && '__mod__' in a) {
+			return a.__mod__ (b);
+		}
+		else if (typeof b == 'object' && '__rpow__' in b) {
+			return b.__rmod__ (a);
+		}
+		else {
+			return a % b;
+		}
+	}
 	
 	var __mod__ = function (a, b) {
 		if (typeof a == 'object' && '__mod__' in a) {
