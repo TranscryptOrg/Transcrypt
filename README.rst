@@ -1,3 +1,5 @@
+**Recommended: PYCON.DE 2016, Munich, Sun. Oct. 30th, 12:30 Presentation by Gunther Klessinger. https://www.pymunich.com/**
+
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
