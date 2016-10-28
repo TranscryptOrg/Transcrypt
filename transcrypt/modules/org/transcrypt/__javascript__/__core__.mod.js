@@ -75,57 +75,69 @@
 	}
 	__all__.__get__ = __get__;
 			
-	// Class creator function
-	var __class__ = function (name, bases, extra) {
-		// Create class functor
-		var cls = function () {
-			var args = [] .slice.apply (arguments);
-			return cls.__new__ (args);
-		};
+	// Mother of all metaclasses		
+	var py_metatype = {
+		__name__: 'type',
+		__bases__: [],
 		
-		// Copy methods, properties and static attributes from base classes to new class object
-		for (var index = bases.length - 1; index >= 0; index--) {	// Reversed order, since class vars of first base should win
-			var base = bases [index];
-			for (var attrib in base) {
-				var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+		// Overridable class creation worker
+		__new__: function (meta, name, bases, attribs) {
+			// Create the class cls, a functor, which the class creator function will return
+			var cls = function () {						// If cls is called with arg0, arg1, etc, it calls its __new__ method with [arg0, arg1, etc]
+				var args = [] .slice.apply (arguments);	// It has a __new__ method, not yet but at call time, since it is copied from the parent in the loop below
+				return cls.__new__ (args);				// Each Python class directly or indirectly derives from object, which has the __new__ method
+			};											// If there are no bases in the Python source, the compiler generates [object] for this parameter
+			
+			// Copy all methods, including __new__, properties and static attributes from base classes to new cls object
+			// The new class object will simply be the prototype of its instances
+			// JavaScript prototypical single inheritance will do here, since any object has only one class
+			// This has nothing to do with Python multiple inheritance, that is implemented explictly in the copy loop below
+			for (var index = bases.length - 1; index >= 0; index--) {	// Reversed order, since class vars of first base should win
+				var base = bases [index];
+				for (var attrib in base) {
+					var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+					Object.defineProperty (cls, attrib, descrip);
+				}
+				
+__pragma__ ('ifdef', '__esv6__')
+				for (var symbol of Object.getOwnPropertySymbols (base)) {
+					var descrip = Object.getOwnPropertyDescriptor (base, symbol);
+					Object.defineProperty (cls, symbol, descrip);
+				}
+__pragma__ ('endif')
+
+			}
+			
+			// Add class specific attributes to the created cls object
+			cls.__metaclass__ = meta;
+			cls.__name__ = name;
+			cls.__bases__ = bases;
+			
+			// Add own methods, properties and own static attributes to the created cls object
+			for (var attrib in attribs) {
+				var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
 				Object.defineProperty (cls, attrib, descrip);
 			}
 			
 __pragma__ ('ifdef', '__esv6__')
-			for (var symbol of Object.getOwnPropertySymbols (base)) {
-				var descrip = Object.getOwnPropertyDescriptor (base, symbol);
+			for (var symbol of Object.getOwnPropertySymbols (attribs)) {
+				var descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
 				Object.defineProperty (cls, symbol, descrip);
 			}
 __pragma__ ('endif')
-
+					
+			// Return created cls object
+			return cls;
 		}
-		
-		// Add class specific attributes to class object
-		cls.__name__ = name;
-		cls.__bases__ = bases;
-		
-		// Add own methods, properties and static attributes to class object
-		for (var attrib in extra) {
-			var descrip = Object.getOwnPropertyDescriptor (extra, attrib);
-			Object.defineProperty (cls, attrib, descrip);
-		}
-		
-__pragma__ ('ifdef', '__esv6__')
-		for (var symbol of Object.getOwnPropertySymbols (extra)) {
-			var descrip = Object.getOwnPropertyDescriptor (extra, symbol);
-			Object.defineProperty (cls, symbol, descrip);
-		}
-__pragma__ ('endif')
-				
-		// Return class object
-		return cls;
 	};
-	__all__.__class__ = __class__;
+	py_metatype.__metaclass__ = py_metatype;
+	__all__.py_metatype = py_metatype;
 	
-	// Create mother of all classes		
-	var object = __all__.__class__ ('object', [], {
+	// Mother of all classes		
+	var object = {
 		__init__: function (self) {},
-			
+		
+		__metaclass__: py_metatype,	// By default, all classes have metaclass type, since they derive from object
 		__name__: 'object',
 		__bases__: [],
 			
@@ -139,12 +151,24 @@ __pragma__ ('endif')
 			// Call constructor
 			this.__init__.apply (null, [instance] .concat (args));
 			
-			// Return instance			
+			// Return instance
 			return instance;
 		}	
-	});
+	};
 	__all__.object = object;
+	
+	// Class creator facade function, calls class creation worker
+	var __class__ = function (name, bases, attribs, meta) {			// Parameter meta is optional
+		if (meta == undefined) {
+			meta = bases [0] .__metaclass__;
+		}
+				
+		return meta.__new__ (meta, name, bases, attribs);
+	}
+	__all__.__class__ = __class__;
 	
 	// Define __pragma__ to preserve '<all>' and '</all>', since it's never generated as a function, must be done early, so here
 	var __pragma__ = function () {};
 	__all__.__pragma__ = __pragma__;
+	
+	

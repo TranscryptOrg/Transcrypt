@@ -9,6 +9,7 @@ def run (autoTester):
 					autoTester.check (self.x)
 					autoTester.check (self.e)
 					
+				# Limitation: no destructuring assignment inside nested classes
 				e = 3
 				
 			def __init__ (self, x):

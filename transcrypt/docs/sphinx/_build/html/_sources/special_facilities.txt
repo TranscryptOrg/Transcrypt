@@ -129,14 +129,12 @@ Note that these pragmas have to be applied on the function definition location r
 
 Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv')
 ---------------------------------------------------------------------------------
-
 In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a *dict* without explicitly calling its *keys ()* member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, *__pragma__ ('iconv')* and *__pragma__ ('noiconv')* can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each *for .. in ..* loop. When designing numerical processing libraries, it's advisable to use *__pragma__ ('noiconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won't suffer.
 
 .. _pragma_ifdef:
 
 Conditional compilation: __pragma__ ('ifdef', <symbol>), __pragma__ ('ifndef', <symbol>), __pragma__ ('else') and __pragma__ ('endif')
 --------------------------------------------------------------------------------------------------------------------------------------
-
 A piece of code in between *__pragma__ ('ifdef', <symbol>)* and *__pragma__ ('endif')* will only be compiled if <symbol> occurs in the global list of defined symbols.
 
 This pragma works mainly in combination with the *-s* / *--symbols <names joined by $>* command line option. On top of that, some command line options automatically add symbols, without using the *-s* switch. An example is *-e 6* option, which adds the symbol *e6* to the global list of defined symbols.
@@ -155,12 +153,31 @@ Important: The conditional compilation pragma's also work when placed at the sta
 
 Inserting literal JavaScript: __pragma__ ('js', ...) and __include__ (...)
 --------------------------------------------------------------------------
-
 During compilation the *__pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
 
 An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *__include__ (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
+
+Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')
+-------------------------------------------------------------------------------------------------------------------------------
+Normally a Python *{...}* literal is compiled to *dict ({...})* to include the special attributes and methods of a Python dict, including e.g. an iterator. When *__pragma__ ('jsiter')* is active, a *Python {...}* literal is compiled to a bare *{...}*, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when *__pragma__ ('jsiter')* is active, a Python *for ... in ...* is literally translated to a JavaScript *for (var ... in ...)*. The main use case for this pragma is conveniently looping through class attributes in the *__new__* method of a metaclass. As a more flexible, but less convenient alternative, *__pragma__ ('js', '{}', '''...''')* can be used.
+
+An example of the use of this pragma is the following:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/metaclasses/__init__.py
+	:start-after: from org.transcrypt.stubs.browser import __pragma__
+	:end-before: class Uppercaser (metaclass = UppercaserMeta):
+	:tab-width: 4
+	:caption: Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass
+
+Keeping your code lean: __pragma__ ('jskeys') and __pragma__ ('nojskeys')
+-------------------------------------------------------------------------
+Normally in Python, dictionary keyws without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
+Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
+-----------------------------------------------------------------------
+When *__pragma__ ('jsmod')* is active, *%* has JavaScript rather than Python semantics. While the -jm command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
 
 Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
 -------------------------------------------------------------------------

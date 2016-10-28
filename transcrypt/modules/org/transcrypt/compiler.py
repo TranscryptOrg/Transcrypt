@@ -476,11 +476,12 @@ class Generator (ast.NodeVisitor):
 			('js_not', 'not'),
 			('js_or', 'or'),
 			('pop', 'py_pop'),						('js_pop', 'pop'),
-			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
+			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('sort', 'py_sort'),					('js_sort', 'sort'),
 			('split', 'py_split'),					('js_split', 'split'),
 			('switch', 'py_switch'),
+			('type', 'py_metatype'),				('js_type', 'type'),		# Only for the type metaclass, the type operator is dealth with separately in visit_Call
 			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
 			('true', 'py_true'),
 			('undefined', 'py_undefined'), 			('js_undefined', 'undefined'),
@@ -535,6 +536,7 @@ class Generator (ast.NodeVisitor):
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
+		self.allowJavaScriptIter = False
 		self.allowJavaScriptKeys = utils.commandArgs.jskeys
 		self.allowJavaScriptMod = utils.commandArgs.jsmod
 		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
@@ -624,7 +626,7 @@ class Generator (ast.NodeVisitor):
 		else:
 			return self.scopes [-1]
 			
-	def getAdjacentClassScopes (self):	# Work backward until finding an interruption in the chain
+	def getAdjacentClassScopes (self):	# Work backward until finding an interruption in the chain. Needed at least to fix destructuring assignment in nested classes.
 		reversedClassScopes = []
 		for scope in reversed (self.scopes):
 			if type (scope.node) != ast.ClassDef:
@@ -1219,7 +1221,12 @@ class Generator (ast.NodeVisitor):
 				)
 				
 		if type (node.func) == ast.Name:
-			if node.func.id == 'property':
+			if node.func.id == 'type':
+				self.emit ('py_typeof (')	# Don't use general alias, since this is the type operator, not the type metaclass
+				self.visit (node.args [0])
+				self.emit (')')
+				return
+			elif node.func.id == 'property':
 				self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, self.filterId (node.args [0].id)))
 				if len (node.args) > 1:
 					self.emit (', {}.{}'.format (self.getScope (ast.ClassDef) .node.name, node.args [1].id))
@@ -1248,6 +1255,11 @@ class Generator (ast.NodeVisitor):
 					self.allowConversionToIterable = True
 				elif node.args [0] .s == 'noiconv':		# Automatic conversion to iterable not supported
 					self.allowConversionToIterable = False
+					
+				elif node.args [0] .s == 'jsiter':		# Translate for ... in ... : ... literally to for (... in ...) {...},
+					self.allowJavaScriptIter = True		# to enable iterating JavaScript objects that are not dicts
+				elif node.args [0] .s == 'nojsiter':	# Dictionary keys without quotes are identifiers
+					self.allowJavaScriptIter = False
 					
 				elif node.args [0] .s == 'jskeys':		# Dictionary keys without quotes are string literals
 					self.allowJavaScriptKeys = True
@@ -1399,11 +1411,11 @@ class Generator (ast.NodeVisitor):
 			self.all.add (node.name)
 			
 		if type (self.getScope () .node) == ast.ClassDef:
-			self.emit (self.filterId ('{}.{}'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]), node.name)))
+			self.emit (self.filterId ('\n{}:'.format (node.name)))
 		else:
-			self.emit ('var {}'.format (self.filterId (node.name)))
+			self.emit ('var {} ='.format (self.filterId (node.name)))
 			
-		self.emit (' = __class__ (\'{}\', [', self.filterId (node.name))
+		self.emit (' __class__ (\'{}\', [', self.filterId (node.name))
 		if node.bases:
 			for index, expr in enumerate (node.bases):
 				try:
@@ -1414,23 +1426,45 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.emit ('object')
 		self.emit ('], {{')
-		self.inscope (node)			
+		self.inscope (node)	
 		
 		self.indent ()
 		classVarAssigns = []
 		index = 0
 		for stmt in node.body:
-			if type (stmt) == ast.FunctionDef:
+			if type (stmt) in (ast.FunctionDef, ast.ClassDef):
 				self.emitComma (index, False)
 				self.visit (stmt)
 				index += 1
-			elif type (stmt) in (ast.Assign, ast.ClassDef):
-				classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
+			elif type (stmt) == ast.Assign:
+				if (
+					len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name and
+					not (type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property')
+				):
+					self.emitComma (index, False)
+					self.emit ('\n{}: ', stmt.targets [0] .id, stmt.targets)
+					self.visit (stmt.value)
+					index += 1
+				else:
+					classVarAssigns.append (stmt)	# Has to be done after the class because tuple assignment requires the use of an algorithm
 			elif self.getPragmaFromExpr (stmt):
 				self.visit (stmt)				# If it's a pragma, just visit it
 		self.dedent ()
 				
-		self.emit ('\n}})')
+		self.emit ('\n}}')
+		
+		if node.keywords:
+			if node.keywords [0] .arg == 'metaclass':
+				self.emit (', ')
+				self.visit (node.keywords [0] .value)
+			else:
+				raise utils.Error (
+					moduleName = self.module.metadata.name,
+					lineNr = self.lineNr,
+					message = '\n\tUnknown keyword argument {} definition of class {}'.format (node.keywords [0] .arg, node.name)
+				)
+				
+		self.emit (')')
 
 		for index, classVarAssign in enumerate (classVarAssigns):
 			self.emit (';\n')
@@ -1500,8 +1534,11 @@ class Generator (ast.NodeVisitor):
 						self.emit (']')
 					self.emit ('])')
 					return
-					
-		self.emit ('dict ({{')								# Since we didn't return, we want identifier keys to be treated as string literals
+		
+		if self.allowJavaScriptIter:
+			self.emit ('{{')
+		else:
+			self.emit ('dict ({{')								# Since we didn't return, we want identifier keys to be treated as string literals
 		for index, (key, value) in enumerate (zip (node.keys, node.values)):
 			self.emitComma (index)
 			self.idFiltering = False						# The key may be a string or an identifier, the latter normally would be filtered, which we don't want
@@ -1509,7 +1546,11 @@ class Generator (ast.NodeVisitor):
 			self.idFiltering = True
 			self.emit (': ')
 			self.visit (value)
-		self.emit ('}})')
+			
+		if self.allowJavaScriptIter:
+			self.emit ('}}')
+		else:
+			self.emit ('}})')
 		
 	def visit_DictComp (self, node):
 		self.visit_ListComp (node, isDict = True)
@@ -1520,7 +1561,7 @@ class Generator (ast.NodeVisitor):
 	def visit_For (self, node):
 		self.adaptLineNrString (node)
 		
-		if node.orelse:
+		if node.orelse and not self.allowJavaScriptIter:
 			self.emit ('var {} = false;\n', self.nextTemp ('break'))
 		else:
 			self.skipTemp ('break')
@@ -1539,7 +1580,14 @@ class Generator (ast.NodeVisitor):
 			)
 		)
 		
-		if optimize:
+		if self.allowJavaScriptIter:
+			self.emit ('for (var ')
+			self.visit (node.target)
+			self.emit (' in ')
+			self.visit (node.iter)
+			self.emit (') {{\n')
+			self.indent ()
+		elif optimize:
 			step = (
 					1
 				if len (node.iter.args) <= 2 else
@@ -1587,7 +1635,7 @@ class Generator (ast.NodeVisitor):
 			if self.allowConversionToIterable:
 				self.emit (')')
 				
-			self.emit ('){{\n')
+			self.emit (') {{\n')
 			self.indent ()
 		
 			''' (1)
@@ -1663,7 +1711,7 @@ class Generator (ast.NodeVisitor):
 		self.dedent ()
 		self.emit ('}}\n')
 		
-		if not optimize:
+		if not (self.allowJavaScriptIter or optimize):
 			if self.module.program.javaScriptVersion >= 6:
 				pass
 				# self.prevTemp ('iterator')	# Leave in for now, see outcommented fragment (1) above

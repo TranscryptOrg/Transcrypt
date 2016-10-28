@@ -7,12 +7,11 @@ Static typing tutorial
 Static typing of variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Variables in your program have a meaning, and what they mean can be seen from their names. Suppose you have a variable called current_speed. Than it will probably hold a floating point number denoting the speed of some object. It would be weird if all of a sudden this variable would e.g. hold the name of a city. What's less clear is wether or not current_speed is a vector or just a number. A vector has a size and a direction, and is usually represented by an x, y and z component. So while variable names may help, they don't tell the whole story. Of course you may name your variable current_speed_vector. But using such a homebrew type system correctly is all left to your personal discipline. And it's quite a lot of typing on top of that.
+Variables in your program have a meaning, and what they mean can be seen from their names. Suppose you have a variable called current_speed. It will probably hold a floating point number denoting the speed of some object. It would be weird if all of a sudden this variable would e.g. hold the name of a city. What's less clear is wether or not current_speed is a vector or just a number. A vector has a size and a direction, and is usually represented by an x, y and z component. So while variable names may help, they don't tell the whole story. Of course you may name your variable current_speed_vector. But using such a homebrew type system correctly is all left to your personal discipline. And it's quite a lot of typing on top of that.
 
 Suppose you have a variable called number_of_persons. It is rather obvious that assigning 3.5 to this variable is probably an error. But that multiplying it by 0.5 is also questionable is less obvious.
 
 It would be nice if mistakes like that could be caught early, preferable in advance, even if the offending code is in the branch of an if-statement that's rarely hit. And it would be nice if no run-time checks were needed, since these cost time.
-
 
 Static typing: a little bit of history for those interested
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

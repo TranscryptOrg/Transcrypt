@@ -39,6 +39,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Enhancement for issue #128: metaclasses (only __new__ overridable) + test case / doc example
 - Enhancement for issue #136: dict.get not implemented
 - Fix for issue #134: %= operator translated incorrectly
 - Enhancement for issue #130: Add pragma to optionally handle % the JS way

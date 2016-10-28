@@ -129,7 +129,7 @@ __pragma__ ('endif')
 	// In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
 	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
-		if (type (container) == dict) {
+		if (py_typeof (container) == dict) {
 			return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
 		}
 		else {
@@ -170,7 +170,7 @@ __pragma__ ('endif')
 	// General conversions
 	
 	function __i__ (any) {	//	Conversion to iterable
-		return type (any) == dict ? any.py_keys () : any;		
+		return py_typeof (any) == dict ? any.py_keys () : any;		
 	}
 	
 	function __t__ (any) {	// Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
@@ -204,7 +204,7 @@ __pragma__ ('endif')
 	int.__name__ = 'int';
 	__all__.int = int;
 	
-	var type = function (anObject) {
+	var py_typeof = function (anObject) {
 		try {
 			var result = anObject.__class__;
 			return result;
@@ -227,7 +227,7 @@ __pragma__ ('endif')
 			}
 		}
 	}
-	__all__.type = type;
+	__all__.py_typeof = py_typeof;
 	
 	var isinstance = function (anObject, classinfo) {
 		function isA (queryClass) {
@@ -1127,6 +1127,28 @@ __pragma__ ('endif')
 	}
 	
 	String.prototype.__rmul__ = String.prototype.__mul__;
+
+__pragma__ ('ifdef', '__map__')
+
+	// Dict extensions to map (experimental)
+	
+	function dict (objectOrPairs) {
+		if (objectOrPairs instanceof Array) {	// It's undefined or an array of pairs
+			var instance = Map (objectOrPairs);
+			if (objectOrPairs) {
+				for (var index = 0; index < objectOrPairs.length; index++) {
+					var pair = objectOrPairs [index];
+					instance [pair [0]] = pair [1];
+				}
+			}
+		}
+		else {													// It's a JavaScript object literal
+			var instance = objectOrPairs;
+		}
+	__all__.str = str;	
+	
+	
+__pragma__ ('else')
 	
 	// Dict extensions to object
 	
@@ -1221,6 +1243,8 @@ __pragma__ ('endif')
 		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
 		return instance;
 	}
+__pragma__ ('endif')
+
 	__all__.dict = dict;
 	dict.__name__ = 'dict';
 		

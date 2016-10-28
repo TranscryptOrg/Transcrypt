@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>3. Special facilities &mdash; Transcrypt 3.5.219 documentation</title>
+    <title>3. Special facilities &mdash; Transcrypt 3.5.232 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.219',
+        VERSION:     '3.5.232',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.219 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.232 documentation" href="index.html" />
     <link rel="next" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" />
     <link rel="prev" title="2. Getting started" href="installation_use.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="installation_use.html" title="2. Getting started"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.219 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -184,17 +184,19 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
             <span class="p">(</span><span class="s">&#39;Infinity&#39;</span><span class="p">,</span> <span class="s">&#39;py_Infinity&#39;</span><span class="p">),</span>            <span class="p">(</span><span class="s">&#39;js_Infinity&#39;</span><span class="p">,</span> <span class="s">&#39;Infinity&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;isNaN&#39;</span><span class="p">,</span> <span class="s">&#39;py_isNaN&#39;</span><span class="p">),</span>                  <span class="p">(</span><span class="s">&#39;js_isNaN&#39;</span><span class="p">,</span> <span class="s">&#39;isNaN&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;iter&#39;</span><span class="p">,</span> <span class="s">&#39;py_iter&#39;</span><span class="p">),</span>                    <span class="p">(</span><span class="s">&#39;js_iter&#39;</span><span class="p">,</span> <span class="s">&#39;iter&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="s">&#39;py_keys&#39;</span><span class="p">),</span>                    <span class="p">(</span><span class="s">&#39;js_keys&#39;</span><span class="p">,</span> <span class="s">&#39;keys&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;py_name&#39;</span><span class="p">),</span>                    <span class="p">(</span><span class="s">&#39;js_name&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;NaN&#39;</span><span class="p">,</span> <span class="s">&#39;py_NaN&#39;</span><span class="p">),</span>                      <span class="p">(</span><span class="s">&#39;js_NaN&#39;</span><span class="p">,</span> <span class="s">&#39;NaN&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;next&#39;</span><span class="p">,</span> <span class="s">&#39;py_next&#39;</span><span class="p">),</span>                    <span class="p">(</span><span class="s">&#39;js_next&#39;</span><span class="p">,</span> <span class="s">&#39;next&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;js_not&#39;</span><span class="p">,</span> <span class="s">&#39;not&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;js_or&#39;</span><span class="p">,</span> <span class="s">&#39;or&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;pop&#39;</span><span class="p">,</span> <span class="s">&#39;py_pop&#39;</span><span class="p">),</span>                      <span class="p">(</span><span class="s">&#39;js_pop&#39;</span><span class="p">,</span> <span class="s">&#39;pop&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s">&#39;selector&#39;</span><span class="p">,</span> <span class="s">&#39;py_selector&#39;</span><span class="p">),</span>            <span class="p">(</span><span class="s">&#39;js_selector&#39;</span><span class="p">,</span> <span class="s">&#39;selector&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;replace&#39;</span><span class="p">,</span> <span class="s">&#39;py_replace&#39;</span><span class="p">),</span>              <span class="p">(</span><span class="s">&#39;js_replace&#39;</span><span class="p">,</span> <span class="s">&#39;replace&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;selector&#39;</span><span class="p">,</span> <span class="s">&#39;py_selector&#39;</span><span class="p">),</span>            <span class="p">(</span><span class="s">&#39;js_selector&#39;</span><span class="p">,</span> <span class="s">&#39;selector&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;sort&#39;</span><span class="p">,</span> <span class="s">&#39;py_sort&#39;</span><span class="p">),</span>                    <span class="p">(</span><span class="s">&#39;js_sort&#39;</span><span class="p">,</span> <span class="s">&#39;sort&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;split&#39;</span><span class="p">,</span> <span class="s">&#39;py_split&#39;</span><span class="p">),</span>                  <span class="p">(</span><span class="s">&#39;js_split&#39;</span><span class="p">,</span> <span class="s">&#39;split&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;switch&#39;</span><span class="p">,</span> <span class="s">&#39;py_switch&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="s">&#39;py_metatype&#39;</span><span class="p">),</span>                <span class="p">(</span><span class="s">&#39;js_type&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">),</span>        <span class="c"># Only for the type metaclass, the type operator is dealth with separately in visit_Call</span>
             <span class="p">(</span><span class="s">&#39;reversed&#39;</span><span class="p">,</span> <span class="s">&#39;py_reversed&#39;</span><span class="p">),</span>            <span class="p">(</span><span class="s">&#39;js_reversed&#39;</span><span class="p">,</span> <span class="s">&#39;reversed&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="s">&#39;py_true&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;undefined&#39;</span><span class="p">,</span> <span class="s">&#39;py_undefined&#39;</span><span class="p">),</span>          <span class="p">(</span><span class="s">&#39;js_undefined&#39;</span><span class="p">,</span> <span class="s">&#39;undefined&#39;</span><span class="p">),</span>
@@ -253,6 +255,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <span class="kn">import</span> <span class="nn">lambda_functions</span>
 <span class="kn">import</span> <span class="nn">list_comprehensions</span>
 <span class="kn">import</span> <span class="nn">local_classes</span>
+<span class="kn">import</span> <span class="nn">metaclasses</span>
 <span class="kn">import</span> <span class="nn">module_builtin</span>
 <span class="kn">import</span> <span class="nn">module_cmath</span>
 
@@ -298,6 +301,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">lambda_functions</span><span class="p">,</span> <span class="s">&#39;lambda_functions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">list_comprehensions</span><span class="p">,</span> <span class="s">&#39;list_comprehensions&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">local_classes</span><span class="p">,</span> <span class="s">&#39;local_classes&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">metaclasses</span><span class="p">,</span> <span class="s">&#39;metaclasses&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_builtin</span><span class="p">,</span> <span class="s">&#39;module_builtin&#39;</span><span class="p">)</span>
 <span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_cmath</span><span class="p">,</span> <span class="s">&#39;module_cmath&#39;</span><span class="p">)</span>
 
@@ -330,18 +334,51 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <p>An example of its use is to encapsulate a JavaScript library as a Python module, as is <a class="reference internal" href="integration_javascript.html#code-encaps-fabric"><span>shown  for the fabric.js library</span></a>. In that case there's usually one format parameter, namely a call to <em>__include__ (&lt;relative module path&gt;)</em>. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.</p>
 <p>Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', &lt;my_piece_of_JS_code&gt;).</p>
 </div>
+<div class="section" id="create-bare-javascript-objects-and-iterate-over-their-attributes-from-python-pragma-jsiter-and-pragma-nojsiter">
+<h2>3.10. Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')<a class="headerlink" href="#create-bare-javascript-objects-and-iterate-over-their-attributes-from-python-pragma-jsiter-and-pragma-nojsiter" title="Permalink to this headline">¶</a></h2>
+<p>Normally a Python <em>{...}</em> literal is compiled to <em>dict ({...})</em> to include the special attributes and methods of a Python dict, including e.g. an iterator. When <em>__pragma__ ('jsiter')</em> is active, a <em>Python {...}</em> literal is compiled to a bare <em>{...}</em>, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when <em>__pragma__ ('jsiter')</em> is active, a Python <em>for ... in ...</em> is literally translated to a JavaScript <em>for (var ... in ...)</em>. The main use case for this pragma is conveniently looping through class attributes in the <em>__new__</em> method of a metaclass. As a more flexible, but less convenient alternative, <em>__pragma__ ('js', '{}', '''...''')</em> can be used.</p>
+<p>An example of the use of this pragma is the following:</p>
+<div class="literal-block-wrapper container" id="use-of-pragma-jsiter-and-pragma-nojsiter-to-manipulate-class-attributes-in-a-metaclass">
+<div class="code-block-caption"><span class="caption-text">Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass</span><a class="headerlink" href="#use-of-pragma-jsiter-and-pragma-nojsiter-to-manipulate-class-attributes-in-a-metaclass" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre>
+<span class="k">class</span> <span class="nc">UppercaserMeta</span> <span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span> <span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attribs</span><span class="p">):</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;jsiter&#39;</span><span class="p">)</span>       <span class="c"># Translate for ... in directly to JavaScript for ... in ... and translate {} to bare {} rather than to dict {}</span>
+                                    <span class="c"># Using bare {} for as attribs parameter to __new__ avoids dict attributes masking regular attributes</span>
+                                    <span class="c"># For more flexibility use __pragma__ (&#39;js&#39;, &#39;{}&#39;, &#39;&#39;&#39;...&#39;&#39;&#39;)</span>
+        <span class="n">upperAttribs</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">attribKey</span> <span class="ow">in</span> <span class="n">attribs</span><span class="p">:</span>   <span class="c"># Translates to &#39;for (var attribKey in attribs)&#39; by virtue of __pragma__ (&#39;jsiter&#39;), to iterate over the attributes of a bare JavaScript {}</span>
+            <span class="n">upperAttribs</span> <span class="p">[</span><span class="n">attribKey</span> <span class="k">if</span>  <span class="n">attribKey</span><span class="o">.</span><span class="n">startswith</span> <span class="p">(</span><span class="s">&#39;__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">attribKey</span><span class="o">.</span><span class="n">upper</span> <span class="p">()]</span> <span class="o">=</span> <span class="n">attribs</span> <span class="p">[</span><span class="n">attribKey</span><span class="p">]</span>
+            
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s">&#39;nojsiter&#39;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="n">__new__</span> <span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">upperAttribs</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="keeping-your-code-lean-pragma-jskeys-and-pragma-nojskeys">
+<h2>3.11. Keeping your code lean: __pragma__ ('jskeys') and __pragma__ ('nojskeys')<a class="headerlink" href="#keeping-your-code-lean-pragma-jskeys-and-pragma-nojskeys" title="Permalink to this headline">¶</a></h2>
+<p>Normally in Python, dictionary keyws without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.</p>
+</div>
+<div class="section" id="keeping-your-code-lean-pragma-jsmod-and-pragma-nojsmod">
+<h2>3.12. Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')<a class="headerlink" href="#keeping-your-code-lean-pragma-jsmod-and-pragma-nojsmod" title="Permalink to this headline">¶</a></h2>
+<p>When <em>__pragma__ ('jsmod')</em> is active, <em>%</em> has JavaScript rather than Python semantics. While the -jm command line switch achieves this globally, the preferred way is to switch on and off this facility locally.</p>
+</div>
 <div class="section" id="keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">
-<h2>3.10. Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')<a class="headerlink" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs" title="Permalink to this headline">¶</a></h2>
+<h2>3.13. Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')<a class="headerlink" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs" title="Permalink to this headline">¶</a></h2>
 <p>While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the <a class="reference internal" href="supported_constructs.html#autotest-arguments"><span>arguments autotest</span></a>. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.</p>
 </div>
 <div class="section" id="operator-overloading-pragma-opov-and-pragma-noopov">
-<h2>3.11. Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')<a class="headerlink" href="#operator-overloading-pragma-opov-and-pragma-noopov" title="Permalink to this headline">¶</a></h2>
+<h2>3.14. Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')<a class="headerlink" href="#operator-overloading-pragma-opov-and-pragma-noopov" title="Permalink to this headline">¶</a></h2>
 <p>Transcrypt currently supports overloading of the following operators: *, /, +, -, &#64;, [], (), ==, !=, &lt;, &lt;=, &gt;, and &gt;=.</p>
 <p>These operators have been chosen since they can enhance the readability of computations involving matrices and vectors, enable the use of callable objects (functors) or are used to compare tuples, lists and sets. Using the -o command line switch will activate operator overloading globally. <em>This is strongly disadvised</em>, since even 1 + 2 will result in two function calls in that case. It's better to use <em>__pragma__ ('opov')</em> to switch it on locally and <em>__pragma__ ('noopov')</em> to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.</p>
 <p>Formula v4 = M * (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and * operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of <em>__mul__</em>, <em>__rmul__</em>, <em>__div__</em>, <em>__rdiv__</em>, <em>__add__</em>, <em>__radd__</em>, <em>__sub__</em>, <em>__rsub__</em>, <em>__matmul__</em>, <em>__rmatmul__</em>, <em>__getitem__</em>, <em>__setitem__</em> and <em>__call__</em> as described in the CPython documentation. The comparison operators are supported by the functions <em>__eq__</em>, <em>__ne__</em>, <em>__lt__</em>, <em>__le__</em>, <em>__gt__</em> and <em>__ge__</em>.</p>
 </div>
 <div class="section" id="skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">
-<span id="skipping-fragments"></span><h2>3.12. Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')<a class="headerlink" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip" title="Permalink to this headline">¶</a></h2>
+<span id="skipping-fragments"></span><h2>3.15. Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')<a class="headerlink" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip" title="Permalink to this headline">¶</a></h2>
 <p>On some occasions it's handy to be able to skip code generation for fragments of Python source. The most important use case is when you perform a static check using the <a class="reference internal" href="installation_use.html#command-line-switches"><span>-c or --check</span></a> command line switch. If you use global JavaScript names without importing them from some encapsulation module, you'll have to tell the static checker that these names are not to be flagged as undefined. Insert a line containing dummy definitions of the unknown names for the static checker, surrounded by <em>__pragma__ ('skip') and __pragma__ ('noskip')</em>, to make code generator skip these definitions. The beginning of the source code of the Pong demo, shown below, demonstates how this is done.</p>
 <div class="literal-block-wrapper container" id="preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py">
 <div class="code-block-caption"><span class="caption-text">Preventing complaints of the static checker about unknown global JavaScript names in pong.py</span><a class="headerlink" href="#preventing-complaints-of-the-static-checker-about-unknown-global-javascript-names-in-pong-py" title="Permalink to this code">¶</a></div>
@@ -364,7 +401,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 </div>
 </div>
 <div class="section" id="automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv">
-<h2>3.13. Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')<a class="headerlink" href="#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv" title="Permalink to this headline">¶</a></h2>
+<h2>3.16. Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')<a class="headerlink" href="#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv" title="Permalink to this headline">¶</a></h2>
 <p>When automatic conversion to truth value is activated, an empty array, dict or set has truth value False just as in CPyton, rather than True, as would be the case natively in JavaScript. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. To switch on automatic conversion to truth values locally, <em>__pragma__ ('tconv')</em> and <em>__pragma__ ('notconv')</em> can be used. The alternative is to switch on automatic conversion globally using the -t command line switch. Use of this switch is disadvised if a lot of boolean expressions are computed in inner loops, since it would result in many extra typechecks. When designing performance sensitive libraries, it's advisable to use <em>__pragma__ ('notconv')</em> explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -t switch, performance of won't suffer.</p>
 </div>
 </div>
@@ -390,10 +427,13 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 <li><a class="reference internal" href="#automatic-conversion-to-iterable-pragma-iconv-and-pragma-noiconv">3.7. Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv')</a></li>
 <li><a class="reference internal" href="#conditional-compilation-pragma-ifdef-symbol-pragma-ifndef-symbol-pragma-else-and-pragma-endif">3.8. Conditional compilation: __pragma__ ('ifdef', &lt;symbol&gt;), __pragma__ ('ifndef', &lt;symbol&gt;), __pragma__ ('else') and __pragma__ ('endif')</a></li>
 <li><a class="reference internal" href="#inserting-literal-javascript-pragma-js-and-include">3.9. Inserting literal JavaScript: __pragma__ ('js', ...) and __include__ (...)</a></li>
-<li><a class="reference internal" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.10. Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')</a></li>
-<li><a class="reference internal" href="#operator-overloading-pragma-opov-and-pragma-noopov">3.11. Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')</a></li>
-<li><a class="reference internal" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.12. Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')</a></li>
-<li><a class="reference internal" href="#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv">3.13. Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')</a></li>
+<li><a class="reference internal" href="#create-bare-javascript-objects-and-iterate-over-their-attributes-from-python-pragma-jsiter-and-pragma-nojsiter">3.10. Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')</a></li>
+<li><a class="reference internal" href="#keeping-your-code-lean-pragma-jskeys-and-pragma-nojskeys">3.11. Keeping your code lean: __pragma__ ('jskeys') and __pragma__ ('nojskeys')</a></li>
+<li><a class="reference internal" href="#keeping-your-code-lean-pragma-jsmod-and-pragma-nojsmod">3.12. Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')</a></li>
+<li><a class="reference internal" href="#keeping-your-code-lean-pragma-kwargs-and-pragma-nokwargs">3.13. Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')</a></li>
+<li><a class="reference internal" href="#operator-overloading-pragma-opov-and-pragma-noopov">3.14. Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')</a></li>
+<li><a class="reference internal" href="#skipping-fragments-while-generating-code-pragma-skip-and-pragma-noskip">3.15. Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')</a></li>
+<li><a class="reference internal" href="#automatic-conversion-to-truth-value-pragma-tconv-and-pragma-notconv">3.16. Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')</a></li>
 </ul>
 </li>
 </ul>
@@ -440,7 +480,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
         <li class="right" >
           <a href="installation_use.html" title="2. Getting started"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.219 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

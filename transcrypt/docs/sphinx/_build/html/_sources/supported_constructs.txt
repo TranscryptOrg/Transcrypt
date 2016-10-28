@@ -18,8 +18,8 @@ Arguments: \*\*kwargs, \*args, defaults, at call and def time, also for lambda's
 	:tab-width: 4
 	:caption: Testlet: arguments
 
-Accessing attributes by name: getattr, setattr, hasattr
--------------------------------------------------------
+Attribute access by name: getattr, setattr, hasattr
+---------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/attribs_by_name/__init__.py
 	:tab-width: 4
@@ -152,6 +152,13 @@ Local classes: inside other classes and functions
 .. literalinclude:: ../../development/automated_tests/transcrypt/local_classes/__init__.py
 	:tab-width: 4
 	:caption: Testlet: local_classes
+
+Metaclasses: overriding the type.__new__ in a descendant metaclass
+------------------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/metaclasses/__init__.py
+	:tab-width: 4
+	:caption: Testlet: metaclasses
 
 Module builtin: a small part of it demo'ed
 ------------------------------------------

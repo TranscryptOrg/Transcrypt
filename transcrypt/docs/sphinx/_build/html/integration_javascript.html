@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.219 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.232 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.219',
+        VERSION:     '3.5.232',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.219 documentation" href="index.html" />
-    <link rel="next" title="8. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
-    <link rel="prev" title="5. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
+    <link rel="top" title="Transcrypt 3.5.232 documentation" href="index.html" />
+    <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
+    <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="autotesting_transcrypt.html" title="8. Autotesting Transcrypt code"
+          <a href="autotesting_transcrypt.html" title="7. Autotesting Transcrypt code"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="supported_constructs.html" title="5. Systematic code examples: a guided tour of Transcrypt"
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.219 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,16 +50,16 @@
           <div class="body" role="main">
             
   <div class="section" id="seamless-interoperation-with-the-dom">
-<h1>6. Seamless interoperation with the DOM<a class="headerlink" href="#seamless-interoperation-with-the-dom" title="Permalink to this headline">¶</a></h1>
+<h1>5. Seamless interoperation with the DOM<a class="headerlink" href="#seamless-interoperation-with-the-dom" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="practical-example-a-simple-responsive-website-using-no-html-or-css-at-all">
-<h2>6.1. Practical example: a simple, responsive website using no HTML or CSS at all<a class="headerlink" href="#practical-example-a-simple-responsive-website-using-no-html-or-css-at-all" title="Permalink to this headline">¶</a></h2>
+<h2>5.1. Practical example: a simple, responsive website using no HTML or CSS at all<a class="headerlink" href="#practical-example-a-simple-responsive-website-using-no-html-or-css-at-all" title="Permalink to this headline">¶</a></h2>
 <p>To many programmers, using 'static' HTML and CSS feels like being locked up in a closet.
 As an alternative, responsiveness can simply be programmed using Transcrypt, as can be seen on <a class="reference external" href="http://www.wiskundeles.com">this site written in Transcrypt</a>.
 Note that it features sourcemaps.
 The site adapts to diverse screen formats, device types and landscape vs. portrait mode.</p>
 </div>
 <div class="section" id="svg-example-turtle-graphics">
-<h2>6.2. SVG example: Turtle graphics<a class="headerlink" href="#svg-example-turtle-graphics" title="Permalink to this headline">¶</a></h2>
+<h2>5.2. SVG example: Turtle graphics<a class="headerlink" href="#svg-example-turtle-graphics" title="Permalink to this headline">¶</a></h2>
 <p><em>Turtle graphics</em> are a way to teach computer programming to children, invented by Seymour Papert in the 1960's.
 Lines are drawn as 'track' of a walking turtle, that can move ahead and turn.
 Children use turtle graphics intuitively by imagining what they would do if they were the turtle.
@@ -408,9 +408,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </div>
 </div>
 <div class="section" id="mixed-examples">
-<h1>7. Mixed examples<a class="headerlink" href="#mixed-examples" title="Permalink to this headline">¶</a></h1>
+<h1>6. Mixed examples<a class="headerlink" href="#mixed-examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="three-ways-of-integration-with-javascript-libraries">
-<h2>7.1. Three ways of integration with JavaScript libraries<a class="headerlink" href="#three-ways-of-integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Three ways of integration with JavaScript libraries<a class="headerlink" href="#three-ways-of-integration-with-javascript-libraries" title="Permalink to this headline">¶</a></h2>
 <p>There are three ways to integrate Transcrypt applications with existing JavaScript libraries.</p>
 <ol class="arabic simple">
 <li>The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.</li>
@@ -439,7 +439,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <p>Note that __pragma__ ('js', &lt;skeletoncode&gt;, includes = [&lt;file1&gt;, &lt;file2&gt;, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The <em>fabric</em> module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the <em>fabric.js</em> in the __javascript__ subdirectory by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.</p>
 </div>
 <div class="section" id="example-pong">
-<h2>7.2. Example: Pong<a class="headerlink" href="#example-pong" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. Example: Pong<a class="headerlink" href="#example-pong" title="Permalink to this headline">¶</a></h2>
 <p>In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that <em>new &lt;constructor&gt;</em> is replaced by <em>__new__ (&lt;constructor&gt;)</em>.</p>
 <table border="1" class="docutils" id="code-pong">
 <colgroup>
@@ -807,7 +807,6 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="pong-mod-js">
 <div class="code-block-caption"><span class="caption-text">pong.mod.js</span><a class="headerlink" href="#pong-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv6__&#39;];
         var fabric = __init__ (__world__.com.fabricjs).fabric;
         var orthoWidth = 1000;
         var orthoHeight = 750;
@@ -897,6 +896,10 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             });}
         });
         var Paddle = __class__ (&#39;Paddle&#39;, [Sprite], {
+            margin: 30,
+            width: 10,
+            height: 100,
+            speed: 400,
             get __init__ () {return __get__ (this, function (self, game, index) {
                 self.index = index;
                 Sprite.__init__ (self, game, self.width, self.height);
@@ -937,11 +940,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 }
             });}
         });
-        Paddle.margin = 30;
-        Paddle.width = 10;
-        Paddle.height = 100;
-        Paddle.speed = 400;
         var Ball = __class__ (&#39;Ball&#39;, [Sprite], {
+            side: 8,
+            speed: 300,
             get __init__ () {return __get__ (this, function (self, game) {
                 Sprite.__init__ (self, game, self.side, self.side);
             });},
@@ -978,17 +979,13 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 }
             });}
         });
-        Ball.side = 8;
-        Ball.speed = 300;
         var Scoreboard = __class__ (&#39;Scoreboard&#39;, [Attribute], {
+            nameShift: 75,
+            hintShift: 25,
             get install () {return __get__ (this, function (self) {
                 self.playerLabels = function () {
                     var __accu0__ = [];
-                    var __iterator0__ = py_iter (tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])]));
-                    while (true) {
-                        try {var __left0__ = py_next (__iterator0__);
-                            var py_name = __left0__ [0];
-                            var position = __left0__ [1];} catch (exception) {break;}
+                    for (var [py_name, position] of tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])])){
                         __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
@@ -1006,22 +1003,14 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
-                    var __iterator0__ = py_iter (zip (self.scores, tuple ([-(2) / 16, 6 / 16])));
-                    while (true) {
-                        try {var __left0__ = py_next (__iterator0__);
-                            var score = __left0__ [0];
-                            var position = __left0__ [1];} catch (exception) {break;}
+                    for (var [score, position] of zip (self.scores, tuple ([-(2) / 16, 6 / 16]))){
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
             });},
             get draw () {return __get__ (this, function (self) {
-                var __iterator0__ = py_iter (zip (self.playerLabels, self.scoreLabels));
-                while (true) {
-                    try {var __left0__ = py_next (__iterator0__);
-                        var playerLabel = __left0__ [0];
-                        var scoreLabel = __left0__ [1];} catch (exception) {break;}
+                for (var [playerLabel, scoreLabel] of zip (self.playerLabels, self.scoreLabels)){
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -1029,8 +1018,6 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.game.canvas.add (self.image);
             });}
         });
-        Scoreboard.nameShift = 75;
-        Scoreboard.hintShift = 25;
         var Game = __class__ (&#39;Game&#39;, [object], {
             get __init__ () {return __get__ (this, function (self) {
                 self.serviceIndex = (Math.random () &gt; 0.5 ? 1 : 0);
@@ -1058,9 +1045,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.buttons = list ([]);
-                var __iterator0__ = py_iter (tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;]));
-                while (true) {
-                    try {var key = py_next (__iterator0__);} catch (exception) {break;}
+                for (var key of tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;])){
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
@@ -1091,9 +1076,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.resize ();
             });},
             get install () {return __get__ (this, function (self) {
-                var __iterator0__ = py_iter (self.attributes);
-                while (true) {
-                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                for (var attribute of self.attributes){
                     attribute.install ();
                 }
             });},
@@ -1130,19 +1113,13 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     }
                 }
                 else {
-                    var __iterator0__ = py_iter (self.attributes);
-                    while (true) {
-                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                    for (var attribute of self.attributes){
                         attribute.predict ();
                     }
-                    var __iterator0__ = py_iter (self.attributes);
-                    while (true) {
-                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                    for (var attribute of self.attributes){
                         attribute.interact ();
                     }
-                    var __iterator0__ = py_iter (self.attributes);
-                    while (true) {
-                        try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                    for (var attribute of self.attributes){
                         attribute.commit ();
                     }
                 }
@@ -1150,26 +1127,20 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
-                var __iterator0__ = py_iter (self.paddles);
-                while (true) {
-                    try {var paddle = py_next (__iterator0__);} catch (exception) {break;}
+                for (var paddle of self.paddles){
                     paddle.reset ();
                 }
                 self.ball.reset ();
                 self.pause = true;
             });},
             get commit () {return __get__ (this, function (self) {
-                var __iterator0__ = py_iter (self.attributes);
-                while (true) {
-                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                for (var attribute of self.attributes){
                     attribute.commit ();
                 }
             });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
-                var __iterator0__ = py_iter (self.attributes);
-                while (true) {
-                    try {var attribute = py_next (__iterator0__);} catch (exception) {break;}
+                for (var attribute of self.attributes){
                     attribute.draw ();
                 }
             });},
@@ -1251,12 +1222,12 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </table>
 </div>
 <div class="section" id="joined-minification">
-<h2>7.3. Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
+<h2>6.3. Joined minification<a class="headerlink" href="#joined-minification" title="Permalink to this headline">¶</a></h2>
 <p>Minification is currently performed by the Google closure compiler, that's also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working <em>strict</em> code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.</p>
 <p>As can be seen from the listings, <em>pong.mod.js</em> without libraries is only slightly longer than <em>pong.py</em> without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the <em>reset</em> function, using <em>__pragma__ ('kargs')</em> and <em>__pragma__ ('nokwargs')</em>. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from <em>fabric.js</em>. From this example it becomes clear that Transcrypt is extremely lightweight.</p>
 </div>
 <div class="section" id="example-jquery">
-<h2>7.4. Example: jQuery<a class="headerlink" href="#example-jquery" title="Permalink to this headline">¶</a></h2>
+<h2>6.4. Example: jQuery<a class="headerlink" href="#example-jquery" title="Permalink to this headline">¶</a></h2>
 <p>In contrast to the use of the <em>fabric.js</em> library in the Pong example, <em>jQuery</em> hasn't been encapsulated at all. It's just downloaded on the fly from a content delivery network and used as-is. Instead of the <em>$</em> (that is not a valid Python identifier), an <em>S</em> is used as <a class="reference internal" href="special_facilities.html#pragma-alias"><span>alias</span></a>. This might have been any character sequence.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1285,12 +1256,9 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <td><div class="literal-block-wrapper first last container" id="jquery-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">jquery_demo.mod.js</span><a class="headerlink" href="#jquery-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv6__&#39;];
         var start = function () {
             var changeColors = function () {
-                var __iterator0__ = py_iter ($divs);
-                while (true) {
-                    try {var div = py_next (__iterator0__);} catch (exception) {break;}
+                for (var div of $divs){
                     $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format (...function () {
                         var __accu0__ = [];
                         for (var i = 0; i &lt; 3; i++) {
@@ -1317,7 +1285,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 </table>
 </div>
 <div class="section" id="example-ios-web-app-with-native-look-and-feel">
-<h2>7.5. Example: iOS web app with native look and feel<a class="headerlink" href="#example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
+<h2>6.5. Example: iOS web app with native look and feel<a class="headerlink" href="#example-ios-web-app-with-native-look-and-feel" title="Permalink to this headline">¶</a></h2>
 <p>You can write full screen iOS web apps in Transcrypt with native look and feel. As example here's an app simulating 6 dice. While this example is kept very simple, you can in fact make apps of arbitrary complexity, with fast and beautiful graphics using any JS graphics library, e.g. multiplayer games working over the Internet. If you add the app to your homescreen it will be cached, so no Internet connection is needed to use it. Web apps for iOS can obtain and use location information from the user.</p>
 <div class="figure">
 <a class="reference internal image-reference" href="_images/ios_app.png"><img alt="A simple dice web app for iOS" src="_images/ios_app.png" style="height: 500px;" /></a>
@@ -1471,7 +1439,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <tbody valign="top">
 <tr class="row-odd"><td><div class="literal-block-wrapper first last container" id="ios-app-html">
 <div class="code-block-caption"><span class="caption-text">ios_app.html</span><a class="headerlink" href="#ios-app-html" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;html manifest=&quot;cache.manifest&quot;
+<div class="highlight-python"><div class="highlight"><pre>&lt;html manifest=&quot;cache.manifest&quot;&gt;
     &lt;!-- v45 --&gt;
     &lt;head&gt;
         &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
@@ -1517,7 +1485,7 @@ __javascript__/ios_app.js
 <p>N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be added to the home screen of your iOS device.</p>
 </div>
 <div class="section" id="example-d3-js">
-<h2>7.6. Example: D3.js<a class="headerlink" href="#example-d3-js" title="Permalink to this headline">¶</a></h2>
+<h2>6.6. Example: D3.js<a class="headerlink" href="#example-d3-js" title="Permalink to this headline">¶</a></h2>
 <p>The <em>D3.js</em> graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1607,7 +1575,6 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="d3js-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">d3js_demo.mod.js</span><a class="headerlink" href="#d3js-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv6__&#39;];
         var Spawn = __class__ (&#39;Spawn&#39;, [object], {
             get __init__ () {return __get__ (this, function (self, width, height) {
                 var __left0__ = tuple ([width, height, 100, d3.scale.category20 ()]);
@@ -1683,7 +1650,7 @@ __javascript__/ios_app.js
 </table>
 </div>
 <div class="section" id="example-react">
-<h2>7.7. Example: React<a class="headerlink" href="#example-react" title="Permalink to this headline">¶</a></h2>
+<h2>6.7. Example: React<a class="headerlink" href="#example-react" title="Permalink to this headline">¶</a></h2>
 <p><em>React</em> is a JavaScript library for easy creation of interactive UI's. Changes to the UI are made by fast manipulation of a light-weight virtual DOM. The real DOM, which is much slower to manipulate, is then compared with the altered virtual DOM and updated efficiently in a minimum number of steps. This way of working leads to good performance, at the same time keeping a straightforward structure of application UI code, since the complexities of optimizing DOM updates are left to the React library. React is unintrusive and mixes well with Transcrypt, allowing creation of extensive web applications that combine maintainability with speed. This example once again clearly illustrates the philosophy behind Transcrypt: rather than confining you to a &quot;parallel&quot; universe that could never keep up, Transcrypt offers you direct access to the ever expanding universe of innovative JavaScript libraries.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1736,7 +1703,6 @@ __javascript__/ios_app.js
 <td><div class="literal-block-wrapper first last container" id="react-demo-mod-js">
 <div class="code-block-caption"><span class="caption-text">react_demo.mod.js</span><a class="headerlink" href="#react-demo-mod-js" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv6__&#39;];
         var h = function (elm_type, props) {
             if (typeof props == &#39;undefined&#39; || (props != null &amp;&amp; props .__class__ == __kwargdict__)) {;
                 var props = &#39;&#39;;
@@ -1780,7 +1746,7 @@ __javascript__/ios_app.js
 </table>
 </div>
 <div class="section" id="example-riot">
-<h2>7.8. Example: Riot<a class="headerlink" href="#example-riot" title="Permalink to this headline">¶</a></h2>
+<h2>6.8. Example: Riot<a class="headerlink" href="#example-riot" title="Permalink to this headline">¶</a></h2>
 <p><em>Riot</em> is a UI framework that combines the use of custom tags and a virtual DOM, much like the one in React. Custom tags look like ordinary HTML tags, but whereas HTML tags only define structure, Riot tags define structure, style and behaviour. Custom tags are compiled to JavaScript by a compiler that comes with Riot. With these custom tags as reusable components, web pages can be built. Riot itself is tiny, and the virtual DOM allows for fast adaptation of page content.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -2044,19 +2010,22 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                     var lifecycle_ev = list ([&#39;before-mount&#39;, &#39;mount&#39;, &#39;update&#39;, &#39;unmount&#39;]);
                     var cur_tag_col = 0;
                     var RiotTag = __class__ (&#39;RiotTag&#39;, [object], {
+                        debug: null,
+                        template: &#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;,
+                        style: &#39;&#39;,
+                        node_name: &#39;unmounted&#39;,
+                        opts: null,
                         get __init__ () {return __get__ (this, function (self, tag, opts) {
                             self.opts = opts;
                             self._setup_tag (tag);
-                            cur_tag_col = (cur_tag_col + 1) % len (colors);
+                            cur_tag_col = __mod__ (cur_tag_col + 1, len (colors));
                             self.my_col = colors.items () [cur_tag_col] [1];
                         });},
                         get _setup_tag () {return __get__ (this, function (self, tag) {
                             tag.py_obj = self;
                             self.riot_tag = tag;
                             var handlers = dict ({});
-                            var __iterator0__ = py_iter (lifecycle_ev);
-                            while (true) {
-                                try {var ev = py_next (__iterator0__);} catch (exception) {break;}
+                            for (var ev of lifecycle_ev){
                                 var f = getattr (self, ev.py_replace (&#39;-&#39;, &#39;_&#39;));
                                 if (f) {
                                     tag.on (ev, f);
@@ -2067,9 +2036,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                             var msg = tuple ([].slice.apply (arguments).slice (1));
                             col_print (L (&#39;&lt;&#39;, self.my_col (self.node_name, self.my_col), &#39;/&gt; &#39;), M (&#39; &#39;.join (function () {
                                 var __accu0__ = [];
-                                var __iterator0__ = py_iter (msg);
-                                while (true) {
-                                    try {var s = py_next (__iterator0__);} catch (exception) {break;}
+                                for (var s of msg){
                                     __accu0__.append (s);
                                 }
                                 return __accu0__;
@@ -2101,9 +2068,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                             tag._immutables = __left0__;
                             var im = __left0__;
                             var lc = lifecycle_ev;
-                            var __iterator0__ = py_iter (dir (self));
-                            while (true) {
-                                try {var k = py_next (__iterator0__);} catch (exception) {break;}
+                            for (var k of dir (self)){
                                 if (k [0] == &#39;_&#39; || __in__ (k, lifecycle_ev) || k == &#39;before_mount&#39;) {
                                     continue;
                                 }
@@ -2122,11 +2087,6 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                                     })
                         });}
                     });
-                    RiotTag.debug = null;
-                    RiotTag.template = &#39;&lt;h1&gt;it worx&lt;/h1&gt;&#39;;
-                    RiotTag.style = &#39;&#39;;
-                    RiotTag.node_name = &#39;unmounted&#39;;
-                    RiotTag.opts = null;
                     __pragma__ (&#39;&lt;use&gt;&#39; +
                         &#39;color&#39; +
                     &#39;&lt;/use&gt;&#39;)
@@ -2220,9 +2180,12 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 <td><div class="literal-block-wrapper first last container" id="riot-demo-mod-js-compiled-by-transcrypt">
 <div class="code-block-caption"><span class="caption-text">riot_demo.mod.js, compiled by Transcrypt</span><a class="headerlink" href="#riot-demo-mod-js-compiled-by-transcrypt" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
-        var __symbols__ = [&#39;__esv6__&#39;];
         var RiotTag = __init__ (__world__.riot_tag).RiotTag;
         var P = __class__ (&#39;P&#39;, [RiotTag], {
+            debug: 1,
+            lv: list ([dict ({&#39;name&#39;: &#39;n0&#39;})]),
+            counter: 1,
+            template: &#39; &lt;div&gt;&lt;h1&gt;Riot Transcrypt Tag Instance {label}&lt;/h1&gt;\n                         &lt;div&gt;INNER&lt;/div&gt;&lt;/div&gt; &#39;,
             get count_up () {return __get__ (this, function (self) {
                 self.counter = self.counter + 1;
                 self.pp (&#39;counter:&#39;, self.counter, &#39;len lv:&#39;, len (self.lv), &#39;adding one lv&#39;);
@@ -2230,11 +2193,9 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                 return self.counter;
             });}
         });
-        P.debug = 1;
-        P.lv = list ([dict ({&#39;name&#39;: &#39;n0&#39;})]);
-        P.counter = 1;
-        P.template = &#39; &lt;div&gt;&lt;h1&gt;Riot Transcrypt Tag Instance {label}&lt;/h1&gt;\n                         &lt;div&gt;INNER&lt;/div&gt;&lt;/div&gt; &#39;;
         var Sample2 = __class__ (&#39;Sample2&#39;, [P], {
+            template: P.template.py_replace (&#39;INNER&#39;, &#39;\n    &lt;div&gt;\n    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;\n    &lt;/div&gt;\n    &#39;),
+            style: &#39;sample2 h5 {color: green}&#39;,
             get __init__ () {return __get__ (this, function (self, tag, opts) {
                 self.label = opts.label.capitalize ();
                 RiotTag.__init__ (self, tag, opts);
@@ -2246,8 +2207,6 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                 RiotTag.update (self);
             });}
         });
-        Sample2.template = P.template.py_replace (&#39;INNER&#39;, &#39;\n    &lt;div&gt;\n    &lt;h5 each=&quot;{lv}&quot;&gt;name: {name} - counter: {count_up()}&lt;/h5&gt;\n    &lt;/div&gt;\n    &#39;);
-        Sample2.style = &#39;sample2 h5 {color: green}&#39;;
         __pragma__ (&#39;&lt;use&gt;&#39; +
             &#39;riot_tag&#39; +
         &#39;&lt;/use&gt;&#39;)
@@ -2266,7 +2225,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
 </table>
 </div>
 <div class="section" id="example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">
-<h2>7.9. Example: Using input and print in a DOM __terminal__ element in your browser<a class="headerlink" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser" title="Permalink to this headline">¶</a></h2>
+<h2>6.9. Example: Using input and print in a DOM __terminal__ element in your browser<a class="headerlink" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser" title="Permalink to this headline">¶</a></h2>
 <p>Without special measures, Transcrypt's <em>print</em> function prints to the debugging console. However if there's an element with id <em>__terminal__</em> in your DOM tree, the <em>print</em> function prints to this element. Moreover, the <em>input</em> function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.</p>
 <p>This means that you can write applications with blocking I/O, rather than event driven behaviour, e.g. for simple activities or, since they are intuitively easy to comprehend, for educational purposes.</p>
 <table border="1" class="docutils">
@@ -2338,31 +2297,31 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
             </a></p>
   <h3><a href="index.html">Subjects</a></h3>
   <ul>
-<li><a class="reference internal" href="#">6. Seamless interoperation with the DOM</a><ul>
-<li><a class="reference internal" href="#practical-example-a-simple-responsive-website-using-no-html-or-css-at-all">6.1. Practical example: a simple, responsive website using no HTML or CSS at all</a></li>
-<li><a class="reference internal" href="#svg-example-turtle-graphics">6.2. SVG example: Turtle graphics</a></li>
+<li><a class="reference internal" href="#">5. Seamless interoperation with the DOM</a><ul>
+<li><a class="reference internal" href="#practical-example-a-simple-responsive-website-using-no-html-or-css-at-all">5.1. Practical example: a simple, responsive website using no HTML or CSS at all</a></li>
+<li><a class="reference internal" href="#svg-example-turtle-graphics">5.2. SVG example: Turtle graphics</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mixed-examples">7. Mixed examples</a><ul>
-<li><a class="reference internal" href="#three-ways-of-integration-with-javascript-libraries">7.1. Three ways of integration with JavaScript libraries</a></li>
-<li><a class="reference internal" href="#example-pong">7.2. Example: Pong</a></li>
-<li><a class="reference internal" href="#joined-minification">7.3. Joined minification</a></li>
-<li><a class="reference internal" href="#example-jquery">7.4. Example: jQuery</a></li>
-<li><a class="reference internal" href="#example-ios-web-app-with-native-look-and-feel">7.5. Example: iOS web app with native look and feel</a></li>
-<li><a class="reference internal" href="#example-d3-js">7.6. Example: D3.js</a></li>
-<li><a class="reference internal" href="#example-react">7.7. Example: React</a></li>
-<li><a class="reference internal" href="#example-riot">7.8. Example: Riot</a></li>
-<li><a class="reference internal" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">7.9. Example: Using input and print in a DOM __terminal__ element in your browser</a></li>
+<li><a class="reference internal" href="#mixed-examples">6. Mixed examples</a><ul>
+<li><a class="reference internal" href="#three-ways-of-integration-with-javascript-libraries">6.1. Three ways of integration with JavaScript libraries</a></li>
+<li><a class="reference internal" href="#example-pong">6.2. Example: Pong</a></li>
+<li><a class="reference internal" href="#joined-minification">6.3. Joined minification</a></li>
+<li><a class="reference internal" href="#example-jquery">6.4. Example: jQuery</a></li>
+<li><a class="reference internal" href="#example-ios-web-app-with-native-look-and-feel">6.5. Example: iOS web app with native look and feel</a></li>
+<li><a class="reference internal" href="#example-d3-js">6.6. Example: D3.js</a></li>
+<li><a class="reference internal" href="#example-react">6.7. Example: React</a></li>
+<li><a class="reference internal" href="#example-riot">6.8. Example: Riot</a></li>
+<li><a class="reference internal" href="#example-using-input-and-print-in-a-dom-terminal-element-in-your-browser">6.9. Example: Using input and print in a DOM __terminal__ element in your browser</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="supported_constructs.html"
-                        title="previous chapter">5. Systematic code examples: a guided tour of Transcrypt</a></p>
+                        title="previous chapter">4. Systematic code examples: a guided tour of Transcrypt</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="autotesting_transcrypt.html"
-                        title="next chapter">8. Autotesting Transcrypt code</a></p>
+                        title="next chapter">7. Autotesting Transcrypt code</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -2394,12 +2353,12 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="autotesting_transcrypt.html" title="8. Autotesting Transcrypt code"
+          <a href="autotesting_transcrypt.html" title="7. Autotesting Transcrypt code"
              >next</a> |</li>
         <li class="right" >
-          <a href="supported_constructs.html" title="5. Systematic code examples: a guided tour of Transcrypt"
+          <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.219 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
