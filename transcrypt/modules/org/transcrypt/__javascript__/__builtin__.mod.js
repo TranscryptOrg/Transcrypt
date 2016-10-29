@@ -28,10 +28,10 @@
 __pragma__ ('ifdef', '__complex__')
 	var complex = __all__.complex;
 __pragma__ ('endif')
-	
 	__all__.print = __all__.__terminal__.print;
 	__all__.input = __all__.__terminal__.input;
 	
+	var __terminal__ = __all__.__terminal__;
 	var print = __all__.print;
 	var input = __all__.input;
 

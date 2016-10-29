@@ -153,8 +153,8 @@ Local classes: inside other classes and functions
 	:tab-width: 4
 	:caption: Testlet: local_classes
 
-Metaclasses: overriding the type.__new__ in a descendant metaclass
-------------------------------------------------------------------
+Metaclasses: overriding type.__new__ in a descendant metaclass
+--------------------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/metaclasses/__init__.py
 	:tab-width: 4

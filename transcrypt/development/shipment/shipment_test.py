@@ -64,6 +64,7 @@ def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = '', o
 	
 # Perform all tests
 
+os.system ('{} -h'.format (transpileCommand))
 for esvSwitch in ('', '-e 6 '):
 	for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
 		switches = fcallSwitch + esvSwitch

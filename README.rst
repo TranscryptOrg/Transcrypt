@@ -39,6 +39,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for issue #140: commandline --help / -h switch broken
 - Enhancement for issue #128: metaclasses (only __new__ overridable) + test case / doc example
 - Enhancement for issue #136: dict.get not implemented
 - Fix for issue #134: %= operator translated incorrectly

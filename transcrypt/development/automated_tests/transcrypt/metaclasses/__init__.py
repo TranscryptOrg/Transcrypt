@@ -3,7 +3,7 @@ from org.transcrypt.stubs.browser import __pragma__
 class UppercaserMeta (type):
 	def __new__ (meta, name, bases, attribs):
 		__pragma__ ('jsiter')		# Translate for ... in directly to JavaScript for ... in ... and translate {} to bare {} rather than to dict {}
-									# Using bare {} for as attribs parameter to __new__ avoids dict attributes masking regular attributes
+									# Using bare {} as attribs parameter to __new__ avoids dict attributes masking regular attributes
 									# For more flexibility use __pragma__ ('js', '{}', '''...''')
 		upperAttribs = {}
 		

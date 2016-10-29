@@ -1,3 +1,5 @@
+# Also contains small enhancements
+
 'This is a single line docstring'
 class A:
 	'''
@@ -39,3 +41,4 @@ def run (autoTester):
 	autoTester.check ('Pull 59')
 	autoTester.check (list (filter (lambda x: x % 2 == 0, range (10))))
 	autoTester.check (list (map (lambda x: x*x, range (0, 31, 3))))
+	
