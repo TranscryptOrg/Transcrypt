@@ -1,3 +1,5 @@
+from org.transcrypt.stubs.browser import __pragma__
+
 class Iterable:
 	def __init__ (self, i):
 		self.aList = range (0, 50, i)
@@ -62,4 +64,25 @@ def run (autoTester):
 		for n in iterable:
 			autoTester.check (n)
 			
-			
+	__pragma__ ('gsend')
+
+	def test0 ():
+		r = 0
+		while True:
+			r = r + (yield r)
+
+	gen0 = test0()
+	next (gen0)
+	autoTester.check (gen0.send (1))
+	autoTester.check (gen0.send (2))
+
+	def test1 ():
+		r = 0
+		while True:
+			r = (yield r) + r
+
+	gen1 = test1()
+	next (gen1)
+	autoTester.check (gen1.send (3))
+	autoTester.check (gen1.send (4))
+	

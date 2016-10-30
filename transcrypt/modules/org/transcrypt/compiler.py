@@ -546,6 +546,7 @@ class Generator (ast.NodeVisitor):
 		self.conditionalCodeGeneration = True
 		self.stripTuple = False		# For speed, tuples are translated to bare JavaScript arrays if they're just indices. Will autoreset.
 		self.stripTuples = False	# For correctness, tuples are translated to bare JavaScript arrays if they are assignment target in a JavaScript 6 for-loop. Will not autoreset.
+		self.replaceSend = False
 		
 		try:
 			self.visit (module.parseTree)
@@ -565,6 +566,8 @@ class Generator (ast.NodeVisitor):
 				return self.operators [type (exprNode.op)][1]
 			elif type (exprNode) == ast.Compare:
 				return self.operators [type (exprNode.ops [0])][1]	# All ops have same priority
+			elif type (exprNode) == ast.Yield:
+				return -1000000
 			else:
 				return 1000000	# No need for parenthesis
 				
@@ -1271,6 +1274,11 @@ class Generator (ast.NodeVisitor):
 				elif node.args [0] .s == 'nojsmod':		# % has Python behaviour
 					self.allowJavaScriptMod = False
 					
+				elif node.args [0] .s == 'gsend':		# Replace send by next.value
+					self.replaceSend = True
+				elif node.args [0] .s == 'nogsend':		# Don't replace send by next.value
+					self.replaceSend = False
+					
 				elif node.args [0] .s == 'tconv':		# Automatic conversion to truth value supported
 					self.allowConversionToTruthValue = True
 				elif node.args [0] .s == 'notconv':		# Automatic conversion to truth value not supported
@@ -1344,12 +1352,32 @@ class Generator (ast.NodeVisitor):
 				self.visit (node.args [0])
 				self.emit ('--')
 				return
-					
+				
+		elif type (node.func) == ast.Attribute:
+			if self.replaceSend and node.func.attr == 'send':	# Construct Attribute instead of bare Call node on the fly and visit it
+				self.visit (ast.Attribute (
+					value = ast.Call (
+						func = ast.Attribute (
+							value = ast.Name (
+								id = node.func.value.id,
+								ctx = ast.Load
+							),
+							attr = 'js_next',
+							ctx = ast.Load
+						),
+						args = node.args,
+						keywords = node.keywords
+					),
+					attr = 'value',
+					ctx = ast.Load
+				))
+				return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
+			
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
 			self.visit (ast.Call (
 				func = ast.Name (
 					id = '__call__',
-					ctx = ast.Load	# Don't use node.func.ctx sicne callable object decorators don't have a ctx
+					ctx = ast.Load	# Don't use node.func.ctx since callable object decorators don't have a ctx
 				),
 				args = [node.func] + node.args,
 				keywords = node.keywords
