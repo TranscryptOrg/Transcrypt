@@ -39,6 +39,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Fix for issue #145: List sorting (fails due to erroneous compare operator)
+- Fix for issue #144: List comprehensions and opov (don't go well together, missing 'this' pointer)
 - Fix for issue #138: Parse error using 'yield' in expression, 'send' missing (see testlet iterators_and_generators) and the discussion at the issue.
 - Fix for issue #140: commandline --help / -h switch broken
 - Enhancement for issue #128: metaclasses (only __new__ overridable) + test case / doc example
@@ -89,7 +91,7 @@ Known restrictions
 Known bugs
 ==========
 
-None
+Module 'time' broken, probably due to end of daylight savings time
 
 Readability
 ===========

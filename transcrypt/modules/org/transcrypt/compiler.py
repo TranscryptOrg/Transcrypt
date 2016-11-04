@@ -1211,7 +1211,7 @@ class Generator (ast.NodeVisitor):
 			for searchDir in self.module.program.moduleSearchDirs:
 				filePath = '{}/{}'.format (searchDir, fileName)
 				if os.path.isfile (filePath):
-					return open (filePath) .read ()
+					return open (filePath, encoding = 'utf-8') .read ()
 				else:
 					searchedIncludePaths.append (filePath)
 			else:
