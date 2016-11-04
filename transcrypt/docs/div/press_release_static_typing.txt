@@ -1,0 +1,22 @@
+LS
+ 
+Below you’ll find the press release of the latest version of the Transcrypt open source Python to Javascript compiler.
+ 
+Kind regards
+Jacques de Hooge
+Initiator of the Transcrypt open source project.
+ 
+ 
+===================================================================
+(PRESS RELEASE)
+ 
+Transcrypt Python in the Browser now has static typechecks.
+ 
+The Transcrypt Python to Javascript compiler now comes with the Mypy static typechecker fully integrated.
+ 
+With the release of Transcrypt Athens, Python developers can develop browser applications using static typechecking. The Transcrypt Python 3.5 to JavaScript compiler comes with the Mypy static checker integrated. It can be activated with a command line switch. Typechecking can be done optionally, by inserting Python 3.5's standard type annotations, so it is e.g. possible to check only on module boundaries, making development with a team less error prone. In addition, Transcrypt enables debugging directly from the Python sourcecode by using sourcemaps. While the generated code has roughly the same speed and size as native JavaScript code, multiple inheritance and local operator overloading are supported. The generated code is JavaScript 5 or 6.
+ 
+ 
+www.transcrypt.org
+info@transcrypt.org
+===================================================================

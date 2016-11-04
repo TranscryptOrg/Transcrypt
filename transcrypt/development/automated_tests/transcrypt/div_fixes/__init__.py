@@ -129,3 +129,46 @@ def run (autoTester):
 	aDict = {'a': 'ape', 'b': 'banana'}
 	autoTester.check (aDict.get ('a', 'noApe'), aDict.get ('b'), aDict.get ('c', 'noCarot'), aDict.get ('d'))
 	
+	autoTester.check ('Issue 144')
+	__pragma__('opov')
+	aList = [x for x in [1, 2, 3]]
+	autoTester.check (aList)
+	__pragma__('noopov')	
+	
+	autoTester.check ('<br><br>Issue 145<br>')	# List sorting incorrect in case of multiple columns
+	
+	class SortTest:
+		def __init__ (self):
+			self.alphabet = 'abcdefghijklmnopqrstuvwxyz'
+			self.nChars = 10
+			self.nCols = 10
+			self.nRows = 30
+			
+			self.pseudoRandom = 0
+			
+			def randomWord ():
+				word = ''
+				for iChar in range (self.nChars):
+					self.pseudoRandom = (81212 * self.pseudoRandom + 28411) % 134456
+#					self.pseudoRandom = (1234 * self.pseudoRandom + 57) % 137			# Deliberately short period
+					word += self.alphabet [self.pseudoRandom % 26]
+				return word	
+		
+			self.rows = [[randomWord () for iCol in range (self.nCols)] for iRow in range (self.nRows)]
+				
+		def sort (self):
+			for iCol in reversed (range (self.nCols)):
+				self.rows.sort (key = lambda row: row [iCol])
+			
+	sortTest = SortTest ()
+	
+	autoTester.check ('<br>Unsorted:<br>')
+	for row in sortTest.rows:
+		autoTester.check ('{}<br>'.format (','.join ([word for word in row])))
+		
+	sortTest.sort ()
+	
+	autoTester.check ('<br>Sorted:<br>')
+	for row in sortTest.rows:
+		autoTester.check ('{}<br>'.format (','.join ([word for word in row])))
+	

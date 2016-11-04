@@ -1373,13 +1373,23 @@ class Generator (ast.NodeVisitor):
 				))
 				return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
 			
-		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# Add Call node on the fly and visit it
-			self.visit (ast.Call (
+		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# If operator overloading and whe're not already in the __call__
+																												# that we generated on the fly,
+			self.visit (ast.Call (																				# generate a call on the fly and visit it
 				func = ast.Name (
 					id = '__call__',
-					ctx = ast.Load	# Don't use node.func.ctx since callable object decorators don't have a ctx
+					ctx = ast.Load	# Don't use node.func.ctx since callable object decorators don't have a ctx, and they too the overloading mechanism
 				),
-				args = [node.func] + node.args,
+				args = (
+						[node.func, node.func.value] + node.args
+					if type (node.func) == ast.Attribute else
+						[
+							node.func,
+							ast.NameConstant (
+								value = None
+							)
+						] + node.args
+				),
 				keywords = node.keywords
 			))
 			return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit. 

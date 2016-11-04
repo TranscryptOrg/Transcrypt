@@ -1461,13 +1461,13 @@ __pragma__ ('endif')
 	};
 	__all__.__setslice__ = __setslice__;
 
-	var __call__ = function (/* <callee>, <params>* */) {
+	var __call__ = function (/* <callee>, <this>, <params>* */) {
 		var args = [] .slice.apply (arguments)
-		if (typeof args [0] == 'object' && '__call__' in args [0]) {
-			return args [0] .__call__ .apply (null,  args.slice (1));
+		if (typeof args [0] == 'object' && '__call__' in args [0]) {		// Overloaded
+			return args [0] .__call__ .apply (args [1], args.slice (2));
 		}
-		else {
-			return args [0] .apply (null, args.slice (1));
+		else {																// Native
+			return args [0] .apply (args [1], args.slice (2));
 		}		
 	};
 	__all__.__call__ = __call__;

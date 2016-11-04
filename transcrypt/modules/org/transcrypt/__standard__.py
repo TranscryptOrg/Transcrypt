@@ -57,12 +57,13 @@ class AssertionError (Exception):
 			Exception.__init__ (self, error = error)
 	
 __pragma__ ('kwargs')
-			
+
+
 def __sort__ (iterable, key = None, reverse = False):	# Used by py_sort, can deal with kwargs
 	if key:
-		iterable.sort (lambda a, b: key (a) > key (b))	# JavaScript sort
+		iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1)	# JavaScript sort, case == irrelevant for sorting
 	else:
-		iterable.sort ()								# JavaScript sort
+		iterable.sort ()		# JavaScript sort
 		
 	if reverse:
 		iterable.reverse ()
@@ -75,7 +76,6 @@ def sorted (iterable, key = None, reverse = False):
 		
 	__sort__ (result, key, reverse)
 	return result
-
 
 __pragma__ ('nokwargs')
 
