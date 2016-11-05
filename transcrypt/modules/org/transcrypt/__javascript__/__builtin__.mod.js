@@ -130,7 +130,7 @@ __pragma__ ('endif')
 	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
 		if (py_typeof (container) == dict) {
-			return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
+			return container.py_keys () .indexOf (element) > -1;								   // The keys of parameter 'element' are in an array
 		}
 		else {
 			return container.indexOf ? container.indexOf (element) > -1 : element in container; // Parameter 'element' itself is an array, string or object
@@ -230,6 +230,34 @@ __pragma__ ('endif')
 	__all__.py_typeof = py_typeof;
 	
 	var isinstance = function (anObject, classinfo) {
+		// classinfo can be array:
+		if ( classinfo.constructor !== Array ) {
+			classinfo = [classinfo]
+		}
+		for (var index = 0; index < classinfo.length; index++) {
+			if (_isinstance ( anObject, classinfo[index] )) return true
+		}
+		return false
+	}
+	var _isinstance = function (anObject, classinfo) {
+		// simple types:
+		var n = classinfo.name // seems to be always set
+		if (['boolean', 'number', 'string'].indexOf( typeof ( anObject )) > -1) {
+			var t = typeof ( anObject );
+			if (t == 'boolean' && ( n == 'bool' || n == 'int') )	   return true
+			if (t == 'string' && n == 'str')						   return true
+			if (t == 'number' && n == 'int'   && anObject % 1 === 0 )  return true
+			if (t == 'number' && n == 'float' && anObject % 1 !== 0 )  return true
+			return false
+		}
+		// list? python tuples are also js arrays, we can't detect the diff.
+		// -> ask for isinstance((1,2), 'list'), since js sided it *is* one
+		if (anObject.constructor === Array) {
+			return (n == 'list') ? true : false
+		}
+		// this only works for Transcrypt dicts, clearly:
+		if ('py_keys' in anObject) return n == 'dict' ? true : false
+
 		function isA (queryClass) {
 			if (queryClass == classinfo) {
 				return true;
@@ -1157,7 +1185,7 @@ __pragma__ ('else')
 		for (var attrib in this) {
 			if (!__specialattrib__ (attrib)) {
 				keys.push (attrib);
-			}     
+			}	 
 		}
 		return keys;
 	}
@@ -1167,7 +1195,7 @@ __pragma__ ('else')
 		for (var attrib in this) {
 			if (!__specialattrib__ (attrib)) {
 				items.push ([attrib, this [attrib]]);
-			}     
+			}	 
 		}
 		return items;
 	}

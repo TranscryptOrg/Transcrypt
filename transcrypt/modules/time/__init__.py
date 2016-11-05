@@ -17,7 +17,6 @@ Spec for all below (must have open to read this module):
 
 Jul 2016, Gunther Klessinger, Axiros GmbH
 """
-
 # we don't need those:
 __pragma__ ('nokwargs')
 
@@ -81,9 +80,9 @@ def _local_time_tuple(jd):
             ,jd.getHours()
             ,jd.getMinutes()
             ,jd.getSeconds()
-            ,jd.getDay() - 1
+            ,jd.getDay() - 1 if jd.getDay() > 0 else 6
             ,_day_of_year(jd, True)
-            ,_daylight(jd)
+            ,_daylight_in_effect(jd)
             ,jd.getMilliseconds() # not in use by the pub API
            )
     return res
@@ -157,9 +156,20 @@ def _daylight(t):
     check-if-daylight-saving-time-is-in-effect-and-if-it-is-for-how-many-hours
 
     return 0 or 1 like python
+    CAUTION: https://docs.python.org/2/library/time.html#time.daylight:
+    "Nonzero if a DST timezone is DEFINED." (but not necessarily in effect!!)
+    -> we just check if there is a delta of tz offsets in june an jan of the
+    year of t:
     """
     jj = __jan_jun_tz(t)
-    # in southern hemisphere the daylight saving is in winter months!
+    if jj[0] != jj[1]:
+        # daylight saving is DEFINED, since there's a difference in tz offsets
+        # in jan and jun, in the year of t:
+        return 1
+    return 0
+
+def _daylight_in_effect(t):
+    jj = __jan_jun_tz(t)
     if min(jj[0], jj[1]) == t.getTimezoneOffset():
         return 1
     return 0
@@ -179,12 +189,17 @@ def __tzn(t):
         return 'n.a.'
 
 def _tzname(t):
+    '''the first is the name of the local non-DST timezone,
+	the second is the name of the local DST timezone.'''
     cn = __tzn(t)
     ret = [cn, cn]
     jj = __jan_jun_tz(t, __tzn)
+    ind = 0
+    if not _daylight_in_effect(t):
+        ind = 1
     for i in jj:
         if i != cn:
-            ret[0] = i
+            ret[ind] = i
     return tuple(ret)
 
 
@@ -192,8 +207,14 @@ def _tzname(t):
 
 # ------------------------------------------------------------------ Public API
 
-# we calc that only once. I mean - we run in the browser in the end:
-altzone  = __now.getTimezoneOffset() * 60
+# we calc those only once. I mean - we run in the browser in the end.
+
+altzone = __now.getTimezoneOffset()
+if not _daylight_in_effect(__now):
+    # then we must use the other offset we have in the current year:
+    _jj  = __jan_jun_tz(__now)
+    altzone = _jj[0] if altzone == _jj[1] else _jj[1]
+altzone = altzone * 60
 
 timezone = _timezone(__now) * 60
 
