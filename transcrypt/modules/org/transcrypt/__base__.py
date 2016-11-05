@@ -5,7 +5,7 @@
 class __Envir__:
 	def __init__ (self):
 		self.transpiler_name = 'transcrypt'
-		self.transpiler_version = '3.5.234.b'
+		self.transpiler_version = '3.5.235'
 		self.target_subdir = '__javascript__'
 		
 __envir__ = __Envir__ ()

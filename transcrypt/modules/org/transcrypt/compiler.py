@@ -375,7 +375,7 @@ class Module:
 		
 		generator = Generator (self)
 		
-		if utils.commandArgs.map or generator.allowDmap:	# Generation of source map and / or prefix map required
+		if utils.commandArgs.map or generator.allowDebugMap:	# Generation of source map and / or prefix map required
 			instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')	
 						
 			# Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
@@ -390,7 +390,7 @@ class Module:
 				
 				# Only append non-emptpy statements and their number info
 				if targetLine.strip () != ';':
-					if generator.allowDmap:
+					if generator.allowDebugMap:
 						targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)
 				
 					targetLines.append (targetLine)
@@ -455,6 +455,8 @@ class Generator (ast.NodeVisitor):
 		self.use = set ()
 		self.all = set ()
 		self.importHeads = set ()
+		self.docString = None
+		self.docStringEmitted = False
 		self.lineNr = 1
 		self.lineNrString = ''
 
@@ -536,10 +538,11 @@ class Generator (ast.NodeVisitor):
 		self.allowOperatorOverloading = utils.commandArgs.opov
 		self.allowConversionToIterable = utils.commandArgs.iconv
 		self.allowConversionToTruthValue = utils.commandArgs.tconv
+		self.allowDebugMap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
+		self.allowDocAttribs = utils.commandArgs.docat
 		self.allowJavaScriptIter = False
 		self.allowJavaScriptKeys = utils.commandArgs.jskeys
 		self.allowJavaScriptMod = utils.commandArgs.jsmod
-		self.allowDmap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
 		self.allowMemoizeCalls = utils.commandArgs.fcall
 		
 		self.noskipCodeGeneration = True
@@ -650,7 +653,7 @@ class Generator (ast.NodeVisitor):
 			self.emit (')')
 			
 	def adaptLineNrString (self, node):
-		if utils.commandArgs.map or self.allowDmap:
+		if utils.commandArgs.map or self.allowDebugMap:
 			if hasattr (node, 'lineno'):
 				lineNr = node.lineno
 			else:
@@ -660,12 +663,21 @@ class Generator (ast.NodeVisitor):
 		else:
 			return ''
 		
-	def emitBody (self, body):
+	def isDocString (self, stmt):
+		return isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str)
+		
+	def emitSetDoc (self, stmt):
+		self.emit (' .__setdoc__ (')
+		self.visit (stmt)
+		self.emit (')')
+					
+	def emitBody (self, body):	# First docstring already removed
 		for stmt in body:
-			if isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str):
-				continue
-			self.visit (stmt)
-			self.emit (';\n')
+			if self.isDocString (stmt):	# Further docstrings ignored
+				pass
+			else:
+				self.visit (stmt)
+				self.emit (';\n')
 			
 	def emitDecorators (self, callable):
 		for decorator in reversed (callable.decorator_list):
@@ -1247,12 +1259,17 @@ class Generator (ast.NodeVisitor):
 								self.aliasers.pop (index)
 								
 				elif node.args [0] .s == 'noanno':
-					self.allowDmap = False
+					self.allowDebugMap = False
 					
 				elif node.args [0] .s == 'fcall':
 					self.allowMemoizeCalls = True
 				elif node.args [0] .s == 'nofcall':
 					self.allowMemoizeCalls = False
+					
+				elif node.args [0] .s == 'docat':
+					self.allowDocAttribs = True
+				elif node.args [0] .s == 'nodocat':
+					self.allowDocAttribs = False
 					
 				elif node.args [0] .s == 'iconv':		# Automatic conversion to iterable supported
 					self.allowConversionToIterable = True
@@ -1477,7 +1494,9 @@ class Generator (ast.NodeVisitor):
 		classVarAssigns = []
 		index = 0
 		for stmt in node.body:
-			if type (stmt) in (ast.FunctionDef, ast.ClassDef):
+			if self.isDocString (stmt):
+				pass
+			elif type (stmt) in (ast.FunctionDef, ast.ClassDef):
 				self.emitComma (index, False)
 				self.visit (stmt)
 				index += 1
@@ -1510,6 +1529,9 @@ class Generator (ast.NodeVisitor):
 				)
 				
 		self.emit (')')
+		
+		if self.allowDocAttribs and self.isDocString (node.body [0]):
+			self.emitSetDoc (node.body [0])
 
 		for index, classVarAssign in enumerate (classVarAssigns):
 			self.emit (';\n')
@@ -1778,7 +1800,7 @@ class Generator (ast.NodeVisitor):
 		else:
 			self.prevTemp ('break')
 						
-	def visit_FunctionDef (self, node):
+	def visit_FunctionDef (self, node):	
 		def emitScopedBody ():
 			self.inscope (node)
 			
@@ -1809,6 +1831,9 @@ class Generator (ast.NodeVisitor):
 				emitScopedBody ()
 				self.emit ('}}')
 				
+				if self.allowDocAttribs and self.isDocString (node.body [0]):
+					self.emitSetDoc (node.body [0])
+				
 				self.emitDecorators (node)
 			else:															# Class scope, so it's a method and needs the currying mechanism
 				self.emit ('\n')
@@ -1823,11 +1848,14 @@ class Generator (ast.NodeVisitor):
 				emitScopedBody ()
 				self.emit ('}}')
 				
+				if self.allowDocAttribs and self.isDocString (node.body [0]):
+					self.emitSetDoc (node.body [0])
+				
 				if self.allowMemoizeCalls:
 					self.emit (', \'{}\'', node.name)	# Name will be used as attribute name to add bound function to instance
 					
 				self.emit (');}}')
-				
+
 				# Method decorators ignored, but @classmethod trivially works, since the class is the prototype of the object
 				# So the object is an extension of the class, and anything you can do with a class, you can do with an object
 				
@@ -2077,8 +2105,22 @@ class Generator (ast.NodeVisitor):
 		importHeadsIndex = len (self.targetFragments)
 		importHeadsLevel = self.indentLevel
 		
-		self.emitBody (node.body)
-			
+		for stmt in node.body:
+			if self.isDocString (stmt):
+				if not self.docString:	# Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
+					self.docString = stmt
+			else:
+				self.visit (stmt)
+				self.emit (';\n')
+
+			# As soon as doc attribs are allowed, emit only once the first one ever seen, to match CPython behaviour
+			if not self.docStringEmitted and self.allowDocAttribs and self.docString:
+				self.emit ('var __doc__ = ')
+				self.visit (self.docString)
+				self.emit (';\n')
+				self.all.add ('__doc__')
+				self.docStringEmitted = True
+						
 		if self.use:
 			self.use = sorted (self.use)
 			self.emit ('__pragma__ (\'<use>\' +\n')	# Only the last occurence of <use> and </use> are special.

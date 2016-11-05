@@ -97,6 +97,17 @@ Dictionaries: dict revisited
 	:tab-width: 4
 	:caption: Testlet: dictionaries
 
+.. _autotest_docstrings:
+	
+Docstrings: __doc__ attribute generated optionally
+--------------------------------------------------
+
+To keep the generated code lean, generation of *__doc__* attributes is controlled per module by *__pragma__ ('docat')* or by the *-d* / *--docat* command line switch, combined with user per module of *__pragma__ ('nodocat')*
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/docstrings/__init__.py
+	:tab-width: 4
+	:caption: Testlet: docstrings
+
 Exceptions: exception class hierarchy, finally
 ----------------------------------------------
 

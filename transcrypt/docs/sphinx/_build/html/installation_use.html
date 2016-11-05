@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Getting started &mdash; Transcrypt 3.5.232 documentation</title>
+    <title>2. Getting started &mdash; Transcrypt 3.5.234.d documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.232',
+        VERSION:     '3.5.234.d',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.232 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.234.d documentation" href="index.html" />
     <link rel="next" title="3. Special facilities" href="special_facilities.html" />
     <link rel="prev" title="1. Transcrypt: what and why" href="what_why.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -202,6 +202,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--anno&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;annotate target files that were compiled from Python with source file names and source line numbers&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-b&#39;</span><span class="p">,</span> <span class="s">&#39;--build&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;rebuild all target files from scratch&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--complex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable complex number support, locally requires operator overloading&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--docat&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable __doc__ attributes. Apply sparsely, since it will make docstrings part of the generated code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-dc&#39;</span><span class="p">,</span> <span class="s">&#39;--dcheck&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: perform lightweight consistency check&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-da&#39;</span><span class="p">,</span> <span class="s">&#39;--dassert&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: activate assertions&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-de&#39;</span><span class="p">,</span> <span class="s">&#39;--dextex&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;debug: show extended exception reports&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
@@ -213,7 +214,7 @@ They are specified in the source code of Transcrypt as follows:</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="s">&#39;--gen&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable generators and iterators. Disadvised, since it will result in a function call for each loop iteration. Preferably use __pragma__ (&#39;gen&#39;) and __pragma__ (&#39;nogen&#39;)&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="s">&#39;--iconv&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable automatic conversion to iterable by default. Disadvised, since it will result in a type check for each for-loop. Preferably use __pragma__ (&#39;iconv&#39;) and __pragma__ (</span><span class="se">\&#39;</span><span class="s">noiconv</span><span class="se">\&#39;</span><span class="s">) to enable automatic conversion locally&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-jk&#39;</span><span class="p">,</span> <span class="s">&#39;--jskeys&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;interpret {key: &#39;value&#39;} as {&#39;key&#39;: &#39;value&#39;} and forbid {key (): &#39;value&#39;}, as JavaScript does. Disadvised, since it&#39;s less flexible than the Python interpretation. Either follow Python semantics by using {&#39;key&#39;: &#39;value&#39;} explicitly if you want literal keys or use __pragma__ (&#39;jskeys&#39;) and __pragma__ (&#39;nojskeys&#39;) locally instead to make clear local deviation from Python semantics&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-jm&#39;</span><span class="p">,</span> <span class="s">&#39;--jsmod&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;give % and %= JavaScript rather than Python behaviour. Disadvised, since it deviates from the mathematical &#39;modulo&#39; operator. Either follow Python semantics or use __pragma__ (&#39;jskeys&#39;) and __pragma__ (&#39;nojskeys&#39;) locally instead to make clear local deviation.&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-jm&#39;</span><span class="p">,</span> <span class="s">&#39;--jsmod&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;give </span><span class="si">%%</span><span class="s"> and </span><span class="si">%%</span><span class="s">= JavaScript rather than Python behaviour. Disadvised, since it deviates from the mathematical &#39;modulo&#39; operator. Either follow Python semantics or use __pragma__ (&#39;jskeys&#39;) and __pragma__ (&#39;nojskeys&#39;) locally instead to make clear local deviation.&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="s">&#39;--kwargs&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;enable keyword arguments by default. In general this is disadvised, use __pragma__ (&#39;kwargs&#39;) and __pragma__(&#39;nokwargs&#39;) locally instead to prevent bloated code&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;--license&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;show license&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span> <span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--map&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;generate source map&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;store_true&#39;</span><span class="p">)</span>
@@ -463,7 +464,7 @@ In the <em>demo/nodejs_demo</em> subdirectory of the installation, you'll find t
 <div class="code-block-caption"><span class="caption-text">Results of the static type validation and the lightweight consistency check</span><a class="headerlink" href="#results-of-the-static-type-validation-and-the-lightweight-consistency-check" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre>
 D:\activ_tosh\geatec\transcrypt\transcrypt\development\manual_tests\static_types&gt;C:\Python35\python.exe D:\activ_tosh\geatec\transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 -ds -dc -n static_types.py 
-Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.5.232
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.5.234.d
 Copyright (C) Geatec Engineering. License: Apache 2.0
 
 Performing lightweight consistency check on module: D:/activ_tosh/geatec/transcrypt/transcrypt/modules/org/transcrypt/__standard__.py
@@ -567,7 +568,7 @@ Ready
         <li class="right" >
           <a href="what_why.html" title="1. Transcrypt: what and why"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

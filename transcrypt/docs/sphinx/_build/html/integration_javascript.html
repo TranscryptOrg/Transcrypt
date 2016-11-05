@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.232 documentation</title>
+    <title>5. Seamless interoperation with the DOM &mdash; Transcrypt 3.5.234.d documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.232',
+        VERSION:     '3.5.234.d',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.232 documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.234.d documentation" href="index.html" />
     <link rel="next" title="7. Autotesting Transcrypt code" href="autotesting_transcrypt.html" />
     <link rel="prev" title="4. Systematic code examples: a guided tour of Transcrypt" href="supported_constructs.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -985,7 +985,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get install () {return __get__ (this, function (self) {
                 self.playerLabels = function () {
                     var __accu0__ = [];
-                    for (var [py_name, position] of tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])])){
+                    for (var [py_name, position] of tuple ([tuple ([&#39;AZ keys:&#39;, -(7) / 16]), tuple ([&#39;KM keys:&#39;, 1 / 16])])) {
                         __accu0__.append (new fabric.Text (&#39;Player {}&#39;.format (py_name), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
@@ -1003,14 +1003,14 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get commit () {return __get__ (this, function (self) {
                 self.scoreLabels = function () {
                     var __accu0__ = [];
-                    for (var [score, position] of zip (self.scores, tuple ([-(2) / 16, 6 / 16]))){
+                    for (var [score, position] of zip (self.scores, tuple ([-(2) / 16, 6 / 16]))) {
                         __accu0__.append (new fabric.Text (&#39;{}&#39;.format (score), dict ({&#39;fill&#39;: &#39;white&#39;, &#39;fontFamily&#39;: &#39;arial&#39;, &#39;fontSize&#39;: &#39;{}&#39;.format (self.game.canvas.width / 30), &#39;left&#39;: self.game.orthoX (position * orthoWidth), &#39;top&#39;: self.game.orthoY (Math.floor (fieldHeight / 2) + self.nameShift)})));
                     }
                     return __accu0__;
                 } ();
             });},
             get draw () {return __get__ (this, function (self) {
-                for (var [playerLabel, scoreLabel] of zip (self.playerLabels, self.scoreLabels)){
+                for (var [playerLabel, scoreLabel] of zip (self.playerLabels, self.scoreLabels)) {
                     self.game.canvas.add (playerLabel);
                     self.game.canvas.add (scoreLabel);
                     self.game.canvas.add (self.hintLabel);
@@ -1045,7 +1045,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 window.addEventListener (&#39;keydown&#39;, self.keydown);
                 window.addEventListener (&#39;keyup&#39;, self.keyup);
                 self.buttons = list ([]);
-                for (var key of tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;])){
+                for (var key of tuple ([&#39;A&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;space&#39;, &#39;enter&#39;])) {
                     var button = document.getElementById (key);
                     button.addEventListener (&#39;mousedown&#39;, (function __lambda__ (aKey) {
                         return (function __lambda__ () {
@@ -1076,7 +1076,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                 self.resize ();
             });},
             get install () {return __get__ (this, function (self) {
-                for (var attribute of self.attributes){
+                for (var attribute of self.attributes) {
                     attribute.install ();
                 }
             });},
@@ -1113,13 +1113,13 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
                     }
                 }
                 else {
-                    for (var attribute of self.attributes){
+                    for (var attribute of self.attributes) {
                         attribute.predict ();
                     }
-                    for (var attribute of self.attributes){
+                    for (var attribute of self.attributes) {
                         attribute.interact ();
                     }
-                    for (var attribute of self.attributes){
+                    for (var attribute of self.attributes) {
                         attribute.commit ();
                     }
                 }
@@ -1127,20 +1127,20 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
             get scored () {return __get__ (this, function (self, playerIndex) {
                 self.scoreboard.increment (playerIndex);
                 self.serviceIndex = 1 - playerIndex;
-                for (var paddle of self.paddles){
+                for (var paddle of self.paddles) {
                     paddle.reset ();
                 }
                 self.ball.reset ();
                 self.pause = true;
             });},
             get commit () {return __get__ (this, function (self) {
-                for (var attribute of self.attributes){
+                for (var attribute of self.attributes) {
                     attribute.commit ();
                 }
             });},
             get draw () {return __get__ (this, function (self) {
                 self.canvas.clear ();
-                for (var attribute of self.attributes){
+                for (var attribute of self.attributes) {
                     attribute.draw ();
                 }
             });},
@@ -1258,7 +1258,7 @@ So both from an aestethical and from a conceptual point of view, turtle graphics
 <div class="highlight-python"><div class="highlight"><pre>    (function () {
         var start = function () {
             var changeColors = function () {
-                for (var div of $divs){
+                for (var div of $divs) {
                     $ (div).css (dict ({&#39;color&#39;: &#39;rgb({},{},{})&#39;.format (...function () {
                         var __accu0__ = [];
                         for (var i = 0; i &lt; 3; i++) {
@@ -2025,7 +2025,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                             tag.py_obj = self;
                             self.riot_tag = tag;
                             var handlers = dict ({});
-                            for (var ev of lifecycle_ev){
+                            for (var ev of lifecycle_ev) {
                                 var f = getattr (self, ev.py_replace (&#39;-&#39;, &#39;_&#39;));
                                 if (f) {
                                     tag.on (ev, f);
@@ -2036,7 +2036,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                             var msg = tuple ([].slice.apply (arguments).slice (1));
                             col_print (L (&#39;&lt;&#39;, self.my_col (self.node_name, self.my_col), &#39;/&gt; &#39;), M (&#39; &#39;.join (function () {
                                 var __accu0__ = [];
-                                for (var s of msg){
+                                for (var s of msg) {
                                     __accu0__.append (s);
                                 }
                                 return __accu0__;
@@ -2068,7 +2068,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
                             tag._immutables = __left0__;
                             var im = __left0__;
                             var lc = lifecycle_ev;
-                            for (var k of dir (self)){
+                            for (var k of dir (self)) {
                                 if (k [0] == &#39;_&#39; || __in__ (k, lifecycle_ev) || k == &#39;before_mount&#39;) {
                                     continue;
                                 }
@@ -2358,7 +2358,7 @@ riot.tag2(&#39;sample&#39;, &#39;&lt;h1&gt;Riot Native Tag&lt;/h1&gt; &lt;h5 eac
         <li class="right" >
           <a href="supported_constructs.html" title="4. Systematic code examples: a guided tour of Transcrypt"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.232 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

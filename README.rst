@@ -1,5 +1,3 @@
-**Recommended: PYCON.DE 2016, Munich, Sun. Oct. 30th, 12:30 Presentation by Gunther Klessinger. https://www.pymunich.com/**
-
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
@@ -39,7 +37,10 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
-- Fix for issue #151: Problem with __include__ and special character inside js (NOT YET TESTED, use pip-installable for production!)
+- Enhancement for issue #149: Transpile docstrings on demand
+- Fix for issue #151: Problem with __include__ and special character inside js
+- Enhancement for issue #150: The 'in' operator (was O (n), is now O (1))
+- Enhancement for issue #147: str function should return string primitive, not 'new String ()'
 - Fix for issue #145: List sorting (fails due to erroneous compare operator)
 - Fix for issue #144: List comprehensions and opov (don't go well together, missing 'this' pointer)
 - Fix for issue #138: Parse error using 'yield' in expression, 'send' missing (see testlet iterators_and_generators) and the discussion at the issue.

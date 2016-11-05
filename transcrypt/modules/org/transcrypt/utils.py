@@ -31,6 +31,7 @@ class CommandArgs:
 		self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
 		self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
 		self.argParser.add_argument ('-c', '--complex', help = "enable complex number support, locally requires operator overloading", action = 'store_true')
+		self.argParser.add_argument ('-d', '--docat', help = "enable __doc__ attributes. Apply sparsely, since it will make docstrings part of the generated code", action = 'store_true')
 		self.argParser.add_argument ('-dc', '--dcheck', help = "debug: perform lightweight consistency check", action = 'store_true')
 		self.argParser.add_argument ('-da', '--dassert', help = "debug: activate assertions", action = 'store_true')
 		self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')

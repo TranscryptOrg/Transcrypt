@@ -130,7 +130,8 @@ __pragma__ ('endif')
 	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
 		if (py_typeof (container) == dict) {
-			return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
+			return container.hasOwnProperty (element);
+			// return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
 		}
 		else {
 			return container.indexOf ? container.indexOf (element) > -1 : element in container; // Parameter 'element' itself is an array, string or object
@@ -941,7 +942,7 @@ __pragma__ ('endif')
 			return stringable.__str__ ();
 		}
 		catch (exception) {
-			return new String (stringable);
+			return String (stringable);	// No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
 		}
 	}
 	__all__.str = str;	
@@ -952,7 +953,7 @@ __pragma__ ('endif')
 	String.prototype.__iter__ = function () {new __PyIterator__ (this);}
 		
 	String.prototype.__repr__ = function () {
-		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .replace ('\t', '\\t') .replace ('\n', '\\n');
+		return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .py_replace ('\t', '\\t') .py_replace ('\n', '\\n');
 	};
 	
 	String.prototype.__str__ = function () {
@@ -1147,9 +1148,8 @@ __pragma__ ('ifdef', '__map__')
 		}
 	__all__.str = str;	
 	
-	
 __pragma__ ('else')
-	
+		
 	// Dict extensions to object
 	
 	function __keys__ () {
@@ -1206,7 +1206,7 @@ __pragma__ ('else')
 		return aDefault;
 	}	
 	
-	function __update__(aDict) {
+	function __update__ (aDict) {
 		for (var aKey in aDict) {
 			this [aKey] = aDict [aKey];
 		}
@@ -1247,6 +1247,16 @@ __pragma__ ('endif')
 
 	__all__.dict = dict;
 	dict.__name__ = 'dict';
+
+	// Docstring setter
+
+	function __setdoc__ (docString) {
+		this.__doc__ = docString;
+		return this;
+	}
+	
+	// Python classes, methods and functions are all translated to JavaScript functions
+	Object.defineProperty (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
 		
 	// General operator overloading, only the ones that make most sense in matrix and complex operations
 	
