@@ -231,6 +231,34 @@ __pragma__ ('endif')
 	__all__.py_typeof = py_typeof;
 	
 	var isinstance = function (anObject, classinfo) {
+		// classinfo can be array:
+		if ( classinfo.constructor !== Array ) {
+			classinfo = [classinfo]
+		}
+		for (var index = 0; index < classinfo.length; index++) {
+			if (_isinstance ( anObject, classinfo[index] )) return true
+		}
+		return false
+	}
+	var _isinstance = function (anObject, classinfo) {
+		// simple types:
+		var n = classinfo.name // seems to be always set
+		if (['boolean', 'number', 'string'].indexOf( typeof ( anObject )) > -1) {
+			var t = typeof ( anObject );
+			if (t == 'boolean' && ( n == 'bool' || n == 'int') )	   return true
+			if (t == 'string' && n == 'str')						   return true
+			if (t == 'number' && n == 'int'   && anObject % 1 === 0 )  return true
+			if (t == 'number' && n == 'float' && anObject % 1 !== 0 )  return true
+			return false
+		}
+		// list? python tuples are also js arrays, we can't detect the diff.
+		// -> ask for isinstance((1,2), 'list'), since js sided it *is* one
+		if (anObject.constructor === Array) {
+			return (n == 'list') ? true : false
+		}
+		// this only works for Transcrypt dicts, clearly:
+		if ('py_keys' in anObject) return n == 'dict' ? true : false
+
 		function isA (queryClass) {
 			if (queryClass == classinfo) {
 				return true;
