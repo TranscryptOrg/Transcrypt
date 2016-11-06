@@ -1,6 +1,8 @@
-language: python
-python:
-    - "3.5"
+language: java
+before_install:
+    - sudo apt-get install python3
+    - sudo apt-get install nodejs
+
 
 script: ./test
 

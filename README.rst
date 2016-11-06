@@ -1,3 +1,5 @@
+![](https://api.travis-ci.org/AXGKl/Transcrypt.svg?branch=travis_test)
+
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
