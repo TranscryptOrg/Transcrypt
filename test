@@ -1,5 +1,6 @@
+ln -s /usr/bin/python3 /usr/bin/python3.5
 python3.5 -h
 java -h
 nodejs --version
-
+ls /usr/bin
 echo 'hi'
