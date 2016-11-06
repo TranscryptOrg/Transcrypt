@@ -1,7 +1,13 @@
+dist: trusty
 language: java
 before_install:
     - sudo apt-get install python3
     - sudo apt-get install nodejs
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 
 
 script: ./test
