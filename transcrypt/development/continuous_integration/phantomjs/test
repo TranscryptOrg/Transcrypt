@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# phatomjs based tester
+export TZ="Europe/Berlin"
+set -x
+G="\e[1;38;5;154m"
+R="\e[1;38;5;124m"
+O="\e[0m"
+
+export PYTHONPATH="."
+d0="`pwd`"
+d1="$d0/transcrypt"
+          exe="$d1/run_transcrypt"
+           d2="$d1/development"
+                    d_at="$d2/automated_tests"
+                     d_ci="$d2/continuous_integration"
+
+if [ "x$1" == "xprepare" ]; then
+	sudo ln -s /usr/bin/python3 /usr/bin/python3.5
+	sudo ln -s /usr/bin/node /usr/bin/nodejs
+	python3.5 --version
+	java -version
+	echo "node version: `nodejs --version`"
+	echo 'prepare ready'
+	exit 0
+fi
+
+
+test_directory () {
+	cd "$1"
+	echo "testing `pwd`"
+	$exe -r "./autotest.py"
+	$exe -bn "./autotest.py"
+    # on a CI container we may:
+	killall python
+	python -m SimpleHTTPServer 2424 &
+	sleep 0.1
+	#phantomjs "$d_ci/loadpage.js" "file://`pwd`/autotest.html" | grep 'Test succeeded' 
+	#phantomjs "$d_ci/loadpage.js" "file://`pwd`/autotest.html" 
+	phantomjs "$d_ci/loadpage.js" "http://127.0.0.1:2424/autotest.html" 
+	killall python 2>/dev/null || true
+	sleep 0.1
+}
+for d in  "time"; do
+	cd "$d0"
+	dt="$d_at/$d"
+	test_directory "$dt" && echo -e "${G}success$O: $dt " || { echo -e "${R}Failed:$O\n$dt"; exit 1; }
+done
+

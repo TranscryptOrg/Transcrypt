@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+if [ "x$1" == "xkill" ]; then
+    for i in "" "-9"; do
+        killall $i firefox
+        killall $i python2
+    done
+    shift
+    sleep 1
+fi
+tests="hello,time"
+port=8080
+export TZ="Europe/Berlin"
+G="\e[1;38;5;154m"
+R="\e[1;38;5;124m"
+O="\e[0m"
+
+if [ "x$1" == "xprepare" ]; then
+	sudo ln -s /usr/bin/python3 /usr/bin/python3.5
+	sudo ln -s /usr/bin/node /usr/bin/nodejs
+	python3.5 --version
+	java -version
+	echo "node version: `nodejs --version`"
+	echo 'prepare ready'
+	exit 0
+fi
+
+stop_flag="/tmp/transcrypt_tester_stopflag_$port"
+rm $stop_flag
+export DISPLAY=:99.0
+/usr/bin/xvfb-run -a firefox  "http://127.0.0.1:$port/do/$tests" &
+python2 "`dirname "$0"`/test_server.py" $port &
+while true; do
+    sleep 1
+    if [ -e "$stop_flag" ]; then
+        cat "$stop_flag" | grep "ERR" && {
+            echo -e "$R stopflag with status ERR found $O"
+            exit 1
+        } || {
+            echo -e "$G all well $O"
+            exit 0
+        }
+    fi
+    echo '.'
+done
+echo -e "$R No stopflag found $O"
+exit 1
