@@ -50,6 +50,8 @@ rm -f "$stop_flag"
 export DISPLAY=:99.0
 /usr/bin/xvfb-run -a firefox  "http://127.0.0.1:$port/do/$tests" &
 python2 "$here/test_server.py" $port &
+echo 'polling now for stopfile'
+set +x
 while true; do
     sleep 1
     if [ -e "$stop_flag" ]; then
@@ -61,7 +63,8 @@ while true; do
             exit 0
         }
     fi
-    echo '.'
+    # echo '.' # no output, to make travis end it earlier on endless loops, ie.
+    # when result never comes....
 done
 echo -e "$R No stopflag found $O"
 exit 1
