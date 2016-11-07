@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# You can start me with $0 test1,test2,..
+# or pointing to a file with one test per line
+
 if [ "x$1" == "xkill" ]; then
     for i in "" "-9"; do
         killall $i firefox
@@ -7,12 +11,22 @@ if [ "x$1" == "xkill" ]; then
     shift
     sleep 1
 fi
-tests="hello,time"
+here=`dirname "$0"`
+cd "$here"
+tests="$1"
+set -x
+test ! -e "$here/$tests" || {
+    echo "reading tests from file"
+    # to comma seped string:
+    tests=`awk '{print $1}' < set1 | paste -s -d, -`
+}
 port=8080
 export TZ="Europe/Berlin"
 G="\e[1;38;5;154m"
 R="\e[1;38;5;124m"
 O="\e[0m"
+
+test ! -z "$tests" || { echo -e "$R no tests $O"; exit 1; }
 
 if [ "x$1" == "xprepare" ]; then
 	sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
