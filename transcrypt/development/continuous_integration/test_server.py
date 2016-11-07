@@ -111,7 +111,7 @@ def index(tests=0, single=None):
         testlist = '<ul><li>' + '</li><li>'.join(ts) + '</li></ul>'
         return stop('All tests finished:Success.', postfix=testlist)
 
-    for s in ('', 'Next test', I('-' * 20), M(t)): print s
+    for s in ('', 'Next test', I('-' * 20), M(t), I('-' * 20)): print s
     return redir % ('', '/run_test/' + t)
 
 def unalias(t):
