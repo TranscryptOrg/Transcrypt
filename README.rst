@@ -37,7 +37,7 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
-- Nothing, this is a Travis test 3
+- Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
 - Enhancement for issue #143: 'isinstance' deserves more compat
 - Enhancement for issue #149: Transpile docstrings on demand
