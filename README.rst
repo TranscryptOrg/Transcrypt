@@ -2,8 +2,8 @@
 	:alt: Logo
 	:target: http://www.transcrypt.org
 	
-http://www.transcrypt.org
-=========================
+Python in the browser: http://www.transcrypt.org
+================================================
 	
 - Pure Python 3.5 syntax, using Python's native parser
 - Precompiled into highly readable JavaScript for speed, downloads kB's rather than MB's
