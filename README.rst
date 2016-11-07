@@ -1,42 +1,32 @@
-Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
-
-- Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
-- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
-- Hierarchical URL based module system to prevent name conflicts
-- Simple relation between Python source and generated JavaScript code for easy debugging
-- Multi-level sourcemaps and optional annotation of target code with source references
-- Compact downloads, kB's rather than MB's
-- Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
-- Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
-
-.. figure:: http://www.transcrypt.org/illustrations/logo_white_small.png
+.. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
 	:alt: Logo
+	:target: http://www.transcrypt.org
 	
-	**Transcription once used to be manual labour**
+Python in the browser, precompiled for speed: http://www.transcrypt.org
+=======================================================================
 	
-Documentation with code examples
-================================
+- Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
+- Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
+- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
+- Pure Python 3.5 syntax, using Python's native parser
+- Debug directly from Python sourcecode, through integrated sourcemaps
+- Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers
+- Lightning fast JavaScript 5 and 6 code: call caching, for-loop optimization, in-line JavaScript etc.
+- Integrated static typechecking and minification at the tip of a command line switch
+- Also runs on top of node.js
+- Extensive documentation with many code examples
+- Apache 2.0 license
+- Pip-install and go!
 
-Take a look at the documentation with code examples at the Transcrypt website: http://www.transcrypt.org .
-
-Status of latest release
-========================
-
-Release: Athens (PyPi v3.5.229, GitHub #12)
-
-This release is mainly a bug fix release for Athens v3.5.222, which contains:
-
-- Improved support for the new, redesigned core of Numscrypt. While Numscrypt is still in its infancy, its scope has been widened from merely educational to general use for computations in the browser. A number of optimizations have been put in place, resulting in performance comparable to pure JS numerical libraries. The difference is that Transcrypt (or rather Python), with its facilities for operator overloading, allows a much more concise and readable notation of numerical algorithms. Plans are to gradually build out Numscrypt with more functionality.
-- Optional static type validation (experimental) using type annotations. Static type validation is activated simply by a command switch. Internally it relies on the mypy project. While this project is still in flux, the resulting productivity improvement is already impressive. Since static type validation is optional and cannot break your code, you can get 90% of the benefits from it rightnow without risk. Even only statically typing the interfaces between modules immediately pays off, especially when working with a team. Don't believe it, try it!
-- Div. fixes.
+Latest release: Athens
+======================
 
 Thanks to everyone who contributed!
-
-Jacques de Hooge
 
 What's new in the latest commits
 ================================
 
+- Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
 - Enhancement for issue #143: 'isinstance' deserves more compat
 - Enhancement for issue #149: Transpile docstrings on demand
@@ -84,18 +74,17 @@ What's new in the latest commits
 - \*args now also can be used in calling pure javascript methods (see issue #102)
 - Pragma's else and elif fixed for use in .py rather than .js files
 
-Known restrictions
-==================
+Main differences with CPython
+=============================
 
-- Only a very limited selection of standard libs have been chosen for inclusion in the Transcrypt distribution. Use or encapsulate the JavaScript ones, that's part of the concept. Some additional standard libs may be ported in the future though.
-- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and simple.
+- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. like math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
+- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
-- No threading of any kind. Will probably stay that way as long as JavaScript doesn't properly support that.
 
 Known bugs
 ==========
 
-Module 'time' broken, probably due to end of daylight savings time
+None
 
 Readability
 ===========
