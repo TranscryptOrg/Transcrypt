@@ -1,4 +1,3 @@
-
 Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
 
 - Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
@@ -38,6 +37,8 @@ Jacques de Hooge
 What's new in the latest commits
 ================================
 
+- Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
+- Enhancement for issue #143: 'isinstance' deserves more compat
 - Enhancement for issue #149: Transpile docstrings on demand
 - Fix for issue #151: Problem with __include__ and special character inside js
 - Enhancement for issue #150: The 'in' operator (was O (n), is now O (1))
