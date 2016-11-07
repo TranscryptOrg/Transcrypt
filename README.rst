@@ -14,6 +14,8 @@ Python in the browser: http://www.transcrypt.org
 - Lightning fast JavaScript code: call caching, for-loop optimization, in-line JavaScript etc.
 - Also runs on top of node.js
 - Extensive documentation with many code examples
+- Apache 2.0 license
+- Pip-install it and go!
 
 Latest release: Athens
 ======================
