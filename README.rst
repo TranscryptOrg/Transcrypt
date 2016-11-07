@@ -1,4 +1,4 @@
-.. figure:: http://www.transcrypt.org/illustrations/ruler_banner.png
+.. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
 	:alt: Logo
 	
 http://www.transcrypt.org
