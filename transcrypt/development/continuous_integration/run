@@ -21,19 +21,10 @@ set -x
 
 export here=$(unset CDPATH && cd "$(dirname "$BASH_SOURCE")" && echo $PWD)
 
-if [ "x$1" == "xset" ]; then
-    echo "reading tests from test set file"
-    # to comma seped string:
-    tests=`awk '{print $1}' < "$here/$2" | paste -s -d, -`
-else
-    tests="$1"
-fi
-
 port="$TEST_PORT"
 test ! -z $port || port=8080
 
 
-test ! -z "$tests" || { echo -e "$R no tests $O"; exit 1; }
 
 if [ "x$1" == "xprepare" ]; then
     cat "$here/README.md"
@@ -46,12 +37,22 @@ if [ "x$1" == "xprepare" ]; then
 	exit 0
 fi
 
+tests="$1"
+test ! -z "$tests" || { echo -e "$R no tests $O"; exit 1; }
+
 stop_flag="/tmp/transcrypt_tester_stopflag_$port"
 rm -f "$stop_flag"
 export DISPLAY=:99.0
-/usr/bin/xvfb-run -a firefox  "http://127.0.0.1:$port/do/$tests" &
+url="http://127.0.0.1:$port/do/$tests"
+
+echo "Testurl is: $url"
+/usr/bin/xvfb-run -a firefox  "$url" &
+
+echo "Testserver port is: $port"
 python2 "$here/test_server.py" $port &
+
 echo 'polling now for stopfile'
+
 set +x
 while true; do
     sleep 1
