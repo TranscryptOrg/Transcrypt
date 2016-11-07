@@ -26,7 +26,6 @@ Thanks to everyone who contributed!
 What's new in the latest commits
 ================================
 
-- Git configured to ignore mode changes
 - Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
 - Enhancement for issue #143: 'isinstance' deserves more compat
