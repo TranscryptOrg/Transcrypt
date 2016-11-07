@@ -1,5 +1,5 @@
-sudo ln -s /usr/bin/python3 /usr/bin/python3.5
-sudo ln -s /usr/bin/node /usr/bin/nodejs
+sudo ln -s /usr/bin/python3 /usr/bin/python3.5 || true
+sudo ln -s /usr/bin/node /usr/bin/nodejs || true
 python3.5 --version
 java -version
 echo "node version: `nodejs --version`"
