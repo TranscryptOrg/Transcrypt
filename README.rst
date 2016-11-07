@@ -1,38 +1,23 @@
-Transcrypt is a tool to precompile a fairly extensive subset of Python into compact, readable Javascript. It has the following characteristics:
-
-- Allows for classical OO programming with *multiple inheritance* using pure Python syntax, parsed by CPython's native parser
-- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
-- Hierarchical URL based module system to prevent name conflicts
-- Simple relation between Python source and generated JavaScript code for easy debugging
-- Multi-level sourcemaps and optional annotation of target code with source references
-- Compact downloads, kB's rather than MB's
-- Lightning fast JavaScript code, using memoization (call caching) to optionally bypass the prototype lookup chain
-- Operator overloading can be switched on and off locally to facilitate use for numerical math that's both readable and efficient
-
-.. figure:: http://www.transcrypt.org/illustrations/logo_white_small.png
+.. figure:: http://www.transcrypt.org/illustrations/ruler_banner.png
 	:alt: Logo
 	
-	**Transcription once used to be manual labour**
+http://www.transcrypt.org
+=========================
 	
-Documentation with code examples
-================================
+- Pure Python 3.5 syntax, using Python's native parser
+- Precompiled into highly readable JavaScript for speed, downloads kB's rather than MB's
+- Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
+- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
+- Generates readable JavaScript that resembles the Python source line by line
+- Debug from Python sourcecode, through integrated sourcemaps
+- Lightning fast JavaScript code: call caching, for-loop optimization, in-line JavaScript etc.
+- Also runs on top of node.js
+- Extensive documentation with many code examples
 
-Take a look at the documentation with code examples at the Transcrypt website: http://www.transcrypt.org .
-
-Status of latest release
-========================
-
-Release: Athens (PyPi v3.5.229, GitHub #12)
-
-This release is mainly a bug fix release for Athens v3.5.222, which contains:
-
-- Improved support for the new, redesigned core of Numscrypt. While Numscrypt is still in its infancy, its scope has been widened from merely educational to general use for computations in the browser. A number of optimizations have been put in place, resulting in performance comparable to pure JS numerical libraries. The difference is that Transcrypt (or rather Python), with its facilities for operator overloading, allows a much more concise and readable notation of numerical algorithms. Plans are to gradually build out Numscrypt with more functionality.
-- Optional static type validation (experimental) using type annotations. Static type validation is activated simply by a command switch. Internally it relies on the mypy project. While this project is still in flux, the resulting productivity improvement is already impressive. Since static type validation is optional and cannot break your code, you can get 90% of the benefits from it rightnow without risk. Even only statically typing the interfaces between modules immediately pays off, especially when working with a team. Don't believe it, try it!
-- Div. fixes.
+Latest release: Athens
+======================
 
 Thanks to everyone who contributed!
-
-Jacques de Hooge
 
 What's new in the latest commits
 ================================
@@ -96,7 +81,7 @@ Known restrictions
 Known bugs
 ==========
 
-Module 'time' broken, probably due to end of daylight savings time
+None
 
 Readability
 ===========
