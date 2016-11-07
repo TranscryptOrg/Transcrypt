@@ -12,9 +12,10 @@ if [ "x$1" == "xkill" ]; then
     shift
     sleep 1
 fi
+
+set -x
 here=`dirname "$0"`
 tests="$1"
-set -x
 test ! -e "$here/$tests" || {
     echo "reading tests from file"
     # to comma seped string:
