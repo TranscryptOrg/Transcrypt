@@ -14,13 +14,17 @@ if [ "x$1" == "xkill" ]; then
 fi
 
 set -x
-here=`dirname "$0"`
-tests="$1"
-test ! -e "$here/$tests" || {
-    echo "reading tests from file"
+
+export here=$(unset CDPATH && cd "$(dirname "$BASH_SOURCE")" && echo $PWD)
+
+if [ "x$1" == "xset" ]; then
+    echo "reading tests from test set file"
     # to comma seped string:
-    tests=`awk '{print $1}' < "$here/$tests" | paste -s -d, -`
-}
+    tests=`awk '{print $1}' < "$here/$2" | paste -s -d, -`
+else
+    tests="$1"
+fi
+
 port=8080
 export TZ="Europe/Berlin"
 G="\e[1;38;5;154m"

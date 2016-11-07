@@ -8,5 +8,5 @@ before_script:
   - "export DISPLAY=:99.0"
   - "./transcrypt/development/continuous_integration/run prepare"
 
-script: "./transcrypt/development/continuous_integration/run" "set1"
+script: "./transcrypt/development/continuous_integration/run" "set" "set1"
 
