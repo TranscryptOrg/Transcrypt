@@ -11,7 +11,8 @@ Python in the browser: http://www.transcrypt.org
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Generates readable JavaScript that resembles the Python source line by line
 - Debug from Python sourcecode, through integrated sourcemaps
-- Lightning fast JavaScript code: call caching, for-loop optimization, in-line JavaScript etc.
+- Lightning fast JavaScript 5 and 6 code: call caching, for-loop optimization, in-line JavaScript etc.
+- Integrated static typechecking and minification at the tip of a command line switch
 - Also runs on top of node.js
 - Extensive documentation with many code examples
 - Apache 2.0 license
