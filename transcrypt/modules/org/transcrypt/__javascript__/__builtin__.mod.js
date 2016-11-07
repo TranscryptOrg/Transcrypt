@@ -129,12 +129,15 @@ __pragma__ ('endif')
 	// In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
 	// If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
 	var __in__ = function (element, container) {
-		if (py_typeof (container) == dict) {
+		if (py_typeof (container) == dict) {		// Currently only implemented as an augmented JavaScript object
 			return container.hasOwnProperty (element);
-			// return container.py_keys () .indexOf (element) > -1;                                   // The keys of parameter 'element' are in an array
 		}
-		else {
-			return container.indexOf ? container.indexOf (element) > -1 : element in container; // Parameter 'element' itself is an array, string or object
+		else {										// Parameter 'element' itself is an array, string or a plain, non-dict JavaScript object
+			return (
+				container.indexOf ?					// If it has an indexOf
+				container.indexOf (element) > -1 :	// it's an array or a string,
+				container.hasOwnProperty (element)	// else it's a plain, non-dict JavaScript object
+			);
 		}
 	}
 	__all__.__in__ = __in__;
@@ -206,59 +209,27 @@ __pragma__ ('endif')
 	__all__.int = int;
 	
 	var py_typeof = function (anObject) {
-		try {
-			var result = anObject.__class__;
-			return result;
-		}
-		catch (exception) {
-			var aType = typeof anObject;
-			if (aType == 'boolean') {
-				return bool;
+		var aType = typeof anObject;
+		if (aType == 'object') {	// Directly trying '__class__ in anObject' turns out to wreck anObject in Chrome if its a primitive
+			try {
+				return anObject.__class__;
 			}
-			else if (aType == 'number') {
-				if (anObject % 1 == 0) {
-					return int;
-				}
-				else {
-					return float;
-				}				
-			}
-			else {
+			catch (exception) {
 				return aType;
 			}
+		}
+		else {
+			return (	// Odly, the braces are required here
+				aType == 'boolean' ? bool :
+				aType == 'string' ? str :
+				aType == 'number' ? (anObject % 1 == 0 ? int : float) :
+				null
+			);
 		}
 	}
 	__all__.py_typeof = py_typeof;
 	
-	var isinstance = function (anObject, classinfo) {
-		// classinfo can be array:
-		if ( classinfo.constructor !== Array ) {
-			classinfo = [classinfo]
-		}
-		for (var index = 0; index < classinfo.length; index++) {
-			if (_isinstance ( anObject, classinfo[index] )) return true
-		}
-		return false
-	}
-	var _isinstance = function (anObject, classinfo) {
-		// simple types:
-		var n = classinfo.name // seems to be always set
-		if (['boolean', 'number', 'string'].indexOf( typeof ( anObject )) > -1) {
-			var t = typeof ( anObject );
-			if (t == 'boolean' && ( n == 'bool' || n == 'int') )	   return true
-			if (t == 'string' && n == 'str')						   return true
-			if (t == 'number' && n == 'int'   && anObject % 1 === 0 )  return true
-			if (t == 'number' && n == 'float' && anObject % 1 !== 0 )  return true
-			return false
-		}
-		// list? python tuples are also js arrays, we can't detect the diff.
-		// -> ask for isinstance((1,2), 'list'), since js sided it *is* one
-		if (anObject.constructor === Array) {
-			return (n == 'list') ? true : false
-		}
-		// this only works for Transcrypt dicts, clearly:
-		if ('py_keys' in anObject) return n == 'dict' ? true : false
-
+	var isinstance = function (anObject, classinfo) {		
 		function isA (queryClass) {
 			if (queryClass == classinfo) {
 				return true;
@@ -270,7 +241,28 @@ __pragma__ ('endif')
 			}
 			return false;
 		}
-		return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
+		
+		if (classinfo instanceof Array) {	// Assume in most cases it isn't, then making it recursive rather than two functions saves a call
+__pragma__ ('ifdef', '__esv6__')
+			for (let aClass of classinfo) {
+__pragma__ ('else')
+			for (var index = 0; index < classinfo.length; index++) {
+				var aClass = classinfo [index];
+__pragma__ ('endif')
+				if (isinstance (anObject, aClass)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		try {					// Most frequent use case first
+			return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
+		}
+		catch (exception) {		// Using isinstance on primitives asumed rare
+			var aType = py_typeof (anObject);
+			return aType == classinfo || (aType == bool && classinfo == int);
+		}
 	};
 	__all__.isinstance = isinstance;
 	

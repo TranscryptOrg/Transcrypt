@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.234.d documentation</title>
+    <title>4. Systematic code examples: a guided tour of Transcrypt &mdash; Transcrypt 3.5.236 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.234.d',
+        VERSION:     '3.5.236',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Transcrypt 3.5.234.d documentation" href="index.html" />
+    <link rel="top" title="Transcrypt 3.5.236 documentation" href="index.html" />
     <link rel="next" title="5. Seamless interoperation with the DOM" href="integration_javascript.html" />
     <link rel="prev" title="3. Special facilities" href="special_facilities.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.236 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -241,6 +241,8 @@ Since they systematically cover all language constructs, they are also very effe
 <div class="literal-block-wrapper container" id="testlet-classes">
 <div class="code-block-caption"><span class="caption-text">Testlet: classes</span><a class="headerlink" href="#testlet-classes" title="Permalink to this code">¶</a></div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;General&lt;br&gt;&#39;</span><span class="p">)</span>
+
     <span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="mi">123</span>
         <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -304,6 +306,44 @@ Since they systematically cover all language constructs, they are also very effe
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">hasattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">hasattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">))</span>
     <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="nb">hasattr</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;q&#39;</span><span class="p">))</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;&lt;br&gt;Augmented isinstance&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="c"># Augmented meaning: compatible with native JavaScript types</span>
+    
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    autoTester.check (&#39;&lt;br&gt;11111111111111111&lt;br&gt;&#39;)</span>
+<span class="sd">    autoTester.check (isinstance (True, bool))</span>
+<span class="sd">    autoTester.check (&#39;&lt;br&gt;22222222222222222&lt;br&gt;&#39;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">simpleTypes</span> <span class="o">=</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">tupleTypes</span> <span class="o">=</span> <span class="p">((</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">A</span><span class="p">),</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">types</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">((</span><span class="n">simpleTypes</span><span class="p">,</span> <span class="n">tupleTypes</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">aType</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="n">types</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">anObject</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">[],</span> <span class="n">a</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)):</span>
+                <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">anObject</span><span class="p">,</span> <span class="n">aType</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">types</span> <span class="o">==</span> <span class="n">simpleTypes</span><span class="p">:</span>
+                    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">anObject</span><span class="p">,</span> <span class="n">simpleTypes</span><span class="p">))</span>
+                    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s">&#39;&lt;br&gt;&lt;br&gt;Method resolution order&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    
+    <span class="k">def</span> <span class="nf">mro</span> <span class="p">(</span><span class="n">aClass</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Recursively assemble method resolution order from all base classes&#39;&#39;&#39;</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">aClass</span><span class="p">]</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">aBase</span> <span class="ow">in</span> <span class="n">aClass</span><span class="o">.</span><span class="n">__bases__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">aBase</span> <span class="ow">in</span> <span class="n">result</span> <span class="ow">and</span> <span class="n">aBase</span> <span class="o">!=</span> <span class="nb">object</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="n">aBase</span><span class="p">)</span>
+                <span class="n">mro</span> <span class="p">(</span><span class="n">aBase</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">last</span> <span class="ow">and</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">aClass</span><span class="o">.</span><span class="n">__bases__</span><span class="p">:</span>
+            <span class="n">aRoot</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([</span><span class="n">aClass</span><span class="o">.</span><span class="n">__name__</span> <span class="k">for</span> <span class="n">aClass</span> <span class="ow">in</span> <span class="n">mro</span> <span class="p">(</span><span class="n">C</span><span class="p">)])</span>
+    
 </pre></div>
 </div>
 </div>
@@ -2697,7 +2737,7 @@ Since they systematically cover all language constructs, they are also very effe
         <li class="right" >
           <a href="special_facilities.html" title="3. Special facilities"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.234.d documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Transcrypt 3.5.236 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -3,6 +3,7 @@
 *.npp
 **.__pycache__/
 dist/
+transcrypt/docs/sphinx/_build/
 transcrypt.egg-info/
 transcrypt/development/attic/
 transcrypt/development/docs/

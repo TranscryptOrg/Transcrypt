@@ -462,12 +462,15 @@ class Generator (ast.NodeVisitor):
 
 		self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
-			('js_and', 'and'),
+
+			# Format: ('<Python source identifier>', '<JavaScript target identifier>')
+			
+													('js_and', 'and'),
 			('arguments', 'py_arguments'),			('js_arguments', 'arguments'),
 			('case', 'py_case'),
 			('default', 'py_default'),
 			('false', 'py_false'),
-			('js_from', 'from'),
+													('js_from', 'from'),
 			('Infinity', 'py_Infinity'),			('js_Infinity', 'Infinity'),
 			('isNaN', 'py_isNaN'),					('js_isNaN', 'isNaN'),
 			('iter', 'py_iter'),					('js_iter', 'iter'),
@@ -475,18 +478,19 @@ class Generator (ast.NodeVisitor):
 			('name', 'py_name'),					('js_name', 'name'),
 			('NaN', 'py_NaN'),						('js_NaN', 'NaN'),
 			('next', 'py_next'),					('js_next', 'next'),
-			('js_not', 'not'),
-			('js_or', 'or'),
+													('js_not', 'not'),
+													('js_or', 'or'),
 			('pop', 'py_pop'),						('js_pop', 'pop'),
 			('replace', 'py_replace'),				('js_replace', 'replace'),
 			('selector', 'py_selector'),			('js_selector', 'selector'),
 			('sort', 'py_sort'),					('js_sort', 'sort'),
 			('split', 'py_split'),					('js_split', 'split'),
 			('switch', 'py_switch'),
-			('type', 'py_metatype'),				('js_type', 'type'),		# Only for the type metaclass, the type operator is dealth with separately in visit_Call
+			('type', 'py_metatype'),				('js_type', 'type'),	# Only for the type metaclass, the type operator is dealth with separately in visit_Call
 			('reversed', 'py_reversed'),			('js_reversed', 'reversed'),
 			('true', 'py_true'),
 			('undefined', 'py_undefined'), 			('js_undefined', 'undefined'),
+			
 # END predef_aliases
 		)]
 		
