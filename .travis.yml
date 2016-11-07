@@ -1,0 +1,12 @@
+dist: trusty
+language: java
+before_install:
+    - sudo apt-get install python3
+    - sudo apt-get install nodejs
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "./transcrypt/development/continuous_integration/run prepare"
+
+script: "./transcrypt/development/continuous_integration/run set set1"
+
