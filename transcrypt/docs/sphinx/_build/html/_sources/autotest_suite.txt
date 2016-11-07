@@ -1,4 +1,0 @@
-The autotest suite
-==================
-
-test
