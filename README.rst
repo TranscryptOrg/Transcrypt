@@ -6,7 +6,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 	
 - Pure Python 3.5 syntax, using Python's native parser
-- Precompiled into highly readable JavaScript for speed, downloads kB's rather than MB's
+- Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Generates readable JavaScript that resembles the Python source line by line
