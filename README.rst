@@ -15,7 +15,7 @@ Python in the browser: http://www.transcrypt.org
 - Also runs on top of node.js
 - Extensive documentation with many code examples
 - Apache 2.0 license
-- Pip-install it and go!
+- Pip-install and go!
 
 Latest release: Athens
 ======================
