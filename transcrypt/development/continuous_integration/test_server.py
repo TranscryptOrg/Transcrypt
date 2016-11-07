@@ -85,10 +85,12 @@ def index(tests=0, single=None):
             print I('loading test set')
             with open(tests) as fd:
                 tests = fd.read()
-                tests = ','.join([k.strip() \
-                        for k in tests.splitlines()])
-        T.extend([k.strip() for k in tests.split(',') if k.strip() and \
-                not k.strip().startswith('#')])
+            tests = [k.strip() for k in tests.splitlines() \
+                     if k and not k.startswith('#')]
+        else:
+            # alternative form:
+            tests = [k.strip() for k in tests.split(',')]
+        T.extend(tests)
     t = ctx['cur_test']
     if not t:
         if exists(stop_flag):
