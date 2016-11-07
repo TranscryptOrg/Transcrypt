@@ -1,0 +1,8 @@
+sudo ln -s /usr/bin/python3 /usr/bin/python3.5
+sudo ln -s /usr/bin/node /usr/bin/nodejs
+python3.5 --version
+java -version
+echo "node version: `nodejs --version`"
+echo 'hi'
+
+

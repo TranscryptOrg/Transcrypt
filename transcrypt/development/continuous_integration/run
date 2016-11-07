@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# You can start me with $0 test1,test2,..
+# or pointing to a file with one test per line
+
+export TZ="Europe/Berlin"
+G="\e[1;38;5;154m"
+R="\e[1;38;5;124m"
+O="\e[0m"
+if [ "x$1" == "xkill" ]; then
+    # handy when running this on the local machine
+    for i in "" "-9"; do
+        killall $i firefox
+        killall $i python2
+    done
+    shift
+    sleep 1
+fi
+
+set -x
+
+export here=$(unset CDPATH && cd "$(dirname "$BASH_SOURCE")" && echo $PWD)
+
+if [ "x$1" == "xset" ]; then
+    echo "reading tests from test set file"
+    # to comma seped string:
+    tests=`awk '{print $1}' < "$here/$2" | paste -s -d, -`
+else
+    tests="$1"
+fi
+
+port="$TEST_PORT"
+test ! -z $port || port=8080
+
+
+test ! -z "$tests" || { echo -e "$R no tests $O"; exit 1; }
+
+if [ "x$1" == "xprepare" ]; then
+    cat "$here/README.md"
+	sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
+	sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
+	python3.5 --version
+	java -version
+	echo "node version: `nodejs --version`"
+	echo 'prepare ready'
+	exit 0
+fi
+
+stop_flag="/tmp/transcrypt_tester_stopflag_$port"
+rm -f "$stop_flag"
+export DISPLAY=:99.0
+/usr/bin/xvfb-run -a firefox  "http://127.0.0.1:$port/do/$tests" &
+python2 "$here/test_server.py" $port &
+echo 'polling now for stopfile'
+set +x
+while true; do
+    sleep 1
+    if [ -e "$stop_flag" ]; then
+        cat "$stop_flag" | grep "ERR" && {
+            echo -e "$R stopflag with status ERR found $O"
+            exit 1
+        } || {
+            echo -e "$G all well $O"
+            exit 0
+        }
+    fi
+    # echo '.' # no output, to make travis end it earlier on endless loops, ie.
+    # when result never comes....
+done
+echo -e "$R No stopflag found $O"
+exit 1
