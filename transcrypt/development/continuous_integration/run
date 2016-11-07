@@ -3,6 +3,10 @@
 # You can start me with $0 test1,test2,..
 # or pointing to a file with one test per line
 
+export TZ="Europe/Berlin"
+G="\e[1;38;5;154m"
+R="\e[1;38;5;124m"
+O="\e[0m"
 if [ "x$1" == "xkill" ]; then
     # handy when running this on the local machine
     for i in "" "-9"; do
@@ -25,11 +29,9 @@ else
     tests="$1"
 fi
 
-port=8080
-export TZ="Europe/Berlin"
-G="\e[1;38;5;154m"
-R="\e[1;38;5;124m"
-O="\e[0m"
+port="$TEST_PORT"
+test ! -z $port || port=8080
+
 
 test ! -z "$tests" || { echo -e "$R no tests $O"; exit 1; }
 

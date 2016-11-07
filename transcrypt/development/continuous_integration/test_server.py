@@ -140,8 +140,8 @@ def run_test(filepath):
 
     # if the js fails we would not get a result hit, so:
     cmd = ['sleep %s' % max_wait,
-            ('wget -q "http://127.0.0.1:8080/result?'
-             'test=%s&res=ERROR" -O /dev/null') % d]
+            ('wget -q "http://127.0.0.1:%s/result?'
+             'test=%s&res=ERROR" -O /dev/null') % (port, d)]
     ctx['error_reporter'] = subprocess.Popen(' && '.join(cmd), shell=True)
     return html
 
@@ -188,6 +188,7 @@ if __name__ == '__main__':
         print 'e.g. %s 8080 or %s 0.0.0.0:7777' % (f, f)
         sys.exit(1)
     h, p = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
+    port=p
     assert os.system('which wget') == 0, 'require wget'
     print 'now hit me at http://%s:%s/<tests>' % (h, p)
     print 'e.g. http://%s:%s/time,hello' % (h, p)
