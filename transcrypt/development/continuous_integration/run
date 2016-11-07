@@ -4,6 +4,7 @@
 # or pointing to a file with one test per line
 
 if [ "x$1" == "xkill" ]; then
+    # handy when running this on the local machine
     for i in "" "-9"; do
         killall $i firefox
         killall $i python2
@@ -12,13 +13,12 @@ if [ "x$1" == "xkill" ]; then
     sleep 1
 fi
 here=`dirname "$0"`
-cd "$here"
 tests="$1"
 set -x
 test ! -e "$here/$tests" || {
     echo "reading tests from file"
     # to comma seped string:
-    tests=`awk '{print $1}' < set1 | paste -s -d, -`
+    tests=`awk '{print $1}' < "$here/$tests" | paste -s -d, -`
 }
 port=8080
 export TZ="Europe/Berlin"
@@ -42,7 +42,7 @@ stop_flag="/tmp/transcrypt_tester_stopflag_$port"
 rm -f "$stop_flag"
 export DISPLAY=:99.0
 /usr/bin/xvfb-run -a firefox  "http://127.0.0.1:$port/do/$tests" &
-python2 "`dirname "$0"`/test_server.py" $port &
+python2 "$here/test_server.py" $port &
 while true; do
     sleep 1
     if [ -e "$stop_flag" ]; then
