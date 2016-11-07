@@ -24,10 +24,16 @@ CAUTION:
 
 ## Sequence of hits
 
-Call this via the browser and check the network log about the various requests.
+Call `/do/<tests>` via the browser and check the network log about the various requests.
 
-Tip: Search os.chdir in this module, we managed to run the tests only in their
+## Tips
+
+1. Search os.chdir in this module, we managed to run the tests only in their
 dirs.
+
+1. `/chk/<test>` allows to analyse a single test, e.g. `/chk/transcrypt/dictionaries`
+
+1. `/.fooo` is expanded to `/transcrypt/foo` as test name.
 
 """
 # tests to run, filled in sys.argv:
@@ -46,7 +52,7 @@ env, j, exists = os.environ, os.path.join, os.path.exists
 env['TZ'] = 'Europe/Berlin' # for browser and our transcypt -r
 stop_flag = '/tmp/transcrypt_tester_stopflag'
 
-ctx = {'cur_test': None}
+ctx = {'cur_test': None, 'have_run': []}
 # /root/Transcrypt/transcrypt:
 _ = os.path.abspath(__file__).rsplit
 env['d_0'] = d0 = _('/', 3)[0]
@@ -63,27 +69,53 @@ def cd():
 
 @route('/')
 @route('/do/<tests:path>')
-def index(tests=0):
+def index(tests=0, single=None):
     if 'favico' in str(tests):
         return ''
     if not tests and not T:
-        return 'need a comma seped. list of tests to run, e.g. /do/hello,time'
+        return '<br>'.join((
+        'Need a comma seped. list of tests to run, e.g. /do/hello,time',
+        'You can also call a single test like /chk/hello or /chk/.dictionaries'))
+    cd()
     if not T:
-        T.extend([k.strip() for k in tests.split(',') if k.strip()])
+        if not single:
+            reset_ctx()
+            ctx['init_url'] = '/do/%s' % tests
+        if os.path.exists('./%s' % tests):
+            print I('loading test set')
+            with open(tests) as fd:
+                tests = fd.read()
+                tests = ','.join([k.strip() \
+                        for k in tests.splitlines()])
+        T.extend([k.strip() for k in tests.split(',') if k.strip() and \
+                not k.strip().startswith('#')])
     t = ctx['cur_test']
     if not t:
         if exists(stop_flag):
             os.unlink(stop_flag)
         # starting.
         T.append('done')
+    # when we come again for the next test, this was the last we ran:
+    last = ctx.get('cur_test')
+    if last:
+        ctx['have_run'].append(last)
+    # next test:
     t = ctx['cur_test'] = T[0] if not t else T[T.index(t) + 1 ]
-    cd()
+    t = unalias(t)
+
     if t == 'done':
-        return stop('All tests finished. Success.')
+        ts = ['<a href="/chk/%s">%s</a>' % (k, k) \
+                for k in ctx.get('have_run', ())]
+        testlist = '<ul><li>' + '</li><li>'.join(ts) + '</li></ul>'
+        return stop('All tests finished:Success.', postfix=testlist)
 
     for s in ('', 'Next test', I('-' * 20), M(t)): print s
     return redir % ('', '/run_test/' + t)
 
+def unalias(t):
+    if t.startswith('.'): # shortcut
+        t = 'transcrypt/' + t[1:]
+    return t
 
 def run_t(*args):
     'invoke transcrypt with flags'
@@ -98,23 +130,37 @@ autoTester = org.transcrypt.autotester.AutoTester ()
 autoTester.done ()
 '''
 
+@route('/chk/<test:path>')
+def chk(test):
+    'a single test, intended for browser - stopping after running at the .html'
+    test = unalias(test)
+    reset_ctx()
+    ctx['stop'] = 1
+    ctx['init_url'] = '/chk/%s' % test
+    return index(tests=test, single=1)
+
 @route('/run_test/<filepath:path>')
 def run_test(filepath):
 
     if '__javascript__' in filepath:
-        # we are alraedy in d:
         with open(filepath) as fd:
             js = fd.read()
-        js += ('\nlocation.href="/result?test=%s&res=" + '
-               'document.getElementById("message").innerHTML;' % os.getcwd())
+
+        if not ctx.get('stop'):
+            # we are alraedy in d:
+            js += ('\nlocation.href="/result?test=%s&res=" + '
+                'document.getElementById("message").innerHTML;' % os.getcwd())
+        else:
+            js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
+            reset_ctx()
         return js
 
-    if filepath != 'compiled':
+    if filepath != 'test_html':
         # the compile takes long so we display a message, while we redir to
         # this method again:
         d = j(env['d_at'], filepath)
         os.chdir(d)
-        return redir % ('compiling tests in %s...' % d, '/run_test/compiled')
+        return redir % ('compiling tests in %s...' % d, '/run_test/test_html')
 
     d = os.getcwd()
     env['PYTHONPATH'] = '.'
@@ -125,24 +171,32 @@ def run_test(filepath):
         print(M('creating an ci autotest.py file')) 
         fn = 'ci'
 
+    d_was = d
     if fn == 'ci':
         d, test = d.rsplit('/', 1)
         os.chdir(d)
         with open(fn + '.py', 'w') as fd:
             fd.write(ci_at % (test, test))
 
-    for flags in ('-r', '-bn'):
+    for flags in ('-r', '-bn -c'):
         run_t(flags, './%s.py' % fn)
         #env['PYTHONPATH'] = '/root/Transcrypt/transcrypt/modules:.'
 
     with open('%s.html' % fn) as fd:
         html = fd.read()
+    html = '<h4>%s</h4>' % d_was + html
+
+    if ctx.get('stop'):
+        # the test has to load still, need the stopflag not to be deleted:
+        # otherwise the js would be augmented with the href forward:
+        return stop(html, no_reset=True)
 
     # if the js fails we would not get a result hit, so:
     cmd = ['sleep %s' % max_wait,
             ('wget -q "http://127.0.0.1:%s/result?'
-             'test=%s&res=ERROR" -O /dev/null') % (port, d)]
+            'test=%s&res=ERROR" -O /dev/null') % (port, d)]
     ctx['error_reporter'] = subprocess.Popen(' && '.join(cmd), shell=True)
+
     return html
 
 @route('/result')
@@ -158,18 +212,28 @@ def result():
     print G('SUCCESS'), test
     return redir % ('next test', '/do/next')
 
-
-def stop(msg):
+def reset_ctx():
     while T: T.pop()
+    ctx['cur_test'] = None
+    ctx['have_run'] = []
+    ctx.pop('stop', 0)
+    ctx.pop('init_url', 0)
+
+def stop(msg, postfix='', no_reset=False):
+    'no redir here, just a static page'
+    iu = ctx.get('init_url')
+    if not no_reset:
+        reset_ctx()
     with open(stop_flag, 'w') as fd:
         fd.write(msg)
-    ctx['cur_test'] = None
     col = G
     if 'ERROR' in msg:
         col = R
     msg += '[%s set]' % stop_flag
     print col(msg)
-    return msg
+    if iu:
+        postfix = '<hr>Rerun <a href="%s">%s</a>' % (iu, iu) + postfix
+    return msg + postfix
 
 # just ansi color:
 def _col(c, *s): return ("\x1B[38;5;%sm%%s\x1B[0m" % c ) % (' '.join(s))
