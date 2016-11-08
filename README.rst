@@ -18,13 +18,6 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-Like it? Star it!
-=================
-
-GitHub stars aren't there for the ego of the developers.
-They are there to make a project gain traction.
-If you'd like to have an efficient alternative to JavaScript in the browser: speak out!
-
 Latest stable release: Athens
 =============================
 
