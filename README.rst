@@ -93,6 +93,7 @@ Development build status
 
 The icon above shows the outcome of the continous integration test that is done on Linux after each commit.
 The test consists of running a set of testlets, systematically covering all facilities of Transcrypt. Each testlet performs an automated back to test against CPython.
+
 The full set of testlets is described in the documentation and comes with the distribution.
 Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
 In that case you can use the latest passing version, that you'll find by clicking on the icon above and then on 'Build History'.
