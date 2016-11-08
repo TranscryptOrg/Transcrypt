@@ -14,7 +14,7 @@ transcrypt/dictionaries
 transcrypt/div_fixes
 transcrypt/div_pulls
 transcrypt/docstrings
-#transcrypt/exceptions (assert 2 * 8 / 4 == 2 fails, nothing compiled)
+transcrypt/exceptions (assert 2 * 8 / 4 == 2 fails, nothing compiled)
 transcrypt/extended_slices
 transcrypt/general_functions
 transcrypt/indices_and_slices
