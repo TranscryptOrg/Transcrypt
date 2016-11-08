@@ -88,19 +88,25 @@ Contributing packages via PyPi of course means total freedom for the developer.
 Development build status
 ------------------------
 
-Main means of validating Transcrypt is the extensive multi-platform shipment test that precedes each release. It consists of a combination of automated back to back testing with CPython and eyeballing of graphical resuls.
-
-The icon below, on the other hand, refers to the results of the continuous integration test, which currently has limited coverage and semantic depth.
-
 .. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
     :target: https://travis-ci.org/QQuick/Transcrypt
 
+The icon above shows the outcome of the continous integration test that is done on Linux after each commit.
+The test consists of running a set of testlets, systematically covering all facilities of Transcrypt. Each testlet performs an automated back to test against CPython.
+The full set of testlets is described in the documentation and comes with the distribution.
 Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
 In that case you can use the latest passing version, that you'll find by clicking on the icon above and then on 'Build History'.
+
+Each release, on the other hand, is preceded by at least the following tests:
+- The automated back to back test described above, not only on Linux but also on Windows and, in case of relevant issues, on OsX.
+- Automated compilation of the manual tests, human exercising of the resulting applications and a visual check of the results.
+- Automated compilation of the demo's, manual exercising of the resulting applications and a visual check of the results.
+- A documentation build, followed by a visual sample check.
 
 What's new in the latest commits
 --------------------------------
 
+- Travis CI test for the exceptions testlet repaired
 - Initial version of chapter 'Differences with CPython' added to docs
 - Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
