@@ -1,5 +1,9 @@
 from org.transcrypt.stubs.browser import __envir__, __new__, __pragma__
 
+if __envir__.executor_name == __envir__.transpiler_name:
+	class BaseException:		# ??? Make part of __builtins__ for CPython compliance?
+		pass
+
 class Ex1 (Exception):
 	pass
 		
@@ -9,24 +13,12 @@ class Ex2 (Ex1):
 class Ex3 (Exception):
 	pass
 	
-if __envir__.executor_name == 'python':
-	class Table (BaseException):
-		def __init__ (self, *args):
-			self.fields = args
-			
-		def __repr__ (self):
-			return 'Table' + repr (self.fields) .replace (', ', ',') .replace ('\'', '')
-else:
-	__pragma__ ('js', '{}', '''
-		function _Table () {
-			this.fields = [] .slice.apply (arguments);
-		}
+class Table (BaseException):	# Any Python exception MUST inherit from BaseException
+	def __init__ (self, *args):
+		self.fields = args
 		
-		_Table.prototype.__str__ = function () {
-			return ('Table(' + this.fields.toString () + ')');
-		};
-	''')
-	Table = _Table
+	def __repr__ (self):
+		return 'Table' + repr (self.fields) .replace (', ', ',') .replace ('\'', '')
 
 def test1 ():
 	raise (Exception ('mary'))
