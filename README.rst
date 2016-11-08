@@ -71,14 +71,14 @@ still it is wise to start an issue beforehand, allowing coordination and prevent
 
 A special place is taken by implementing standard libraries. While Transcrypt mostly relies on browser-centric JavaScript libraries,
 availability of a limited number of standard libraries will help acceptance by Python programmers. So you're most welcome to make a contribution here.
-The design goal again is, better 90% complete, fast, small, and reliable, than 100% complete, slow, bulky and buggy.
+The design goal again is: better 90% complete, fast, small, and reliable, than 100% complete, slow, bulky and buggy.
 If you contribute a library, please also contribute an autotest (see docs) and some documentation for it.
 The supported platforms are Windows and Linux (and, with that, OsX).
 
 While being open and respectful to any good ideas, the final say as to what gets in and what doesn't, is with Jacques.
 So this is a dictatorial rather than a democratic project.
 Being a sailer himself, Jacques values the notion of having one captain on a ship.
-The captain doesn't own the ship, but he serves the crew and passengers by plotting a stable course.
+The captain doesn't own the ship, but he serves the passengers by consulting with the crew and plotting one stable course.
 
 Another possibility to contribute libraries to Transcrypt is by submitting them as separate packages to PyPi.
 In that case be sure to add the keyword Transcrypt to allow people to find your package.
