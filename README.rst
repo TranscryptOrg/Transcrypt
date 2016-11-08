@@ -98,6 +98,7 @@ Since the branching model has been deliberately kept simple, continuous integrat
 In that case you can use the latest passing version, that you'll find by clicking on the icon above and then on 'Build History'.
 
 Each release, on the other hand, is preceded by at least the following tests:
+
 - The automated back to back test described above, not only on Linux but also on Windows and, in case of relevant issues, on OsX.
 - Automated compilation of the manual tests, human exercising of the resulting applications and a visual check of the results.
 - Automated compilation of the demo's, manual exercising of the resulting applications and a visual check of the results.
