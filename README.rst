@@ -23,6 +23,37 @@ Latest release: Athens
 
 Thanks to everyone who contributed!
 
+Main differences with CPython
+=============================
+
+- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. like math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
+- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
+- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
+
+Readability
+===========
+
+As can be seen below, there's a simple parallel between the Python and the JavaScript code.
+So it should be easy to debug.
+Also, code can be tested from the command prompt using stubs.
+
+.. figure:: http://www.transcrypt.org/illustrations/class_compare.png
+	:alt: Screenshot of Python versus JavaScript code
+	
+	**Classic OO with multiple inheritance in JavaScript**
+
+Build status
+============
+
+.. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
+    :target: https://travis-ci.org/QQuick/Transcrypt
+
+**The build status icons that have become en vogue deserve some expectation management.**
+While we're working to improve both coverage and semantic depth of the continuous integration tests,
+they are still very limited compared to the shipment tests that precede a release.
+Also, since the branching model has been deliberately kept simple, they may be transiently broken.
+
+	
 What's new in the latest commits
 ================================
 
@@ -73,30 +104,6 @@ What's new in the latest commits
 - Fix to enable Numscrypt development
 - \*args now also can be used in calling pure javascript methods (see issue #102)
 - Pragma's else and elif fixed for use in .py rather than .js files
-
-Main differences with CPython
-=============================
-
-- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. like math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
-- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
-- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
-
-Known bugs
-==========
-
-None
-
-Readability
-===========
-
-As can be seen below, there's a simple parallel between the Python and the JavaScript code.
-So it should be easy to debug.
-Also, code can be tested from the command prompt using stubs.
-
-.. figure:: http://www.transcrypt.org/illustrations/class_compare.png
-	:alt: Screenshot of Python versus JavaScript code
-	
-	**Classic OO with multiple inheritance in JavaScript**
 
 Other packages you might like
 =============================
