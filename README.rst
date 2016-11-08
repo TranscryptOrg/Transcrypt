@@ -96,9 +96,7 @@ The icon below, on the other hand, refers to the results of the continuous integ
     :target: https://travis-ci.org/QQuick/Transcrypt
 
 Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
-In that case you can use the latest passing version, as documented by Travis.
-Another possibility is to use the latest release as a basis.
-While this may mean some manual merging, it offers the advantage of working with shipment tested code.
+In that case you can use the latest passing version, that you'll find by clicking on the icon above and then on 'Build History'.
 
 What's new in the latest commits
 --------------------------------
