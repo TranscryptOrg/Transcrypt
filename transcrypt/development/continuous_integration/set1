@@ -1,9 +1,7 @@
 # These are run by travis and will cause build breaks if failing. Comment out via a '#'
 hello
 time
-transcrypt
 
-'''
 transcrypt/arguments
 transcrypt/attribs_by_name
 transcrypt/classes
@@ -36,6 +34,6 @@ transcrypt/set_comprehensions
 transcrypt/simple_and_augmented_assignment
 transcrypt/truthyness
 transcrypt/tuple_assignment
-'''
+
 
 
