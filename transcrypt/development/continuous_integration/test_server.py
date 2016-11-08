@@ -180,7 +180,7 @@ def run_test(filepath):
         with open(fn + '.py', 'w') as fd:
             fd.write(ci_at % (test, test))
 
-    for flags in ('-r', '-bn -c'):
+    for flags in ('-r', '-bn -c -da'):
         run_t(flags, './%s.py' % fn)
         #env['PYTHONPATH'] = '/root/Transcrypt/transcrypt/modules:.'
 
