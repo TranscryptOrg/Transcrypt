@@ -17,7 +17,7 @@ transcrypt/dictionaries
 transcrypt/div_fixes
 transcrypt/div_pulls
 transcrypt/docstrings
-transcrypt/exceptions
+# transcrypt/exceptions
 transcrypt/extended_slices
 transcrypt/general_functions
 transcrypt/indices_and_slices
