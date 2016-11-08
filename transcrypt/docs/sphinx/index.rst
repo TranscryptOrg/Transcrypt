@@ -14,8 +14,8 @@ Table of Contents:
 	what_why
 	installation_use
 	special_facilities
-	philosophy_directions
-	differences_cpython
 	supported_constructs
 	integration_javascript
 	autotesting_transcrypt
+	philosophy_directions
+	differences_cpython

@@ -88,13 +88,14 @@ Contributing packages via PyPi of course means total freedom for the developer.
 Development build status
 ------------------------
 
+Main means of validating Transcrypt is the extensive multi-platform shipment test that precedes each release. It consists of a combination of automated back to back testing with CPython and eyeballing of graphical resuls.
+
+The icon below, on the other hand, refers to the results of the continuous integration test, which currently has limited coverage and semantic depth.
+
 .. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
     :target: https://travis-ci.org/QQuick/Transcrypt
 
-**The build status icons that have become en vogue deserve some expectation management.**
-While we're working to improve both coverage and semantic depth of the continuous integration tests,
-they are still very limited compared to the shipment tests that precede a release.
-Also, since the branching model has been deliberately kept simple, they may be transiently broken.
+Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
 In that case you can use the latest passing version, as documented by Travis.
 Another possibility is to use the latest release as a basis.
 While this may mean some manual merging, it offers the advantage of working with shipment tested code.
