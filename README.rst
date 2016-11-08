@@ -4,7 +4,7 @@
 	
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
-	
+
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
@@ -18,17 +18,20 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-Latest release: Athens
-======================
+Like it? Star it!
+=================
 
-Thanks to everyone who contributed!
+GitHub stars aren't there for the ego of the developers.
+They are there to make a project gain traction.
+If you'd like to have an efficient alternative to JavaScript in the browser: speak out!
 
-Main differences with CPython
+Latest stable release: Athens
 =============================
 
-- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. like math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
-- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
-- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
+To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation 
+<http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/>`_.
+
+Thanks to everyone who contributed!
 
 Readability
 ===========
@@ -42,8 +45,55 @@ Also, code can be tested from the command prompt using stubs.
 	
 	**Classic OO with multiple inheritance in JavaScript**
 
-Build status
-============
+Main differences with CPython
+=============================
+
+- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. like math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
+- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
+- No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
+
+Information for contributors
+============================
+
+How to contribute
+-----------------
+
+Transcrypt started out as a personal repo, owned by Jacques de Hooge.
+As the project caught on and the number of people contributing issues, ideas and code grew,
+the repo was transferred to the QQuick organisation, to be able to form a developer team on GitHub.
+
+There was also a clear message in this: Transcrypt isn't owned by anyone in particular.
+It is the collective property of everyone using it or contributing to it.
+At the same time the need was felt to keep a very firm grip on code quality, especially of the core.
+
+Everything under ../transcrypt/modules/org/transcrypt plus the file ../transcrypt/\_\_main\_\_.py is considered to be part of Transcrypt's core.
+A major design goal is to keep the core small and fast. This means that some CPython facilities were deliberately left out or simplified.
+Core development is still mainly done by Jacques, but with the input of many great ideas submitted as issues.
+If you want to improve something in the core, this is best initiated by first opening an issue for it.
+Opening a pull request directly can lead to disappointment, although all effort is made to take good ideas seriously.
+
+All other parts of Transcrypt are referred to as periphery.
+While a good quality pull request for the periphery stands a reasonable chance of being accepted,
+still it is wise to start an issue beforehand, allowing coordination and preventing waste of effort.
+
+A special place is taken by implementing standard libraries. While Transcrypt mostly relies on browser-centric JavaScript libraries,
+availability of a limited number of standard libraries will help acceptance by Python programmers. So you're most welcome to make a contribution here.
+The design goal again is, better 90% complete, fast, small, and reliable, than 100% complete, slow, bulky and buggy.
+If you contribute a library, please also contribute an autotest (see docs) and some documentation for it.
+The supported platforms are Windows and Linux (and, with that, OsX).
+
+While being open and respectful to any good ideas, the final say as to what gets in and what doesn't, is with Jacques.
+So this is a dictatorial rather than a democratic project.
+Being a sailer himself, Jacques values the notion of having one captain on a ship.
+The captain doesn't own the ship, but he serves the crew and passengers by plotting a stable course.
+
+Another possibility to contribute libraries to Transcrypt is by submitting them as separate packages to PyPi.
+In that case be sure to add the keyword Transcrypt to allow people to find your package.
+Making your package pip-installable will also help it to catch on.
+Contributing packages via PyPi of course means total freedom for the developer.
+
+Development build status
+------------------------
 
 .. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
     :target: https://travis-ci.org/QQuick/Transcrypt
@@ -52,10 +102,12 @@ Build status
 While we're working to improve both coverage and semantic depth of the continuous integration tests,
 they are still very limited compared to the shipment tests that precede a release.
 Also, since the branching model has been deliberately kept simple, they may be transiently broken.
+In that case you can use the latest passing version, as documented by Travis.
+Another possibility is to use the latest release as a basis.
+While this may mean some manual merging, it offers the advantage of working with shipment tested code.
 
-	
 What's new in the latest commits
-================================
+--------------------------------
 
 - Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
