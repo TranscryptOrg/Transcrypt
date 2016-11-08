@@ -102,6 +102,7 @@ While this may mean some manual merging, it offers the advantage of working with
 What's new in the latest commits
 --------------------------------
 
+- Initial versioin of chapter 'Differences with CPython' added to docs
 - Travis CI activated
 - Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
 - Enhancement for issue #143: 'isinstance' deserves more compat

@@ -151,6 +151,8 @@ Code after *__pragma__ ('ifndef', <symbol>)* is compiled if <symbol> is NOT defi
 
 Important: The conditional compilation pragma's also work when placed at the start of a line in precompiled or hand-written JavaScript code.
 
+.. _pragma_js:
+
 Inserting literal JavaScript: __pragma__ ('js', ...) and __include__ (...)
 --------------------------------------------------------------------------
 During compilation the *__pragma__ ('js', code, <format parameters>)* is replaced by the JavaScript code given in the *code* parameter. This code is formatted using the Python *str.format* method, using *<format parameters>*.
