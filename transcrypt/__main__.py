@@ -94,6 +94,8 @@ def main ():
 		if utils.commandArgs.complex:
 			__symbols__.append ('__complex__')
 			
+		__symbols__.append ('__py{}.{}__'.format (* sys.version_info [:2]))
+			
 		if utils.commandArgs.esv:
 			__symbols__.append ('__esv{}__'.format (utils.commandArgs.esv))
 		else:

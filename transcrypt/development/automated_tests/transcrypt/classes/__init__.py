@@ -67,13 +67,7 @@ def run (autoTester):
 	
 	autoTester.check ('<br><br>Augmented isinstance<br>')
 	# Augmented meaning: compatible with native JavaScript types
-	
-	'''
-	autoTester.check ('<br>11111111111111111<br>')
-	autoTester.check (isinstance (True, bool))
-	autoTester.check ('<br>22222222222222222<br>')
-	'''
-	
+		
 	simpleTypes = (dict, list, A, B, C, bool, str, float, int)
 	tupleTypes = ((dict, list), (bool, int), (bool, A), (C, B))
 	for i, types in enumerate ((simpleTypes, tupleTypes)):
@@ -84,7 +78,6 @@ def run (autoTester):
 					autoTester.check (i, j, k, isinstance (anObject, simpleTypes))
 					
 	autoTester.check ('<br><br>Method resolution order<br>')
-	
 	
 	def mro (aClass, result = None):
 		''' Recursively assemble method resolution order from all base classes'''

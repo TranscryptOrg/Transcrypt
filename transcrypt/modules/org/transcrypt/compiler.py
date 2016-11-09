@@ -93,6 +93,8 @@ class Program:
 		self.moduleSearchDirs = moduleSearchDirs
 		self.symbols = symbols
 		
+		self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
+		
 		if utils.commandArgs.esv == None:
 			self.javaScriptVersion = utils.defaultJavaScriptVersion
 		else:
@@ -1803,7 +1805,10 @@ class Generator (ast.NodeVisitor):
 			self.emit ('}}\n')
 		else:
 			self.prevTemp ('break')
-						
+				
+	def visit_FormattedValue (self, node):
+		self.visit (node.value)
+				
 	def visit_FunctionDef (self, node):	
 		def emitScopedBody ():
 			self.inscope (node)
@@ -1999,6 +2004,17 @@ class Generator (ast.NodeVisitor):
 						self.emit (';\n')
 		except Exception as exception:
 			utils.enhanceException (exception, lineNr = self.lineNr, message = 'Can\'t import from module \'{}\''.format (node.module))
+			
+	def visit_JoinedStr (self, node):
+		self.emit (repr (''.join ([value.s if type (value) == ast.Str else '{{}}' for value in node.values])))
+		self.emit ('.format (')
+		index = 0
+		for value in node.values:
+			if type (value) == ast.FormattedValue:
+				self.emitComma (index)
+				self.visit (value)
+				index += 1
+		self.emit (')')
 			
 	def visit_Lambda (self, node):
 		self.emit ('(function __lambda__ ',)	# Extra () needed to make it callable at definition time
@@ -2241,7 +2257,7 @@ class Generator (ast.NodeVisitor):
 		self.emit ('])')
 		
 	def visit_Str (self, node):
-		self.emit ('{}', repr (node.s))
+		self.emit ('{}', repr (node.s))	# Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
 		
 	# Visited for RHS index, non-overloaded LHS index, RHS slice and RHS extended slice
 	# LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also

@@ -266,7 +266,7 @@ __pragma__ ('endif')
 	};
 	__all__.isinstance = isinstance;
 	
-	// Repr function uses __repr__ method, then __str__ then toString
+	// Repr function uses __repr__ method, then __str__, then toString
 	var repr = function (anObject) {
 		try {
 			return anObject.__repr__ ();
@@ -275,7 +275,7 @@ __pragma__ ('endif')
 			try {
 				return anObject.__str__ ();
 			}
-			catch (exception) {	// It was a dict in Python, so an Object in JavaScript
+			catch (exception) {	// anObject has no __repr__ and no __str__
 				try {
 					if (anObject == null) {
 						return 'None'
@@ -962,7 +962,12 @@ __pragma__ ('endif')
 			return stringable.__str__ ();
 		}
 		catch (exception) {
-			return String (stringable);	// No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
+			try {
+				return repr (stringable)
+			}
+			catch (exception) {
+				return String (stringable);	// No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
+			}
 		}
 	}
 	__all__.str = str;	
@@ -1033,13 +1038,13 @@ __pragma__ ('endif')
 					key = autoIndex++;
 				}
 				if (key == +key) {	// So key is numerical
-					return args [key] == undefined ? match : args [key];
+					return args [key] == undefined ? match : str (args [key]);
 				}
 				else {				// Key is a string
 					for (var index = 0; index < args.length; index++) {
 						// Find first 'dict' that has that key and the right field
 						if (typeof args [index] == 'object' && args [index][key] != undefined) {
-							return args [index][key];	// Return that field field
+							return str (args [index][key]);	// Return that field field
 						}
 					}
 					return match;
@@ -1166,7 +1171,7 @@ __pragma__ ('ifdef', '__map__')
 		else {													// It's a JavaScript object literal
 			var instance = objectOrPairs;
 		}
-	__all__.str = str;	
+	__all__.dict = dict;	
 	
 __pragma__ ('else')
 		

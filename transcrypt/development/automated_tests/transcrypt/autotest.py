@@ -16,11 +16,17 @@ import div_pulls
 import docstrings
 import exceptions
 import extended_slices
+
+__pragma__ ('ifdef', '__py3.6__')	# Needed because Transcrypt imports are compile time
+if '__py3.6__' in __symbols__:		# Needed because CPython doesn't understand pragma's
+	import fstrings
+__pragma__ ('endif')
+
 import general_functions
 import indices_and_slices
 
-__pragma__ ('ifdef', '__esv6__')	# Needed because Transcrypt imports are compile time
-if '__esv6__' in __symbols__:	# Needed because CPython doesn't understand pragma's
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
 	import iterators_and_generators
 __pragma__ ('endif')
 
@@ -63,6 +69,12 @@ autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (docstrings, 'docstrings')
 autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
+
+__pragma__ ('ifdef', '__py3.6__')
+if '__py3.6__' in __symbols__:
+	autoTester.run (fstrings, 'fstrings')
+__pragma__ ('endif')
+
 autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 
