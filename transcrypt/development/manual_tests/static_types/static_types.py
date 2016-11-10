@@ -24,7 +24,7 @@ class A:
 		return 'test'
 		
 __pragma__ ('ifdef', '__undefined__')	# Needed because Transcrypt imports are compile time
-if '__undefined__' in __symbols__:		# Needed because CPython doesn't understand pragma's
+if '__undefined__' in __symbols__:		# Needed because CPython doesn't understand pragmas
 
 	# Variable annotations
 
