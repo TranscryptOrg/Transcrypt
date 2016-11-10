@@ -7,6 +7,12 @@ import classes
 import complex_numbers
 import conditional_expressions
 import control_structures
+
+__pragma__ ('ifdef', '__py3.6__')	# Needed because Transcrypt imports are compile time
+if '__py3.6__' in __symbols__:		# Needed because CPython doesn't understand pragma's
+	import dashed_numbers
+__pragma__ ('endif')
+
 import data_structures
 import decorators
 import dict_comprehensions
@@ -60,6 +66,12 @@ autoTester.run (classes, 'classes')
 autoTester.run (complex_numbers, 'complex_numbers')
 autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')
+
+__pragma__ ('ifdef', '__py3.6__')
+if '__py3.6__' in __symbols__:
+	autoTester.run (dashed_numbers, 'dashed_numbers')
+__pragma__ ('endif')
+
 autoTester.run (data_structures, 'data_structures')
 autoTester.run (decorators, 'decorators')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')

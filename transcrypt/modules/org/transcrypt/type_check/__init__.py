@@ -3,7 +3,7 @@ import os
 import subprocess
 import traceback
 
-mypyPath = '{}/mypy-lang-0.4.4-and-api'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/'))
+mypyPath = '{}/mypy-lang-0.4.4_and_api'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/'))
 sys.path.append (mypyPath)
 
 from mypy import api
