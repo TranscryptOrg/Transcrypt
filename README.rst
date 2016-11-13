@@ -108,7 +108,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- Enhancement for issue #169: Add support for float('inf') and float('-inf') 
+- Enhancement for issue #169: Add support for float('inf') and float('-inf')
+- Python 3.6 numbers with dashes added
+- Python 3.6 fstrings added 
 - Travis CI test for the exceptions testlet repaired
 - Initial version of chapter 'Differences with CPython' added to docs
 - Travis CI activated
