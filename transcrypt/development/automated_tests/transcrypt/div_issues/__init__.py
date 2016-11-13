@@ -1,6 +1,6 @@
 from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbols__
 
-from div_fixes.issue55 import *		# Names not exported from package's __init__.py
+from div_issues.issue55 import *		# Names not exported from package's __init__.py
 
 def run (autoTester):
 	autoTester.check ('Issue 24')	# Non keyword switch generates javascript SyntaxError
@@ -171,4 +171,8 @@ def run (autoTester):
 	autoTester.check ('<br>Sorted:<br>')
 	for row in sortTest.rows:
 		autoTester.check ('{}<br>'.format (','.join ([word for word in row])))
+		
+	autoTester.check ('<br><br>Issue 169<br>')	# Add support for float('inf') and float('-inf')
+	
+	autoTester.check (int (1 / float ('inf')), int (1 / float ('-inf')))
 	

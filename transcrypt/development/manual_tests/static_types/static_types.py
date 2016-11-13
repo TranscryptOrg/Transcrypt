@@ -1,4 +1,4 @@
-from org.transcrypt.stubs.browser import __pragma__
+# from org.transcrypt.stubs.browser import __pragma__
 
 from typing import Iterator	#, List, Dict, ClassVar
 
@@ -23,6 +23,7 @@ class A:
 	def test (self) -> None:
 		return 'test'
 		
+'''
 __pragma__ ('ifdef', '__undefined__')	# Needed because Transcrypt imports are compile time
 if '__undefined__' in __symbols__:		# Needed because CPython doesn't understand pragmas
 
@@ -40,3 +41,4 @@ if '__undefined__' in __symbols__:		# Needed because CPython doesn't understand 
 	aClass.aClassVar = {'aString', 3.14}
 
 __pragma__ ('endif')
+'''

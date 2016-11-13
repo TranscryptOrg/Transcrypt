@@ -30,7 +30,7 @@ Readability
 ===========
 
 As can be seen below, there's a simple parallel between the Python and the JavaScript code.
-So it should be easy to debug.
+In combination with the use of sourcemaps, this enables efficient debugging.
 Also, code can be tested from the command prompt using stubs.
 
 .. figure:: http://www.transcrypt.org/illustrations/class_compare.png
@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Enhancement for issue #169: Add support for float('inf') and float('-inf') 
 - Travis CI test for the exceptions testlet repaired
 - Initial version of chapter 'Differences with CPython' added to docs
 - Travis CI activated

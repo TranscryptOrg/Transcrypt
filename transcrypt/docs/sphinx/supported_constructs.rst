@@ -76,12 +76,12 @@ Dict comprehensions
 	:tab-width: 4
 	:caption: Testlet: dict_comprehensions
 	
-Diverse fixes
--------------
+Diverse issues
+--------------
 
-.. literalinclude:: ../../development/automated_tests/transcrypt/div_fixes/__init__.py
+.. literalinclude:: ../../development/automated_tests/transcrypt/div_issues/__init__.py
 	:tab-width: 4
-	:caption: Testlet: div_fixes
+	:caption: Testlet: div_issues
 	
 Diverse pulls
 -------------

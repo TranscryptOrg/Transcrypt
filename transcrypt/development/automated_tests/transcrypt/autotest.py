@@ -17,7 +17,7 @@ import data_structures
 import decorators
 import dict_comprehensions
 import dictionaries
-import div_fixes
+import div_issues
 import div_pulls
 import docstrings
 import exceptions
@@ -76,7 +76,7 @@ autoTester.run (data_structures, 'data_structures')
 autoTester.run (decorators, 'decorators')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')
 autoTester.run (dictionaries, 'dictionaries')
-autoTester.run (div_fixes, 'div_fixes')
+autoTester.run (div_issues, 'div_issues')
 autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (docstrings, 'docstrings')
 autoTester.run (exceptions, 'exceptions')

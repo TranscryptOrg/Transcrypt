@@ -192,7 +192,13 @@ __pragma__ ('endif')
 	__all__.bool = bool;
 	
 	var float = function (any) {
-		if (isNaN (any)) {
+		if (any == 'inf') {
+			return Infinity;
+		}
+		else if (any == '-inf') {
+			return -Infinity;
+		}
+		else if (isNaN (any)) {
 			throw ValueError (new Error ());
 		}
 		else {
