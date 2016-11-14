@@ -2,6 +2,8 @@ __pragma__ ('skip')
 document = window = Math = Date = 0	# Prevent complaints by optional static checker
 __pragma__ ('noskip')
 
+__pragma__ ('noalias', 'clear')
+
 from com.fabricjs import fabric
 
 orthoWidth = 1000

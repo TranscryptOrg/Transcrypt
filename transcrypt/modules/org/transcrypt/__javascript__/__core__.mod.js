@@ -42,6 +42,13 @@
 	};
 	__all__.__init__ = __init__;
 	
+	
+__pragma__ ('ifdef', '__esv6__')
+	// Proxy switch, controlled by __pragma__ ('proxy') and __pragma ('noproxy')
+	var __proxy__ = false;	// No use assigning it to __all__, only its transient state is important
+__pragma__ ('endif')
+	
+	
 	// Since we want to assign functions, a = b.f should make b.f produce a bound function
 	// So __get__ should be called by a property rather then a function
 	// Factory __get__ creates one of three curried functions for func
@@ -74,7 +81,7 @@
 		}
 	}
 	__all__.__get__ = __get__;
-			
+		
 	// Mother of all metaclasses		
 	var py_metatype = {
 		__name__: 'type',
@@ -133,7 +140,7 @@ __pragma__ ('endif')
 	py_metatype.__metaclass__ = py_metatype;
 	__all__.py_metatype = py_metatype;
 	
-	// Mother of all classes		
+	// Mother of all classes
 	var object = {
 		__init__: function (self) {},
 		
@@ -148,10 +155,35 @@ __pragma__ ('endif')
 			// The descriptor produced by __get__ will return the right method flavor
 			var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
 			
+__pragma__ ('ifdef', '__esv6__')
+		if ('__getattr__' in this || '__setattr__' in this) {
+			instance = new Proxy (instance, {
+				get: function (target, name) {
+					var result = target [name];
+					if (result == undefined) {	// Target doesn't have attribute named name
+						return target.__getattr__ (name);
+					}
+					else {
+						return result;
+					}
+				},
+				set: function (target, name, value) {
+					try {
+						target.__setattr__ (name, value);
+					}
+					catch (exception) {			// Target doesn't have a __setattr__ method
+						target [name] = value;
+					}
+					return true;
+				}
+			})
+		}
+__pragma__ ('endif')
+
 			// Call constructor
 			this.__init__.apply (null, [instance] .concat (args));
-			
-			// Return instance
+
+			// Return constructed instance
 			return instance;
 		}	
 	};

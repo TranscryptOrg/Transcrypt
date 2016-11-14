@@ -53,6 +53,12 @@ import modules
 import nonlocals
 import operator_overloading
 import properties
+
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
+	import proxies
+__pragma__ ('endif')
+
 import set_comprehensions
 import simple_and_augmented_assignment
 import truthyness
@@ -112,6 +118,12 @@ autoTester.run (modules, 'modules')
 autoTester.run (nonlocals, 'nonlocals')
 autoTester.run (operator_overloading, 'operator_overloading')
 autoTester.run (properties, 'properties')
+
+__pragma__ ('ifdef', '__esv6__')
+if '__esv6__' in __symbols__:
+	autoTester.run (proxies, 'proxies')
+__pragma__ ('endif')
+
 autoTester.run (set_comprehensions, 'set_comprehensions')
 autoTester.run (simple_and_augmented_assignment, 'simple_and_augmented_assignment')
 autoTester.run (truthyness, 'truthyness')

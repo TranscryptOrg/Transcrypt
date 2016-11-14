@@ -29,7 +29,8 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 - Any amount of literal JavaScript can be included in-line or from a separate file using :ref:`\_\_pragma\_\_ ('js', ..., ...) <pragma_js>`.
 - The print function can be used to print to a DOM element or to the browser console.
 - The methods console.dir and console.log are also available when programming for the browser, as are in fact all JavaScript facilities, including the complete DOM-manipulation API.
-- Certain identifiers have special meaning in JavaScript. In most cases they still can be used in Transcrypt, since they are aliased to other identifiers. Identifiers starting with 'py\_' are to be avoided, since they have special meaning in Transcrypt. It would have been possible to make clashes harder, by using e.g. @ and \_\_ in but this would have made the JavaScript code harder to read.
+- Certain identifiers are reserved in JavaScript. In most cases they still can be used in Transcrypt, since they are aliased to other identifiers. Identifiers and directory keys starting with 'py\_' are to be avoided, since many of them have special meaning in Transcrypt. It would have been possible to make clashes even more rare, by using e.g. @ and \_\_ in but this would have made the JavaScript code harder to read. Note that you can define a local alias yourself if you still want to use a reserved identifier.
+- The name *type* cannot be used as an ordinary identifier.
 - You can use 'require' to load JavaScript modules on the fly and access them just as you would from JavaScript.
 
 Differences due to running Transcryp applications in the browser, rather than on the desktop

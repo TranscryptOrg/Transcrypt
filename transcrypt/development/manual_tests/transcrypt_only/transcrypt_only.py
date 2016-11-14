@@ -25,10 +25,16 @@ class Tolerant:
 		
 tolerant = Tolerant ()	# Unexpected *args and **kwargs behaviour
 
-output ('T', 'a' in tolerant)
-output ('T', 'f' in tolerant)
+output ('T', 'a' in Tolerant)
+output ('T', 'f' in Tolerant)
+output ('F', 'b' in Tolerant)
+output ('T', 'g' in Tolerant)
+output ('F', 'h' in Tolerant)
+
+output ('F', 'a' in tolerant)
+output ('F', 'f' in tolerant)
 output ('T', 'b' in tolerant)
-output ('T', 'g' in tolerant)
+output ('F', 'g' in tolerant)
 output ('F', 'h' in tolerant)
 
 output ('<br>Issue 102')
@@ -51,7 +57,7 @@ example.foo (*args) 	# For JavaScript < 6 this is transcribed to example.foo.cal
 __pragma__ ('ifdef', '__esv6__')
 output ('[object Object] rather than null in previous line')
 __pragma__ ('else')
-output ('null rather than [object Object] in previous line')
+output ('None rather than [object Object] in previous line')
 __pragma__ ('endif')
 
 output ('<br>Issue 130')	# Add pragma to optionally handle % the JS way

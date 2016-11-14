@@ -172,6 +172,15 @@ def run (autoTester):
 	for row in sortTest.rows:
 		autoTester.check ('{}<br>'.format (','.join ([word for word in row])))
 		
+	autoTester.check ('<br><br>Issue 148<br>')	# Allow key a.o. key 'items' in dict
+	
+	aDict = {
+		'items': [4, 5, 6]
+	}
+
+	for aKey, aValue in aDict.items ():
+		autoTester.check ('{}: {}'.format (aKey, aValue))	
+		
 	autoTester.check ('<br><br>Issue 169<br>')	# Add support for float('inf') and float('-inf')
 	
 	autoTester.check (int (1 / float ('inf')), int (1 / float ('-inf')))

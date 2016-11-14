@@ -92,7 +92,7 @@ Development build status
     :target: https://travis-ci.org/QQuick/Transcrypt
 
 The icon above shows the outcome of the continous integration test that is done on Linux after each commit.
-The test consists of running a set of testlets, systematically covering all facilities of Transcrypt. Each testlet performs an automated back to test against CPython.
+The test consists of running a set of testlets, systematically covering all facilities of Transcrypt. Each testlet performs an automated back to back test against CPython.
 
 The full set of testlets is described in the documentation and comes with the distribution.
 Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
@@ -102,12 +102,14 @@ Each release, on the other hand, is preceded by at least the following tests:
 
 - The automated back to back test described above, not only on Linux but also on Windows and, in case of relevant issues, on OsX.
 - Automated compilation of the manual tests, human exercising of the resulting applications and a visual check of the results.
-- Automated compilation of the demo's, manual exercising of the resulting applications and a visual check of the results.
+- Automated compilation of the demo's, human exercising of the resulting applications and a visual check of the results.
 - A documentation build, followed by a visual sample check.
 
 What's new in the latest commits
 --------------------------------
 
+- Enhancement for issue: #89 and #149: __getattr__ and __setattr__ are now supported, requiring the -e 6 switch. Testlet 'proxies' added.
+- New aliases added to prevent name clashes. The orignal name can always be reached by prepending js_. So e.g. if you need 'clear' in JS, use 'js_clear' in Python. A complete list of aliases is in the docs. Any alias can be undefined to maintain backward compatibility, e.g __pragma__ ('noalias', 'clear').
 - Enhancement for issue #169: Add support for float('inf') and float('-inf')
 - Python 3.6 numbers with dashes added
 - Python 3.6 fstrings added 

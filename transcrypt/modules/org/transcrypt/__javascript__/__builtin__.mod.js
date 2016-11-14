@@ -84,13 +84,6 @@ __pragma__ ('endif')
 	}
 	__all__.__merge__ = __merge__;
 	
-	/* Not needed anymore?
-	// Make console.log understand apply
-	console.log.apply = function () {
-		print ([] .slice.apply (arguments) .slice (1));
-	};
-	*/
-
 	// Manipulating attributes by name
 	
 	var dir = function (obj) {
@@ -915,7 +908,7 @@ __pragma__ ('endif')
 		return this.union (other) .difference (this.intersection (other));
 	};
 	
-	Array.prototype.update = function () {	// O (n)
+	Array.prototype.py_update = function () {	// O (n)
 		var updated = [] .concat.apply (this.slice (), arguments) .sort ();		
 		this.clear ();
 		for (var i = 0; i < updated.length; i++) {
@@ -1265,13 +1258,13 @@ __pragma__ ('else')
 		Object.defineProperty (instance, 'py_keys', {value: __keys__, enumerable: false});
 		Object.defineProperty (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
 		Object.defineProperty (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.py_keys ());}, enumerable: false});
-		Object.defineProperty (instance, 'items', {value: __items__, enumerable: false});		
-		Object.defineProperty (instance, 'del', {value: __del__, enumerable: false});
-		Object.defineProperty (instance, 'clear', {value: __clear__, enumerable: false});
-		Object.defineProperty (instance, 'get', {value: __getdefault__, enumerable: false});
-		Object.defineProperty (instance, 'setdefault', {value: __setdefault__, enumerable: false});
+		Object.defineProperty (instance, 'py_items', {value: __items__, enumerable: false});		
+		Object.defineProperty (instance, 'py_del', {value: __del__, enumerable: false});
+		Object.defineProperty (instance, 'py_clear', {value: __clear__, enumerable: false});
+		Object.defineProperty (instance, 'py_get', {value: __getdefault__, enumerable: false});
+		Object.defineProperty (instance, 'py_setdefault', {value: __setdefault__, enumerable: false});
 		Object.defineProperty (instance, 'py_pop', {value: __pop__, enumerable: false});
-		Object.defineProperty (instance, 'update', {value: __update__, enumerable: false});
+		Object.defineProperty (instance, 'py_update', {value: __update__, enumerable: false});
 		return instance;
 	}
 __pragma__ ('endif')
