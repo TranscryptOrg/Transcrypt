@@ -55,12 +55,27 @@ export DISPLAY=:99.0
 url="http://127.0.0.1:$port/do/$tests"
 
 echo "Testurl is: $url"
-/usr/bin/xvfb-run -a firefox  "$url" &
+# Launch XVFB detached from this process
+# If we don't detach - then the PGID will not be
+# different from the 'run' script
+setsid /usr/bin/xvfb-run -a firefox "$url" &
+
+# Get the PID of xvfb-run (parent process)
+XVFB_PID=$(ps -e -o pid,cmd | \
+           grep -o "\([[:digit:]]*\) .*usr/bin/xvfb-run.*" | \
+           head -n 1 | \
+           grep -o " \([[:digit:]]*\) ")
+
+# Get the Process Group ID for xvfb-run, the parent of a
+# group of process that run under it
+XVFB_PGID=$(ps -o pgid= $XVFB_PID | grep -o "[[:digit:]]*")
 
 echo "Testserver port is: $port"
 python2 "$here/test_server.py" $port &
+TESTSERVER_PID=$!
 
 echo 'polling now for stopfile'
+ERR_FOUND=1
 
 set +x
 while true; do
@@ -68,14 +83,28 @@ while true; do
     if [ -e "$stop_flag" ]; then
         cat "$stop_flag" | grep "ERR" && {
             echo -e "$R stopflag with status ERR found $O"
-            exit 1
+            break
         } || {
             echo -e "$G all well $O"
-            exit 0
+            ERR_FOUND=0
+            break
         }
     fi
     # echo '.' # no output, to make travis end it earlier on endless loops, ie.
     # when result never comes....
 done
-echo -e "$R No stopflag found $O"
-exit 1
+
+echo "Killing XVFB PID=$XVFB_PID PGID=$XVFB_PGID"
+# @note - xvfb-run generates child processes which
+#   means you can't just kill xvfb-run - you gotta
+#   kill the group
+kill -TERM -- -$XVFB_PGID
+
+echo "Killing TESTSERVER PID=$TESTSERVER_PID"
+kill $TESTSERVER_PID
+
+echo "Error Status: $ERR_FOUND"
+exit $ERR_FOUND
+
+#echo -e "$R No stopflag found $O"
+#exit 1
