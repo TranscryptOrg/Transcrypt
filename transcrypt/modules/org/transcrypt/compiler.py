@@ -1384,6 +1384,7 @@ class Generator (ast.NodeVisitor):
 				
 		elif type (node.func) == ast.Attribute:
 			if self.replaceSend and node.func.attr == 'send':	# Construct Attribute instead of bare Call node on the fly and visit it
+				self.emit ('(function () {{return ')	# Encapsulate in function to prevent minifier complaining if value isn't used
 				self.visit (ast.Attribute (
 					value = ast.Call (
 						func = ast.Attribute (
@@ -1400,6 +1401,7 @@ class Generator (ast.NodeVisitor):
 					attr = 'value',
 					ctx = ast.Load
 				))
+				self.emit ('}}) ()')
 				return	# The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
 			
 		if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'):	# If operator overloading and whe're not already in the __call__
@@ -2464,6 +2466,13 @@ class Generator (ast.NodeVisitor):
 			
 	def visit_Yield (self, node):
 		self.getScope (ast.FunctionDef) .containsYield = True
-		self.emit ('yield ')
-		self.visit (node.value)
+		self.emit ('yield')
+		if (node.value != None):
+			self.emit (' ')
+			self.visit (node.value)
 		
+	def visit_YieldFrom (self, node):
+		self.getScope (ast.FunctionDef) .containsYield = True
+		self.emit ('yield* ')
+		self.visit (node.value)
+	

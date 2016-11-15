@@ -127,6 +127,17 @@ Fast calls or fcalls are method calls where the method isn't an attribute of an 
 
 Note that these pragmas have to be applied on the function definition location rather than the call location. Placing *__pragma__ ('fcall')* or *__pragma__ ('nofcall')* at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.
 
+Enabling Pythons *send* syntax: __pragma__ ('gsend') and __pragma ('nogsend')
+----------------------------------------------------------------------------------------
+
+These pragmas enable respectively disable use of Pythons *send* syntax for generators, which is disabled by default. An example of its use is in the following code:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/iterators_and_generators/__init__.py
+	:start-after: BEGIN 1st example with 'send'
+	:end-before: END 1st example with 'send'
+	:tab-width: 4
+	:caption: Use of __pragma ('gsend') to enable Pythons *send* syntax fo generators 
+
 Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv')
 ---------------------------------------------------------------------------------
 In CPython sometimes automatic conversion from a non-iterable to an iterable type takes place. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. Iteration through the keys of a *dict* without explicitly calling its *keys ()* member is a frequent use case of automatic conversion. To switch on automatic conversion for dicts locally, *__pragma__ ('iconv')* and *__pragma__ ('noiconv')* can be used. The alternative is to switch on automatic conversion globally using the -i command line switch. Use of this switch is disadvised, especially for numerical processing code containing nested loops, since it adds the mentioned typecheck to each *for .. in ..* loop. When designing numerical processing libraries, it's advisable to use *__pragma__ ('noiconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -i switch, the performance of the computations won't suffer.

@@ -25,6 +25,13 @@ Attribute access by name: getattr, setattr, hasattr
 	:tab-width: 4
 	:caption: Testlet: attribs_by_name
 
+Attribute proxies by name: __getattr__, __setattr__
+---------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/proxies/__init__.py
+	:tab-width: 4
+	:caption: Testlet: proxies
+
 Classes: multiple inheritance and assignment of bound functions
 ---------------------------------------------------------------
 

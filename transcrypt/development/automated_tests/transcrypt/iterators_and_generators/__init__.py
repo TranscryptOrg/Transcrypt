@@ -63,7 +63,9 @@ def run (autoTester):
 		autoTester.check ('[4]')
 		for n in iterable:
 			autoTester.check (n)
-			
+		
+	# BEGIN 1st example with 'send'
+		
 	__pragma__ ('gsend')
 
 	def test0 ():
@@ -86,3 +88,41 @@ def run (autoTester):
 	autoTester.check (gen1.send (3))
 	autoTester.check (gen1.send (4))
 	
+	# END 1st example with 'send'
+	
+	def subGenerator ():
+		yield 27
+		yield 37
+		yield 47
+	
+	
+	def mainGenerator ():
+		yield 17
+		yield from subGenerator ()
+		yield 57
+		
+	autoTester.check (* [i for i in mainGenerator ()])
+	
+	def subCoroutine ():
+		autoTester.check (38)
+		yield
+		autoTester.check (48)
+		yield
+		autoTester.check (58)
+		yield
+		autoTester.check (68)
+	
+	
+	def mainCoroutine ():
+		autoTester.check (18)
+		yield
+		autoTester.check (28)
+		yield from subCoroutine ()
+		autoTester.check (78)
+		yield
+		autoTester.check (88)
+		
+	m = mainCoroutine ()
+	for i in range (5):
+		m.send (None)
+		
