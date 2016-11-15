@@ -28,8 +28,17 @@ test ! -z $port || port=8080
 
 if [ "x$1" == "xprepare" ]; then
     cat "$here/README.md"
-    sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
-    sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
+
+    if [ ! -e /usr/bin/python3.5 ]
+    then
+        sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
+    fi
+
+    if [ ! -e /usr/bin/nodejs ]
+    then
+        sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
+    fi
+
     python3.5 --version
     java -version
     echo "node version: `nodejs --version`"
