@@ -212,7 +212,7 @@ def result():
     test = request.query.test
     # the result div of the autotest html:
     if not 'green' in res and not 'succeeded' in res:
-        return stop('%s %s' % (test, res))
+        return stop('ERROR %s %s' % (test, res))
     print G('SUCCESS'), test
     return redir % ('next test', '/do/next')
 
