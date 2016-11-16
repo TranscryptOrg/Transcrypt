@@ -62,7 +62,7 @@ setsid /usr/bin/xvfb-run -a firefox "$url" &
 
 # Get the PID of xvfb-run (parent process)
 XVFB_PID=$(ps -e -o pid,cmd | \
-           grep -o "\([[:digit:]]*\) .*usr/bin/xvfb-run.*" | \
+           grep "[x]vfb-run -a firefox" | \
            head -n 1 | \
            grep -o " \([[:digit:]]*\) ")
 
