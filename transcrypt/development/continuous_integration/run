@@ -59,6 +59,11 @@ echo "Testurl is: $url"
 # If we don't detach - then the PGID will not be
 # different from the 'run' script
 setsid /usr/bin/xvfb-run -a firefox "$url" &
+if [ $? -ne 0 ]
+then
+    echo "$R Failed to Launch XVFB/Firefox: $? $O"
+    exit 3
+fi
 
 # Get the PID of xvfb-run (parent process)
 XVFB_PID=$(ps -e -o pid,cmd | \
@@ -82,6 +87,13 @@ function killXVFB() {
 
 echo "Testserver port is: $port"
 python2 "$here/test_server.py" $port &
+if [ $? -ne 0 ]
+then
+    echo "$R Failed to launch test server: $? $O"
+    killXVFB
+    exit 3
+fi
+
 TESTSERVER_PID=$!
 
 # This function is called to correctly kill
