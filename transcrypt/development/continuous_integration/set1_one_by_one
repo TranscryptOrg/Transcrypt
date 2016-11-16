@@ -15,7 +15,7 @@ transcrypt/data_structures
 transcrypt/decorators
 transcrypt/dict_comprehensions
 transcrypt/dictionaries
-transcrypt/div_fixes
+#transcrypt/div_fixes
 transcrypt/div_pulls
 transcrypt/docstrings
 transcrypt/exceptions	# -da flag added, but still problem, no idea what (JdeH)
@@ -27,8 +27,8 @@ transcrypt/list_comprehensions
 transcrypt/local_classes
 transcrypt/metaclasses
 transcrypt/module_builtin
-transcrypt/module_cmath
-transcrypt/module_math
+#transcrypt/module_cmath
+#transcrypt/module_math
 transcrypt/modules
 transcrypt/nonlocals
 transcrypt/operator_overloading

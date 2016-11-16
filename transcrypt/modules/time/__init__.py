@@ -1,6 +1,7 @@
 """
 time module
 
+
 No:
 
 - Platform specific functions
@@ -19,6 +20,7 @@ Jul 2016, Gunther Klessinger, Axiros GmbH
 """
 # we don't need those:
 __pragma__ ('nokwargs')
+
 
 # for js dates:
 from org.transcrypt.stubs.browser import __new__
