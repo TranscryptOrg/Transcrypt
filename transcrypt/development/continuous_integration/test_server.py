@@ -85,7 +85,8 @@ def index(tests=0, single=None):
             print I('loading test set')
             with open(tests) as fd:
                 tests = fd.read()
-            tests = [k.strip() for k in tests.splitlines() \
+            # ignoring '# ...' lines, using 'foo' in 'foo # comment' lines:
+            tests = [k.split('#')[0].strip() for k in tests.splitlines() \
                      if k and not k.startswith('#')]
         else:
             # alternative form:
@@ -209,7 +210,8 @@ def result():
         pass
     res = request.query.res
     test = request.query.test
-    if 'ERROR' in res:
+    # the result div of the autotest html:
+    if not 'green' in res and not 'succeeded' in res:
         return stop('%s %s' % (test, res))
     print G('SUCCESS'), test
     return redir % ('next test', '/do/next')
