@@ -70,9 +70,38 @@ XVFB_PID=$(ps -e -o pid,cmd | \
 # group of process that run under it
 XVFB_PGID=$(ps -o pgid= $XVFB_PID | grep -o "[[:digit:]]*")
 
+# Kill the XVFB process group and all children
+function killXVFB() {
+    # @note - xvfb-run generates child processes which
+    #   means you can't just kill xvfb-run - you gotta
+    #   kill the group
+    echo "Killing XVFB PID=$XVFB_PID PGID=$XVFB_PGID"
+    kill -- -$XVFB_PGID
+}
+
+
 echo "Testserver port is: $port"
 python2 "$here/test_server.py" $port &
 TESTSERVER_PID=$!
+
+# This function is called to correctly kill
+# the children processes started by this script
+function killChildren() {
+    killXVFB
+    echo "Killing TESTSERVER PID=$TESTSERVER_PID"
+    kill $TESTSERVER_PID
+}
+
+# Control-C Handler Function
+function ctrlCTrap() {
+    echo "**** Control-C ****"
+    killChildren
+    exit 2
+}
+
+# Capture the Ctrl-C input so that we can correctly
+# kill children in the middle of a run.
+trap ctrlCTrap INT
 
 echo 'polling now for stopfile'
 ERR_FOUND=1
@@ -94,14 +123,7 @@ while true; do
     # when result never comes....
 done
 
-echo "Killing XVFB PID=$XVFB_PID PGID=$XVFB_PGID"
-# @note - xvfb-run generates child processes which
-#   means you can't just kill xvfb-run - you gotta
-#   kill the group
-kill -TERM -- -$XVFB_PGID
-
-echo "Killing TESTSERVER PID=$TESTSERVER_PID"
-kill $TESTSERVER_PID
+killChildren
 
 echo "Error Status: $ERR_FOUND"
 exit $ERR_FOUND
