@@ -28,13 +28,22 @@ test ! -z $port || port=8080
 
 if [ "x$1" == "xprepare" ]; then
     cat "$here/README.md"
-	sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
-	sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
-	python3.5 --version
-	java -version
-	echo "node version: `nodejs --version`"
-	echo 'prepare ready'
-	exit 0
+
+    if [ ! -e /usr/bin/python3.5 ]
+    then
+        sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
+    fi
+
+    if [ ! -e /usr/bin/nodejs ]
+    then
+        sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
+    fi
+
+    python3.5 --version
+    java -version
+    echo "node version: `nodejs --version`"
+    echo 'prepare ready'
+    exit 0
 fi
 
 tests="$1"
@@ -46,12 +55,68 @@ export DISPLAY=:99.0
 url="http://127.0.0.1:$port/do/$tests"
 
 echo "Testurl is: $url"
-/usr/bin/xvfb-run -a firefox  "$url" &
+# Launch XVFB detached from this process
+# If we don't detach - then the PGID will not be
+# different from the 'run' script
+setsid /usr/bin/xvfb-run -a firefox "$url" &
+if [ $? -ne 0 ]
+then
+    echo "$R Failed to Launch XVFB/Firefox: $? $O"
+    exit 3
+fi
+
+# Get the PID of xvfb-run (parent process)
+XVFB_PID=$(ps -e -o pid,cmd | \
+           grep "[x]vfb-run -a firefox" | \
+           head -n 1 | \
+           grep -o " \([[:digit:]]*\) ")
+
+# Get the Process Group ID for xvfb-run, the parent of a
+# group of process that run under it
+XVFB_PGID=$(ps -o pgid= $XVFB_PID | grep -o "[[:digit:]]*")
+
+# Kill the XVFB process group and all children
+function killXVFB() {
+    # @note - xvfb-run generates child processes which
+    #   means you can't just kill xvfb-run - you gotta
+    #   kill the group
+    echo "Killing XVFB PID=$XVFB_PID PGID=$XVFB_PGID"
+    kill -- -$XVFB_PGID
+}
+
 
 echo "Testserver port is: $port"
 python2 "$here/test_server.py" $port &
+if [ $? -ne 0 ]
+then
+    echo "$R Failed to launch test server: $? $O"
+    killXVFB
+    exit 3
+fi
+
+TESTSERVER_PID=$!
+
+# This function is called to correctly kill
+# the children processes started by this script
+function killChildren() {
+    killXVFB
+    echo "Killing TESTSERVER PID=$TESTSERVER_PID"
+    kill $TESTSERVER_PID
+}
+
+# Control-C Handler Function
+function ctrlCTrap() {
+    echo "**** Control-C ****"
+    killChildren
+    exit 2
+}
+
+# Capture the Ctrl-C input so that we can correctly
+# kill children in the middle of a run.
+trap ctrlCTrap INT
 
 echo 'polling now for stopfile'
+ERR_FOUND=1
 
 set +x
 while true; do
@@ -59,14 +124,21 @@ while true; do
     if [ -e "$stop_flag" ]; then
         cat "$stop_flag" | grep "ERR" && {
             echo -e "$R stopflag with status ERR found $O"
-            exit 1
+            break
         } || {
             echo -e "$G all well $O"
-            exit 0
+            ERR_FOUND=0
+            break
         }
     fi
     # echo '.' # no output, to make travis end it earlier on endless loops, ie.
     # when result never comes....
 done
-echo -e "$R No stopflag found $O"
-exit 1
+
+killChildren
+
+echo "Error Status: $ERR_FOUND"
+exit $ERR_FOUND
+
+#echo -e "$R No stopflag found $O"
+#exit 1
