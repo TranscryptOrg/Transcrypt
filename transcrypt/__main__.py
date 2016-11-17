@@ -111,6 +111,7 @@ def main ():
 					return setExitCode (exitSuccess)
 			except Exception as exception:
 				utils.log (True, 'Error: cannot run {} using CPython: {}\n'.format (utils.commandArgs.source, str (exception) .replace (' (<string>', '') .replace (')', '')))
+				utils.log(True, traceback.format_exc())
 				return setExitCode (exitCannotRunSource)
 		else:
 			try:
