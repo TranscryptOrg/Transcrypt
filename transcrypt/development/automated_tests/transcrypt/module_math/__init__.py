@@ -1,44 +1,53 @@
 from math import *
 
-def run (autoTester):
-	autoTester.check (pi)
-	autoTester.check (e)
-	
-	autoTester.check (exp (3))
-	autoTester.check (int (expm1 (5)))
-	
-	autoTester.check (log (0.2))
-	autoTester.check (round (log (1024, 2)))
-	autoTester.check (log1p (5))
-	autoTester.check (int (log2 (257)))
-	autoTester.check (int (log10 (1001)))
-	
-	autoTester.check (pow (3, 4.5))
-	autoTester.check (sqrt (25.1))
-	
-	autoTester.check (sin (10))
-	autoTester.check (cos (10))
-	autoTester.check (tan (10))
+def _check(nr, autoTester):
+	# we just compare the first 15 digits of floats due to precision deviations
+	# in browser and CPython:
+	if isinstance(nr, float):
+		nr = str(nr)[:15]
+	autoTester.check(nr)
 
-	autoTester.check (asin (0.5))
-	autoTester.check (acos (0.5))
-	autoTester.check (atan (0.5))
-	autoTester.check (atan2 (1, 2))
+
+def run (autoTester):
+	check = lambda nr: _check(nr, autoTester)
+	check (pi)
+	check (e)
 	
-	autoTester.check (int (hypot (3, 4.1)))
+	check (exp (3))
+	check (int (expm1 (5)))
 	
-	autoTester.check (degrees (pi/2.1))
-	autoTester.check (radians (90))
+	check (log (0.2))
+	check (round (log (1024, 2)))
+	check (log1p (5))
+	check (int (log2 (257)))
+	check (int (log10 (1001)))
 	
-	autoTester.check (sinh (1))
-	autoTester.check (cosh (1))
-	autoTester.check (tan (1))
+	check (pow (3, 4.5))
+	check (sqrt (25.1))
 	
-	autoTester.check (asinh (70))
-	autoTester.check (acosh (70))
-	autoTester.check (atan (70))
+	check (sin (10))
+	check (cos (10))
+	check (tan (10))
+
+	check (asin (0.5))
+	check (acos (0.5))
+	check (atan (0.5))
+	check (atan2 (1, 2))
 	
-	autoTester.check (floor (3.5))
-	autoTester.check (ceil (3.5))
-	autoTester.check (trunc (3.5))
+	check (int (hypot (3, 4.1)))
+	
+	check (degrees (pi/2.1))
+	check (radians (90))
+	
+	check (sinh (1))
+	check (cosh (1))
+	check (tan (1))
+	
+	check (asinh (70))
+	check (acosh (70))
+	check (atan (70))
+	
+	check (floor (3.5))
+	check (ceil (3.5))
+	check (trunc (3.5))
 	

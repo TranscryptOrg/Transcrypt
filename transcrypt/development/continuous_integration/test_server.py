@@ -59,9 +59,16 @@ env['d_0'] = d0 = _('/', 3)[0]
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
 env['d_at'] = d0 + '/development/automated_tests'
-redir = '\n'.join(('<html>', '<body>', '%s', '<script>',
-         'window.location.href="%s";', '</script>',
-         '</body>', '</html>'))
+
+html_tmpl = '''<html>
+<body>
+%s
+<script>
+%s
+</script>
+</body>
+</html>'''
+redir = html_tmpl % ('%s', 'window.location.href="%s";')
 
 def cd():
     'back to integration test dir'
@@ -122,7 +129,9 @@ def unalias(t):
 
 def run_t(*args):
     'invoke transcrypt with flags'
-    os.system('%s/run_transcrypt %s' % (env['d_0'], ' '.join(args)))
+    cmd = '%s/run_transcrypt %s' % (env['d_0'], ' '.join(args))
+    if os.system(cmd):
+        return os.popen(cmd + ' -v 2>&1').read()
 
 # %s e.g. dictionaries, we are in its parent dir when writing this:
 ci_at = '''
@@ -180,27 +189,36 @@ def run_test(filepath):
         os.chdir(d)
         with open(fn + '.py', 'w') as fd:
             fd.write(ci_at % (test, test))
-
+    err = None
     for flags in ('-r', '-b -n -c -da'):
-        run_t(flags, './%s.py' % fn)
+        err = run_t(flags, './%s.py' % fn)
+        if err:
+            break
         #env['PYTHONPATH'] = '/root/Transcrypt/transcrypt/modules:.'
 
     with open('%s.html' % fn) as fd:
         html = fd.read()
     html = '<h4>%s</h4>' % d_was + html
+    if err:
+        html = '<h1>ERROR</h1><hr><pre>%s</pre>' % err
 
     if ctx.get('stop'):
+        # this is a single test, run via /chk/<test>
         # the test has to load still, need the stopflag not to be deleted:
         # otherwise the js would be augmented with the href forward:
         return stop(html, no_reset=True)
 
     # if the js fails we would not get a result hit, so:
+    if err:
+        global max_wait
+        max_wait = 0
     cmd = ['sleep %s' % max_wait,
             ('wget -q "http://127.0.0.1:%s/result?'
             'test=%s&res=ERROR" -O /dev/null') % (port, d)]
     ctx['error_reporter'] = subprocess.Popen(' && '.join(cmd), shell=True)
 
     return html
+
 
 @route('/result')
 def result():
@@ -234,34 +252,165 @@ def stop(msg, postfix='', no_reset=False):
     if 'ERROR' in msg:
         col = R
     msg += '[%s set]' % stop_flag
-    print col(msg)
+    if not ctx.get('stop'):
+        print col(msg)
     if iu:
         postfix = '<hr>Rerun <a href="%s">%s</a>' % (iu, iu) + postfix
     return msg + postfix
 
-# just ansi color:
+
+
+# ------------------------------------------------------ dev mode (auto reload)
+import threading
+fs_changed = threading.Event()
+# max reload of test result page at every ... second:
+reload_interval = 2
+fs_change_msg = 'Filesystem change detected'
+@route('/dev/<url:path>')
+def dev(url):
+    ''' loading the original url within an iframe and polling for fs changes,
+    reloading the iframe on changes'''
+    u = request.url
+    test_url = u.replace('/dev/', '/')
+    fs_change_url = u.split('/dev/', 1)[0] + '/dev_fs_changed'
+    ctx['last_reload'] = time.time()
+    # env['d_0'] is the whole transcrypt directory.
+    c = env.get('TS_MON_CMD')
+    if not c:
+        print ('No $TS_MON_CMD in environ - using default '
+              '(all transcrypt .py files)')
+        c = '''find "%s" -name "*.py" | entr -c wget -q "%s" -O -''' \
+                % (env['d_0'], fs_change_url)
+    print L('$TS_MON_CMD : ', I(c))
+
+    ctx['monitor_cmd'] = c
+    print I('starting FS monitor', M(ctx['monitor_cmd']))
+
+    ctx['fs_chcker'] = subprocess.Popen(ctx['monitor_cmd'], shell=True)
+
+    m = {'test_url': test_url, 'fs_change_msg': fs_change_msg}
+
+    return html_tmpl % ('''
+            <div id="result">Polling for changes...</div>
+            <hr>
+            <h2>Test Output of %s</h2>
+            <iframe id="test_iframe" src="%s" width="100%%" height="100%%">
+            </iframe>''' % (test_url, test_url),
+
+            '''
+            var nr = 1;
+            function load_fs_poll_page() {
+                document.title = nr + ' Transcrypt Dev Tester';
+                var res=document.getElementById("result");
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+                    if (xmlhttp.status == 200) {
+                        var sr = xmlhttp.responseText;
+                        if (sr == '%(fs_change_msg)s') {
+                            var i = document.getElementById('test_iframe');
+                            nr += 1;
+                            i.src = "%(test_url)s?nr=" + nr;
+                            res.innerHTML = `Test page reloaded.
+                            Continue polling....`
+                        } else {
+                            res.innerHTML = sr +
+                                    ' - no fs_change. Continue polling...';
+                        }
+                        load_fs_poll_page();
+                    }
+                    else {
+                        res.innerHTML = `Stopping reload.
+                        There was an error on the dev server.
+                        Fix and reload this page when done.
+                        `;
+                        }
+                    }
+                };
+                xmlhttp.open("GET", "/dev_fs_poll?test_url=%(test_url)s", true);
+                xmlhttp.send();
+            }
+            load_fs_poll_page();
+            ''' % m)
+
+@route('/dev_fs_poll')
+def dev_fs_poll():
+    ''' returning a timestamp update all 10 secs to the browser.
+    Except if there is an event - then we return the change message,
+    causing it to reload the page'''
+    for i in range(50):
+        if fs_changed.wait(0.2):
+            fs_changed.clear()
+            if not time.time() - ctx['last_reload'] < reload_interval:
+                ctx['last_reload'] = time.time()
+                return fs_change_msg
+            else:
+                print M('Ignoring fs_change event (too frequent)')
+    print 'return'
+    return time.ctime()
+
+@route('/dev_fs_changed')
+def dev_fs_changed():
+    print M('fs change detected')
+    print fs_changed
+    fs_changed.set()
+    return 'event set'
+
+
+
+
+
+
+# ------------------------------------------------------------ ansi term colors
 def _col(c, *s): return ("\x1B[38;5;%sm%%s\x1B[0m" % c ) % (' '.join(s))
 G = lambda *s: _col(154, *s)
 R = lambda *s: _col(124, *s)
 M = lambda *s: _col(176, *s)
 I = lambda *s: _col(146, *s)
+L = lambda *s: _col(240, *s)
 
-
+def usage():
+    print
+    print I('Usage:')
+    f = sys.argv[0]
+    print 'Start me with %s <[host:]port> [dev]' % f
+    print 'e.g. %s 8080 or %s 0.0.0.0:7777' % (f, f)
+    print 'Hit me at http://%s:%s/do/<tests>' % (h, p)
+    print 'e.g. http://%s:%s/do/time,hello' % (h, p)
+    print 'or http://%s:%s/do/set1' % (h, p)
+    print
+    print '- single tests via /chk, e.g. /chk/time'
+    print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
+    print
+    print 'we require the "wget" command'
+    print
+    print 'dev mode requires:'
+    print ' - pip install paste'
+    print ' - the "entr" command'
+    print
+    print
 
 if __name__ == '__main__':
     l = sys.argv
+    dev_mode = 0
     if not len(l) - 1:
-        f = l[0]
-        print 'Start me with %s <[host:]port>'
-        print 'e.g. %s 8080 or %s 0.0.0.0:7777' % (f, f)
+        usage()
         sys.exit(1)
-    h, p = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
-    port=p
-    assert os.system('which wget') == 0, 'require wget'
-    print 'now hit me at http://%s:%s/<tests>' % (h, p)
-    print 'e.g. http://%s:%s/time,hello' % (h, p)
-    stop_flag += '_%s' % p
+    if len(l) > 2 and l[2] == 'dev':
+        dev_mode = 1
 
-    run(host=h, port=int(p))
+    (host, port) = (h, p) = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
+    assert os.system('which wget') == 0, 'require wget'
+    if dev_mode:
+        assert os.system('which entr') == 0, 'require entr'
+    usage()
+    stop_flag += '_%s' % p
+    port = int(port)
+    if not dev_mode:
+        run(host=host, port=port)
+    else:
+        from bottle import PasteServer
+        run(server=PasteServer, host=host, port=port)
 
 

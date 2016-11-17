@@ -133,6 +133,38 @@ ci.py files if autotest.py is missing e.g. in transcrypt/dictionaries.
 Read `test_server.py` for details.
 
 
+### Dev Mode
+
+In Dev mode the server reloads the test page(s) automatically on file system
+change.
+
+Here is a demo cast: https://www.youtube.com/watch?v=lvTjKWVOwXA
+
+Start the server like this
+
+    ./test_server.py <port> dev
+
+and hit the test url like this
+
+    http://127.0.0.1:<port>/dev/<test_url
+
+e.g.
+
+    http://127.0.0.1:<port>/dev/chk/time
+
+For dev mode you need to `pip install paste` and also have the `entr` command
+in your path as a file system change monitor.
+
+Overriding the default:
+
+Check the `$TS_MON_CMD` command output and optionally export a custom one
+before starting test test server. Necessary is the hit on the server whenever
+there is a change.
+
+
+
+
+
 
 
 
