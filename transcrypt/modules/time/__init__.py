@@ -1,7 +1,6 @@
 """
 time module
 
-
 No:
 
 - Platform specific functions
