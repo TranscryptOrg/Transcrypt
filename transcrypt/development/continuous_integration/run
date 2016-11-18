@@ -69,7 +69,7 @@ fi
 XVFB_PID=$(ps -e -o pid,cmd | \
            grep "[x]vfb-run -a firefox" | \
            head -n 1 | \
-           grep -o " \([[:digit:]]*\) ")
+           grep -o -m 1 "\([[:digit:]]*\) ")
 
 # Get the Process Group ID for xvfb-run, the parent of a
 # group of process that run under it
