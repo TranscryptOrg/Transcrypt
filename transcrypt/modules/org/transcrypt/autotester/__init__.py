@@ -129,6 +129,7 @@ class AutoTester:
 		self.pyPosClass = "py-pos"
 		self.excArea = "exc-area"
 		self.excHeaderClass = "exc-header"
+		self.collapsedClass = "collapsed"
 
 	def sortedRepr (self, any):
 		# When using sets or dicts, use elemens or keys
@@ -204,7 +205,10 @@ class AutoTester:
 		    overflow-x: auto;
 		  }
 		  .exc-header {
-	    color: red;
+	      color: red;
+		  }
+		  .collapsed {
+		    display: None;
 		  }
 		</style>
 		"""
@@ -258,14 +262,18 @@ class AutoTester:
 		else:
 			document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor)
 
-	def _appendTableResult(self, testPos, testItem, refPos, refItem):
+	def _appendTableResult(self, name, testPos, testItem, refPos, refItem, collapse=False):
 
 		table = document.getElementById(self.tableId)
 		# Insert at the end
 		row = table.insertRow(-1);
+		row.classList.add(name)
 		if ( testItem != refItem ):
 			row.classList.add(self.faultRowClass)
 			refPos = "!!!" + refPos
+		else:
+			if ( collapse ):
+				row.classList.add(self.collapsedClass)
 
 		# Populate the Row
 		cpy_pos = row.insertCell(0)
@@ -313,7 +321,7 @@ class AutoTester:
 			posData,resultData = self._extractPosResult(child)
 			self.refDict[keyName] = zip(posData, resultData)
 
-	def appendSeqRowName(self, name, errCount):
+	def _appendSeqRowName(self, name, errCount):
 		"""
 		"""
 		table = document.getElementById(self.tableId)
@@ -326,15 +334,49 @@ class AutoTester:
 		headerCell.innerHTML = name + " | Errors = " + str(errCount)
 		headerCell.colSpan = 4
 		headerCell.style.textAlign= "center"
+		modCollapseClass = "mod-collapsed"
+		if ( errCount == 0 ):
+			headerCell.classList.add(modCollapseClass)
+
+		def toggleCollapse(evt):
+			""" Toggle whether the
+			"""
+			doCollapse = not evt.target.classList.contains(modCollapseClass)
+
+			table = document.getElementById(self.tableId)
+			# Get all rows that are associated with this module class
+			clsName = self._getRowClsName(name)
+			allRows = table.tHead.children
+			rows = filter(lambda x: x.classList.contains(clsName), allRows)
+			#rows = [ x for x in table.tHead.children if clsName in x.classList]
+
+			for row in rows:
+				if ( doCollapse ):
+					row.classList.add(self.collapsedClass)
+				else:
+					row.classList.remove(self.collapsedClass)
+
+			if ( doCollapse ):
+				evt.target.classList.add(modCollapseClass)
+			else:
+				evt.target.classList.remove(modCollapseClass)
+
+		headerCell.onclick = toggleCollapse
+
+
+	def _getRowClsName(self, name):
+		return("mod-" + name)
 
 	def _outputTableResults(self, name, errCount,  testData, refData):
-		self.appendSeqRowName(name, errCount)
+		collapse = (errCount == 0)
+		self._appendSeqRowName(name, errCount)
+		clsName = self._getRowClsName(name)
 		if ( testData is not None ):
 			for ((testPos, testItem),(refPos,refItem)) in zip(testData, refData):
-				self._appendTableResult(testPos, testItem, refPos, refItem)
+				self._appendTableResult(clsName, testPos, testItem, refPos, refItem, collapse)
 		else:
 			for (refPos, refItem) in refData:
-				self._appendTableResult(None, None, refPos, refItem)
+				self._appendTableResult(clsName, None, None, refPos, refItem)
 
 	def compare (self):
 		self._getPythonResults()
