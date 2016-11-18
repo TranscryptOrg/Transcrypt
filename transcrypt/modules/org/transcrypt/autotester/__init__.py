@@ -59,7 +59,7 @@ def getFileLocation():
 		# This regex splits the string coming from the javascript
 		# stacktrace so that we can connect the file and line number
 		# runTests (http://localhost:8080/run/autotest.js:3159:8)
-		#  func       URL                     filename    lineno:colno
+		#  func	      URL		      filename	  lineno:colno
 		# Group 1 = function
 		# Group 2 & 3 = protocol and hostname
 		# Group 4 = Path on this host (filename is at the end)
@@ -204,7 +204,7 @@ class AutoTester:
 		    overflow-x: auto;
 		  }
 		  .exc-header {
-            color: red;
+	    color: red;
 		  }
 		</style>
 		"""
@@ -265,6 +265,7 @@ class AutoTester:
 		row = table.insertRow(-1);
 		if ( testItem != refItem ):
 			row.classList.add(self.faultRowClass)
+			refPos = "!!!" + refPos
 
 		# Populate the Row
 		cpy_pos = row.insertCell(0)
