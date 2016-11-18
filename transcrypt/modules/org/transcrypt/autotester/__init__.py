@@ -130,6 +130,7 @@ class AutoTester:
 		self.excArea = "exc-area"
 		self.excHeaderClass = "exc-header"
 		self.collapsedClass = "collapsed"
+		self.modCollapseClass = "mod-collapsed"
 
 	def sortedRepr (self, any):
 		# When using sets or dicts, use elemens or keys
@@ -235,6 +236,7 @@ class AutoTester:
 	def _writeTableArea(self, f):
 		f.write ('<div id="{}"></div>'.format(self.excArea))
 		f.write ('<div id="{}">'.format(self.resultsDiv))
+		f.write ('<div> <a id="force-collapse" href="#"> Collapse All</a> <a id="force-expand" href="#">Expand All</a></div>')
 		f.write ('<table id="{}"><thead><tr> <th colspan="2"> CPython </th> <th colspan="2"> Transcrypt </th> </tr>'.format(self.tableId))
 		f.write ('<tr> <th class="header-pos"> Location </th> <th class="header-val"> Value </th> <th class="header-val"> Value </th> <th class="header-pos"> Location </th> </tr></thead><tbody></tbody>')
 		f.write ('</table>')
@@ -321,47 +323,52 @@ class AutoTester:
 			posData,resultData = self._extractPosResult(child)
 			self.refDict[keyName] = zip(posData, resultData)
 
+	def _collapseModule(self, headerRow, doCollapse):
+		""" collapse/expand particular module in the table of results
+		"""
+		name = headerRow.id
+		table = document.getElementById(self.tableId)
+		clsName = self._getRowClsName(name)
+		allRows = table.tHead.children
+		rows = filter(lambda x: x.classList.contains(clsName), allRows)
+
+		for row in rows:
+			if ( doCollapse ):
+				row.classList.add(self.collapsedClass)
+			else:
+				row.classList.remove(self.collapsedClass)
+
+		if ( doCollapse ):
+			headerRow.classList.add(self.modCollapseClass)
+		else:
+			headerRow.classList.remove(self.modCollapseClass)
+
+
 	def _appendSeqRowName(self, name, errCount):
 		"""
 		"""
 		table = document.getElementById(self.tableId)
 		# Insert at the end
 		row = table.insertRow(-1);
+		row.id = name
 		row.classList.add(self.testletHeaderClass)
+		if ( errCount == 0 ):
+			row.classList.add(self.modCollapseClass)
+
+		def toggleCollapse(evt):
+			""" Toggle whether the
+			"""
+			headerRow = evt.target.parentElement
+			doCollapse = not headerRow.classList.contains(self.modCollapseClass)
+			self._collapseModule(headerRow, doCollapse)
+
+		row.onclick = toggleCollapse
 
 		# Populate the Row
 		headerCell = row.insertCell(0)
 		headerCell.innerHTML = name + " | Errors = " + str(errCount)
 		headerCell.colSpan = 4
 		headerCell.style.textAlign= "center"
-		modCollapseClass = "mod-collapsed"
-		if ( errCount == 0 ):
-			headerCell.classList.add(modCollapseClass)
-
-		def toggleCollapse(evt):
-			""" Toggle whether the
-			"""
-			doCollapse = not evt.target.classList.contains(modCollapseClass)
-
-			table = document.getElementById(self.tableId)
-			# Get all rows that are associated with this module class
-			clsName = self._getRowClsName(name)
-			allRows = table.tHead.children
-			rows = filter(lambda x: x.classList.contains(clsName), allRows)
-			#rows = [ x for x in table.tHead.children if clsName in x.classList]
-
-			for row in rows:
-				if ( doCollapse ):
-					row.classList.add(self.collapsedClass)
-				else:
-					row.classList.remove(self.collapsedClass)
-
-			if ( doCollapse ):
-				evt.target.classList.add(modCollapseClass)
-			else:
-				evt.target.classList.remove(modCollapseClass)
-
-		headerCell.onclick = toggleCollapse
 
 
 	def _getRowClsName(self, name):
@@ -378,7 +385,49 @@ class AutoTester:
 			for (refPos, refItem) in refData:
 				self._appendTableResult(clsName, None, None, refPos, refItem)
 
+	def _expandCollapseAllFuncs(self):
+		""" This function sets up the callback handlers for the
+		collapse all and expand all links
+		"""
+
+		def applyToAll(evt, collapse):
+			"""
+			"""
+			table = document.getElementById(self.tableId)
+
+			# find all rows in the testletheader class
+			filtFunc = lambda x: x.classList.contains(self.testletHeaderClass)
+			headerRows = filter(filtFunc, table.tHead.children)
+
+			for headerRow in headerRows:
+				self._collapseModule(headerRow, collapse)
+
+		def collapseAll(evt):
+			""" collapse all rows handler
+			"""
+			evt.preventDefault()
+			applyToAll(evt, True)
+			return(False)
+
+
+		def expandAll(evt):
+			""" Expand All Rows Handler
+			"""
+			evt.preventDefault()
+			applyToAll(evt, False)
+			return(False)
+
+		forceCollapse = document.getElementById("force-collapse")
+		forceCollapse.onclick = collapseAll
+
+		forceExpand = document.getElementById("force-expand")
+		forceExpand.onclick = expandAll
+
 	def compare (self):
+		# Setup the functions that expand or contract all
+		# elements of the table
+		self._expandCollapseAllFuncs()
+
 		self._getPythonResults()
 		totalErrors = 0
 		sKeys = sorted(self.refDict.keys())
