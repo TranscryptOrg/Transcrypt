@@ -108,8 +108,12 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- Enhancement for issue: #139: 'yield from' now supported. EXPERIMENTAL
-- Enhancement for issue: #89 and #149: __getattr__ and __setattr__ are now supported, requiring the -e 6 switch. Testlet 'proxies' added.
+- Emulation of sync console I/O for educational purposes, text only
+- Autotest output now in tabular form for easy comparison, incl. source line nrs
+- Fix for issue #178: List Comprehensions / Operator Precedence Bug
+- Div. enhancements and fixes for CI tests
+- Enhancement for issue #139: 'yield from' now supported. EXPERIMENTAL
+- Enhancement for issue #89 and #149: __getattr__ and __setattr__ are now supported, requiring the -e 6 switch. Testlet 'proxies' added.
 - New aliases added to prevent name clashes. The orignal name can always be reached by prepending js_. So e.g. if you need 'clear' in JS, use 'js_clear' in Python. A complete list of aliases is in the docs. Any alias can be undefined to maintain backward compatibility, e.g __pragma__ ('noalias', 'clear').
 - Enhancement for issue #169: Add support for float('inf') and float('-inf')
 - Python 3.6 numbers with dashes added

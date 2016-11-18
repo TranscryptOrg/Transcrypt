@@ -59,11 +59,11 @@ class AssertionError (Exception):
 __pragma__ ('kwargs')
 
 
-def __sort__ (iterable, key = None, reverse = False):	# Used by py_sort, can deal with kwargs
+def __sort__ (iterable, key = None, reverse = False):				# Used by py_sort, can deal with kwargs
 	if key:
-		iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1)	# JavaScript sort, case == irrelevant for sorting
+		iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1)	# JavaScript sort, case '==' is irrelevant for sorting
 	else:
-		iterable.sort ()		# JavaScript sort
+		iterable.sort ()											# JavaScript sort
 		
 	if reverse:
 		iterable.reverse ()
@@ -169,13 +169,24 @@ class complex:
 __pragma__ ('endif')
 
 class __Terminal__:
+	'''
+	Printing to either the console or to html happens async, but is blocked by calling window.prompt.
+	So while all input and print statements are encountered in normal order, the print's exit immediately without yet having actually printed
+	This means the next input takes control, blocking actual printing and so on indefinitely
+	The effect is that everything's only printed after all inputs are done
+	To prevent that, what's needed is to only execute the next window.prompt after actual printing has been done
+	Since we've no way to find out when that is, a timeout is used.
+	'''
+
 	def __init__ (self):
+		self.buffer = ''
+	
 		try:
 			self.element = document.getElementById ('__terminal__')
-		except:	# node.js
+		except:
 			self.element = None
+			
 		if self.element:
-			self.buffer = ''
 			self.element.style.overflowX = 'auto'
 			self.element.style.boxSizing = 'border-box'
 			self.element.style.padding = '5px'
@@ -184,24 +195,17 @@ class __Terminal__:
 	__pragma__ ('kwargs')
 		
 	def print (self, *args, sep = ' ', end = '\n'):
-		def printAsync ():
-			if self.element:
-				self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ]	
-				self.element.innerHTML = self.buffer.replace ('\n', '<br>')
-				self.element.scrollTop = self.element.scrollHeight
-			else:
-				console.log (sep.join ([str (arg) for arg in args]))
-		setTimeout (printAsync, 5)
+		self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ]	
+		
+		if self.element:
+			self.element.innerHTML = self.buffer.replace ('\n', '<br>')
+			self.element.scrollTop = self.element.scrollHeight
+		else:
+			console.log (sep.join ([str (arg) for arg in args]))
 		
 	def input (self, question):
-		self.print ('{}_'.format (question), end = '')
-		try:
-			answer = window.prompt (question)
-		except:
-			answer = ''
-			console.log ('Error: Blocking input not yet implemented outside browser')
-		if hasattr (self, 'buffer'):
-			self.buffer = self.buffer [:-1]	# Cut of the underscore
+		self.print ('{}'.format (question), end = '')
+		answer = window.prompt ('\n'.join (self.buffer.split ('\n') [-16:]))
 		self.print (answer)
 		return answer
 		
