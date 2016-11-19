@@ -59,7 +59,7 @@ def getFileLocation():
 		# This regex splits the string coming from the javascript
 		# stacktrace so that we can connect the file and line number
 		# runTests (http://localhost:8080/run/autotest.js:3159:8)
-		#  func       URL                     filename    lineno:colno
+		#  func	      URL		      filename	  lineno:colno
 		# Group 1 = function
 		# Group 2 & 3 = protocol and hostname
 		# Group 4 = Path on this host (filename is at the end)
@@ -129,6 +129,8 @@ class AutoTester:
 		self.pyPosClass = "py-pos"
 		self.excArea = "exc-area"
 		self.excHeaderClass = "exc-header"
+		self.collapsedClass = "collapsed"
+		self.modCollapseClass = "mod-collapsed"
 
 	def sortedRepr (self, any):
 		# When using sets or dicts, use elemens or keys
@@ -204,7 +206,10 @@ class AutoTester:
 		    overflow-x: auto;
 		  }
 		  .exc-header {
-            color: red;
+	      color: red;
+		  }
+		  .collapsed {
+		    display: None;
 		  }
 		</style>
 		"""
@@ -231,6 +236,7 @@ class AutoTester:
 	def _writeTableArea(self, f):
 		f.write ('<div id="{}"></div>'.format(self.excArea))
 		f.write ('<div id="{}">'.format(self.resultsDiv))
+		f.write ('<div> <a id="force-collapse" href="#"> Collapse All</a> <a id="force-expand" href="#">Expand All</a></div>')
 		f.write ('<table id="{}"><thead><tr> <th colspan="2"> CPython </th> <th colspan="2"> Transcrypt </th> </tr>'.format(self.tableId))
 		f.write ('<tr> <th class="header-pos"> Location </th> <th class="header-val"> Value </th> <th class="header-val"> Value </th> <th class="header-pos"> Location </th> </tr></thead><tbody></tbody>')
 		f.write ('</table>')
@@ -258,13 +264,18 @@ class AutoTester:
 		else:
 			document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor)
 
-	def _appendTableResult(self, testPos, testItem, refPos, refItem):
+	def _appendTableResult(self, name, testPos, testItem, refPos, refItem, collapse=False):
 
 		table = document.getElementById(self.tableId)
 		# Insert at the end
 		row = table.insertRow(-1);
+		row.classList.add(name)
 		if ( testItem != refItem ):
 			row.classList.add(self.faultRowClass)
+			refPos = "!!!" + refPos
+		else:
+			if ( collapse ):
+				row.classList.add(self.collapsedClass)
 
 		# Populate the Row
 		cpy_pos = row.insertCell(0)
@@ -312,13 +323,46 @@ class AutoTester:
 			posData,resultData = self._extractPosResult(child)
 			self.refDict[keyName] = zip(posData, resultData)
 
-	def appendSeqRowName(self, name, errCount):
+	def _collapseModule(self, headerRow, doCollapse):
+		""" collapse/expand particular module in the table of results
+		"""
+		name = headerRow.id
+		table = document.getElementById(self.tableId)
+		clsName = self._getRowClsName(name)
+		allRows = table.tHead.children
+		rows = filter(lambda x: x.classList.contains(clsName), allRows)
+
+		for row in rows:
+			if ( doCollapse ):
+				row.classList.add(self.collapsedClass)
+			else:
+				row.classList.remove(self.collapsedClass)
+
+		if ( doCollapse ):
+			headerRow.classList.add(self.modCollapseClass)
+		else:
+			headerRow.classList.remove(self.modCollapseClass)
+
+
+	def _appendSeqRowName(self, name, errCount):
 		"""
 		"""
 		table = document.getElementById(self.tableId)
 		# Insert at the end
 		row = table.insertRow(-1);
+		row.id = name
 		row.classList.add(self.testletHeaderClass)
+		if ( errCount == 0 ):
+			row.classList.add(self.modCollapseClass)
+
+		def toggleCollapse(evt):
+			""" Toggle whether the
+			"""
+			headerRow = evt.target.parentElement
+			doCollapse = not headerRow.classList.contains(self.modCollapseClass)
+			self._collapseModule(headerRow, doCollapse)
+
+		row.onclick = toggleCollapse
 
 		# Populate the Row
 		headerCell = row.insertCell(0)
@@ -326,16 +370,64 @@ class AutoTester:
 		headerCell.colSpan = 4
 		headerCell.style.textAlign= "center"
 
+
+	def _getRowClsName(self, name):
+		return("mod-" + name)
+
 	def _outputTableResults(self, name, errCount,  testData, refData):
-		self.appendSeqRowName(name, errCount)
+		collapse = (errCount == 0)
+		self._appendSeqRowName(name, errCount)
+		clsName = self._getRowClsName(name)
 		if ( testData is not None ):
 			for ((testPos, testItem),(refPos,refItem)) in zip(testData, refData):
-				self._appendTableResult(testPos, testItem, refPos, refItem)
+				self._appendTableResult(clsName, testPos, testItem, refPos, refItem, collapse)
 		else:
 			for (refPos, refItem) in refData:
-				self._appendTableResult(None, None, refPos, refItem)
+				self._appendTableResult(clsName, None, None, refPos, refItem)
+
+	def _expandCollapseAllFuncs(self):
+		""" This function sets up the callback handlers for the
+		collapse all and expand all links
+		"""
+
+		def applyToAll(evt, collapse):
+			"""
+			"""
+			table = document.getElementById(self.tableId)
+
+			# find all rows in the testletheader class
+			filtFunc = lambda x: x.classList.contains(self.testletHeaderClass)
+			headerRows = filter(filtFunc, table.tHead.children)
+
+			for headerRow in headerRows:
+				self._collapseModule(headerRow, collapse)
+
+		def collapseAll(evt):
+			""" collapse all rows handler
+			"""
+			evt.preventDefault()
+			applyToAll(evt, True)
+			return(False)
+
+
+		def expandAll(evt):
+			""" Expand All Rows Handler
+			"""
+			evt.preventDefault()
+			applyToAll(evt, False)
+			return(False)
+
+		forceCollapse = document.getElementById("force-collapse")
+		forceCollapse.onclick = collapseAll
+
+		forceExpand = document.getElementById("force-expand")
+		forceExpand.onclick = expandAll
 
 	def compare (self):
+		# Setup the functions that expand or contract all
+		# elements of the table
+		self._expandCollapseAllFuncs()
+
 		self._getPythonResults()
 		totalErrors = 0
 		sKeys = sorted(self.refDict.keys())
