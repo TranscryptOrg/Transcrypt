@@ -185,3 +185,18 @@ def run (autoTester):
 	
 	autoTester.check (int (1 / float ('inf')), int (1 / float ('-inf')))
 	
+	autoTester.check ('<br><br>Issue 178<br>')	# List Comprehensions / Operator Precedence Bug
+	
+	bitmaps = [
+		(2 , ''),
+		(4 , ''),
+		(8, 'i'),
+		(16, 'm'),
+		(32, 'y'),
+		(64, 'u'),
+		(128, 'g')
+	]
+	
+	for flags in (122, 233, 11, 55, 79, 201, 23, 111, 200, 100, 50, 25, 12, 6):
+		autoTester.check  (''.join ([x [1] for x in bitmaps if (x [0] & flags) > 0]))
+	

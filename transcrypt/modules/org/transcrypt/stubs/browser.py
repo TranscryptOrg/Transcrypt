@@ -4,7 +4,7 @@ from org.transcrypt.__base__ import __envir__
 from org.transcrypt import utils
 
 # Complete __envir__ for the stub mode
-__envir__.executor_name = 'python'
+__envir__.executor_name = __envir__.interpreter_name
 
 # Set main to commandArgs.source rather than transcrypt
 class __main__:
@@ -30,7 +30,7 @@ for attributeName in window.__dict__:
 def print (*args):
 	console.log (*args)
 
-# Ignore all pragma's when running CPython
+# Ignore all pragma's when running CPython, since we can't control CPython's operation in a simple way
 def __pragma__ (*args):
 	pass
 	
