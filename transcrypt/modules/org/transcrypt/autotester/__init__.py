@@ -171,6 +171,13 @@ class AutoTester:
 		else:
 			self.refDict[self._currTestlet].append((position,item))
 
+	def expectException(self, func):
+		try:
+			func()
+			return("no exception")
+		except Exception as exc:
+			return("exception")
+
 	def _writeCSS(self, f):
 		cssOut = """
 		<style>
