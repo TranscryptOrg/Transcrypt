@@ -138,7 +138,7 @@ Read `test_server.py` for details.
 In Dev mode the server reloads the test page(s) automatically on file system
 change.
 
-Here is a demo cast: https://www.youtube.com/watch?v=lvTjKWVOwXA
+Here is an informal demo cast explaining what it does: https://www.youtube.com/watch?v=lvTjKWVOwXA
 
 Start the server like this
 
@@ -161,6 +161,13 @@ Check the `$TS_MON_CMD` command output and optionally export a custom one
 before starting test test server. Necessary is the hit on the server whenever
 there is a change.
 
+
+### Building Your Own CI Chain
+
+If you want to have the testing done outside travis you'll need a headless X
+server and a browser installed on the test site, currently firefox. Have a look at the `run`
+script, in order to see how firefox is started with the `set1` testset used as
+base url.
 
 
 
