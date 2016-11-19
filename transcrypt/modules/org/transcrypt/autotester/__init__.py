@@ -474,8 +474,32 @@ class AutoTester:
 		else:
 			stacktrace.innerHTML = "No Stack Trace Available!"
 
-	def run (self, testlet, testletName):
+	def _cleanName(self, name):
+		""" Clean the passed name of characters that won't be allowed
+		    in CSS class or HTML id strings.
+		"""
+		# Convert testletName to replace any of the characters that
+		# are not acceptable in a CSS class or HTML id - this is to
+		# make our lives easier
+		# @note - I'm SPECIFICALLY not using a regex here because the
+		#   regex engine module is still under dev and could possibly
+		#   have issues
+		ret = name
+		invalidChars = [
+			'~', '!', '@', '$', '%',
+			'^', '&', '*', '(', ')',
+			'+', '=', ',', '.', '/',
+			"'", ';', ':', '"', '?',
+			'>', '<', '[', ']', '\\',
+			'{', '}', '|', '`', '#',
+			" ",
+		]
+		for ch in invalidChars:
+			ret = ret.replace(ch, "_")
+		return(ret)
 
+	def run (self, testlet, testletName):
+		testletName = self._cleanName(testletName)
 		self._currTestlet = testletName
 		if __envir__.executor_name == __envir__.transpiler_name:
 			self.testDict[self._currTestlet] = []
