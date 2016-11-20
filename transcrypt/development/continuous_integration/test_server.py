@@ -370,32 +370,43 @@ M = lambda *s: _col(176, *s)
 I = lambda *s: _col(146, *s)
 L = lambda *s: _col(240, *s)
 
-def usage():
+def usage(h, p):
     print
-    print I('Usage:')
+    print I('Usage')
     f = sys.argv[0]
     print 'Start me with %s <[host:]port> [dev]' % f
-    print 'e.g. %s 8080 or %s 0.0.0.0:7777' % (f, f)
-    print 'Hit me at http://%s:%s/do/<tests>' % (h, p)
-    print 'e.g. http://%s:%s/do/time,hello' % (h, p)
-    print 'or http://%s:%s/do/set1' % (h, p)
+    print 'e.g. %s %s or %s 0.0.0.0:7777' % (f, p, f)
     print
+    print 'Hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
+            h, p)
     print '- single tests via /chk, e.g. /chk/time'
     print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
     print
-    print 'we require the "wget" command'
+    print M('Examples')
+    print 'http://%s:%s/do/time,hello (testing time and hello module)' % (h, p)
+    print 'http://%s:%s/do/set1 (testing a set of modules given in file set1)'\
+            % (h, p)
+    print 'http://%s:%s/chk/time (single module test)' % (h, p)
+    print 'http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
+            % (h, p)
     print
-    print 'dev mode requires:'
-    print ' - pip install paste'
-    print ' - the "entr" command'
     print
+    print I('Requirements')
+    print '- the "wget" command'
+    print
+    print M('dev mode') + ' requires:'
+    print ' - pip install paste (server is started multithreaded then)'
+    print ' - the "entr" command (for filesystem monitoring)'
+    print 'you can use your own filesystem monitor if you export a custom $TS_MON_CMD'
+    print '(default $TS_MON_CMD is printed out when starting in test mode)'
     print
 
 if __name__ == '__main__':
+    h, p = '127.0.0.1', 8080 # default
     l = sys.argv
     dev_mode = 0
     if not len(l) - 1:
-        usage()
+        usage(h, p)
         sys.exit(1)
     if len(l) > 2 and l[2] == 'dev':
         dev_mode = 1
@@ -404,7 +415,7 @@ if __name__ == '__main__':
     assert os.system('which wget') == 0, 'require wget'
     if dev_mode:
         assert os.system('which entr') == 0, 'require entr'
-    usage()
+    usage(h, p)
     stop_flag += '_%s' % p
     port = int(port)
     if not dev_mode:
