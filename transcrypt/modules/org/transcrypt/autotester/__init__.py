@@ -172,6 +172,13 @@ class AutoTester:
 		except Exception as exc:
 			return("exception")
 
+	def checkPad(self, val, count):
+		""" This method is to help manage flow control in unit tests and
+        keep all unit tests aligned
+		"""
+		for i in range(0, count):
+			self.check(val)
+
 	def _writeCSS(self, f):
 		cssOut = """
 		<style>
