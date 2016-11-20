@@ -83,26 +83,20 @@ def getFileLocation():
 		else:
 			__pragma__('js', '{}', 'console.log("Failed to Match Frame");')
 			return("UNKNOWN:???")
-	else: #Python
-		# Needed because Transcrypt imports are compile time
-		# @note - I really want to differentiate python from
-		#   javascript environments - I don't care what version
-		#   of python - need to determine what that symbol should
-		#   be
-		__pragma__ ('ifdef', '__py3.6__')
-		from inspect import getframeinfo, stack
-		s = stack()
-		caller = getframeinfo(s[2][0])
-		# Trim the file name path so that we don't get
-		# a lot of unnecessary content
-		filepath = caller.filename
-		# @todo - this is a hack - we should use os.path
-		pathParts = filepath.split('/')
-		filename = "/".join(pathParts[-2:])
-		return( "%s:%d" % (filename, caller.lineno))
-		__pragma__('else')
-		return("UNKNOWN:???")
-		__pragma__ ('endif')
+	#ELSE
+	# Needed because Transcrypt imports are compile time
+	__pragma__("skip")
+	from inspect import getframeinfo, stack
+	s = stack()
+	caller = getframeinfo(s[2][0])
+	# Trim the file name path so that we don't get
+	# a lot of unnecessary content
+	filepath = caller.filename
+	# @todo - this is a hack - we should use os.path
+	pathParts = filepath.split('/')
+	filename = "/".join(pathParts[-2:])
+	return( "%s:%d" % (filename, caller.lineno))
+	__pragma__ ('noskip')
 
 
 
@@ -170,6 +164,20 @@ class AutoTester:
 			self.testDict[self._currTestlet].append((position,item))
 		else:
 			self.refDict[self._currTestlet].append((position,item))
+
+	def expectException(self, func):
+		try:
+			func()
+			return("no exception")
+		except Exception as exc:
+			return("exception")
+
+	def checkPad(self, val, count):
+		""" This method is to help manage flow control in unit tests and
+        keep all unit tests aligned
+		"""
+		for i in range(0, count):
+			self.check(val)
 
 	def _writeCSS(self, f):
 		cssOut = """
@@ -374,16 +382,19 @@ class AutoTester:
 	def _getRowClsName(self, name):
 		return("mod-" + name)
 
-	def _outputTableResults(self, name, errCount,  testData, refData):
-		collapse = (errCount == 0)
-		self._appendSeqRowName(name, errCount)
-		clsName = self._getRowClsName(name)
-		if ( testData is not None ):
-			for ((testPos, testItem),(refPos,refItem)) in zip(testData, refData):
-				self._appendTableResult(clsName, testPos, testItem, refPos, refItem, collapse)
-		else:
-			for (refPos, refItem) in refData:
-				self._appendTableResult(clsName, None, None, refPos, refItem)
+	def _getTotalErrorCnt(self, testData, refData):
+		""" This method determines the total number of non-matching
+		    values in the test and reference data for a particular module.
+		"""
+		errCount = 0
+		for i,(refPos, refItem) in enumerate(refData):
+			try:
+				testPos,testItem = testData[i]
+				if ( testItem != refItem ):
+					errCount+=1
+			except:
+				errCount+=1
+		return(errCount)
 
 	def _expandCollapseAllFuncs(self):
 		""" This function sets up the callback handlers for the
@@ -427,27 +438,49 @@ class AutoTester:
 		# Setup the functions that expand or contract all
 		# elements of the table
 		self._expandCollapseAllFuncs()
-
 		self._getPythonResults()
+
 		totalErrors = 0
 		sKeys = sorted(self.refDict.keys())
 		for key in sKeys:
 			refData = self.refDict[key]
-			errCount = 0
 			try:
 				testData = self.testDict[key]
-				for ((_,obs),(_,exp)) in zip(testData, refData):
-					if ( obs != exp ):
-						errCount+=1
-			except:
-				# We Don't have Test Data from Javascript to compare
-				# against -
-				testData = None
-				errCount += len(refData)
+				if ( testData is None ):
+					raise KeyError("No Test Data Module: {}".format(key))
+			except KeyError:
+				# No Test Data found for this key - we will populate with
+				# errors for all ref data
+				self._appendSeqRowName(key, len(refData))
+				clsName = self._getRowClsName(key)
+				for i,(refPos, refItem) in enumerate(refData):
+					self._appendTableResult(clsName, None, None, refPos, refItem, False)
+				continue
+			# know we have testData so let's determine the total number of
+			# errors for this test module. This will allow us to both set
+			# the num of errors in the test module header row and set the
+			# rows to the appropriate initial collapsed/expanded state.
+			errCount= self._getTotalErrorCnt(testData, refData)
+			collapse = (errCount == 0)
+			self._appendSeqRowName(key, errCount)
 
-			self._outputTableResults(key, errCount, testData, refData)
-			totalErrors += errCount
+			# Now we will populate the table with all the rows
+			# of data fro the comparison
+			clsName = self._getRowClsName(key)
+			for i,(refPos, refItem) in enumerate(refData):
+				try:
+					# This will throw if testData's length is
+					# shorter than refData's
+					testPos,testItem = testData[i]
+				except:
+					testPos = None
+					testItem = None
 
+				self._appendTableResult(
+					clsName, testPos, testItem, refPos, refItem, collapse
+				)
+
+		totalErrors += errCount
 		self._setOutputStatus( totalErrors == 0 )
 
 	def _showException(self, testname, exc):
@@ -467,8 +500,32 @@ class AutoTester:
 		else:
 			stacktrace.innerHTML = "No Stack Trace Available!"
 
-	def run (self, testlet, testletName):
+	def _cleanName(self, name):
+		""" Clean the passed name of characters that won't be allowed
+		    in CSS class or HTML id strings.
+		"""
+		# Convert testletName to replace any of the characters that
+		# are not acceptable in a CSS class or HTML id - this is to
+		# make our lives easier
+		# @note - I'm SPECIFICALLY not using a regex here because the
+		#   regex engine module is still under dev and could possibly
+		#   have issues
+		ret = name
+		invalidChars = [
+			'~', '!', '@', '$', '%',
+			'^', '&', '*', '(', ')',
+			'+', '=', ',', '.', '/',
+			"'", ';', ':', '"', '?',
+			'>', '<', '[', ']', '\\',
+			'{', '}', '|', '`', '#',
+			" ",
+		]
+		for ch in invalidChars:
+			ret = ret.replace(ch, "_")
+		return(ret)
 
+	def run (self, testlet, testletName):
+		testletName = self._cleanName(testletName)
 		self._currTestlet = testletName
 		if __envir__.executor_name == __envir__.transpiler_name:
 			self.testDict[self._currTestlet] = []

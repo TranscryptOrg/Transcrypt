@@ -55,7 +55,19 @@ class AssertionError (Exception):
 			Exception.__init__ (self, message, error = error)
 		else:
 			Exception.__init__ (self, error = error)
-	
+
+class NotImplementedError (Exception):
+	def __init__(self, message, error):
+		Exception.__init__(self, message, error = error)
+
+class IndexError(Exception):
+	def __init__(self, message, error):
+		Exception.__init__(self, message, error = error)
+
+class AttributeError(Exception):
+	def __init__(self, message, error):
+		Exception.__init__(self, message, error = error)
+
 __pragma__ ('kwargs')
 
 
