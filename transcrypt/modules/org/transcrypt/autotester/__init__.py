@@ -83,26 +83,20 @@ def getFileLocation():
 		else:
 			__pragma__('js', '{}', 'console.log("Failed to Match Frame");')
 			return("UNKNOWN:???")
-	else: #Python
-		# Needed because Transcrypt imports are compile time
-		# @note - I really want to differentiate python from
-		#   javascript environments - I don't care what version
-		#   of python - need to determine what that symbol should
-		#   be
-		__pragma__ ('ifdef', '__py3.6__')
-		from inspect import getframeinfo, stack
-		s = stack()
-		caller = getframeinfo(s[2][0])
-		# Trim the file name path so that we don't get
-		# a lot of unnecessary content
-		filepath = caller.filename
-		# @todo - this is a hack - we should use os.path
-		pathParts = filepath.split('/')
-		filename = "/".join(pathParts[-2:])
-		return( "%s:%d" % (filename, caller.lineno))
-		__pragma__('else')
-		return("UNKNOWN:???")
-		__pragma__ ('endif')
+	#ELSE
+	# Needed because Transcrypt imports are compile time
+	__pragma__("skip")
+	from inspect import getframeinfo, stack
+	s = stack()
+	caller = getframeinfo(s[2][0])
+	# Trim the file name path so that we don't get
+	# a lot of unnecessary content
+	filepath = caller.filename
+	# @todo - this is a hack - we should use os.path
+	pathParts = filepath.split('/')
+	filename = "/".join(pathParts[-2:])
+	return( "%s:%d" % (filename, caller.lineno))
+	__pragma__ ('noskip')
 
 
 
