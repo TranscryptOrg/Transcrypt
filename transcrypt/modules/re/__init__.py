@@ -643,49 +643,49 @@ def compile(pattern, flags = 0):
 def search(pattern, string, flags = 0):
 	""" Search a string for a particular matching pattern
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.search(string) )
 
 def match(pattern, string, flags = 0):
 	""" Match a string for a particular pattern
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.match(string) )
 
 def fullmatch(pattern, string, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.fullmatch(string) )
 
 def split(pattern, string, maxsplit = 0, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.split(string, maxsplit) )
 
 def findall(pattern, string, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.findall(string) )
 
 def finditer(pattern, string, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.finditer(string) )
 
 def sub(pattern, repl, string, count = 0, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.sub(repl, string, count) )
 
 def subn(pattern, repl, string, count = 0, flags = 0):
 	"""
 	"""
-	p = Regex(pattern, flags)
+	p = compile(pattern, flags)
 	return( p.subn(repl, string, count) )
 
 def escape(string):
