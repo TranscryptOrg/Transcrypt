@@ -181,10 +181,10 @@ def checkFindAllOps(test, flags = 0):
 	test.check(re.findall(r, testStr3, flags)) # 2 Caps
 
 def checkSplitOps(test, flags = 0):
-	test.check(re.split(",", testStr1, flags))
+	test.check(re.split(",", testStr1, 0, flags))
 
-	test.check(re.split("(apple|orange)",testStr4, flags))
-	test.check(re.split("\\[([\\d]+)\\]", testStr2, flags))
+	test.check(re.split("(apple|orange)",testStr4, 0, flags))
+	test.check(re.split("\\[([\\d]+)\\]", testStr2, 0, flags))
 	r = re.compile(",", flags)
 	test.check(r.split(testStr1, 0))
 	test.check(r.split(testStr1, 1))
