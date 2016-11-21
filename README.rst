@@ -1,7 +1,7 @@
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
-	:alt: Logo
-	:target: http://www.transcrypt.org
- 	
+    :alt: Logo
+    :target: http://www.transcrypt.org
+    
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 
@@ -34,9 +34,9 @@ In combination with the use of sourcemaps, this enables efficient debugging.
 Also, code can be tested from the command prompt using stubs.
 
 .. figure:: http://www.transcrypt.org/illustrations/class_compare.png
-	:alt: Screenshot of Python versus JavaScript code
-	
-	**Classic OO with multiple inheritance in JavaScript**
+    :alt: Screenshot of Python versus JavaScript code
+    
+    **Classic OO with multiple inheritance in JavaScript**
 
 Main differences with CPython
 =============================
@@ -144,9 +144,9 @@ What's new in the latest commits
 - Slicing bug fixed (stop beyond list end), issue #122 + autotest
 
 .. figure:: http://www.transcrypt.org/illustrations/plotly_demo.png
-	:alt: Plotly demo
-	
-	**Plotly demo**
+    :alt: Plotly demo
+    
+    **Plotly demo**
 
 - Plotly.js demo added: lim (Numscrypt -> Maturity) Transcrypt + Numscrypt + Plotly = Live Science Demos in the Browser with native JS performance, all Plotly.js plot types are supported
 - __pragma__ ('jskeys'/'nojskeys') added make Plotly.js code match Plotly.js docs for convenience, locally voiding the need for quotes around dir keys
