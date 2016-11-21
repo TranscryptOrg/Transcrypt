@@ -3,10 +3,10 @@
 # In Transcrypt, __base__ is available inline, it isn't nested and cannot be imported in the normal way
 
 class __Envir__:
-	def __init__ (self):
-		self.interpreter_name = 'python'
-		self.transpiler_name = 'transcrypt'
-		self.transpiler_version = '3.6.3'
-		self.target_subdir = '__javascript__'
-		
+    def __init__ (self):
+        self.interpreter_name = 'python'
+        self.transpiler_name = 'transcrypt'
+        self.transpiler_version = '3.6.3'
+        self.target_subdir = '__javascript__'
+        
 __envir__ = __Envir__ ()
