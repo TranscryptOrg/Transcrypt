@@ -148,6 +148,21 @@ def checkMatchOps(test, flags = 0):
 	test.check( (re.match("s", "asdf", flags) is None) )
 	test.check( (re.match(r"^s", "asdf", flags) is None) )
 	test.check( (re.compile("^s", flags).match("asdf", 1) is None) )
+	# Matches with named groups
+	try:
+		r = re.compile(r"(?P<prefix>[a-zA-Z]+)://(?P<suffix>[^/]*)", flags)
+	except Exception as exc:
+		test.checkPad(None, 6)
+		return
+
+	m = r.match("http://asdf")
+	test.check( m.groups() )
+	test.check( m.group() )
+	test.check( m.group(0) )
+	test.check( m.group(1) )
+	test.check( m.group("prefix") )
+	test.check( m.group("suffix") )
+
 
 def checkFullMatchOps(test, flags = 0):
 	test.check( (re.fullmatch("asdf", "asdf", flags).pos))

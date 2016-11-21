@@ -77,7 +77,7 @@ class ReIndexError(IndexError):
 class Match(object):
 	""" Resulting Match from a Regex Operation
 	"""
-	def __init__(self, mObj, string, pos, endpos, rObj):
+	def __init__(self, mObj, string, pos, endpos, rObj, namedGroups = None):
 		"""
 		"""
 		self._obj = mObj
@@ -87,11 +87,17 @@ class Match(object):
 		self._re = rObj
 		self._string = string
 
-		# @note - javascript does not have the concept
-		#		of named groups so we will never be able to
-		#		implement this.
-		self._lastgroup = None
+		self._namedGroups = namedGroups
+
 		self._lastindex = self._lastMatchGroup()
+		if ( self._namedGroups is not None ):
+			self._lastgroup = self._namedGroups[self._lastindex]
+		else:
+			# @note - javascript does not have the concept
+			#		of named groups so we will never be able to
+			#		implement this in raw RegExp
+			self._lastgroup = None
+
 
 	# Read-only Properties
 	def _getPos(self):
@@ -158,12 +164,18 @@ class Match(object):
 		ret = []
 		if ( len(args) > 0 ):
 			for index in args:
-				if ( index >= len(self._obj) ):
-					# js will return an 'undefined' and we
-					# want this to return an index error
-					# Built-in Exceptions not defined ?
-					raise ReIndexError()
-				ret.append(self._obj[index])
+				if type(index) is str:
+					if self._namedGroups is not None:
+						ret.append( self._obj[self._namedGroups[index]] )
+					else:
+						raise NotImplementedError("No NamedGroups Available");
+				else:
+					if ( index >= len(self._obj) ):
+						# js will return an 'undefined' and we
+						# want this to return an index error
+						# Built-in Exceptions not defined ?
+						raise ReIndexError()
+					ret.append(self._obj[index])
 		else:
 			ret.append(self._obj[0])
 
@@ -187,15 +199,32 @@ class Match(object):
 		""" The concept of named captures doesn't exist
 		in javascript so this will likely never be implemented.
 		"""
-		raise NotImplementedError()
+		if ( self._namedGroups is not None ):
+			ret = {}
+			for gName, gId in self._namedGroups.items():
+				value = self._obj[gid]
+				ret[gName] = value if value is not None else default
+			return(ret)
+		else:
+			# JS Only does not implement this
+			raise NotImplementedError("No NamedGroups Available")
 
 	def start(self, group = 0):
 		"""
 		"""
-		if ( group >= len(self._obj) ):
+		gId = 0
+		if ( type(group) is str ):
+			if ( self._namedGroups is not None):
+				gId = self._namedGroups[group]
+			else:
+				raise NotImplementedError("No NamedGroups Available")
+		else:
+			gId = group
+
+		if ( gId >= len(self._obj) ):
 			raise ReIndexError()
 
-		if ( group == 0 ):
+		if ( gId == 0 ):
 			return(self._obj.index)
 		else:
 			# We don't really have a good way to do
@@ -207,8 +236,8 @@ class Match(object):
 			# the last in a group - this is a difficult
 			# problem to solve without completely
 			# re-writing the regex engine from scratch.
-			if ( self._obj[group] is not None ):
-				r = compile(escape(self._obj[group]), self._re.flags)
+			if ( self._obj[gId] is not None ):
+				r = compile(escape(self._obj[gId]), self._re.flags)
 				m = r.search(self._obj[0])
 				if m:
 					return(self._obj.index + m.start())
@@ -221,10 +250,19 @@ class Match(object):
 	def end(self, group = 0):
 		"""
 		"""
-		if ( group >= len(self._obj) ):
+		gId = 0
+		if ( type(group) is str ):
+			if ( self._namedGroups is not None):
+				gId = self._namedGroups[group]
+			else:
+				raise NotImplementedError("No NamedGroups Available")
+		else:
+			gId = group
+
+		if ( gId >= len(self._obj) ):
 			raise ReIndexError()
 
-		if ( group == 0 ):
+		if ( gId == 0 ):
 			return( self._obj.index + len(self._obj[0]))
 		else:
 			# We don't really have a good way to do
@@ -236,8 +274,8 @@ class Match(object):
 			# the last in a group - this is a difficult
 			# problem to solve without completely
 			# re-writing the regex engine from scratch.
-			if ( self._obj[group] is not None ):
-				r = compile(escape(self._obj[group]), self._re.flags)
+			if ( self._obj[gId] is not None ):
+				r = compile(escape(self._obj[gId]), self._re.flags)
 				m = r.search(self._obj[0])
 				if m:
 					return(self._obj.index + m.end())
@@ -250,8 +288,6 @@ class Match(object):
 	def span(self, group = 0):
 		"""
 		"""
-		if ( group >= len(self._obj) ):
-			raise ReIndexError()
 		return( (self.start(group), self.end(group)) )
 
 class Regex(object):
