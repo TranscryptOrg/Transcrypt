@@ -23,34 +23,34 @@ pi = modules.mod1.pi
 f = modules.mod2.f
 
 def run (autoTester):
-	# Import without 'as'
-	autoTester.check ('modules')
-	autoTester.check (a.f ())
-	autoTester.check (modules.mod1.mod11.mod112.f ())
-	autoTester.check (modules.mod1.mod11.e)
-	autoTester.check (pi)
-	autoTester.check (f (102030))
-	autoTester.check (modules.mod2.mod21.f ())
-	B = modules.mod2.mod22.B
-	b = B ()
-	autoTester.check (b.x)
-	autoTester.check (modules.mod3.x)
-	
-	# Import with 'as'
-	a2 = aliasMod111.A (6789101112)
-	autoTester.check (a2.f ())
-	autoTester.check (aMod1.pi)
-	
-	# From ... import without 'as'
-	a3 = mod111.A (100.001)
-	autoTester.check (a3.f ())
-	autoTester.check (mod112.f ())
-	
-	# From ... import with 'as'
-	autoTester.check (aMod21.f ())
-	autoTester.check (aMod22.B () .x)
-	
-	# From ... import *
-	autoTester.check (mod3Hundred)
-	autoTester.check (mod3GetTwoHundred ())
-	autoTester.check (A (123.321) .f ())
+    # Import without 'as'
+    autoTester.check ('modules')
+    autoTester.check (a.f ())
+    autoTester.check (modules.mod1.mod11.mod112.f ())
+    autoTester.check (modules.mod1.mod11.e)
+    autoTester.check (pi)
+    autoTester.check (f (102030))
+    autoTester.check (modules.mod2.mod21.f ())
+    B = modules.mod2.mod22.B
+    b = B ()
+    autoTester.check (b.x)
+    autoTester.check (modules.mod3.x)
+    
+    # Import with 'as'
+    a2 = aliasMod111.A (6789101112)
+    autoTester.check (a2.f ())
+    autoTester.check (aMod1.pi)
+    
+    # From ... import without 'as'
+    a3 = mod111.A (100.001)
+    autoTester.check (a3.f ())
+    autoTester.check (mod112.f ())
+    
+    # From ... import with 'as'
+    autoTester.check (aMod21.f ())
+    autoTester.check (aMod22.B () .x)
+    
+    # From ... import *
+    autoTester.check (mod3Hundred)
+    autoTester.check (mod3GetTwoHundred ())
+    autoTester.check (A (123.321) .f ())

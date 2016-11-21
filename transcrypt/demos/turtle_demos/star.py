@@ -10,9 +10,9 @@ down ()
 color ('red', 'yellow')
 begin_fill ()
 while True:
-	forward (500)
-	right (170)
-	if distance (startPos) < 1:
-		break
+    forward (500)
+    right (170)
+    if distance (startPos) < 1:
+        break
 end_fill ()
 done ()

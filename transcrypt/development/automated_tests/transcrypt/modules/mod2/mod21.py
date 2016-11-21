@@ -1,3 +1,3 @@
 def f ():
-	return 'London is the town for me\n'
-	
+    return 'London is the town for me\n'
+    
