@@ -1,7 +1,7 @@
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
 	:alt: Logo
 	:target: http://www.transcrypt.org
-	
+ 	
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 
