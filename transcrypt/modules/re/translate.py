@@ -7,6 +7,7 @@
 
 VERBOSE = False
 
+MAX_SHIFTREDUCE_LOOPS = 1000
 
 # Represents a regex group (e.g /()/, /(?:)/ /(?=), etc).
 # `start` and `end` is the index of the groups start and end token in the token list.
@@ -300,9 +301,8 @@ def translate(rgx):
 
     while True:
         nloop += 1
-        if nloop > 50:
-            console.log("Failed to parse...", rgx)
-            break
+        if nloop > MAX_SHIFTREDUCE_LOOPS:
+            raise Exception()
 
         stack, queue, flags, done = shiftReduce(stack, queue, namedGroups, flags)
         if done:
