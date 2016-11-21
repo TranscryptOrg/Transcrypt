@@ -5,8 +5,10 @@
 # This will compare the output of the script running in the browswer to the output in the DIV.
 # If those two match, the test reports OK, else it reports failure.
 
-from org.transcrypt.stubs.browser import *
+
 from org.transcrypt.stubs.browser import __main__, __envir__, __pragma__
+from org.transcrypt.autotester.html import HTMLGenerator, DataConverter, JSTesterUI
+
 # Don't import __envir__ from __base__ since it will overwrite __buildin__.__envir__ in the browser
 # Import from stubs will be skipped in the browser
 # ... The ice is a bit thin here
@@ -14,11 +16,6 @@ from org.transcrypt.stubs.browser import __main__, __envir__, __pragma__
 __pragma__ ('nokwargs')
 
 import itertools
-
-okColor = 'green'
-errorColor = 'red'
-highlightColor = 'yellow'
-testletNameColor = 'blue'
 
 def getFileLocation():
 	""" This function needs to crawl up the stack
@@ -101,6 +98,11 @@ def getFileLocation():
 
 
 class AutoTester:
+	""" Main testing class for comparing CPython to Transcrypt. This
+	class is primarily used by calling the "check" method to confirm that
+	the result is the same in both environments and "done" when all checks
+	for a particular module have been completed.
+	"""
 	def __init__ (self, symbols = []):
 		self.symbols = symbols
 		# refDict/testDict contains the test results
@@ -108,23 +110,11 @@ class AutoTester:
 		self._currTestlet = "UNKNOWN"
 		self.testDict = {}
 		self.refDict = {}
-		self.messageDivId = 'message'
-		self.referenceDivId = 'python'
-		self.refResultDivId = "pyresults"
-		self.refPosDivId = "pypos"
-		self.testDivId = 'transcrypt'
-		self.tableId = 'resulttable'
-		self.resultsDiv = 'results'
-		self.faultRowClass = 'faultrow'
-		self.testletHeaderClass = "testletheader"
-		self.transValClass = "trans-val"
-		self.transPosClass = "trans-pos"
-		self.pyValClass = "py-val"
-		self.pyPosClass = "py-pos"
-		self.excArea = "exc-area"
-		self.excHeaderClass = "exc-header"
-		self.collapsedClass = "collapsed"
-		self.modCollapseClass = "mod-collapsed"
+
+		if __envir__.executor_name == __envir__.transpiler_name:
+			self.ui = JSTesterUI()
+		else:
+			self.ui = None
 
 	def sortedRepr (self, any):
 		# When using sets or dicts, use elemens or keys
@@ -157,6 +147,11 @@ class AutoTester:
 			return repr (any)
 
 	def check (self, *args):
+		""" Given a set of values from either the python or transcrypt
+		environments, we log the position of the check call in the test
+		and representative values of the passed arguments for later
+		comparison.
+		"""
 		position=getFileLocation()
 		# N.B. stubs.browser provides a special sorting repr
 		item = ' '.join ([self.sortedRepr (arg) for arg in args])
@@ -166,6 +161,10 @@ class AutoTester:
 			self.refDict[self._currTestlet].append((position,item))
 
 	def expectException(self, func):
+		""" This method attempts to call the passed method and
+		checks to see whether an exception was generated.
+		@return string indicating "no exception" or "exception"
+		"""
 		try:
 			func()
 			return("no exception")
@@ -178,209 +177,6 @@ class AutoTester:
 		"""
 		for i in range(0, count):
 			self.check(val)
-
-	def _writeCSS(self, f):
-		cssOut = """
-		<style>
-		  body {
-		    max-width: 100%;
-		  }
-		  .faultrow > td {
-		     background-color: LightCoral;
-		  }
-		  #resulttable {
-		    border-collapse: collapse;
-		    width: 100%;
-		    table-layout: fixed;
-		  }
-		  #resulttable th, #resulttable td {
-		    border: 1px solid grey;
-		  }
-		  .testletheader > td {
-		    background-color: LightSkyBlue;
-		  }
-		  .header-pos {
-		    width: 20%;
-		  }
-		  .header-val {
-		    width: 30%;
-		  }
-		  .py-pos,.trans-pos {
-		    width: 20%;
-		    overflow: hidden;
-		  }
-		  .py-val, .trans-val {
-		    width: 30%;
-		    overflow-x: auto;
-		  }
-		  .exc-header {
-	      color: red;
-		  }
-		  .collapsed {
-		    display: None;
-		  }
-		</style>
-		"""
-		f.write(cssOut)
-
-	def _writeStatusHeaderTemplate(self, f):
-		f.write ('<b>Status:</b>\n')
-		f.write ('<div id="{}"></div><br><br>\n\n'.format (self.messageDivId))
-
-	def _writeHiddenResults(self, f):
-		f.write('<div id="{}" style="display: None">'.format(self.referenceDivId))
-		for key in self.refDict.keys():
-			itemData = ' | '.join([x[1] for x in self.refDict[key]])
-			posContent = ' | '.join([x[0] for x in self.refDict[key]])
-			f.write('<div id="{}">\n'.format(key))
-			# @note - we should probably HTML escape this
-			#    data so that we don't get the HTML rendering
-			#    engine mucking with our test result.
-			f.write ('<div id="{}">{}</div>\n\n'.format (self.refResultDivId, itemData))
-			f.write ('<div id="{}">{}</div>\n'.format(self.refPosDivId, posContent))
-			f.write('</div>\n')
-		f.write('</div></div>\n')
-
-	def _writeTableArea(self, f):
-		f.write ('<div id="{}"></div>'.format(self.excArea))
-		f.write ('<div id="{}">'.format(self.resultsDiv))
-		f.write ('<div> <a id="force-collapse" href="#"> Collapse All</a> <a id="force-expand" href="#">Expand All</a></div>')
-		f.write ('<table id="{}"><thead><tr> <th colspan="2"> CPython </th> <th colspan="2"> Transcrypt </th> </tr>'.format(self.tableId))
-		f.write ('<tr> <th class="header-pos"> Location </th> <th class="header-val"> Value </th> <th class="header-val"> Value </th> <th class="header-pos"> Location </th> </tr></thead><tbody></tbody>')
-		f.write ('</table>')
-		f.write ('</div>')
-
-	def dump (self, filePrename):
-		for minified in (False, True):
-			miniInfix = '.min' if minified else ''
-			fname = '{}{}.html'.format (filePrename, miniInfix)
-			with open (fname, 'w') as aFile:
-				aFile.write("<html><head>")
-				self._writeCSS(aFile)
-				aFile.write("</head><body>")
-				self._writeStatusHeaderTemplate(aFile)
-
-				self._writeHiddenResults(aFile)
-				self._writeTableArea(aFile)
-
-				aFile.write ('<script src="{}/{}{}.js"></script>\n\n'.format (__envir__.target_subdir, filePrename, miniInfix))
-				aFile.write("</body></html>")
-
-	def _setOutputStatus(self, success):
-		if ( success ):
-			document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}">Test succeeded</div>'.format (okColor)
-		else:
-			document.getElementById (self.messageDivId) .innerHTML = '<div style="color: {}"><b>Test failed</b></div>'.format (errorColor)
-
-	def _appendTableResult(self, name, testPos, testItem, refPos, refItem, collapse=False):
-
-		table = document.getElementById(self.tableId)
-		# Insert at the end
-		row = table.insertRow(-1);
-		row.classList.add(name)
-		if ( testItem != refItem ):
-			row.classList.add(self.faultRowClass)
-			refPos = "!!!" + refPos
-		else:
-			if ( collapse ):
-				row.classList.add(self.collapsedClass)
-
-		# Populate the Row
-		cpy_pos = row.insertCell(0)
-		cpy_pos.innerHTML = refPos
-		cpy_pos.classList.add(self.pyPosClass)
-		cpy_val = row.insertCell(1)
-		cpy_val.innerHTML = refItem
-		cpy_val.classList.add(self.pyValClass)
-		trans_val = row.insertCell(2)
-		if ( testItem is not None ):
-			trans_val.innerHTML = testItem
-		trans_val.classList.add(self.transValClass)
-		trans_pos = row.insertCell(3)
-		if ( testPos is not None ):
-			trans_pos.innerHTML = testPos
-		trans_pos.classList.add(self.transPosClass)
-
-	def _extractPosResult(self, elem):
-		resultData = None
-		posData = None
-		for e in elem.children:
-			idStr = e.getAttribute("id")
-			if ( idStr == self.refResultDivId):
-				resultData = e.innerHTML.split(' | ')
-			elif ( idStr == self.refPosDivId):
-				posData = e.innerHTML.split(' | ')
-			else:
-				# Unknown Element - very strange
-				pass
-		return(posData, resultData)
-
-
-	def _getPythonResults(self):
-		""" Acquire the python unit test results from the
-		    hidden div and parse into a dictionary.
-		"""
-		refData = document.getElementById(self.referenceDivId)
-		# Each of the children of this element is in the form
-		# <div id="{key}">
-		#   <div id="pyresults"> {Result Content} </div>
-		#   <div id="pypos"> {Result Positions} </div>
-		# </div>
-		for child in refData.children:
-			keyName = child.getAttribute("id")
-			posData,resultData = self._extractPosResult(child)
-			self.refDict[keyName] = zip(posData, resultData)
-
-	def _collapseModule(self, headerRow, doCollapse):
-		""" collapse/expand particular module in the table of results
-		"""
-		name = headerRow.id
-		table = document.getElementById(self.tableId)
-		clsName = self._getRowClsName(name)
-		allRows = table.tHead.children
-		rows = filter(lambda x: x.classList.contains(clsName), allRows)
-
-		for row in rows:
-			if ( doCollapse ):
-				row.classList.add(self.collapsedClass)
-			else:
-				row.classList.remove(self.collapsedClass)
-
-		if ( doCollapse ):
-			headerRow.classList.add(self.modCollapseClass)
-		else:
-			headerRow.classList.remove(self.modCollapseClass)
-
-
-	def _appendSeqRowName(self, name, errCount):
-		"""
-		"""
-		table = document.getElementById(self.tableId)
-		# Insert at the end
-		row = table.insertRow(-1);
-		row.id = name
-		row.classList.add(self.testletHeaderClass)
-		if ( errCount == 0 ):
-			row.classList.add(self.modCollapseClass)
-
-		def toggleCollapse(evt):
-			""" Toggle whether the
-			"""
-			headerRow = evt.target.parentElement
-			doCollapse = not headerRow.classList.contains(self.modCollapseClass)
-			self._collapseModule(headerRow, doCollapse)
-
-		row.onclick = toggleCollapse
-
-		# Populate the Row
-		headerCell = row.insertCell(0)
-		headerCell.innerHTML = name + " | Errors = " + str(errCount)
-		headerCell.colSpan = 4
-		headerCell.style.textAlign= "center"
-
-
-	def _getRowClsName(self, name):
-		return("mod-" + name)
 
 	def _getTotalErrorCnt(self, testData, refData):
 		""" This method determines the total number of non-matching
@@ -396,49 +192,10 @@ class AutoTester:
 				errCount+=1
 		return(errCount)
 
-	def _expandCollapseAllFuncs(self):
-		""" This function sets up the callback handlers for the
-		collapse all and expand all links
-		"""
-
-		def applyToAll(evt, collapse):
-			"""
-			"""
-			table = document.getElementById(self.tableId)
-
-			# find all rows in the testletheader class
-			filtFunc = lambda x: x.classList.contains(self.testletHeaderClass)
-			headerRows = filter(filtFunc, table.tHead.children)
-
-			for headerRow in headerRows:
-				self._collapseModule(headerRow, collapse)
-
-		def collapseAll(evt):
-			""" collapse all rows handler
-			"""
-			evt.preventDefault()
-			applyToAll(evt, True)
-			return(False)
-
-
-		def expandAll(evt):
-			""" Expand All Rows Handler
-			"""
-			evt.preventDefault()
-			applyToAll(evt, False)
-			return(False)
-
-		forceCollapse = document.getElementById("force-collapse")
-		forceCollapse.onclick = collapseAll
-
-		forceExpand = document.getElementById("force-expand")
-		forceExpand.onclick = expandAll
-
 	def compare (self):
-		# Setup the functions that expand or contract all
-		# elements of the table
-		self._expandCollapseAllFuncs()
-		self._getPythonResults()
+		# Load the python reference data from the hidden HTML div
+		dc = DataConverter()
+		self.refDict = dc.getPythonResults()
 
 		totalErrors = 0
 		sKeys = sorted(self.refDict.keys())
@@ -451,10 +208,9 @@ class AutoTester:
 			except KeyError:
 				# No Test Data found for this key - we will populate with
 				# errors for all ref data
-				self._appendSeqRowName(key, len(refData))
-				clsName = self._getRowClsName(key)
+				self.ui.appendSeqRowName(key, len(refData))
 				for i,(refPos, refItem) in enumerate(refData):
-					self._appendTableResult(clsName, None, None, refPos, refItem, False)
+					self.ui.appendTableResult(key, None, None, refPos, refItem, False)
 				continue
 			# know we have testData so let's determine the total number of
 			# errors for this test module. This will allow us to both set
@@ -462,11 +218,10 @@ class AutoTester:
 			# rows to the appropriate initial collapsed/expanded state.
 			errCount= self._getTotalErrorCnt(testData, refData)
 			collapse = (errCount == 0)
-			self._appendSeqRowName(key, errCount)
+			self.ui.appendSeqRowName(key, errCount)
 
 			# Now we will populate the table with all the rows
 			# of data fro the comparison
-			clsName = self._getRowClsName(key)
 			for i,(refPos, refItem) in enumerate(refData):
 				try:
 					# This will throw if testData's length is
@@ -476,29 +231,13 @@ class AutoTester:
 					testPos = None
 					testItem = None
 
-				self._appendTableResult(
-					clsName, testPos, testItem, refPos, refItem, collapse
+				self.ui.appendTableResult(
+					key, testPos, testItem, refPos, refItem, collapse
 				)
 
 		totalErrors += errCount
-		self._setOutputStatus( totalErrors == 0 )
+		self.ui.setOutputStatus( totalErrors == 0 )
 
-	def _showException(self, testname, exc):
-		"""
-		"""
-		excElem = document.getElementById(self.excArea)
-		header = document.createElement("H2")
-		header.classList.add(self.excHeaderClass)
-		header.innerHTML = "Exception Thrown in JS Runtime";
-		excElem.appendChild(header)
-		content = document.createElement("p")
-		content.innerHTML = "Exception in {}: {}".format(testname, str(exc))
-		excElem.appendChild(content)
-		stacktrace = document.createElement("p")
-		if ( exc.stack is not None ):
-			stacktrace.innerHTML = str(exc.stack)
-		else:
-			stacktrace.innerHTML = "No Stack Trace Available!"
 
 	def _cleanName(self, name):
 		""" Clean the passed name of characters that won't be allowed
@@ -534,12 +273,19 @@ class AutoTester:
 		try:
 			testlet.run (self)
 		except Exception as exc:
-			self._setOutputStatus(False)
-			self._showException(testletName, exc)
+			if ( self.ui is not None ):
+				self.ui.setOutputStatus(False)
+				self.ui.showException(testletName, exc)
+			else:
+				# Error - no UI yet
+				raise Exception("No Valid UI instance yet")
 
 
 	def done (self):
 		if __envir__.executor_name == __envir__.transpiler_name:
 			self.compare ()
 		else:
-			self.dump (__main__.__file__ [ : -3] .replace ('\\', '/') .rsplit ('/', 1) [-1])
+			fnameBase = __main__.__file__ [ : -3] .replace ('\\', '/') .rsplit ('/', 1) [-1]
+			hg = HTMLGenerator(fnameBase)
+			for minified in (False, True):
+				hg.generate_html(self.refDict, minified)
