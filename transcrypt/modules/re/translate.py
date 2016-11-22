@@ -5,6 +5,9 @@
 # ease of integrating with the Transcrypt project
 #
 
+
+__pragma__ ('tconv')
+
 VERBOSE = False
 
 MAX_SHIFTREDUCE_LOOPS = 1000
