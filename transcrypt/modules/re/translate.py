@@ -271,7 +271,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
 
     elif s1.name == '(?P=':
         if s0.name == ')':
-            stack[-2:] = [Token('\\' + namedGroups[s1.paras[0]])]
+            stack[-2:] = [Token('\\' + str(namedGroups[s1.paras[0]]))]
         elif not s1.paras:
             s1.paras.append(s0.name)
             stack.pop()
