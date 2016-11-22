@@ -237,7 +237,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
             elif s0.name == 's':
                 flags += 's'
             else:
-                raise Error('Unsupported flag: ' + s0.name)
+                raise Exception('Unsupported flag: ' + s0.name)
 
             stack.pop()
             s1.isModeGroup = True

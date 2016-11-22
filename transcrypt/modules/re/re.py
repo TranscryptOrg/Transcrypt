@@ -100,17 +100,17 @@ class Match:
 
     def end(self, group=None):
         if group is not None:
-            raise Error("match.end() with argument is not supported")
+            raise Exception("match.end() with argument is not supported")
         return self._startIndex + self._groupsList[0].length
 
     def start(self, group=None):
         if group is not None:
-            raise Error("match.start() with argument is not supported")
+            raise Exception("match.start() with argument is not supported")
         return self._startIndex
 
     def span(self, group=None):
-        if group is not none:
-            raise Error("match.span() with argument is not supported")
+        if group is not None:
+            raise Exception("match.span() with argument is not supported")
         return (self.start(), self.end())
 
 
