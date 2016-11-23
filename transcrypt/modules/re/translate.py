@@ -1,26 +1,16 @@
-# MIT License
-# Copyright (c) 2016
+# Python RegExp Syntax to Javascript RegExp Syntax Translator
+# This code was pulled from the repository at:
+#   https://github.com/GULPF/rescrypt
+# Original license was MIT but was converted to Apache v2 for
+# ease of integrating with the Transcrypt project
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+
+
+__pragma__ ('tconv')
 
 VERBOSE = False
 
+MAX_SHIFTREDUCE_LOOPS = 1000
 
 # Represents a regex group (e.g /()/, /(?:)/ /(?=), etc).
 # `start` and `end` is the index of the groups start and end token in the token list.
@@ -247,7 +237,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
             elif s0.name == 's':
                 flags += 's'
             else:
-                raise Error('Unsupported flag: ' + s0.name)
+                raise Exception('Unsupported flag: ' + s0.name)
 
             stack.pop()
             s1.isModeGroup = True
@@ -281,7 +271,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
 
     elif s1.name == '(?P=':
         if s0.name == ')':
-            stack[-2:] = [Token('\\' + namedGroups[s1.paras[0]])]
+            stack[-2:] = [Token('\\' + str(namedGroups[s1.paras[0]]))]
         elif not s1.paras:
             s1.paras.append(s0.name)
             stack.pop()
@@ -314,9 +304,8 @@ def translate(rgx):
 
     while True:
         nloop += 1
-        if nloop > 50:
-            console.log("Failed to parse...", rgx)
-            break
+        if nloop > MAX_SHIFTREDUCE_LOOPS:
+            raise Exception()
 
         stack, queue, flags, done = shiftReduce(stack, queue, namedGroups, flags)
         if done:

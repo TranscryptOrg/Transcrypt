@@ -17,11 +17,14 @@ __pragma__ ('nokwargs')
 
 import itertools
 
-def getFileLocation():
+def getFileLocation(ancestor):
 	""" This function needs to crawl up the stack
-	and find out where the grandparent caller of
+	and find out where the ancestor caller of
 	this function was in the source code of either the
 	python or javascript, depending on environment.
+	@param ancestor the ancestor of this function that
+	  we want to capture file information about.
+	@return string indicating the file position and line number
 	"""
 	if __envir__.executor_name == __envir__.transpiler_name: # js
 		s = None
@@ -52,7 +55,7 @@ def getFileLocation():
 		#   translation changes then this index may need to change
 		#   @todo - need more work here to determine this because
 		#     this is fragile
-		gpFrame = frames[5]
+		gpFrame = frames[(ancestor*2 + 1)]
 		# This regex splits the string coming from the javascript
 		# stacktrace so that we can connect the file and line number
 		# runTests (http://localhost:8080/run/autotest.js:3159:8)
@@ -85,7 +88,7 @@ def getFileLocation():
 	__pragma__("skip")
 	from inspect import getframeinfo, stack
 	s = stack()
-	caller = getframeinfo(s[2][0])
+	caller = getframeinfo(s[ancestor][0])
 	# Trim the file name path so that we don't get
 	# a lot of unnecessary content
 	filepath = caller.filename
@@ -146,19 +149,22 @@ class AutoTester:
 		else:
 			return repr (any)
 
-	def check (self, *args):
+	__pragma__('kwargs')
+	def check (self, *args, ancestor = 2):
 		""" Given a set of values from either the python or transcrypt
 		environments, we log the position of the check call in the test
 		and representative values of the passed arguments for later
 		comparison.
 		"""
-		position=getFileLocation()
+		position=getFileLocation(ancestor)
 		# N.B. stubs.browser provides a special sorting repr
 		item = ' '.join ([self.sortedRepr (arg) for arg in args])
 		if __envir__.executor_name == __envir__.transpiler_name:
 			self.testDict[self._currTestlet].append((position,item))
 		else:
 			self.refDict[self._currTestlet].append((position,item))
+
+	__pragma__('nokwargs')
 
 	def expectException(self, func):
 		""" This method attempts to call the passed method and
@@ -170,6 +176,29 @@ class AutoTester:
 			return("no exception")
 		except Exception as exc:
 			return("exception")
+
+	def throwToError(self, func):
+		""" This function invokes the passed function and then
+		converts an exception to an error response so that
+		the unit test can continue even in the case where an
+		exception may or may not occur.
+		"""
+		try:
+			return(func())
+		except Exception as exc:
+			return (None, "!!!{}".format(str(exc)))
+
+	def checkEval(self, func):
+		""" Check the result of the passed function which is
+		invoked without arguments. If this function throws an
+		exception, that exception is caught and converted to an error
+		with can be compared against the result. This allows the
+		user to control for exception that may or may not be generated
+		in the unit tests
+		"""
+		ret = self.throwToError(func)
+		self.check(ret, ancestor = 3)
+
 
 	def checkPad(self, val, count):
 		""" This method is to help manage flow control in unit tests and
