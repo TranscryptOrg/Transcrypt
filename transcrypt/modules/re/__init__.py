@@ -13,7 +13,7 @@
 
 from org.transcrypt.stubs.browser import __pragma__
 from re.translate import translate
-from re.re import PyRegExp, _encodeFlags, _decodeFlags
+from re.re import _encodeFlags, _decodeFlags
 
 
 # Flags
@@ -69,7 +69,8 @@ class error(Exception):
         # @todo - lineno and colno attributes
 
 class ReIndexError(IndexError):
-    """ Index Error variant for the re module
+    """ Index Error variant for the re module - primarily used for
+    the group method in the Match Object.
     """
     def __init__(self):
         IndexError.__init__(self, "no such group")
@@ -196,6 +197,8 @@ class Match(object):
     def groupdict(self, default = None):
         """ The concept of named captures doesn't exist
         in javascript so this will likely never be implemented.
+        For the python translated re we will have a group dict where
+        possible.
         """
         if ( self._namedGroups is not None ):
             ret = {}
@@ -208,7 +211,14 @@ class Match(object):
             raise NotImplementedError("No NamedGroups Available")
 
     def start(self, group = 0):
-        """
+        """ Find the starting index in the string for the passed
+        group id or named group string.
+        @param group
+          if the type of group is a str, then the named groups dict
+            is searched for a matching string.
+          if the type of group is an int, then the groups are
+            indexed starting with 0 = entire match, and 1,... are
+            the indices of the matched sub-groups
         """
         gId = 0
         if ( type(group) is str ):
@@ -246,7 +256,14 @@ class Match(object):
                 return(-1)
 
     def end(self, group = 0):
-        """
+        """ Find the ending index in the string for the passed
+        group id or named group string.
+        @param group
+          if the type of group is a str, then the named groups dict
+            is searched for a matching string.
+          if the type of group is an int, then the groups are
+            indexed starting with 0 = entire match, and 1,... are
+            the indices of the matched sub-groups
         """
         gId = 0
         if ( type(group) is str ):
@@ -284,7 +301,15 @@ class Match(object):
                 return(-1)
 
     def span(self, group = 0):
-        """
+        """ Find the start and end index in the string for the passed
+        group id or named group string.
+        @param group
+          if the type of group is a str, then the named groups dict
+            is searched for a matching string.
+          if the type of group is an int, then the groups are
+            indexed starting with 0 = entire match, and 1,... are
+            the indices of the matched sub-groups
+        @return tuple of (start, end)
         """
         return( (self.start(group), self.end(group)) )
 
@@ -292,7 +317,10 @@ class Regex(object):
     """ Regular Expression Object
     """
     def __init__(self, pattern, flags):
-        """
+        """ Initial the Regex Object
+        @param pattern - javascript regular expression pattern as a string
+        @param flags - string of javascript flags for the subsequently
+           created RegExp object.
         """
         if ( not ((flags & ASCII) > 0) ):
             flags |= UNICODE
@@ -308,7 +336,7 @@ class Regex(object):
         self._groups = groupCounterRegex.exec('').length-1
         # Javascript does not have named captures so this
         # will never have content in js only mode
-        self._groupindex = {}
+        self._groupindex = None
 
     # Read-only Properties
     def _getPattern(self):
@@ -331,7 +359,10 @@ class Regex(object):
     groups = property(_getGroups, _setGroups)
 
     def _getGroupIndex(self):
-        return(self._groupindex)
+        if ( self._groupindex is None ):
+            return({})
+        else:
+            return(self._groupindex)
     def _setGroupIndex(self, val):
         raise AttributeError("readonly attribute")
     groupindex = property(_getGroupIndex, _setGroupIndex)
@@ -378,7 +409,7 @@ class Regex(object):
         return(ret)
 
     def _getTargetStr(self, string, pos, endpos):
-        """
+        """ Given an start and endpos, slice out a target string.
         """
         endPtr = len(string)
         if ( endpos is not None ):
@@ -396,7 +427,8 @@ class Regex(object):
         return(self._groups > 0)
 
     def search(self, string, pos=0, endpos=None):
-        """
+        """ Search through a string for matches to
+        this regex object. @see the python docs
         """
         if ( endpos is None ):
             endpos = len(string)
@@ -410,13 +442,13 @@ class Regex(object):
                 return(None)
             else:
                 # Valid match we will create a match object
-                return( Match(m, string, pos, endpos, self))
+                return( Match(m, string, pos, endpos, self, self._groupindex))
         else:
             return(None)
 
-
     def match(self, string, pos=0, endpos = None):
-        """
+        """ Match this regex at the beginning of the passed
+        string. @see the python docs
         """
         target = string
         if ( endpos is not None ):
@@ -429,14 +461,15 @@ class Regex(object):
         if m:
             # Match only at the beginning
             if ( m.index == pos ):
-                return( Match(m, string, pos, endpos, self))
+                return( Match(m, string, pos, endpos, self, self._groupindex))
             else:
                 return(None)
         else:
             return(None)
 
     def fullmatch(self, string, pos=0, endpos = None):
-        """
+        """ Match the entirety of the passed string to this regex
+        object. @see the python docs
         """
         target = string
         strEndPos = len(string)
@@ -449,14 +482,21 @@ class Regex(object):
         if m:
             obsEndPos = (m.index+len(m[0]))
             if ( m.index == pos and obsEndPos == strEndPos ):
-                return( Match(m, string, pos, strEndPos, self))
+                return( Match(m, string, pos, strEndPos, self, self._groupindex))
             else:
                 return(None)
         else:
             return(None)
 
     def split(self, string, maxsplit = 0):
-        """
+        """ Split the passed string on each match of this regex
+        object. If the regex contains captures, then the match
+        content is included as a separate item. If no captures are
+        in the regex, then only the non-matching split content is
+        returned. @see the python docs
+        @param maxsplit max number of times to split the string
+          at a matching substring.
+        @return list of sub-strings
         """
         # JS split is slightly different from Python
         # the "limit" arg limits the number of elements
@@ -532,7 +572,13 @@ class Regex(object):
         return(ret)
 
     def findall(self, string, pos = 0, endpos = None):
-        """
+        """ Find All the matches to this regex in the passed string
+        @return either:
+          List of strings of the matched regex has 1 or 0 capture
+            groups
+          List of elements that are each a list of the groups matched
+            at each location in the string.
+        @see the python docs
         """
         mlist = self._findAllMatches(string, pos, endpos)
 
@@ -553,20 +599,34 @@ class Regex(object):
         return(ret)
 
     def finditer(self, string, pos, endpos = None):
-        """
+        """ Like findall but returns an iterator instead of
+        a list.
+        @see the python docs
         """
         mlist = self._findAllMatches(string, pos, endpos)
-        ret = map(lambda m: Match(m, string, 0, len(string), self), mlist)
+        ret = map(lambda m: Match(m, string, 0, len(string), self, self._groupindex), mlist)
         return( iter(ret) )
 
     def sub(self, repl, string, count = 0):
-        """
+        """ Substitude each match of this regex in the passed string
+        with either:
+          if repl is of type string,
+             replace with repl
+          if repl is a callable object, then the returned value
+            from repl(m) where m is the match object at a particular
+            point in the string.
+        @see the python docs
+        @return the augmented string with substitutions
         """
         ret,_ = self.subn(repl, string, count)
         return(ret)
 
     def subn(self, repl, string, count = 0):
-        """
+        """ Similar to sub except that instead of just returning the
+        augmented string, it returns a tuple of the augmented string
+        and the number of times that the replacement op occured.
+        (augstr, numreplacements)
+        @see the python docs
         """
         # For this we are going to use the 'exec' method
         # because the 'replace' method in javascript is broken
@@ -600,7 +660,7 @@ class Regex(object):
                     ret += string[lastEnd:m.index]
 
                 try:
-                    content = repl(Match(m, string, 0, len(string), self))
+                    content = repl(Match(m, string, 0, len(string), self, self._groupindex))
                     ret += content
                 except:
                     # repl is likely not callable so - we will
@@ -622,6 +682,31 @@ class Regex(object):
                     ret += string[lastEnd:]
                     return(ret,totalMatch)
 
+
+class PyRegExp(Regex):
+    """ Python Regular Expression object which translates a python
+    regex syntax string into a format that can be passed to the
+    js regex engine.
+    """
+    def __init__(self, pyPattern, flags):
+        """
+        @pattern Python Regex String
+        @pattern flags bit flags passed by the user.
+        """
+        passedFlags = _decodeFlags(flags)
+        jsTokens, jsflags, namedGroups, nCapGroups = translate(pyPattern)
+        flags |= _encodeFlags(jsflags)
+
+        jsPattern = ''.join(jsTokens)
+        Regex.__init__(self, jsPattern, flags)
+
+        self._jsTokens = jsTokens;
+        # nCapGroups = the same as self.groups defined in the
+        #   base class.
+        self._capgroups = nCapGroups
+        self._groupindex = namedGroups
+
+
 def compile(pattern, flags = 0):
     """ Compile a regex object and return
     an object that can be used for further processing.
@@ -629,10 +714,7 @@ def compile(pattern, flags = 0):
     if ( flags & JSSTRICT ):
         p = Regex(pattern, flags)
     else:
-        passedFlags = _decodeFlags(flags)
-        jsTokens, jsflags, namedGroups, nCaptureGroups = translate(pattern)
-        flags |= _encodeFlags(jsflags)
-        p = PyRegExp(pattern, jsTokens, jsflags + passedFlags, flags, namedGroups, nCaptureGroups)
+        p = PyRegExp(pattern, flags)
     return(p)
 
 def search(pattern, string, flags = 0):

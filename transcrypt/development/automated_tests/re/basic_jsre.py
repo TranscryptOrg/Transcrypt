@@ -22,9 +22,16 @@ def run (test):
 
     checkSearchWithGroups(test, re.JSSTRICT)
     checkMatchOps(test, re.JSSTRICT)
+    checkMatchWithGroups(test, re.JSSTRICT)
+    #checkMatchwithNamedGroups(test, re.JSSTRICT)
+
     checkFullMatchOps(test, re.JSSTRICT)
     checkFindAllOps(test, re.JSSTRICT)
     checkSplitOps(test, re.JSSTRICT)
     checkSubOps(test, re.JSSTRICT)
     checkSyntaxErrors(test, re.JSSTRICT)
+    #checkConditionalGroups(test, re.JSSTRICT)
+    #checkCommentGroup(test, re.JSSTRICT)
+    #checkWithFlags(test, re.JSSTRICT)
+
     checkFindIter(test, re.JSSTRICT)

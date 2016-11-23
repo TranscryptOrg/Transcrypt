@@ -118,17 +118,20 @@ def checkSearchWithGroups(test, flags = 0):
     test.check( re.search(r, testStr2, flags).endpos)
     test.check( re.search(r, testStr2, flags).groups())
     test.check( re.search(r, testStr2, flags).group())
-    test.check( re.search(r, testStr2, flags).group(0))
-    test.check( re.search(r, testStr2, flags).group(1))
+    test.checkEval(lambda: re.search(r, testStr2, flags).group(0))
+    test.checkEval(lambda: re.search(r, testStr2, flags).group(1))
     test.check( re.search(r, testStr2, flags).start())
-    test.check( re.search(r, testStr2, flags).start(0))
-    test.check( re.search(r, testStr2, flags).start(1))
+    test.checkEval(lambda: re.search(r, testStr2, flags).start(0))
+    test.checkEval(lambda: re.search(r, testStr2, flags).start(1))
+
     test.check( re.search(r, testStr2, flags).end())
-    test.check( re.search(r, testStr2, flags).end(0))
-    test.check( re.search(r, testStr2, flags).end(1))
+    test.checkEval(lambda: re.search(r, testStr2, flags).end(0))
+    test.checkEval(lambda: re.search(r, testStr2, flags).end(1))
+
     test.check( re.search(r, testStr2, flags).span())
-    test.check( re.search(r, testStr2, flags).span(0))
-    test.check( re.search(r, testStr2, flags).span(1))
+    test.checkEval(lambda: re.search(r, testStr2, flags).span(0))
+    test.checkEval(lambda: re.search(r, testStr2, flags).span(1))
+
     test.check( re.search(r, testStr2, flags).lastgroup)
     test.check( re.search(r, testStr2, flags).lastindex)
 
@@ -136,7 +139,6 @@ def checkSearchWithGroups(test, flags = 0):
         test.check(
             test.expectException(lambda: re.search(',', testStr1, flags).group(1))
         )
-
 
 def checkMatchOps(test, flags = 0):
     test.check( re.match("asdf", "asdf", flags).pos )
@@ -148,20 +150,91 @@ def checkMatchOps(test, flags = 0):
     test.check( (re.match("s", "asdf", flags) is None) )
     test.check( (re.match(r"^s", "asdf", flags) is None) )
     test.check( (re.compile("^s", flags).match("asdf", 1) is None) )
+
+def checkMatchwithNamedGroups(test, flags = 0):
+    """
+    """
     # Matches with named groups
+    r = None
     try:
         r = re.compile(r"(?P<prefix>[a-zA-Z]+)://(?P<suffix>[^/]*)", flags)
     except Exception as exc:
-        test.checkPad(None, 6)
+        test.checkPad(None, 12)
+
+    if ( r is not None ):
+        m = r.match("http://asdf")
+        test.check( m.groups() )
+        test.check( m.group() )
+        test.check( m.group(0) )
+        test.check( m.group(1) )
+        test.check( m.group("prefix") )
+        test.check( m.group("suffix") )
+
+        m = r.match("ftp://192.168.1.1")
+        test.check( m.group() )
+        test.check( m.group(0) )
+        test.check( m.group(1) )
+        test.check( m.group("prefix") )
+        test.check( m.group("suffix") )
+        m = r.match("555-5555")
+        test.check(m)
+
+    try:
+        r = re.compile(r"(?P<country>\d{1,3})-(?P<areacode>\d{3})-(?P<number>\d{3}-\d{4})", flags)
+    except:
+        test.checkPad(None, )
+
+    if ( r is not None ):
+        m = r.match("1-234-567-9012")
+        test.check(m.groups())
+        test.check(m.group())
+        test.check(m.group(0))
+        test.check(m.group(1))
+        test.check(m.group(2))
+        test.check(m.group(3))
+
+        test.check( m.group("country") )
+        test.check( m.group("areacode") )
+        test.check( m.group("number") )
+
+        m = r.match("adfs;")
+        test.check(m)
+
+def checkMatchWithGroups(test, flags = 0):
+    rgx = re.compile(r'(\w)(\w)(\w)', flags)
+    test.check(rgx.pattern)
+    test.check(rgx.groups)
+    m = rgx.match('abc')
+    if m:
+        test.check(m.group(0))
+        test.check(m.group(1))
+        test.check(m.group(1, 2))
+        test.check(m.group(2, 1))
+    else:
+        test.checkPad(None, 4)
+
+def checkCommentGroup(test, flags = 0):
+    """ Comment Groups are only supported in Python so will
+    likely fail in javascript only mode
+    """
+    r = None
+    try:
+        r = re.compile(r'a(?#foobar)b', flags)
+    except:
+        test.checkPad(None,2)
+
+    if ( r is not None ):
+        test.check(r.search("ab").group())
+        test.check(r.search("er"))
+
+    try:
+        r = re.compile(r'([\d]+)(?#blarg)\[\]', flags)
+    except:
+        test.checkPad(None, 2)
         return
 
-    m = r.match("http://asdf")
-    test.check( m.groups() )
-    test.check( m.group() )
-    test.check( m.group(0) )
-    test.check( m.group(1) )
-    test.check( m.group("prefix") )
-    test.check( m.group("suffix") )
+    test.check( r.search("1234[]").group())
+    test.check( r.search("asdf[]"))
 
 
 def checkFullMatchOps(test, flags = 0):
@@ -171,7 +244,13 @@ def checkFullMatchOps(test, flags = 0):
     test.check( (re.fullmatch("q", "asdf", flags) is None))
     test.check( (re.compile("o[gh]", flags).fullmatch("dog") is None))
     test.check( (re.compile("o[gh]", flags).fullmatch("ogre") is None))
-    test.check( re.compile("o[gh]", flags).fullmatch("doggie",1,3).pos)
+
+    m = re.compile("o[gh]", flags).fullmatch("doggie",1,3)
+    if m:
+        test.check(m.pos)
+        test.check(m.endpos)
+    else:
+        test.checkPad(None,2)
 
 def checkFindAllOps(test, flags = 0):
     test.check(re.findall(",", testStr1, flags)) # No Caps
@@ -233,3 +312,55 @@ def checkFindIter(test, flags = 0):
         test.check(m.endpos)
         test.check(m.string)
         test.check(m.lastindex)
+
+def checkWithFlags(test, flags = 0):
+    """ This checks the regex with flags called out in the
+    string, for example (?i) for ignore case.
+    This is a python only feature.
+    """
+    try:
+        r = re.compile(r'(?i)aba', flags)
+    except:
+        test.checkPad(None, 5)
+        return
+
+    m = r.search("aBA")
+    test.check(m.group() )
+    test.check(m.groups())
+
+    m = r.match("aAa")
+    test.check(m)
+
+    m = r.match("ABA")
+    test.check(m.group())
+
+    m = r.match("abA")
+    test.check(m.group())
+
+
+def checkConditionalGroups(test, flags = 0):
+    """ Check conditional groups - this is a python only
+    feature - will likely faily in the js strict mode
+    """
+    rgx = None
+    try:
+        rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b)', flags)
+    except:
+        test.checkPad(None, 5)
+
+    if ( rgx is not None ):
+        test.checkEval(lambda: rgx.match('abab').group())
+        test.checkEval(lambda: rgx.match('aa').group())
+        test.checkEval(lambda: rgx.match('bcb').group())
+        test.checkEval(lambda: rgx.match('c').group())
+        test.checkEval(lambda: rgx.match('abcb'))
+
+    try:
+        rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b|d)', flags)
+    except:
+        test.checkPad(None, 5)
+        return
+    test.checkEval(lambda: rgx.match('abab').group())
+    test.checkEval(lambda: rgx.match('aad').group())
+    test.checkEval(lambda: rgx.match('bcb').group())
+    test.checkEval(lambda: rgx.match('bcb').group())

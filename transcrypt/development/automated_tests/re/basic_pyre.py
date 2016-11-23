@@ -24,8 +24,15 @@ def run (test):
 
     checkSearchWithGroups(test)
     checkMatchOps(test)
+    checkMatchWithGroups(test)
+    checkMatchwithNamedGroups(test)
     checkFullMatchOps(test)
     checkFindAllOps(test)
     checkSplitOps(test)
     checkSubOps(test)
     checkSyntaxErrors(test)
+    checkConditionalGroups(test)
+    checkCommentGroup(test)
+    checkWithFlags(test)
+
+    checkFindIter(test)
