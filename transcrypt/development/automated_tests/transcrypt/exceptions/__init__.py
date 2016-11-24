@@ -157,10 +157,14 @@ def run (autoTester):
     else:
         autoTester.check ('no error 2')
         
-    for i in range (2):
+    for raiseIt in (False, True):
         try:
-            j = 1 / i
-            autoTester.check ('no error 3')
-        finally:
-            autoTester.check ('anyhow 3')
+            try:
+                if raiseIt:
+                    raise Exception ()
+                autoTester.check ('no error 3')
+            finally:
+                autoTester.check ('anyhow 3')
+        except:
+            autoTester.check ('error 3')
             
