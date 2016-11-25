@@ -270,10 +270,15 @@ __pragma__ ('endif')
     __all__.isinstance = isinstance;
 
     var callable = function (anObject) {
-      return(null);
+        if ( typeof anObject == 'object' && '__call__' in anObject ) {
+            return true;
+        }
+        else {
+            return typeof anObject === 'function';
+        }
     };
-
     __all__.callable = callable;
+
     // Repr function uses __repr__ method, then __str__, then toString
     var repr = function (anObject) {
         try {
