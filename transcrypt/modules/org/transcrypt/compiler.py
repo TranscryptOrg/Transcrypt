@@ -2239,18 +2239,31 @@ class Generator (ast.NodeVisitor):
         
     def visit_Raise (self, node):
         self.adaptLineNrString (node)
-            
-        self.emit ('var {} = ', self.nextTemp ('except')) 
-        self.visit (node.exc)
-        self.emit (';\n')
+        
+        if node.exc:
+            # Create an exception object with a temporary name
+            self.emit ('var {} = ', self.nextTemp ('except'))
+            self.visit (node.exc)
+            self.emit (';\n')
+        else:
+            # We want to rethrow, so we must be in a catch block, so the 'current exception' with name self.getTemp ('except') will exist already
+            pass
+        
+        # Optionally add a __cause__ attribute to it
         self.emit ('{}.__cause__ = ', self.getTemp ('except'))
         if node.cause:
             self.visit (node.cause)
         else:
             self.emit ('null')
+            
         self.emit (';\n')
+        
+        # Throw the exception
         self.emit ('throw {}', self.getTemp ('except'))
-        self.prevTemp ('except')
+        
+        # Relinquish the temporary name if we own it
+        if node.exc:
+            self.prevTemp ('except')
         
     def visit_Return (self, node):
         self.adaptLineNrString (node)
@@ -2374,41 +2387,41 @@ class Generator (ast.NodeVisitor):
         self.dedent ()
         self.emit ('}}\n')
         
-        self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
-        self.indent ()
-        
-        for index, excepthandler in enumerate (node.handlers):
-            if index:
-                self.emit ('else ')             # Never here after a catch all
-                            
-            if excepthandler.type:
-                self.emit ('if (isinstance ({}, ', self.getTemp ('except'))
-                self.visit (excepthandler.type)
-                self.emit (')) {{\n')
-                self.indent ()
-                
-                if excepthandler.name:
-                    self.emit ('var {} = {};\n', excepthandler.name, self.getTemp ('except'))
+        if node.handlers:                           # try ... finally (without any catch) is also valid Python
+            self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
+            self.indent ()
+            
+            for index, excepthandler in enumerate (node.handlers):
+                if index:
+                    self.emit ('else ')             # Never here after a catch all
+                                
+                if excepthandler.type:
+                    self.emit ('if (isinstance ({}, ', self.getTemp ('except'))
+                    self.visit (excepthandler.type)
+                    self.emit (')) {{\n')
+                    self.indent ()
                     
-                self.emitBody (excepthandler.body)
-                
+                    if excepthandler.name:
+                        self.emit ('var {} = {};\n', excepthandler.name, self.getTemp ('except'))
+                        
+                    self.emitBody (excepthandler.body)
+                    
+                    self.dedent ()
+                    self.emit ('}}\n')
+                else:                               # Catch all, swallowing no problem
+                    self.emitBody (excepthandler.body)
+                    break
+            else:                                   # No catch all, avoid swallowing exception
+                self.emit ('else {{\n')
+                self.indent ()
+                self.emit ('throw {};\n', self.getTemp ('except'))
                 self.dedent ()
                 self.emit ('}}\n')
-            else:                               # Catch all, swallowing no problem
-                self.emitBody (excepthandler.body)
-                break
-        else:                                   # No catch all, avoid swallowing exception
-            self.emit ('else {{\n')
-            self.indent ()
-            self.emit ('throw {};\n', self.getTemp ('except'))
-            self.dedent ()
-            self.emit ('}}\n')
 
-        self.dedent ()
-        self.prevTemp ('except')
-        self.emit ('}}\n')
-        
-        
+            self.dedent ()
+            self.prevTemp ('except')
+            self.emit ('}}\n')
+                    
         if node.finalbody:
             self.emit ('finally {{\n')
             self.indent ()
