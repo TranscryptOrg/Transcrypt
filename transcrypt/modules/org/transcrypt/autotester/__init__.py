@@ -264,7 +264,8 @@ class AutoTester:
 					key, testPos, testItem, refPos, refItem, collapse
 				)
 
-		totalErrors += errCount
+			totalErrors += errCount
+
 		self.ui.setOutputStatus( totalErrors == 0 )
 
 
