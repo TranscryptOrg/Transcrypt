@@ -269,6 +269,11 @@ __pragma__ ('endif')
     };
     __all__.isinstance = isinstance;
 
+    var callable = function (anObject) {
+      return(null);
+    };
+
+    __all__.callable = callable;
     // Repr function uses __repr__ method, then __str__, then toString
     var repr = function (anObject) {
         try {
