@@ -1384,9 +1384,7 @@ class Logger(Filterer):
             self._log(WARNING, msg, args, **kwargs)
 
     def warn(self, msg, *args, **kwargs):
-        # @note - we don't have a warnings module
-        #warnings.warn("The 'warn' method is deprecated, "
-        #                           "use 'warning' instead", DeprecationWarning, 2)
+        warnings.warn_explicit("The `warn` method is deprecated - use `warning`", DeprecationWarning, 'logging/__init__.py', 1388, "logging")
         self.warning(msg, *args, **kwargs)
 
     def error(self, msg, *args, **kwargs):
@@ -1717,9 +1715,8 @@ class LoggerAdapter(object):
         self.log(WARNING, msg, *args, **kwargs)
 
     def warn(self, msg, *args, **kwargs):
-        # @note - No warnings module yet
-        #warnings.warn("The 'warn' method is deprecated, "
-        #                           "use 'warning' instead", DeprecationWarning, 2)
+        warnings.warn_explicit("The `warn` method is deprecated - use `warning`", DeprecationWarning, 'logging/__init__.py', 1719, "logging")
+
         self.warning(msg, *args, **kwargs)
 
     def error(self, msg, *args, **kwargs):
@@ -1943,9 +1940,7 @@ def warning(msg, *args, **kwargs):
     root.warning(msg, *args, **kwargs)
 
 def warn(msg, *args, **kwargs):
-    # @note warnings not implemeneted yet.
-    #warnings.warn("The 'warn' function is deprecated, "
-    #                           "use 'warning' instead", DeprecationWarning, 2)
+    warnings.warn_explicit("The `warn` method is deprecated - use `warning`", DeprecationWarning, 'logging/__init__.py', 1944, "logging")
     warning(msg, *args, **kwargs)
 
 def info(msg, *args, **kwargs):
@@ -2058,9 +2053,7 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
         if _warnings_showwarning is not None:
             _warnings_showwarning(message, category, filename, lineno, file, line)
     else:
-        # @note - no warnings module
-        #s = warnings.formatwarning(message, category, filename, lineno, line)
-        s = "{}:{}: {}: {}".format(filename, lineno, category, message)
+        s = warnings.formatwarning(message, category, filename, lineno, line)
         logger = getLogger("py.warnings")
         if not logger.handlers:
             logger.addHandler(NullHandler())
@@ -2072,13 +2065,12 @@ def captureWarnings(capture):
     If capture is False, ensure that warnings are not redirected to logging
     but to their original destinations.
     """
-    raise NotImplementedError()
-    # global _warnings_showwarning
-    # if capture:
-    #     if _warnings_showwarning is None:
-    #         _warnings_showwarning = warnings.showwarning
-    #         warnings.setShowWarning(_showwarning)
-    # else:
-    #     if _warnings_showwarning is not None:
-    #         warnings.setShowWarnings(_warnings_showwarning)
-    #         _warnings_showwarning = None
+    global _warnings_showwarning
+    if capture:
+        if _warnings_showwarning is None:
+            _warnings_showwarning = warnings.showwarning
+            warnings.setShowWarning(_showwarning)
+    else:
+        if _warnings_showwarning is not None:
+            warnings.setShowWarnings(_warnings_showwarning)
+            _warnings_showwarning = None
