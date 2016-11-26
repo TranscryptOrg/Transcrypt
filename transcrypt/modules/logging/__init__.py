@@ -50,20 +50,7 @@ Automated tests are available in the logging test module.
 """
 from org.transcrypt.stubs.browser import __pragma__
 import time
-#import sys, os, time, io, traceback, warnings, weakref, collections
-
-#from string import Template
-
-# __all__ = [
-#     'BASIC_FORMAT', 'BufferingFormatter', 'CRITICAL', 'DEBUG', 'ERROR',
-#     'FATAL', 'FileHandler', 'Filter', 'Formatter', 'Handler', 'INFO',
-#     'LogRecord', 'Logger', 'LoggerAdapter', 'NOTSET', 'NullHandler',
-#     'StreamHandler', 'WARN', 'WARNING', 'addLevelName', 'basicConfig',
-#     'captureWarnings', 'critical', 'debug', 'disable', 'error',
-#     'exception', 'fatal', 'getLevelName', 'getLogger', 'getLoggerClass',
-#     'info', 'log', 'makeLogRecord', 'setLoggerClass', 'shutdown',
-#     'warn', 'warning', 'getLogRecordFactory', 'setLogRecordFactory',
-#     'lastResort', 'raiseExceptions']
+import warnings
 
 __author__  = "Vinay Sajip <vinay_sajip@red-dove.com>, Carl Allendorph"
 __status__  = "experimental"
@@ -1179,14 +1166,16 @@ class PlaceHolder(object):
         """
         Initialize with the specified logger being a child of this placeholder.
         """
-        self.loggerMap = { alogger : None }
+        n = alogger.name
+        self.loggerMap = { n : alogger }
 
     def append(self, alogger):
         """
         Add the specified logger as a child of this placeholder.
         """
-        if alogger not in self.loggerMap:
-            self.loggerMap[alogger] = None
+        n = alogger.name
+        if n not in self.loggerMap.keys():
+            self.loggerMap[n] = alogger
 
 #
 #       Determine which class to use when instantiating loggers.
@@ -1312,10 +1301,12 @@ class Manager(object):
         name = alogger.name
         namelen = len(name)
         for c in ph.loggerMap.keys():
+            log = ph.loggerMap[c]
+            if not log.parent.name.startswith(name):
             #The if means ... if not c.parent.name.startswith(nm)
-            if c.parent.name[:namelen] != name:
-                alogger.parent = c.parent
-                c.parent = alogger
+            #if c.parent.name[:namelen] != name:
+                alogger.parent = log.parent
+                log.parent = alogger
 
 #---------------------------------------------------------------------------
 #       Logger classes and functions
@@ -2069,7 +2060,7 @@ def _showwarning(message, category, filename, lineno, file=None, line=None):
     else:
         # @note - no warnings module
         #s = warnings.formatwarning(message, category, filename, lineno, line)
-        s = "WARNING: {}, {}, {}, {}, {}".format(message, category, filename, lineno, line)
+        s = "{}:{}: {}: {}".format(filename, lineno, category, message)
         logger = getLogger("py.warnings")
         if not logger.handlers:
             logger.addHandler(NullHandler())
@@ -2081,13 +2072,13 @@ def captureWarnings(capture):
     If capture is False, ensure that warnings are not redirected to logging
     but to their original destinations.
     """
-    _consoleStream.write("Warnings not Handled By Logging")
+    raise NotImplementedError()
     # global _warnings_showwarning
     # if capture:
-    #           if _warnings_showwarning is None:
-    #                   _warnings_showwarning = warnings.showwarning
-    #                   warnings.showwarning = _showwarning
+    #     if _warnings_showwarning is None:
+    #         _warnings_showwarning = warnings.showwarning
+    #         warnings.setShowWarning(_showwarning)
     # else:
-    #           if _warnings_showwarning is not None:
-    #                   warnings.showwarning = _warnings_showwarning
-    #                   _warnings_showwarning = None
+    #     if _warnings_showwarning is not None:
+    #         warnings.setShowWarnings(_warnings_showwarning)
+    #         _warnings_showwarning = None
