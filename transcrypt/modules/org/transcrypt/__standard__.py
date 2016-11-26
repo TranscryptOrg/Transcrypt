@@ -68,6 +68,26 @@ class AttributeError(Exception):
     def __init__(self, message, error):
         Exception.__init__(self, message, error = error)
 
+# Warnings Exceptions
+# @note - this is a limited subset of the warnings defined in
+#    the cpython implementation to keep things small for now.
+
+class Warning(Exception):
+    """ Warning Base Class
+    """
+    pass
+
+class UserWarning(Warning):
+    pass
+
+class DeprecationWarning(Warning):
+    pass
+
+class RuntimeWarning(Warning):
+    pass
+
+
+
 __pragma__ ('kwargs')
 
 

@@ -23,6 +23,12 @@
     var IndexError = __all__.IndexError;
     var AttributeError = __all__.AttributeError;
 
+    // Warnings Exceptions
+    var Warning = __all__.Warning;
+    var UserWarning = __all__.UserWarning;
+    var DeprecationWarning = __all__.DeprecationWarning;
+    var RuntimeWarning = __all__.RuntimeWarning;
+
     var __sort__ = __all__.__sort__;
     var sorted = __all__.sorted;
 
@@ -268,6 +274,16 @@ __pragma__ ('endif')
         }
     };
     __all__.isinstance = isinstance;
+
+    var callable = function (anObject) {
+        if ( typeof anObject == 'object' && '__call__' in anObject ) {
+            return true;
+        }
+        else {
+            return typeof anObject === 'function';
+        }
+    };
+    __all__.callable = callable;
 
     // Repr function uses __repr__ method, then __str__, then toString
     var repr = function (anObject) {
