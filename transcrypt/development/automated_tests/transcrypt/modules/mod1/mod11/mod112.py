@@ -1,3 +1,3 @@
 def f ():
-	return ('Paris, c\'est la vie\n')
-	
+    return ('Paris, c\'est la vie\n')
+    

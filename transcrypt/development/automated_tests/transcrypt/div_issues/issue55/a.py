@@ -1,3 +1,3 @@
 def f1 ():
-	return 'f1'
-	
+    return 'f1'
+    
