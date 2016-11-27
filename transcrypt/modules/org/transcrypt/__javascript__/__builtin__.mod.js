@@ -1252,17 +1252,53 @@ __pragma__ ('else')
     }
 
     function dict (objectOrPairs) {
+        var instance = {};
         if (!objectOrPairs || objectOrPairs instanceof Array) { // It's undefined or an array of pairs
-            var instance = {};
             if (objectOrPairs) {
                 for (var index = 0; index < objectOrPairs.length; index++) {
                     var pair = objectOrPairs [index];
-                    instance [pair [0]] = pair [1];
+                    if ( !(pair instanceof Array) || pair.length != 2) {
+                        throw ValueError(
+                            "dict update sequence element #" + index +
+                            " has length " + pair.length +
+                            "; 2 is required", new Error());
+                    }
+                    var key = pair [0];
+                    var val = pair [1];
+                    if (!(objectOrPairs instanceof Array) && objectOrPairs instanceof Object) {
+                         // User can potentially pass in an object
+                         // that has a hierarchy of objects. This
+                         // checks to make sure that these objects
+                         // get converted to dict objects instead of
+                         // leaving them as js objects.
+                         if (!isinstance (objectOrPairs, dict)) {
+                             val = dict (val);
+                         }
+                    }
+                    instance [key] = val;
                 }
             }
         }
-        else {                                                  // It's a JavaScript object literal
-            var instance = objectOrPairs;
+        else {
+            if (isinstance (objectOrPairs, dict)) {
+                // Passed object is a dict already so we need to be
+                // a little careful
+                // @note - this is a shallow copy per python std - so
+                //    it is assumed that children have already become
+                //    python objects at some point.
+                var ks = objectOrPairs.py_keys ();
+                for (var index = 0; index < ks.length; index++ ) {
+                    var key = ks [index];
+                    instance [key] = objectOrPairs [key];
+                }
+            } else if ( ! (objectOrPairs instanceof Object) ) {
+                // We have already covered Array so this indicates
+                // that the passed object is not a js object - ie,
+                // it is an int or a string, which is invalid.
+                throw ValueError ("Invalid type of object for dict creation", new Error ());
+            } else {
+                instance = objectOrPairs;
+            }
         }
 
         // Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
