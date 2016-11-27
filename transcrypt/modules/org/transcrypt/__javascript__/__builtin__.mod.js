@@ -1236,6 +1236,11 @@ __pragma__ ('else')
         if (result != undefined) {
             delete this [aKey];
             return result;
+        } else {
+            // Identify check because user could pass None
+            if ( aDefault === undefined ) {
+                throw KeyError(aKey, new Error());
+            }
         }
         return aDefault;
     }

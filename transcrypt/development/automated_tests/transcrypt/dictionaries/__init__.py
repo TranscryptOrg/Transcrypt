@@ -44,4 +44,16 @@ def run (autoTester):
     autoTester.check (tel.pop ('guido', 1))
     autoTester.check (tel.pop ('edsger', 2))
     autoTester.check (tel.pop ('foo', 'bar'))
-    
+    autoTester.check (tel.pop ('foo', None))
+
+    # Check exceptions
+    knights = {'robin': 'the brave', 'gallahad': 'the pure'}
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman") )
+    )
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman", None) )
+    )
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman", "the gullible") )
+    )
