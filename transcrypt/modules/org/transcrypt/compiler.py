@@ -377,33 +377,39 @@ class Module:
         
         generator = Generator (self)
         
-        if utils.commandArgs.map or generator.allowDebugMap:    # Generation of source map and / or prefix map required
-            instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n') 
+        if utils.commandArgs.map or utils.commandArgs.anno:             # In both cases the generator will have instrumented the target fragments by appending line numbers
+                                                                        # N.B. __pragma__ ('noanno') will be too late to prevent instrumenting of the main module's first line
+                                                                        # In that case if no source maps are required either, the appended line numbers simply won't be used
+            instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')                 # Split joined fragments into lines
                         
             # Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
             targetLines = []
-            self.sourceLineNrs = []
+            
+            if utils.commandArgs.map:
+                self.sourceLineNrs = []                                                                 # Only needed for source maps, not for annotations
                 
             for targetLine in instrumentedTargetLines:
-                sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]
-                sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule
+                sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]                           # Take the appended line number, e.g. the string '000014'
+                sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule  # Turn it into an integer, e.g. 14
                 
-                targetLine = targetLine [ : -sourcemaps.lineNrLength]
+                targetLine = targetLine [ : -sourcemaps.lineNrLength]                                   # Obtain non-instrumented line by removing the appended line number
                 
                 # Only append non-emptpy statements and their number info
-                if targetLine.strip () != ';':
-                    if generator.allowDebugMap:
-                        targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)
+                if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
+                    if generator.allowDebugMap:                                                         # If annotations comments have to be prepended
+                        targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
                 
-                    targetLines.append (targetLine)
-                    self.sourceLineNrs.append (sourceLineNr)
+                    targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation commend
+                    
+                    if utils.commandArgs.map:
+                        self.sourceLineNrs.append (sourceLineNr)                                        # Remember its line number to be able to generate a sourcemap
                     
             # Generate per module sourcemap and copy sourcefile
             if utils.commandArgs.map:
                 utils.log (False, 'Generating source map for module: {}\n', self.metadata.sourcePath)               
                 self.modMap.generate (self.metadata.sourcePath, self.sourceLineNrs)
                 self.modMap.save ()
-        else:   # No maps needed, shortcut for speed
+        else:                                                           # No maps needed, so this 'no stripping' shortcut for speed
             targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']     
         
         # Join and save module code
@@ -412,7 +418,7 @@ class Module:
             aFile.write (self.targetCode)
         
     def extractPropertiesFromJavascript (self):
-        def purgeLineNrs (clause):
+        def removeLineNrs (clause):
             if utils.commandArgs.anno:
                 return re.sub ('/\* {} \*/'.format (sourcemaps.lineNrLength * '\d'), '', clause)
             else:
@@ -420,7 +426,7 @@ class Module:
     
         utils.log (False, 'Extracting module properties from: {}\n', self.metadata.targetPath)
                 
-        useClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')])
+        useClause = removeLineNrs (self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')])
         self.use = sorted (set ([
             word
             for word in useClause.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
@@ -429,7 +435,7 @@ class Module:
         for moduleName in self.use:
             self.program.provide (moduleName)
         
-        allClause = purgeLineNrs (self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')])
+        allClause = removeLineNrs (self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')])
         self.all = sorted (set ([
             word [1 : ]
             for word in allClause.replace ('__all__', ' ') .replace ('=', ' ') .split ()
@@ -460,7 +466,6 @@ class Generator (ast.NodeVisitor):
         self.docString = None
         self.docStringEmitted = False
         self.lineNr = 1
-        self.lineNrString = ''
 
         self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
@@ -682,16 +687,18 @@ class Generator (ast.NodeVisitor):
         if self.allowConversionToTruthValue:
             self.emit (')')
             
-    def adaptLineNrString (self, node):
-        if utils.commandArgs.map or self.allowDebugMap:
+    def adaptLineNrString (self, node): 
+        if utils.commandArgs.map or utils.commandArgs.anno: # Under these conditions, appended line numbers will be stripped later, so they have to be there
             if hasattr (node, 'lineno'):
-                lineNr = node.lineno
+                lineNr = node.lineno    # Use new line number
             else:
-                lineNr = self.lineNr
+                lineNr = self.lineNr    # Use 'cached' line nubmer
                 
             self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
-        else:
-            return ''
+        else:                                               # __pragma__ ('noanno') isn't enough to perform this else-clause and to later on take the 'no stripping' shortcut
+                                                            # This is in the main module the first line will already have been instrumented
+                                                            # So in that case each line is instrumented and instrumentation will be stripped later on
+            self.lineNrString = ''
         
     def isDocString (self, stmt):
         return isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str)
@@ -1551,9 +1558,12 @@ class Generator (ast.NodeVisitor):
                     self.emitComma (index, False)
                     self.emit ('\n{}: ', stmt.targets [0] .id, stmt.targets)
                     self.visit (stmt.value)
+                    self.adaptLineNrString (stmt) 
                     index += 1
                 else:
-                    classVarAssigns.append (stmt)   # Has to be done after the class because tuple assignment requires the use of an algorithm
+                    # Limitation: Can't properly deal with line number in this case
+                    classVarAssigns.append (stmt)   # Has to be done after the class because tuple assignment requires the use of an algorithm.
+                                                    # May also be a property assign
             elif self.getPragmaFromExpr (stmt):
                 self.visit (stmt)               # If it's a pragma, just visit it
         self.dedent ()
@@ -2217,7 +2227,15 @@ class Generator (ast.NodeVisitor):
         self.descope ()
         
     def visit_Name (self, node):    
-        if type (node.ctx) == ast.Store:
+        if node.id == '__file__':
+            self.visit (ast.Str (s = self.module.metadata.sourcePath))
+            return
+            
+        elif node.id == '__line__':
+            self.visit (ast.Num (n = self.lineNr))
+            return
+            
+        elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
                 self.all.add (node.id)
                 

@@ -259,6 +259,53 @@ def console_test(test):
     logger.critical("The house is on fire")
 
 
+def placeholder_testing(test):
+    """ This test is intended to manage placeholding of loggers
+    For example creating "asdf.qwer.eer" when "asdf.qwer" does not
+    exit
+    """
+
+    logger = logging.getLogger("phtest.middle.testme")
+    logger.setLevel(10)
+
+    hdlr = TestHandler(test, 5)
+    fmt = logging.Formatter(style="{", fmt="{levelname}:{name}:{message}")
+    hdlr.setFormatter(fmt)
+    logger.addHandler(hdlr)
+
+    logger.error("Gen a message")
+
+    log2 = logging.getLogger("phtest.middle")
+    log2.setLevel(10)
+    log2.addHandler(hdlr)
+
+    log2.info("This is another message")
+
+    log3 = logging.getLogger("phtest")
+    log3.setLevel(10)
+    log3.addHandler(hdlr)
+    log3.info("Yet another message")
+
+    # Now let's go the opposite way
+
+    logger = logging.getLogger("mngtest")
+    logger.setLevel(10)
+    logger.addHandler(hdlr)
+
+    logger.error("Gen a message 2 - the generating")
+
+    log2 = logging.getLogger("mngtest.mid")
+    log2.setLevel(10)
+    log2.addHandler(hdlr)
+
+    log2.info("This is another message 2 - the anothering")
+
+    log3 = logging.getLogger("mngtest.mid.end")
+    log3.setLevel(10)
+    log3.addHandler(hdlr)
+    log3.info("Yet another message 2 - the whatever...")
+
+
 def run(test):
     """ These are general logging test for the Logger class and
     associated classes. This does not cover the configuration module.
@@ -268,3 +315,4 @@ def run(test):
     logging_api_tests(test)
     formatter_tests(test)
     console_test(test)
+    placeholder_testing(test)

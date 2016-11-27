@@ -63,7 +63,18 @@ def run (autoTester):
         autoTester.check ('[4]')
         for n in iterable:
             autoTester.check (n)
-        
+            
+    # BEGIN issue 196: for loop over iter (), runs OK but needs JavaScript 6. This should be clearly in the docs.
+            
+    a = 0
+    vals = [1,2,3]
+    ret = iter (vals)
+    for m in ret:
+        a += m
+    autoTester.check (a)
+     
+    # END issue 196
+                
     # BEGIN 1st example with 'send'
         
     __pragma__ ('gsend')

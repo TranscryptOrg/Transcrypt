@@ -54,6 +54,7 @@ import modules
 import nonlocals
 import operator_overloading
 import properties
+import reprtest
 
 __pragma__ ('ifdef', '__esv6__')
 if '__esv6__' in __symbols__:
@@ -120,6 +121,7 @@ autoTester.run (modules, 'modules')
 autoTester.run (nonlocals, 'nonlocals')
 autoTester.run (operator_overloading, 'operator_overloading')
 autoTester.run (properties, 'properties')
+autoTester.run (reprtest, 'repr_str')
 
 __pragma__ ('ifdef', '__esv6__')
 if '__esv6__' in __symbols__:

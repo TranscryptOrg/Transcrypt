@@ -23,6 +23,12 @@
     var IndexError = __all__.IndexError;
     var AttributeError = __all__.AttributeError;
 
+    // Warnings Exceptions
+    var Warning = __all__.Warning;
+    var UserWarning = __all__.UserWarning;
+    var DeprecationWarning = __all__.DeprecationWarning;
+    var RuntimeWarning = __all__.RuntimeWarning;
+
     var __sort__ = __all__.__sort__;
     var sorted = __all__.sorted;
 
@@ -311,12 +317,7 @@ __pragma__ ('endif')
                                 else {
                                     comma = true;
                                 }
-                                try {
-                                    result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
-                                }
-                                catch (exception) {
-                                    result += attribRepr + ': ' + anObject [attrib] .toString ();
-                                }
+                                result += attribRepr + ': ' + repr (anObject [attrib]);
                             }
                         }
                         result += '}';
@@ -719,12 +720,7 @@ __pragma__ ('endif')
             if (index) {
                 result += ', ';
             }
-            try {
-                result += this [index] .__repr__ ();
-            }
-            catch (exception) {
-                result += this [index] .toString ();
-            }
+            result += repr (this [index]);
         }
 
         if (this.__class__ == tuple && this.length == 1) {
