@@ -317,12 +317,7 @@ __pragma__ ('endif')
                                 else {
                                     comma = true;
                                 }
-                                try {
-                                    result += attribRepr + ': ' + anObject [attrib] .__repr__ ();
-                                }
-                                catch (exception) {
-                                    result += attribRepr + ': ' + anObject [attrib] .toString ();
-                                }
+                                result += attribRepr + ': ' + repr (anObject [attrib]);
                             }
                         }
                         result += '}';
@@ -725,12 +720,7 @@ __pragma__ ('endif')
             if (index) {
                 result += ', ';
             }
-            try {
-                result += this [index] .__repr__ ();
-            }
-            catch (exception) {
-                result += this [index] .toString ();
-            }
+            result += repr (this [index]);
         }
 
         if (this.__class__ == tuple && this.length == 1) {
