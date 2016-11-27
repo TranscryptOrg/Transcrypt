@@ -695,7 +695,7 @@ class Generator (ast.NodeVisitor):
                 lineNr = self.lineNr    # Use 'cached' line nubmer
                 
             self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
-        else:                                               # __pragma__ ('noanno') isn't enough to bring use here and later on take the 'no stripping' shortcut
+        else:                                               # __pragma__ ('noanno') isn't enough to perform this else-clause and to later on take the 'no stripping' shortcut
                                                             # This is in the main module the first line will already have been instrumented
                                                             # So in that case each line is instrumented and instrumentation will be stripped later on
             self.lineNrString = ''
@@ -2227,7 +2227,15 @@ class Generator (ast.NodeVisitor):
         self.descope ()
         
     def visit_Name (self, node):    
-        if type (node.ctx) == ast.Store:
+        if node.id == '__file__':
+            self.visit (ast.Str (s = self.module.metadata.sourcePath))
+            return
+            
+        elif node.id == '__line__':
+            self.visit (ast.Num (n = self.lineNr))
+            return
+            
+        elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
                 self.all.add (node.id)
                 
