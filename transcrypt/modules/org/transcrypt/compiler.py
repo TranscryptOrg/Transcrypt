@@ -892,7 +892,7 @@ class Generator (ast.NodeVisitor):
             self.indent ()
             self.emit ('var {} = arguments [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('ilastarg'))
 
-            # kwargdict may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
+            # kwarg transfer object may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
             self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
             self.indent ()
 
@@ -1230,7 +1230,7 @@ class Generator (ast.NodeVisitor):
     def visit_Call (self, node):
         self.adaptLineNrString (node)
 
-        def emitKwargDict ():
+        def emitKwargTrans ():
             self.emit ('__kwargtrans__ (')
 
             hasSeparateKeyArgs = False
@@ -1254,7 +1254,7 @@ class Generator (ast.NodeVisitor):
                     self.visit (keyword.value)
                 else:
                     # It's the **kwargs arg, so the last arg
-                    # In JavaScript this must be an expression denoting an Object (sometimes specialized as kwargdict)
+                    # In JavaScript this must be an expression denoting an Object
                     # The keyword args in there have to be added to the kwargs transfer object as well
                     if hasSeparateKeyArgs:
                         self.emit ('}}, ')
@@ -1478,7 +1478,7 @@ class Generator (ast.NodeVisitor):
 
             if node.keywords:
                 self.emitComma (len (node.args))
-                emitKwargDict ()
+                emitKwargTrans ()
 
             self.emit (')')
         else:
@@ -1500,7 +1500,7 @@ class Generator (ast.NodeVisitor):
 
                     if node.keywords:
                         self.emit ('.concat ([')    # At least *args was present before this point
-                        emitKwargDict ()
+                        emitKwargTrans ()
                         self.emit ('])')
 
                     self.emit (')')
@@ -1514,7 +1514,7 @@ class Generator (ast.NodeVisitor):
 
                 if node.keywords:
                     self.emitComma (len (node.args))
-                    emitKwargDict ()
+                    emitKwargTrans ()
 
                 self.emit (')')
 

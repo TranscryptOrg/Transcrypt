@@ -223,7 +223,7 @@ __pragma__ ('ifdef', '__esv6__')
                     
                     var product = function () {
                         let args = [] .slice.apply (arguments);
-                        if (args.length && args [args.length - 1] .__class__ == __kwargdict__) {
+                        if (args.length && args [args.length - 1] .hasOwnProperty ('__kwargtrans__')) {
                             var repeat = args.pop () ['repeat']; 
                         }
                         else {
@@ -253,7 +253,7 @@ __pragma__ ('ifdef', '__esv6__')
                                 r = len (list (iterable));
                             }
                         }
-                        let aProduct = product (iterable, __kwargdict__ ({repeat: r}));
+                        let aProduct = product (iterable, __kwargtrans__ ({repeat: r}));
                         let result = [];
                         for (let molecule of aProduct) {
                             if (len (set (molecule)) == r) {    // Weed out doubles
