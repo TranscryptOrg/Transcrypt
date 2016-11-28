@@ -173,10 +173,12 @@ def run_t(*args):
     'invoke transcrypt with flags'
     args = ' '.join(args)
     args = args.replace('__', ' ')
+    dbg_args = ' -v ' + args
     cmd = '%s/run_transcrypt %s' % (env['d_0'], args)
+    dbg_cmd = '%s/run_transcrypt %s' % (env['d_0'], dbg_args)
     print 'Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd))
     if os.system(cmd):
-        return os.popen(cmd + '-v 2>&1').read()
+        return os.popen(dbg_cmd + ' 2>&1').read()
 
 # %s e.g. dictionaries, we are in its parent dir when writing this:
 ci_at = '''
