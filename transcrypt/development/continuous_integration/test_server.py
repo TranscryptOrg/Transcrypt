@@ -215,7 +215,7 @@ def run_test(filepath):
             # we are alraedy in d:
             js += ('\nlocation.href="/result?test=%s&flags=%s&res=" + '
                 'document.getElementById("message").innerHTML;') % (
-                    os.getcwd(), flags)
+                    os.getcwd(), 'flags')
         else:
             js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
             reset_ctx()
