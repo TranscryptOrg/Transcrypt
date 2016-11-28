@@ -71,7 +71,7 @@ dflt_fs_mon = ('find "%s" -name "*.py" | entr -c '
                'wget -q "%%(FS_CHANGE_URL)s" -O -') % env['d_0']
 env['TS_MON_CMD'] = os.environ.get('TS_MON_CMD', dflt_fs_mon)
 # test flag sets, comma seperated from env or CLI
-test_flags = ['-bnc__-da__-e__6', '-bnc__-da__-e__5']
+test_flags = ['-bnc__-da__-e__5', '-bnc__-da__-e__6']
 
 html_tmpl = '''<html>
 <body>
