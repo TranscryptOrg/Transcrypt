@@ -81,6 +81,13 @@ class Match(object):
     def __init__(self, mObj, string, pos, endpos, rObj, namedGroups = None):
         """
         """
+        # JS has two "None" values: `null` and `undefined`.
+        # `x is None` converts to `x === null`, which will fail if `x` is undefined.
+        # The js match object uses undefined for non-used capture groups,
+        # so it's not possible to find non-used groups by comparing with `None`,
+        # unless this conversion is made.
+        for index, match in enumerate(mObj):
+            mObj[index] = None if mObj[index] == js_undefined else mObj[index]
         self._obj = mObj
 
         self._pos = pos
