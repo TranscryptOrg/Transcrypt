@@ -211,7 +211,6 @@ def run_test(filepath):
     if '__javascript__' in filepath:
         with open(filepath) as fd:
             js = fd.read()
-
         if not ctx.get('stop'):
             # we are alraedy in d:
             js += ('\nlocation.href="/result?test=%s&flags=%s&res=" + '
@@ -220,6 +219,11 @@ def run_test(filepath):
         else:
             js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
             reset_ctx()
+        js += '\n\n'
+
+        splt = "var run = function (autoTester) {"
+        if splt in js:
+            debug(js.split(splt, 1)[1])
         return js
 
     if not filepath.startswith('test_html'):
