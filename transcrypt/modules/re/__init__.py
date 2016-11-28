@@ -13,7 +13,6 @@
 
 from org.transcrypt.stubs.browser import __pragma__
 from re.translate import translate
-from re.re import _encodeFlags, _decodeFlags
 
 
 # Flags
