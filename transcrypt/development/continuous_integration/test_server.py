@@ -239,7 +239,7 @@ def run_test(filepath):
             fd.write(ci_at % (test, test))
 
     err = None
-    for _flags in ['-r', flags]:
+    for _flags in ['-r %s' % flags, flags]:
         err = run_t(_flags, './%s.py' % fn)
         if err:
             break
