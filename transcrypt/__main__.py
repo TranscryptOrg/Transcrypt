@@ -84,7 +84,7 @@ def main ():
                 utils.log (True, '{}\n\n', bar)
                 
         if utils.commandArgs.star:
-            webbrowser.open ('https://github.com/JdeH/Transcrypt')
+            webbrowser.open ('https://github.com/qquick/Transcrypt')
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already

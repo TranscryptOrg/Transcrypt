@@ -69,27 +69,24 @@ class AttributeError(Exception):
         Exception.__init__(self, message, error = error)
 
 # Warnings Exceptions
-# @note - this is a limited subset of the warnings defined in
-#    the cpython implementation to keep things small for now.
+# N.B. This is a limited subset of the warnings defined in
+# the cpython implementation to keep things small for now.
 
-class Warning(Exception):
-    """ Warning Base Class
-    """
+class Warning (Exception):
+    ''' Warning Base Class
+    '''
     pass
 
-class UserWarning(Warning):
+class UserWarning (Warning):
     pass
 
-class DeprecationWarning(Warning):
+class DeprecationWarning (Warning):
     pass
 
-class RuntimeWarning(Warning):
+class RuntimeWarning (Warning):
     pass
-
-
 
 __pragma__ ('kwargs')
-
 
 def __sort__ (iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
     if key:
