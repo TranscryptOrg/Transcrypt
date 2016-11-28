@@ -81,6 +81,13 @@ class Match(object):
     def __init__(self, mObj, string, pos, endpos, rObj, namedGroups = None):
         """
         """
+        # JS has two "None" values: `null` and `undefined`.
+        # `x is None` converts to `x === null`, which will fail if `x` is undefined.
+        # The js match object uses undefined for non-used capture groups,
+        # so it's not possible to find non-used groups by comparing with `None`,
+        # unless this conversion is made.
+        for index, match in enumerate(mObj):
+            mObj[index] = None if mObj[index] == js_undefined else mObj[index]
         self._obj = mObj
 
         self._pos = pos
@@ -693,14 +700,13 @@ class PyRegExp(Regex):
         @pattern Python Regex String
         @pattern flags bit flags passed by the user.
         """
-        passedFlags = _decodeFlags(flags)
-        jsTokens, jsflags, namedGroups, nCapGroups = translate(pyPattern)
-        flags |= _encodeFlags(jsflags)
+        jsTokens, inlineFlags, namedGroups, nCapGroups = translate(pyPattern)
+        flags |= inlineFlags
 
         jsPattern = ''.join(jsTokens)
         Regex.__init__(self, jsPattern, flags)
 
-        self._jsTokens = jsTokens;
+        self._jsTokens = jsTokens
         # nCapGroups = the same as self.groups defined in the
         #   base class.
         self._capgroups = nCapGroups

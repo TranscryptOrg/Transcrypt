@@ -201,7 +201,7 @@ def checkMatchwithNamedGroups(test, flags = 0):
         test.check(m)
 
 def checkMatchWithGroups(test, flags = 0):
-    rgx = re.compile(r'(\w)(\w)(\w)', flags)
+    rgx = re.compile(r'(\w)(\w)(\w)?', flags)
     test.check(rgx.pattern)
     test.check(rgx.groups)
     m = rgx.match('abc')
@@ -212,6 +212,15 @@ def checkMatchWithGroups(test, flags = 0):
         test.check(m.group(2, 1))
     else:
         test.checkPad(None, 4)
+
+    # groups() with default value
+
+    m = rgx.match('ab')
+    if m:
+        test.check(m.groups(0))
+    else:
+        test.checkPad(None, 1)
+
 
 def checkCommentGroup(test, flags = 0):
     """ Comment Groups are only supported in Python so will
@@ -352,8 +361,10 @@ def checkConditionalGroups(test, flags = 0):
         test.checkEval(lambda: rgx.match('abab').group())
         test.checkEval(lambda: rgx.match('aa').group())
         test.checkEval(lambda: rgx.match('bcb').group())
-        test.checkEval(lambda: rgx.match('c').group())
+        test.checkEval(lambda: rgx.match('c').group()) 
         test.checkEval(lambda: rgx.match('abcb'))
+        # PyRegex needs to use n_splits from `translate` for this to work
+        test.checkEval(lambda: rgx.match('c').groups()) 
 
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b|d)', flags)
