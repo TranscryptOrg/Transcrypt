@@ -693,14 +693,13 @@ class PyRegExp(Regex):
         @pattern Python Regex String
         @pattern flags bit flags passed by the user.
         """
-        passedFlags = _decodeFlags(flags)
-        jsTokens, jsflags, namedGroups, nCapGroups = translate(pyPattern)
-        flags |= _encodeFlags(jsflags)
+        jsTokens, inlineFlags, namedGroups, nCapGroups = translate(pyPattern)
+        flags |= inlineFlags
 
         jsPattern = ''.join(jsTokens)
         Regex.__init__(self, jsPattern, flags)
 
-        self._jsTokens = jsTokens;
+        self._jsTokens = jsTokens
         # nCapGroups = the same as self.groups defined in the
         #   base class.
         self._capgroups = nCapGroups
