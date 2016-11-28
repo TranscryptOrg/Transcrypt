@@ -60,6 +60,13 @@ env['d_0'] = d0 = _('/', 3)[0]
 env['d_i'] =  _('/', 1)[0]
 env['d_at'] = d0 + '/development/automated_tests'
 
+
+dflt_fs_mon = ('find "%s" -name "*.py" | entr -c '
+               'wget -q "%%(FS_CHANGE_URL)s" -O -') % env['d_0']
+env['TS_MON_CMD'] = os.environ.get('TS_MON_CMD', dflt_fs_mon)
+# test flag sets, comma seperated from env or CLI
+test_flags = ['-b -n -c -da']
+
 html_tmpl = '''<html>
 <body>
 %s
@@ -190,7 +197,9 @@ def run_test(filepath):
         with open(fn + '.py', 'w') as fd:
             fd.write(ci_at % (test, test))
     err = None
-    for flags in ('-r', '-b -n -c -da'):
+    _all_flags = list(test_flags)
+    _all_flags.insert(0, '-r') # the python mode
+    for flags in _all_flags:
         err = run_t(flags, './%s.py' % fn)
         if err:
             break
@@ -276,26 +285,28 @@ def dev(url):
     ctx['last_reload'] = time.time()
     # env['d_0'] is the whole transcrypt directory.
     c = env.get('TS_MON_CMD')
-    if not c:
-        print ('No $TS_MON_CMD in environ - using default '
-              '(all transcrypt .py files)')
-        c = '''find "%s" -name "*.py" | entr -c wget -q "%s" -O -''' \
-                % (env['d_0'], fs_change_url)
-    print L('$TS_MON_CMD : ', I(c))
+    if c:
+        c = c % {'FS_CHANGE_URL': fs_change_url}
+        print L('$TS_MON_CMD : ', I(c))
+        ctx['monitor_cmd'] = c
+        ctx['monitor_msg'] = 'Continue polling...'
+        print I('starting FS monitor', M(ctx['monitor_cmd']))
+        ctx['fs_chcker'] = subprocess.Popen(ctx['monitor_cmd'], shell=True)
+    else:
+        print 'Not spawning fs checker (assuming external checker)'
+        ctx['monitor_msg'] = 'Waiting for external hit on "%s"' % fs_change_url
 
-    ctx['monitor_cmd'] = c
-    print I('starting FS monitor', M(ctx['monitor_cmd']))
-
-    ctx['fs_chcker'] = subprocess.Popen(ctx['monitor_cmd'], shell=True)
-
-    m = {'test_url': test_url, 'fs_change_msg': fs_change_msg}
+    m = {'test_url': test_url,
+         'fs_change_msg': fs_change_msg,
+         'monitor_msg': ctx['monitor_msg']}
 
     return html_tmpl % ('''
             <div id="result">Polling for changes...</div>
             <hr>
             <h2>Test Output of %s</h2>
+            <h3>Test Flags: %s</h3>
             <iframe id="test_iframe" src="%s" width="100%%" height="100%%">
-            </iframe>''' % (test_url, test_url),
+            </iframe>''' % (test_url, ', '.join(test_flags), test_url),
 
             '''
             var nr = 1;
@@ -313,10 +324,10 @@ def dev(url):
                             nr += 1;
                             i.src = "%(test_url)s?nr=" + nr;
                             res.innerHTML = `Test page reloaded.
-                            Continue polling....`
+                            %(monitor_msg)s...`
                         } else {
                             res.innerHTML = sr +
-                                    ' - no fs_change. Continue polling...';
+                                    ' - no fs_change. %(monitor_msg)s...';
                         }
                         load_fs_poll_page();
                     }
@@ -364,17 +375,17 @@ def dev_fs_changed():
 
 # ------------------------------------------------------------ ansi term colors
 def _col(c, *s): return ("\x1B[38;5;%sm%%s\x1B[0m" % c ) % (' '.join(s))
-G = lambda *s: _col(154, *s)
+I = lambda *s: _col(154, *s)
+M = lambda *s: _col(111, *s)
+G = lambda *s: _col(28, *s)
+L = lambda *s: _col(145, *s)
 R = lambda *s: _col(124, *s)
-M = lambda *s: _col(176, *s)
-I = lambda *s: _col(146, *s)
-L = lambda *s: _col(240, *s)
 
-def usage(h, p):
+def usage(h, p, exit=None, msg=None):
     print
     print I('Usage')
     f = sys.argv[0]
-    print 'Start me with %s <[host:]port> [dev]' % f
+    print 'Start me with %s <[host:]port> [dev] [flags <flags>]' % f
     print 'e.g. %s %s or %s 0.0.0.0:7777' % (f, p, f)
     print
     print 'Hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
@@ -382,40 +393,81 @@ def usage(h, p):
     print '- single tests via /chk, e.g. /chk/time'
     print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
     print
-    print M('Examples')
+    print I('Testflags')
+    print 'You can configure which set of flags you want to test when transpiling'
+    print 'On CLI supply a comma sep. list of flag sets: flags "<set1>, <set2>,..."'
+    print 'The environment variable $TS_TEST_FLAGS is understood as well'
+    print 'e.g. export TS_TEST_FLAGS="-b -n, -b -e 5"'
+    print 'See transcrypt -h output to understand the flags accepted by the transpiler'
+    print 'Default: %s' % M(', '.join(test_flags))
+    print
+    print I('DEV Mode FS Monitor')
+    print 'If you do not pass an empty string into $TS_MON_CMD we spawn a filesystem'
+    print 'monitor via "%s", where %%(FS_CHANGE_URL)s will be replaced by %s'\
+            % (M(dflt_fs_mon), M('http://<host>:<port>/dev_fs_changed'))
+    print '=> If you want to start your own FS monitor, have it hit this url and'
+    print 'export an empty string to $TS_MON_CMD.'
+    print 'You can also pass an alternative monitor command to $TS_MON_CMD, which'
+    print 'we then spawn.'
+    print
+    print I('Examples')
+    print M('Example URLs')
     print 'http://%s:%s/do/time,hello (testing time and hello module)' % (h, p)
     print 'http://%s:%s/do/set1 (testing a set of modules given in file set1)'\
             % (h, p)
     print 'http://%s:%s/chk/time (single module test)' % (h, p)
     print 'http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
             % (h, p)
+    print M('Example Startup')
+    print "./test_server.py 7777 dev flags '-b -n -c -da -e 5, -b -n -c -da -e 6"
     print
     print
     print I('Requirements')
     print '- the "wget" command'
     print
-    print M('dev mode') + ' requires:'
+    print I('dev mode') + ' requires:'
     print ' - pip install paste (server is started multithreaded then)'
     print ' - the "entr" command (for filesystem monitoring)'
     print 'you can use your own filesystem monitor if you export a custom $TS_MON_CMD'
     print '(default $TS_MON_CMD is printed out when starting in test mode)'
     print
+    if msg:
+        print R(msg)
+    if exit is not None:
+        sys.exit(exit)
 
 if __name__ == '__main__':
     h, p = '127.0.0.1', 8080 # default
     l = sys.argv
     dev_mode = 0
-    if not len(l) - 1:
-        usage(h, p)
+    if not len(l) - 1 or '-h' in l:
+        usage(h, p, exit=1)
         sys.exit(1)
     if len(l) > 2 and l[2] == 'dev':
+        l.pop(2)
         dev_mode = 1
 
+    user_flags = os.environ.get('TS_TEST_FLAGS')
+    if len(l) > 2 and l[2] == 'flags':
+        l.pop(2)
+        if not len(l) > 2:
+            usage(h, p, exit=1, msg="'flags' argument requires some flags")
+        user_flags = l.pop(2)
+    if user_flags:
+        while test_flags:
+            test_flags.pop()
+        [test_flags.append(t.strip()) for t in user_flags.split(',') \
+                    if t.strip()]
+    print I('ENVIRON'), ':'
+    print L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags))
+    print L('$TS_MON_CMD'), ': ', M(os.environ.get('TS_MON_CMD') or '(external)')
+
     (host, port) = (h, p) = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
-    assert os.system('which wget') == 0, 'require wget'
+    assert os.system('which wget >/dev/null') == 0, 'require wget'
     if dev_mode:
-        assert os.system('which entr') == 0, 'require entr'
-    usage(h, p)
+        assert os.system('which entr >/dev/null') == 0, 'require entr'
+    # usage only on -h or no args:
+    # usage(h, p)
     stop_flag += '_%s' % p
     port = int(port)
     if not dev_mode:
