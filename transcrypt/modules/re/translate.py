@@ -263,7 +263,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
     elif s1.name == '(?P<':
         if s0.name == '>':
             # todo: don't count every time, just keep track of it over time
-            namedGroups[''.join(s1.paras)] = countCaptureGroups(stack) + len(namedGroups) + 1
+            namedGroups[''.join(s1.paras)] = countCaptureGroups(stack) + 1
             stack[-2:] = [Token('(')]
         else:
             s1.paras.append(s0.name)
