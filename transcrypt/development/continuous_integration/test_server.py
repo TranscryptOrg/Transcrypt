@@ -215,15 +215,15 @@ def run_test(filepath):
             # we are alraedy in d:
             js += ('\nlocation.href="/result?test=%s&flags=%s&res=" + '
                 'document.getElementById("message").innerHTML;') % (
-                    os.getcwd(), 'flags')
+                    os.getcwd(), flags)
         else:
             js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
             reset_ctx()
         js += '\n\n'
-
-        splt = "var run = function (autoTester) {"
-        if splt in js:
-            debug(js.split(splt, 1)[1])
+        # outputting the js - too much for travis:
+        #splt = "var run = function (autoTester) {"
+        #if splt in js:
+        #    debug(js.split(splt, 1)[1])
         return js
 
     if not filepath.startswith('test_html'):
@@ -285,7 +285,7 @@ def run_test(filepath):
 
 @route('/result')
 def result():
-    debug('result reported')
+    info('result reported')
     debug('test', request.query.test)
     debug('res', request.query.res)
     debug('flags', request.query.flags)
