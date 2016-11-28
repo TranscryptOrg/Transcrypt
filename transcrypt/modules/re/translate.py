@@ -12,6 +12,8 @@ VERBOSE = False
 
 MAX_SHIFTREDUCE_LOOPS = 1000
 
+stringFlags = 'aiLmsux'
+
 # Represents a regex group (e.g /()/, /(?:)/ /(?=), etc).
 # `start` and `end` is the index of the groups start and end token in the token list.
 class Group:
@@ -169,7 +171,6 @@ def shift(stack, queue):
 
 # Shift-reduce parser. Creates the next state of the stack & queue.
 def shiftReduce(stack, queue, namedGroups, flags):
-    pyFlags = 'iLmsux'
     done = False
     high = len(stack) - 1
 
@@ -229,15 +230,21 @@ def shiftReduce(stack, queue, namedGroups, flags):
         stack = stack[:-2]
 
     elif s1.name == '(?':
-        if s0.name in pyFlags:
+        if s0.name in stringFlags:
             if s0.name == 'i':
-                flags += 'i'
+                flags |= re.IGNORECASE
+            elif s0.name == 'L':
+                flags |= re.LOCALE
             elif s0.name == 'm':
-                flags += 'm'
+                flags |= re.MULTILINE
             elif s0.name == 's':
-                flags += 's'
-            else:
-                raise Exception('Unsupported flag: ' + s0.name)
+                flags |= re.DOTALL
+            elif s0.name == 'u':
+                flags |= re.UNICODE
+            elif s0.name == 'x':
+                flags |= re.VERBOSE
+            elif s0.name == 'a':
+                flags |= re.ASCII
 
             stack.pop()
             s1.isModeGroup = True
@@ -263,7 +270,7 @@ def shiftReduce(stack, queue, namedGroups, flags):
     elif s1.name == '(?P<':
         if s0.name == '>':
             # todo: don't count every time, just keep track of it over time
-            namedGroups[''.join(s1.paras)] = countCaptureGroups(stack) + len(namedGroups) + 1
+            namedGroups[''.join(s1.paras)] = countCaptureGroups(stack) + 1
             stack[-2:] = [Token('(')]
         else:
             s1.paras.append(s0.name)
@@ -294,10 +301,12 @@ def shiftReduce(stack, queue, namedGroups, flags):
 # Takes a re-regex and returns a js-regex.
 # TODO: Returns way to many values.
 def translate(rgx):
+    # can't import as normal because it's a circular dependency
+    import re
     stack = []
     queue = list(rgx)
 
-    flags = ''
+    flags = 0
     namedGroups = dict()
 
     nloop = 0
@@ -326,7 +335,7 @@ def translate(rgx):
 
     for token in stack:
         stringed = token.resolve()
-        if 's' in flags and stringed == '.':
+        if (flags & re.DOTALL) and stringed == '.':
             stringed = '[\s\S]'
         resolvedTokens.append(stringed)
     return resolvedTokens, flags, namedGroups, countCaptureGroups(stack), n_splits

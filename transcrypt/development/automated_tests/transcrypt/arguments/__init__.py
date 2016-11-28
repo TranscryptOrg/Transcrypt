@@ -27,6 +27,11 @@ class C:
     
 def run (autoTester):
     def f (x, y = -1, *args, m = -2, n, **kwargs):
+        # BEGIN issue 203, kwargs turned into real dict
+        autoTester.check ('#203', kwargs.__class__.__name__)
+        autoTester.check ('#203', sorted (kwargs.keys ()))
+        # END issue 203
+    
         def f2 (x, y = -3, *args, m = -4, n, **kwargs):
             autoTester.check (x, y, args, m, n, kwargs)
         f2 (11, 22, 1010, 2020, m = 100100, n = 200200, p = 10001000, q = 20002000)
