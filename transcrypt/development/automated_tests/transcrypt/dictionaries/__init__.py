@@ -3,6 +3,7 @@ __pragma__ ('iconv')
 
 def run (autoTester):
     tel = {'guido': 4127, 'jack': 4098}
+    autoTester.check (len (tel))
     tel ['sape'] = 4139
 
     autoTester.check (tel)
@@ -19,6 +20,43 @@ def run (autoTester):
     autoTester.check ('jack' not in tel)
 
     autoTester.check (dict ([('guido', 4127), ('jack', 4098), ('sape', 4139)]))
+    autoTester.check (
+        autoTester.expectException( lambda: dict(1) )
+    )
+    autoTester.check (
+        autoTester.expectException( lambda: dict(134.34) )
+    )
+    autoTester.check (
+        autoTester.expectException( lambda: dict("asdf") )
+    )
+    autoTester.check (
+        autoTester.expectException( lambda: dict(["1234", 1]) )
+    )
+
+    autoTester.check( dict ([]))
+    autoTester.check (dict ({}))
+    autoTester.check (dict ({"asdf": 1, "qwer": 2}) )
+
+    # check dict copy, Issue # 221
+    b = {"a" : 2.01, "b": -3.3}
+    d = dict (b)
+    autoTester.check (d)
+    b = {"a" : 2, "b": [1,2,3]}
+    d = dict (b)
+    autoTester.check (d)
+    b = {"a" : None, "b": set([1,2,3])}
+    d = dict (b)
+    autoTester.check (d)
+    b = {"a" : {"c": 2}, "b": (1,2)}
+    d = dict (b)
+    autoTester.check (d)
+    autoTester.check (d["a"]["c"])
+    autoTester.check (d.get("a").get("c"))
+    autoTester.check (b.get("a").get("c"))
+    d["a"]["c"] = 3
+    autoTester.check (d.get("a").get("c"))
+    autoTester.check (b.get("a").get("c"))
+
 
     knights = {'robin': 'the brave', 'gallahad': 'the pure'}
 
@@ -44,4 +82,16 @@ def run (autoTester):
     autoTester.check (tel.pop ('guido', 1))
     autoTester.check (tel.pop ('edsger', 2))
     autoTester.check (tel.pop ('foo', 'bar'))
-    
+    autoTester.check (tel.pop ('foo', None))
+
+    # Check exceptions
+    knights = {'robin': 'the brave', 'gallahad': 'the pure'}
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman") )
+    )
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman", None) )
+    )
+    autoTester.check (
+        autoTester.expectException ( lambda: knights.pop("batman", "the gullible") )
+    )
