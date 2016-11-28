@@ -853,11 +853,11 @@ class Generator (ast.NodeVisitor):
         # They can also be passed in as keyword args
         # If so, the keywords are filled in starting with the last positional arg
         # So after a keyword positional arg cannot follow a non-keyword positional arg
-        # The kwargdict may be the last of the actual params
+        # The kwarg transfer object may be the last of the actual params
         # It should not initialize a formal param, so it's overwritten by the default as well.
         for arg, expr in reversed (list (zip (reversed (node.args), reversed (node.defaults)))):
             if expr:
-                self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .hasOwnProperty ("__iskwargdict__"))) {{;\n', self.filterId (arg.arg))
+                self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .hasOwnProperty ("__kwargtrans__"))) {{;\n', self.filterId (arg.arg))
                 self.indent ()
                 self.emit ('var {} = ', self.filterId (arg.arg))
                 self.visit (expr)
@@ -884,15 +884,15 @@ class Generator (ast.NodeVisitor):
             # Store index of last actual param
             self.emit ('var {} = arguments.length - 1;\n', self.nextTemp ('ilastarg'))
 
-            # Any calltime keyword args are passed in a JavaScript-only object __kwargdict__, recognizable by attribute __iskwargdict__
-            # If it's there, copy the __kwargdict__ into local var __allkwargs__
+            # Any calltime keyword args are passed in a special JavaScript-only kwarg transfer object, recognizable by attribute __kwargtrans__
+            # If it's there, copy this special object into local var __allkwargs__
             # And lower __ilastarg__ by 1, since the last calltime arg wasn't a normal (Python) one
             # It's only known at call time if there are keyword arguments, unless there are no arguments at all, so allways have to generate this code
-            self.emit ('if (arguments [{0}] && arguments [{0}].hasOwnProperty ("__iskwargdict__")) {{\n', self.getTemp ('ilastarg'))
+            self.emit ('if (arguments [{0}] && arguments [{0}].hasOwnProperty ("__kwargtrans__")) {{\n', self.getTemp ('ilastarg'))
             self.indent ()
             self.emit ('var {} = arguments [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('ilastarg'))
 
-            # __kwargdict__ may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
+            # kwargdict may contain deftime defined keyword args, but also keyword args that are absorbed by **kwargs
             self.emit ('for (var {} in {}) {{\n', self.nextTemp ('attrib'), self.getTemp ('allkwargs'))
             self.indent ()
 
@@ -918,16 +918,17 @@ class Generator (ast.NodeVisitor):
             self.dedent ()
             self.emit ('}}\n')  # for (__attrib__..
 
-            # Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there. Faster than not copying marker.
+            # Take out the __kwargstrans__ marker, to prevent it from being passed in to another call, leading to confusion there
+            # So after being used once, the kwarg transfer object becomes an ordinary object
             if node.kwarg:
-                self.emit ('delete {}.__iskwargdict__;\n', self.filterId (node.kwarg.arg))
+                self.emit ('delete {}.__kwargtrans__;\n', self.filterId (node.kwarg.arg))
 
             self.dedent ()
             self.emit ('}}\n')  # if (arguments [{0}]..
 
-            # If there's a vararg, assign an array containing the remainder of the actual non keyword only params, except for the __kwargdict__
+            # If there's a vararg, assign an array containing the remainder of the actual non keyword only params, except for the kwarg transfer object
             if node.vararg:
-                # Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the __kwargdict__
+                # Slice starts at end of formal positional params, ends with last actual param, all actual keyword args are taken out into the kwarg transfer object
                 self.emit (
                     'var {} = tuple ([].slice.apply (arguments).slice ({}, {} + 1));\n',
                     self.filterId (node.vararg.arg),
@@ -1230,7 +1231,7 @@ class Generator (ast.NodeVisitor):
         self.adaptLineNrString (node)
 
         def emitKwargDict ():
-            self.emit ('__kwargdict__ (')
+            self.emit ('__kwargtrans__ (')
 
             hasSeparateKeyArgs = False
             hasKwargs = False
@@ -1254,7 +1255,7 @@ class Generator (ast.NodeVisitor):
                 else:
                     # It's the **kwargs arg, so the last arg
                     # In JavaScript this must be an expression denoting an Object (sometimes specialized as kwargdict)
-                    # The keyword args in there have to be added to the __kwargdict__ as well
+                    # The keyword args in there have to be added to the kwargs transfer object as well
                     if hasSeparateKeyArgs:
                         self.emit ('}}, ')
                     self.visit (keyword.value)

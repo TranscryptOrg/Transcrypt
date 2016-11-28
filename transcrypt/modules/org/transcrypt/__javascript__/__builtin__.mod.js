@@ -56,13 +56,13 @@ __pragma__ ('endif')
     var __except__ = null;
     __all__.__except__ = __except__;
     
-     // Define recognizable dictionary for **kwargs parameter
-    var __kwargdict__ = function (anObject) {
-        anObject.__iskwargdict__ = null;
+     // Creator of a marked dictionary, used to pass **kwargs parameter
+    var __kwargtrans__ = function (anObject) {
+        anObject.__kwargtrans__ = null; // Removable marker
         anObject.constructor = Object;
         return anObject;
     }
-    __all__.___kwargdict__ = __kwargdict__;
+    __all__.__kwargtrans__ = __kwargtrans__;
 
     // Property installer function, no member since that would bloat classes
     var property = function (getter, setter) {  // Returns a property descriptor rather than a property
