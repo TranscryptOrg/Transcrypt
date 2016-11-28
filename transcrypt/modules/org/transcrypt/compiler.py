@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import os
+import os.path
 import sys
 import ast
 import re
@@ -2228,6 +2229,15 @@ class Generator (ast.NodeVisitor):
     def visit_Name (self, node):
         if node.id == '__file__':
             self.visit (ast.Str (s = self.module.metadata.sourcePath))
+            return
+
+        elif node.id == '__filename__':
+            p = os.path.split (self.module.metadata.sourcePath)
+            fname = p[-1]
+            if fname.startswith("__init__"):
+                subDir = os.path.split(p[0])
+                fname = os.path.join( subDir[-1], fname )
+            self.visit (ast.Str (s = fname))
             return
 
         elif node.id == '__line__':
