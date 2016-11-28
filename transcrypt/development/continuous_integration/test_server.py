@@ -110,9 +110,6 @@ def index(tests=0, single=None):
     repeatadly call ourselves'''
     if 'favico' in str(tests):
         return ''
-    rl = logging.getLogger('')
-    for h in rl.handlers:
-        h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
 
     if not tests and not T:
         # no args -> give info:
