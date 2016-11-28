@@ -333,8 +333,10 @@ class Regex(object):
 
         self._flags = flags
         self._jsFlags, self._obj = self._compileWrapper(pattern, flags)
-        self._pattern = pattern
-
+        self._jspattern = pattern
+        # For this regex object pypattern and jspattern are the
+        # same.
+        self._pypattern = pattern
 
         # we will determine groups by using another regex
         # that tacks on an empty match.
@@ -346,7 +348,7 @@ class Regex(object):
 
     # Read-only Properties
     def _getPattern(self):
-        ret = self._pattern.replace('\\', '\\\\')
+        ret = self._pypattern.replace('\\', '\\\\')
         return(ret)
     def _setPattern(self, val):
         raise AttributeError("readonly attribute")
@@ -525,7 +527,7 @@ class Regex(object):
             flags = self._flags
             flags |= GLOBAL
 
-            _, rObj = self._compileWrapper(self._pattern, flags)
+            _, rObj = self._compileWrapper(self._jspattern, flags)
             ret = []
             lastM = None
             cnt = 0
@@ -567,7 +569,7 @@ class Regex(object):
         flags = self._flags
         flags |= GLOBAL
 
-        _, rObj = self._compileWrapper(self._pattern, flags)
+        _, rObj = self._compileWrapper(self._jspattern, flags)
         ret = []
         while( True ):
             m = rObj.exec(target)
@@ -641,7 +643,7 @@ class Regex(object):
         flags = self._flags
         flags |= GLOBAL
 
-        _, rObj = self._compileWrapper(self._pattern, flags)
+        _, rObj = self._compileWrapper(self._jspattern, flags)
         ret = ""
         totalMatch = 0
         lastEnd = -1
@@ -699,18 +701,19 @@ class PyRegExp(Regex):
         @pattern Python Regex String
         @pattern flags bit flags passed by the user.
         """
-        jsTokens, inlineFlags, namedGroups, nCapGroups = translate(pyPattern)
+        jsTokens, inlineFlags, namedGroups, nCapGroups, n_splits = translate(pyPattern)
         flags |= inlineFlags
 
         jsPattern = ''.join(jsTokens)
         Regex.__init__(self, jsPattern, flags)
+        self._pypattern = pyPattern
 
+        self._nsplits = n_splits
         self._jsTokens = jsTokens
         # nCapGroups = the same as self.groups defined in the
         #   base class.
         self._capgroups = nCapGroups
         self._groupindex = namedGroups
-
 
 def compile(pattern, flags = 0):
     """ Compile a regex object and return
