@@ -2234,7 +2234,11 @@ class Generator (ast.NodeVisitor):
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
             return
-            
+
+        elif node.id == '__name__':
+            self.visit (ast.Str (s = self.module.metadata.name))
+            return
+
         elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
                 self.all.add (node.id)
