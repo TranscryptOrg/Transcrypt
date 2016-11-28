@@ -285,6 +285,10 @@ def run_test(filepath):
 
 @route('/result')
 def result():
+    debug('result reported')
+    debug('test', request.query.test)
+    debug('res', request.query.res)
+    debug('flags', request.query.flags)
     try:
         ctx['error_reporter'].kill()
     except:
