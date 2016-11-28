@@ -472,7 +472,7 @@ def usage(h, p, exit=None, msg=None):
     print 'http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
             % (h, p)
     print M('Example Startup')
-    print "./test_server.py 7777 dev flags '-b -n -c -da -e 5, -b -n -c -da -e 6"
+    print "./test_server.py 7777 dev flags '-bnc__-da__-e__5, -b__-n__-c__-da__-e__6"
     print
     print
     print I('Requirements')
