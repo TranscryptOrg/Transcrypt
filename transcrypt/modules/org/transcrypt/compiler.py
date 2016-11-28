@@ -857,7 +857,7 @@ class Generator (ast.NodeVisitor):
         # It should not initialize a formal param, so it's overwritten by the default as well.
         for arg, expr in reversed (list (zip (reversed (node.args), reversed (node.defaults)))):
             if expr:
-                self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .__class__ == __kwargdict__)) {{;\n', self.filterId (arg.arg))
+                self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0} .hasOwnProperty ("__iskwargdict__"))) {{;\n', self.filterId (arg.arg))
                 self.indent ()
                 self.emit ('var {} = ', self.filterId (arg.arg))
                 self.visit (expr)
@@ -876,7 +876,7 @@ class Generator (ast.NodeVisitor):
             # If there is a **kwargs arg, make a local to hold its calltime contents
             # This local is needed even if arguments.length == 0, it's just empty then but may be read or passed on
             if node.kwarg:
-                self.emit ('var {} = {{}};\n', self.filterId (node.kwarg.arg))
+                self.emit ('var {} = dict ();\n', self.filterId (node.kwarg.arg))
 
             self.emit ('if (arguments.length) {{\n')
             self.indent ()
@@ -884,11 +884,11 @@ class Generator (ast.NodeVisitor):
             # Store index of last actual param
             self.emit ('var {} = arguments.length - 1;\n', self.nextTemp ('ilastarg'))
 
-            # Any calltime keyword args are passed in a JavaScript-only object of type __kwargdict__
+            # Any calltime keyword args are passed in a JavaScript-only object __kwargdict__, recognizable by attribute __iskwargdict__
             # If it's there, copy the __kwargdict__ into local var __allkwargs__
             # And lower __ilastarg__ by 1, since the last calltime arg wasn't a normal (Python) one
             # It's only known at call time if there are keyword arguments, unless there are no arguments at all, so allways have to generate this code
-            self.emit ('if (arguments [{0}] && arguments [{0}].__class__ == __kwargdict__) {{\n', self.getTemp ('ilastarg'))
+            self.emit ('if (arguments [{0}] && arguments [{0}].hasOwnProperty ("__iskwargdict__")) {{\n', self.getTemp ('ilastarg'))
             self.indent ()
             self.emit ('var {} = arguments [{}--];\n', self.nextTemp ('allkwargs'), self.getTemp ('ilastarg'))
 
@@ -920,7 +920,7 @@ class Generator (ast.NodeVisitor):
 
             # Take out the kwargdict marker, to prevent it from being passed in to another call, leading to confusion there. Faster than not copying marker.
             if node.kwarg:
-                self.emit ('{}.__class__ = null;\n', self.filterId (node.kwarg.arg))
+                self.emit ('delete {}.__iskwargdict__;\n', self.filterId (node.kwarg.arg))
 
             self.dedent ()
             self.emit ('}}\n')  # if (arguments [{0}]..

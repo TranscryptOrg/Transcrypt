@@ -55,10 +55,10 @@ __pragma__ ('endif')
     // Define current exception, there's at most one exception in the air at any time
     var __except__ = null;
     __all__.__except__ = __except__;
-
-    // Define recognizable dictionary for **kwargs parameter
+    
+     // Define recognizable dictionary for **kwargs parameter
     var __kwargdict__ = function (anObject) {
-        anObject.__class__ = __kwargdict__; // This class needs no __name__
+        anObject.__iskwargdict__ = null;
         anObject.constructor = Object;
         return anObject;
     }
@@ -1163,27 +1163,6 @@ __pragma__ ('endif')
 
     String.prototype.__rmul__ = String.prototype.__mul__;
 
-__pragma__ ('ifdef', '__map__')
-
-    // Dict extensions to map (experimental)
-
-    function dict (objectOrPairs) {
-        if (objectOrPairs instanceof Array) {   // It's undefined or an array of pairs
-            var instance = Map (objectOrPairs);
-            if (objectOrPairs) {
-                for (var index = 0; index < objectOrPairs.length; index++) {
-                    var pair = objectOrPairs [index];
-                    instance [pair [0]] = pair [1];
-                }
-            }
-        }
-        else {                                                  // It's a JavaScript object literal
-            var instance = objectOrPairs;
-        }
-    __all__.dict = dict;
-
-__pragma__ ('else')
-
     // Dict extensions to object
 
     function __keys__ () {
@@ -1271,6 +1250,7 @@ __pragma__ ('else')
                          // checks to make sure that these objects
                          // get converted to dict objects instead of
                          // leaving them as js objects.
+                         
                          if (!isinstance (objectOrPairs, dict)) {
                              val = dict (val);
                          }
@@ -1281,23 +1261,25 @@ __pragma__ ('else')
         }
         else {
             if (isinstance (objectOrPairs, dict)) {
-                // Passed object is a dict already so we need to be
-                // a little careful
-                // @note - this is a shallow copy per python std - so
-                //    it is assumed that children have already become
-                //    python objects at some point.
-                var ks = objectOrPairs.py_keys ();
-                for (var index = 0; index < ks.length; index++ ) {
-                    var key = ks [index];
+                // Passed object is a dict already so we need to be a little careful
+                // N.B. - this is a shallow copy per python std - so
+                // it is assumed that children have already become
+                // python objects at some point.
+                
+                var aKeys = objectOrPairs.py_keys ();
+                for (var index = 0; index < aKeys.length; index++ ) {
+                    var key = aKeys [index];
                     instance [key] = objectOrPairs [key];
                 }
-            } else if ( ! (objectOrPairs instanceof Object) ) {
-                // We have already covered Array so this indicates
-                // that the passed object is not a js object - ie,
-                // it is an int or a string, which is invalid.
-                throw ValueError ("Invalid type of object for dict creation", new Error ());
-            } else {
+            } else if (objectOrPairs instanceof Object) {
+                // Passed object is a JavaScript object but not yet a dict, don't copy it
                 instance = objectOrPairs;
+            } else {
+                // We have already covered Array so this indicates
+                // that the passed object is not a js object - i.e.
+                // it is an int or a string, which is invalid.
+                
+                throw ValueError ("Invalid type of object for dict creation", new Error ());
             }
         }
 
@@ -1318,11 +1300,10 @@ __pragma__ ('else')
         Object.defineProperty (instance, 'py_update', {value: __update__, enumerable: false});
         return instance;
     }
-__pragma__ ('endif')
 
     __all__.dict = dict;
     dict.__name__ = 'dict';
-
+    
     // Docstring setter
 
     function __setdoc__ (docString) {
