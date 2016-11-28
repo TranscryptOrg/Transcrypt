@@ -68,7 +68,7 @@ dflt_fs_mon = ('find "%s" -name "*.py" | entr -c '
                'wget -q "%%(FS_CHANGE_URL)s" -O -') % env['d_0']
 env['TS_MON_CMD'] = os.environ.get('TS_MON_CMD', dflt_fs_mon)
 # test flag sets, comma seperated from env or CLI
-test_flags = ['-b -n -c -da -e 6', '-b -n -c -da -e 5']
+test_flags = ['-bnc__-da__-e__6', '-bnc__-da__-e__5']
 
 html_tmpl = '''<html>
 <body>
@@ -172,6 +172,7 @@ def short(d):
 def run_t(*args):
     'invoke transcrypt with flags'
     args = ' '.join(args)
+    args = args.replace('__', ' ')
     cmd = '%s/run_transcrypt %s' % (env['d_0'], args)
     print 'Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd))
     if os.system(cmd):
@@ -436,28 +437,38 @@ def usage(h, p, exit=None, msg=None):
     print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
     print
     print I('Testflags')
-    print 'You can configure which set of flags you want to test when transpiling'
-    print 'On CLI supply a comma sep. list of flag sets: flags "<set1>, <set2>,..."'
-    print 'The environment variable $TS_TEST_FLAGS is understood as well'
+    print 'You can configure which set of flags you want to test when transpiling.'
+    print 'See transcrypt -h output to understand the flags accepted by the transpiler.'
+    print 'Testflags via CLI: Supply a comma sep. list of flag sets: flags "<set1>, <set2>,..."'
+    print 'Testflags via ENV: The variable $TS_TEST_FLAGS is understood:'
     print 'e.g. export TS_TEST_FLAGS="-b -n, -b -e 5"'
-    print 'See transcrypt -h output to understand the flags accepted by the transpiler'
+    print 'Note: Urls with spaces are ugly and we do not unquote in all cases.'
+    print 'Therefore we allow to ', M('alias a space with two underscores'),' for testflags.'
     print 'Default: %s' % M(', '.join(test_flags))
     print
-    print I('DEV Mode FS Monitor')
+    print I('Singe Tests')
+    print 'Calling /chk/<testname>[::<flags>] results in one single test hit,'
+    print 'displaying the result page'
+    print 'If no flags are provided we use the first entry of the test_flags array.'
+    print
+    print I('DEV Mode / FS Monitor')
     print 'If you do not pass an empty string into $TS_MON_CMD we spawn a filesystem'
-    print 'monitor via "%s", where %%(FS_CHANGE_URL)s will be replaced by %s'\
+    print 'monitor via \n"%s",\nwhere %%(FS_CHANGE_URL)s will be replaced by %s'\
             % (M(dflt_fs_mon), M('http://<host>:<port>/dev_fs_changed'))
     print '=> If you want to start your own FS monitor, have it hit this url and'
     print 'export an empty string to $TS_MON_CMD.'
     print 'You can also pass an alternative monitor command to $TS_MON_CMD, which'
     print 'we then spawn.'
+    print 'In DEV mode the server is started multithreaded via paste, which is'
+    print 'a dependency.'
     print
     print I('Examples')
     print M('Example URLs')
     print 'http://%s:%s/do/time,hello (testing time and hello module)' % (h, p)
     print 'http://%s:%s/do/set1 (testing a set of modules given in file set1)'\
             % (h, p)
-    print 'http://%s:%s/chk/time (single module test)' % (h, p)
+    print 'http://%s:%s/chk/time (single module test, default flags)' % (h, p)
+    print 'http://%s:%s/chk/time::-bnc -da -e 6 (single module test, custom flags)' % (h, p)
     print 'http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
             % (h, p)
     print M('Example Startup')
