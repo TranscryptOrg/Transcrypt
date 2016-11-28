@@ -174,9 +174,11 @@ def checkMatchwithNamedGroups(test, flags = 0):
     try:
         r = re.compile(r"(?P<prefix>[a-zA-Z]+)://(?P<suffix>[^/]*)", flags)
     except Exception as exc:
-        test.checkPad(None, 12)
+        test.checkPad(None, 15)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
         d = r.groupindex
         __pragma__('skip')
         d = convertMappingDict(d)
@@ -203,9 +205,17 @@ def checkMatchwithNamedGroups(test, flags = 0):
     try:
         r = re.compile(r"(?P<country>\d{1,3})-(?P<areacode>\d{3})-(?P<number>\d{3}-\d{4})", flags)
     except:
-        test.checkPad(None, )
+        test.checkPad(None, 13)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
+
         m = r.match("1-234-567-9012")
         test.check(m.groups())
         test.check(m.group())
@@ -251,18 +261,22 @@ def checkCommentGroup(test, flags = 0):
     try:
         r = re.compile(r'a(?#foobar)b', flags)
     except:
-        test.checkPad(None,2)
+        test.checkPad(None,4)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
         test.check(r.search("ab").group())
         test.check(r.search("er"))
 
     try:
         r = re.compile(r'([\d]+)(?#blarg)\[\]', flags)
     except:
-        test.checkPad(None, 2)
+        test.checkPad(None, 4)
         return
 
+    test.check( r.groups )
+    test.check( r.pattern )
     test.check( r.search("1234[]").group())
     test.check( r.search("asdf[]"))
 
@@ -354,6 +368,9 @@ def checkWithFlags(test, flags = 0):
         test.checkPad(None, 5)
         return
 
+    test.check(r.groups)
+    test.check(r.pattern)
+
     m = r.search("aBA")
     test.check(m.group() )
     test.check(m.groups())
@@ -390,8 +407,11 @@ def checkConditionalGroups(test, flags = 0):
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b|d)', flags)
     except:
-        test.checkPad(None, 5)
+        test.checkPad(None, 6)
         return
+
+    test.check(rgx.groups)
+    test.check(rgx.pattern)
     test.checkEval(lambda: rgx.match('abab').group())
     test.checkEval(lambda: rgx.match('aad').group())
     test.checkEval(lambda: rgx.match('bcb').group())
