@@ -4,6 +4,17 @@ import re
 __pragma__("skip")
 re.J = (1<<19)
 re.JSSTRICT = re.J
+
+def convertMappingDict(mdict):
+    """ This method converts a mapping proxy object to
+    a dict object. mapping proxies create read-only dicts
+    but we don't have that concept in transcrypt yet.
+    """
+    ret = {}
+    for k in mdict.keys():
+        ret[k] = mdict[k]
+    return(ret)
+
 __pragma__("noskip")
 
 testStr1 = "There,is,No,Time"
@@ -56,7 +67,11 @@ def checkRegexProperties(test, flags = 0):
         test.check( r.groups )
         test.check( r.pattern )
         test.check( r.flags )
-        test.check( r.groupindex )
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
         # Check Read-only props on regex object
         def assignPattern():
             r.pattern = "asdfasdf"
@@ -162,6 +177,12 @@ def checkMatchwithNamedGroups(test, flags = 0):
         test.checkPad(None, 12)
 
     if ( r is not None ):
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
+
         m = r.match("http://asdf")
         test.check( m.groups() )
         test.check( m.group() )
