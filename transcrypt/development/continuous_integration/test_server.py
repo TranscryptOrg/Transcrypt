@@ -62,7 +62,7 @@ _ = os.path.abspath(__file__).rsplit
 env['d_0'] = d0 = _('/', 3)[0]
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
-log_file = env['d_i'] + '/tests.log'
+log_file = env['d_i'] + '/results.log'
 env['d_at'] = d0 + '/development/automated_tests'
 
 
@@ -110,6 +110,10 @@ def index(tests=0, single=None):
     repeatadly call ourselves'''
     if 'favico' in str(tests):
         return ''
+    rl = logging.getLogger('')
+    for h in rl.handlers:
+        h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
+
     if not tests and not T:
         # no args -> give info:
         return '<br>'.join((
@@ -170,7 +174,7 @@ def unalias(t):
     return t
 
 def short(d):
-    return d.replace(env['d_0'], '.')
+    return d.replace(env['d_0'] + '/', '')
 
 def run_t(*args):
     'invoke transcrypt with flags'
@@ -199,7 +203,7 @@ def run_test(filepath):
     1. filepath = the test and the flags -> cd to the test dir, returning redir to:
     2. filepath = 'test_html' (compiling in the test dir ->
                     autotest.html created, which we return)
-    3. filepath = '__javascript__/...' (fetching the js from within the html)
+    3. filepath = '__javascript__/autotest.js' (fetching the js from within the html)
          the js is augemented with the result check and a redir to calling url,
          closing the loop
     '''
@@ -214,8 +218,8 @@ def run_test(filepath):
         if not ctx.get('stop'):
             # we are alraedy in d:
             js += ('\nlocation.href="/result?test=%s&flags=%s&res=" + '
-                'document.getElementById("message").innerHTML;' % (
-                    os.getcwd(), flags))
+                'document.getElementById("message").innerHTML;') % (
+                    os.getcwd(), flags)
         else:
             js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
             reset_ctx()
@@ -424,23 +428,35 @@ def dev_fs_changed():
     return 'event set'
 
 
-
-
-
 # --------------------------------------------------------------------- logging
-if os.path.exists(log_file):
-    os.unlink(log_file)
-logging.basicConfig(filename=log_file, level=logging.DEBUG)
 def log(meth, *msg): meth(' '.join(str(a) for a in msg))
 def debug(*msg): log(logging.debug, *msg)
 def info(*msg) : log(logging.info , *msg)
 def warn(*msg) : log(logging.warn , *msg)
 def error(*msg): log(logging.error, *msg)
-so = logging.StreamHandler()
-rl = logging.getLogger('')
-rl.addHandler(so)
-for h in rl.handlers:
-    h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
+
+def setup_logging():
+    unlinked = 0
+    if os.path.exists(log_file):
+        os.unlink(log_file)
+        unlinked = 1
+
+    logging.basicConfig(filename=log_file, level=logging.DEBUG)
+    so = logging.StreamHandler()
+    rl = logging.getLogger('')
+    rl.addHandler(so)
+    for h in rl.handlers:
+        h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
+    if unlinked:
+        info('Unlinked old logfile: %s' % short(log_file))
+    info(I('ENVIRON'), ':')
+    info(L('DEVMODE'), ': ', M('%s' % bool(dev_mode)))
+    info(L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags)))
+    if dev_mode:
+        info(L('$TS_MON_CMD'), ': ', M(os.environ.get('TS_MON_CMD') \
+                or '(external)'))
+    info('')
+
 
 
 # ------------------------------------------------------------ ansi term colors
@@ -462,6 +478,12 @@ def usage(h, p, exit=None, msg=None):
             h, p)
     print '- single tests via /chk, e.g. /chk/time'
     print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
+    print
+    print I('Logging')
+    print 'We log to a gitignored file in the same dir as the test_server'
+    print 'We log incl. ansi color codes, i.e. using cat you have colors'
+    print 'You can strip color codes like this:\n%s' % L(
+            """python -c 'import re; print(re.compile(r"\\x1b[^m]*m").sub("", open("tests.log").read()))'""")
     print
     print I('Testflags')
     print 'You can configure which set of flags you want to test when transpiling.'
@@ -537,13 +559,6 @@ if __name__ == '__main__':
             test_flags.pop()
         [test_flags.append(t.strip()) for t in user_flags.split(',') \
                     if t.strip()]
-    info(I('ENVIRON'), ':')
-    info(L('DEVMODE'), ': ', M('%s' % bool(dev_mode)))
-    info(L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags)))
-    if dev_mode:
-        info(L('$TS_MON_CMD'), ': ', M(os.environ.get('TS_MON_CMD') \
-                or '(external)'))
-    info('')
     (host, port) = (h, p) = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
     assert os.system('which wget >/dev/null') == 0, 'require wget'
     if dev_mode:
@@ -554,8 +569,11 @@ if __name__ == '__main__':
     try:
         port = int(port)
     except:
-        usage(h, p, exit=1, msg='Port argument must be integer - is %s' % \
-                I(port))
+        usage(h, p, exit=1,
+              msg='Port argument must be integer - is %s' % I(port))
+
+    setup_logging()
+
     if not dev_mode:
         info(I('Starting single threaded'))
         run(host=host, port=port)
