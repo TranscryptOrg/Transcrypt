@@ -36,6 +36,11 @@ dirs.
 1. `/.fooo` is expanded to `/transcrypt/foo` as test name.
 
 """
+import sys, os, time, subprocess, urllib, logging
+# make py2 >> py3:
+reload(sys); sys.setdefaultencoding('utf-8')
+from bottle import route, run, template, request
+
 # tests to run, filled in sys.argv:
 T = []
 
@@ -45,11 +50,7 @@ max_wait = 10 # then its error
 # hits, while polling. Disadvantage: pip install paste required, not req. for travis:
 dev_mode = 0
 
-import sys, os, time, subprocess, urllib
-# make py2 >> py3:
-reload(sys); sys.setdefaultencoding('utf-8')
 
-from bottle import route, run, template, request
 test_end_marker = 'done'
 env, j, exists = os.environ, os.path.join, os.path.exists
 env['TZ'] = 'Europe/Berlin' # for browser and our transcypt -r
@@ -61,7 +62,9 @@ _ = os.path.abspath(__file__).rsplit
 env['d_0'] = d0 = _('/', 3)[0]
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
+log_file = env['d_i'] + '/tests.log'
 env['d_at'] = d0 + '/development/automated_tests'
+
 
 
 dflt_fs_mon = ('find "%s" -name "*.py" | entr -c '
@@ -119,7 +122,7 @@ def index(tests=0, single=None):
             reset_ctx()
             ctx['init_url'] = '/do/%s' % tests
         if os.path.exists('./%s' % tests):
-            print I('loading test set')
+            info(I('loading test set'))
             with open(tests) as fd:
                 tests = fd.read()
             # ignoring '# ...' lines, using 'foo' in 'foo # comment' lines:
@@ -158,7 +161,7 @@ def index(tests=0, single=None):
         return stop('All tests finished:Success.', postfix=testlist)
 
     for s in ('', 'Next test', I('-' * 20), M(t), I('-' * 20)):
-        print s
+        info(s)
     return redir % ('', '/run_test/' + t)
 
 def unalias(t):
@@ -176,7 +179,7 @@ def run_t(*args):
     dbg_args = ' -v ' + args
     cmd = '%s/run_transcrypt %s' % (env['d_0'], args)
     dbg_cmd = '%s/run_transcrypt %s' % (env['d_0'], dbg_args)
-    print 'Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd))
+    info('Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd)))
     if os.system(cmd):
         return os.popen(dbg_cmd + ' 2>&1').read()
 
@@ -191,7 +194,8 @@ autoTester.done ()
 
 @route('/run_test/<filepath:path>')
 def run_test(filepath):
-    '''called 3 times:
+    '''
+    Called 3 times per test (filepath like <testdir>::<flags>)
     1. filepath = the test and the flags -> cd to the test dir, returning redir to:
     2. filepath = 'test_html' (compiling in the test dir ->
                     autotest.html created, which we return)
@@ -199,16 +203,19 @@ def run_test(filepath):
          the js is augemented with the result check and a redir to calling url,
          closing the loop
     '''
+    flags = ctx.get('cur_flags', '')
     if '::' in filepath:
         filepath, flags = filepath.split('::', 1)
+        ctx['cur_flags'] = flags
     if '__javascript__' in filepath:
         with open(filepath) as fd:
             js = fd.read()
 
         if not ctx.get('stop'):
             # we are alraedy in d:
-            js += ('\nlocation.href="/result?test=%s&res=" + '
-                'document.getElementById("message").innerHTML;' % os.getcwd())
+            js += ('\nlocation.href="/result?test=%s&flags=%s&res=" + '
+                'document.getElementById("message").innerHTML;' % (
+                    os.getcwd(), flags))
         else:
             js += ('\nhistory.pushState({}, null, "%(init_url)s");' % ctx)
             reset_ctx()
@@ -227,7 +234,8 @@ def run_test(filepath):
     fn = 'autotest'
     if not '%s.py' % fn in os.listdir(d):
         if not '__init__.py' in os.listdir(d):
-            return redir % ('err', '/result?test=%s&res=ERROR' % d)
+            return redir % ('err', '/result?test=%s&flags=%s&res=ERROR' % (
+                d, flags))
         print(M('creating ci autotest.py file'))
         fn = 'ci'
 
@@ -262,8 +270,9 @@ def run_test(filepath):
         global max_wait
         max_wait = 0
     cmd = ['sleep %s' % max_wait,
-            ('wget -q "http://127.0.0.1:%s/result?'
-            'test=%s&res=ERROR" -O /dev/null') % (port, d)]
+          ('wget -q "http://127.0.0.1:%s/result?'
+           'test=%s&flags=%s&res=ERROR" -O /dev/null') % (port, d, flags)]
+    # pid:
     ctx['error_reporter'] = subprocess.Popen(' && '.join(cmd), shell=True)
 
     return html
@@ -277,10 +286,11 @@ def result():
         pass
     res = request.query.res
     test = request.query.test
+    flags = request.query.flags
     # the result div of the autotest html:
     if not 'green' in res and not 'succeeded' in res:
         return stop('ERROR %s %s' % (test, res))
-    print G('SUCCESS'), test
+    info(G('SUCCESS'), test)
     return redir % ('next test', '/do/next')
 
 def reset_ctx():
@@ -302,7 +312,7 @@ def stop(msg, postfix='', no_reset=False):
         col = R
     msg += '[%s set]' % stop_flag
     if not ctx.get('stop'):
-        print col(msg)
+        info(col(msg))
     if iu:
         postfix = '<hr>Rerun <a href="%s">%s</a>' % (iu, iu) + postfix
     return msg + postfix
@@ -332,13 +342,13 @@ def dev(url):
     c = env.get('TS_MON_CMD')
     if c:
         c = c % {'FS_CHANGE_URL': fs_change_url}
-        print L('$TS_MON_CMD : ', I(c))
+        info(L('$TS_MON_CMD : ', I(c)))
         ctx['monitor_cmd'] = c
         ctx['monitor_msg'] = 'Continue polling...'
-        print I('starting FS monitor', M(ctx['monitor_cmd']))
+        info(I('starting FS monitor', M(ctx['monitor_cmd'])))
         ctx['fs_chcker'] = subprocess.Popen(ctx['monitor_cmd'], shell=True)
     else:
-        print 'Not spawning fs checker (assuming external checker)'
+        info('Not spawning fs checker (assuming external checker)')
         ctx['monitor_msg'] = 'Waiting for external hit on "%s"' % fs_change_url
 
     m = {'test_url': test_url,
@@ -402,20 +412,35 @@ def dev_fs_poll():
                 ctx['last_reload'] = time.time()
                 return fs_change_msg
             else:
-                print M('Ignoring fs_change event (too frequent)')
-    print 'return'
+                info(M('Ignoring fs_change event (too frequent)'))
+    info('return')
     return time.ctime()
 
 @route('/dev_fs_changed')
 def dev_fs_changed():
-    print M('fs change detected')
-    print fs_changed
+    info(M('fs change detected'))
+    info(fs_changed)
     fs_changed.set()
     return 'event set'
 
 
 
 
+
+# --------------------------------------------------------------------- logging
+if os.path.exists(log_file):
+    os.unlink(log_file)
+logging.basicConfig(filename=log_file, level=logging.DEBUG)
+def log(meth, *msg): meth(' '.join(str(a) for a in msg))
+def debug(*msg): log(logging.debug, *msg)
+def info(*msg) : log(logging.info , *msg)
+def warn(*msg) : log(logging.warn , *msg)
+def error(*msg): log(logging.error, *msg)
+so = logging.StreamHandler()
+rl = logging.getLogger('')
+rl.addHandler(so)
+for h in rl.handlers:
+    h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
 
 
 # ------------------------------------------------------------ ansi term colors
@@ -512,12 +537,13 @@ if __name__ == '__main__':
             test_flags.pop()
         [test_flags.append(t.strip()) for t in user_flags.split(',') \
                     if t.strip()]
-    print I('ENVIRON'), ':'
-    print L('DEVMODE'), ': ', M('%s' % bool(dev_mode))
-    print L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags))
+    info(I('ENVIRON'), ':')
+    info(L('DEVMODE'), ': ', M('%s' % bool(dev_mode)))
+    info(L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags)))
     if dev_mode:
-        print L('$TS_MON_CMD'), ': ', M(os.environ.get('TS_MON_CMD') or '(external)')
-    print
+        info(L('$TS_MON_CMD'), ': ', M(os.environ.get('TS_MON_CMD') \
+                or '(external)'))
+    info('')
     (host, port) = (h, p) = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
     assert os.system('which wget >/dev/null') == 0, 'require wget'
     if dev_mode:
@@ -531,10 +557,10 @@ if __name__ == '__main__':
         usage(h, p, exit=1, msg='Port argument must be integer - is %s' % \
                 I(port))
     if not dev_mode:
-        print I('Starting single threaded')
+        info(I('Starting single threaded'))
         run(host=host, port=port)
     else:
-        print I('Starting multi threaded (dev mode)')
+        info(I('Starting multi threaded (dev mode)'))
         from bottle import PasteServer
         run(server=PasteServer, host=host, port=port)
 
