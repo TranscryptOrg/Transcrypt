@@ -1,5 +1,8 @@
 dist: trusty
 language: java
+addons:
+    firefox: "49.0"
+
 before_install:
     - sudo apt-get install python3
     - sudo apt-get install nodejs
