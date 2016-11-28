@@ -2232,12 +2232,14 @@ class Generator (ast.NodeVisitor):
             return
 
         elif node.id == '__filename__':
-            p = os.path.split (self.module.metadata.sourcePath)
-            fname = p[-1]
-            if fname.startswith("__init__"):
-                subDir = os.path.split(p[0])
-                fname = os.path.join( subDir[-1], fname )
-            self.visit (ast.Str (s = fname))
+            path = os.path.split (self.module.metadata.sourcePath)
+            fileName = path [1]
+            
+            if fileName.startswith ('__init__'):
+                subDir = os.path.split (path [0])
+                fileName = os.path.join (subDir [1], fileName)
+                
+            self.visit (ast.Str (s = fileName))
             return
 
         elif node.id == '__line__':
