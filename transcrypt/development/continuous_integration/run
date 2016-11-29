@@ -31,7 +31,7 @@ if [ "x$1" == "xprepare" ]; then
 
     if [ ! -e /usr/bin/python3.5 ]
     then
-        sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
+        sudo ln -s /usr/bin/python3 /usr/bin/python 2>/dev/null
     fi
 
     if [ ! -e /usr/bin/nodejs ]
@@ -39,7 +39,10 @@ if [ "x$1" == "xprepare" ]; then
         sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
     fi
 
+    python --version
+    python3 --version
     python3.5 --version
+    python3.6 --version
     java -version
     echo "node version: `nodejs --version`"
     echo 'prepare ready'
