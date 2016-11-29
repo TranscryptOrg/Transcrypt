@@ -7,6 +7,11 @@ export TZ="Europe/Berlin"
 G="\e[1;38;5;154m"
 R="\e[1;38;5;124m"
 O="\e[0m"
+if [ "x$1" == "xno_cleanup" ]; then
+    # the kill procedure did hang on travis:
+    no_cleanup=1
+    shift
+fi
 if [ "x$1" == "xkill" ]; then
     # handy when running this on the local machine
     for i in "" "-9"; do
@@ -137,7 +142,7 @@ while true; do
     # when result never comes....
 done
 
-killChildren
+$no_cleanup || killChildren
 
 echo "Error Status: $ERR_FOUND"
 exit $ERR_FOUND
