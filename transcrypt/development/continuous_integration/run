@@ -27,21 +27,13 @@ test ! -z $port || port=8080
 
 
 if [ "x$1" == "xprepare" ]; then
-    # transcrypt requires python3.5 in run_transcrypt:
-    test ! -e /usr/bin/python3.6 ||  sudo rm -f /usr/bin/python3.5
-    test ! -e /usr/bin/python3.7 ||  sudo rm -f /usr/bin/python3.5
-
-    if [ ! -e /usr/bin/python3.5 ]
-    then
-        sudo ln -s /usr/bin/python3 /usr/bin/python 2>/dev/null
-        sudo ln -s /usr/bin/python3 /usr/bin/python3.5 2>/dev/null
-    fi
 
     if [ ! -e /usr/bin/nodejs ]
     then
         sudo ln -s /usr/bin/node /usr/bin/nodejs 2>/dev/null
     fi
-
+    # python version will be detected by test_server, resulting in
+    # different run_transcrypt
     python --version
     python3 --version
     python3.5 --version

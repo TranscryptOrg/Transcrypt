@@ -60,6 +60,13 @@ ctx = {'cur_test': None, 'have_run': []}
 # /root/Transcrypt/transcrypt:
 _ = os.path.abspath(__file__).rsplit
 env['d_0'] = d0 = _('/', 3)[0]
+pyver = ''
+for maj in '3.6', '3.7':
+    if os.popen('python%s --version 2>/dev/null').read():
+        pyver = maj
+        break
+
+env['run_transcr'] = d0 + '/run_transcrypt%s' % pyver
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
 log_file = env['d_i'] + '/results.log'
@@ -178,8 +185,8 @@ def run_t(*args):
     args = ' '.join(args)
     args = args.replace('__', ' ')
     dbg_args = ' -v ' + args
-    cmd = '%s/run_transcrypt %s' % (env['d_0'], args)
-    dbg_cmd = '%s/run_transcrypt %s' % (env['d_0'], dbg_args)
+    cmd = '%s %s' % (env['run_transcr'], args)
+    dbg_cmd = '%s %s' % (env['run_transcr'], dbg_args)
     info('Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd)))
     if os.system(cmd):
         return os.popen(dbg_cmd + ' 2>&1').read()
@@ -454,6 +461,7 @@ def setup_logging():
         h.setFormatter(logging.Formatter('%(created)s: %(levelname)s: %(message)s'))
     if unlinked:
         info('Unlinked old logfile: %s' % short(log_file))
+    info(I('TRUNNER'), ':'), M(env['run_transcr'])
     info(I('ENVIRON'), ':')
     info(L('DEVMODE'), ': ', M('%s' % bool(dev_mode)))
     info(L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags)))
