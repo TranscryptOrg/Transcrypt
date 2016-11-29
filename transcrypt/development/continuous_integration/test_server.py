@@ -57,9 +57,20 @@ env['TZ'] = 'Europe/Berlin' # for browser and our transcypt -r
 stop_flag = '/tmp/transcrypt_tester_stopflag'
 
 ctx = {'cur_test': None, 'have_run': []}
-# /root/Transcrypt/transcrypt:
+
+# set some paths into our environ:
 _ = os.path.abspath(__file__).rsplit
+# /root/Transcrypt/transcrypt:
 env['d_0'] = d0 = _('/', 3)[0]
+runners = {'3.5': 'run_transcrypt',
+           '3.6': 'run_transcrypt36',
+           '3.7': 'run_transcrypt37'}
+
+avail_pyvers = []
+for maj in '3.5', '3.6', '3.7':
+    if os.popen('python%s --version 2>/dev/null' % maj).read():
+        avail_pyvers.append(maj)
+
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
 log_file = env['d_i'] + '/results.log'
@@ -178,8 +189,8 @@ def run_t(*args):
     args = ' '.join(args)
     args = args.replace('__', ' ')
     dbg_args = ' -v ' + args
-    cmd = '%s/run_transcrypt %s' % (env['d_0'], args)
-    dbg_cmd = '%s/run_transcrypt %s' % (env['d_0'], dbg_args)
+    cmd = '%s %s' % (env['run_transcr'], args)
+    dbg_cmd = '%s %s' % (env['run_transcr'], dbg_args)
     info('Invoking transcrypt: %s' % I(short(os.getcwd())), M(short(cmd)))
     if os.system(cmd):
         return os.popen(dbg_cmd + ' 2>&1').read()
@@ -455,6 +466,7 @@ def setup_logging():
     if unlinked:
         info('Unlinked old logfile: %s' % short(log_file))
     info(I('ENVIRON'), ':')
+    info(L('TRUNNER'), ':', M(short(env['run_transcr'])))
     info(L('DEVMODE'), ': ', M('%s' % bool(dev_mode)))
     info(L('$TS_TEST_FLAGS'), ': ', M(', '.join(test_flags)))
     if dev_mode:
@@ -476,13 +488,24 @@ def usage(h, p, exit=None, msg=None):
     print
     print I('Usage')
     f = sys.argv[0]
-    print 'Start me with %s <[host:]port> [dev] [flags <flags>]' % f
+    usage = M('%s <[host:]port> [py_ver] [dev] [flags <flags>]' % f)
+    print
+    print usage
+    print
     print 'e.g. %s 7777 or %s 0.0.0.0:7777' % (f, f)
     print
-    print 'Hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
+    print 'When started hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
             h, p)
+    print
+    print '- all CLI args are positional, do not change their order'
     print '- single tests via /chk, e.g. /chk/time'
     print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
+    print
+    print I('Python Version')
+    print 'The python version to use for run_transcrypt (not for this test_server)'
+    print 'You have available: %s' % M(' or '.join(sorted(avail_pyvers)))
+    print 'Default:'
+    print R('-') if not avail_pyvers else M(avail_pyvers[-1])
     print
     print I('Logging')
     print 'We log to a gitignored file in the same dir as the test_server'
@@ -538,20 +561,38 @@ def usage(h, p, exit=None, msg=None):
     print 'you can use your own filesystem monitor if you export a custom $TS_MON_CMD'
     print '(default $TS_MON_CMD is printed out when starting in test mode)'
     print
+    print I('Arguments Summary')
+    print usage
+    print
     if msg:
         print R(msg)
     if exit is not None:
         sys.exit(exit)
 
 if __name__ == '__main__':
+
     h, p = '127.0.0.1', 8080 # default
-    l = sys.argv
+    l = list(sys.argv) # copy, we'll mutate l
     if not len(l) - 1 or '-h' in l:
         usage(h, p, exit=1)
         sys.exit(1)
+
+    if not avail_pyvers:
+        print R('You have not any supported python version (%s)' % \
+                ' or '.join(sorted(runners.keys())))
+        sys.exit(1)
+
+    # taking highest as default:
+    py_ver = avail_pyvers[-1]
+    if len(l) > 2 and l[2] in avail_pyvers:
+        py_ver = l[2]
+        l.pop(2)
+    env['run_transcr'] = d0 + '/' + runners[py_ver]
+
     if len(l) > 2 and l[2] == 'dev':
         l.pop(2)
         dev_mode = 1
+
 
     user_flags = os.environ.get('TS_TEST_FLAGS')
     if len(l) > 2 and l[2] == 'flags':
@@ -564,7 +605,9 @@ if __name__ == '__main__':
             test_flags.pop()
         [test_flags.append(t.strip()) for t in user_flags.split(',') \
                     if t.strip()]
+
     (host, port) = (h, p) = ('127.0.0.1:%s' % l[1]).split(':')[-2:]
+    l.pop(1)
     assert os.system('which wget >/dev/null') == 0, 'require wget'
     if dev_mode:
         assert os.system('which entr >/dev/null') == 0, 'require entr'
@@ -576,6 +619,10 @@ if __name__ == '__main__':
     except:
         usage(h, p, exit=1,
               msg='Port argument must be integer - is %s' % I(port))
+
+    # all switches must be popped now:
+    if not len(l) == 1:
+        usage(h, p, exit=1, msg='Note that all args are positional')
 
     setup_logging()
 
