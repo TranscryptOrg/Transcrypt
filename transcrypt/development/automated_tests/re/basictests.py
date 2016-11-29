@@ -1,9 +1,20 @@
 
-from org.transcrypt.stubs.browser import __pragma__
+from org.transcrypt.stubs.browser import __pragma__, __symbols__
 import re
 __pragma__("skip")
 re.J = (1<<19)
 re.JSSTRICT = re.J
+
+def convertMappingDict(mdict):
+    """ This method converts a mapping proxy object to
+    a dict object. mapping proxies create read-only dicts
+    but we don't have that concept in transcrypt yet.
+    """
+    ret = {}
+    for k in mdict.keys():
+        ret[k] = mdict[k]
+    return(ret)
+
 __pragma__("noskip")
 
 testStr1 = "There,is,No,Time"
@@ -56,7 +67,11 @@ def checkRegexProperties(test, flags = 0):
         test.check( r.groups )
         test.check( r.pattern )
         test.check( r.flags )
-        test.check( r.groupindex )
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
         # Check Read-only props on regex object
         def assignPattern():
             r.pattern = "asdfasdf"
@@ -137,7 +152,7 @@ def checkSearchWithGroups(test, flags = 0):
 
     for i in range(2,50):
         test.check(
-            test.expectException(lambda: re.search(',', testStr1, flags).group(1))
+            test.expectException(lambda: re.search(',', testStr1, flags).group(i))
         )
 
 def checkMatchOps(test, flags = 0):
@@ -159,9 +174,17 @@ def checkMatchwithNamedGroups(test, flags = 0):
     try:
         r = re.compile(r"(?P<prefix>[a-zA-Z]+)://(?P<suffix>[^/]*)", flags)
     except Exception as exc:
-        test.checkPad(None, 12)
+        test.checkPad(None, 15)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
+
         m = r.match("http://asdf")
         test.check( m.groups() )
         test.check( m.group() )
@@ -182,9 +205,17 @@ def checkMatchwithNamedGroups(test, flags = 0):
     try:
         r = re.compile(r"(?P<country>\d{1,3})-(?P<areacode>\d{3})-(?P<number>\d{3}-\d{4})", flags)
     except:
-        test.checkPad(None, )
+        test.checkPad(None, 13)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
+        d = r.groupindex
+        __pragma__('skip')
+        d = convertMappingDict(d)
+        __pragma__('noskip')
+        test.check( d )
+
         m = r.match("1-234-567-9012")
         test.check(m.groups())
         test.check(m.group())
@@ -221,6 +252,20 @@ def checkMatchWithGroups(test, flags = 0):
     else:
         test.checkPad(None, 1)
 
+    # Match with group that is non-captured
+    rgx = re.compile(r'(?:[\w\s]+)\[(\d+)\]', flags)
+    test.check(rgx.pattern)
+    test.check(rgx.groups)
+
+    m = rgx.match("asdf[23]")
+    if m:
+        test.check( m.groups() )
+        test.check( m.group(0) )
+        test.check( m.group(1) )
+        test.check( test.expectException( lambda: m.group(2) ) )
+    else:
+        test.checkPad(None, 4)
+
 
 def checkCommentGroup(test, flags = 0):
     """ Comment Groups are only supported in Python so will
@@ -230,18 +275,22 @@ def checkCommentGroup(test, flags = 0):
     try:
         r = re.compile(r'a(?#foobar)b', flags)
     except:
-        test.checkPad(None,2)
+        test.checkPad(None,4)
 
     if ( r is not None ):
+        test.check(r.groups)
+        test.check(r.pattern)
         test.check(r.search("ab").group())
         test.check(r.search("er"))
 
     try:
         r = re.compile(r'([\d]+)(?#blarg)\[\]', flags)
     except:
-        test.checkPad(None, 2)
+        test.checkPad(None, 4)
         return
 
+    test.check( r.groups )
+    test.check( r.pattern )
     test.check( r.search("1234[]").group())
     test.check( r.search("asdf[]"))
 
@@ -311,6 +360,11 @@ def checkSyntaxErrors(test, flags = 0):
 def checkFindIter(test, flags = 0):
     """ Test the finditer method
     """
+    __pragma__ ('ifdef', '__esv5__')
+    if ( '__esv5__' in __symbols__ ):
+        test.check("Skip finditer tests in esv5")
+        return
+    __pragma__('else')
     p = "\\[([\\d]+)\\]"
     r = re.compile(p, flags)
     test.check( r.groups )
@@ -321,6 +375,19 @@ def checkFindIter(test, flags = 0):
         test.check(m.endpos)
         test.check(m.string)
         test.check(m.lastindex)
+        test.check(m.groups())
+        test.check(m.group(0))
+        test.check(m.group(1))
+        test.check(test.expectException( lambda: m.group(2) ))
+        test.check(test.expectException( lambda: m.group(2342)))
+        test.check(test.expectException( lambda: m.group("asdf")))
+        test.check(m.start(0))
+        test.check(m.start(1))
+        test.check(test.expectException( lambda: m.start("asdf")))
+        test.check(m.end(0))
+        test.check(m.end(1))
+        test.check(test.expectException( lambda: m.end("asdf")))
+    __pragma__('endif')
 
 def checkWithFlags(test, flags = 0):
     """ This checks the regex with flags called out in the
@@ -332,6 +399,9 @@ def checkWithFlags(test, flags = 0):
     except:
         test.checkPad(None, 5)
         return
+
+    test.check(r.groups)
+    test.check(r.pattern)
 
     m = r.search("aBA")
     test.check(m.group() )
@@ -355,22 +425,31 @@ def checkConditionalGroups(test, flags = 0):
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b)', flags)
     except:
-        test.checkPad(None, 5)
+        test.checkPad(None, 12)
 
     if ( rgx is not None ):
+        test.check(rgx.groups)
+        test.check(rgx.pattern)
         test.checkEval(lambda: rgx.match('abab').group())
         test.checkEval(lambda: rgx.match('aa').group())
         test.checkEval(lambda: rgx.match('bcb').group())
-        test.checkEval(lambda: rgx.match('c').group()) 
+        test.checkEval(lambda: rgx.match('c').group())
         test.checkEval(lambda: rgx.match('abcb'))
         # PyRegex needs to use n_splits from `translate` for this to work
-        test.checkEval(lambda: rgx.match('c').groups()) 
+        test.checkEval(lambda: rgx.match('c').groups())
+        test.checkEval(lambda: rgx.split("ababbababcdjsabbabdbab"))
+        test.checkEval(lambda: rgx.sub("jumbo", "ababsdf rexababwer"))
+        test.checkEval(lambda: rgx.sub("shrimp", "shipbcb shootc aardvark"))
+        test.checkEval(lambda: rgx.findall("ababxaaxcebbcxababeded"))
 
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b|d)', flags)
     except:
-        test.checkPad(None, 5)
+        test.checkPad(None, 6)
         return
+
+    test.check(rgx.groups)
+    test.check(rgx.pattern)
     test.checkEval(lambda: rgx.match('abab').group())
     test.checkEval(lambda: rgx.match('aad').group())
     test.checkEval(lambda: rgx.match('bcb').group())
