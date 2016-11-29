@@ -142,7 +142,8 @@ while true; do
     # when result never comes....
 done
 
-$no_cleanup || killChildren
+test "x$no_cleanup" = "x" && killChildren \
+    || echo 'Not killing children, no_cleanup is set'
 
 echo "Error Status: $ERR_FOUND"
 exit $ERR_FOUND
