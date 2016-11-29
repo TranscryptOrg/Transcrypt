@@ -1,5 +1,5 @@
 
-from org.transcrypt.stubs.browser import __pragma__
+from org.transcrypt.stubs.browser import __pragma__, __symbols__
 import re
 __pragma__("skip")
 re.J = (1<<19)
@@ -360,6 +360,11 @@ def checkSyntaxErrors(test, flags = 0):
 def checkFindIter(test, flags = 0):
     """ Test the finditer method
     """
+    __pragma__ ('ifdef', '__esv5__')
+    if ( '__esv5__' in __symbols__ ):
+        test.check("Skip finditer tests in esv5")
+        return
+    __pragma__('else')
     p = "\\[([\\d]+)\\]"
     r = re.compile(p, flags)
     test.check( r.groups )
@@ -382,6 +387,7 @@ def checkFindIter(test, flags = 0):
         test.check(m.end(0))
         test.check(m.end(1))
         test.check(test.expectException( lambda: m.end("asdf")))
+    __pragma__('endif')
 
 def checkWithFlags(test, flags = 0):
     """ This checks the regex with flags called out in the

@@ -617,9 +617,16 @@ class Regex(object):
         a list.
         @see the python docs
         """
+        # @note - Transcrypt compiled with `-e 5` does not have
+        #    iterator support at this point. Only `-e 6` has
+        #    iterator support.
+        __pragma__ ('ifdef', '__esv5__')
+        raise NotImplementedError("No Iterator Support in es5")
+        __pragma__('else')
         mlist = self._findAllMatches(string, pos, endpos)
         ret = map(lambda m: Match(m, string, 0, len(string), self, self._groupindex), mlist)
         return( iter(ret) )
+        __pragma__('endif')
 
     def sub(self, repl, string, count = 0):
         """ Substitude each match of this regex in the passed string
