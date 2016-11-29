@@ -152,7 +152,7 @@ def checkSearchWithGroups(test, flags = 0):
 
     for i in range(2,50):
         test.check(
-            test.expectException(lambda: re.search(',', testStr1, flags).group(1))
+            test.expectException(lambda: re.search(',', testStr1, flags).group(i))
         )
 
 def checkMatchOps(test, flags = 0):
@@ -251,6 +251,20 @@ def checkMatchWithGroups(test, flags = 0):
         test.check(m.groups(0))
     else:
         test.checkPad(None, 1)
+
+    # Match with group that is non-captured
+    rgx = re.compile(r'(?:[\w\s]+)\[(\d+)\]', flags)
+    test.check(rgx.pattern)
+    test.check(rgx.groups)
+
+    m = rgx.match("asdf[23]")
+    if m:
+        test.check( m.groups() )
+        test.check( m.group(0) )
+        test.check( m.group(1) )
+        test.check( test.expectException( lambda: m.group(2) ) )
+    else:
+        test.checkPad(None, 4)
 
 
 def checkCommentGroup(test, flags = 0):
@@ -356,6 +370,18 @@ def checkFindIter(test, flags = 0):
         test.check(m.endpos)
         test.check(m.string)
         test.check(m.lastindex)
+        test.check(m.groups())
+        test.check(m.group(0))
+        test.check(m.group(1))
+        test.check(test.expectException( lambda: m.group(2) ))
+        test.check(test.expectException( lambda: m.group(2342)))
+        test.check(test.expectException( lambda: m.group("asdf")))
+        test.check(m.start(0))
+        test.check(m.start(1))
+        test.check(test.expectException( lambda: m.start("asdf")))
+        test.check(m.end(0))
+        test.check(m.end(1))
+        test.check(test.expectException( lambda: m.end("asdf")))
 
 def checkWithFlags(test, flags = 0):
     """ This checks the regex with flags called out in the
@@ -393,16 +419,22 @@ def checkConditionalGroups(test, flags = 0):
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b)', flags)
     except:
-        test.checkPad(None, 5)
+        test.checkPad(None, 12)
 
     if ( rgx is not None ):
+        test.check(rgx.groups)
+        test.check(rgx.pattern)
         test.checkEval(lambda: rgx.match('abab').group())
         test.checkEval(lambda: rgx.match('aa').group())
         test.checkEval(lambda: rgx.match('bcb').group())
-        test.checkEval(lambda: rgx.match('c').group()) 
+        test.checkEval(lambda: rgx.match('c').group())
         test.checkEval(lambda: rgx.match('abcb'))
         # PyRegex needs to use n_splits from `translate` for this to work
-        test.checkEval(lambda: rgx.match('c').groups()) 
+        test.checkEval(lambda: rgx.match('c').groups())
+        test.checkEval(lambda: rgx.split("ababbababcdjsabbabdbab"))
+        test.checkEval(lambda: rgx.sub("jumbo", "ababsdf rexababwer"))
+        test.checkEval(lambda: rgx.sub("shrimp", "shipbcb shootc aardvark"))
+        test.checkEval(lambda: rgx.findall("ababxaaxcebbcxababeded"))
 
     try:
         rgx = re.compile(r'(a)?(b)?(?(1)a|c)(?(2)b|d)', flags)
