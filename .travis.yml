@@ -2,6 +2,7 @@ dist: trusty
 language: python
 python:
 - '3.5'
+- '3.6-dev'
 - 'nightly'
 
 addons:
