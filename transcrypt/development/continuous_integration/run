@@ -8,7 +8,9 @@ G="\e[1;38;5;154m"
 R="\e[1;38;5;124m"
 O="\e[0m"
 if [ "x$1" == "xno_cleanup" ]; then
-    # the kill procedure did hang on travis:
+    # the kill procedure did hang on travis, so we set this in .travis.yml:
+    # on your CI server you do NOT want to set this,
+    # xfvb and firefox will continue running otherwise:
     no_cleanup=1
     shift
 fi
