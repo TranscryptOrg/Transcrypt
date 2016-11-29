@@ -1786,6 +1786,21 @@ Logger.manager = Manager(Logger.root)
 # instances of a class
 root.manager = Logger.manager
 
+def _resetLogging():
+    """ This is a utility method to help with testing so that
+    we can start from a clean slate.
+    """
+    _handlerList = []
+    _handlers = {}
+    global root
+    root = RootLogger(WARNING)
+    Logger.root = root
+    Logger.manager = Manager(Logger.root)
+    # @note - this is necessary because I think there may be a bug
+    # in the way that class level attributes are distributed to
+    # instances of a class
+    root.manager = Logger.manager
+
 #---------------------------------------------------------------------------
 # Configuration classes and functions
 #---------------------------------------------------------------------------
