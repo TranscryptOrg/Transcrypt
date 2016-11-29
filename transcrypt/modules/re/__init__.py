@@ -13,7 +13,6 @@
 
 from org.transcrypt.stubs.browser import __pragma__
 from re.translate import translate
-from re.re import _encodeFlags, _decodeFlags
 
 
 # Flags
@@ -172,6 +171,8 @@ class Match(object):
             for index in args:
                 if type(index) is str:
                     if self._namedGroups is not None:
+                        if ( index not in self._namedGroups.keys() ):
+                            raise ReIndexError()
                         ret.append( self._obj[self._namedGroups[index]] )
                     else:
                         raise NotImplementedError("No NamedGroups Available");
@@ -230,6 +231,8 @@ class Match(object):
         gId = 0
         if ( type(group) is str ):
             if ( self._namedGroups is not None):
+                if ( group not in self._namedGroups.keys() ):
+                    raise ReIndexError()
                 gId = self._namedGroups[group]
             else:
                 raise NotImplementedError("No NamedGroups Available")
@@ -275,6 +278,8 @@ class Match(object):
         gId = 0
         if ( type(group) is str ):
             if ( self._namedGroups is not None):
+                if ( group not in self._namedGroups.keys() ):
+                    raise ReIndexError()
                 gId = self._namedGroups[group]
             else:
                 raise NotImplementedError("No NamedGroups Available")
@@ -334,8 +339,10 @@ class Regex(object):
 
         self._flags = flags
         self._jsFlags, self._obj = self._compileWrapper(pattern, flags)
-        self._pattern = pattern
-
+        self._jspattern = pattern
+        # For this regex object pypattern and jspattern are the
+        # same.
+        self._pypattern = pattern
 
         # we will determine groups by using another regex
         # that tacks on an empty match.
@@ -347,7 +354,7 @@ class Regex(object):
 
     # Read-only Properties
     def _getPattern(self):
-        ret = self._pattern.replace('\\', '\\\\')
+        ret = self._pypattern.replace('\\', '\\\\')
         return(ret)
     def _setPattern(self, val):
         raise AttributeError("readonly attribute")
@@ -526,7 +533,7 @@ class Regex(object):
             flags = self._flags
             flags |= GLOBAL
 
-            _, rObj = self._compileWrapper(self._pattern, flags)
+            _, rObj = self._compileWrapper(self._jspattern, flags)
             ret = []
             lastM = None
             cnt = 0
@@ -568,7 +575,7 @@ class Regex(object):
         flags = self._flags
         flags |= GLOBAL
 
-        _, rObj = self._compileWrapper(self._pattern, flags)
+        _, rObj = self._compileWrapper(self._jspattern, flags)
         ret = []
         while( True ):
             m = rObj.exec(target)
@@ -610,9 +617,16 @@ class Regex(object):
         a list.
         @see the python docs
         """
+        # @note - Transcrypt compiled with `-e 5` does not have
+        #    iterator support at this point. Only `-e 6` has
+        #    iterator support.
+        __pragma__ ('ifdef', '__esv5__')
+        raise NotImplementedError("No Iterator Support in es5")
+        __pragma__('else')
         mlist = self._findAllMatches(string, pos, endpos)
         ret = map(lambda m: Match(m, string, 0, len(string), self, self._groupindex), mlist)
         return( iter(ret) )
+        __pragma__('endif')
 
     def sub(self, repl, string, count = 0):
         """ Substitude each match of this regex in the passed string
@@ -642,7 +656,7 @@ class Regex(object):
         flags = self._flags
         flags |= GLOBAL
 
-        _, rObj = self._compileWrapper(self._pattern, flags)
+        _, rObj = self._compileWrapper(self._jspattern, flags)
         ret = ""
         totalMatch = 0
         lastEnd = -1
@@ -700,18 +714,19 @@ class PyRegExp(Regex):
         @pattern Python Regex String
         @pattern flags bit flags passed by the user.
         """
-        jsTokens, inlineFlags, namedGroups, nCapGroups = translate(pyPattern)
+        jsTokens, inlineFlags, namedGroups, nCapGroups, n_splits = translate(pyPattern)
         flags |= inlineFlags
 
         jsPattern = ''.join(jsTokens)
         Regex.__init__(self, jsPattern, flags)
+        self._pypattern = pyPattern
 
+        self._nsplits = n_splits
         self._jsTokens = jsTokens
         # nCapGroups = the same as self.groups defined in the
         #   base class.
         self._capgroups = nCapGroups
         self._groupindex = namedGroups
-
 
 def compile(pattern, flags = 0):
     """ Compile a regex object and return
