@@ -1,10 +1,16 @@
 dist: trusty
-language: java
+language: python
+python:
+- '3.5'
+- '3.6'
+
 addons:
     firefox: "49.0"
+    apt:
+        packages:
+            - oracle-java8-installer
 
 before_install:
-    - sudo apt-get install python3
     - sudo apt-get install nodejs
 
 before_script:
