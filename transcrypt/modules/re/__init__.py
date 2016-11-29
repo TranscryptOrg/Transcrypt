@@ -171,6 +171,8 @@ class Match(object):
             for index in args:
                 if type(index) is str:
                     if self._namedGroups is not None:
+                        if ( index not in self._namedGroups.keys() ):
+                            raise ReIndexError()
                         ret.append( self._obj[self._namedGroups[index]] )
                     else:
                         raise NotImplementedError("No NamedGroups Available");
@@ -229,6 +231,8 @@ class Match(object):
         gId = 0
         if ( type(group) is str ):
             if ( self._namedGroups is not None):
+                if ( group not in self._namedGroups.keys() ):
+                    raise ReIndexError()
                 gId = self._namedGroups[group]
             else:
                 raise NotImplementedError("No NamedGroups Available")
@@ -274,6 +278,8 @@ class Match(object):
         gId = 0
         if ( type(group) is str ):
             if ( self._namedGroups is not None):
+                if ( group not in self._namedGroups.keys() ):
+                    raise ReIndexError()
                 gId = self._namedGroups[group]
             else:
                 raise NotImplementedError("No NamedGroups Available")
