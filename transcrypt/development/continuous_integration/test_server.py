@@ -504,7 +504,8 @@ def usage(h, p, exit=None, msg=None):
     print I('Python Version')
     print 'The python version to use for run_transcrypt (not for this test_server)'
     print 'You have available: %s' % M(' or '.join(sorted(avail_pyvers)))
-    print 'Default: 3.5'
+    print 'Default:'
+    print R('-') if not avail_pyvers else M(avail_pyvers[-1])
     print
     print I('Logging')
     print 'We log to a gitignored file in the same dir as the test_server'
@@ -581,7 +582,8 @@ if __name__ == '__main__':
                 ' or '.join(sorted(runners.keys())))
         sys.exit(1)
 
-    py_ver = '3.5'
+    # taking highest as default:
+    py_ver = avail_pyvers[-1]
     if len(l) > 2 and l[2] in avail_pyvers:
         py_ver = l[2]
         l.pop(2)
