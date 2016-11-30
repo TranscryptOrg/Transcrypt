@@ -47,4 +47,4 @@ MSG: ['INFO[08:59:53]: Message on The Bus goes Round and Round']
 
 Browser Client Output:
 
-<Image Goes Here>
+![Image of Browser Test Output](https://cloud.githubusercontent.com/assets/15036736/20763406/c6c1b1ac-b6de-11e6-9283-fbfd7f003e3b.png)
