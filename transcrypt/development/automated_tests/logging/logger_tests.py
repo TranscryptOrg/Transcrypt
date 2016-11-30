@@ -1,36 +1,13 @@
 
 from org.transcrypt.stubs.browser import __pragma__, __envir__
 
-#from logging import *
 import logging
-#import logging as log
-
-class TestHandler(logging.Handler):
-    """ This handler is intended to make it easier to test the
-    logging module output without requiring the console or the
-    sys.stderr.
-    """
-    def __init__(self, test, level):
-        """
-        """
-        logging.Handler.__init__(self, level)
-        self._test = test
-
-    def emit(self, record):
-        """
-        """
-        msg = self.format(record)
-        self._test.check(msg)
+from utils import TestHandler, resetLogging
 
 
 def logger_basics(test):
-    # @note - basicConfig has some issues because the
-    #   kwargs parameter is difficult work
-    # basehdlr = TestHandler(test, 0)
-    # fmt = logging.Formatter(style="{")
-    # basehdlr.setFormatter(fmt)
 
-    # logging.basicConfig(handlers = [basehdlr])
+    resetLogging()
 
     logger = logging.getLogger("tester")
     test.check(logger.name)
@@ -118,6 +95,8 @@ def logger_basics(test):
 
 def logging_api_tests(test):
 
+    resetLogging()
+
     logger = logging.getLogger()
     logger.setLevel(20)
     hdlr = TestHandler(test, 30)
@@ -183,11 +162,14 @@ def logging_api_tests(test):
 def formatter_tests(test):
     """ This function contains some tests of the formatter objects
     """
+
+    resetLogging()
+
     logger = logging.getLogger("fmttest")
     logger.setLevel(10)
 
     hdlr = TestHandler(test, 30)
-    fmt = logging.Formatter(style="{", fmt="{levelname}:{name}:{message}")
+    fmt = logging.Formatter("{levelname}:{name}:{message}", style="{")
     test.check(fmt.usesTime())
     hdlr.setFormatter(fmt)
     logger.addHandler(hdlr)
@@ -220,12 +202,14 @@ def console_test(test):
     autotester results but can be manually inspected in the
     console.log
     """
+    resetLogging()
+
     logger = logging.getLogger("consoleTest")
 
     logger.setLevel(10)
 
     hdlr = TestHandler(test, 30)
-    fmt = logging.Formatter(style="{", fmt="{name}:{message}")
+    fmt = logging.Formatter("{name}:{message}", style="{")
     test.check(fmt.usesTime())
     hdlr.setFormatter(fmt)
     hdlr.setLevel(20)
@@ -269,7 +253,7 @@ def placeholder_testing(test):
     logger.setLevel(10)
 
     hdlr = TestHandler(test, 5)
-    fmt = logging.Formatter(style="{", fmt="{levelname}:{name}:{message}")
+    fmt = logging.Formatter("{levelname}:{name}:{message}", style="{")
     hdlr.setFormatter(fmt)
     logger.addHandler(hdlr)
 

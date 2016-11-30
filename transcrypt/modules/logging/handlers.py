@@ -81,13 +81,13 @@ class AJAXHandler(logging.Handler):
           AJAX push. None are applied by default.
         """
         logging.Handler.__init__(self)
-        raise NotImplementedError("Not Tested")
         method = method.upper()
         if method not in ["GET", "POST"]:
             raise ValueError("method must be GET or POST")
         self.url = url
         self.method = method
         self.headers = headers
+        raise NotImplementedError("Not Tested")
 
     def mapLogRecord(self, record):
         """
@@ -114,26 +114,25 @@ class AJAXHandler(logging.Handler):
                 else:
                     sep = '?'
                 url = url + "%c%s" % (sep, data)
-            else: "POST"
-              # encode data here
-                pass
+            else: # "POST"
+                # encode data here
+                url = "asdf"
 
             def ajaxCallback():
                 # @note - we should probably do something
                 #   like keep track of error messages and
                 #   provide a counter of failed pushes ?
-                pass
+                return(0)
 
             __pragma__('js', '{}',
-            '''
+                       '''
             var x = new(this.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
             x.open(data ? 'POST' : 'GET', url, 1);
             x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             x.onreadystatechange = ajaxCallback
             x.send(data)
-            ''')
-
+                       ''')
 
         except Exception:
             self.handleError(record)
@@ -181,8 +180,6 @@ class BufferingHandler(logging.Handler):
         self.acquire()
         try:
             self.buffer = []
-        except Exception exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             self.release()
 
@@ -194,8 +191,6 @@ class BufferingHandler(logging.Handler):
         """
         try:
             self.flush()
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             logging.Handler.close(self)
 
@@ -252,8 +247,6 @@ class MemoryHandler(BufferingHandler):
                 for record in self.buffer:
                     self.target.handle(record)
                 self.buffer = []
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             self.release()
 
@@ -265,16 +258,11 @@ class MemoryHandler(BufferingHandler):
         try:
             if self.flushOnClose:
                 self.flush()
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             self.acquire()
             try:
                 self.target = None
                 BufferingHandler.close(self)
-            except Exception as exc: # @note - this is a hack around bug in transcrypt
-                raise exc
-
             finally:
                 self.release()
 
@@ -300,7 +288,7 @@ class QueueHandler(logging.Handler):
         """
         logging.Handler.__init__(self)
         raise NotImplementedError("No Working Implementation Yet")
-        self.queue = queue
+        #self.queue = queue
 
     def enqueue(self, record):
         """
