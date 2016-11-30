@@ -145,7 +145,7 @@ while true; do
 done
 
 test "x$no_cleanup" = "x" && killChildren \
-    || echo 'Not killing children, no_cleanup is set'
+    || echo 'Not killing children, $no_cleanup is set'
 
 echo "Error Status: $ERR_FOUND"
 exit $ERR_FOUND
