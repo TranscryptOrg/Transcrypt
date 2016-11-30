@@ -680,12 +680,10 @@ class Regex(object):
                     # subsequent match
                     ret += string[lastEnd:m.index]
 
-                try:
+                if callable(repl):
                     content = repl(Match(m, string, 0, len(string), self, self._groupindex))
                     ret += content
-                except:
-                    # repl is likely not callable so - we will
-                    # instead try to use it as a string
+                else:
                     ret += repl
 
                 totalMatch+=1

@@ -558,7 +558,7 @@ class Formatter(object):
 
     converter = time.localtime
     __pragma__('kwargs')
-    def __init__(self, fmt=None, datefmt=None, style='{'):
+    def __init__(self, format=None, datefmt=None, style='{'):
         """
         Initialize the formatter with specified format strings.
 
@@ -578,7 +578,7 @@ class Formatter(object):
         if ( style != '{' ):
             raise NotImplementedError("{} format only")
 
-        self._style = _STYLES[style][0](fmt)
+        self._style = _STYLES[style][0](format)
         self._fmt = self._style._fmt
         self.datefmt = datefmt
 
@@ -875,8 +875,6 @@ def _removeHandlerRef(wr):
         try:
             if wr in handlers:
                 handlers.remove(wr)
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             release()
 
@@ -888,8 +886,6 @@ def _addHandlerRef(handler):
     try:
         _handlerList.append(handler)
 #        _handlerList.append(weakref.ref(handler, _removeHandlerRef))
-    except Exception as exc: # @note - this is a hack around bug in transcrypt
-        raise exc
     finally:
         _releaseLock()
 
@@ -926,8 +922,6 @@ class Handler(Filterer):
             self._name = name
             if name:
                 _handlers[name] = self
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             _releaseLock()
 
@@ -1000,9 +994,6 @@ class Handler(Filterer):
             self.acquire()
             try:
                 self.emit(record)
-            except Exception as exc: # @note - this is a hack around bug in transcrypt
-                raise exc
-
             finally:
                 self.release()
         return rv
@@ -1036,8 +1027,6 @@ class Handler(Filterer):
         try:        #unlikely to raise an exception, but you never know...
             if self._name and self._name in _handlers:
                 del _handlers[self._name]
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             _releaseLock()
 
@@ -1090,8 +1079,6 @@ class StreamHandler(Handler):
         try:
             if self.stream and hasattr(self.stream, "flush"):
                 self.stream.flush()
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             self.release()
 
@@ -1246,8 +1233,6 @@ class Manager(object):
                 rv.manager = self
                 self.loggerDict[name] = rv
                 self._fixupParents(rv)
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             _releaseLock()
         return rv
@@ -1530,8 +1515,6 @@ class Logger(Filterer):
         try:
             if not (hdlr in self.handlers):
                 self.handlers.append(hdlr)
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             _releaseLock()
 
@@ -1543,8 +1526,6 @@ class Logger(Filterer):
         try:
             if hdlr in self.handlers:
                 self.handlers.remove(hdlr)
-        except Exception as exc: # @note - this is a hack around bug in transcrypt
-            raise exc
         finally:
             _releaseLock()
 
@@ -1786,6 +1767,21 @@ Logger.manager = Manager(Logger.root)
 # instances of a class
 root.manager = Logger.manager
 
+def _resetLogging():
+    """ This is a utility method to help with testing so that
+    we can start from a clean slate.
+    """
+    _handlerList = []
+    _handlers = {}
+    global root
+    root = RootLogger(WARNING)
+    Logger.root = root
+    Logger.manager = Manager(Logger.root)
+    # @note - this is necessary because I think there may be a bug
+    # in the way that class level attributes are distributed to
+    # instances of a class
+    root.manager = Logger.manager
+
 #---------------------------------------------------------------------------
 # Configuration classes and functions
 #---------------------------------------------------------------------------
@@ -1835,48 +1831,31 @@ def basicConfig(**kwargs):
     _acquireLock()
     try:
         if len(root.handlers) == 0:
-            handlers = kwargs["handlers"]
-            # @note - kwargs as the function args does not seem to
-            #     be a full-fledged dict
-            #handlers = kwargs.pop("handlers", None)
+            handlers = kwargs.pop("handlers", None)
             if handlers is not None:
                 if "stream" in kwargs:
                     raise ValueError("'stream' should not be "
-                                                     "specified together with 'handlers'")
+                                     "specified together with 'handlers'")
             if handlers is None:
-                stream = kwargs["stream"]
-                #stream = kwargs.pop("stream", None)
+                stream = kwargs.pop("stream", None)
                 h = StreamHandler(stream)
                 handlers = [h]
-            dfs = kwargs["datefmt"]
-            #dfs = kwargs.pop("datefmt", None)
-            style = kwargs["style"]
-            if ( style is None ):
-                style = "{"
-            #style = kwargs.pop("style", '{')
+            dfs = kwargs.pop("datefmt", None)
+            style = kwargs.pop("style", '{')
             if style not in _STYLES:
                 raise ValueError('Style must be one of: {}'.format(','.join(_STYLES.keys())))
-            fs = kwargs["format"]
-            if ( fs is None ):
-                fs = _STYLES[style][1]
-            #fs = kwargs.pop("format", _STYLES[style][1])
+            fs = kwargs.pop("format", _STYLES[style][1])
             fmt = Formatter(fs, dfs, style)
             for h in handlers:
                 if h.formatter is None:
                     h.setFormatter(fmt)
                 root.addHandler(h)
-            level = kwargs["level"]
-            #level = kwargs.pop("level", None)
+            level = kwargs.pop("level", None)
             if level is not None:
                 root.setLevel(level)
-            # @todo - currently we don't have a full dict object
-            # in kwargs - so we have to make sacrifices.
-            #if kwargs:
-            #    keys = ', '.join(kwargs.keys())
-            #    raise ValueError('Unrecognised argument(s): {}'.format(keys))
-    except Exception as exc: # @note - this is a hack around bug in transcrypt
-        raise exc
-
+            if len(kwargs) > 0:
+                keys = ', '.join(kwargs.keys())
+                raise ValueError('Unrecognised argument(s): {}'.format(keys))
     finally:
         _releaseLock()
 
