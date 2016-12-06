@@ -19,7 +19,7 @@ def log10 (x):      # IE workaround
     return Math.log (x) / Math.LN10
 
 def isnan(x):
-    return isNaN(x)
+    return js_isNaN(x)
 
 pow = Math.pow
 sqrt = Math.sqrt
