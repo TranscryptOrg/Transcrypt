@@ -51,3 +51,7 @@ def run (autoTester):
     check (ceil (3.5))
     check (trunc (3.5))
     
+    check (isnan (3))
+    check (isnan (nan))
+    
+    
