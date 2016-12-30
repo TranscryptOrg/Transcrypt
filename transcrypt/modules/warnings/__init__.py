@@ -22,7 +22,15 @@
 #       programmatic interface.
 # 2) There is a limited subset of warnings right now to keep
 #       things small.
-# 3) catch_warnings is not implemented currently
+# 3) catch_warnings is not implemented currently because the
+#       transcrypt framework currently does not support "with/as"
+#       clauses very well.
+# 4) This module does not implement the `warn` method. The user
+#       is suggested to use the `warn_explicit` method instead.
+#       In order to prevent cases where a NonImplementedError is
+#       thrown instead of a useful warning, the `warn` method is
+#       not present - forcing the developer to pick a better
+#       solution (like use `warn_explicit`).
 
 # @note - I've moved the re module dependency to the top level because
 #  transcrypt will need to compile and include this regardless if it
@@ -229,87 +237,22 @@ def resetwarnings():
     filters = []
     _filters_mutated()
 
-# def _is_internal_frame(frame):
-#     """Signal whether the frame is an internal CPython implementation detail."""
-#     filename = frame.f_code.co_filename
-#     return 'importlib' in filename and '_bootstrap' in filename
-
-
-# def _next_external_frame(frame):
-#     """Find the next frame that doesn't involve CPython internals."""
-#     frame = frame.f_back
-#     while frame is not None and _is_internal_frame(frame):
-#         frame = frame.f_back
-#     return frame
 
 __warningregistry__ = {}
 
-# Code typically replaced by _warnings
-def warn(message, category=None, stacklevel=1, source=None):
-    """Issue a warning, or maybe ignore it or raise an exception."""
-    # Check if message is already a Warning object
-    if isinstance(message, Warning):
-        category = message.__class__
-    # Check category argument
-    if category is None:
-        category = UserWarning
-    #if not (isinstance(category, type) and issubclass(category, Warning)):
-    # @note there is no `issubclass` method yet.
-    #if not (isinstance(category, type)):
-    #    raise TypeError("category must be a Warning subclass, "
-    #                    "not '{}'".format(category.__name__))
+# @note - The current implementation of transcrypt cannot support
+#    stack traversal so it is very difficult to support a `warnings.warn`
+#    function. In order to prevent runtime conditions where a warning
+#    should have been generated, but instead will generate a extremely
+#    non-helpful "NotImplementedError", I'm removing the `warn` function
+#    from the API. This will force developers to use the `warn_explicit`
+#    function instead, leveraging the __filename__, __line__, __name__
+#    macros.
+#
+# def warn(message, category=None, stacklevel=1):
+#     """Issue a warning, or maybe ignore it or raise an exception."""
+#     raise NotImplementedError("Stack info not implemented - use warn_explicit"))
 
-    # Get context information
-    # try:
-    #     # @note - currently this isn't available - we can emulate
-    #     #   this with Error - @see autotest module
-    #     if stacklevel <= 1 or _is_internal_frame(sys._getframe(1)):
-    #         # If frame is too small to care or if the warning originated in
-    #         # internal code, then do not try to hide any frames.
-    #         frame = sys._getframe(stacklevel)
-    #     else:
-    #         frame = sys._getframe(1)
-    #         # Look for one frame less since the above line starts us off.
-    #         for x in range(stacklevel-1):
-    #             frame = _next_external_frame(frame)
-    #             if frame is None:
-    #                 raise ValueError
-    # except ValueError:
-    #     globals = sys.__dict__
-    #     lineno = 1
-    # else:
-    #     globals = frame.f_globals
-    #     lineno = frame.f_lineno
-
-    globals = {}
-    lineno = -1
-
-    if '__name__' in globals:
-        module = globals['__name__']
-    else:
-        module = "<unknown>"
-
-    if '__file__' in globals:
-        filename = globals['__file__']
-    else:
-        filename = "<unknown>"
-
-    if filename:
-        fnl = filename.lower()
-        if fnl.endswith(".pyc"):
-            filename = filename[:-1]
-    else:
-        # if module == "__main__":
-        #     try:
-        #         filename = sys.argv[0]
-        #     except AttributeError:
-        #         # embedded interpreters don't have sys.argv, see bug #839151
-        #         filename = '__main__'
-        if not filename:
-            filename = module
-    registry = __warningregistry__
-    warn_explicit(message, category, filename, lineno, module, registry,
-                  globals, source)
 
 def _checkCatMatch(msgCat, filtCat):
     """
@@ -317,8 +260,33 @@ def _checkCatMatch(msgCat, filtCat):
     return ( msgCat.__name__ == filtCat.__name__ )
 
 def warn_explicit(message, category, filename, lineno,
-                  module=None, registry=None, module_globals=None,
-                  source=None):
+                  module=None, registry=None, module_globals=None
+                  ):
+    """ Explicitly set the message and origin information for a warning.
+    This is the preferred method to use in transcrypt.
+    @param message message for the warning that will be created.
+    @param category object that subclasses `Warning` and indicates the
+       type of warning being created. @see addWarningCategory for
+       extensibility
+    @param filename name of the file from which this warning is originating.
+       @note use the __file__ and __filename__ macro definitions for this.
+       In general, this should refer to the python source file or if that
+       does not exist a pure js file.
+    @param lineno The line number in the associated source file that this
+       warning is being generated at. @note use the __line__ macro.
+    @param module name of the module that is generating this warning.
+       @note use the __name__ macro as a mechanism for creating this
+       string.
+    @param registry This parameter is used to reference the data storage
+       location which houses the state of warnings that have been
+       generated. In most applications, you should leave this value as
+       None. If this value is None, then the internal `warnings` module
+       registry will be used by default. @note this is a deviation from
+       the python standard API.
+    @param module_globals This parameter is carry over from the python
+       implementation and provided to keep the API the same. This
+       parameter is currently not used.
+    """
     lineno = int(lineno)
     if module is None:
         module = filename or "<unknown>"
@@ -400,21 +368,20 @@ def warn_explicit(message, category, filename, lineno,
         # Unrecognized actions are errors
         raise RuntimeError("Unrecognized action ({}) in warnings.filters:\n {}".format(action, item))
     # Print message and context
-    msg = WarningMessage(message, category.__name__, filename, lineno, source)
+    msg = WarningMessage(message, category.__name__, filename, lineno)
     _showwarnmsg(msg)
 
 
 class WarningMessage(object):
 
     def __init__(self, message, category, filename, lineno, file=None,
-                 line=None, source=None):
+                 line=None):
         self.message = message
         self.category = category
         self.filename = filename
         self.lineno = lineno
         self.file = file
         self.line = line
-        self.source = source
 
         self._category_name = category.__name__ if category else None
 
@@ -423,7 +390,9 @@ class WarningMessage(object):
                 "line : {} }}".format(self.message, self._category_name,
                                       self.filename, self.lineno, self.line))
 
-
+# @note - Currently transcrypt does not support "with/as" clauses so
+#    this is currently not going to work. As such, this class will
+#    throw an exception when the user tries to use it.
 class catch_warnings(object):
     """A context manager that copies and restores the warnings filter upon
     exiting the context.
@@ -451,7 +420,7 @@ class catch_warnings(object):
         self._record = record
         #self._module = sys.modules['warnings'] if module is None else module
         self._entered = False
-        raise NotImplementedError()
+        raise NotImplementedError("with/as not well supported in transcrypt")
 
     # def __repr__(self):
     #     args = []

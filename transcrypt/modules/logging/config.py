@@ -39,6 +39,9 @@ This module adds the method `addResolvable` which allows the user
 to add new class objects that can be included in the dict config
 by string representation. See the unit tests for an example
 
+The converter syntax, e.g. `cfg:\\handlers.hdlr1`, is not tested at
+this point and will throw an "NotImplemented" exception if a converter
+sequence is encountered.
 
 """
 
@@ -343,9 +346,10 @@ class BaseConfigurator(object):
                 prefix = d[1] # prefix
                 converter = self.value_converters.get(prefix, None)
                 if converter:
-                    suffix = d[2] # suffix
-                    converter = getattr(self, converter)
-                    value = converter(suffix)
+                    raise NotImplementedError("Converters Not Well Tested!")
+                    #suffix = d[2] # suffix
+                    #converter = getattr(self, converter)
+                    #value = converter(suffix)
         return value
 
     def configure_custom(self, config):

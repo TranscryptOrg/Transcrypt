@@ -50,5 +50,7 @@ floor = Math.floor
 ceil = Math.ceil
 trunc = Math.trunc
 
+isnan = js_isNaN
+
 inf = js_Infinity
 nan = js_NaN
