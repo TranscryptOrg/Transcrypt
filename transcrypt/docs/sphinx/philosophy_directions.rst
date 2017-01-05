@@ -7,7 +7,7 @@ Transcrypt's primary target audience
 Transcrypt is written for internet developers who:
 
 - Prefer Python over JavaScript for the development of complex, yet maintainable web software with minimal lifecycle costs
-- Need their software to be every bit as fast and compact ast the native JavaScript counterparts
+- Need their software to be every bit as fast and compact as the native JavaScript counterparts
 - Want unrestricted use of any JavaScript library or platform
 
 In this primary target audience there are at least two groups to be distinguished and a third group on the border.
