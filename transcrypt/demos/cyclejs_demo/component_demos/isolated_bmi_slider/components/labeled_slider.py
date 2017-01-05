@@ -1,4 +1,4 @@
-from snabbdom import span, input, div
+from components.snabbdom import span, input, div
 
 
 def LabeledSlider(sources):
