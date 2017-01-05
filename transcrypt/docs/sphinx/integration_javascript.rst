@@ -30,13 +30,13 @@ Turtle graphics in Transcrypt do not require the use of any graphics libraries. 
 	:tab-width: 4
 	:caption: Drawing a alternatingly floodfilled star
 	
-`Click here to view the resulting zoomable star <http://www.transcrypt.org/live/demos/turtle_demos/star.html>`_.
+`Click here to view the resulting zoomable star <http://www.transcrypt.org/live/transcrypt/demos/turtle_demos/star.html>`_.
 	
 .. literalinclude:: ../../demos/turtle_demos/snowflake.py
 	:tab-width: 4
 	:caption: Drawing the contours of a snowflake
 
-`Click here to view the resulting zoomable snowflake <http://www.transcrypt.org/live/demos/turtle_demos/snowflake.html>`_.
+`Click here to view the resulting zoomable snowflake <http://www.transcrypt.org/live/demos/transcrypt/turtle_demos/snowflake.html>`_.
 	
 .. literalinclude:: ../../modules/turtle/__init__.py
 	:tab-width: 4
