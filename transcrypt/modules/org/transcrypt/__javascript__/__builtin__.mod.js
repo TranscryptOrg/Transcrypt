@@ -64,7 +64,7 @@ __pragma__ ('endif')
     }
     __all__.__kwargtrans__ = __kwargtrans__;
 
-    // Property installer function, no member since that would bloat classes
+    // Python property installer function, no member since that would bloat classes
     var property = function (getter, setter) {  // Returns a property descriptor rather than a property
         if (!setter) {  // ??? Make setter optional instead of dummy?
             setter = function () {};
@@ -73,7 +73,7 @@ __pragma__ ('endif')
     }
     __all__.property = property;
     
-    // Conditional property installer function, prevents redefinition of properties if multiple Transcrypt apps are on one page
+    // Conditional JavaScript property installer function, prevents redefinition of properties if multiple Transcrypt apps are on one page
     var __setProperty__ = function (anObject, name, descriptor) {
         if (!anObject.hasOwnProperty (name)) {
             Object.defineProperty (anObject, name, descriptor);
