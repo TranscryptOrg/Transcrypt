@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/module_math/__javascript__/module_math.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/module_math/__init__.py"
+	],
+	"sourcesContent": [
+		"from math import *\n\ndef _check(nr, autoTester):\n    # we just compare the first 15 digits of floats due to precision deviations\n    # in browser and CPython:\n    if isinstance(nr, float):\n        nr = str(nr)[:15]\n    autoTester.check(nr)\n\n\ndef run (autoTester):\n    check = lambda nr: _check(nr, autoTester)\n    check (pi)\n    check (e)\n    \n    check (exp (3))\n    check (int (expm1 (5)))\n    \n    check (log (0.2))\n    check (round (log (1024, 2)))\n    check (log1p (5))\n    check (int (log2 (257)))\n    check (int (log10 (1001)))\n    \n    check (pow (3, 4.5))\n    check (sqrt (25.1))\n    \n    check (sin (10))\n    check (cos (10))\n    check (tan (10))\n\n    check (asin (0.5))\n    check (acos (0.5))\n    check (atan (0.5))\n    check (atan2 (1, 2))\n    \n    check (int (hypot (3, 4.1)))\n    \n    check (degrees (pi/2.1))\n    check (radians (90))\n    \n    check (sinh (1))\n    check (cosh (1))\n    check (tan (1))\n    \n    check (asinh (70))\n    check (acosh (70))\n    check (atan (70))\n    \n    check (floor (3.5))\n    check (ceil (3.5))\n    check (trunc (3.5))\n    \n    check (isnan (3))\n    check (isnan (nan))\n    \n    \n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAGA;AACA;AAAA;AACA;AAAA;AAGA;AACA;AAAA;AAAA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AAEA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

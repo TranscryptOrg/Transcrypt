@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/simple_and_augmented_assignment/__javascript__/simple_and_augmented_assignment.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/simple_and_augmented_assignment/__init__.py"
+	],
+	"sourcesContent": [
+		"class A:\n    def __init__ (self):\n        self.i = 0\n        \n    def f (self):\n        return self.i\n\na = A ()\n        \ndef run (autoTester):\n    x = 3\n    y = 5\n    z = x + y\n    autoTester.check (z)\n    \n    l = [1, 2, 3]\n    l [1] = l [2]\n    autoTester.check (l)\n    \n    # Should generate x++\n    x += 1\n    autoTester.check (x)\n    x += +1\n    autoTester.check (x)\n    x -= -1\n    autoTester.check (x)\n    \n    # Should generate y--\n    y -= 1\n    autoTester.check (y)\n    y -= +1\n    autoTester.check (y)\n    y += -1\n    autoTester.check (y)\n    \n    x += -3\n    autoTester.check (x)\n    \n    x += 6\n    autoTester.check (x)\n    \n    y -= 3\n    autoTester.check (y)\n    \n    l [1] += l [1]\n    autoTester.check (l)\n    \n    x += y\n    y += x\n    \n    autoTester.check (x, y)\n    \n    f = a.f\n    \n    a.i += 1\n    autoTester.check (f ())\n    \n    a.i += 10\n    autoTester.check (f ())\n    \n    a.i += a.i\n    autoTester.check (f ())\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAEA;AAEA;AACA;AACA;AACA;AACA;AAEA;AACA;AACA;AAAA;AAIA;AAAA;AAEA;AAAA;AAEA;AAAA;AAIA;AAAA;AAEA;AAAA;AAEA;AAAA;AAGA;AAAA;AAGA;AAAA;AAGA;AAAA;AAGA;AAAA;AAAA;AAKA;AAEA;AAAA;AAGA;AAAA;AAGA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

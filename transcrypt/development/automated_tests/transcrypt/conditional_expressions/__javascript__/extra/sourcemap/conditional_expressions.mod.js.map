@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/conditional_expressions/__javascript__/conditional_expressions.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/conditional_expressions/__init__.py"
+	],
+	"sourcesContent": [
+		"def f (x, b):\n    return x * x if b else x + x\n\ndef run (autoTester):\n    bools = (False, True)\n    for a in bools:\n        for b in bools:\n            autoTester.check (f (10 if a else 100, b))\n            \n    for p in bools:\n        for q in bools:\n            for r in bools:\n                autoTester.check ('a' if p else 'b' if q else 'c' if r else 'd')\n                \n                a = ((('e' if p else 'f') if q else 'g') if r else 'h')\n                b = ('i' if p else ('j' if q else ('k' if r else 'l')))\n                c = 'm' if (p if q else r) else 'n'\n                d = 'o' if p < q <= r else 'p'\n                autoTester.check (a, b, c, d)\n                \n    odd = [x if x % 2 else x + 1 for x in range (10)]\n    noDuplicates = set (odd)\n    autoTester.check (odd, noDuplicates)\n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AACA;AAEA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

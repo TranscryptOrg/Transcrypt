@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/complex_numbers/__javascript__/complex_numbers.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/complex_numbers/__init__.py"
+	],
+	"sourcesContent": [
+		"from org.transcrypt.stubs.browser import __pragma__\n\ndef run (autoTester):\n    x = 567\n    y = -3\n    z = 5 * x + 2 * y\n    autoTester.check (x, y, z)\n\n    __pragma__ ('opov')\n    \n    a = 234 + 3j\n    b = 4 - 5j\n    c = complex (-6, 7)\n    autoTester.check (a, b, c)\n    \n    t = 6 * x - 3 * y + 7   # Just to check, faster with 'noopov'\n    autoTester.check (t)\n    \n    d = 2 * a\n    e = x * b\n    f = z + d + e\n    g = a / b\n    h = a - b\n    i = x - c\n    j = a - x\n    k = b + y\n    \n    autoTester.check (d, e, f, round (g.real, 2), round (g.imag, 2), h, i, j, k)\n    \n    __pragma__ ('noopov')\n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AACA;AAIA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

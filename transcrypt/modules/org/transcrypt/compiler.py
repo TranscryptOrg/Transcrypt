@@ -1959,7 +1959,7 @@ class Generator (ast.NodeVisitor):
             if len (node.orelse) == 1 and node.orelse [0].__class__.__name__ == 'If':
                 # elif statement
                 self.emit ('else ')
-                self.visit (node.orelse[0])
+                self.visit (node.orelse [0])
             else:
                 self.adaptLineNrString (node.orelse)
 

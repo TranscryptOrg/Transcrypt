@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/div_pulls/__javascript__/div_pulls.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/div_pulls/__init__.py"
+	],
+	"sourcesContent": [
+		"# Also contains small enhancements\n\n'This is a single line docstring'\nclass A:\n    '''\n    This\n    is \n    a \n    multiline\n    docstring\n    '''\n    def __init__ (self, x):\n        'This is a single line comment'\n        self.x = x\n        '''\n        This\n        is \n        a \n        multiline\n        docstring\n        '''\n    'This is a single line docstring'\n'''\nThis\nis \na \nmultiline\ndocstring\n'''\n\na = A (5.5)\n\ndef run (autoTester):   \n    autoTester.check ('Pull 56')\n    s = 'abcdefghij'\n    autoTester.check (s [2:3])\n    autoTester.check (s [:3])\n    autoTester.check (s [2:])\n    autoTester.check (s [::2])\n    \n    autoTester.check ('Pull 59')\n    autoTester.check (list (filter (lambda x: x % 2 == 0, range (10))))\n    autoTester.check (list (map (lambda x: x*x, range (0, 31, 3))))\n    \n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AAQA;AAEA;AAAA;AAAA;AAiBA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
