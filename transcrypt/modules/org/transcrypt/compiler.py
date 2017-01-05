@@ -481,6 +481,7 @@ class Generator (ast.NodeVisitor):
             ('del', 'py_del'),                      ('js_del', 'del'),
             ('false', 'py_false'),
                                                     ('js_from', 'from'),
+                                                    ('js_global', 'global'),
             ('Infinity', 'py_Infinity'),            ('js_Infinity', 'Infinity'),
             ('isNaN', 'py_isNaN'),                  ('js_isNaN', 'isNaN'),
             ('iter', 'py_iter'),                    ('js_iter', 'iter'),
