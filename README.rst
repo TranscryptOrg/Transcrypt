@@ -108,6 +108,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Enhancement for issue #247: One web page can now hold multiple Transcrypt apps
+- Fixes for issues #254 and #252, both having to do with sourcemap being one line off in else clause
 - Emulation of sync console I/O for educational purposes, text only
 - Autotest output now in tabular form for easy comparison, incl. source line nrs
 - Fix for issue #178: List Comprehensions / Operator Precedence Bug
