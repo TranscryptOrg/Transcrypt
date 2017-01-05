@@ -1843,7 +1843,7 @@ class Generator (ast.NodeVisitor):
                 self.prevTemp ('iterable')
 
         if node.orelse:
-            self.adaptLineNrString (node.orelse)
+            self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node and line nr
 
             self.emit ('if (!{}) {{\n', self.getTemp ('break'))
             self.prevTemp ('break')
@@ -1958,12 +1958,12 @@ class Generator (ast.NodeVisitor):
 
         if node.orelse:
             if len (node.orelse) == 1 and node.orelse [0].__class__.__name__ == 'If':
-                # elif statement, we stay on the same line
+                # elif statement, we stay on the same line, no need to call adaptLineNrString
                 self.emit ('else ')
                 self.visit (node.orelse [0])
             else:
-                self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node that could contain a line nr.
-
+                self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node and line nr
+                
                 self.emit ('else {{\n')
                 self.indent ()
                 self.emitBody (node.orelse)
@@ -2518,7 +2518,7 @@ class Generator (ast.NodeVisitor):
         self.emit ('}}\n')
 
         if node.orelse:
-            self.adaptLineNrString (node.orelse)
+            self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node and line nr
 
             self.emit ('if (!{}) {{\n', self.getTemp ('break'))
             self.prevTemp ('break')
