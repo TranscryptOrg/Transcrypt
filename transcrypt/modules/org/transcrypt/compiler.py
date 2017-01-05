@@ -689,12 +689,12 @@ class Generator (ast.NodeVisitor):
         if self.allowConversionToTruthValue:
             self.emit (')')
 
-    def adaptLineNrString (self, node):
+    def adaptLineNrString (self, node, offset = 0):
         if utils.commandArgs.map or utils.commandArgs.anno: # Under these conditions, appended line numbers will be stripped later, so they have to be there
             if hasattr (node, 'lineno'):
-                lineNr = node.lineno    # Use new line number
+                lineNr = node.lineno + offset   # Use new line number
             else:
-                lineNr = self.lineNr    # Use 'cached' line nubmer
+                lineNr = self.lineNr + offset   # Use 'cached' line nubmer
 
             self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
         else:                                               # __pragma__ ('noanno') isn't enough to perform this else-clause and to later on take the 'no stripping' shortcut
@@ -1958,11 +1958,11 @@ class Generator (ast.NodeVisitor):
 
         if node.orelse:
             if len (node.orelse) == 1 and node.orelse [0].__class__.__name__ == 'If':
-                # elif statement
+                # elif statement, we stay on the same line
                 self.emit ('else ')
                 self.visit (node.orelse [0])
             else:
-                self.adaptLineNrString (node.orelse)
+                self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node that could contain a line nr.
 
                 self.emit ('else {{\n')
                 self.indent ()
