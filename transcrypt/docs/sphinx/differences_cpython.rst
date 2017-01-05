@@ -33,7 +33,7 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 - The name *type* cannot be used as an ordinary identifier.
 - You can use 'require' to load JavaScript modules on the fly and access them just as you would from JavaScript.
 
-Differences due to running Transcryp applications in the browser, rather than on the desktop
+Differences due to running Transcrypt applications in the browser, rather than on the desktop
 --------------------------------------------------------------------------------------------
 
 - Transcrypt doesn't directly support the use of libraries written in C++ since, without special measures like compiling to asm.js, C++ doesn't run in the browser.
