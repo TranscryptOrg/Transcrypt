@@ -1,6 +1,6 @@
 # ====== Legal notices
 #
-# Copyright 2014, 2015, 2016 Jacques de Hooge, GEATEC engineering, www.geatec.com
+# Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -964,7 +964,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.msg)
             self.emit (');\n')
 
-    def visit_Assign (self, node):
+    def visit_Assign (self, node):       
         self.adaptLineNrString (node)
 
         targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
@@ -980,7 +980,19 @@ class Generator (ast.NodeVisitor):
 
             if type (target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
                 if type (target.slice) == ast.Index:        # Always overloaded
-                    if type (target.slice.value) == ast.Tuple:
+                    if self.isCall (node.targets [0] .value, 'globals'):
+                        # Create assignments on the fly and visit it
+                        # Note that the RHS may be quite complex, e.g. a Python list comprehension
+                        self.visit (ast.Assign (
+                            targets = [ast.Name (
+                                id = self.nextTemp ('temp'),
+                                ctx = ast.Store
+                            )],
+                            value = value
+                        ))
+                        self.emit (';\neval (\'{} = {{}}\'.format ({}))\n', node.targets [0] .slice.value.id, self.getTemp ('temp'))
+                        self.prevTemp ('temp')
+                    elif type (target.slice.value) == ast.Tuple:
                         self.visit (target.value)
                         self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
                         self.stripTuple = True
@@ -1103,7 +1115,7 @@ class Generator (ast.NodeVisitor):
         # So we introduce the restriction that an assignment involves no properties at all or only properties
         # Also these properties have to use the 'property' function 'literally'
         # With these restrictions we can recognize property installation at compile time
-
+        
         if len (node.targets) == 1 and type (node.targets [0]) in targetLeafs:
             # Fast shortcut for the most frequent and simple case
             assignTarget (node.targets [0], node.value)
@@ -2353,7 +2365,11 @@ class Generator (ast.NodeVisitor):
     # LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
     def visit_Subscript (self, node):
         if type (node.slice) == ast.Index:
-            if type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
+            if self.isCall (node.value, 'globals'):
+                self.emit ('eval (')
+                self.visit (node.slice.value)
+                self.emit (')')
+            elif type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
                 self.visit (node.value)
                 self.emit ('.__getitem__ (')
                 self.stripTuple = True
