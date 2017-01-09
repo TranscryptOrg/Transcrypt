@@ -18,8 +18,8 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-Latest stable release: Athens
-=============================
+Latest stable release: Paris
+============================
 
 To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation 
 <http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/>`_.
@@ -108,9 +108,10 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- Function globals () is now available to programmatially set module attribs, issue #251
+- Function globals () is now available to dynamically get and set module attribs, issue #251
 - Demo for cyclejs was added, also to the shipment test
 - Enhancement for issue #247: One web page can now hold multiple Transcrypt apps
+- Regular expression module finished! (issue #98)
 - Fixes for issues #254 and #252, both having to do with sourcemap being one line off in else clause
 - Emulation of sync console I/O for educational purposes, text only
 - Autotest output now in tabular form for easy comparison, incl. source line nrs
