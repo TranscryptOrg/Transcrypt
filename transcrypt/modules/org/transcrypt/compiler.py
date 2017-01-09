@@ -981,7 +981,7 @@ class Generator (ast.NodeVisitor):
             if type (target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
                 if type (target.slice) == ast.Index:        # Always overloaded
                     if self.isCall (node.targets [0] .value, 'globals'):
-                        # Create assignments on the fly and visit it
+                        # Create assignment on the fly and visit it
                         # Note that the RHS may be quite complex, e.g. a Python list comprehension
                         self.visit (ast.Assign (
                             targets = [ast.Name (
@@ -990,7 +990,13 @@ class Generator (ast.NodeVisitor):
                             )],
                             value = value
                         ))
-                        self.emit (';\neval (\'{} = {{}}\'.format ({}))\n', node.targets [0] .slice.value.id, self.getTemp ('temp'))
+                        try:
+                            self.emit (';\neval (\'var {{}} = {}\'.format ({}));\n', self.getTemp ('temp'), self.filterId (node.targets [0] .slice.value.id))
+                            self.emit ('console.log (777, {});\n', self.filterId (node.targets [0] .slice.value.id))
+                            self.emit ('console.log (eval ({}));\n', self.filterId (node.targets [0] .slice.value.id))
+                            self.emit ('__all__[{}] = {}', self.filterId (node.targets [0] .slice.value.id), self.getTemp ('temp'))
+                        except Exception as e:
+                            print (e)
                         self.prevTemp ('temp')
                     elif type (target.slice.value) == ast.Tuple:
                         self.visit (target.value)

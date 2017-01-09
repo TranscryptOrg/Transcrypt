@@ -103,7 +103,7 @@ __pragma__ ('endif')
     __all__.__merge__ = __merge__;
 
     // Manipulating attributes by name
-
+    
     var dir = function (obj) {
         var aList = [];
         for (var aKey in obj) {
@@ -112,17 +112,16 @@ __pragma__ ('endif')
         aList.sort ();
         return aList;
     };
+    __all__.dir = dir;
 
     var setattr = function (obj, name, value) {
         obj [name] = value;
     };
-
     __all__.setattr = setattr;
 
     var getattr = function (obj, name) {
         return obj [name];
     };
-
     __all__.getattr= getattr;
 
     var hasattr = function (obj, name) {
