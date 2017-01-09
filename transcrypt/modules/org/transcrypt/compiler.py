@@ -983,21 +983,11 @@ class Generator (ast.NodeVisitor):
                     if self.isCall (node.targets [0] .value, 'globals'):
                         # Create assignment on the fly and visit it
                         # Note that the RHS may be quite complex, e.g. a Python list comprehension
-                        self.visit (ast.Assign (
-                            targets = [ast.Name (
-                                id = self.nextTemp ('temp'),
-                                ctx = ast.Store
-                            )],
-                            value = value
-                        ))
-                        try:
-                            self.emit (';\neval (\'var {{}} = {}\'.format ({}));\n', self.getTemp ('temp'), self.filterId (node.targets [0] .slice.value.id))
-                            self.emit ('console.log (777, {});\n', self.filterId (node.targets [0] .slice.value.id))
-                            self.emit ('console.log (eval ({}));\n', self.filterId (node.targets [0] .slice.value.id))
-                            self.emit ('__all__[{}] = {}', self.filterId (node.targets [0] .slice.value.id), self.getTemp ('temp'))
-                        except Exception as e:
-                            print (e)
-                        self.prevTemp ('temp')
+                        self.emit ('__all__ [')
+                        self.visit (node.targets [0] .slice.value)
+                        self.emit ('] = ')
+                        self.visit (value)
+                        self.emit (';\n')
                     elif type (target.slice.value) == ast.Tuple:
                         self.visit (target.value)
                         self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
@@ -2372,9 +2362,9 @@ class Generator (ast.NodeVisitor):
     def visit_Subscript (self, node):
         if type (node.slice) == ast.Index:
             if self.isCall (node.value, 'globals'):
-                self.emit ('eval (')
+                self.emit ('__all__ [')
                 self.visit (node.slice.value)
-                self.emit (')')
+                self.emit (']')
             elif type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
                 self.visit (node.value)
                 self.emit ('.__getitem__ (')
