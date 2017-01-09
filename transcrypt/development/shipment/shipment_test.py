@@ -68,9 +68,9 @@ os.system ('{} -h'.format (transpileCommand))
 for esvSwitch in ('', '-e 6 '):
     for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
         switches = fcallSwitch + esvSwitch
-        '''
+        
         test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
-        test ('demos/cyclejs_demo', 'terminal_demo', False, False, switches)
+        test ('demos/terminal_demo', 'terminal_demo', False, False, switches)
         
         test ('development/automated_tests/hello', 'autotest', True, False, switches)
         test ('development/automated_tests/transcrypt', 'autotest', True, False, switches + '-c ')  
@@ -94,7 +94,6 @@ for esvSwitch in ('', '-e 6 '):
         test ('demos/turtle_demos', 'snowflake', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'mondrian', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'mandala', False, False, switches + '-p .user ')
-        '''
                 
         test ('demos/cyclejs_demo', 'cyclejs_demo', False, False, switches)
         test ('demos/cyclejs_demo', 'cyclejs_http_demo', False, False, switches)
