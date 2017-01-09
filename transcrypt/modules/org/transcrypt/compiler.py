@@ -3,7 +3,7 @@
 # Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# you may not use this file except in compliance withhe License.
 # You may obtain a copy of the License at
 #   http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -980,15 +980,7 @@ class Generator (ast.NodeVisitor):
 
             if type (target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
                 if type (target.slice) == ast.Index:        # Always overloaded
-                    if self.isCall (node.targets [0] .value, 'globals'):
-                        # Create assignment on the fly and visit it
-                        # Note that the RHS may be quite complex, e.g. a Python list comprehension
-                        self.emit ('__all__ [')
-                        self.visit (node.targets [0] .slice.value)
-                        self.emit ('] = ')
-                        self.visit (value)
-                        self.emit (';\n')
-                    elif type (target.slice.value) == ast.Tuple:
+                    if type (target.slice.value) == ast.Tuple:
                         self.visit (target.value)
                         self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
                         self.stripTuple = True
@@ -1305,6 +1297,9 @@ class Generator (ast.NodeVisitor):
                 if len (node.args) > 1:
                     self.emit (', {}.{}'.format (self.getScope (ast.ClassDef) .node.name, node.args [1].id))
                 self.emit (')')
+                return
+            elif node.func.id == 'globals':
+                self.emit ('__globals__ (__all__)')
                 return
             elif node.func.id == '__pragma__':
                 if node.args [0] .s == 'alias':
@@ -2361,11 +2356,7 @@ class Generator (ast.NodeVisitor):
     # LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
     def visit_Subscript (self, node):
         if type (node.slice) == ast.Index:
-            if self.isCall (node.value, 'globals'):
-                self.emit ('__all__ [')
-                self.visit (node.slice.value)
-                self.emit (']')
-            elif type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
+            if type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
                 self.visit (node.value)
                 self.emit ('.__getitem__ (')
                 self.stripTuple = True

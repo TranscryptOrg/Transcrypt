@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/incidental_tests/sourcemap_else/__javascript__/test_sourcemap_else.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/incidental_tests/sourcemap_else/test_sourcemap_else.py"
+	],
+	"sourcesContent": [
+		"if True:\n    a = 1\nelse:\n    a = 2\n    \nif False:\n    a = 1\nelif False:\n    a = 2\nelif False:\n    a = 3\nelse:\n    a = 4\n\nfor i in range (3):\n    a = 1\nelse:\n    a = 2\n\nwhile False:\n    a = 1\nelse:\n    a = 2\n    \ntry:\n    a = 1\nexcept:\n    a = 2\nelse:\n    a = 3\n    "
+	],
+	"mappings": "AAAA;AAAA;AACA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AACA;AACA;AAAA;AACA;AACA;AAAA;AACA;AACA;AAAA;AAEA;AAAA;AACA;AAAA;AACA;AACA;AAAA;AAEA;AAAA;AACA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAIA;AAAA;AAAA;AAAA;AAAA;AAAA;AAFA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

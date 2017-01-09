@@ -30,6 +30,7 @@ if '__py3.6__' in __symbols__:      # Needed because CPython doesn't understand 
 __pragma__ ('endif')
 
 import general_functions
+import globals_function
 import indices_and_slices
 
 __pragma__ ('ifdef', '__esv6__')
@@ -96,6 +97,7 @@ if '__py3.6__' in __symbols__:
     autoTester.run (fstrings, 'fstrings')
 __pragma__ ('endif')
 
+autoTester.run (globals_function, 'globals_function')
 autoTester.run (general_functions, 'general_functions')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 

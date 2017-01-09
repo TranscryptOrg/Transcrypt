@@ -307,8 +307,8 @@ class AutoTester:
 				self.ui.setOutputStatus(False)
 				self.ui.showException(testletName, exc)
 			else:
-				# Error - no UI yet
-				raise Exception("No Valid UI instance yet")
+				# Error - No UI yet, reraise specific exception to enable finding out why
+				raise
 
 
 	def done (self):

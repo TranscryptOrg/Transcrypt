@@ -1,0 +1,36 @@
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\demos\cyclejs_demo\component_demos\isolated_bmi_slider>C:\Python35\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -n bmi.py 
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.6.3
+Copyright (C) Geatec Engineering. License: Apache 2.0
+
+
+Error in program bmi.py, module snabbdom, line 1: 
+	Attempt to load module: snabbdom
+	Can't find any of:
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/exe/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/exe/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/src/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/src/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/src_pyo/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/customers/marco_gotte/cardioWorkflowNT/src_pyo/pythonLibrary/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/__javascript__/snabbdom.mod.js
+		D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/__javascript__/snabbdom.mod.js
+		C:/Python35/python35.zip/__javascript__/snabbdom.mod.js
+		C:/Python35/python35.zip/__javascript__/snabbdom.mod.js
+		C:/Python35/DLLs/__javascript__/snabbdom.mod.js
+		C:/Python35/DLLs/__javascript__/snabbdom.mod.js
+		C:/Python35/lib/__javascript__/snabbdom.mod.js
+		C:/Python35/lib/__javascript__/snabbdom.mod.js
+		C:/Python35/__javascript__/snabbdom.mod.js
+		C:/Python35/__javascript__/snabbdom.mod.js
+		C:/Python35/lib/site-packages/__javascript__/snabbdom.mod.js
+		C:/Python35/lib/site-packages/__javascript__/snabbdom.mod.js
+
+
+Aborted

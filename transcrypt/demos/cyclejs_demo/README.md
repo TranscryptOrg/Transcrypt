@@ -1,7 +1,7 @@
 # Cycle JS Demos
 
 These were transcribed from https://cycle.js.org/ examples and should give you
-a feel how Transcrypt feels within a cycle js app context.
+a feel how Transcrypt fits within a cycle js app context.
 
 
 ## CycleJS Sources
