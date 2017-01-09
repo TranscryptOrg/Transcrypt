@@ -68,14 +68,19 @@ os.system ('{} -h'.format (transpileCommand))
 for esvSwitch in ('', '-e 6 '):
     for fcallSwitch in (('', '-f ') if commandArgs.fcall else ('',)):
         switches = fcallSwitch + esvSwitch
+        '''
         test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
+        test ('demos/cyclejs_demo', 'terminal_demo', False, False, switches)
+        
         test ('development/automated_tests/hello', 'autotest', True, False, switches)
         test ('development/automated_tests/transcrypt', 'autotest', True, False, switches + '-c ')  
         test ('development/automated_tests/time', 'autotest', True, False, switches)    
+        
         test ('development/manual_tests/module_random', 'module_random', False, False, switches)
         test ('development/manual_tests/transcrypt_only', 'transcrypt_only', False, False, switches)
         test ('development/manual_tests/transcrypt_and_python_results_differ', 'results', False, False, switches)
         test ('development/manual_tests/static_types', 'static_types', False, False, switches + '-ds -dc -n ', 'static_types')
+        
         test ('demos/hello', 'hello', False, False, switches)
         test ('demos/jquery_demo', 'jquery_demo', False, False, switches)
         test ('demos/d3js_demo', 'd3js_demo', False, False, switches)
@@ -84,11 +89,18 @@ for esvSwitch in ('', '-e 6 '):
         test ('demos/riot_demo', 'riot_demo', False, False, switches)
         test ('demos/plotly_demo', 'plotly_demo', False, False, switches)
         test ('demos/pong', 'pong', False, False, switches)
+        
         test ('demos/turtle_demos', 'star', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'snowflake', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'mondrian', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'mandala', False, False, switches + '-p .user ')
-        test ('demos/terminal_demo', 'terminal_demo', False, False, switches)
+        '''
+                
+        test ('demos/cyclejs_demo', 'cyclejs_demo', False, False, switches)
+        test ('demos/cyclejs_demo', 'cyclejs_http_demo', False, False, switches)
+        test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider', 'bmi', False, False, switches)
+        test ('demos/cyclejs_demo/component_demos/labeled_slider', 'labeled_slider', False, False, switches)
+        
 
 # Make docs optionally since they cause a lot of diffs  
 # Make them before target files are erased, since they are to be included in the docs
