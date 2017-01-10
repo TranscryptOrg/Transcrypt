@@ -9,7 +9,7 @@ Table of Contents:
 
 .. toctree::
 	:numbered:
-	:maxdepth: 2
+	:maxdepth: 3
 	
 	what_why
 	installation_use

@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Documentation updated, also on-line
 - Fix for issue #256: Parenthesis aren't translated (before dot, e.g. in return)
 - Option -b (or --blind) added to shipment test. Running it with -c (or --clean) -b (or --blind) will not show anything, just clean repo by removing all generated files. Meant for usage before a commit.
 - [Release Paris (PyPi v3.6.4, GitHub #14): Support for Python 3.6, div. fixes and enhancements]

@@ -80,9 +80,9 @@ def run(test):
     test.check( str(v) )
 
     # @note - in python the dictionary key
-    #     ordering if not specified. So the following tests
+    #     ordering is not specified. So the following tests
     #     cannot be reliably completed when there are more than
-    #     one key in a dict - so I've skipped this test coverage.
+    #     one key in a dict - so this test coverage was skipped for now.
 
     d = { "asdf": 3.4 }
     test.check( repr( d ) )

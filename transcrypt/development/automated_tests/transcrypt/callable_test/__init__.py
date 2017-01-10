@@ -37,37 +37,37 @@ def run(test):
 
     __pragma__('opov')
 
-    class callObj(object):
+    class CallObj(object):
         def __init__(self, r):
             self._r = r
 
         def __call__(self):
             return(self._r)
 
-    test.check( callable(callObj) )
+    test.check( callable(CallObj) )
 
-    obj = callObj(2)
+    obj = CallObj(2)
     test.check(obj())
     test.check( callable(obj) )
     test.check( callable(obj._r) )
 
-    class nonCallObj(object):
+    class NonCallObj(object):
         def __init__(self, b):
             self._b = b
 
         def func(self):
             return(self._b)
 
-    test.check( callable(nonCallObj) )
+    test.check( callable(NonCallObj) )
 
-    obj2 = nonCallObj(2)
+    obj2 = NonCallObj(2)
     test.check( callable(obj2) )
     test.check( callable(obj2._b) )
     test.check( callable(obj2.func) )
 
     __pragma__('noopov')
 
-    class nonOpovNonCallObj(object):
+    class NonOpovNonCallObj(object):
         """
         """
         def __init__(self, c):
@@ -83,7 +83,7 @@ def run(test):
 
         C = property(_getC, _setC)
 
-    obj = nonOpovNonCallObj(4)
+    obj = NonOpovNonCallObj(4)
     test.check( callable(obj) )
     test.check( callable(obj.other) )
     test.check( callable(obj._c) )

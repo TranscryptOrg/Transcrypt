@@ -38,8 +38,8 @@ To experiment with Transcrypt yourself:
 
 You may also want to try the demo's.
 
-Troubleshooting checklist
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Installation troubleshooting checklist
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Transcrypt was installed using *pip*, but *import transcrypt* fails. Transcrypt isn't a library but a compiler. Install and run it as described in this chapter.
 2. Transcrypt reports an error containing the word 'java'. Transcrypt produces both prettyfied and minified JavaScript output. For the minification it makes use of the Google Closure Compiler, which is included in the distribution and requires Java to run. You can check proper installation of Java by typing the word *java* on the command line. This should give you a list of options: *Usage: java [-options] class []args...]* and so on. If you can't or won't install Java, you can run Transcrypt without minification by using the *-n* command line switch.
@@ -160,4 +160,8 @@ Below is an example of code with type hints and deliberate inconsistencies, and 
 .. literalinclude:: ../../development/manual_tests/static_types/static_types.out
 	:tab-width: 4
 	:caption: Results of the static type validation and the lightweight consistency check
+    
+Getting help and giving feedback
+--------------------------------
+If you have coding questions with regard to Transcrypt applications, the best place to ask for help is `StackOverflow (tag: Transcrypt) <http://stackoverflow.com/questions/tagged/transcrypt/>`_. For bugs and feature requests use the `Transcrypt issue list on GitHub <https://github.com/QQuick/Transcrypt/issues>`_. For any matters with regard to Transcrypt you'd like to ask or discuss you can also send a email to info@transcrypt.org.
 	

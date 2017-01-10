@@ -32,6 +32,15 @@ Attribute proxies by name: __getattr__, __setattr__
 	:tab-width: 4
 	:caption: Testlet: proxies
 
+Callable or not: using the callable () built-in function
+--------------------------------------------------------
+
+The *callable (object)* built-in function will tell you if something supports the () operator.
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/callable_test/__init__.py
+	:tab-width: 4
+	:caption: Testlet: callable_test
+    
 Classes: multiple inheritance and assignment of bound functions
 ---------------------------------------------------------------
 
@@ -83,6 +92,15 @@ Dict comprehensions
 	:tab-width: 4
 	:caption: Testlet: dict_comprehensions
 	
+Dictionaries: dict revisited
+----------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/dictionaries/__init__.py
+	:tab-width: 4
+	:caption: Testlet: dictionaries
+
+.. _autotest_docstrings:
+	
 Diverse issues
 --------------
 
@@ -96,15 +114,6 @@ Diverse pulls
 .. literalinclude:: ../../development/automated_tests/transcrypt/div_pulls/__init__.py
 	:tab-width: 4
 	:caption: Testlet: div_pulls
-	
-Dictionaries: dict revisited
-----------------------------
-
-.. literalinclude:: ../../development/automated_tests/transcrypt/dictionaries/__init__.py
-	:tab-width: 4
-	:caption: Testlet: dictionaries
-
-.. _autotest_docstrings:
 	
 Docstrings: __doc__ attribute generated optionally
 --------------------------------------------------
@@ -135,6 +144,39 @@ General functions: sort and sorted
 .. literalinclude:: ../../development/automated_tests/transcrypt/general_functions/__init__.py
 	:tab-width: 4
 	:caption: Testlet: general_functions
+
+Global variable access by using globals () [<variable_name>]
+------------------------------------------------------------
+
+The *globals ()* function does the same as its counterpart in CPython, with some restrictions.
+
+In the same module:
+
+- *globals ()* can retrieve all module-level variables, wether created via *globals ()* or in the normal way
+- module-level variables created via *globals ()* can only be retrieved by *globals ()*, not as a normal variable
+
+From a different module:
+
+- *globals ()* can retrieve all module-level variables, wether created by *globals ()* or in the normal way
+- module-level variables created by *globals ()* can be retrieved by *globals ()*, but also as a normal variable
+
+Since imports are done (statically) at compile time, *from ... import \** will not include the variables created (dynamically) via *globals ()*.
+You can however import the whole module, e.g. *import <longName> as <shortName>* and then use *<shortName>.<dynamicallyCreatedVariable>*.
+
+The code below shows what's possible:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/globals_function/sub.py
+	:tab-width: 4
+	:caption: Testlet: globals_function, module sub
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/globals_function/__init__.py
+	:tab-width: 4
+	:caption: Testlet: globals_function, main program
+    
+The output will be:
+
+.. figure:: ../images/autotest_global_functions.png
+	:alt: Output of 'global_functions autotest' 
 
 Indices and slices: LHS, RHS, basic and extended
 ------------------------------------------------
@@ -242,6 +284,13 @@ Properties
 .. literalinclude:: ../../development/automated_tests/transcrypt/properties/__init__.py
 	:tab-width: 4
 	:caption: Testlet: properties
+		
+Representation as text: the repr and str built-in functions
+-----------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/reprtest/__init__.py
+	:tab-width: 4
+	:caption: Testlet: reprtest
 		
 Set comprehensions
 ------------------
