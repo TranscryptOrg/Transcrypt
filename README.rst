@@ -110,6 +110,7 @@ What's new in the latest commits
 
 - Fix for issue #256: Parenthesis aren't translated (before dot, e.g. in return)
 - Option -b (or --blind) added to shipment test. Running it with -c (or --clean) -b (or --blind) will not show anything, just clean repo of all generated files before commit.
+- [Release Paris (PyPi v3.6.4, GitHub #14): Support for Python 3.6, div. fixes and enhancements]
 - Function globals () is now available to dynamically get and set module attribs, issue #251
 - Demo for cyclejs was added, also to the shipment test
 - Enhancement for issue #247: One web page can now hold multiple Transcrypt apps
@@ -123,32 +124,7 @@ What's new in the latest commits
 - Enhancement for issue #89 and #149: __getattr__ and __setattr__ are now supported, requiring the -e 6 switch. Testlet 'proxies' added.
 - New aliases added to prevent name clashes. The orignal name can always be reached by prepending js_. So e.g. if you need 'clear' in JS, use 'js_clear' in Python. A complete list of aliases is in the docs. Any alias can be undefined to maintain backward compatibility, e.g __pragma__ ('noalias', 'clear').
 - Enhancement for issue #169: Add support for float('inf') and float('-inf')
-- Python 3.6 numbers with dashes added
-- Python 3.6 fstrings added 
-- Travis CI test for the exceptions testlet repaired
-- Initial version of chapter 'Differences with CPython' added to docs
-- Travis CI activated
-- Procedural improvement for issue #160: Sphinx _build dir should be Git ignored (since it obscures code diffs)
-- Enhancement for issue #143: 'isinstance' deserves more compat
-- Enhancement for issue #149: Transpile docstrings on demand
-- Fix for issue #151: Problem with __include__ and special character inside js
-- Enhancement for issue #150: The 'in' operator (was O (n), is now O (1))
-- Enhancement for issue #147: str function should return string primitive, not 'new String ()'
-- Fix for issue #145: List sorting (fails due to erroneous compare operator)
-- Fix for issue #144: List comprehensions and opov (don't go well together, missing 'this' pointer)
-- Fix for issue #138: Parse error using 'yield' in expression, 'send' missing (see testlet iterators_and_generators) and the discussion at the issue.
-- Fix for issue #140: commandline --help / -h switch broken
-- Enhancement for issue #128: metaclasses (only __new__ overridable) + test case / doc example
-- Enhancement for issue #136: dict.get not implemented
-- Fix for issue #134: %= operator translated incorrectly
-- Enhancement for issue #130: Add pragma to optionally handle % the JS way
-- Fix for issue #127: Can't use key 'keys' in a dict 
-- Enhancement issue #113: Use for ... of pervasively for js6 + autotest  
-- Fix for issue #125: strings not iterable (js6 only) + autotest
-- Release 12
-- Local classes now arbitrarily nestable, issue #120
-- Operator % has now Python rather than JS behaviour, issue #123 + autotest
-- Slicing bug fixed (stop beyond list end), issue #122 + autotest
+- [Release: Paris (PyPi v3.6.1, GitHub #13): Partial support for Python 3.6]
 
 .. figure:: http://www.transcrypt.org/illustrations/plotly_demo.png
     :alt: Plotly demo
@@ -156,24 +132,6 @@ What's new in the latest commits
     **Plotly demo**
 
 - Plotly.js demo added: lim (Numscrypt -> Maturity) Transcrypt + Numscrypt + Plotly = Live Science Demos in the Browser with native JS performance, all Plotly.js plot types are supported
-- __pragma__ ('jskeys'/'nojskeys') added make Plotly.js code match Plotly.js docs for convenience, locally voiding the need for quotes around dir keys
-- 'Star us on GitHub' command line option added
-- Fix for 'unexpected indent' when rebuilding
-- Fix for accidentally deleting current path from sys.path in some installations
-- Fix for 'cannot import __symbols__' bug when using -r with autotest.
-- Exception hierarchy improved, all Transcrypt runtime exceptions now derive from Exception
-- Non-standard attribute 'stack' added to Exception to obtain stack trace in de-facto JavaScript compatible way
-- Attempt to iterate over non-iterable now results in exception (only when using -e 6 switch) (see issue #112))
-- Iterating over TypedArrays and other non-list iterables fixed (only needed for when using -e 6 switch) (see issue #112)
-- Release 9
-- Truthyness of instances of custom classes fixed (see issue #110)
-- Source map generation bug fixed (see issue #104)
-- Optional static type validation using mypy (experimental)
-- Small doc improvements
-- Some more fixes for Numscrypt
-- Fix to enable Numscrypt development
-- \*args now also can be used in calling pure javascript methods (see issue #102)
-- Pragma's else and elif fixed for use in .py rather than .js files
 
 Other packages you might like
 =============================
