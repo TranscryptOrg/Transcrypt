@@ -199,4 +199,33 @@ def run (autoTester):
     
     for flags in (122, 233, 11, 55, 79, 201, 23, 111, 200, 100, 50, 25, 12, 6):
         autoTester.check  (''.join ([x [1] for x in bitmaps if (x [0] & flags) > 0]))
+        
+    def issue256 ():
+        autoTester.check ('Issue 256')
+
+        class C:
+            def __init__ (self, value):
+                self.value = value
+
+        def f1 (value):  # Generate parens after return
+            return (C (value) .value or 'second') .capitalize () == 'First'
+            
+        def f2 (value):  # Generate parens after return
+            return (C (value) .value or 'second') .capitalize () == 'Second'
+            
+        def f3 (value):  # Generate NO parens after return
+            return C (value) .value or 'second'
+            
+        def f4 (value):  # Generate NO parens after return
+            return (C (value) .value or 'second')
+                
+        autoTester.check (f1 ('first'))
+        autoTester.check (f1 (''))
+        autoTester.check (f2 ('first'))
+        autoTester.check (f2 (''))
+        autoTester.check (f3 ('first'))
+        autoTester.check (f4 (''))
+        
+    issue256 ()
+
     

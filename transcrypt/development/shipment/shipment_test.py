@@ -14,6 +14,7 @@ class CommandArgs:
         self.argParser.add_argument ('-d', '--docs', help = 'make docs', action = 'store_true')
         self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
         self.argParser.add_argument ('-i', '--inst', help = 'installed version rather than new one', action = 'store_true')
+        self.argParser.add_argument ('-b', '--blind', help = 'don\'t start browser', action = 'store_true')
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)
 
@@ -51,17 +52,18 @@ def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = '', o
         else:
             os.system ('{} -r {}.py'.format (transpileCommand, fileNamePrefix))     
     
-    if nodejs:
-        os.system ('start cmd /k node __javascript__/{}.js'.format (fileNamePrefix))
-        time.sleep (5)
-        webbrowser.open ('http://localhost:8080', new = 2)
-    else:
-        webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
+    if not commandArgs.blind:
+        if nodejs:
+            os.system ('start cmd /k node __javascript__/{}.js'.format (fileNamePrefix))
+            time.sleep (5)
+            webbrowser.open ('http://localhost:8080', new = 2)
+        else:
+            webbrowser.open ('file://{}/{}.html'.format (getAbsPath (relPath), fileNamePrefix), new = 2)
+            
+            filePath = '{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix)
+            if os.path.isfile (filePath):
+                webbrowser.open ('file://{}'.format (filePath), new = 2)
         
-        filePath = '{}/{}.min.html'.format (getAbsPath (relPath), fileNamePrefix)
-        if os.path.isfile (filePath):
-            webbrowser.open ('file://{}'.format (filePath), new = 2)
-    
 # Perform all tests
 
 os.system ('{} -h'.format (transpileCommand))
