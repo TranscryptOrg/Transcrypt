@@ -207,7 +207,7 @@ def checkMatchWithNamedGroups(test, flags = 0):
     except:
         test.checkPad(None, 13)
 
-    if (r is not None ):
+    if ( r is not None ):
         test.check(r.groups)
         test.check(r.pattern)
         d = r.groupindex

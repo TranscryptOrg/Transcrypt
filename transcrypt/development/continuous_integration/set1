@@ -1,7 +1,7 @@
 # These are run by travis and will cause build breaks if failing. Comment out via a '#', NOT VIA ''' ... '''!
 hello
 logging
-re
+# re    # Somehow stalls with Python 3.6, shipment test runs Ok with it.
 time
 transcrypt
 
