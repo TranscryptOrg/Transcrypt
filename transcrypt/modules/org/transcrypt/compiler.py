@@ -1198,8 +1198,7 @@ class Generator (ast.NodeVisitor):
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
             (type (node.op) in (
                 ast.Mult, ast.Div, ast.Add, ast.Sub,
-                ast.LShift, ast.RShift, ast.BitOr, ast.BitXor, ast.BitAnd,
-                ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
+                ast.LShift, ast.RShift, ast.BitOr, ast.BitXor, ast.BitAnd
             ) and self.allowOperatorOverloading)
         ):
             self.emit ('{} ('.format (self.filterId (
