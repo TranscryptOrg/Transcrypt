@@ -109,7 +109,7 @@ What's new in the latest commits
 --------------------------------
 
 - Fix for issue #256: Parenthesis aren't translated (before dot, e.g. in return)
-- Option -b (or --blind) added to shipment test. Running it with -c (or --clean) -b (or --blind) will not show anything, just clean repo of all generated files before commit.
+- Option -b (or --blind) added to shipment test. Running it with -c (or --clean) -b (or --blind) will not show anything, just clean repo by removing all generated files before commit.
 - [Release Paris (PyPi v3.6.4, GitHub #14): Support for Python 3.6, div. fixes and enhancements]
 - Function globals () is now available to dynamically get and set module attribs, issue #251
 - Demo for cyclejs was added, also to the shipment test
