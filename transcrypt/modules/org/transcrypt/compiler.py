@@ -1196,16 +1196,31 @@ class Generator (ast.NodeVisitor):
         elif (
             type (node.op) in (ast.Pow, ast.MatMult) or
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
-            (type (node.op) in (ast.Mult, ast.Div, ast.Add, ast.Sub) and self.allowOperatorOverloading)
+            (type (node.op) in (
+                ast.Mult, ast.Div, ast.Add, ast.Sub,
+                ast.LShift, ast.RShift, ast.BitOr, ast.BitXor, ast.BitAnd,
+                ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
+            ) and self.allowOperatorOverloading)
         ):
             self.emit ('{} ('.format (self.filterId (
+                # Non-overloaded
                 ('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
                 '__matmul__' if type (node.op) == ast.MatMult else
                 ('__jsmod__' if self.allowJavaScriptMod else '__mod__') if type (node.op) == ast.Mod else
+                
+                # Overloaded arithmetic
                 '__mul__' if type (node.op) == ast.Mult else
                 '__div__' if type (node.op) == ast.Div else
                 '__add__' if type (node.op) == ast.Add else
                 '__sub__' if type (node.op) == ast.Sub else
+                
+                # Overloaded bitwise
+                '__lshift__' if type (node.op) == ast.LShift else
+                '__rshift__' if type (node.op) == ast.RShift else
+                '__or__' if type (node.op) == ast.BitOr else
+                '__xor__' if type (node.op) == ast.BitXor else
+                '__and__' if type (node.op) == ast.BitAnd else
+                
                 'Never here'
             )))
             self.visit (node.left)
@@ -1620,14 +1635,19 @@ class Generator (ast.NodeVisitor):
                 ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
             )):
                 self.emit ('{} ('.format (self.filterId (
+                
+                    # Non-overloaded
                     '__in__' if type (op) == ast.In else
                     '!__in__' if type (op) == ast.NotIn else
+                    
+                    # Overloaded
                     '__eq__' if type (op) == ast.Eq else
                     '__ne__' if type (op) == ast.NotEq else
                     '__lt__' if type (op) == ast.Lt else
                     '__le__' if type (op) == ast.LtE else
                     '__gt__' if type (op) == ast.Gt else
                     '__ge__' if type (op) == ast.GtE else
+                    
                     'Never here'
                 )))
                 self.visitSubExpr (node, left)

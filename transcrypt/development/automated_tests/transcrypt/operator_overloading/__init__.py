@@ -126,3 +126,67 @@ def run (autoTester):
     autoTester.check ((2, 1, 3) != (1, 2, 3))
     autoTester.check ([2, 1, 3] != [1, 2, 3])
     __pragma__ ('noopov')
+    
+    class Bitwise:
+        def __lshift__ (self, other):
+            autoTester.check ('lshift')
+            
+        def __rlshift__ (self, other):
+            autoTester.check ('rlshift')
+            
+        def __rshift__ (self, other):
+            autoTester.check ('rshift')
+            
+        def __rrshift__ (self, other):
+            autoTester.check ('rrshift')
+            
+        def __or__ (self, other):
+            autoTester.check ('or') 
+            
+        def __ror__ (self, other):
+            autoTester.check ('ror')
+            
+        def __xor__ (self, other):
+            autoTester.check ('xor')
+            
+        def __rxor__ (self, other):
+            autoTester.check ('rxor')
+            
+        def __and__ (self, other):
+            autoTester.check ('and')
+            
+        def __rand__ (self, other):
+            autoTester.check ('rand') 
+
+    bitwise = Bitwise ()
+    
+    __pragma__ ('opov')
+    
+    bitwise << []
+    [] << bitwise
+    autoTester.check (32 << 2)
+    
+    bitwise >> []
+    [] >> bitwise
+    autoTester.check (32 >> 2)
+    
+    bitwise | []
+    [] | bitwise
+    autoTester.check (1 | 4)
+    
+    bitwise ^ []
+    [] ^ bitwise
+    autoTester.check (11 ^ 13)
+    
+    bitwise & []
+    [] & bitwise
+    autoTester.check (12 & 20)
+    
+    __pragma__ ('noopov')
+
+    autoTester.check (32 << 2)
+    autoTester.check (32 >> 2)
+    autoTester.check (1 | 4)
+    autoTester.check (11 ^ 13)
+    autoTester.check (12 & 20)
+    

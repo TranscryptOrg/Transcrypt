@@ -1387,6 +1387,8 @@ __pragma__ ('endif')
     };
     __all__.pow = __pow__;
 
+    // Overloaded binary arithmetic
+    
     var __mul__ = function (a, b) {
         if (typeof a == 'object' && '__mul__' in a) {
             return a.__mul__ (b);
@@ -1445,6 +1447,75 @@ __pragma__ ('endif')
     };
     __all__.__sub__ = __sub__;
 
+    // Overloaded binary bitwise
+    
+    var __lshift__ = function (a, b) {
+        if (typeof a == 'object' && '__lshift__' in a) {
+            return a.__lshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rlshift__' in b) {
+            return b.__rlshift__ (a);
+        }
+        else {
+            return a << b;
+        }
+    };
+    __all__.__lshift__ = __lshift__;
+
+    var __rshift__ = function (a, b) {
+        if (typeof a == 'object' && '__rshift__' in a) {
+            return a.__rshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rrshift__' in b) {
+            return b.__rrshift__ (a);
+        }
+        else {
+            return a >> b;
+        }
+    };
+    __all__.__rshift__ = __rshift__;
+
+    var __or__ = function (a, b) {
+        if (typeof a == 'object' && '__or__' in a) {
+            return a.__or__ (b);
+        }
+        else if (typeof b == 'object' && '__ror__' in b) {
+            return b.__ror__ (a);
+        }
+        else {
+            return a | b;
+        }
+    };
+    __all__.__or__ = __or__;
+
+    var __xor__ = function (a, b) {
+        if (typeof a == 'object' && '__xor__' in a) {
+            return a.__xor__ (b);
+        }
+        else if (typeof b == 'object' && '__rxor__' in b) {
+            return b.__rxor__ (a);
+        }
+        else {
+            return a ^ b;
+        }
+    };
+    __all__.__xor__ = __xor__;
+
+    var __and__ = function (a, b) {
+        if (typeof a == 'object' && '__and__' in a) {
+            return a.__and__ (b);
+        }
+        else if (typeof b == 'object' && '__rand__' in b) {
+            return b.__rand__ (a);
+        }
+        else {
+            return a & b;
+        }
+    };
+    __all__.__and__ = __and__;    
+    
+    // Overloaded binary compare
+    
     var __eq__ = function (a, b) {
         if (typeof a == 'object' && '__eq__' in a) {
             return a.__eq__ (b);
