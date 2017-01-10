@@ -23,7 +23,7 @@ def run (test):
     checkSearchWithGroups(test, re.JSSTRICT)
     checkMatchOps(test, re.JSSTRICT)
     checkMatchWithGroups(test, re.JSSTRICT)
-    #checkMatchwithNamedGroups(test, re.JSSTRICT)
+    #checkMatchWithNamedGroups(test, re.JSSTRICT)
 
     checkFullMatchOps(test, re.JSSTRICT)
     checkFindAllOps(test, re.JSSTRICT)

@@ -6,6 +6,7 @@ __pragma__ ('skip')
 copy = Math = __typeof__ = __repr__ = document = console = window = 0
 __pragma__ ('noskip')
 
+__pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs investigation
 __pragma__ ('nokwargs')
 __pragma__ ('noalias', 'sort')
 

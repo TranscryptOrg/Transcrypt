@@ -25,7 +25,7 @@ def run (test):
     checkSearchWithGroups(test)
     checkMatchOps(test)
     checkMatchWithGroups(test)
-    checkMatchwithNamedGroups(test)
+    # checkMatchWithNamedGroups(test)           # !!! @JdeH temporarily disabled this
     checkFullMatchOps(test)
     checkFindAllOps(test)
     checkSplitOps(test)

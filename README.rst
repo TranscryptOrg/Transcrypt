@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Autotest for regular expression module made part of shipment test and CI test. Some parts commented out, marked with @JdeH
 - Documentation updated, also on-line
 - Fix for issue #256: Parenthesis aren't translated (before dot, e.g. in return)
 - Option -b (or --blind) added to shipment test. Running it with -c (or --clean) -b (or --blind) will not show anything, just clean repo by removing all generated files. Meant for usage before a commit.
