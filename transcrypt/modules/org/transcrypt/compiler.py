@@ -16,6 +16,7 @@
 import os
 import os.path
 import sys
+import tokenize
 import ast
 import re
 import copy
@@ -296,7 +297,7 @@ class Module:
         try:
             utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
 
-            with open (self.metadata.sourcePath) as sourceFile:
+            with tokenize.open (self.metadata.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
 
             self.parseTree = ast.parse (self.sourceCode)
@@ -1295,7 +1296,7 @@ class Generator (ast.NodeVisitor):
             for searchDir in self.module.program.moduleSearchDirs:
                 filePath = '{}/{}'.format (searchDir, fileName)
                 if os.path.isfile (filePath):
-                    return open (filePath, encoding = 'utf-8') .read ()
+                    return tokenize.open (filePath) .read ()
                 else:
                     searchedIncludePaths.append (filePath)
             else:
