@@ -85,7 +85,7 @@ commandArgs = CommandArgs ()
     
 def create (path):
     os.makedirs (os.path.dirname (path), exist_ok = True)
-    return open (path, 'w')
+    return open (path, 'w', encoding = 'utf-8')
     
 def formatted (*args):  # args [0] is string, args [1 : ] are format params
     try:
