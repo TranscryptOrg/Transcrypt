@@ -71,7 +71,7 @@ The minified JavaScript file *including the Transcrypt runtime* is only 10kB. Wi
 Available command line switches
 -------------------------------
 
-The available command line switches will be shown if you run transcript -h.
+The available command line switches will be shown if you run transcrypt -h.
 They are specified in the source code of Transcrypt as follows:
 
 .. literalinclude:: ../../modules/org/transcrypt/utils.py
