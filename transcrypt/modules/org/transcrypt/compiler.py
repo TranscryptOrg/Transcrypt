@@ -58,9 +58,9 @@ class ModuleMetadata:
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             raise utils.Error (
-                moduleName = self.name,
-                message = '\n\tAttempt to load module: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
-                    self.name, '\n\t\t'. join (searchedModulePaths)
+                message = (
+                    '\n\tAttempt to load module: {}'.format (self.name) +
+                    '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
                 )
             )
 
@@ -92,6 +92,8 @@ class ModuleMetadata:
 
 class Program:
     def __init__ (self, moduleSearchDirs, symbols):
+        utils.setProgram (self)
+    
         self.moduleSearchDirs = moduleSearchDirs
         self.symbols = symbols
 
@@ -106,6 +108,7 @@ class Program:
         self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
 
         self.moduleDict = {}
+        self.moduleNameStack = []   # Enables showing load sequence in case a module cannot be loaded
 
         # Set paths that don't require the module dict
         self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
@@ -141,7 +144,8 @@ class Program:
         except Exception as exception:
             utils.enhanceException (
                 exception,
-                message = str (exception)
+                message =
+                str (exception)
             )
 
         # Set paths that require the module dict
@@ -262,6 +266,8 @@ class Module:
         self.metadata = moduleMetadata  # May contain dots if it's imported
         self.program.moduleDict [self.metadata.name] = self
 
+        self.program.moduleNameStack.append (self.metadata.name)  # Names of module being under compilation, needed for error reports
+                
         # Set sourcemap
         if utils.commandArgs.map:
             self.modMap = sourcemaps.SourceMap (
@@ -289,6 +295,8 @@ class Module:
 
             if utils.commandArgs.map:
                 self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
+                
+        self.program.moduleNameStack.pop ()
 
     def getModuleCaption (self):
         return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''
@@ -304,7 +312,6 @@ class Module:
         except SyntaxError as syntaxError:
             utils.enhanceException (
                 syntaxError,
-                moduleName = self.metadata.name,
                 lineNr = syntaxError.lineno,
                 message = (
                         '{} <SYNTAX FAULT] {}'.format (
@@ -594,7 +601,10 @@ class Generator (ast.NodeVisitor):
             self.targetFragments.append (self.lineNrString) # Last target fragment doesn't have a '\n' to replace in the emit method
 
         except Exception as exception:
-            utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr)
+            utils.enhanceException (
+                exception,
+                lineNr = self.lineNr
+            )
 
         if self.tempIndices:
             raise utils.Error (
@@ -1301,7 +1311,6 @@ class Generator (ast.NodeVisitor):
                     searchedIncludePaths.append (filePath)
             else:
                 raise utils.Error (
-                    moduleName = self.module.metadata.name,
                     lineNr = self.lineNr,
                     message = '\n\tAttempt to include file: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
                         node.args [0], '\n\t\t'. join (searchedIncludePaths)
@@ -1414,7 +1423,6 @@ class Generator (ast.NodeVisitor):
                     pass                                # Easier dealth with on statement / expression level in self.visit
                 else:
                     raise utils.Error (
-                        moduleName = self.module.metadata.name,
                         lineNr = self.lineNr,
                         message = 'Unknown pragma: {}'.format (
                             node.args [0] .s if type (node.args [0]) == ast.Str else node.args [0]
@@ -1562,7 +1570,11 @@ class Generator (ast.NodeVisitor):
                     self.emitComma (index)
                     self.visit (expr)
                 except Exception as exception:
-                    utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Invalid base class')
+                    utils.enhanceException (
+                        exception,
+                        lineNr = self.lineNr,
+                        message = 'Invalid base class'
+                    )
         else:
             self.emit ('object')
         self.emit ('], {{')
@@ -1604,7 +1616,6 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.keywords [0] .value)
             else:
                 raise utils.Error (
-                    moduleName = self.module.metadata.name,
                     lineNr = self.lineNr,
                     message = '\n\tUnknown keyword argument {} definition of class {}'.format (node.keywords [0] .arg, node.name)
                 )
@@ -1966,7 +1977,6 @@ class Generator (ast.NodeVisitor):
         self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
 
         # raise utils.Error (
-            # moduleName = self.module.metadata.name,
             # lineNr = self.lineNr,
             # message = 'Keyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
         # )
@@ -2023,7 +2033,11 @@ class Generator (ast.NodeVisitor):
             try:
                 self.useModule (alias.name)
             except Exception as exception:
-                utils.enhanceException (exception, moduleName = self.module.metadata.name, lineNr = self.lineNr, message = 'Can\'t import module \'{}\''.format (alias.name))
+                utils.enhanceException (
+                    exception,
+                    lineNr = self.lineNr,
+                    message = 'Can\'t import module \'{}\''.format (alias.name)
+                )
 
             if alias.asname:
                 self.emit ('var {} =  __init__ (__world__.{})', self.filterId (alias.asname), self.filterId (alias.name))
@@ -2049,7 +2063,10 @@ class Generator (ast.NodeVisitor):
             for index, alias in enumerate (node.names):
                 if alias.name == '*':                                           # * Never refers to modules, only to entities in modules
                     if len (node.names) > 1:
-                        raise Error (moduleName = module.metadata.name, lineNr = node.lineno, message = 'Can\'t import module \'{}\''.format (alias.name))
+                        raise Error (
+                            lineNr = node.lineno,
+                            message = 'Can\'t import module \'{}\''.format (alias.name)
+                        )
 
                     module = self.useModule (node.module)
 
@@ -2088,7 +2105,11 @@ class Generator (ast.NodeVisitor):
                     if index < len (node.names) - 1:
                         self.emit (';\n')
         except Exception as exception:
-            utils.enhanceException (exception, lineNr = self.lineNr, message = 'Can\'t import from module \'{}\''.format (node.module))
+            utils.enhanceException (
+                exception,
+                lineNr = self.lineNr,
+                message = 'Can\'t import from module \'{}\''.format (node.module)
+            )
 
     def visit_JoinedStr (self, node):
         self.emit (repr (''.join ([value.s if type (value) == ast.Str else '{{}}' for value in node.values])))

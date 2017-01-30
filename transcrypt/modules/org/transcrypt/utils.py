@@ -96,20 +96,21 @@ def formatted (*args):  # args [0] is string, args [1 : ] are format params
 def log (always, *args):
     if always or commandArgs.verbose:
         print (formatted (*args), end = '')
-                
+         
+program = None
+def setProgram (aProgram):
+    global program
+    program = aProgram
+         
 class Error (Exception):
-    def __init__ (self, moduleName = '', lineNr = 0, message = ''):
-        self.moduleName = moduleName
+    def __init__ (self, lineNr = 0, message = ''):
         self.lineNr = lineNr - nrOfExtraLines
         self.message = message  
 
     # First one encountered counts, for all fields, because it's closest to the error
     # One error at a time, just like Python, clear and simple
     
-    def set (self, moduleName = '', lineNr = 0, message = ''):
-        if not self.moduleName:
-            self.moduleName = moduleName
-            
+    def set (self, lineNr = 0, message = ''):          
         if not self.lineNr:
             self.lineNr = lineNr - nrOfExtraLines
             
@@ -117,11 +118,14 @@ class Error (Exception):
             self.message = message
             
     def __str__ (self):
+        moduleNameStackTail = program.moduleNameStack [1 : ]
         return 'Error in {}'.format (
             ': '.join (
                 [', '.join (
                     ['program {}'.format (commandArgs.source)] +
-                    (['module {}'.format (self.moduleName)] if self.moduleName else []) +
+                    (['module {}'.format (
+                        '.'.join (moduleNameStackTail)
+                    )] if moduleNameStackTail else []) +
                     (['line {}'.format (self.lineNr)] if self.lineNr else [])
                 )] +
                 [self.message] if self.message else []
