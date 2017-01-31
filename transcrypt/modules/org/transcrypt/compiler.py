@@ -2076,8 +2076,9 @@ class Generator (ast.NodeVisitor):
                         if index < len (module.all) - 1:
                             self.emit (';\n')
 
-                    # And export everything imported
-                    self.all.update (module.all)
+                    if type (self.getScope ().node) == ast.Module:
+                        # And export everything imported, if we are not importing inside of a function.
+                        self.all.update (module.all)
                 else:
                     # Import something
                     # N.B. The emits in the try and except clauses have different placement of brackets
