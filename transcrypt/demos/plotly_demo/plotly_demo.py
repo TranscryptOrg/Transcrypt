@@ -26,24 +26,27 @@ Plotly.plot (
     }
 )       
 
-xValues = list (range (10))
-yValues = [math.exp (x**2) for x in xValues] 
-kind = 'logarithmic'
-Plotly.plot (
-    kind,
-    [
+try:
+    xValues = list (range (10))
+    yValues = [math.exp (x**2) for x in xValues] 
+    kind = 'logarithmic'
+    Plotly.plot (
+        kind,
+        [
+            {
+                x: xValues,
+                y: yValues
+            }
+        ],
         {
-            x: xValues,
-            y: yValues
+            title: kind,
+            xaxis: {title: 'x'},
+            yaxis: {type: 'log', tickformat: '2e', title: 'exp (x**2)'}
         }
-    ],
-    {
-        title: kind,
-        xaxis: {title: 'x'},
-        yaxis: {type: 'log', tickformat: '2e', title: 'exp (x**2)'}
-    }
-)
-
+    )
+except: # Microsoft Edge bug in exp function
+    pass
+    
 tangentialValues = list (range (-180, 180))
 radialValuesList = [
     [abs (t) for t in tangentialValues],
