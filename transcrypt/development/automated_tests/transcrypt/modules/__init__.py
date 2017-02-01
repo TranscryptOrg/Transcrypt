@@ -54,3 +54,7 @@ def run (autoTester):
     autoTester.check (mod3Hundred)
     autoTester.check (mod3GetTwoHundred ())
     autoTester.check (A (123.321) .f ())
+
+    from modules import mod4
+    # From ... import within function, with circular import
+    autoTester.check(mod4.mod4Add2FromMod5(449))
