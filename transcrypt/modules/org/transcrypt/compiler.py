@@ -2097,11 +2097,12 @@ class Generator (ast.NodeVisitor):
                         else:
                             self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))
 
-                    # And export that something imported
-                    if alias.asname:
-                        self.all.add (alias.asname)
-                    else:
-                        self.all.add (alias.name)
+                    if type (self.getScope ().node) == ast.Module:
+                        # And export that something imported
+                        if alias.asname:
+                            self.all.add (alias.asname)
+                        else:
+                            self.all.add (alias.name)
 
                     if index < len (node.names) - 1:
                         self.emit (';\n')
