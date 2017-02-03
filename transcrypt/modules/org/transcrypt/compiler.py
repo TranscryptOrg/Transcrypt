@@ -144,8 +144,7 @@ class Program:
         except Exception as exception:
             utils.enhanceException (
                 exception,
-                message =
-                str (exception)
+                message = '\n\t{}'.format (str (exception))
             )
 
         # Set paths that require the module dict
@@ -314,7 +313,7 @@ class Module:
                 syntaxError,
                 lineNr = syntaxError.lineno,
                 message = (
-                        '{} <SYNTAX FAULT] {}'.format (
+                        '\n\t{} <SYNTAX FAULT] {}'.format (
                             syntaxError.text [:syntaxError.offset].lstrip (),
                             syntaxError.text [syntaxError.offset:].rstrip ()
                         )
@@ -498,6 +497,7 @@ class Generator (ast.NodeVisitor):
             ('keys', 'py_keys'),                    ('js_keys', 'keys'),
             ('name', 'py_name'),                    ('js_name', 'name'),
             ('NaN', 'py_NaN'),                      ('js_NaN', 'NaN'),
+            ('new', 'py_new'),
             ('next', 'py_next'),                    ('js_next', 'next'),
                                                     ('js_not', 'not'),
                                                     ('js_or', 'or'),
@@ -508,9 +508,11 @@ class Generator (ast.NodeVisitor):
             ('split', 'py_split'),                  ('js_split', 'split'),
             ('switch', 'py_switch'),
             ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealth with separately in visit_Call
+            ('TypeError', 'py_TypeError'),          ('js_TypeError', 'TypeError'),
             ('update', 'py_update'),                ('js_update', 'update'),
             ('reversed', 'py_reversed'),            ('js_reversed', 'reversed'),
             ('setdefault', 'py_setdefault'),        ('js_setdefault', 'setdefault'),
+                                                    ('js_super', 'super'),
             ('true', 'py_true'),
             ('undefined', 'py_undefined'),          ('js_undefined', 'undefined'),
 
@@ -1142,7 +1144,13 @@ class Generator (ast.NodeVisitor):
         if type (node.value) in (ast.BinOp, ast.BoolOp, ast.Compare):
             self.emit (')')
 
-        self.emit ('.{}', self.filterId (node.attr))
+        if node.attr == 'super':
+            raise utils.Error (
+                lineNr = self.lineNr,
+                message = '\n\tBuilt in function \'super\' not supported'
+            )
+        else:
+            self.emit ('.{}', self.filterId (node.attr))
 
     def visit_AugAssign (self, node):
         if (
@@ -1424,7 +1432,7 @@ class Generator (ast.NodeVisitor):
                 else:
                     raise utils.Error (
                         lineNr = self.lineNr,
-                        message = 'Unknown pragma: {}'.format (
+                        message = '\n\tUnknown pragma: {}'.format (
                             node.args [0] .s if type (node.args [0]) == ast.Str else node.args [0]
                         )
                     )
@@ -1573,7 +1581,7 @@ class Generator (ast.NodeVisitor):
                     utils.enhanceException (
                         exception,
                         lineNr = self.lineNr,
-                        message = 'Invalid base class'
+                        message = '\n\tInvalid base class'
                     )
         else:
             self.emit ('object')
@@ -1596,7 +1604,7 @@ class Generator (ast.NodeVisitor):
                     not (type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property')
                 ):
                     self.emitComma (index, False)
-                    self.emit ('\n{}: ', stmt.targets [0] .id, stmt.targets)
+                    self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id), stmt.targets)
                     self.visit (stmt.value)
                     self.adaptLineNrString (stmt)
                     index += 1
@@ -1680,9 +1688,10 @@ class Generator (ast.NodeVisitor):
 
     def visit_Delete (self, node):  # Currently dict element only, rest can be done with empty slice assignment
         for expr in node.targets:
-            self.emit ('delete ')
-            self.visit (expr)
-            self.emit (';\n')
+            if type (expr) != ast.Name:
+                self.emit ('delete ')
+                self.visit (expr)
+                self.emit (';\n')
 
     def visit_Dict (self, node):
         if not self.allowJavaScriptKeys:                    # If we don't want JavaScript treatment of keys, for literal keys it doesn't make a difference
@@ -1978,7 +1987,7 @@ class Generator (ast.NodeVisitor):
 
         # raise utils.Error (
             # lineNr = self.lineNr,
-            # message = 'Keyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
+            # message = '\n\tKeyword \'global\' not supported, use \'nonlocal\' instead, or make variable attribute of \'window\'\n'
         # )
 
     def visit_If (self, node):
@@ -2036,7 +2045,7 @@ class Generator (ast.NodeVisitor):
                 utils.enhanceException (
                     exception,
                     lineNr = self.lineNr,
-                    message = 'Can\'t import module \'{}\''.format (alias.name)
+                    message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                 )
 
             if alias.asname:
@@ -2065,7 +2074,7 @@ class Generator (ast.NodeVisitor):
                     if len (node.names) > 1:
                         raise Error (
                             lineNr = node.lineno,
-                            message = 'Can\'t import module \'{}\''.format (alias.name)
+                            message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
 
                     module = self.useModule (node.module)
@@ -2110,7 +2119,7 @@ class Generator (ast.NodeVisitor):
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr,
-                message = 'Can\'t import from module \'{}\''.format (node.module)
+                message = '\n\tCan\'t import from module \'{}\''.format (node.module)
             )
 
     def visit_JoinedStr (self, node):

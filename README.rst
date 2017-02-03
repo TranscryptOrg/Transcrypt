@@ -108,6 +108,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Fix for issue #279: TypeError exists both in Python and JavaScrip, needs alias
+- Fix for issue #277: Alias needed for new
+- Fix for issue #274: Cannot delete unqualified property in strict mode
 - Fix for issue #268: Module import trace missing in error messages
 - Autotest for regular expression module made part of shipment test and CI test. Some parts commented out, marked with @JdeH
 - Documentation updated, also on-line

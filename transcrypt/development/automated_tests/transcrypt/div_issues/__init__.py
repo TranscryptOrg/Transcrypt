@@ -227,5 +227,19 @@ def run (autoTester):
         autoTester.check (f4 (''))
         
     issue256 ()
-
     
+    autoTester.check ('Issue 274')
+    a = 3
+    del a
+    autoTester.check ('Still alive')
+    
+    autoTester.check ('Issue 277')
+    new = 3
+    autoTester.check (new)
+    
+    autoTester.check ('Issue 279')
+    class A:
+        TypeError = 111
+        js_TypeError = 222
+    autoTester.check (A.TypeError, A.js_TypeError)  # ... Generated code should use py_TypeError and TypeError respectively    
+    autoTester.check ('Still alive')
