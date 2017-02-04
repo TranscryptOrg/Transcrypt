@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Enhancement for issue #26: super () added for unique path to single ancestor method
 - Fix for issue #279: TypeError exists both in Python and JavaScrip, needs alias
 - Fix for issue #277: Alias needed for new
 - Fix for issue #274: Cannot delete unqualified property in strict mode

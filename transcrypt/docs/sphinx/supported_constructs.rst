@@ -299,6 +299,17 @@ Set comprehensions
 	:tab-width: 4
 	:caption: Testlet: set_comprehensions
 
+Super
+-----
+
+The *super ()*  builtin function is supported for cases where there's exactly one path upwards to exactly one matching method.
+This covers most use cases, even in a diamond class hierarchy, and results in fast and compact code.
+In case of more than one path, possibly to more than one matching method, use explicit class names, as shown in the example below.
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/builtin_super/__init__.py
+	:tab-width: 4
+	:caption: Testlet: builtin_super
+		
 Simple and augmented assignment
 -------------------------------
 

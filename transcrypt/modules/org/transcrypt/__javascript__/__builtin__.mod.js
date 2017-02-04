@@ -75,6 +75,26 @@ __pragma__ ('endif')
     }
     __all__.__globals__ = __globals__
     
+    // Partial implementation of super () .<methodName> (<params>)
+    var __super__ = function (aClass, methodName) {        
+        // Lean and fast, no C3 linearization, only call first implementation encountered
+        // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
+        
+__pragma__ ('ifdef', '__esv6__')
+        for (let base of aClass.__bases__) {    // May be inherited
+__pragma__ ('else')
+        for (var index = 0; index < aClass.__bases__.length; index++) {
+            var base = aClass.__bases__ [index];
+__pragma__ ('endif')
+            if (methodName in base) {
+               return base [methodName];
+            }
+        }
+
+        throw new Exception ('Superclass method not found');    // !!! Improve!
+    }
+    __all__.__super__ = __super__
+        
     // Python property installer function, no member since that would bloat classes
     var property = function (getter, setter) {  // Returns a property descriptor rather than a property
         if (!setter) {  // ??? Make setter optional instead of dummy?

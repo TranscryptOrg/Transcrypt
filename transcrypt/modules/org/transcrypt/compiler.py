@@ -682,9 +682,18 @@ class Generator (ast.NodeVisitor):
         else:
             return self.scopes [-1]
 
-    def getAdjacentClassScopes (self):  # Work backward until finding an interruption in the chain. Needed at least to fix destructuring assignment in nested classes.
+    def getAdjacentClassScopes (self, inMethod = False):
+        # Work backward until finding an interruption in the chain
+        # Needed to fix destructuring assignment in nested classes and to make super () work
+        # The latter needs inMethod, since suported use of super () is directly or indirectly enclosed in a method body
         reversedClassScopes = []
         for scope in reversed (self.scopes):
+            if inMethod:
+                if type (scope.node) == ast.FunctionDef:
+                    continue
+                else:
+                    inMethod = False
+                    
             if type (scope.node) != ast.ClassDef:
                 break;
             reversedClassScopes.append (scope)
@@ -1462,31 +1471,84 @@ class Generator (ast.NodeVisitor):
                 self.emit ('--')
                 return
 
-        elif type (node.func) == ast.Attribute:
-            if self.replaceSend and node.func.attr == 'send':   # Construct Attribute instead of bare Call node on the fly and visit it
-                self.emit ('(function () {{return ')    # Encapsulate in function to prevent minifier complaining if value isn't used
-                self.visit (ast.Attribute (
-                    value = ast.Call (
-                        func = ast.Attribute (
-                            value = ast.Name (
-                                id = node.func.value.id,
-                                ctx = ast.Load
-                            ),
-                            attr = 'js_next',
+        elif (
+            type (node.func) == ast.Attribute and 
+            self.replaceSend and
+            node.func.attr == 'send'                # Construct Attribute instead of bare Call node on the fly and visit it
+        ):
+            self.emit ('(function () {{return ')    # Encapsulate in function to prevent minifier complaining if value isn't used
+            self.visit (ast.Attribute (
+                value = ast.Call (
+                    func = ast.Attribute (
+                        value = ast.Name (
+                            id = node.func.value.id,
                             ctx = ast.Load
                         ),
-                        args = node.args,
-                        keywords = node.keywords
+                        attr = 'js_next',
+                        ctx = ast.Load
                     ),
-                    attr = 'value',
-                    ctx = ast.Load
-                ))
-                self.emit ('}}) ()')
-                return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
-
-        if self.allowOperatorOverloading and not (type (node.func) == ast.Name and node.func.id == '__call__'): # If operator overloading and whe're not already in the __call__
-                                                                                                                # that we generated on the fly,
-            self.visit (ast.Call (                                                                              # generate a call on the fly and visit it
+                    args = node.args,
+                    keywords = node.keywords
+                ),
+                attr = 'value',
+                ctx = ast.Load
+            ))
+            self.emit ('}}) ()')
+            return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
+            
+        elif (
+            type (node.func) == ast.Attribute and
+            type (node.func.value) == ast.Call and
+            type (node.func.value.func) == ast.Name and
+            node.func.value.func.id == 'super'
+        ):
+            if node.func.value.args or node.func.value.keywords:
+                raise utils.Error (
+                    lineNr = self.lineNr,
+                    message = '\n\tBuilt in function \'super\' with arguments not supported'
+                )
+                
+            else:   # Construct node for __super__ (self, '<methodName>')(self, <params>) and visit it
+                self.visit (
+                    ast.Call (
+                        func = ast.Call (
+                            func = ast.Name (
+                                id = '__super__',
+                                ctx = ast.Load
+                            ),
+                            args = [
+                                ast.Name (
+                                    id = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes (True)]),
+                                    ctx = ast.Load
+                                ),
+                                ast.Str (
+                                    s = node.func.attr  # <methodName>
+                                )
+                            ],
+                            keywords = []
+                        ),
+                        args = (
+                            [
+                                ast.Name (
+                                    id = 'self',
+                                    ctx = ast.Load
+                                )
+                            ] +
+                            node.args                   # <normal part of params>
+                        ),
+                        keywords = node.keywords        # <keyword part of params>
+                    )
+                )
+                return
+        
+        if (
+            self.allowOperatorOverloading and       # If operator overloading and 
+            not (                                   # whe're not already in the __call__ that we generated on the fly,
+                type (node.func) == ast.Name and
+                node.func.id == '__call__'
+            )
+        ):
+            self.visit (ast.Call (                  # generate __call__ node on the fly and visit it                                                            
                 func = ast.Name (
                     id = '__call__',
                     ctx = ast.Load  # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too the overloading mechanism
