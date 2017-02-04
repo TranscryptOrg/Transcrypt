@@ -1153,14 +1153,16 @@ class Generator (ast.NodeVisitor):
         if type (node.value) in (ast.BinOp, ast.BoolOp, ast.Compare):
             self.emit (')')
 
-        if node.attr == 'super':
-            raise utils.Error (
-                lineNr = self.lineNr,
-                message = '\n\tBuilt in function \'super\' not supported'
-            )
-        else:
-            self.emit ('.{}', self.filterId (node.attr))
+        self.emit ('.{}', self.filterId (node.attr))
 
+    def visit_AnnAssign (self, node):
+        self.visit (
+            ast.Assign (
+                [node.target],
+                node.value
+            )
+        )
+        
     def visit_AugAssign (self, node):
         if (
             type (node.op) == ast.FloorDiv              # FloorDiv has no operator symbol in JavaScript, so <operator>= won't work
