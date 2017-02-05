@@ -66,6 +66,7 @@ def main ():
         return exitCode
     
     try:
+        utils.log (True, '\n')
         licensePath = '{}/{}'.format (transpilerDir, 'license_reference.txt')   
         if not os.path.isfile (licensePath):
             utils.log (True, 'Error: missing license reference file\n')

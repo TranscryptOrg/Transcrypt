@@ -45,21 +45,21 @@ class ModuleMetadata:
             self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
 
             self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+            searchedModulePaths += [self.sourcePath, self.targetPath]
+
             if not os.path.isfile (self.sourcePath):
                 self.sourcePath = self.targetPath   # For a Javascript-only module, source and target are the same and a source map can be faked
 
             self.extraSubdir = 'extra'
             self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
 
-            searchedModulePaths += [self.sourcePath, self.targetPath]
-
-            if (os.path.isfile (self.sourcePath) or os.path.isfile (self.targetPath)):
+            if (os.path.isfile (self.sourcePath)):
                 break;
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             raise utils.Error (
                 message = (
-                    '\n\tAttempt to load module: {}'.format (self.name) +
+                    '\n\tAttempt to import module: {}'.format (self.name) +
                     '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
                 )
             )
@@ -108,7 +108,7 @@ class Program:
         self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
 
         self.moduleDict = {}
-        self.moduleNameStack = []   # Enables showing load sequence in case a module cannot be loaded
+        self.importStack = []   # Enables showing load sequence in case a module cannot be loaded
 
         # Set paths that don't require the module dict
         self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
@@ -265,7 +265,11 @@ class Module:
         self.metadata = moduleMetadata  # May contain dots if it's imported
         self.program.moduleDict [self.metadata.name] = self
 
-        self.program.moduleNameStack.append (self.metadata.name)  # Names of module being under compilation, needed for error reports
+        # Names of module being under compilation and line nrs of current import
+        # Used for error reports
+        # Note that JavaScript-only modules will leave lineNr None if they import something
+        # This is since there's no explicit import location in such modules
+        self.program.importStack.append ([self.metadata, None])
                 
         # Set sourcemap
         if utils.commandArgs.map:
@@ -295,7 +299,7 @@ class Module:
             if utils.commandArgs.map:
                 self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
                 
-        self.program.moduleNameStack.pop ()
+        self.program.importStack.pop ()
 
     def getModuleCaption (self):
         return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''
@@ -804,8 +808,9 @@ class Generator (ast.NodeVisitor):
             del self.tempIndices [name]
 
     def useModule (self, name):
-        result = self.module.program.provide (name) # Must be done first because it can generate a healthy exception
-        self.use.add (name)                         # Must not be done if the healthy exception occurs
+        self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
+        result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
+        self.use.add (name)                                     # Must not be done if the healthy exception occurs
         return result
 
     def isCall (self, node, name):

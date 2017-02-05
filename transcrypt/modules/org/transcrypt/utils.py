@@ -118,19 +118,12 @@ class Error (Exception):
             self.message = message
             
     def __str__ (self):
-        moduleNameStackTail = program.moduleNameStack [1 : ]
-        return 'Error in {}'.format (
-            ': '.join (
-                [', '.join (
-                    ['program {}'.format (commandArgs.source)] +
-                    (['module {}'.format (
-                        '.'.join (moduleNameStackTail)
-                    )] if moduleNameStackTail else []) +
-                    (['line {}'.format (self.lineNr)] if self.lineNr else [])
-                )] +
-                [self.message] if self.message else []
-            )
-        )
+        result = 'Error while compiling (offending file last):'
+        for importRecord in program.importStack [ : -1]:
+            result += '\n\tFile \'{}\', line {}, at import of:'.format (importRecord [0] .sourcePath, importRecord [1])
+        result += '\n\tFile \'{}\', line {}, namely:'.format (program.importStack [-1][0] .sourcePath, self.lineNr)
+        result += '\n\t{}'.format (self.message)
+        return result
         
 def enhanceException (exception, **kwargs):
     if isinstance (exception, Error):
