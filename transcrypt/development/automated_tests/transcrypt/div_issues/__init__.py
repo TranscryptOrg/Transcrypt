@@ -232,7 +232,13 @@ def run (autoTester):
     a = 3
     del a
     autoTester.check ('Still alive')
-    
+
+    autoTester.check ('Issue 276')  # Partial, other part tested with in testlet 'operator_overloading'
+    a = 2
+    b = a ** 3
+    a **= 4
+    autoTester.check (a, b)
+        
     autoTester.check ('Issue 277')
     new = 3
     autoTester.check (new)
@@ -243,3 +249,4 @@ def run (autoTester):
         js_TypeError = 222
     autoTester.check (A.TypeError, A.js_TypeError)  # ... Generated code should use py_TypeError and TypeError respectively    
     autoTester.check ('Still alive')
+    

@@ -1171,16 +1171,16 @@ class Generator (ast.NodeVisitor):
         
     def visit_AugAssign (self, node):
         if (
-            type (node.op) in (ast.FloorDiv, ast.MatMult)   # Python // and @ have no operator symbol in JavaScript, so <operator>= won't work
+            type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)   # Python // and @ have no operator symbol in JavaScript, so <operator>= won't work
             or
-            (                                               # Python % (as opposed to JavaScript %) has no operator symbol in JavaScript, so <operator>= won't work
+            (                         # Python % (as opposed to JavaScript %) has no operator symbol in JavaScript, so <operator>= won't work
                 type (node.op) == ast.Mod and (
                     self.allowOperatorOverloading or
                     not self.allowJavaScriptMod
                 )
             )
             or
-            (                                               # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
+            (                         # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
                 type (node.target) == ast.Subscript and (
                     self.allowOperatorOverloading or
                     type (node.target.slice) != ast.Index or
