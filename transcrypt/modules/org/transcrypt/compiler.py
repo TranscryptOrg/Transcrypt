@@ -1156,12 +1156,13 @@ class Generator (ast.NodeVisitor):
         self.emit ('.{}', self.filterId (node.attr))
 
     def visit_AnnAssign (self, node):
-        self.visit (
-            ast.Assign (
-                [node.target],
-                node.value
+        if node.value != None:  # Rather than a node.value is a NameConstant with value None
+            self.visit (
+                ast.Assign (
+                    [node.target],
+                    node.value
+                )
             )
-        )
         
     def visit_AugAssign (self, node):
         if (
