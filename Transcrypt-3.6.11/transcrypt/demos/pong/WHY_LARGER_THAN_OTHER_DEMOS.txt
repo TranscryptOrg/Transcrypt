@@ -1,0 +1,22 @@
+Q:
+
+Why is the download for the pong example 156 kB while other examples are between 15 and 20 kB including the Transcrypt runtime?
+
+A:
+
+Because it includes the complete, rather big, fabric.js library.
+The pong example shows that it is possible to indeed completely inline JS libraries in the generated target code.
+
+While inlining large JS libraries avoids external dependencies, of course it bloats the target file.
+Since the library and the application share identifiers, joined minification in theory can do a better job than separate minification.
+However in practice minifiers are not yet clever enough to fully benefit from these shared identifiers.
+An alternative is to keep JS libraries separate and download them on the fly from a proprietary server or CDN.
+This is the road taken by all other examples, resulting in small target files.
+
+Note that in this example using fabric.js is really overkill, everything could easily have been done directly on top of the HTML5 canvas.
+The point to be made, however, is that any JS library can be encapsulated and imported as if it were a Python library, keeping the global namespace clean.
+This can be seen in pong.py at the statement: 'from com.fabricjs import fabric'.
+
+In general any JS libaries used for Transcrypt apps can be dealth with in exactly the same way as libraries for used for native JS apps.
+Downloading them on the fly seems to be the standard in the JS world, in theory giving the browser the possibility to cache them.
+When programming for node.js, 'require' can be put to work as usual.

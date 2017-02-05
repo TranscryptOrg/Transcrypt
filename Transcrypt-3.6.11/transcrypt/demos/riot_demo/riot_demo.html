@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello PyRiot ;-)</title>
+    <!-- for transcrypted version we do not need the compiler.
+         for the classic version you can use riot+compiler -->
+    <script src="https://cdn.jsdelivr.net/riot/2.5/riot.js"></script>
+	<style>
+        body {font-family:arial;font-size:30px;padding:50px;}
+		h1 {font-size:50px;color:#0000ff;}
+	</style>
+  </head>
+
+  <body>
+
+  <!-- classic riot (compiled on server, could be done in browser)         -->
+        <sample id="s1"></sample>
+        <script src="tags/sample.js"></script>
+        <script>riot.mount('sample')</script>
+
+
+  <!-- transcrypted version (transpiled on server, using python)           -->
+        <sample2 id='s2' label="nr1"></sample2>
+        <mp2     id='s3' label="nr2"></mp2>
+        <!-- the transpiled tag's js -->
+        <script src="__javascript__/riot_demo.js"></script>
+        <script>
+            // register
+            var cls = riot_demo.Sample2
+            riot.tag2('sample2', cls.template, cls.style, '', function(opts) {
+                new cls(this, opts)})
+            document.t1 = riot.mount('sample2')[0].update()
+            document.t2 = riot.mount('#s3', 'sample2')[0]
+            document.t2.update()
+        </script>
+  </body>
+</html>

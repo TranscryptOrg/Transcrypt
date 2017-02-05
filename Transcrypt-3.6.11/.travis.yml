@@ -1,0 +1,20 @@
+dist: trusty
+
+language: python
+python:
+- '3.5'
+- '3.6-dev'
+- 'nightly'
+
+addons:
+    firefox: "49.0"
+
+before_install:
+    - sudo apt-get install nodejs
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "./transcrypt/development/continuous_integration/run prepare"
+
+script: "./transcrypt/development/continuous_integration/run no_cleanup set1"
+

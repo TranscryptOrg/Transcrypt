@@ -1,0 +1,50 @@
+<html>
+	<body> 
+		<font face="arial" >
+		
+		<style>
+			#A, #Z, #K, #M, #space, #enter {
+				-webkit-user-select:none;
+				-khtml-user-drag:none;
+				-khtml-user-select:none;
+				-moz-user-select:none;
+				-moz-user-select:-moz-none;
+				-ms-user-select:none;
+				user-select:none
+			}
+			body {
+				visibility: hidden;
+			}
+		</style>
+		
+		<div id='text_frame' style="position:absolute">
+			<font color="444444" size="3">
+			<h3>Hit the spacebar to start</h3><br>
+
+			<font color="000000" size="3">
+			This example has sourcemap support for Google Chrome. Press F12, click the <i>sources</i> tab and then click <b>somewhere near the end</b> of <i>pong.min.js</i> to try.<br><br>
+			
+			You have to click near the end since 90% of the JS code is the large fabric.js library. Fabric.js is used here just as an example, this simple demo could have been programmed directly on top of the HTML5 canvas.
+		</div>
+
+		<div id="canvas_frame" style="position:absolute">
+			<canvas id="canvas"></canvas>
+		</div>
+		 
+		<div id="buttons_frame" style="position:absolute; font-size:30">
+			<div id='A' style="position:absolute; background-color: gray; left:0; top:0; width:100; height:90; text-align:center"><br>A</div>
+			<div id='Z' style="position:absolute; background-color: gray; left:0; top:120; width:100; height:90; text-align:center"><br>Z</div>
+			
+			<div id='K' style="position:absolute; background-color: gray; left:400; top:0; width:100; height:90; text-align:center"><br>K</div>
+			<div id='M' style="position:absolute; background-color: gray; left:400; top:120; width:100; height:90; text-align:center"><br>M</div>
+
+			<div id='space' style="position:absolute; background-color: gray; left:0; top:240; width:270; height:90; text-align:center"><br>Space</div>
+			<div id='enter' style="position:absolute; background-color: gray; left:350; top:240; width:150; height:90; text-align:center"><br>Enter</div>
+			
+			<div style="position:absolute; top:300">&nbsp</div>
+		<div>
+		
+		<script src="__javascript__/pong.min.js"></script>
+		<style>body {visibility: visible;}</style>
+	</body>
+</html>
