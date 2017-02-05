@@ -10,15 +10,28 @@ class Matrix:
         else:
             self._ = [[0 for col in range (nCols)] for row in range (nRows)]
         
+    def __matmul__ (self, other):
+        result = Matrix (self.nRows, other.nCols)
+        for iTargetRow in range (result.nRows):
+            for iTargetCol in range (result.nCols):
+                for iTerm in range (self.nCols):
+                    result._ [iTargetRow][iTargetCol] += self._ [iTargetRow][iTerm] * other._ [iTerm][iTargetCol]
+        return result
+                
+    def __imatmul__ (self, other):
+        # True in-place multiplication not yet implemented in compiler
+        # It currently translates m1 @= m2 to m1 = m1 @ ms and uses __matmul__ instead
+        # This fake __imatmul__ is just for CPython , allowing back to back testing
+        return self.__matmul__ (other)._
+        
     def __mul__ (self, other):
         if type (other) == Matrix:
-            result = Matrix (self.nRows, other.nCols)
-            for iTargetRow in range (result.nRows):
-                for iTargetCol in range (result.nCols):
-                    for iTerm in range (self.nCols):
-                        result._ [iTargetRow][iTargetCol] += self._ [iTargetRow][iTerm] * other._ [iTerm][iTargetCol]
+            result = Matrix (self.nRows, self.nCols)
+            for iRow in range (self.nRows):
+                for iCol in range (self.nCols):
+                    result._ [iRow][iCol] = self._ [iRow][iCol] * other._ [iRow][iCol]   
             return result
-        else:   # other is a scalar
+        else:  # other is a scalar
             return self.__rmul__ (other)
                 
     def __rmul__ (self, scalar):    # Only called if left operand is scalar, all other cases will call __mul__
@@ -80,6 +93,18 @@ def run (autoTester):
         [70, 80, 90]
     ])
     
+    m4 = Matrix (3, 3, [
+        [1, 1,  2],
+        [2, 2,  3],
+        [3, 3, -5]
+    ])
+    
+    m5 = Matrix (3, 3, [
+        [1, 1,  2],
+        [2, 2,  3],
+        [3, 3, -5]
+    ])
+        
     x = 3
     y = x * 4 * x
     fast = 2 * 3
@@ -92,6 +117,9 @@ def run (autoTester):
     m3 = 2 * (2 * m0 * 3 * m1 + m2 * 4) * 2
     autoTester.check (m0 [1][1], m0 [1][2], m1 [1][1], m1 [1][2])
     
+    m5 @= m4
+    m6 = m0 @ m1
+    
     __pragma__ ('noopov')
     
     fast2 = 16 * y + 1
@@ -100,6 +128,7 @@ def run (autoTester):
     autoTester.check (x, y)
     autoTester.check (m2)
     autoTester.check (m3)
+    autoTester.check (m5)
     autoTester.check (fast, slow, fast2)
     
     x = 'marker'

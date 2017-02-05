@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Operator @= added, M3 @= M2 converted M3 = M3 @ M2, same as for other augmented assignment ops
 - Compilation error report now contains detailed import sequence
 - Enhancement for issue #281: tuple keys allowed for dictionaries
 - Enhancement for issue #26: super () added for unique path to single ancestor method
