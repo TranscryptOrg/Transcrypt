@@ -27,36 +27,35 @@ def run (autoTester):
         autoTester.expectException( lambda: dict(134.34) )
     )
     autoTester.check (
-        autoTester.expectException( lambda: dict("asdf") )
+        autoTester.expectException( lambda: dict('asdf') )
     )
     autoTester.check (
-        autoTester.expectException( lambda: dict(["1234", 1]) )
+        autoTester.expectException( lambda: dict(['1234', 1]) )
     )
 
     autoTester.check( dict ([]))
     autoTester.check (dict ({}))
-    autoTester.check (dict ({"asdf": 1, "qwer": 2}) )
+    autoTester.check (dict ({'asdf': 1, 'qwer': 2}) )
 
     # check dict copy, Issue # 221
-    b = {"a" : 2.01, "b": -3.3}
+    b = {'a' : 2.01, 'b': -3.3}
     d = dict (b)
     autoTester.check (d)
-    b = {"a" : 2, "b": [1,2,3]}
+    b = {'a' : 2, 'b': [1,2,3]}
     d = dict (b)
     autoTester.check (d)
-    b = {"a" : None, "b": set([1,2,3])}
+    b = {'a' : None, 'b': set([1,2,3])}
     d = dict (b)
     autoTester.check (d)
-    b = {"a" : {"c": 2}, "b": (1,2)}
+    b = {'a' : {'c': 2}, 'b': (1,2)}
     d = dict (b)
     autoTester.check (d)
-    autoTester.check (d["a"]["c"])
-    autoTester.check (d.get("a").get("c"))
-    autoTester.check (b.get("a").get("c"))
-    d["a"]["c"] = 3
-    autoTester.check (d.get("a").get("c"))
-    autoTester.check (b.get("a").get("c"))
-
+    autoTester.check (d['a']['c'])
+    autoTester.check (d.get('a').get('c'))
+    autoTester.check (b.get('a').get('c'))
+    d['a']['c'] = 3
+    autoTester.check (d.get('a').get('c'))
+    autoTester.check (b.get('a').get('c'))
 
     knights = {'robin': 'the brave', 'gallahad': 'the pure'}
 
@@ -84,6 +83,20 @@ def run (autoTester):
     autoTester.check (tel.pop ('foo', 'bar'))
     autoTester.check (tel.pop ('foo', None))
 
+    # Check compound keys (issue 281)
+    
+    d = {}
+    d ['a'] = 3
+    d [(1, 2)] = 4
+    autoTester.check (d ['a'], d [(1, 2)])
+
+    __pragma__ ('opov')
+    d = {}
+    d ['a'] = 3
+    d [(1, 2)] = 4
+    autoTester.check (d ['a'], d [(1, 2)])
+    __pragma__ ('noopov')
+    
     # Check exceptions
     knights = {'robin': 'the brave', 'gallahad': 'the pure'}
     autoTester.check (

@@ -81,7 +81,7 @@ __pragma__ ('endif')
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
         
 __pragma__ ('ifdef', '__esv6__')
-        for (let base of aClass.__bases__) {    // May be inherited
+        for (let base of aClass.__bases__) {
 __pragma__ ('else')
         for (var index = 0; index < aClass.__bases__.length; index++) {
             var base = aClass.__bases__ [index];
@@ -1267,6 +1267,14 @@ __pragma__ ('endif')
             this [aKey] = aDict [aKey];
         }
     }
+    
+    function __rgetitem__ (aKey) {
+        return this [repr (aKey)];
+    }
+    
+    function __rsetitem__ (aKey, aValue) {
+        this [repr (aKey)] = aValue;
+    }
 
     function dict (objectOrPairs) {
         var instance = {};
@@ -1336,6 +1344,8 @@ __pragma__ ('endif')
         __setProperty__ (instance, 'py_setdefault', {value: __setdefault__, enumerable: false});
         __setProperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
         __setProperty__ (instance, 'py_update', {value: __update__, enumerable: false});
+        __setProperty__ (instance, '__getitem__', {value: __rgetitem__, enumerable: false});
+        __setProperty__ (instance, '__setitem__', {value: __rsetitem__, enumerable: false});
         return instance;
     }
 
