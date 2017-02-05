@@ -86,14 +86,14 @@ def run (autoTester):
     # Check compound keys (issue 281)
     
     d = {}
-    d ['a'] = 3
-    d [(1, 2)] = 4
+    d ['a'] = 3777
+    d [(1, 2)] = 4777
     autoTester.check (d ['a'], d [(1, 2)])
 
     __pragma__ ('opov')
     d = {}
-    d ['a'] = 3
-    d [(1, 2)] = 4
+    d ['a'] = 3777
+    d [(1, 2)] = 4777
     autoTester.check (d ['a'], d [(1, 2)])
     __pragma__ ('noopov')
     

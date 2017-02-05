@@ -1268,12 +1268,13 @@ __pragma__ ('endif')
         }
     }
     
-    function __rgetitem__ (aKey) {
-        return this [repr (aKey)];
+    
+    function __dgetitem__ (aKey) {
+        return this [aKey];
     }
     
-    function __rsetitem__ (aKey, aValue) {
-        this [repr (aKey)] = aValue;
+    function __dsetitem__ (aKey, aValue) {
+        this [aKey] = aValue;
     }
 
     function dict (objectOrPairs) {
@@ -1344,8 +1345,8 @@ __pragma__ ('endif')
         __setProperty__ (instance, 'py_setdefault', {value: __setdefault__, enumerable: false});
         __setProperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
         __setProperty__ (instance, 'py_update', {value: __update__, enumerable: false});
-        __setProperty__ (instance, '__getitem__', {value: __rgetitem__, enumerable: false});
-        __setProperty__ (instance, '__setitem__', {value: __rsetitem__, enumerable: false});
+        __setProperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
+        __setProperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices
         return instance;
     }
 
