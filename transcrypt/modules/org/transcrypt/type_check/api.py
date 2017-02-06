@@ -38,8 +38,11 @@ print ('\nExit status:', result[2])
 import sys
 from io import StringIO
 from typing import List, Tuple
-from mypy.main import main
 
+try:
+    from mypy.main import main
+except:
+    print ('Package mypy couldn\'t be found')
 
 def run(params: List[str]) -> Tuple[str, str, int]:
     sys.argv = [''] + params
