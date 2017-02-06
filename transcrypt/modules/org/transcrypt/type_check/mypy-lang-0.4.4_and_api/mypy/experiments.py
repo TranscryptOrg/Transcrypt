@@ -1,1 +1,0 @@
-STRICT_OPTIONAL = False

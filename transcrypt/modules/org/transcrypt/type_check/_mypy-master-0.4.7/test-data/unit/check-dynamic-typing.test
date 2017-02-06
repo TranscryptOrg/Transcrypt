@@ -1,0 +1,676 @@
+-- Assignment
+-- ----------
+
+
+[case testAssignmentWithDynamic]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+
+a = d # Everything ok
+d = a
+d = d
+d.x = a
+d.x = d
+
+class A: pass
+
+[case testMultipleAssignmentWithDynamic]
+from typing import Any
+d = None # type: Any
+a, b = None, None # type: (A, B)
+
+d, a = b, b    # E: Incompatible types in assignment (expression has type "B", variable has type "A")
+d, d = d, d, d # E: Too many values to unpack (2 expected, 3 provided)
+
+a, b = d, d
+d, d = a, b
+a, b = d
+s, t = d
+
+class A: pass
+class B: pass
+
+
+-- Expressions
+-- -----------
+
+
+[case testCallingFunctionWithDynamicArgumentTypes]
+from typing import Any
+a, b = None, None # type: (A, B)
+
+b = f(a) # E: Incompatible types in assignment (expression has type "A", variable has type "B")
+
+a = f(a)
+a = f(b)
+a = f(None)
+a = f(f)
+
+def f(x: Any) -> 'A':
+    pass
+
+class A: pass
+class B: pass
+
+[case testCallingWithDynamicReturnType]
+from typing import Any
+a, b = None, None # type: (A, B)
+
+a = f(b) # E: Argument 1 to "f" has incompatible type "B"; expected "A"
+
+a = f(a)
+b = f(a)
+
+def f(x: 'A') -> Any:
+    pass
+
+class A: pass
+class B: pass
+
+[case testBinaryOperationsWithDynamicLeftOperand]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+c = None # type: C
+b = None # type: bool
+n = 0
+
+d in a  # E: Unsupported right operand type for in ("A")
+d and a
+d or a
+c = d and b # Unintuitive type inference?
+c = d or b  # Unintuitive type inference?
+
+c = d + a
+c = d - a
+c = d * a
+c = d / a
+c = d // a
+c = d % a
+c = d ** a
+b = d == a
+b = d != a
+b = d < a
+b = d <= a
+b = d > a
+b = d >= a
+b = d in c
+b = d and b
+b = d or b
+
+class A: pass
+class C:
+    def __contains__(self, a: A) -> bool:
+        pass
+[file builtins.py]
+class object:
+  def __init__(self): pass
+class bool: pass
+class int: pass
+class type: pass
+class function: pass
+class str: pass
+
+[case testBinaryOperationsWithDynamicAsRightOperand]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+c = None # type: C
+b = None # type: bool
+n = 0
+
+a and d
+a or d
+c = a in d
+c = b and d # Unintuitive type inference?
+c = b or d  # Unintuitive type inference?
+b = a + d
+b = a / d
+
+c = a + d
+c = a - d
+c = a * d
+c = a / d
+c = a // d
+c = a % d
+c = a ** d
+b = a in d
+b = b and d
+b = b or d
+
+class A:
+    def __add__(self, a: 'A') -> 'C':
+        pass
+    def __sub__(self, a: 'A') -> 'C':
+        pass
+    def __mul__(self, a: 'A') -> 'C':
+        pass
+    def __truediv__(self, a: 'A') -> 'C':
+        pass
+    def __floordiv__(self, a: 'A') -> 'C':
+        pass
+    def __mod__(self, a: 'A') -> 'C':
+        pass
+    def __pow__(self, a: 'A') -> 'C':
+        pass
+    def _lt(self, a: 'A') -> bool:
+        pass
+    def _gt(self, a: 'A') -> bool:
+        pass
+
+class C: pass
+[file builtins.py]
+class object:
+  def __init__(self): pass
+class bool: pass
+class int: pass
+class type: pass
+class function: pass
+class str: pass
+
+[case testDynamicWithUnaryExpressions]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+b = None # type: bool
+a = not d # E: Incompatible types in assignment (expression has type "bool", variable has type "A")
+b = not d
+a = -d
+class A: pass
+[builtins fixtures/bool.pyi]
+[out]
+
+[case testDynamicWithMemberAccess]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+
+a = d.foo(a()) # E: "A" not callable
+
+a = d.x
+a = d.foo(a, a)
+d.x = a
+d.x.y.z  # E: "A" has no attribute "y"
+
+class A: pass
+[out]
+
+[case testIndexingWithDynamic]
+from typing import Any
+d = None # type: Any
+a = None # type: A
+
+a = d[a()] # E: "A" not callable
+d[a()] = a # E: "A" not callable
+
+a = d[a]
+d[a] = a
+d[a], d[a] = a, a
+
+class A: pass
+
+[case testTupleExpressionsWithDynamci]
+from typing import Tuple, Any
+t2 = None # type: Tuple[A, A]
+d = None # type: Any
+
+t2 = (d, d, d)  # E: Incompatible types in assignment (expression has type "Tuple[Any, Any, Any]", variable has type "Tuple[A, A]")
+t2 = (d, d)
+
+class A: pass
+[builtins fixtures/tuple.pyi]
+
+[case testCastsWithDynamicType]
+from typing import Any, cast
+class A: pass
+class B: pass
+d = None # type: Any
+a = None # type: A
+b = None # type: B
+b = cast(A, d) # E: Incompatible types in assignment (expression has type "A", variable has type "B")
+a = cast(A, d)
+b = cast(Any, d)
+a = cast(Any, f())
+def f() -> None: pass
+
+[case testCompatibilityOfDynamicWithOtherTypes]
+from typing import Any, Tuple
+d = None # type: Any
+t = None # type: Tuple[A, A]
+# TODO: callable types, overloaded functions
+
+d = None # All ok
+d = t
+d = g
+d = A
+t = d
+f = d
+
+def g(a: 'A') -> None:
+    pass
+
+class A: pass
+class B: pass
+[builtins fixtures/tuple.pyi]
+
+
+-- Statements
+-- ----------
+
+
+[case testDynamicCondition]
+from typing import Any
+d = None # type: Any
+while d:
+    pass
+if d:
+    pass
+elif d:
+    pass
+[builtins fixtures/bool.pyi]
+
+[case testRaiseWithDynamic]
+from typing import Any
+d = None # type: Any
+raise d
+[builtins fixtures/exception.pyi]
+
+[case testReturnWithDynamic]
+from typing import Any
+d = None # type: Any
+
+def f() -> None:
+    return d # Ok
+
+def g() -> 'A':
+    return d # Ok
+
+class A: pass
+
+
+-- Implicit dynamic types for functions
+-- ------------------------------------
+
+
+[case testImplicitGlobalFunctionSignature]
+from typing import Any, Callable
+x = None # type: Any
+a = None # type: A
+g = None # type: Callable[[], None]
+h = None # type: Callable[[A], None]
+
+f()     # E: Too few arguments for "f"
+f(x, x) # E: Too many arguments for "f"
+g = f   # E: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type Callable[[], None])
+f(a)
+f(x)
+a = f(a)
+h = f
+
+def f(x): pass
+
+class A: pass
+
+[case testImplicitGlobalFunctionSignatureWithDifferentArgCounts]
+from typing import Callable
+g0 = None # type: Callable[[], None]
+g1 = None # type: Callable[[A], None]
+g2 = None # type: Callable[[A, A], None]
+a = None # type: A
+
+g1 = f0 # E: Incompatible types in assignment (expression has type Callable[[], Any], variable has type Callable[[A], None])
+g2 = f0 # E: Incompatible types in assignment (expression has type Callable[[], Any], variable has type Callable[[A, A], None])
+g0 = f2 # E: Incompatible types in assignment (expression has type Callable[[Any, Any], Any], variable has type Callable[[], None])
+g1 = f2 # E: Incompatible types in assignment (expression has type Callable[[Any, Any], Any], variable has type Callable[[A], None])
+
+g0 = g0
+g2 = f2
+f0()
+f2(a, a)
+
+def f0(): pass
+
+def f2(x, y): pass
+
+class A: pass
+
+[case testImplicitGlobalFunctionSignatureWithDefaultArgs]
+from typing import Callable
+a, b = None, None # type: (A, B)
+
+g0 = None # type: Callable[[], None]
+g1 = None # type: Callable[[A], None]
+g2 = None # type: Callable[[A, A], None]
+g3 = None # type: Callable[[A, A, A], None]
+g4 = None # type: Callable[[A, A, A, A], None]
+
+f01(a, a)       # Fail
+f13()           # Fail
+f13(a, a, a, a) # Fail
+g2 = f01 # Fail
+g0 = f13 # Fail
+g4 = f13 # Fail
+
+f01()
+f01(a)
+f13(a)
+f13(a, a)
+f13(a, a, a)
+
+g0 = f01
+g1 = f01
+g1 = f13
+g2 = f13
+g3 = f13
+
+def f01(x = b): pass
+def f13(x, y = b, z = b): pass
+
+class A: pass
+class B: pass
+[out]
+main:10: error: Too many arguments for "f01"
+main:11: error: Too few arguments for "f13"
+main:12: error: Too many arguments for "f13"
+main:13: error: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type Callable[[A, A], None])
+main:14: error: Incompatible types in assignment (expression has type Callable[[Any, Any, Any], Any], variable has type Callable[[], None])
+main:15: error: Incompatible types in assignment (expression has type Callable[[Any, Any, Any], Any], variable has type Callable[[A, A, A, A], None])
+
+[case testSkipTypeCheckingWithImplicitSignature]
+
+a = None # type: A
+def f():
+    a()
+def g(x):
+    a()
+    a.x
+    a + a
+    if a():
+        a()
+class A: pass
+[builtins fixtures/bool.pyi]
+
+[case testSkipTypeCheckingWithImplicitSignatureAndDefaultArgs]
+
+a = None # type: A
+def f(x=a()):
+    a()
+def g(x, y=a, z=a()):
+    a()
+class A: pass
+
+[case testImplicitMethodSignature]
+from typing import Callable
+g0 = None # type: Callable[[], None]
+g1 = None # type: Callable[[A], None]
+g2 = None # type: Callable[[A, A], None]
+a = None # type: A
+
+g0 = a.f # E: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type Callable[[], None])
+g2 = a.f # E: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type Callable[[A, A], None])
+a = a.f  # E: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type "A")
+
+class A:
+    def g(self) -> None:
+        a = self.f(a)
+    def f(self, x): pass
+
+g1 = a.f
+a = a.f(a)
+
+[case testSkipTypeCheckingImplicitMethod]
+
+a = None # type: A
+class A:
+    def f(self):
+        a()
+    def g(self, x, y=a()):
+        a()
+
+[case testImplicitInheritedMethod]
+from typing import Callable
+g0 = None # type: Callable[[], None]
+g1 = None # type: Callable[[A], None]
+a = None # type: A
+
+g0 = a.f # E: Incompatible types in assignment (expression has type Callable[[Any], Any], variable has type Callable[[], None])
+
+g1 = a.f
+a = a.f(a)
+
+class B:
+    def f(self, x):
+        pass
+class A(B):
+    def g(self) -> None:
+        a = self.f(a)
+
+[case testEmptyReturnWithImplicitSignature]
+import typing
+def f():
+    return
+class A:
+    def g(self):
+        return
+
+[case testVarArgsWithImplicitSignature]
+from typing import Any
+o = None # type: Any
+def f(x, *a): pass
+f() # E: Too few arguments for "f"
+f(o)
+f(o, o)
+f(o, o, o)
+[builtins fixtures/list.pyi]
+
+
+-- Implicit types for constructors
+-- -------------------------------
+
+
+[case testInitMethodWithImplicitSignature]
+from typing import Callable
+f1 = None # type: Callable[[A], A]
+f2 = None # type: Callable[[A, A], A]
+a = None # type: A
+
+A(a)   # Fail
+f1 = A # Fail
+
+A(a, a)
+f2 = A
+
+class A:
+  def __init__(self, a, b): pass
+[out]
+main:6: error: Too few arguments for "A"
+main:7: error: Incompatible types in assignment (expression has type "A", variable has type Callable[[A], A])
+
+[case testUsingImplicitTypeObjectWithIs]
+
+t = None # type: type
+t = A
+t = B
+
+class A: pass
+class B:
+    def __init__(self): pass
+
+
+-- Type compatibility
+-- ------------------
+
+
+[case testTupleTypeCompatibility]
+from typing import Any, Tuple
+t1 = None # type: Tuple[Any, A]
+t2 = None # type: Tuple[A, Any]
+t3 = None # type: Tuple[Any, Any]
+t4 = None # type: Tuple[A, A]
+t5 = None # type: Tuple[Any, Any, Any]
+
+t3 = t5 # E: Incompatible types in assignment (expression has type "Tuple[Any, Any, Any]", variable has type "Tuple[Any, Any]")
+t5 = t4 # E: Incompatible types in assignment (expression has type "Tuple[A, A]", variable has type "Tuple[Any, Any, Any]")
+
+t1 = t1
+t1 = t2
+t1 = t3
+t1 = t4
+t2 = t1
+t2 = t3
+t2 = t4
+t3 = t1
+t3 = t2
+t3 = t4
+t4 = t1
+t4 = t2
+t4 = t3
+
+class A: pass
+[builtins fixtures/tuple.pyi]
+
+[case testFunctionTypeCompatibilityAndReturnTypes]
+from typing import Any, Callable
+f1 = None # type: Callable[[], Any]
+f11 = None # type: Callable[[], Any]
+f2 = None # type: Callable[[], A]
+f3 = None # type: Callable[[], None]
+
+f2 = f3 # E: Incompatible types in assignment (expression has type Callable[[], None], variable has type Callable[[], A])
+
+f1 = f2
+f1 = f3
+f2 = f11
+f3 = f11
+
+class A: pass
+
+[case testFunctionTypeCompatibilityAndArgumentTypes]
+from typing import Any, Callable
+f1 = None # type: Callable[[A, Any], None]
+f2 = None # type: Callable[[Any, A], None]
+f3 = None # type: Callable[[A, A], None]
+
+f1 = f1
+f1 = f2
+f1 = f3
+
+f2 = f1
+f2 = f2
+f2 = f3
+
+f3 = f1
+f3 = f2
+f3 = f3
+
+class A: pass
+
+[case testFunctionTypeCompatibilityAndArgumentCounts]
+from typing import Any, Callable
+f1 = None # type: Callable[[Any], None]
+f2 = None # type: Callable[[Any, Any], None]
+
+f1 = f2 # E: Incompatible types in assignment (expression has type Callable[[Any, Any], None], variable has type Callable[[Any], None])
+
+
+-- Overriding
+-- ----------
+
+
+[case testOverridingMethodWithDynamicTypes]
+from typing import Any
+a, b = None, None # type: (A, B)
+
+b.f(b) # E: Argument 1 to "f" of "B" has incompatible type "B"; expected "A"
+a = a.f(b)
+
+class B:
+    def f(self, x: 'A') -> 'B':
+        pass
+    def g(self, x: 'B') -> None:
+        pass
+class A(B):
+    def f(self, x: Any) -> Any:
+        pass
+    def g(self, x: Any) -> None:
+        pass
+
+[case testOverridingMethodWithImplicitDynamicTypes]
+
+a, b = None, None # type: (A, B)
+
+b.f(b) # E: Argument 1 to "f" of "B" has incompatible type "B"; expected "A"
+a = a.f(b)
+
+class B:
+    def f(self, x: 'A') -> 'B':
+        pass
+    def g(self, x: 'B') -> None:
+        pass
+class A(B):
+    def f(self, x):
+        pass
+    def g(self, x):
+        pass
+
+[case testOverridingMethodAcrossHierarchy]
+import typing
+class C:
+    def f(self, a: 'A') -> None: pass
+class B(C):
+    def f(self, a): pass
+class A(B):
+    def f(self, a: 'D') -> None: # E: Argument 1 of "f" incompatible with supertype "C"
+        pass
+class D: pass
+[out]
+
+[case testInvalidOverrideArgumentCountWithImplicitSignature1]
+import typing
+class B:
+    def f(self, x: A) -> None: pass
+class A(B):
+    def f(self, x, y): # dynamic function not type checked
+        x()
+[out]
+
+[case testInvalidOverrideArgumentCountWithImplicitSignature2]
+import typing
+class B:
+    def f(self, x, y): pass
+class A(B):
+    def f(self, x: 'A') -> None: # E: Signature of "f" incompatible with supertype "B"
+        pass
+[out]
+
+[case testInvalidOverrideArgumentCountWithImplicitSignature3]
+import typing
+class B:
+    def f(self, x: A) -> None: pass
+class A(B):
+    def f(self, x, y) -> None: # E: Signature of "f" incompatible with supertype "B"
+        x()
+[out]
+
+
+-- Don't complain about too few/many arguments in dynamic functions
+-- ----------------------------------------------------------------
+
+[case testTooManyArgsInDynamic]
+def f() -> None: pass
+def g():
+    f(1) # Silent
+[out]
+
+[case testTooFewArgsInDynamic]
+def f(a: int) -> None: pass
+def g():
+    f() # Silent
+[out]
+
+[case testJustRightInDynamic]
+def f(a: int) -> None: pass
+def g():
+    f('') # Silent
+[out]

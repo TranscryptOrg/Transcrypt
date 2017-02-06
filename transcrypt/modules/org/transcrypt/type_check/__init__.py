@@ -3,32 +3,30 @@ import os
 import subprocess
 import traceback
 
-mypyPath = '{}/mypy-lang-0.4.4_and_api'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/'))
-sys.path.insert (0, mypyPath)   # Prepend, to favor it over CPython's mypy installation
-
-from mypy import api
+from org.transcrypt.type_check import api
 from org.transcrypt import utils
 
 def run (sourcePath):
+    utils.log (True, 'Performing static type validation on application: {}\n', sourcePath)
+    
     try:
-        utils.log (True, 'Performing static type validation on application: {}\n', sourcePath)
-        
-        validationMessages = api.type_validator.validate ([sourcePath])
-        
-        if validationMessages:
-            oldFileName = ''
-            for validationMessage in validationMessages:
-                if isinstance (validationMessage, api.StaticTypingError):
-                    if validationMessage.file_name != oldFileName:
-                        utils.log (True, '\tFile {}\n', validationMessage.file_name)
-                        oldFileName = validationMessage.file_name
-                    utils.log (True, '\t\tLine {}: {}\n', validationMessage.line_nr, validationMessage.description)
-                elif isinstance (validationError, api.CompilationError):
-                    utils.log (True, '\t{}'.format (message))
-                else:
-                    utils.log (True, '\tUnknown error')
-            utils.log (True, '\n')
+        stdOutReport, stdErrReport, exitStatus = api.run ([
+            sourcePath
+        ])
     except Exception as exception:
-        utils.log (False, traceback.format_exc ())
-        raise exception
+        print (exception)
+    
+    if stdOutReport:
+        utils.log (True, 'The following inconsistencies were found:\n')
+        for stdOutLine in stdOutReport.split ('\n'):
+            utils.log (True, '\t{}\n', stdOutLine)
+            
+    if stdErrReport:
+        utils.log (True, 'Problems encountered during static type check\n')
+        for stdErrLine in stdErrReport.split ('\n'):
+            utils.log (True, '\t{}\n', stdErrLine)
+                    
+    utils.log (True, '\n')
+        
+    
         

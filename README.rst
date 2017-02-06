@@ -108,7 +108,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- Added in-place ops @= **= %=, *=, /=, +=, -=, <<=, >>=, |=, ^=
+- Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)
+- Added in-place overloads for @=, **=, %=, *=, /=, +=, -=, <<=, >>=, |=, ^=
 - Operator **= added, a **= b converted to a = a ** b
 - Operator @= added, M3 @= M2 converted to M3 = M3 @ M2, same as for other augmented assignment ops
 - Compilation error report now contains detailed import sequence

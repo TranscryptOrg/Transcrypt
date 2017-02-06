@@ -1,0 +1,15 @@
+-- Tests for unsupported features
+
+
+[case testDecorateOverloadedFunction]
+# The error messages are not the most informative ever.
+def d(x): pass
+@d
+def f(): pass
+def f(x): pass # E
+def g(): pass
+@d # E
+def g(x): pass
+[out]
+main:5: error: Name 'f' already defined
+main:7: error: Name 'g' already defined

@@ -1,0 +1,479 @@
+-- Tests for command line parsing
+-- ------------------------------
+--
+-- The initial line specifies the command line, in the format
+--
+--   # cmd: mypy <options>
+
+
+-- Directories/packages on the command line
+-- ----------------------------------------
+
+[case testCmdlinePackage]
+# cmd: mypy pkg
+[file pkg/__init__.py]
+[file pkg/a.py]
+undef
+[file pkg/subpkg/__init__.py]
+[file pkg/subpkg/a.py]
+undef
+import pkg.subpkg.a
+[out]
+pkg/a.py:1: error: Name 'undef' is not defined
+pkg/subpkg/a.py:1: error: Name 'undef' is not defined
+
+[case testCmdlinePackageSlash]
+# cmd: mypy pkg/
+[file pkg/__init__.py]
+[file pkg/a.py]
+undef
+[file pkg/subpkg/__init__.py]
+[file pkg/subpkg/a.py]
+undef
+import pkg.subpkg.a
+[out]
+pkg/a.py:1: error: Name 'undef' is not defined
+pkg/subpkg/a.py:1: error: Name 'undef' is not defined
+
+[case testCmdlineNonPackage]
+# cmd: mypy dir
+[file dir/a.py]
+undef
+[file dir/subdir/a.py]
+undef
+[out]
+dir/a.py:1: error: Name 'undef' is not defined
+
+[case testCmdlineNonPackageSlash]
+# cmd: mypy dir/
+[file dir/a.py]
+undef
+[file dir/subdir/a.py]
+undef
+[out]
+dir/a.py:1: error: Name 'undef' is not defined
+
+[case testCmdlinePackageContainingSubdir]
+# cmd: mypy pkg
+[file pkg/__init__.py]
+[file pkg/a.py]
+undef
+[file pkg/subdir/a.py]
+undef
+[out]
+pkg/a.py:1: error: Name 'undef' is not defined
+
+[case testCmdlineNonPackageContainingPackage]
+# cmd: mypy dir
+[file dir/a.py]
+undef
+import subpkg.a
+[file dir/subpkg/__init__.py]
+[file dir/subpkg/a.py]
+undef
+[out]
+dir/subpkg/a.py:1: error: Name 'undef' is not defined
+dir/a.py:1: error: Name 'undef' is not defined
+
+[case testBadFileEncoding]
+# cmd: mypy a.py
+[file a.py]
+# coding: uft-8
+[out]
+mypy: can't decode file 'a.py': unknown encoding: uft-8
+
+[case testCannotIgnoreDuplicateModule]
+# cmd: mypy one/mod/__init__.py two/mod/__init__.py
+[file one/mod/__init__.py]
+# type: ignore
+[file two/mod/__init__.py]
+# type: ignore
+[out]
+two/mod/__init__.py: error: Duplicate module named 'mod'
+
+[case testFlagsFile]
+# cmd: mypy @flagsfile
+[file flagsfile]
+-2
+main.py
+[file main.py]
+def f():
+    try:
+        1/0
+    except ZeroDivisionError, err:
+        print err
+
+[case testConfigFile]
+# cmd: mypy main.py
+[file mypy.ini]
+[[mypy]
+python_version = 2.7
+[file main.py]
+def f():
+    try:
+        1/0
+    except ZeroDivisionError, err:
+        print err
+
+[case testAltConfigFile]
+# cmd: mypy --config-file config.ini main.py
+[file config.ini]
+[[mypy]
+python_version = 2.7
+[file main.py]
+def f():
+    try:
+        1/0
+    except ZeroDivisionError, err:
+        print err
+
+[case testPerFileConfigSection]
+# cmd: mypy x.py y.py z.py
+[file mypy.ini]
+[[mypy]
+hide_error_context = True
+disallow_untyped_defs = True
+[[mypy-y*]
+disallow_untyped_defs = False
+[[mypy-z*]
+disallow_untyped_calls = True
+[file x.py]
+def f(a):
+    pass
+def g(a: int) -> int:
+    return f(a)
+[file y.py]
+def f(a):
+    pass
+def g(a: int) -> int:
+    return f(a)
+[file z.py]
+def f(a):
+    pass
+def g(a: int) -> int:
+    return f(a)
+[out]
+z.py:1: error: Function is missing a type annotation
+z.py:4: error: Call to untyped function "f" in typed context
+x.py:1: error: Function is missing a type annotation
+
+[case testPerFileConfigSectionMultipleMatches]
+# cmd: mypy xx.py xy.py yx.py yy.py
+[file mypy.ini]
+[[mypy]
+hide_error_context = True
+[[mypy-*x*]
+disallow_untyped_defs = True
+[[mypy-*y*]
+disallow_untyped_calls = True
+[file xx.py]
+def f(a): pass
+def g(a: int) -> int: return f(a)
+[file xy.py]
+def f(a): pass
+def g(a: int) -> int: return f(a)
+[file yx.py]
+def f(a): pass
+def g(a: int) -> int: return f(a)
+[file yy.py]
+def f(a): pass
+def g(a: int) -> int: return f(a)
+[out]
+yy.py:2: error: Call to untyped function "f" in typed context
+yx.py:1: error: Function is missing a type annotation
+yx.py:2: error: Call to untyped function "f" in typed context
+xy.py:1: error: Function is missing a type annotation
+xy.py:2: error: Call to untyped function "f" in typed context
+xx.py:1: error: Function is missing a type annotation
+
+[case testMultipleGlobConfigSection]
+# cmd: mypy x.py y.py z.py
+[file mypy.ini]
+[[mypy]
+hide_error_context = True
+[[mypy-x*,z*]
+disallow_untyped_defs = True
+[file x.py]
+def f(a): pass
+[file y.py]
+def f(a): pass
+[file z.py]
+def f(a): pass
+[out]
+z.py:1: error: Function is missing a type annotation
+x.py:1: error: Function is missing a type annotation
+
+[case testConfigErrorNoSection]
+# cmd: mypy -c pass
+[file mypy.ini]
+[out]
+mypy.ini: No [mypy] section in config file
+
+[case testConfigErrorUnknownFlag]
+# cmd: mypy -c pass
+[file mypy.ini]
+[[mypy]
+bad = 0
+[out]
+mypy.ini: [mypy]: Unrecognized option: bad = 0
+
+[case testConfigErrorUnknownReport]
+# cmd: mypy -c pass
+[file mypy.ini]
+[[mypy]
+bad_report = .
+[out]
+mypy.ini: [mypy]: Unrecognized report type: bad_report
+
+[case testConfigErrorBadBoolean]
+# cmd: mypy -c pass
+[file mypy.ini]
+[[mypy]
+ignore_missing_imports = nah
+[out]
+mypy.ini: [mypy]: ignore_missing_imports: Not a boolean: nah
+
+[case testConfigErrorNotPerFile]
+# cmd: mypy -c pass
+[file mypy.ini]
+[[mypy]
+[[mypy-*]
+strict_optional = True
+[out]
+mypy.ini: [mypy-*]: Per-module sections should only specify per-module flags (strict_optional)
+
+[case testCoberturaParser]
+# cmd: mypy --cobertura-xml-report build pkg
+[file pkg/__init__.py]
+[file pkg/a.py]
+from typing import Dict
+
+def foo() -> Dict:
+  z = {'hello': 'world'}
+  return z
+[file pkg/subpkg/__init__.py]
+[file pkg/subpkg/a.py]
+def bar() -> str:
+  return 'world'
+def untyped_function():
+  return 42
+[outfile build/cobertura.xml]
+<coverage timestamp="$TIMESTAMP" version="$VERSION" line-rate="0.8000" branch-rate="0">
+  <sources>
+    <source>$PWD</source>
+  </sources>
+  <packages>
+    <package complexity="1.0" name="pkg" branch-rate="0" line-rate="1.0000">
+      <classes>
+        <class complexity="1.0" filename="pkg/__init__.py" name="__init__.py" branch-rate="0" line-rate="1.0">
+          <methods/>
+          <lines/>
+        </class>
+        <class complexity="1.0" filename="pkg/a.py" name="a.py" branch-rate="0" line-rate="1.0000">
+          <methods/>
+          <lines>
+            <line branch="true" hits="1" number="3" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="4" precision="precise"/>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package complexity="1.0" name="pkg.subpkg" branch-rate="0" line-rate="0.5000">
+      <classes>
+        <class complexity="1.0" filename="pkg/subpkg/__init__.py" name="__init__.py" branch-rate="0" line-rate="1.0">
+          <methods/>
+          <lines/>
+        </class>
+        <class complexity="1.0" filename="pkg/subpkg/a.py" name="a.py" branch-rate="0" line-rate="0.5000">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="1" precision="precise"/>
+            <line branch="false" hits="0" number="3" precision="any"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
+
+[case testConfigMypyPath]
+# cmd: mypy file.py
+[file mypy.ini]
+[[mypy]
+mypy_path =
+    foo:bar
+    , baz
+[file foo/foo.pyi]
+def foo(x: int) -> str: ...
+[file bar/bar.pyi]
+def bar(x: str) -> list: ...
+[file baz/baz.pyi]
+def baz(x: list) -> dict: ...
+[file file.py]
+import no_stubs
+from foo import foo
+from bar import bar
+from baz import baz
+baz(bar(foo(42)))
+baz(bar(foo('oof')))
+[out]
+file.py:1: error: Cannot find module named 'no_stubs'
+file.py:1: note: (Perhaps setting MYPYPATH or using the "--ignore-missing-imports" flag would help)
+file.py:6: error: Argument 1 to "foo" has incompatible type "str"; expected "int"
+
+[case testIgnoreErrorsConfig]
+# cmd: mypy x.py y.py
+[file mypy.ini]
+[[mypy]
+[[mypy-x]
+ignore_errors = True
+[file x.py]
+"" + 0
+[file y.py]
+"" + 0
+[out]
+y.py:1: error: Unsupported operand types for + ("str" and "int")
+
+[case testConfigFollowImportsNormal]
+# cmd: mypy main.py
+[file main.py]
+from a import x
+x + 0
+x + ''  # E
+import a
+a.x + 0
+a.x + ''  # E
+a.y  # E
+a + 0  # E
+[file mypy.ini]
+[[mypy]
+follow_imports = normal
+[file a.py]
+x = 0
+x += ''  # Error reported here
+[out]
+a.py:2: error: Unsupported operand types for + ("int" and "str")
+main.py:3: error: Unsupported operand types for + ("int" and "str")
+main.py:6: error: Unsupported operand types for + ("int" and "str")
+main.py:7: error: "module" has no attribute "y"
+main.py:8: error: Unsupported operand types for + ("module" and "int")
+
+[case testConfigFollowImportsSilent]
+# cmd: mypy main.py
+[file main.py]
+from a import x
+x + ''
+import a
+a.x + ''
+a.y
+a + 0
+[file mypy.ini]
+[[mypy]
+follow_imports = silent
+[file a.py]
+x = 0
+x += ''  # No error reported
+[out]
+main.py:2: error: Unsupported operand types for + ("int" and "str")
+main.py:4: error: Unsupported operand types for + ("int" and "str")
+main.py:5: error: "module" has no attribute "y"
+main.py:6: error: Unsupported operand types for + ("module" and "int")
+
+[case testConfigFollowImportsSkip]
+# cmd: mypy main.py
+[file main.py]
+from a import x
+reveal_type(x)  # Expect Any
+import a
+reveal_type(a.x)  # Expect Any
+[file mypy.ini]
+[[mypy]
+follow_imports = skip
+[file a.py]
+/  # No error reported
+[out]
+main.py:2: error: Revealed type is 'Any'
+main.py:4: error: Revealed type is 'Any'
+
+[case testConfigFollowImportsError]
+# cmd: mypy main.py
+[file main.py]
+from a import x
+reveal_type(x)  # Expect Any
+import a  # Error reported here
+reveal_type(a.x)  # Expect Any
+[file mypy.ini]
+[[mypy]
+follow_imports = error
+[file a.py]
+/  # No error reported
+[out]
+main.py:1: note: Import of 'a' ignored
+main.py:1: note: (Using --follow-imports=error, module not passed on command line)
+main.py:2: error: Revealed type is 'Any'
+main.py:4: error: Revealed type is 'Any'
+
+[case testConfigFollowImportsSelective]
+# cmd: mypy main.py
+[file mypy.ini]
+[[mypy]
+[[mypy-normal]
+follow_imports = normal
+[[mypy-silent]
+follow_imports = silent
+[[mypy-skip]
+follow_imports = skip
+[[mypy-error]
+follow_imports = error
+[file main.py]
+import normal
+import silent
+import skip
+import error
+reveal_type(normal.x)
+reveal_type(silent.x)
+reveal_type(skip)
+reveal_type(error)
+[file normal.py]
+x = 0
+x += ''
+[file silent.py]
+x = 0
+x += ''
+[file skip.py]
+bla bla
+[file error.py]
+bla bla
+[out]
+main.py:4: note: Import of 'error' ignored
+main.py:4: note: (Using --follow-imports=error, module not passed on command line)
+normal.py:2: error: Unsupported operand types for + ("int" and "str")
+main.py:5: error: Revealed type is 'builtins.int'
+main.py:6: error: Revealed type is 'builtins.int'
+main.py:7: error: Revealed type is 'Any'
+main.py:8: error: Revealed type is 'Any'
+
+[case testConfigSilentMissingImportsOff]
+# cmd: mypy main.py
+[file main.py]
+import missing  # Expect error here
+reveal_type(missing.x)  # Expect Any
+[file mypy.ini]
+[[mypy]
+ignore_missing_imports = False
+[out]
+main.py:1: error: Cannot find module named 'missing'
+main.py:1: note: (Perhaps setting MYPYPATH or using the "--ignore-missing-imports" flag would help)
+main.py:2: error: Revealed type is 'Any'
+
+[case testConfigSilentMissingImportsOn]
+# cmd: mypy main.py
+[file main.py]
+import missing  # No error here
+reveal_type(missing.x)  # Expect Any
+[file mypy.ini]
+[[mypy]
+ignore_missing_imports = True
+[out]
+main.py:2: error: Revealed type is 'Any'

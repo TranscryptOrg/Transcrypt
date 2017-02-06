@@ -1,0 +1,72 @@
+-- Nested list assignment
+-- -----------------------------
+
+[case testNestedListAssignment]
+from typing import List
+a1, b1, c1 = None, None, None # type: (A, B, C)
+a2, b2, c2 = None, None, None # type: (A, B, C)
+
+a1, [b1, c1] = a2, [b2, c2]
+a1, [a1, [b1, c1]] = a2, [a2, [b2, c2]]
+a1, [a1, [a1, b1]] = a1, [a1, [a1, c1]]  # E: Incompatible types in assignment (expression has type "C", variable has type "B")
+
+class A: pass
+class B: pass
+class C: pass
+[builtins fixtures/list.pyi]
+[out]
+
+[case testNestedListAssignmentToTuple]
+from typing import List
+a, b, c = None, None, None # type: (A, B, C)
+
+a, b = [a, b]
+a, b = [a]  # E: Need more than 1 value to unpack (2 expected)
+a, b = [a, b, c]  # E: Too many values to unpack (2 expected, 3 provided)
+
+class A: pass
+class B: pass
+class C: pass
+[builtins fixtures/list.pyi]
+[out]
+
+[case testListAssignmentFromTuple]
+from typing import List
+a, b, c = None, None, None # type: (A, B, C)
+t = a, b
+
+[a, b], c = t, c
+[a, c], c = t, c  # E: Incompatible types in assignment (expression has type "B", variable has type "C")
+[a, a, a], c = t, c  # E: Need more than 2 values to unpack (3 expected)
+[a], c = t, c  # E: Too many values to unpack (1 expected, 2 provided)
+
+class A: pass
+class B: pass
+class C: pass
+[builtins fixtures/list.pyi]
+[out]
+
+[case testListAssignmentUnequalAmountToUnpack]
+from typing import List
+a, b, c = None, None, None # type: (A, B, C)
+
+def f() -> None: # needed because test parser tries to parse [a, b] as section header
+    [a, b] = [a, b]
+    [a, b] = [a]  # E: Need more than 1 value to unpack (2 expected)
+    [a, b] = [a, b, c]  # E: Too many values to unpack (2 expected, 3 provided)
+
+class A: pass
+class B: pass
+class C: pass
+[builtins fixtures/list.pyi]
+[out]
+
+[case testListWithStarExpr]
+(x, *a) = [1, 2, 3]
+a = [1, *[2, 3]]
+reveal_type(a)  # E: Revealed type is 'builtins.list[builtins.int]'
+b = [0, *a]
+reveal_type(b)  # E: Revealed type is 'builtins.list[builtins.int*]'
+c = [*a, 0]
+reveal_type(c)  # E: Revealed type is 'builtins.list[builtins.int*]'
+[builtins fixtures/list.pyi]

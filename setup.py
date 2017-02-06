@@ -24,6 +24,9 @@ setup (
 	author = 'Jacques de Hooge',
 	author_email = 'jacques.de.hooge@qquick.org',
 	packages = ['transcrypt'],
+	install_requires = [
+		'mypy'
+	],
 	entry_points = {
 		'console_scripts': [
 			'transcrypt = transcrypt.__main__:main'
