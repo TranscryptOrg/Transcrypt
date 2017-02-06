@@ -1404,7 +1404,8 @@ __pragma__ ('endif')
             return a % b;
         }
     };
-
+    __all__.__jsmod__ = __jsmod__;
+    
     var __mod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -1416,7 +1417,7 @@ __pragma__ ('endif')
             return ((a % b) + b) % b;
         }
     };
-    __all__.pow = __pow__;
+    __all__.mod = __mod__;
 
     // Overloaded binary arithmetic
     
@@ -1544,7 +1545,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__and__ = __and__;    
-    
+        
     // Overloaded binary compare
     
     var __eq__ = function (a, b) {
@@ -1606,6 +1607,222 @@ __pragma__ ('endif')
         }
     };
     __all__.__ge__ = __ge__;
+    
+    // Overloaded augmented general
+    
+    var __imatmul__ = function (a, b) {
+        if ('__imatmul__' in a) {
+            return a.__imatmul__ (b);
+        }
+        else {
+            return a.__matmul__ (b);
+        }
+    };
+    __all__.__imatmul__ = __imatmul__;
+
+    var __ipow__ = function (a, b) {
+        if (typeof a == 'object' && '__pow__' in a) {
+            return a.__ipow__ (b);
+        }
+        else if (typeof a == 'object' && '__ipow__' in a) {
+            return a.__pow__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rpow__ (a);
+        }
+        else {
+            return Math.pow (a, b);
+        }
+    };
+    __all__.ipow = __ipow__;
+
+    var __ijsmod__ = function (a, b) {
+        if (typeof a == 'object' && '__imod__' in a) {
+            return a.__ismod__ (b);
+        }
+        else if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return a % b;
+        }
+    };
+    __all__.ijsmod__ = __ijsmod__;
+    
+    var __imod__ = function (a, b) {
+        if (typeof a == 'object' && '__imod__' in a) {
+            return a.__imod__ (b);
+        }
+        else if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return ((a % b) + b) % b;
+        }
+    };
+    __all__.imod = __imod__;
+    
+    // Overloaded augmented arithmetic
+    
+    var __imul__ = function (a, b) {
+        if (typeof a == 'object' && '__imul__' in a) {
+            return a.__imul__ (b);
+        }
+        else if (typeof a == 'object' && '__mul__' in a) {
+            return a = a.__mul__ (b);
+        }
+        else if (typeof b == 'object' && '__rmul__' in b) {
+            return a = b.__rmul__ (a);
+        }
+        else if (typeof a == 'string') {
+            return a = a.__mul__ (b);
+        }
+        else if (typeof b == 'string') {
+            return a = b.__rmul__ (a);
+        }
+        else {
+            return a *= b;
+        }
+    };
+    __all__.__imul__ = __imul__;
+
+    var __idiv__ = function (a, b) {
+        if (typeof a == 'object' && '__idiv__' in a) {
+            return a.__idiv__ (b);
+        }
+        else if (typeof a == 'object' && '__div__' in a) {
+            return a = a.__div__ (b);
+        }
+        else if (typeof b == 'object' && '__rdiv__' in b) {
+            return a = b.__rdiv__ (a);
+        }
+        else {
+            return a /= b;
+        }
+    };
+    __all__.__idiv__ = __idiv__;
+
+    var __iadd__ = function (a, b) {
+        if (typeof a == 'object' && '__iadd__' in a) {
+            return a.__iadd__ (b);
+        }
+        else if (typeof a == 'object' && '__add__' in a) {
+            return a = a.__add__ (b);
+        }
+        else if (typeof b == 'object' && '__radd__' in b) {
+            return a = b.__radd__ (a);
+        }
+        else {
+            return a += b;
+        }
+    };
+    __all__.__iadd__ = __iadd__;
+
+    var __isub__ = function (a, b) {
+        if (typeof a == 'object' && '__isub__' in a) {
+            return a.__isub__ (b);
+        }
+        else if (typeof a == 'object' && '__sub__' in a) {
+            return a = a.__sub__ (b);
+        }
+        else if (typeof b == 'object' && '__rsub__' in b) {
+            return a = b.__rsub__ (a);
+        }
+        else {
+            return a -= b;
+        }
+    };
+    __all__.__isub__ = __isub__;
+
+    // Overloaded augmented bitwise
+    
+    var __ilshift__ = function (a, b) {
+        if (typeof a == 'object' && '__ilshift__' in a) {
+            return a.__ilshift__ (b);
+        }
+        else if (typeof a == 'object' && '__lshift__' in a) {
+            return a = a.__lshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rlshift__' in b) {
+            return a = b.__rlshift__ (a);
+        }
+        else {
+            return a <<= b;
+        }
+    };
+    __all__.__ilshift__ = __ilshift__;
+
+    var __irshift__ = function (a, b) {
+        if (typeof a == 'object' && '__irshift__' in a) {
+            return a.__irshift__ (b);
+        }
+        else if (typeof a == 'object' && '__rshift__' in a) {
+            return a = a.__rshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rrshift__' in b) {
+            return a = b.__rrshift__ (a);
+        }
+        else {
+            return a >>= b;
+        }
+    };
+    __all__.__irshift__ = __irshift__;
+
+    var __ior__ = function (a, b) {
+        if (typeof a == 'object' && '__ior__' in a) {
+            return a.__ior__ (b);
+        }
+        else if (typeof a == 'object' && '__or__' in a) {
+            return a = a.__or__ (b);
+        }
+        else if (typeof b == 'object' && '__ror__' in b) {
+            return a = b.__ror__ (a);
+        }
+        else {
+            return a |= b;
+        }
+    };
+    __all__.__ior__ = __ior__;
+
+    var __ixor__ = function (a, b) {
+        if (typeof a == 'object' && '__ixor__' in a) {
+            return a.__ixor__ (b);
+        }
+        else if (typeof a == 'object' && '__xor__' in a) {
+            return a = a.__xor__ (b);
+        }
+        else if (typeof b == 'object' && '__rxor__' in b) {
+            return a = b.__rxor__ (a);
+        }
+        else {
+            return a ^= b;
+        }
+    };
+    __all__.__ixor__ = __ixor__;
+
+    var __iand__ = function (a, b) {
+        if (typeof a == 'object' && '__iand__' in a) {
+            return a.__iand__ (b);
+        }
+        else if (typeof a == 'object' && '__and__' in a) {
+            return a = a.__and__ (b);
+        }
+        else if (typeof b == 'object' && '__rand__' in b) {
+            return a = b.__rand__ (a);
+        }
+        else {
+            return a &= b;
+        }
+    };
+    __all__.__iand__ = __iand__;
+    
+    // Indices and slices
 
     var __getitem__ = function (container, key) {                           // Slice c.q. index, direct generated call to runtime switch
         if (typeof container == 'object' && '__getitem__' in container) {

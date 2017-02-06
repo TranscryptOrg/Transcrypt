@@ -22,7 +22,7 @@ class Matrix:
         # True in-place multiplication not yet implemented in compiler
         # It currently translates m1 @= m2 to m1 = m1 @ ms and uses __matmul__ instead
         # This fake __imatmul__ is just for CPython , allowing back to back testing
-        return self.__matmul__ (other)._
+        return self.__matmul__ (other)
         
     def __mul__ (self, other):
         if type (other) == Matrix:
@@ -41,6 +41,9 @@ class Matrix:
                 result._ [iRow][iCol] = scalar * self._ [iRow][iCol]
         return result
     
+    def __imul__ (self, other):
+        return self.__mul__ (other)
+                
     def __add__ (self, other):
         result = Matrix (self.nRows, self.nCols)
         for iRow in range (self.nRows):
@@ -48,6 +51,8 @@ class Matrix:
                 result._ [iRow][iCol] = self._ [iRow][iCol] + other._ [iRow][iCol]
         return result
         
+    # No __iadd__, to test fallback to __add__
+    
     def __getitem__ (self, index):
         return self._ [index]
 
@@ -108,6 +113,7 @@ def run (autoTester):
     x = 3
     y = x * 4 * x
     fast = 2 * 3
+    fast += 1
     
     __pragma__ ('opov')
     
@@ -115,7 +121,11 @@ def run (autoTester):
     slow = 2 + 3
     m2 = m0 * m1  + m1 * (m0 + m1)
     m3 = 2 * (2 * m0 * 3 * m1 + m2 * 4) * 2
+
     autoTester.check (m0 [1][1], m0 [1][2], m1 [1][1], m1 [1][2])
+
+    m1 += m0
+    m2 *= m1
     
     m5 @= m4
     m6 = m0 @ m1
@@ -123,12 +133,14 @@ def run (autoTester):
     __pragma__ ('noopov')
     
     fast2 = 16 * y + 1
+    fast *= 2
     
     autoTester.check (m0, m1)
     autoTester.check (x, y)
     autoTester.check (m2)
     autoTester.check (m3)
     autoTester.check (m5)
+    autoTester.check (m6)
     autoTester.check (fast, slow, fast2)
     
     x = 'marker'
@@ -211,11 +223,19 @@ def run (autoTester):
     [] & bitwise
     autoTester.check (12 & 20)
     
+    a = 32
+    a <<=2
+    autoTester.check (a)
+    
     __pragma__ ('noopov')
-
+    
     autoTester.check (32 << 2)
     autoTester.check (32 >> 2)
     autoTester.check (1 | 4)
     autoTester.check (11 ^ 13)
     autoTester.check (12 & 20)
+    
+    a = 32
+    a <<= 2
+    autoTester.check (a)
     

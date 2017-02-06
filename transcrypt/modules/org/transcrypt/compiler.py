@@ -52,7 +52,7 @@ class ModuleMetadata:
 
             self.extraSubdir = 'extra'
             self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
-
+            
             if (os.path.isfile (self.sourcePath)):
                 break;
         else:
@@ -1170,29 +1170,59 @@ class Generator (ast.NodeVisitor):
             )
         
     def visit_AugAssign (self, node):
-        if (
-            type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)   # Python // and @ have no operator symbol in JavaScript, so <operator>= won't work
-            or
-            (                         # Python % (as opposed to JavaScript %) has no operator symbol in JavaScript, so <operator>= won't work
-                type (node.op) == ast.Mod and (
-                    self.allowOperatorOverloading or
-                    not self.allowJavaScriptMod
+        if self.allowOperatorOverloading:
+            self.emit ('var ')
+            self.visit (node.target)
+            self.emit ( 
+                ' = {} (',
+                self.filterId (
+                    # Non-overloaded
+                    '__ipow__' if type (node.op) == ast.Pow else
+                    '__imatmul__' if type (node.op) == ast.MatMult else
+                    ('__ijsmod__' if self.allowJavaScriptMod else '__imod__') if type (node.op) == ast.Mod else
+                    
+                    # Overloaded arithmetic
+                    '__imul__' if type (node.op) == ast.Mult else
+                    '__idiv__' if type (node.op) == ast.Div else
+                    '__iadd__' if type (node.op) == ast.Add else
+                    '__isub__' if type (node.op) == ast.Sub else
+                    
+                    # Overloaded bitwise
+                    '__ilshift__' if type (node.op) == ast.LShift else
+                    '__irshift__' if type (node.op) == ast.RShift else
+                    '__ior__' if type (node.op) == ast.BitOr else
+                    '__ixor__' if type (node.op) == ast.BitXor else
+                    '__iand__' if type (node.op) == ast.BitAnd else
+                    
+                    'Never here'
                 )
             )
+            
+            self.visit (node.target)
+            self.emit (', ')
+            self.visit (node.value)
+            self.emit (')')        
+        elif (
+            # Python //, @ and ** have no operator symbol in JavaScript, so <operator>= won't work
+            type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)
             or
-            (                         # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
+            # Python % (as opposed to JavaScript %) has no operator symbol in JavaScript, so <operator>= won't work
+            (type (node.op) == ast.Mod and not self.allowJavaScriptMod)
+            or
+            # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
+            (                         
                 type (node.target) == ast.Subscript and (
-                    self.allowOperatorOverloading or
                     type (node.target.slice) != ast.Index or
                     type (node.target.slice.value) == ast.Tuple
                 )
             )
         ):
+            # Just translate to binary operator node
             self.visit (ast.Assign (
                 targets = [node.target],
                 value = ast.BinOp (left = node.target, op = node.op, right = node.value)
-            ))            
-        else:                               # Just translate to binary operator noe, which may result in calling overloaded operators
+            ))         
+        else:   # No overloading in this branch                           
             self.visit (node.target)        # No need to emit var first, it has to exist already
 
             # Optimize for ++ and --

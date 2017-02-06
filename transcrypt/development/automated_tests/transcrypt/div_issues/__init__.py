@@ -233,7 +233,7 @@ def run (autoTester):
     del a
     autoTester.check ('Still alive')
 
-    autoTester.check ('Issue 276')  # Partial, other part tested with in testlet 'operator_overloading'
+    autoTester.check ('Issue 276')  # Partial, other part tested in testlet 'operator_overloading'
     a = 2
     b = a ** 3
     a **= 4
