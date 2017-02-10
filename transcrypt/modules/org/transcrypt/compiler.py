@@ -743,7 +743,74 @@ class Generator (ast.NodeVisitor):
             else:
                 self.visit (stmt)
                 self.emit (';\n')
+                
+    def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None):              
+        if type (target.slice) == ast.Index:        # Always overloaded
+            if type (target.slice.value) == ast.Tuple:
+                self.visit (target.value)
+                self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
+                self.stripTuple = True
+                self.visit (target.slice.value)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealth with here, is special case
+                self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
+                self.visit (target.value)
+                self.emit (', ')
+                self.visit (target.slice.value)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
+                self.visit (target)                 # which is called indirectly here
+                self.emit (' = ')
+                self.visit (value)
+                emitPathIndices ()
+        elif type (target.slice) == ast.Slice:
+            if self.allowOperatorOverloading:
+                self.emit ('__setslice__ (')        # Free function tries .__setitem__ (overload) and .__setslice__ (native)
+                self.visit (target.value)
+                self.emit (', ')
+            else:
+                self.visit (target.value)
+                self.emit ('.__setslice__ (')
 
+            if target.slice.lower == None:
+                self.emit ('0')
+            else:
+                self.visit (target.slice.lower)
+            self.emit (', ')
+
+            if target.slice.upper == None:
+                self.emit ('null')
+            else:
+                self.visit (target.slice.upper)
+            self.emit (', ')
+
+            if target.slice.step:
+                self.visit (target.slice.step)
+            else:
+                self.emit ('null')                  # Must be null rather than 1, see Array.prototype.__setslice__
+            self.emit (', ')
+
+            self.visit (value)
+
+            self.emit (')')
+        elif type (target.slice) == ast.ExtSlice:   # Always overloaded
+            self.visit (target.value)
+            self.emit ('.__setitem__ (')            # Method, since extended slice access is always overloaded
+            self.emit ('[')
+            for index, dim in enumerate (target.slice.dims):
+                self.emitComma (index)
+                self.visit (dim)
+            self.emit (']')
+            self.emit (', ')
+            self.visit (value)
+            self.emit (')')
+            
     def emitDecorators (self, callable):
         for decorator in reversed (callable.decorator_list):
             self.emit ('\n')
@@ -1006,73 +1073,9 @@ class Generator (ast.NodeVisitor):
                     pass
 
             if type (target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
-                if type (target.slice) == ast.Index:        # Always overloaded
-                    if type (target.slice.value) == ast.Tuple:
-                        self.visit (target.value)
-                        self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
-                        self.stripTuple = True
-                        self.visit (target.slice.value)
-                        self.emit (', ')
-                        self.visit (value)
-                        emitPathIndices ()
-                        self.emit (')')
-                    elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealth with here, is special case
-                        self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
-                        self.visit (target.value)
-                        self.emit (', ')
-                        self.visit (target.slice.value)
-                        self.emit (', ')
-                        self.visit (value)
-                        emitPathIndices ()
-                        self.emit (')')
-                    else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
-                        self.visit (target)                 # which is called indirectly here
-                        self.emit (' = ')
-                        self.visit (value)
-                        emitPathIndices ()
-                elif type (target.slice) == ast.Slice:
-                    if self.allowOperatorOverloading:
-                        self.emit ('__setslice__ (')        # Free function tries .__setitem__ (overload) and .__setslice__ (native)
-                        self.visit (target.value)
-                        self.emit (', ')
-                    else:
-                        self.visit (target.value)
-                        self.emit ('.__setslice__ (')
-
-                    if target.slice.lower == None:
-                        self.emit ('0')
-                    else:
-                        self.visit (target.slice.lower)
-                    self.emit (', ')
-
-                    if target.slice.upper == None:
-                        self.emit ('null')
-                    else:
-                        self.visit (target.slice.upper)
-                    self.emit (', ')
-
-                    if target.slice.step:
-                        self.visit (target.slice.step)
-                    else:
-                        self.emit ('null')                  # Must be null rather than 1, see Array.prototype.__setslice__
-                    self.emit (', ')
-
-                    self.visit (value)
-
-                    self.emit (')')
-                elif type (target.slice) == ast.ExtSlice:   # Always overloaded
-                    self.visit (target.value)
-                    self.emit ('.__setitem__ (')            # Method, since extended slice access is always overloaded
-                    self.emit ('[')
-                    for index, dim in enumerate (target.slice.dims):
-                        self.emitComma (index)
-                        self.visit (dim)
-                    self.emit (']')
-                    self.emit (', ')
-                    self.visit (value)
-                    self.emit (')')
+                self.emitSubscriptAssign (target, value, emitPathIndices)
             else:
-                if isPropertyAssign and not target.id == self.getTemp ('left'):
+                if isPropertyAssign and target.id != self.getTemp ('left'):
                     self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getScope () .node.name, target.id))
                     self.visit (value)
                     emitPathIndices ()
@@ -1080,7 +1083,7 @@ class Generator (ast.NodeVisitor):
                 else:
                     if type (target) == ast.Name:
                         if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
-                            self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]))) # The target is an attribute
+                            self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]))) # The target is a class attribute
                         elif target.id in self.getScope () .nonlocals:
                             pass
                         else:
@@ -1171,37 +1174,49 @@ class Generator (ast.NodeVisitor):
         
     def visit_AugAssign (self, node):
         if self.allowOperatorOverloading:
-            self.emit ('var ')
-            self.visit (node.target)
-            self.emit ( 
-                ' = {} (',
-                self.filterId (
-                    # Non-overloaded
-                    '__ipow__' if type (node.op) == ast.Pow else
-                    '__imatmul__' if type (node.op) == ast.MatMult else
-                    ('__ijsmod__' if self.allowJavaScriptMod else '__imod__') if type (node.op) == ast.Mod else
-                    
-                    # Overloaded arithmetic
-                    '__imul__' if type (node.op) == ast.Mult else
-                    '__idiv__' if type (node.op) == ast.Div else
-                    '__iadd__' if type (node.op) == ast.Add else
-                    '__isub__' if type (node.op) == ast.Sub else
-                    
-                    # Overloaded bitwise
-                    '__ilshift__' if type (node.op) == ast.LShift else
-                    '__irshift__' if type (node.op) == ast.RShift else
-                    '__ior__' if type (node.op) == ast.BitOr else
-                    '__ixor__' if type (node.op) == ast.BitXor else
-                    '__iand__' if type (node.op) == ast.BitAnd else
-                    
-                    'Never here'
-                )
+            rhsFunctionName = self.filterId (
+                # Non-overloaded
+                '__ipow__' if type (node.op) == ast.Pow else
+                '__imatmul__' if type (node.op) == ast.MatMult else
+                ('__ijsmod__' if self.allowJavaScriptMod else '__imod__') if type (node.op) == ast.Mod else
+                
+                # Overloaded arithmetic
+                '__imul__' if type (node.op) == ast.Mult else
+                '__idiv__' if type (node.op) == ast.Div else
+                '__iadd__' if type (node.op) == ast.Add else
+                '__isub__' if type (node.op) == ast.Sub else
+                
+                # Overloaded bitwise
+                '__ilshift__' if type (node.op) == ast.LShift else
+                '__irshift__' if type (node.op) == ast.RShift else
+                '__ior__' if type (node.op) == ast.BitOr else
+                '__ixor__' if type (node.op) == ast.BitXor else
+                '__iand__' if type (node.op) == ast.BitAnd else
+                
+                'Never here'
             )
-            
-            self.visit (node.target)
-            self.emit (', ')
-            self.visit (node.value)
-            self.emit (')')        
+                
+            rhsCall = ast.Call (
+                func = ast.Name (
+                    id = rhsFunctionName,
+                    ctx = ast.Load
+                ),
+                args = [
+                    node.target,
+                    node.value
+                ],
+                keywords = []
+            )
+        
+            if type (node.target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
+                self.emitSubscriptAssign (node.target, rhsCall)
+            else:
+                if type (node.target) == ast.Name and not node.target.id in self.getScope () .nonlocals:
+                    self.emit ('var ')
+
+                self.visit (node.target)
+                self.emit (' = ')
+                self.visit (rhsCall)       
         elif (
             # Python //, @ and ** have no operator symbol in JavaScript, so <operator>= won't work
             type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)

@@ -1,3 +1,0 @@
-import typing
-
-namedtuple = object()

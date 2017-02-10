@@ -239,3 +239,15 @@ def run (autoTester):
     a <<= 2
     autoTester.check (a)
     
+    class A:
+        def __init__ (self):
+            self.b = {}
+            
+    a = A ()
+    a.b ['c'] = 'd'
+        
+    __pragma__('opov')
+    a.b ['c'] += 'e'
+    __pragma__('noopov')
+    
+    autoTester.check (a.b ['c'])
