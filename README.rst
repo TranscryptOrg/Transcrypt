@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Fix for issue #284 (+= problem) and autotest case
 - Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)
 - Added in-place overloads for @=, **=, %=, *=, /=, +=, -=, <<=, >>=, |=, ^=
 - Operator **= added, a **= b converted to a = a ** b
