@@ -111,8 +111,8 @@ What's new in the latest commits
 - Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)
 - Fix for issue #284 (+= problem) and autotest case
 - Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)
-- Added in-place overloads for @=, **=, %=, *=, /=, +=, -=, <<=, >>=, |=, ^=
-- Operator **= added, a **= b converted to a = a ** b
+- Added in-place overloads for @=, \*\*=, %=, \*=, /=, +=, -=, <<=, >>=, \|=, ^=
+- Operator \*\*= added, a \*\*= b converted to a = a \*\* b
 - Operator @= added, M3 @= M2 converted to M3 = M3 @ M2, same as for other augmented assignment ops
 - Compilation error report now contains detailed import sequence
 - Enhancement for issue #281: tuple keys allowed for dictionaries
@@ -137,7 +137,7 @@ What's new in the latest commits
 - Div. enhancements and fixes for CI tests
 - Enhancement for issue #139: 'yield from' now supported.
 - Enhancement for issue #89 and #149: __getattr__ and __setattr__ are now supported, requiring the -e 6 switch. Testlet 'proxies' added.
-- New aliases added to prevent name clashes. The orignal name can always be reached by prepending js_. So e.g. if you need 'clear' in JS, use 'js_clear' in Python. A complete list of aliases is in the docs. Any alias can be undefined to maintain backward compatibility, e.g __pragma__ ('noalias', 'clear').
+- New aliases added to prevent name clashes. The orignal name can always be reached by prepending \js_. So e.g. if you need 'clear' in JS, use 'js_clear' in Python. A complete list of aliases is in the docs. Any alias can be undefined to maintain backward compatibility, e.g __pragma__ ('noalias', 'clear').
 - Enhancement for issue #169: Add support for float('inf') and float('-inf')
 
 Other packages you might like
