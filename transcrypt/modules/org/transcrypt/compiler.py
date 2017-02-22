@@ -23,6 +23,7 @@ import copy
 import datetime
 import math
 import traceback
+import io
 
 from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, type_check
 
@@ -305,13 +306,28 @@ class Module:
         return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''
 
     def parse (self):
+        def pragmasFromComments (sourceCode):
+            # This function changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
+        
+            inTokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
+            pragmaCommentLineIndices = []
+            for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in inTokens:
+                if tokenType == tokenize.COMMENT and tokenString [1 : ] .lstrip () .startswith ('__pragma__'):
+                    pragmaCommentLineIndices.append (startRowColumn [0] - 1)
+            sourceLines = sourceCode.split ('\n') 
+            for pragmaCommentLineIndex in pragmaCommentLineIndices:
+                head, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
+                sourceLines [pragmaCommentLineIndex] = head + tail.lstrip ()
+
+            return '\n'.join (sourceLines)
+            
         try:
             utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
 
             with tokenize.open (self.metadata.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
-
-            self.parseTree = ast.parse (self.sourceCode)
+                
+            self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
         except SyntaxError as syntaxError:
             utils.enhanceException (
                 syntaxError,

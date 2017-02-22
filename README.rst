@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)
 - Fix for issue #284 (+= problem) and autotest case
 - Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)
 - Added in-place overloads for @=, **=, %=, *=, /=, +=, -=, <<=, >>=, |=, ^=

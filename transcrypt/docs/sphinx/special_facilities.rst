@@ -67,6 +67,27 @@ As an alternative, instantiation and construction can be encapsulated in one fun
 
 As a third alternative, encapsulation can be done in Python rather than JavaScript: *def Canvas (<parameters>): return __new__ (<3rd party module name>.Canvas (<parameters>)*. Also in this case the creation syntax is simple: *canvas = Canvas (<parameters>)*.
 
+The __pragma__ mechanism
+------------------------
+
+Pragma's are directives in the source code, that locally alter the behaviour of the compiler. Pragma's come in two varieties.
+
+The function-like variety:
+
+*__pragma__ (<parameters>)*
+
+is acceptable only to Transcrypt, CPython requires a stub with parameter *\*args*. Such a stub can either be defined locally or imported:
+
+*from org.transcrypt.stubs.browser import __pragma__*
+
+The comment-like variety:
+
+# __pragma__ (<parameters>)
+
+is acceptable both to Transcrypt and CPython. In CPython it does nothing.
+
+N.B. Both varieties have to be properly indented, matching indentation of their context.
+
 .. _pragma_alias:
 
 Identifier aliasing: __pragma__ ('alias', ...) and __pragma__ ('noalias', ...)
