@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- EXPERIMENTAL: Add --ext_noiter / - xni switch to surpress reference to Symbol.iterator in dict implementation, as some browsers don't support this
 - Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)
 - Fix for issue #284 (+= problem) and autotest case
 - Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)

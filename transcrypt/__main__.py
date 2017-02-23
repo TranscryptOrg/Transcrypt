@@ -102,6 +102,9 @@ def main ():
         else:
             __symbols__.append ('__esv{}__'.format (utils.defaultJavaScriptVersion))
             
+        if utils.commandArgs.ext_noiter:
+            __symbols__.append ('__ext_noiter__')
+            
         from org.transcrypt.stubs.browser import __set_stubsymbols__    # Import (ignored when transpiling) late, since commandArgs must be set already
         __set_stubsymbols__ (__symbols__)                               # Make symbols available to CPython, seems that exec can't do that directly
         
