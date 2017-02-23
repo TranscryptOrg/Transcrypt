@@ -62,6 +62,17 @@ ctx = {'cur_test': None, 'have_run': []}
 _ = os.path.abspath(__file__).rsplit
 # /root/Transcrypt/transcrypt:
 env['d_0'] = d0 = _('/', 3)[0]
+
+
+runners = {'3.5': 'run_transcrypt',
+           '3.6': 'run_transcrypt36'}
+
+avail_pyvers = []
+for maj in '3.5', '3.6':
+    if os.popen('python%s --version 2>/dev/null' % maj).read():
+        avail_pyvers.append(maj)
+
+'''        
 runners = {'3.5': 'run_transcrypt',
            '3.6': 'run_transcrypt36',
            '3.7': 'run_transcrypt37'}
@@ -70,7 +81,9 @@ avail_pyvers = []
 for maj in '3.5', '3.6', '3.7':
     if os.popen('python%s --version 2>/dev/null' % maj).read():
         avail_pyvers.append(maj)
-
+'''
+        
+        
 # /root/Transcrypt/transcrypt/development_cont.int:
 env['d_i'] =  _('/', 1)[0]
 log_file = env['d_i'] + '/results.log'
