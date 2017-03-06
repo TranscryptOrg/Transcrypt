@@ -1337,11 +1337,7 @@ __pragma__ ('endif')
         __setProperty__ (instance, '__class__', {value: dict, enumerable: false, writable: true});
         __setProperty__ (instance, 'py_keys', {value: __keys__, enumerable: false});
         __setProperty__ (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
-        
-__pragma__ ('ifndef', '__ext_noiter__')
         __setProperty__ (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.py_keys ());}, enumerable: false});
-__pragma__ ('endif') 
-            
         __setProperty__ (instance, 'py_items', {value: __items__, enumerable: false});
         __setProperty__ (instance, 'py_del', {value: __del__, enumerable: false});
         __setProperty__ (instance, 'py_clear', {value: __clear__, enumerable: false});

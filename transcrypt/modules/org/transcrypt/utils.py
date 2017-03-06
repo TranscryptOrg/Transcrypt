@@ -55,7 +55,6 @@ class CommandArgs:
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
         self.argParser.add_argument ('-x', '--ext', help = "reserved for extended options")
-        self.argParser.add_argument ('-xni', '--ext_noiter', help = "no iterator support. The symbol __ext_noiter__ is added to the global symbol list.", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)
