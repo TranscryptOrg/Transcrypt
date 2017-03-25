@@ -1,6 +1,6 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-02-06 20:11:29
-function test () {
+// Transcrypt'ed from Python, 2017-03-25 16:43:44
+function static_types () {
    var __symbols__ = ['__py3.5__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
@@ -173,7 +173,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.13';
+							self.transpiler_version = '3.6.20';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -504,6 +504,16 @@ function test () {
 			}
 		}
 	);
+    var __call__ = function (/* <callee>, <this>, <params>* */) {   // Needed for __base__ and __standard__ if global 'opov' switch is on
+        var args = [] .slice.apply (arguments);
+        if (typeof args [0] == 'object' && '__call__' in args [0]) {        // Overloaded
+            return args [0] .__call__ .apply (args [1], args.slice (2));
+        }
+        else {                                                              // Native
+            return args [0] .apply (args [1], args.slice (2));
+        }
+    };
+    __all__.__call__ = __call__;
 
     // Initialize non-nested modules __base__ and __standard__ and make its names available directly and via __all__
     // They can't do that itself, because they're regular Python modules
@@ -1021,9 +1031,14 @@ function test () {
     };
     __all__.py_reversed = py_reversed;
 
-    // Zip method for arrays
+    // Zip method for arrays and strings
     var zip = function () {
         var args = [] .slice.call (arguments);
+        if (typeof args [0] == 'string') {
+            for (var i = 0; i < args.length; i++) {
+                args [i] = args [i] .split ('');
+            }
+        }
         var shortest = args.length == 0 ? [] : args.reduce (    // Find shortest array in arguments
             function (array0, array1) {
                 return array0.length < array1.length ? array0 : array1;
@@ -2315,30 +2330,92 @@ function test () {
     };
     __all__.__setslice__ = __setslice__;
 
-    var __call__ = function (/* <callee>, <this>, <params>* */) {
-        var args = [] .slice.apply (arguments);
-        if (typeof args [0] == 'object' && '__call__' in args [0]) {        // Overloaded
-            return args [0] .__call__ .apply (args [1], args.slice (2));
-        }
-        else {                                                              // Native
-            return args [0] .apply (args [1], args.slice (2));
-        }
-    };
-    __all__.__call__ = __call__;
+	__nest__ (
+		__all__,
+		'mod1', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var test = function (i) {
+						var a = 3;
+						var a = 4.5;
+						return str (i);
+					};
+					__pragma__ ('<all>')
+						__all__.test = test;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'mod2', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var test = function (i) {
+						return 3;
+					};
+					__pragma__ ('<all>')
+						__all__.test = test;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'typing', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+				}
+			}
+		}
+	);
 	(function () {
-		var f = function (i) {
-			return 'xyz';
+		var mod1 = {};
+		var mod2 = {};
+		var Iterator = __init__ (__world__.typing).Iterator;
+		__nest__ (mod1, '', __init__ (__world__.mod1));
+		__nest__ (mod2, '', __init__ (__world__.mod2));
+		var testVar = 3.5;
+		var fib = function (n) {
+			var __left0__ = tuple ([0, 1]);
+			var a = __left0__ [0];
+			var b = __left0__ [1];
+			while (a < n) {
+				var __left0__ = tuple ([b, a + b]);
+				var a = __left0__ [0];
+				var b = __left0__ [1];
+			}
+			return 3;
 		};
-		f ('abc');
-		var g = function (i) {
-			return 'xyz';
+		var add = function (a, b) {
+			return a + b;
 		};
-		f ('abc');
+		var A = __class__ ('A', [object], {
+			get __init__ () {return __get__ (this, function (self) {
+				// pass;
+			});},
+			get test () {return __get__ (this, function (self) {
+				return 'test';
+			});}
+		});
+		__pragma__ ('<use>' +
+			'mod1' +
+			'mod2' +
+			'typing' +
+		'</use>')
 		__pragma__ ('<all>')
-			__all__.f = f;
-			__all__.g = g;
+			__all__.A = A;
+			__all__.Iterator = Iterator;
+			__all__.add = add;
+			__all__.fib = fib;
+			__all__.testVar = testVar;
 		__pragma__ ('</all>')
 	}) ();
    return __all__;
 }
-window ['test'] = test ();
+window ['static_types'] = static_types ();

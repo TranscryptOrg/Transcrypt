@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Integrated with newest API of mypy
 - Fix for issue # 304: Invalid JS when using global --opov flag
 - Fix for issue #301: zip broken for strings
 - Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)

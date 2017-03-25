@@ -5,6 +5,8 @@ from typing import Iterator #, List, Dict, ClassVar
 import mod1
 import mod2
 
+testVar: int = 3.5
+
 def fib (n: int) -> Iterator [int]:
     a, b = 0, 1
     while a < n:

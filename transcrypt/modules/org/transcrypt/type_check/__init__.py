@@ -3,7 +3,7 @@ import os
 import subprocess
 import traceback
 
-from org.transcrypt.type_check import api
+from mypy import api
 from org.transcrypt import utils
 
 def run (sourcePath):
