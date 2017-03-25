@@ -13,9 +13,9 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 
 To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g.
 
-- *itertools*
+ 
 	
-Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, to keep it lightweight. For computations e.g. JavaScripts *Math* object, rather then Python's *math* module is currently used. Nevertheless porting (part of) some standard libraries might be handy. If you do, you're invited to make them available via PyPi, using 'Transcrypt' in your keyword list.
+Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, to keep it lightweight. Nevertheless porting (part of) some standard libraries might be handy. If you do, you're invited to make them available via PyPi, using 'Transcrypt' in your keyword list.
 
 Finding the code for a module proceeds as follows:
 

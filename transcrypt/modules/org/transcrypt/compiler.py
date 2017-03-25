@@ -309,11 +309,12 @@ class Module:
         def pragmasFromComments (sourceCode):
             # This function changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
         
-            inTokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
+            tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
             pragmaCommentLineIndices = []
-            for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in inTokens:
+            for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in tokens:
                 if tokenType == tokenize.COMMENT and tokenString [1 : ] .lstrip () .startswith ('__pragma__'):
                     pragmaCommentLineIndices.append (startRowColumn [0] - 1)
+                    
             sourceLines = sourceCode.split ('\n') 
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 head, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')

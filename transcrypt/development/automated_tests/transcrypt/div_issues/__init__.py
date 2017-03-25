@@ -250,3 +250,17 @@ def run (autoTester):
     autoTester.check (A.TypeError, A.js_TypeError)  # ... Generated code should use py_TypeError and TypeError respectively    
     autoTester.check ('Still alive')
     
+    autoTester.check ('Issue 301')
+    def filter_word (word0, word1):
+        if len (word0) != len (word1):
+            return False
+        for char0, char1 in zip (word0, word1):
+            if char0 != '_' and char0 != char1:
+                return False
+        return True
+    autoTester.check (filter_word ('bee', 'beer'))
+    autoTester.check (filter_word ('wine', 'wine'))
+    autoTester.check (filter_word ('win_', 'wind'))
+    autoTester.check (filter_word ('_in_', 'kind'))
+    autoTester.check (filter_word ('min_', 'kind'))
+

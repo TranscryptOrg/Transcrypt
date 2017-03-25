@@ -108,6 +108,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Fix for issue # 304: Invalid JS when using global --opov flag
+- Fix for issue #301: zip broken for strings
 - Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)
 - Fix for issue #284 (+= problem) and autotest case
 - Bundled version 0.4.4 of mypy static typechecker replaced by dependency on mypy (currently 0.4.7)
