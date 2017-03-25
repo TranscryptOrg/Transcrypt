@@ -3,7 +3,11 @@ import os
 import subprocess
 import traceback
 
-from mypy import api
+try:
+    from mypy import api
+except:
+    print ('Could not find mypy')
+    
 from org.transcrypt import utils
 
 def run (sourcePath):

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-03-25 16:43:44
+// Transcrypt'ed from Python, 2017-03-25 17:37:12
 function static_types () {
    var __symbols__ = ['__py3.5__', '__esv5__'];
     var __all__ = {};
@@ -173,7 +173,7 @@ function static_types () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.20';
+							self.transpiler_version = '3.6.21';
 							self.target_subdir = '__javascript__';
 						});}
 					});
