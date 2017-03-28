@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/re/__javascript__/autotest.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/re/autotest.py"
+	],
+	"sourcesContent": [
+		"import org.transcrypt.autotester\n\nimport basic_pyre\nimport basic_jsre\n\nautoTester = org.transcrypt.autotester.AutoTester ()\n\nautoTester.run (basic_jsre, 'Basic JS RE Tests')\nautoTester.run (basic_pyre, 'Basic Python RE Tests')\n\nautoTester.done ()\n"
+	],
+	"mappings": "AAAA;AAUA;AAAA;AAAA;AAVA;AAEA;AACA;AAEA;AAEA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

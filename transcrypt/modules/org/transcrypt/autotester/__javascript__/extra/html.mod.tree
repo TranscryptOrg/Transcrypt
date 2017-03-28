@@ -1,0 +1,2943 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __main__
+					asname: NoneType = None
+				element: alias 
+					name: str = __envir__
+					asname: NoneType = None
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nokwargs
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = okColor
+					ctx: Store 
+			value: Str 
+				s: str = green
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = errorColor
+					ctx: Store 
+			value: Str 
+				s: str = red
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = highlightColor
+					ctx: Store 
+			value: Str 
+				s: str = yellow
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = testletNameColor
+					ctx: Store 
+			value: Str 
+				s: str = blue
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = messageDivId
+					ctx: Store 
+			value: Str 
+				s: str = message
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = referenceDivId
+					ctx: Store 
+			value: Str 
+				s: str = python
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = refResultDivId
+					ctx: Store 
+			value: Str 
+				s: str = pyresults
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = refPosDivId
+					ctx: Store 
+			value: Str 
+				s: str = pypos
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = testDivId
+					ctx: Store 
+			value: Str 
+				s: str = transcrypt
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tableId
+					ctx: Store 
+			value: Str 
+				s: str = resulttable
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = resultsDivId
+					ctx: Store 
+			value: Str 
+				s: str = results
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = faultRowClass
+					ctx: Store 
+			value: Str 
+				s: str = faultrow
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = testletHeaderClass
+					ctx: Store 
+			value: Str 
+				s: str = testletheader
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = transValClass
+					ctx: Store 
+			value: Str 
+				s: str = trans-val
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = transPosClass
+					ctx: Store 
+			value: Str 
+				s: str = trans-pos
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pyValClass
+					ctx: Store 
+			value: Str 
+				s: str = py-val
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pyPosClass
+					ctx: Store 
+			value: Str 
+				s: str = py-pos
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = excAreaId
+					ctx: Store 
+			value: Str 
+				s: str = exc-area
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = excHeaderClass
+					ctx: Store 
+			value: Str 
+				s: str = exc-header
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = forceCollapseId
+					ctx: Store 
+			value: Str 
+				s: str = force-collapse
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = forceExpandId
+					ctx: Store 
+			value: Str 
+				s: str = force-expand
+		element: ClassDef 
+			name: str = HTMLGenerator
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This class generates the HTML template for the autotester results.
+	This code is primarily run during the Python execution cycle but
+	does define strings that are referenced by the javascript as well.
+	
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = filenameBase
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: NoneType = None
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		@param filenameBase string denoting the base filename for the
+		files this class will generate. This should NOT include the
+		file extension (.html for example). This will be tacked on
+		later depending on minified state.
+		
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _fnameBase
+									ctx: Store 
+							value: Name 
+								id: str = filenameBase
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = generate_html
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = refDict
+								annotation: NoneType = None
+							element: arg 
+								arg: str = minified
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: bool = False
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str =  Generate the HTML file that gets generated by the
+		Python script portion of the test. File will be named
+		'<fnameBase.html'
+		@param refDict Dict of python reference data associated with
+		  each of the test modules. The keys of this dict are the names
+		  of the ref modules.
+		@param minified indicates whether the output file should use the
+		  minified version of the javascript or not. If minified, then
+		  the output file will be name 'fnameBase.min.html'
+		
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _fnameBase
+									ctx: Load 
+								ops: list 
+									element: Is 
+								comparators: list 
+									element: NameConstant 
+										value: NoneType = None
+							body: list 
+								element: Raise 
+									exc: Call 
+										func: Name 
+											id: str = ValueError
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = Filename Base must be defined to generate
+										keywords: list 
+									cause: NoneType = None
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = minInfix
+									ctx: Store 
+							value: IfExp 
+								test: Name 
+									id: str = minified
+									ctx: Load 
+								body: Str 
+									s: str = .min
+								orelse: Str 
+									s: str = 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = fname
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = minInfix
+										ctx: Load 
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = _fnameBase
+												ctx: Load 
+											element: Str 
+												s: str = .html
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = jsFileName
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = minInfix
+										ctx: Load 
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = _fnameBase
+												ctx: Load 
+											element: Str 
+												s: str = .js
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = jsPath
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = {}/{}
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = __envir__
+											ctx: Load 
+										attr: str = target_subdir
+										ctx: Load 
+									element: Name 
+										id: str = jsFileName
+										ctx: Load 
+								keywords: list 
+						element: With 
+							items: list 
+								element: withitem 
+									context_expr: Call 
+										func: Name 
+											id: str = open
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = fname
+												ctx: Load 
+											element: Str 
+												s: str = w
+										keywords: list 
+									optional_vars: Name 
+										id: str = f
+										ctx: Store 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = <html><head>
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = _writeCSS
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = f
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = </head><body>
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = _writeStatusHeaderTemplate
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = f
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = dc
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = DataConverter
+											ctx: Load 
+										args: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dc
+												ctx: Load 
+											attr: str = writeHiddenResults
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = f
+												ctx: Load 
+											element: Name 
+												id: str = refDict
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = _writeTableArea
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = f
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <script src="{}"></script>
+
+
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = jsPath
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = </body></html>
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _writeCSS
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = f
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = cssOut
+									ctx: Store 
+							value: Str 
+								s: str = 
+		<style>
+		  body {
+		    max-width: 100%;
+		  }
+		  .faultrow > td {
+		     background-color: LightCoral;
+		  }
+		  #resulttable {
+		    border-collapse: collapse;
+		    width: 100%;
+		    table-layout: fixed;
+		  }
+		  #resulttable th, #resulttable td {
+		    border: 1px solid grey;
+		  }
+		  .testletheader > td {
+		    background-color: LightSkyBlue;
+		  }
+		  .header-pos {
+		    width: 20%;
+		  }
+		  .header-val {
+		    width: 30%;
+		  }
+		  .py-pos,.trans-pos {
+		    width: 20%;
+		    overflow: hidden;
+		  }
+		  .py-val, .trans-val {
+		    width: 30%;
+		    overflow-x: auto;
+		  }
+		  .exc-header {
+	      color: red;
+		  }
+		  .collapsed {
+		    display: None;
+		  }
+		</style>
+		
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = cssOut
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _writeStatusHeaderTemplate
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = f
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = <b>Status:</b>
+
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div id="{}"></div><br><br>
+
+
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = messageDivId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _writeTableArea
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = f
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div id="{}"></div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = excAreaId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div id="{}">
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = resultsDivId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div> <a id="{}" href="#"> Collapse All</a> <a id="{}" href="#">Expand All</a></div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = forceCollapseId
+												ctx: Load 
+											element: Name 
+												id: str = forceExpandId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <table id="{}"><thead><tr> <th colspan="2"> CPython </th> <th colspan="2"> Transcrypt </th> </tr>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = tableId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = <tr> <th class="header-pos"> Location </th> <th class="header-val"> Value </th> <th class="header-val"> Value </th> <th class="header-pos"> Location </th> </tr></thead><tbody></tbody>
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = </table>
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = </div>
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = DataConverter
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This class contains code that stores the python results in
+	the HTML document and can extract the data from the HTML to
+	prepare it for comparison with the javascript results.
+	
+				element: FunctionDef 
+					name: str = writeHiddenResults
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = f
+								annotation: NoneType = None
+							element: arg 
+								arg: str = refDict
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str =  Write the Python results into a div that is hidden by
+		default so that we can extract it at runtime.
+		@param f file that we are writing the content into
+		@param refDict python reference result data in the form of
+		a dict. The keys are the names of the individual test modules.
+		
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div id="{}" style="display: None">
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = referenceDivId
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: For 
+							target: Name 
+								id: str = key
+								ctx: Store 
+							iter: Call 
+								func: Attribute 
+									value: Name 
+										id: str = refDict
+										ctx: Load 
+									attr: str = keys
+									ctx: Load 
+								args: list 
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = itemData
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str =  | 
+											attr: str = join
+											ctx: Load 
+										args: list 
+											element: ListComp 
+												elt: Subscript 
+													value: Name 
+														id: str = x
+														ctx: Load 
+													slice: Index 
+														value: Num 
+															n: int = 1
+													ctx: Load 
+												generators: list 
+													element: comprehension 
+														target: Name 
+															id: str = x
+															ctx: Store 
+														iter: Subscript 
+															value: Name 
+																id: str = refDict
+																ctx: Load 
+															slice: Index 
+																value: Name 
+																	id: str = key
+																	ctx: Load 
+															ctx: Load 
+														ifs: list 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = posContent
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str =  | 
+											attr: str = join
+											ctx: Load 
+										args: list 
+											element: ListComp 
+												elt: Subscript 
+													value: Name 
+														id: str = x
+														ctx: Load 
+													slice: Index 
+														value: Num 
+															n: int = 0
+													ctx: Load 
+												generators: list 
+													element: comprehension 
+														target: Name 
+															id: str = x
+															ctx: Store 
+														iter: Subscript 
+															value: Name 
+																id: str = refDict
+																ctx: Load 
+															slice: Index 
+																value: Name 
+																	id: str = key
+																	ctx: Load 
+															ctx: Load 
+														ifs: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <div id="{}">
+
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = key
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <div id="{}">{}</div>
+
+
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = refResultDivId
+														ctx: Load 
+													element: Name 
+														id: str = itemData
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = <div id="{}">{}</div>
+
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = refPosDivId
+														ctx: Load 
+													element: Name 
+														id: str = posContent
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = </div>
+
+										keywords: list 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = f
+										ctx: Load 
+									attr: str = write
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = </div></div>
+
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = getPythonResults
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str =  Acquire the python unit test results from the
+		    hidden div and parse into a dictionary.
+		@return dict whose keys are the names of the test
+		  submodules.
+		
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = refData
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = referenceDivId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = refDict
+									ctx: Store 
+							value: Dict 
+								keys: list 
+								values: list 
+						element: For 
+							target: Name 
+								id: str = child
+								ctx: Store 
+							iter: Attribute 
+								value: Name 
+									id: str = refData
+									ctx: Load 
+								attr: str = children
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = keyName
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = child
+												ctx: Load 
+											attr: str = getAttribute
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = id
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Tuple 
+											elts: list 
+												element: Name 
+													id: str = posData
+													ctx: Store 
+												element: Name 
+													id: str = resultData
+													ctx: Store 
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = _extractPosResult
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = child
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Subscript 
+											value: Name 
+												id: str = refDict
+												ctx: Load 
+											slice: Index 
+												value: Name 
+													id: str = keyName
+													ctx: Load 
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = zip
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = posData
+												ctx: Load 
+											element: Name 
+												id: str = resultData
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: Return 
+							value: Name 
+								id: str = refDict
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _extractPosResult
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = elem
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = resultData
+									ctx: Store 
+							value: NameConstant 
+								value: NoneType = None
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = posData
+									ctx: Store 
+							value: NameConstant 
+								value: NoneType = None
+						element: For 
+							target: Name 
+								id: str = e
+								ctx: Store 
+							iter: Attribute 
+								value: Name 
+									id: str = elem
+									ctx: Load 
+								attr: str = children
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = idStr
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = e
+												ctx: Load 
+											attr: str = getAttribute
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = id
+										keywords: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = idStr
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Name 
+												id: str = refResultDivId
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = resultData
+													ctx: Store 
+											value: Call 
+												func: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = e
+															ctx: Load 
+														attr: str = innerHTML
+														ctx: Load 
+													attr: str = split
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str =  | 
+												keywords: list 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Name 
+													id: str = idStr
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Name 
+														id: str = refPosDivId
+														ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Name 
+															id: str = posData
+															ctx: Store 
+													value: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = e
+																	ctx: Load 
+																attr: str = innerHTML
+																ctx: Load 
+															attr: str = split
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str =  | 
+														keywords: list 
+											orelse: list 
+												element: Pass 
+							orelse: list 
+						element: Return 
+							value: Tuple 
+								elts: list 
+									element: Name 
+										id: str = posData
+										ctx: Load 
+									element: Name 
+										id: str = resultData
+										ctx: Load 
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = getRowClsName
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = name
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  Utility method for naming the test module class that
+	    a row belows to
+	
+				element: Return 
+					value: BinOp 
+						left: Str 
+							s: str = mod-
+						op: Add 
+						right: Name 
+							id: str = name
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = JSTesterUI
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This class contains the code that populates the autotester results
+	while running in the javascript runtime.
+	
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = expander
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = TestModuleExpander
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = setOutputStatus
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = success
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: If 
+							test: Name 
+								id: str = success
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = document
+														ctx: Load 
+													attr: str = getElementById
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = messageDivId
+														ctx: Load 
+												keywords: list 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="color: {}">Test succeeded</div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = okColor
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = document
+														ctx: Load 
+													attr: str = getElementById
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = messageDivId
+														ctx: Load 
+												keywords: list 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <div style="color: {}"><b>Test failed</b></div>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = errorColor
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = appendSeqRowName
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = name
+								annotation: NoneType = None
+							element: arg 
+								arg: str = errCount
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = table
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tableId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = row
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = table
+										ctx: Load 
+									attr: str = insertRow
+									ctx: Load 
+								args: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 1
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = id
+									ctx: Store 
+							value: Name 
+								id: str = name
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = row
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = testletHeaderClass
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = expander
+										ctx: Load 
+									attr: str = setupCollapseableHeader
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = row
+										ctx: Load 
+									element: Compare 
+										left: Name 
+											id: str = errCount
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Num 
+												n: int = 0
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = headerCell
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = insertCell
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 0
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = headerCell
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: Name 
+										id: str = name
+										ctx: Load 
+									op: Add 
+									right: Str 
+										s: str =  | Errors = 
+								op: Add 
+								right: Call 
+									func: Name 
+										id: str = str
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = errCount
+											ctx: Load 
+									keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = headerCell
+										ctx: Load 
+									attr: str = colSpan
+									ctx: Store 
+							value: Num 
+								n: int = 4
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = headerCell
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = textAlign
+									ctx: Store 
+							value: Str 
+								s: str = center
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = appendTableResult
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = name
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testPos
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testItem
+								annotation: NoneType = None
+							element: arg 
+								arg: str = refPos
+								annotation: NoneType = None
+							element: arg 
+								arg: str = refItem
+								annotation: NoneType = None
+							element: arg 
+								arg: str = collapse
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: bool = False
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = clsName
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = getRowClsName
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = name
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = table
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tableId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = row
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = table
+										ctx: Load 
+									attr: str = insertRow
+									ctx: Load 
+								args: list 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: int = 1
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = row
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = clsName
+										ctx: Load 
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = testItem
+									ctx: Load 
+								ops: list 
+									element: NotEq 
+								comparators: list 
+									element: Name 
+										id: str = refItem
+										ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = row
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = faultRowClass
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = refPos
+											ctx: Store 
+									value: BinOp 
+										left: Str 
+											s: str = !!!
+										op: Add 
+										right: Name 
+											id: str = refPos
+											ctx: Load 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = expander
+												ctx: Load 
+											attr: str = setCollapsed
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = row
+												ctx: Load 
+											element: Name 
+												id: str = collapse
+												ctx: Load 
+										keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = cpy_pos
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = insertCell
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 0
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = cpy_pos
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: Name 
+								id: str = refPos
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = cpy_pos
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = pyPosClass
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = cpy_val
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = insertCell
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 1
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = cpy_val
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: Name 
+								id: str = refItem
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = cpy_val
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = pyValClass
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = trans_val
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = insertCell
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 2
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = testItem
+									ctx: Load 
+								ops: list 
+									element: IsNot 
+								comparators: list 
+									element: NameConstant 
+										value: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = trans_val
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Name 
+										id: str = testItem
+										ctx: Load 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = trans_val
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = transValClass
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = trans_pos
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = insertCell
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 3
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = testPos
+									ctx: Load 
+								ops: list 
+									element: IsNot 
+								comparators: list 
+									element: NameConstant 
+										value: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = trans_pos
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Name 
+										id: str = testPos
+										ctx: Load 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = trans_pos
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = transPosClass
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = showException
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = testname
+								annotation: NoneType = None
+							element: arg 
+								arg: str = exc
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = excElem
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = excAreaId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = header
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = createElement
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = H2
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = header
+											ctx: Load 
+										attr: str = classList
+										ctx: Load 
+									attr: str = add
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = excHeaderClass
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = header
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: Str 
+								s: str = Exception Thrown in JS Runtime
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = excElem
+										ctx: Load 
+									attr: str = appendChild
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = header
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = content
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = createElement
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = p
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = content
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = Exception in {}: {}
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = testname
+										ctx: Load 
+									element: Call 
+										func: Name 
+											id: str = str
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = exc
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = excElem
+										ctx: Load 
+									attr: str = appendChild
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = content
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = stacktrace
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = createElement
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = p
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = exc
+										ctx: Load 
+									attr: str = stack
+									ctx: Load 
+								ops: list 
+									element: IsNot 
+								comparators: list 
+									element: NameConstant 
+										value: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = stacktrace
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = str
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = exc
+													ctx: Load 
+												attr: str = stack
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = stacktrace
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Str 
+										s: str = No Stack Trace Available!
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = TestModuleExpander
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This class handles expanding or contracting a set of
+	test row results under a particular test.
+	
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = collapsedClass
+									ctx: Store 
+							value: Str 
+								s: str = collapsed
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = modCollapseClass
+									ctx: Store 
+							value: Str 
+								s: str = mod-collapsed
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _expandCollapseAllFuncs
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = setCollapsed
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = row
+								annotation: NoneType = None
+							element: arg 
+								arg: str = collapse
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: If 
+							test: Name 
+								id: str = collapse
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = row
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = collapsedClass
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = row
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = remove
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = collapsedClass
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = setupCollapseableHeader
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = row
+								annotation: NoneType = None
+							element: arg 
+								arg: str = startCollapsed
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: bool = False
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = 
+		
+						element: If 
+							test: Name 
+								id: str = startCollapsed
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = row
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = modCollapseClass
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: FunctionDef 
+							name: str = toggleCollapse
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = evt
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Str 
+										s: str =  Toggle whether the
+			
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = headerRow
+											ctx: Store 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = evt
+												ctx: Load 
+											attr: str = target
+											ctx: Load 
+										attr: str = parentElement
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = doCollapse
+											ctx: Store 
+									value: UnaryOp 
+										op: Not 
+										operand: Call 
+											func: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = headerRow
+														ctx: Load 
+													attr: str = classList
+													ctx: Load 
+												attr: str = contains
+												ctx: Load 
+											args: list 
+												element: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = modCollapseClass
+													ctx: Load 
+											keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = collapseModule
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = headerRow
+												ctx: Load 
+											element: Name 
+												id: str = doCollapse
+												ctx: Load 
+										keywords: list 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = row
+										ctx: Load 
+									attr: str = onclick
+									ctx: Store 
+							value: Name 
+								id: str = toggleCollapse
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = collapseModule
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = headerRow
+								annotation: NoneType = None
+							element: arg 
+								arg: str = doCollapse
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str =  collapse/expand particular module in the table of results
+		
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = name
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = headerRow
+									ctx: Load 
+								attr: str = id
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = table
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tableId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = clsName
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = getRowClsName
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = name
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = allRows
+									ctx: Store 
+							value: Attribute 
+								value: Attribute 
+									value: Name 
+										id: str = table
+										ctx: Load 
+									attr: str = tHead
+									ctx: Load 
+								attr: str = children
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = rows
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = filter
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = x
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = x
+														ctx: Load 
+													attr: str = classList
+													ctx: Load 
+												attr: str = contains
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = clsName
+													ctx: Load 
+											keywords: list 
+									element: Name 
+										id: str = allRows
+										ctx: Load 
+								keywords: list 
+						element: For 
+							target: Name 
+								id: str = row
+								ctx: Store 
+							iter: Name 
+								id: str = rows
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = setCollapsed
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = row
+												ctx: Load 
+											element: Name 
+												id: str = doCollapse
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: If 
+							test: Name 
+								id: str = doCollapse
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = headerRow
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = add
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = modCollapseClass
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = headerRow
+													ctx: Load 
+												attr: str = classList
+												ctx: Load 
+											attr: str = remove
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = modCollapseClass
+												ctx: Load 
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _expandCollapseAllFuncs
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str =  This function sets up the callback handlers for the
+		collapse all and expand all links
+		
+						element: FunctionDef 
+							name: str = applyToAll
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = evt
+										annotation: NoneType = None
+									element: arg 
+										arg: str = collapse
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Str 
+										s: str = 
+			
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = table
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = getElementById
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = tableId
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = filtFunc
+											ctx: Store 
+									value: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = x
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = x
+														ctx: Load 
+													attr: str = classList
+													ctx: Load 
+												attr: str = contains
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = testletHeaderClass
+													ctx: Load 
+											keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = headerRows
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = filter
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = filtFunc
+												ctx: Load 
+											element: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = table
+														ctx: Load 
+													attr: str = tHead
+													ctx: Load 
+												attr: str = children
+												ctx: Load 
+										keywords: list 
+								element: For 
+									target: Name 
+										id: str = headerRow
+										ctx: Store 
+									iter: Name 
+										id: str = headerRows
+										ctx: Load 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = collapseModule
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = headerRow
+														ctx: Load 
+													element: Name 
+														id: str = collapse
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+							decorator_list: list 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = collapseAll
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = evt
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Str 
+										s: str =  collapse all rows handler
+			
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = evt
+												ctx: Load 
+											attr: str = preventDefault
+											ctx: Load 
+										args: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = applyToAll
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = evt
+												ctx: Load 
+											element: NameConstant 
+												value: bool = True
+										keywords: list 
+								element: Return 
+									value: NameConstant 
+										value: bool = False
+							decorator_list: list 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = expandAll
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = evt
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Str 
+										s: str =  Expand All Rows Handler
+			
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = evt
+												ctx: Load 
+											attr: str = preventDefault
+											ctx: Load 
+										args: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = applyToAll
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = evt
+												ctx: Load 
+											element: NameConstant 
+												value: bool = False
+										keywords: list 
+								element: Return 
+									value: NameConstant 
+										value: bool = False
+							decorator_list: list 
+							returns: NoneType = None
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = forceCollapse
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = forceCollapseId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = forceCollapse
+										ctx: Load 
+									attr: str = onclick
+									ctx: Store 
+							value: Name 
+								id: str = collapseAll
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = forceExpand
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = forceExpandId
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = forceExpand
+										ctx: Load 
+									attr: str = onclick
+									ctx: Store 
+							value: Name 
+								id: str = expandAll
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 

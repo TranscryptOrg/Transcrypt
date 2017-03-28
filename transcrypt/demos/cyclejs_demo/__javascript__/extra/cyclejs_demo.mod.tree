@@ -1,0 +1,253 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = dom
+					ctx: Store 
+			value: Name 
+				id: str = CycleDOM
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Tuple 
+					elts: list 
+						element: Name 
+							id: str = div
+							ctx: Store 
+						element: Name 
+							id: str = input
+							ctx: Store 
+						element: Name 
+							id: str = p
+							ctx: Store 
+						element: Name 
+							id: str = h1
+							ctx: Store 
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Attribute 
+						value: Name 
+							id: str = dom
+							ctx: Load 
+						attr: str = div
+						ctx: Load 
+					element: Attribute 
+						value: Name 
+							id: str = dom
+							ctx: Load 
+						attr: str = input
+						ctx: Load 
+					element: Attribute 
+						value: Name 
+							id: str = dom
+							ctx: Load 
+						attr: str = p
+						ctx: Load 
+				ctx: Load 
+		element: FunctionDef 
+			name: str = render
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = toggled
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = div
+							ctx: Load 
+						args: list 
+							element: List 
+								elts: list 
+									element: Call 
+										func: Name 
+											id: str = input
+											ctx: Load 
+										args: list 
+											element: Dict 
+												keys: list 
+													element: Str 
+														s: str = attrs
+												values: list 
+													element: Dict 
+														keys: list 
+															element: Str 
+																s: str = type
+														values: list 
+															element: Str 
+																s: str = checkbox
+										keywords: list 
+									element: Str 
+										s: str = Toggle me
+									element: Call 
+										func: Name 
+											id: str = p
+											ctx: Load 
+										args: list 
+											element: IfExp 
+												test: Name 
+													id: str = toggled
+													ctx: Load 
+												body: Str 
+													s: str = ON
+												orelse: Str 
+													s: str = off
+										keywords: list 
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = main
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = drivers
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = xs
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = xstream
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = default
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = driver_sinks
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = DOM
+						values: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Call 
+														func: Attribute 
+															value: Call 
+																func: Attribute 
+																	value: Subscript 
+																		value: Name 
+																			id: str = drivers
+																			ctx: Load 
+																		slice: Index 
+																			value: Str 
+																				s: str = DOM
+																		ctx: Load 
+																	attr: str = select
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = input
+																keywords: list 
+															attr: str = events
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = change
+														keywords: list 
+													attr: str = map
+													ctx: Load 
+												args: list 
+													element: Lambda 
+														args: arguments 
+															args: list 
+																element: arg 
+																	arg: str = ev
+																	annotation: NoneType = None
+															vararg: NoneType = None
+															kwonlyargs: list 
+															kw_defaults: list 
+															kwarg: NoneType = None
+															defaults: list 
+														body: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = ev
+																	ctx: Load 
+																attr: str = target
+																ctx: Load 
+															attr: str = checked
+															ctx: Load 
+												keywords: list 
+											attr: str = startWith
+											ctx: Load 
+										args: list 
+											element: NameConstant 
+												value: bool = False
+										keywords: list 
+									attr: str = map
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = render
+										ctx: Load 
+								keywords: list 
+				element: Return 
+					value: Name 
+						id: str = driver_sinks
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = drivers
+					ctx: Store 
+			value: Dict 
+				keys: list 
+					element: Str 
+						s: str = DOM
+				values: list 
+					element: Call 
+						func: Attribute 
+							value: Name 
+								id: str = dom
+								ctx: Load 
+							attr: str = makeDOMDriver
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = #app
+						keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Cycle
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = main
+						ctx: Load 
+					element: Name 
+						id: str = drivers
+						ctx: Load 
+				keywords: list 

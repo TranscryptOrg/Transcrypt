@@ -1,0 +1,57 @@
+<html><head>
+		<style>
+		  body {
+		    max-width: 100%;
+		  }
+		  .faultrow > td {
+		     background-color: LightCoral;
+		  }
+		  #resulttable {
+		    border-collapse: collapse;
+		    width: 100%;
+		    table-layout: fixed;
+		  }
+		  #resulttable th, #resulttable td {
+		    border: 1px solid grey;
+		  }
+		  .testletheader > td {
+		    background-color: LightSkyBlue;
+		  }
+		  .header-pos {
+		    width: 20%;
+		  }
+		  .header-val {
+		    width: 30%;
+		  }
+		  .py-pos,.trans-pos {
+		    width: 20%;
+		    overflow: hidden;
+		  }
+		  .py-val, .trans-val {
+		    width: 30%;
+		    overflow-x: auto;
+		  }
+		  .exc-header {
+	      color: red;
+		  }
+		  .collapsed {
+		    display: None;
+		  }
+		</style>
+		</head><body><b>Status:</b>
+<div id="message"></div><br><br>
+
+<div id="python" style="display: None"><div id="testlet0">
+<div id="pyresults">'hello' | 'world'</div>
+
+<div id="pypos">automated_tests/hello\testlet0.py:2 | automated_tests/hello\testlet0.py:3</div>
+</div>
+<div id="testlet1">
+<div id="pyresults">'goodbye' | 'moon'</div>
+
+<div id="pypos">automated_tests/hello\testlet1.py:2 | automated_tests/hello\testlet1.py:3</div>
+</div>
+</div></div>
+<div id="exc-area"></div><div id="results"><div> <a id="force-collapse" href="#"> Collapse All</a> <a id="force-expand" href="#">Expand All</a></div><table id="resulttable"><thead><tr> <th colspan="2"> CPython </th> <th colspan="2"> Transcrypt </th> </tr><tr> <th class="header-pos"> Location </th> <th class="header-val"> Value </th> <th class="header-val"> Value </th> <th class="header-pos"> Location </th> </tr></thead><tbody></tbody></table></div><script src="__javascript__/autotest.js"></script>
+
+</body></html>

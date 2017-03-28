@@ -1271,18 +1271,27 @@ __pragma__ ('endif')
         } else {
             // Identify check because user could pass None
             if ( aDefault === undefined ) {
-                throw KeyError(aKey, new Error());
+                throw KeyError (aKey, new Error());
             }
         }
         return aDefault;
     }
-
+    
+    function __popitem__ () {
+        var aKey = Object.keys (this) [0];
+        if (aKey == null) {
+            throw KeyError (aKey, new Error ());
+        }
+        var result = tuple ([aKey, this [aKey]]);
+        delete this [aKey];
+        return result;
+    }
+    
     function __update__ (aDict) {
         for (var aKey in aDict) {
             this [aKey] = aDict [aKey];
         }
     }
-    
     
     function __dgetitem__ (aKey) {
         return this [aKey];
@@ -1359,6 +1368,7 @@ __pragma__ ('endif')
         __setProperty__ (instance, 'py_get', {value: __getdefault__, enumerable: false});
         __setProperty__ (instance, 'py_setdefault', {value: __setdefault__, enumerable: false});
         __setProperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
+        __setProperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
         __setProperty__ (instance, 'py_update', {value: __update__, enumerable: false});
         __setProperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
         __setProperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices

@@ -1,0 +1,49 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Str 
+				s: str = 
+this is just to allow `from snabbdom import div, input, ...`
+
+		element: For 
+			target: Name 
+				id: str = key
+				ctx: Store 
+			iter: Tuple 
+				elts: list 
+					element: Str 
+						s: str = makeDOMDriver
+					element: Str 
+						s: str = div
+					element: Str 
+						s: str = h
+					element: Str 
+						s: str = input
+					element: Str 
+						s: str = span
+				ctx: Load 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = __all__
+								ctx: Load 
+							slice: Index 
+								value: Name 
+									id: str = key
+									ctx: Load 
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = getattr
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = CycleDOM
+								ctx: Load 
+							element: Name 
+								id: str = key
+								ctx: Load 
+						keywords: list 
+			orelse: list 

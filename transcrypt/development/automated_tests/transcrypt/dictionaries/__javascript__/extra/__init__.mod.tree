@@ -1,0 +1,1493 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = iconv
+				keywords: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tel
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = guido
+							element: Str 
+								s: str = jack
+						values: list 
+							element: Num 
+								n: int = 4127
+							element: Num 
+								n: int = 4098
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = len
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tel
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = tel
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = sape
+							ctx: Store 
+					value: Num 
+						n: int = 4139
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tel
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = tel
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = jack
+								ctx: Load 
+						keywords: list 
+				element: Delete 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = tel
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = sape
+							ctx: Del 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = tel
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = irv
+							ctx: Store 
+					value: Num 
+						n: int = 4127
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tel
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = sorted
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = list
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = tel
+														ctx: Load 
+													attr: str = keys
+													ctx: Load 
+												args: list 
+												keywords: list 
+										keywords: list 
+								keywords: list 
+							element: NameConstant 
+								value: bool = False
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = sorted
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = tel
+												ctx: Load 
+											attr: str = keys
+											ctx: Load 
+										args: list 
+										keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Str 
+									s: str = guido
+								ops: list 
+									element: In 
+								comparators: list 
+									element: Name 
+										id: str = tel
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Str 
+									s: str = jack
+								ops: list 
+									element: NotIn 
+								comparators: list 
+									element: Name 
+										id: str = tel
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = dict
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+											element: Tuple 
+												elts: list 
+													element: Str 
+														s: str = guido
+													element: Num 
+														n: int = 4127
+												ctx: Load 
+											element: Tuple 
+												elts: list 
+													element: Str 
+														s: str = jack
+													element: Num 
+														n: int = 4098
+												ctx: Load 
+											element: Tuple 
+												elts: list 
+													element: Str 
+														s: str = sape
+													element: Num 
+														n: int = 4139
+												ctx: Load 
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Name 
+												id: str = dict
+												ctx: Load 
+											args: list 
+												element: Num 
+													n: int = 1
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Name 
+												id: str = dict
+												ctx: Load 
+											args: list 
+												element: Num 
+													n: float = 134.34
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Name 
+												id: str = dict
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = asdf
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Name 
+												id: str = dict
+												ctx: Load 
+											args: list 
+												element: List 
+													elts: list 
+														element: Str 
+															s: str = 1234
+														element: Num 
+															n: int = 1
+													ctx: Load 
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = dict
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = dict
+									ctx: Load 
+								args: list 
+									element: Dict 
+										keys: list 
+										values: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = dict
+									ctx: Load 
+								args: list 
+									element: Dict 
+										keys: list 
+											element: Str 
+												s: str = asdf
+											element: Str 
+												s: str = qwer
+										values: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = b
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = a
+							element: Str 
+								s: str = b
+						values: list 
+							element: Num 
+								n: float = 2.01
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: float = 3.3
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = b
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = b
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = a
+							element: Str 
+								s: str = b
+						values: list 
+							element: Num 
+								n: int = 2
+							element: List 
+								elts: list 
+									element: Num 
+										n: int = 1
+									element: Num 
+										n: int = 2
+									element: Num 
+										n: int = 3
+								ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = b
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = b
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = a
+							element: Str 
+								s: str = b
+						values: list 
+							element: NameConstant 
+								value: NoneType = None
+							element: Call 
+								func: Name 
+									id: str = set
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+											element: Num 
+												n: int = 3
+										ctx: Load 
+								keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = b
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = b
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = a
+							element: Str 
+								s: str = b
+						values: list 
+							element: Dict 
+								keys: list 
+									element: Str 
+										s: str = c
+								values: list 
+									element: Num 
+										n: int = 2
+							element: Tuple 
+								elts: list 
+									element: Num 
+										n: int = 1
+									element: Num 
+										n: int = 2
+								ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = b
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Subscript 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									slice: Index 
+										value: Str 
+											s: str = a
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = c
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = d
+												ctx: Load 
+											attr: str = get
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = a
+										keywords: list 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = c
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = b
+												ctx: Load 
+											attr: str = get
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = a
+										keywords: list 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = c
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Subscript 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = a
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = c
+							ctx: Store 
+					value: Num 
+						n: int = 3
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = d
+												ctx: Load 
+											attr: str = get
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = a
+										keywords: list 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = c
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = b
+												ctx: Load 
+											attr: str = get
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = a
+										keywords: list 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = c
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = knights
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = robin
+							element: Str 
+								s: str = gallahad
+						values: list 
+							element: Str 
+								s: str = the brave
+							element: Str 
+								s: str = the pure
+				element: For 
+					target: Tuple 
+						elts: list 
+							element: Name 
+								id: str = k
+								ctx: Store 
+							element: Name 
+								id: str = v
+								ctx: Store 
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = sorted
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = knights
+										ctx: Load 
+									attr: str = items
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = k
+										ctx: Load 
+									element: Name 
+										id: str = v
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Str 
+							s: str = gallahad
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = knights
+								ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = gallahad is a knight
+								keywords: list 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = k
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = sorted
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = knights
+								ctx: Load 
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = k
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = knight
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = rudolph
+						values: list 
+							element: Str 
+								s: str = the righteous
+				element: For 
+					target: Name 
+						id: str = k
+						ctx: Store 
+					iter: Name 
+						id: str = knight
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = k
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tel
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = guido
+						values: list 
+							element: Num 
+								n: int = 123
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = tel
+								ctx: Load 
+							attr: str = update
+							ctx: Load 
+						args: list 
+							element: Dict 
+								keys: list 
+									element: Str 
+										s: str = edsger
+								values: list 
+									element: Num 
+										n: int = 42
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = setdefault
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = linus
+									element: Num 
+										n: int = 456
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = tel
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = linus
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = setdefault
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = guido
+									element: Num 
+										n: int = 789
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = pop
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = guido
+									element: Num 
+										n: int = 1
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = pop
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = guido
+									element: Num 
+										n: int = 1
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = pop
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = edsger
+									element: Num 
+										n: int = 2
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = pop
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = foo
+									element: Str 
+										s: str = bar
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = tel
+										ctx: Load 
+									attr: str = pop
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = foo
+									element: NameConstant 
+										value: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Dict 
+						keys: list 
+						values: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = a
+							ctx: Store 
+					value: Num 
+						n: int = 3777
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							slice: Index 
+								value: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 2
+									ctx: Load 
+							ctx: Store 
+					value: Num 
+						n: int = 4777
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = a
+								ctx: Load 
+							element: Subscript 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								slice: Index 
+									value: Tuple 
+										elts: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+										ctx: Load 
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = opov
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Dict 
+						keys: list 
+						values: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							slice: Index 
+								value: Str 
+									s: str = a
+							ctx: Store 
+					value: Num 
+						n: int = 3777
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							slice: Index 
+								value: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 1
+										element: Num 
+											n: int = 2
+									ctx: Load 
+							ctx: Store 
+					value: Num 
+						n: int = 4777
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Subscript 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = a
+								ctx: Load 
+							element: Subscript 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								slice: Index 
+									value: Tuple 
+										elts: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+										ctx: Load 
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = noopov
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = knights
+							ctx: Store 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = robin
+							element: Str 
+								s: str = gallahad
+						values: list 
+							element: Str 
+								s: str = the brave
+							element: Str 
+								s: str = the pure
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Name 
+													id: str = knights
+													ctx: Load 
+												attr: str = pop
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = batman
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Name 
+													id: str = knights
+													ctx: Load 
+												attr: str = pop
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = batman
+												element: NameConstant 
+													value: NoneType = None
+											keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = expectException
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Name 
+													id: str = knights
+													ctx: Load 
+												attr: str = pop
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = batman
+												element: Str 
+													s: str = the gullible
+											keywords: list 
+								keywords: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

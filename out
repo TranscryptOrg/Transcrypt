@@ -1,0 +1,32 @@
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt>C:\Python35\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -ds static_types.py 
+
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.6.21
+Copyright (C) Geatec Engineering. License: Apache 2.0
+
+Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/static_types.py
+Problems encountered during static type check
+	mypy: can't read file 'D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/static_types.py': No such file or directory
+	
+
+
+list index out of rangeTraceback (most recent call last):
+  File "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules\org\transcrypt\compiler.py", line 143, in __init__
+    moduleMetadata = ModuleMetadata (self, self.mainModuleName)
+  File "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules\org\transcrypt\compiler.py", line 64, in __init__
+    '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
+org.transcrypt.utils.Error: <unprintable Error object>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py", line 119, in main
+    compiler.Program (compilerPath, __symbols__)
+  File "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules\org\transcrypt\compiler.py", line 148, in __init__
+    message = '\n\t{}'.format (str (exception))
+  File "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules\org\transcrypt\utils.py", line 124, in __str__
+    result += '\n\tFile \'{}\', line {}, namely:'.format (program.importStack [-1][0] .sourcePath, self.lineNr)
+IndexError: list index out of range
+
+
+Aborted

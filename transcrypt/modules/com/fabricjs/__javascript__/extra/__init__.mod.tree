@@ -1,0 +1,41 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noanno
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = fabric
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = 
+(function () {{
+    var exports = {{}};
+    {}  // Puts fabric in exports and in global window
+    delete window.fabric;
+    return exports;
+}}) () .fabric;
+    
+					element: Call 
+						func: Name 
+							id: str = __include__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = com/fabricjs/__javascript__/fabric.js
+						keywords: list 
+				keywords: list 

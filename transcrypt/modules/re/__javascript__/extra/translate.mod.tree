@@ -1,0 +1,3675 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = tconv
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = VERBOSE
+					ctx: Store 
+			value: NameConstant 
+				value: bool = False
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MAX_SHIFTREDUCE_LOOPS
+					ctx: Store 
+			value: Num 
+				n: int = 1000
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = stringFlags
+					ctx: Store 
+			value: Str 
+				s: str = aiLmsux
+		element: ClassDef 
+			name: str = Group
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = start
+								annotation: NoneType = None
+							element: arg 
+								arg: str = end
+								annotation: NoneType = None
+							element: arg 
+								arg: str = klass
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = start
+									ctx: Store 
+							value: Name 
+								id: str = start
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = end
+									ctx: Store 
+							value: Name 
+								id: str = end
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = klass
+									ctx: Store 
+							value: Name 
+								id: str = klass
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __repr__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = str
+									ctx: Load 
+								args: list 
+									element: Tuple 
+										elts: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = start
+												ctx: Load 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = end
+												ctx: Load 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = klass
+												ctx: Load 
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = generateGroupSpans
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = tokens
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = groupInfo
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = idx
+							ctx: Store 
+					value: Num 
+						n: int = 0
+				element: For 
+					target: Name 
+						id: str = token
+						ctx: Store 
+					iter: Name 
+						id: str = tokens
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = token
+											ctx: Load 
+										attr: str = name
+										ctx: Load 
+									attr: str = startswith
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = (
+								keywords: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = groupInfo
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Name 
+													id: str = Group
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = idx
+														ctx: Load 
+													element: NameConstant 
+														value: NoneType = None
+													element: Attribute 
+														value: Name 
+															id: str = token
+															ctx: Load 
+														attr: str = name
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Attribute 
+											value: Name 
+												id: str = token
+												ctx: Load 
+											attr: str = name
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = )
+									body: list 
+										element: For 
+											target: Name 
+												id: str = group
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = reversed
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = groupInfo
+														ctx: Load 
+												keywords: list 
+											body: list 
+												element: If 
+													test: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = group
+																ctx: Load 
+															attr: str = end
+															ctx: Load 
+														ops: list 
+															element: Is 
+														comparators: list 
+															element: NameConstant 
+																value: NoneType = None
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Attribute 
+																	value: Name 
+																		id: str = group
+																		ctx: Load 
+																	attr: str = end
+																	ctx: Store 
+															value: Name 
+																id: str = idx
+																ctx: Load 
+													orelse: list 
+											orelse: list 
+									orelse: list 
+						element: AugAssign 
+							target: Name 
+								id: str = idx
+								ctx: Store 
+							op: Add 
+							value: Num 
+								n: int = 1
+					orelse: list 
+				element: Return 
+					value: Name 
+						id: str = groupInfo
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = countCaptureGroups
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = tokens
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = groupInfo
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = generateGroupSpans
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tokens
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = count
+							ctx: Store 
+					value: Num 
+						n: int = 0
+				element: For 
+					target: Name 
+						id: str = token
+						ctx: Store 
+					iter: Name 
+						id: str = tokens
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = token
+										ctx: Load 
+									attr: str = name
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Str 
+										s: str = (
+							body: list 
+								element: AugAssign 
+									target: Name 
+										id: str = count
+										ctx: Store 
+									op: Add 
+									value: Num 
+										n: int = 1
+							orelse: list 
+					orelse: list 
+				element: Return 
+					value: Name 
+						id: str = count
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = getCaptureGroup
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = groupInfo
+						annotation: NoneType = None
+					element: arg 
+						arg: str = namedGroups
+						annotation: NoneType = None
+					element: arg 
+						arg: str = groupRef
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Try 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = id
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = int
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = groupRef
+										ctx: Load 
+								keywords: list 
+					handlers: list 
+						element: ExceptHandler 
+							type: NoneType = None
+							name: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = id
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = namedGroups
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = groupRef
+												ctx: Load 
+										ctx: Load 
+					orelse: list 
+					finalbody: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = search
+							ctx: Store 
+					value: Num 
+						n: int = 0
+				element: For 
+					target: Name 
+						id: str = group
+						ctx: Store 
+					iter: Name 
+						id: str = groupInfo
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = group
+										ctx: Load 
+									attr: str = klass
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Str 
+										s: str = (
+							body: list 
+								element: AugAssign 
+									target: Name 
+										id: str = search
+										ctx: Store 
+									op: Add 
+									value: Num 
+										n: int = 1
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = search
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Name 
+												id: str = id
+												ctx: Load 
+									body: list 
+										element: Return 
+											value: Name 
+												id: str = group
+												ctx: Load 
+									orelse: list 
+							orelse: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = splitIfElse
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = tokens
+						annotation: NoneType = None
+					element: arg 
+						arg: str = namedGroups
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = variants
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = groupInfo
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = generateGroupSpans
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tokens
+								ctx: Load 
+						keywords: list 
+				element: For 
+					target: Name 
+						id: str = group
+						ctx: Store 
+					iter: Name 
+						id: str = groupInfo
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = group
+										ctx: Load 
+									attr: str = klass
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Str 
+										s: str = (?<
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = iff
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = tokens
+											ctx: Load 
+										slice: Slice 
+											lower: NoneType = None
+											upper: NoneType = None
+											step: NoneType = None
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = els
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = tokens
+											ctx: Load 
+										slice: Slice 
+											lower: NoneType = None
+											upper: NoneType = None
+											step: NoneType = None
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = conStart
+											ctx: Store 
+									value: Attribute 
+										value: Name 
+											id: str = group
+											ctx: Load 
+										attr: str = start
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = conEnd
+											ctx: Store 
+									value: Attribute 
+										value: Name 
+											id: str = group
+											ctx: Load 
+										attr: str = end
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = ref
+											ctx: Store 
+									value: Attribute 
+										value: Subscript 
+											value: Name 
+												id: str = tokens
+												ctx: Load 
+											slice: Index 
+												value: BinOp 
+													left: Name 
+														id: str = conStart
+														ctx: Load 
+													op: Add 
+													right: Num 
+														n: int = 1
+											ctx: Load 
+										attr: str = name
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = captureGroup
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = getCaptureGroup
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = groupInfo
+												ctx: Load 
+											element: Name 
+												id: str = namedGroups
+												ctx: Load 
+											element: Name 
+												id: str = ref
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = captureGroupModifier
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = tokens
+											ctx: Load 
+										slice: Index 
+											value: BinOp 
+												left: Attribute 
+													value: Name 
+														id: str = captureGroup
+														ctx: Load 
+													attr: str = end
+													ctx: Load 
+												op: Add 
+												right: Num 
+													n: int = 1
+										ctx: Load 
+								element: If 
+									test: BoolOp 
+										op: Or 
+										values: list 
+											element: Compare 
+												left: Attribute 
+													value: Name 
+														id: str = captureGroupModifier
+														ctx: Load 
+													attr: str = name
+													ctx: Load 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: List 
+														elts: list 
+															element: Str 
+																s: str = ?
+															element: Str 
+																s: str = *
+														ctx: Load 
+											element: Call 
+												func: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = captureGroupModifier
+															ctx: Load 
+														attr: str = name
+														ctx: Load 
+													attr: str = startswith
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = {0,
+												keywords: list 
+									body: list 
+										element: If 
+											test: Compare 
+												left: Attribute 
+													value: Name 
+														id: str = captureGroupModifier
+														ctx: Load 
+													attr: str = name
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Str 
+														s: str = ?
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = iff
+																ctx: Load 
+															slice: Index 
+																value: BinOp 
+																	left: Attribute 
+																		value: Name 
+																			id: str = captureGroup
+																			ctx: Load 
+																		attr: str = end
+																		ctx: Load 
+																	op: Add 
+																	right: Num 
+																		n: int = 1
+															ctx: Store 
+													value: NameConstant 
+														value: NoneType = None
+											orelse: list 
+												element: If 
+													test: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = captureGroupModifier
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = *
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Subscript 
+																	value: Name 
+																		id: str = iff
+																		ctx: Load 
+																	slice: Index 
+																		value: BinOp 
+																			left: Attribute 
+																				value: Name 
+																					id: str = captureGroup
+																					ctx: Load 
+																				attr: str = end
+																				ctx: Load 
+																			op: Add 
+																			right: Num 
+																				n: int = 1
+																	ctx: Store 
+															value: Call 
+																func: Name 
+																	id: str = Token
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = +
+																keywords: list 
+													orelse: list 
+														element: If 
+															test: Call 
+																func: Attribute 
+																	value: Attribute 
+																		value: Name 
+																			id: str = captureGroupModifier
+																			ctx: Load 
+																		attr: str = name
+																		ctx: Load 
+																	attr: str = startswith
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = {0,
+																keywords: list 
+															body: list 
+																element: Assign 
+																	targets: list 
+																		element: Subscript 
+																			value: Attribute 
+																				value: Subscript 
+																					value: Name 
+																						id: str = iff
+																						ctx: Load 
+																					slice: Index 
+																						value: BinOp 
+																							left: Attribute 
+																								value: Name 
+																									id: str = captureGroup
+																									ctx: Load 
+																								attr: str = end
+																								ctx: Load 
+																							op: Add 
+																							right: Num 
+																								n: int = 1
+																					ctx: Load 
+																				attr: str = name
+																				ctx: Load 
+																			slice: Slice 
+																				lower: Num 
+																					n: int = 0
+																				upper: Num 
+																					n: int = 3
+																				step: NoneType = None
+																			ctx: Store 
+																	value: Str 
+																		s: str = {1,
+															orelse: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = els
+														ctx: Load 
+													slice: Index 
+														value: BinOp 
+															left: Attribute 
+																value: Name 
+																	id: str = captureGroup
+																	ctx: Load 
+																attr: str = end
+																ctx: Load 
+															op: Add 
+															right: Num 
+																n: int = 1
+													ctx: Store 
+											value: NameConstant 
+												value: NoneType = None
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = hasElse
+													ctx: Store 
+											value: NameConstant 
+												value: bool = False
+										element: For 
+											target: Name 
+												id: str = idx
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = conStart
+														ctx: Load 
+													element: Name 
+														id: str = conEnd
+														ctx: Load 
+												keywords: list 
+											body: list 
+												element: If 
+													test: Compare 
+														left: Attribute 
+															value: Subscript 
+																value: Name 
+																	id: str = tokens
+																	ctx: Load 
+																slice: Index 
+																	value: Name 
+																		id: str = idx
+																		ctx: Load 
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = |
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Name 
+																	id: str = hasElse
+																	ctx: Store 
+															value: NameConstant 
+																value: bool = True
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = els
+																		ctx: Load 
+																	attr: str = pop
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = conEnd
+																		ctx: Load 
+																keywords: list 
+														element: Assign 
+															targets: list 
+																element: Subscript 
+																	value: Name 
+																		id: str = iff
+																		ctx: Load 
+																	slice: Slice 
+																		lower: Name 
+																			id: str = idx
+																			ctx: Load 
+																		upper: BinOp 
+																			left: Name 
+																				id: str = conEnd
+																				ctx: Load 
+																			op: Add 
+																			right: Num 
+																				n: int = 1
+																		step: NoneType = None
+																	ctx: Store 
+															value: List 
+																elts: list 
+																ctx: Load 
+														element: Assign 
+															targets: list 
+																element: Subscript 
+																	value: Name 
+																		id: str = els
+																		ctx: Load 
+																	slice: Slice 
+																		lower: Name 
+																			id: str = conStart
+																			ctx: Load 
+																		upper: BinOp 
+																			left: Name 
+																				id: str = idx
+																				ctx: Load 
+																			op: Add 
+																			right: Num 
+																				n: int = 1
+																		step: NoneType = None
+																	ctx: Store 
+															value: List 
+																elts: list 
+																ctx: Load 
+														element: Break 
+													orelse: list 
+											orelse: list 
+										element: If 
+											test: UnaryOp 
+												op: Not 
+												operand: Name 
+													id: str = hasElse
+													ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = els
+																ctx: Load 
+															slice: Slice 
+																lower: Name 
+																	id: str = conStart
+																	ctx: Load 
+																upper: BinOp 
+																	left: Name 
+																		id: str = conEnd
+																		ctx: Load 
+																	op: Add 
+																	right: Num 
+																		n: int = 1
+																step: NoneType = None
+															ctx: Store 
+													value: List 
+														elts: list 
+														ctx: Load 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = iff
+																ctx: Load 
+															attr: str = pop
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = conEnd
+																ctx: Load 
+														keywords: list 
+											orelse: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = iff
+														ctx: Load 
+													slice: Slice 
+														lower: Name 
+															id: str = conStart
+															ctx: Load 
+														upper: BinOp 
+															left: Name 
+																id: str = conStart
+																ctx: Load 
+															op: Add 
+															right: Num 
+																n: int = 3
+														step: NoneType = None
+													ctx: Store 
+											value: List 
+												elts: list 
+												ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = els
+														ctx: Load 
+													slice: Slice 
+														lower: Attribute 
+															value: Name 
+																id: str = captureGroup
+																ctx: Load 
+															attr: str = start
+															ctx: Load 
+														upper: BinOp 
+															left: Attribute 
+																value: Name 
+																	id: str = captureGroup
+																	ctx: Load 
+																attr: str = end
+																ctx: Load 
+															op: Add 
+															right: Num 
+																n: int = 1
+														step: NoneType = None
+													ctx: Store 
+											value: List 
+												elts: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = (
+														keywords: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = )
+														keywords: list 
+												ctx: Load 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = iff
+														ctx: Load 
+													attr: str = remove
+													ctx: Load 
+												args: list 
+													element: NameConstant 
+														value: NoneType = None
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = els
+														ctx: Load 
+													attr: str = remove
+													ctx: Load 
+												args: list 
+													element: NameConstant 
+														value: NoneType = None
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = variants
+														ctx: Load 
+													attr: str = append
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = iff
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = variants
+														ctx: Load 
+													attr: str = append
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = els
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = pastIff
+													ctx: Store 
+											value: NameConstant 
+												value: bool = False
+										element: For 
+											target: Name 
+												id: str = idx
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = conStart
+														ctx: Load 
+													element: Name 
+														id: str = conEnd
+														ctx: Load 
+												keywords: list 
+											body: list 
+												element: If 
+													test: Compare 
+														left: Attribute 
+															value: Subscript 
+																value: Name 
+																	id: str = iff
+																	ctx: Load 
+																slice: Index 
+																	value: Name 
+																		id: str = idx
+																		ctx: Load 
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = |
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Name 
+																	id: str = iff
+																	ctx: Store 
+															value: Subscript 
+																value: Name 
+																	id: str = tokens
+																	ctx: Load 
+																slice: Slice 
+																	lower: NoneType = None
+																	upper: Name 
+																		id: str = idx
+																		ctx: Load 
+																	step: NoneType = None
+																ctx: Load 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = iff
+																		ctx: Load 
+																	attr: str = extend
+																	ctx: Load 
+																args: list 
+																	element: Subscript 
+																		value: Name 
+																			id: str = tokens
+																			ctx: Load 
+																		slice: Slice 
+																			lower: BinOp 
+																				left: Name 
+																					id: str = conEnd
+																					ctx: Load 
+																				op: Add 
+																				right: Num 
+																					n: int = 1
+																			upper: NoneType = None
+																			step: NoneType = None
+																		ctx: Load 
+																keywords: list 
+														element: Break 
+													orelse: list 
+											orelse: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = iff
+														ctx: Load 
+													slice: Slice 
+														lower: Name 
+															id: str = conStart
+															ctx: Load 
+														upper: BinOp 
+															left: Name 
+																id: str = conStart
+																ctx: Load 
+															op: Add 
+															right: Num 
+																n: int = 3
+														step: NoneType = None
+													ctx: Store 
+											value: List 
+												elts: list 
+												ctx: Load 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = variants
+														ctx: Load 
+													attr: str = append
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = iff
+														ctx: Load 
+												keywords: list 
+								element: Break 
+							orelse: list 
+					orelse: list 
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Name 
+							id: str = variants
+							ctx: Load 
+					body: list 
+						element: Return 
+							value: List 
+								elts: list 
+									element: Name 
+										id: str = tokens
+										ctx: Load 
+								ctx: Load 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = allVariants
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = variant
+						ctx: Store 
+					iter: Name 
+						id: str = variants
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = allVariants
+										ctx: Load 
+									attr: str = extend
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = splitIfElse
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = variant
+												ctx: Load 
+											element: Name 
+												id: str = namedGroups
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+					orelse: list 
+				element: Return 
+					value: Name 
+						id: str = allVariants
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = Token
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = name
+								annotation: NoneType = None
+							element: arg 
+								arg: str = paras
+								annotation: NoneType = None
+							element: arg 
+								arg: str = pure
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: NoneType = None
+							element: NameConstant 
+								value: bool = False
+					body: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = paras
+									ctx: Load 
+								ops: list 
+									element: Is 
+								comparators: list 
+									element: NameConstant 
+										value: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = paras
+											ctx: Store 
+									value: List 
+										elts: list 
+										ctx: Load 
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = name
+									ctx: Store 
+							value: Name 
+								id: str = name
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = paras
+									ctx: Store 
+							value: Name 
+								id: str = paras
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = pure
+									ctx: Store 
+							value: Name 
+								id: str = pure
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = isModeGroup
+									ctx: Store 
+							value: NameConstant 
+								value: bool = False
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __repr__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = name
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = resolve
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = paras
+									ctx: Store 
+							value: Str 
+								s: str = 
+						element: For 
+							target: Name 
+								id: str = para
+								ctx: Store 
+							iter: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = paras
+								ctx: Load 
+							body: list 
+								element: AugAssign 
+									target: Name 
+										id: str = paras
+										ctx: Store 
+									op: Add 
+									value: Call 
+										func: Name 
+											id: str = str
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = para
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: Return 
+							value: BinOp 
+								left: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = name
+									ctx: Load 
+								op: Add 
+								right: Name 
+									id: str = paras
+									ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = shift
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = stack
+						annotation: NoneType = None
+					element: arg 
+						arg: str = queue
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = done
+							ctx: Store 
+					value: UnaryOp 
+						op: Not 
+						operand: Call 
+							func: Name 
+								id: str = bool
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = queue
+									ctx: Load 
+							keywords: list 
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Name 
+							id: str = done
+							ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = stack
+										ctx: Load 
+									attr: str = append
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = Token
+											ctx: Load 
+										args: list 
+											element: Subscript 
+												value: Name 
+													id: str = queue
+													ctx: Load 
+												slice: Index 
+													value: Num 
+														n: int = 0
+												ctx: Load 
+											element: List 
+												elts: list 
+												ctx: Load 
+											element: NameConstant 
+												value: bool = True
+										keywords: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = queue
+									ctx: Store 
+							value: Subscript 
+								value: Name 
+									id: str = queue
+									ctx: Load 
+								slice: Slice 
+									lower: Num 
+										n: int = 1
+									upper: NoneType = None
+									step: NoneType = None
+								ctx: Load 
+					orelse: list 
+				element: Return 
+					value: Tuple 
+						elts: list 
+							element: Name 
+								id: str = stack
+								ctx: Load 
+							element: Name 
+								id: str = queue
+								ctx: Load 
+							element: Name 
+								id: str = done
+								ctx: Load 
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = shiftReduce
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = stack
+						annotation: NoneType = None
+					element: arg 
+						arg: str = queue
+						annotation: NoneType = None
+					element: arg 
+						arg: str = namedGroups
+						annotation: NoneType = None
+					element: arg 
+						arg: str = flags
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = done
+							ctx: Store 
+					value: NameConstant 
+						value: bool = False
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = high
+							ctx: Store 
+					value: BinOp 
+						left: Call 
+							func: Name 
+								id: str = len
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = stack
+									ctx: Load 
+							keywords: list 
+						op: Sub 
+						right: Num 
+							n: int = 1
+				element: If 
+					test: Compare 
+						left: Call 
+							func: Name 
+								id: str = len
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = stack
+									ctx: Load 
+							keywords: list 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 2
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = stack
+											ctx: Store 
+										element: Name 
+											id: str = queue
+											ctx: Store 
+										element: Name 
+											id: str = done
+											ctx: Store 
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = shift
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+									element: Name 
+										id: str = queue
+										ctx: Load 
+								keywords: list 
+						element: Return 
+							value: Tuple 
+								elts: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+									element: Name 
+										id: str = queue
+										ctx: Load 
+									element: Name 
+										id: str = flags
+										ctx: Load 
+									element: Name 
+										id: str = done
+										ctx: Load 
+								ctx: Load 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = s0
+							ctx: Store 
+					value: IfExp 
+						test: Compare 
+							left: Call 
+								func: Name 
+									id: str = len
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+								keywords: list 
+							ops: list 
+								element: Gt 
+							comparators: list 
+								element: Num 
+									n: int = 0
+						body: Subscript 
+							value: Name 
+								id: str = stack
+								ctx: Load 
+							slice: Index 
+								value: Name 
+									id: str = high
+									ctx: Load 
+							ctx: Load 
+						orelse: Call 
+							func: Name 
+								id: str = Token
+								ctx: Load 
+							args: list 
+								element: Str 
+									s: str = 
+							keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = s1
+							ctx: Store 
+					value: IfExp 
+						test: Compare 
+							left: Call 
+								func: Name 
+									id: str = len
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+								keywords: list 
+							ops: list 
+								element: Gt 
+							comparators: list 
+								element: Num 
+									n: int = 1
+						body: Subscript 
+							value: Name 
+								id: str = stack
+								ctx: Load 
+							slice: Index 
+								value: BinOp 
+									left: Name 
+										id: str = high
+										ctx: Load 
+									op: Sub 
+									right: Num 
+										n: int = 1
+							ctx: Load 
+						orelse: Call 
+							func: Name 
+								id: str = Token
+								ctx: Load 
+							args: list 
+								element: Str 
+									s: str = 
+							keywords: list 
+				element: If 
+					test: Name 
+						id: str = VERBOSE
+						ctx: Load 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = token
+								ctx: Store 
+							iter: Name 
+								id: str = stack
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = console
+												ctx: Load 
+											attr: str = log
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = token
+														ctx: Load 
+													attr: str = resolve
+													ctx: Load 
+												args: list 
+												keywords: list 
+											element: Str 
+												s: str = 	
+										keywords: list 
+											element: keyword 
+												arg: str = end
+												value: Str 
+													s: str = 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = console
+										ctx: Load 
+									attr: str = log
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = 
+								keywords: list 
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Attribute 
+							value: Name 
+								id: str = s1
+								ctx: Load 
+							attr: str = name
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Str 
+								s: str = \
+					body: list 
+						element: If 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = s0
+										ctx: Load 
+									attr: str = name
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Str 
+										s: str = A
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Subscript 
+											value: Name 
+												id: str = stack
+												ctx: Load 
+											slice: Slice 
+												lower: UnaryOp 
+													op: USub 
+													operand: Num 
+														n: int = 2
+												upper: NoneType = None
+												step: NoneType = None
+											ctx: Store 
+									value: List 
+										elts: list 
+											element: Call 
+												func: Name 
+													id: str = Token
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = ^
+												keywords: list 
+										ctx: Load 
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Attribute 
+											value: Name 
+												id: str = s0
+												ctx: Load 
+											attr: str = name
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = a
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = stack
+														ctx: Load 
+													slice: Slice 
+														lower: UnaryOp 
+															op: USub 
+															operand: Num 
+																n: int = 2
+														upper: NoneType = None
+														step: NoneType = None
+													ctx: Store 
+											value: List 
+												elts: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = \07
+														keywords: list 
+												ctx: Load 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Attribute 
+													value: Name 
+														id: str = s0
+														ctx: Load 
+													attr: str = name
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Str 
+														s: str = Z
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = stack
+																ctx: Load 
+															slice: Slice 
+																lower: UnaryOp 
+																	op: USub 
+																	operand: Num 
+																		n: int = 2
+																upper: NoneType = None
+																step: NoneType = None
+															ctx: Store 
+													value: List 
+														elts: list 
+															element: Call 
+																func: Name 
+																	id: str = Token
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = $
+																keywords: list 
+														ctx: Load 
+											orelse: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = stack
+																ctx: Load 
+															slice: Slice 
+																lower: UnaryOp 
+																	op: USub 
+																	operand: Num 
+																		n: int = 2
+																upper: NoneType = None
+																step: NoneType = None
+															ctx: Store 
+													value: List 
+														elts: list 
+															element: Call 
+																func: Name 
+																	id: str = Token
+																	ctx: Load 
+																args: list 
+																	element: BinOp 
+																		left: Str 
+																			s: str = \
+																		op: Add 
+																		right: Attribute 
+																			value: Name 
+																				id: str = s0
+																				ctx: Load 
+																			attr: str = name
+																			ctx: Load 
+																keywords: list 
+														ctx: Load 
+					orelse: list 
+						element: If 
+							test: BoolOp 
+								op: And 
+								values: list 
+									element: Compare 
+										left: Attribute 
+											value: Name 
+												id: str = s0
+												ctx: Load 
+											attr: str = name
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = $
+									element: Attribute 
+										value: Name 
+											id: str = s0
+											ctx: Load 
+										attr: str = pure
+										ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = stack
+												ctx: Load 
+											attr: str = pop
+											ctx: Load 
+										args: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = stack
+												ctx: Load 
+											attr: str = extend
+											ctx: Load 
+										args: list 
+											element: List 
+												elts: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = (?=
+														keywords: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = \n
+														keywords: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = ?
+														keywords: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = $
+														keywords: list 
+													element: Call 
+														func: Name 
+															id: str = Token
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = )
+														keywords: list 
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Attribute 
+											value: Name 
+												id: str = s1
+												ctx: Load 
+											attr: str = name
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = {
+									body: list 
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = s0
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = ,
+													element: Compare 
+														left: Call 
+															func: Name 
+																id: str = len
+																ctx: Load 
+															args: list 
+																element: Attribute 
+																	value: Name 
+																		id: str = s1
+																		ctx: Load 
+																	attr: str = paras
+																	ctx: Load 
+															keywords: list 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Num 
+																n: int = 0
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = s1
+																	ctx: Load 
+																attr: str = paras
+																ctx: Load 
+															attr: str = append
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = 0
+														keywords: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Attribute 
+																value: Name 
+																	id: str = s1
+																	ctx: Load 
+																attr: str = paras
+																ctx: Load 
+															attr: str = append
+															ctx: Load 
+														args: list 
+															element: Str 
+																s: str = ,
+														keywords: list 
+											orelse: list 
+												element: If 
+													test: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = s0
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = }
+													body: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Attribute 
+																		value: Name 
+																			id: str = s1
+																			ctx: Load 
+																		attr: str = paras
+																		ctx: Load 
+																	attr: str = append
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = }
+																keywords: list 
+														element: Assign 
+															targets: list 
+																element: Attribute 
+																	value: Name 
+																		id: str = s1
+																		ctx: Load 
+																	attr: str = name
+																	ctx: Store 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = s1
+																		ctx: Load 
+																	attr: str = resolve
+																	ctx: Load 
+																args: list 
+																keywords: list 
+														element: Assign 
+															targets: list 
+																element: Attribute 
+																	value: Name 
+																		id: str = s1
+																		ctx: Load 
+																	attr: str = paras
+																	ctx: Store 
+															value: List 
+																elts: list 
+																ctx: Load 
+													orelse: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Attribute 
+																		value: Name 
+																			id: str = s1
+																			ctx: Load 
+																		attr: str = paras
+																		ctx: Load 
+																	attr: str = append
+																	ctx: Load 
+																args: list 
+																	element: Attribute 
+																		value: Name 
+																			id: str = s0
+																			ctx: Load 
+																		attr: str = name
+																		ctx: Load 
+																keywords: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = stack
+													ctx: Store 
+											value: Subscript 
+												value: Name 
+													id: str = stack
+													ctx: Load 
+												slice: Slice 
+													lower: NoneType = None
+													upper: UnaryOp 
+														op: USub 
+														operand: Num 
+															n: int = 1
+													step: NoneType = None
+												ctx: Load 
+									orelse: list 
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = s1
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = [
+													element: Compare 
+														left: Attribute 
+															value: Name 
+																id: str = s0
+																ctx: Load 
+															attr: str = name
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Str 
+																s: str = ^
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = stack
+																ctx: Load 
+															slice: Slice 
+																lower: UnaryOp 
+																	op: USub 
+																	operand: Num 
+																		n: int = 2
+																upper: NoneType = None
+																step: NoneType = None
+															ctx: Store 
+													value: List 
+														elts: list 
+															element: Call 
+																func: Name 
+																	id: str = Token
+																	ctx: Load 
+																args: list 
+																	element: Str 
+																		s: str = [^
+																keywords: list 
+														ctx: Load 
+											orelse: list 
+												element: If 
+													test: BoolOp 
+														op: And 
+														values: list 
+															element: Compare 
+																left: Attribute 
+																	value: Name 
+																		id: str = s1
+																		ctx: Load 
+																	attr: str = name
+																	ctx: Load 
+																ops: list 
+																	element: Eq 
+																comparators: list 
+																	element: Str 
+																		s: str = (
+															element: Compare 
+																left: Attribute 
+																	value: Name 
+																		id: str = s0
+																		ctx: Load 
+																	attr: str = name
+																	ctx: Load 
+																ops: list 
+																	element: Eq 
+																comparators: list 
+																	element: Str 
+																		s: str = ?
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Subscript 
+																	value: Name 
+																		id: str = stack
+																		ctx: Load 
+																	slice: Slice 
+																		lower: UnaryOp 
+																			op: USub 
+																			operand: Num 
+																				n: int = 2
+																		upper: NoneType = None
+																		step: NoneType = None
+																	ctx: Store 
+															value: List 
+																elts: list 
+																	element: Call 
+																		func: Name 
+																			id: str = Token
+																			ctx: Load 
+																		args: list 
+																			element: Str 
+																				s: str = (?
+																		keywords: list 
+																ctx: Load 
+													orelse: list 
+														element: If 
+															test: BoolOp 
+																op: And 
+																values: list 
+																	element: Compare 
+																		left: Attribute 
+																			value: Name 
+																				id: str = s1
+																				ctx: Load 
+																			attr: str = name
+																			ctx: Load 
+																		ops: list 
+																			element: In 
+																		comparators: list 
+																			element: List 
+																				elts: list 
+																					element: Str 
+																						s: str = *
+																					element: Str 
+																						s: str = +
+																					element: Str 
+																						s: str = ?
+																				ctx: Load 
+																	element: Compare 
+																		left: Attribute 
+																			value: Name 
+																				id: str = s0
+																				ctx: Load 
+																			attr: str = name
+																			ctx: Load 
+																		ops: list 
+																			element: Eq 
+																		comparators: list 
+																			element: Str 
+																				s: str = ?
+															body: list 
+																element: Assign 
+																	targets: list 
+																		element: Subscript 
+																			value: Name 
+																				id: str = stack
+																				ctx: Load 
+																			slice: Slice 
+																				lower: UnaryOp 
+																					op: USub 
+																					operand: Num 
+																						n: int = 2
+																				upper: NoneType = None
+																				step: NoneType = None
+																			ctx: Store 
+																	value: List 
+																		elts: list 
+																			element: Call 
+																				func: Name 
+																					id: str = Token
+																					ctx: Load 
+																				args: list 
+																					element: BinOp 
+																						left: Attribute 
+																							value: Name 
+																								id: str = s1
+																								ctx: Load 
+																							attr: str = name
+																							ctx: Load 
+																						op: Add 
+																						right: Str 
+																							s: str = ?
+																				keywords: list 
+																		ctx: Load 
+															orelse: list 
+																element: If 
+																	test: BoolOp 
+																		op: And 
+																		values: list 
+																			element: Attribute 
+																				value: Name 
+																					id: str = s1
+																					ctx: Load 
+																				attr: str = isModeGroup
+																				ctx: Load 
+																			element: Compare 
+																				left: Attribute 
+																					value: Name 
+																						id: str = s0
+																						ctx: Load 
+																					attr: str = name
+																					ctx: Load 
+																				ops: list 
+																					element: Eq 
+																				comparators: list 
+																					element: Str 
+																						s: str = )
+																	body: list 
+																		element: Assign 
+																			targets: list 
+																				element: Name 
+																					id: str = stack
+																					ctx: Store 
+																			value: Subscript 
+																				value: Name 
+																					id: str = stack
+																					ctx: Load 
+																				slice: Slice 
+																					lower: NoneType = None
+																					upper: UnaryOp 
+																						op: USub 
+																						operand: Num 
+																							n: int = 2
+																					step: NoneType = None
+																				ctx: Load 
+																	orelse: list 
+																		element: If 
+																			test: Compare 
+																				left: Attribute 
+																					value: Name 
+																						id: str = s1
+																						ctx: Load 
+																					attr: str = name
+																					ctx: Load 
+																				ops: list 
+																					element: Eq 
+																				comparators: list 
+																					element: Str 
+																						s: str = (?
+																			body: list 
+																				element: If 
+																					test: Compare 
+																						left: Attribute 
+																							value: Name 
+																								id: str = s0
+																								ctx: Load 
+																							attr: str = name
+																							ctx: Load 
+																						ops: list 
+																							element: In 
+																						comparators: list 
+																							element: Name 
+																								id: str = stringFlags
+																								ctx: Load 
+																					body: list 
+																						element: If 
+																							test: Compare 
+																								left: Attribute 
+																									value: Name 
+																										id: str = s0
+																										ctx: Load 
+																									attr: str = name
+																									ctx: Load 
+																								ops: list 
+																									element: Eq 
+																								comparators: list 
+																									element: Str 
+																										s: str = i
+																							body: list 
+																								element: AugAssign 
+																									target: Name 
+																										id: str = flags
+																										ctx: Store 
+																									op: BitOr 
+																									value: Attribute 
+																										value: Name 
+																											id: str = re
+																											ctx: Load 
+																										attr: str = IGNORECASE
+																										ctx: Load 
+																							orelse: list 
+																								element: If 
+																									test: Compare 
+																										left: Attribute 
+																											value: Name 
+																												id: str = s0
+																												ctx: Load 
+																											attr: str = name
+																											ctx: Load 
+																										ops: list 
+																											element: Eq 
+																										comparators: list 
+																											element: Str 
+																												s: str = L
+																									body: list 
+																										element: AugAssign 
+																											target: Name 
+																												id: str = flags
+																												ctx: Store 
+																											op: BitOr 
+																											value: Attribute 
+																												value: Name 
+																													id: str = re
+																													ctx: Load 
+																												attr: str = LOCALE
+																												ctx: Load 
+																									orelse: list 
+																										element: If 
+																											test: Compare 
+																												left: Attribute 
+																													value: Name 
+																														id: str = s0
+																														ctx: Load 
+																													attr: str = name
+																													ctx: Load 
+																												ops: list 
+																													element: Eq 
+																												comparators: list 
+																													element: Str 
+																														s: str = m
+																											body: list 
+																												element: AugAssign 
+																													target: Name 
+																														id: str = flags
+																														ctx: Store 
+																													op: BitOr 
+																													value: Attribute 
+																														value: Name 
+																															id: str = re
+																															ctx: Load 
+																														attr: str = MULTILINE
+																														ctx: Load 
+																											orelse: list 
+																												element: If 
+																													test: Compare 
+																														left: Attribute 
+																															value: Name 
+																																id: str = s0
+																																ctx: Load 
+																															attr: str = name
+																															ctx: Load 
+																														ops: list 
+																															element: Eq 
+																														comparators: list 
+																															element: Str 
+																																s: str = s
+																													body: list 
+																														element: AugAssign 
+																															target: Name 
+																																id: str = flags
+																																ctx: Store 
+																															op: BitOr 
+																															value: Attribute 
+																																value: Name 
+																																	id: str = re
+																																	ctx: Load 
+																																attr: str = DOTALL
+																																ctx: Load 
+																													orelse: list 
+																														element: If 
+																															test: Compare 
+																																left: Attribute 
+																																	value: Name 
+																																		id: str = s0
+																																		ctx: Load 
+																																	attr: str = name
+																																	ctx: Load 
+																																ops: list 
+																																	element: Eq 
+																																comparators: list 
+																																	element: Str 
+																																		s: str = u
+																															body: list 
+																																element: AugAssign 
+																																	target: Name 
+																																		id: str = flags
+																																		ctx: Store 
+																																	op: BitOr 
+																																	value: Attribute 
+																																		value: Name 
+																																			id: str = re
+																																			ctx: Load 
+																																		attr: str = UNICODE
+																																		ctx: Load 
+																															orelse: list 
+																																element: If 
+																																	test: Compare 
+																																		left: Attribute 
+																																			value: Name 
+																																				id: str = s0
+																																				ctx: Load 
+																																			attr: str = name
+																																			ctx: Load 
+																																		ops: list 
+																																			element: Eq 
+																																		comparators: list 
+																																			element: Str 
+																																				s: str = x
+																																	body: list 
+																																		element: AugAssign 
+																																			target: Name 
+																																				id: str = flags
+																																				ctx: Store 
+																																			op: BitOr 
+																																			value: Attribute 
+																																				value: Name 
+																																					id: str = re
+																																					ctx: Load 
+																																				attr: str = VERBOSE
+																																				ctx: Load 
+																																	orelse: list 
+																																		element: If 
+																																			test: Compare 
+																																				left: Attribute 
+																																					value: Name 
+																																						id: str = s0
+																																						ctx: Load 
+																																					attr: str = name
+																																					ctx: Load 
+																																				ops: list 
+																																					element: Eq 
+																																				comparators: list 
+																																					element: Str 
+																																						s: str = a
+																																			body: list 
+																																				element: AugAssign 
+																																					target: Name 
+																																						id: str = flags
+																																						ctx: Store 
+																																					op: BitOr 
+																																					value: Attribute 
+																																						value: Name 
+																																							id: str = re
+																																							ctx: Load 
+																																						attr: str = ASCII
+																																						ctx: Load 
+																																			orelse: list 
+																						element: Expr 
+																							value: Call 
+																								func: Attribute 
+																									value: Name 
+																										id: str = stack
+																										ctx: Load 
+																									attr: str = pop
+																									ctx: Load 
+																								args: list 
+																								keywords: list 
+																						element: Assign 
+																							targets: list 
+																								element: Attribute 
+																									value: Name 
+																										id: str = s1
+																										ctx: Load 
+																									attr: str = isModeGroup
+																									ctx: Store 
+																							value: NameConstant 
+																								value: bool = True
+																					orelse: list 
+																						element: If 
+																							test: Compare 
+																								left: Attribute 
+																									value: Name 
+																										id: str = s0
+																										ctx: Load 
+																									attr: str = name
+																									ctx: Load 
+																								ops: list 
+																									element: Eq 
+																								comparators: list 
+																									element: Str 
+																										s: str = (
+																							body: list 
+																								element: Assign 
+																									targets: list 
+																										element: Attribute 
+																											value: Name 
+																												id: str = s0
+																												ctx: Load 
+																											attr: str = name
+																											ctx: Store 
+																									value: Str 
+																										s: str = <
+																							orelse: list 
+																						element: Assign 
+																							targets: list 
+																								element: Name 
+																									id: str = newToken
+																									ctx: Store 
+																							value: Call 
+																								func: Name 
+																									id: str = Token
+																									ctx: Load 
+																								args: list 
+																									element: BinOp 
+																										left: Str 
+																											s: str = (?
+																										op: Add 
+																										right: Attribute 
+																											value: Name 
+																												id: str = s0
+																												ctx: Load 
+																											attr: str = name
+																											ctx: Load 
+																								keywords: list 
+																						element: Assign 
+																							targets: list 
+																								element: Subscript 
+																									value: Name 
+																										id: str = stack
+																										ctx: Load 
+																									slice: Slice 
+																										lower: UnaryOp 
+																											op: USub 
+																											operand: Num 
+																												n: int = 2
+																										upper: NoneType = None
+																										step: NoneType = None
+																									ctx: Store 
+																							value: List 
+																								elts: list 
+																									element: Name 
+																										id: str = newToken
+																										ctx: Load 
+																								ctx: Load 
+																			orelse: list 
+																				element: If 
+																					test: Compare 
+																						left: Attribute 
+																							value: Name 
+																								id: str = s1
+																								ctx: Load 
+																							attr: str = name
+																							ctx: Load 
+																						ops: list 
+																							element: Eq 
+																						comparators: list 
+																							element: Str 
+																								s: str = (?<
+																					body: list 
+																						element: If 
+																							test: Compare 
+																								left: Attribute 
+																									value: Name 
+																										id: str = s0
+																										ctx: Load 
+																									attr: str = name
+																									ctx: Load 
+																								ops: list 
+																									element: Eq 
+																								comparators: list 
+																									element: Str 
+																										s: str = )
+																							body: list 
+																								element: Assign 
+																									targets: list 
+																										element: Subscript 
+																											value: Name 
+																												id: str = stack
+																												ctx: Load 
+																											slice: Slice 
+																												lower: UnaryOp 
+																													op: USub 
+																													operand: Num 
+																														n: int = 1
+																												upper: NoneType = None
+																												step: NoneType = None
+																											ctx: Store 
+																									value: List 
+																										elts: list 
+																											element: Call 
+																												func: Name 
+																													id: str = Token
+																													ctx: Load 
+																												args: list 
+																													element: Call 
+																														func: Attribute 
+																															value: Str 
+																																s: str = 
+																															attr: str = join
+																															ctx: Load 
+																														args: list 
+																															element: Attribute 
+																																value: Name 
+																																	id: str = s1
+																																	ctx: Load 
+																																attr: str = paras
+																																ctx: Load 
+																														keywords: list 
+																												keywords: list 
+																											element: Call 
+																												func: Name 
+																													id: str = Token
+																													ctx: Load 
+																												args: list 
+																													element: Str 
+																														s: str = >
+																												keywords: list 
+																										ctx: Load 
+																								element: Assign 
+																									targets: list 
+																										element: Attribute 
+																											value: Name 
+																												id: str = s1
+																												ctx: Load 
+																											attr: str = paras
+																											ctx: Store 
+																									value: List 
+																										elts: list 
+																										ctx: Load 
+																							orelse: list 
+																								element: Expr 
+																									value: Call 
+																										func: Attribute 
+																											value: Attribute 
+																												value: Name 
+																													id: str = s1
+																													ctx: Load 
+																												attr: str = paras
+																												ctx: Load 
+																											attr: str = append
+																											ctx: Load 
+																										args: list 
+																											element: Attribute 
+																												value: Name 
+																													id: str = s0
+																													ctx: Load 
+																												attr: str = name
+																												ctx: Load 
+																										keywords: list 
+																								element: Expr 
+																									value: Call 
+																										func: Attribute 
+																											value: Name 
+																												id: str = stack
+																												ctx: Load 
+																											attr: str = pop
+																											ctx: Load 
+																										args: list 
+																										keywords: list 
+																					orelse: list 
+																						element: If 
+																							test: Compare 
+																								left: Attribute 
+																									value: Name 
+																										id: str = s1
+																										ctx: Load 
+																									attr: str = name
+																									ctx: Load 
+																								ops: list 
+																									element: Eq 
+																								comparators: list 
+																									element: Str 
+																										s: str = (?P
+																							body: list 
+																								element: Assign 
+																									targets: list 
+																										element: Subscript 
+																											value: Name 
+																												id: str = stack
+																												ctx: Load 
+																											slice: Slice 
+																												lower: UnaryOp 
+																													op: USub 
+																													operand: Num 
+																														n: int = 2
+																												upper: NoneType = None
+																												step: NoneType = None
+																											ctx: Store 
+																									value: List 
+																										elts: list 
+																											element: Call 
+																												func: Name 
+																													id: str = Token
+																													ctx: Load 
+																												args: list 
+																													element: BinOp 
+																														left: Str 
+																															s: str = (?P
+																														op: Add 
+																														right: Attribute 
+																															value: Name 
+																																id: str = s0
+																																ctx: Load 
+																															attr: str = name
+																															ctx: Load 
+																												keywords: list 
+																										ctx: Load 
+																							orelse: list 
+																								element: If 
+																									test: Compare 
+																										left: Attribute 
+																											value: Name 
+																												id: str = s1
+																												ctx: Load 
+																											attr: str = name
+																											ctx: Load 
+																										ops: list 
+																											element: Eq 
+																										comparators: list 
+																											element: Str 
+																												s: str = (?P<
+																									body: list 
+																										element: If 
+																											test: Compare 
+																												left: Attribute 
+																													value: Name 
+																														id: str = s0
+																														ctx: Load 
+																													attr: str = name
+																													ctx: Load 
+																												ops: list 
+																													element: Eq 
+																												comparators: list 
+																													element: Str 
+																														s: str = >
+																											body: list 
+																												element: Assign 
+																													targets: list 
+																														element: Subscript 
+																															value: Name 
+																																id: str = namedGroups
+																																ctx: Load 
+																															slice: Index 
+																																value: Call 
+																																	func: Attribute 
+																																		value: Str 
+																																			s: str = 
+																																		attr: str = join
+																																		ctx: Load 
+																																	args: list 
+																																		element: Attribute 
+																																			value: Name 
+																																				id: str = s1
+																																				ctx: Load 
+																																			attr: str = paras
+																																			ctx: Load 
+																																	keywords: list 
+																															ctx: Store 
+																													value: BinOp 
+																														left: Call 
+																															func: Name 
+																																id: str = countCaptureGroups
+																																ctx: Load 
+																															args: list 
+																																element: Name 
+																																	id: str = stack
+																																	ctx: Load 
+																															keywords: list 
+																														op: Add 
+																														right: Num 
+																															n: int = 1
+																												element: Assign 
+																													targets: list 
+																														element: Subscript 
+																															value: Name 
+																																id: str = stack
+																																ctx: Load 
+																															slice: Slice 
+																																lower: UnaryOp 
+																																	op: USub 
+																																	operand: Num 
+																																		n: int = 2
+																																upper: NoneType = None
+																																step: NoneType = None
+																															ctx: Store 
+																													value: List 
+																														elts: list 
+																															element: Call 
+																																func: Name 
+																																	id: str = Token
+																																	ctx: Load 
+																																args: list 
+																																	element: Str 
+																																		s: str = (
+																																keywords: list 
+																														ctx: Load 
+																											orelse: list 
+																												element: Expr 
+																													value: Call 
+																														func: Attribute 
+																															value: Attribute 
+																																value: Name 
+																																	id: str = s1
+																																	ctx: Load 
+																																attr: str = paras
+																																ctx: Load 
+																															attr: str = append
+																															ctx: Load 
+																														args: list 
+																															element: Attribute 
+																																value: Name 
+																																	id: str = s0
+																																	ctx: Load 
+																																attr: str = name
+																																ctx: Load 
+																														keywords: list 
+																												element: Expr 
+																													value: Call 
+																														func: Attribute 
+																															value: Name 
+																																id: str = stack
+																																ctx: Load 
+																															attr: str = pop
+																															ctx: Load 
+																														args: list 
+																														keywords: list 
+																									orelse: list 
+																										element: If 
+																											test: Compare 
+																												left: Attribute 
+																													value: Name 
+																														id: str = s1
+																														ctx: Load 
+																													attr: str = name
+																													ctx: Load 
+																												ops: list 
+																													element: Eq 
+																												comparators: list 
+																													element: Str 
+																														s: str = (?P=
+																											body: list 
+																												element: If 
+																													test: Compare 
+																														left: Attribute 
+																															value: Name 
+																																id: str = s0
+																																ctx: Load 
+																															attr: str = name
+																															ctx: Load 
+																														ops: list 
+																															element: Eq 
+																														comparators: list 
+																															element: Str 
+																																s: str = )
+																													body: list 
+																														element: Assign 
+																															targets: list 
+																																element: Subscript 
+																																	value: Name 
+																																		id: str = stack
+																																		ctx: Load 
+																																	slice: Slice 
+																																		lower: UnaryOp 
+																																			op: USub 
+																																			operand: Num 
+																																				n: int = 2
+																																		upper: NoneType = None
+																																		step: NoneType = None
+																																	ctx: Store 
+																															value: List 
+																																elts: list 
+																																	element: Call 
+																																		func: Name 
+																																			id: str = Token
+																																			ctx: Load 
+																																		args: list 
+																																			element: BinOp 
+																																				left: Str 
+																																					s: str = \
+																																				op: Add 
+																																				right: Call 
+																																					func: Name 
+																																						id: str = str
+																																						ctx: Load 
+																																					args: list 
+																																						element: Subscript 
+																																							value: Name 
+																																								id: str = namedGroups
+																																								ctx: Load 
+																																							slice: Index 
+																																								value: Subscript 
+																																									value: Attribute 
+																																										value: Name 
+																																											id: str = s1
+																																											ctx: Load 
+																																										attr: str = paras
+																																										ctx: Load 
+																																									slice: Index 
+																																										value: Num 
+																																											n: int = 0
+																																									ctx: Load 
+																																							ctx: Load 
+																																					keywords: list 
+																																		keywords: list 
+																																ctx: Load 
+																													orelse: list 
+																														element: If 
+																															test: UnaryOp 
+																																op: Not 
+																																operand: Attribute 
+																																	value: Name 
+																																		id: str = s1
+																																		ctx: Load 
+																																	attr: str = paras
+																																	ctx: Load 
+																															body: list 
+																																element: Expr 
+																																	value: Call 
+																																		func: Attribute 
+																																			value: Attribute 
+																																				value: Name 
+																																					id: str = s1
+																																					ctx: Load 
+																																				attr: str = paras
+																																				ctx: Load 
+																																			attr: str = append
+																																			ctx: Load 
+																																		args: list 
+																																			element: Attribute 
+																																				value: Name 
+																																					id: str = s0
+																																					ctx: Load 
+																																				attr: str = name
+																																				ctx: Load 
+																																		keywords: list 
+																																element: Expr 
+																																	value: Call 
+																																		func: Attribute 
+																																			value: Name 
+																																				id: str = stack
+																																				ctx: Load 
+																																			attr: str = pop
+																																			ctx: Load 
+																																		args: list 
+																																		keywords: list 
+																															orelse: list 
+																																element: AugAssign 
+																																	target: Subscript 
+																																		value: Attribute 
+																																			value: Name 
+																																				id: str = s1
+																																				ctx: Load 
+																																			attr: str = paras
+																																			ctx: Load 
+																																		slice: Index 
+																																			value: Num 
+																																				n: int = 0
+																																		ctx: Store 
+																																	op: Add 
+																																	value: Attribute 
+																																		value: Name 
+																																			id: str = s0
+																																			ctx: Load 
+																																		attr: str = name
+																																		ctx: Load 
+																																element: Expr 
+																																	value: Call 
+																																		func: Attribute 
+																																			value: Name 
+																																				id: str = stack
+																																				ctx: Load 
+																																			attr: str = pop
+																																			ctx: Load 
+																																		args: list 
+																																		keywords: list 
+																											orelse: list 
+																												element: If 
+																													test: Compare 
+																														left: Attribute 
+																															value: Name 
+																																id: str = s1
+																																ctx: Load 
+																															attr: str = name
+																															ctx: Load 
+																														ops: list 
+																															element: Eq 
+																														comparators: list 
+																															element: Str 
+																																s: str = (?#
+																													body: list 
+																														element: If 
+																															test: Compare 
+																																left: Attribute 
+																																	value: Name 
+																																		id: str = s0
+																																		ctx: Load 
+																																	attr: str = name
+																																	ctx: Load 
+																																ops: list 
+																																	element: Eq 
+																																comparators: list 
+																																	element: Str 
+																																		s: str = )
+																															body: list 
+																																element: Assign 
+																																	targets: list 
+																																		element: Name 
+																																			id: str = stack
+																																			ctx: Store 
+																																	value: Subscript 
+																																		value: Name 
+																																			id: str = stack
+																																			ctx: Load 
+																																		slice: Slice 
+																																			lower: NoneType = None
+																																			upper: UnaryOp 
+																																				op: USub 
+																																				operand: Num 
+																																					n: int = 2
+																																			step: NoneType = None
+																																		ctx: Load 
+																															orelse: list 
+																																element: Assign 
+																																	targets: list 
+																																		element: Name 
+																																			id: str = stack
+																																			ctx: Store 
+																																	value: Subscript 
+																																		value: Name 
+																																			id: str = stack
+																																			ctx: Load 
+																																		slice: Slice 
+																																			lower: NoneType = None
+																																			upper: UnaryOp 
+																																				op: USub 
+																																				operand: Num 
+																																					n: int = 1
+																																			step: NoneType = None
+																																		ctx: Load 
+																													orelse: list 
+																														element: Assign 
+																															targets: list 
+																																element: Tuple 
+																																	elts: list 
+																																		element: Name 
+																																			id: str = stack
+																																			ctx: Store 
+																																		element: Name 
+																																			id: str = queue
+																																			ctx: Store 
+																																		element: Name 
+																																			id: str = done
+																																			ctx: Store 
+																																	ctx: Store 
+																															value: Call 
+																																func: Name 
+																																	id: str = shift
+																																	ctx: Load 
+																																args: list 
+																																	element: Name 
+																																		id: str = stack
+																																		ctx: Load 
+																																	element: Name 
+																																		id: str = queue
+																																		ctx: Load 
+																																keywords: list 
+				element: Return 
+					value: Tuple 
+						elts: list 
+							element: Name 
+								id: str = stack
+								ctx: Load 
+							element: Name 
+								id: str = queue
+								ctx: Load 
+							element: Name 
+								id: str = flags
+								ctx: Load 
+							element: Name 
+								id: str = done
+								ctx: Load 
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = translate
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = rgx
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Import 
+					names: list 
+						element: alias 
+							name: str = re
+							asname: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = stack
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = queue
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = list
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = rgx
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = flags
+							ctx: Store 
+					value: Num 
+						n: int = 0
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = namedGroups
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = nloop
+							ctx: Store 
+					value: Num 
+						n: int = 0
+				element: While 
+					test: NameConstant 
+						value: bool = True
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = nloop
+								ctx: Store 
+							op: Add 
+							value: Num 
+								n: int = 1
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = nloop
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = MAX_SHIFTREDUCE_LOOPS
+										ctx: Load 
+							body: list 
+								element: Raise 
+									exc: Call 
+										func: Name 
+											id: str = Exception
+											ctx: Load 
+										args: list 
+										keywords: list 
+									cause: NoneType = None
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = stack
+											ctx: Store 
+										element: Name 
+											id: str = queue
+											ctx: Store 
+										element: Name 
+											id: str = flags
+											ctx: Store 
+										element: Name 
+											id: str = done
+											ctx: Store 
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = shiftReduce
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+									element: Name 
+										id: str = queue
+										ctx: Load 
+									element: Name 
+										id: str = namedGroups
+										ctx: Load 
+									element: Name 
+										id: str = flags
+										ctx: Load 
+								keywords: list 
+						element: If 
+							test: Name 
+								id: str = done
+								ctx: Load 
+							body: list 
+								element: Break 
+							orelse: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = variants
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = splitIfElse
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = stack
+								ctx: Load 
+							element: Name 
+								id: str = namedGroups
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = n_splits
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = len
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = variants
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = final
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = i
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 0
+							element: Call 
+								func: Name 
+									id: str = len
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = variants
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = final
+										ctx: Load 
+									attr: str = extend
+									ctx: Load 
+								args: list 
+									element: Subscript 
+										value: Name 
+											id: str = variants
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = i
+												ctx: Load 
+										ctx: Load 
+								keywords: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = i
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: BinOp 
+										left: Call 
+											func: Name 
+												id: str = len
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = variants
+													ctx: Load 
+											keywords: list 
+										op: Sub 
+										right: Num 
+											n: int = 1
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = final
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Name 
+													id: str = Token
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = |
+												keywords: list 
+										keywords: list 
+							orelse: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = stack
+							ctx: Store 
+					value: Name 
+						id: str = final
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = groupInfo
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = generateGroupSpans
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = stack
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = resolvedTokens
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = token
+						ctx: Store 
+					iter: Name 
+						id: str = stack
+						ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = stringed
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = token
+										ctx: Load 
+									attr: str = resolve
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: If 
+							test: BoolOp 
+								op: And 
+								values: list 
+									element: BinOp 
+										left: Name 
+											id: str = flags
+											ctx: Load 
+										op: BitAnd 
+										right: Attribute 
+											value: Name 
+												id: str = re
+												ctx: Load 
+											attr: str = DOTALL
+											ctx: Load 
+									element: Compare 
+										left: Name 
+											id: str = stringed
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = .
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = stringed
+											ctx: Store 
+									value: Str 
+										s: str = [\s\S]
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = resolvedTokens
+										ctx: Load 
+									attr: str = append
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stringed
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: Return 
+					value: Tuple 
+						elts: list 
+							element: Name 
+								id: str = resolvedTokens
+								ctx: Load 
+							element: Name 
+								id: str = flags
+								ctx: Load 
+							element: Name 
+								id: str = namedGroups
+								ctx: Load 
+							element: Call 
+								func: Name 
+									id: str = countCaptureGroups
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = stack
+										ctx: Load 
+								keywords: list 
+							element: Name 
+								id: str = n_splits
+								ctx: Load 
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None

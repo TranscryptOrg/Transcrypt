@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/globals_function/__javascript__/globals_function.sub.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/globals_function/sub.py"
+	],
+	"sourcesContent": [
+		"xxa = 'subXxa'\nxxb = 'subXxb'\n\nfor name in ('xxp', 'xxq'):\n    globals () [name] = 'sub{}'.format (name.capitalize ())\n\ndef f ():\n    for name in ('xxr', 'xxs'):\n        globals () [name] = 'sub{}'.format (name.capitalize ())\n        \ndef run (autoTester):\n    f ()\n    autoTester.check ('Check sub 1', xxa, xxb)    \n    autoTester.check ('Check sub 2', * [globals () [name] for name in ('xxa', 'xxb', 'xxp', 'xxq', 'xxr', 'xxs')])\n    autoTester.check ('Check sub 3', * sorted ([value for key, value in globals () .items () if key.startswith ('xx')]))\n\n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAEA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

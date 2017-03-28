@@ -1,0 +1,582 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _array
+					ctx: Store 
+			value: ListComp 
+				elt: Num 
+					n: int = 0
+				generators: list 
+					element: comprehension 
+						target: Name 
+							id: str = i
+							ctx: Store 
+						iter: Call 
+							func: Name 
+								id: str = range
+								ctx: Load 
+							args: list 
+								element: Num 
+									n: int = 624
+							keywords: list 
+						ifs: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _index
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _bitmask1
+					ctx: Store 
+			value: BinOp 
+				left: BinOp 
+					left: Num 
+						n: int = 2
+					op: Pow 
+					right: Num 
+						n: int = 32
+				op: Sub 
+				right: Num 
+					n: int = 1
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _bitmask2
+					ctx: Store 
+			value: BinOp 
+				left: Num 
+					n: int = 2
+				op: Pow 
+				right: Num 
+					n: int = 31
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _bitmask3
+					ctx: Store 
+			value: BinOp 
+				left: BinOp 
+					left: Num 
+						n: int = 2
+					op: Pow 
+					right: Num 
+						n: int = 31
+				op: Sub 
+				right: Num 
+					n: int = 1
+		element: FunctionDef 
+			name: str = _fill_array
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Global 
+					names: list 
+						element: str = _array
+				element: For 
+					target: Name 
+						id: str = i
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 624
+						keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = y
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: Subscript 
+										value: Name 
+											id: str = _array
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = i
+												ctx: Load 
+										ctx: Load 
+									op: BitAnd 
+									right: Name 
+										id: str = _bitmask2
+										ctx: Load 
+								op: Add 
+								right: BinOp 
+									left: Subscript 
+										value: Name 
+											id: str = _array
+											ctx: Load 
+										slice: Index 
+											value: BinOp 
+												left: BinOp 
+													left: Name 
+														id: str = i
+														ctx: Load 
+													op: Add 
+													right: Num 
+														n: int = 1
+												op: Mod 
+												right: Num 
+													n: int = 624
+										ctx: Load 
+									op: BitAnd 
+									right: Name 
+										id: str = _bitmask3
+										ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = _array
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = i
+											ctx: Load 
+									ctx: Store 
+							value: BinOp 
+								left: Subscript 
+									value: Name 
+										id: str = _array
+										ctx: Load 
+									slice: Index 
+										value: BinOp 
+											left: BinOp 
+												left: Name 
+													id: str = i
+													ctx: Load 
+												op: Add 
+												right: Num 
+													n: int = 397
+											op: Mod 
+											right: Num 
+												n: int = 624
+									ctx: Load 
+								op: BitXor 
+								right: BinOp 
+									left: Name 
+										id: str = y
+										ctx: Load 
+									op: RShift 
+									right: Num 
+										n: int = 1
+						element: If 
+							test: Compare 
+								left: BinOp 
+									left: Name 
+										id: str = y
+										ctx: Load 
+									op: Mod 
+									right: Num 
+										n: int = 2
+								ops: list 
+									element: NotEq 
+								comparators: list 
+									element: Num 
+										n: int = 0
+							body: list 
+								element: AugAssign 
+									target: Subscript 
+										value: Name 
+											id: str = _array
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = i
+												ctx: Load 
+										ctx: Store 
+									op: BitXor 
+									value: Num 
+										n: int = 2567483615
+							orelse: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _random_integer
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Global 
+					names: list 
+						element: str = _index
+				element: Global 
+					names: list 
+						element: str = _array
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = _index
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Num 
+								n: int = 0
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = _fill_array
+									ctx: Load 
+								args: list 
+								keywords: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = y
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = _array
+							ctx: Load 
+						slice: Index 
+							value: Name 
+								id: str = _index
+								ctx: Load 
+						ctx: Load 
+				element: AugAssign 
+					target: Name 
+						id: str = y
+						ctx: Store 
+					op: BitXor 
+					value: BinOp 
+						left: Name 
+							id: str = y
+							ctx: Load 
+						op: RShift 
+						right: Num 
+							n: int = 11
+				element: AugAssign 
+					target: Name 
+						id: str = y
+						ctx: Store 
+					op: BitXor 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = y
+								ctx: Load 
+							op: LShift 
+							right: Num 
+								n: int = 7
+						op: BitAnd 
+						right: Num 
+							n: int = 2636928640
+				element: AugAssign 
+					target: Name 
+						id: str = y
+						ctx: Store 
+					op: BitXor 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = y
+								ctx: Load 
+							op: LShift 
+							right: Num 
+								n: int = 15
+						op: BitAnd 
+						right: Num 
+							n: int = 4022730752
+				element: AugAssign 
+					target: Name 
+						id: str = y
+						ctx: Store 
+					op: BitXor 
+					value: BinOp 
+						left: Name 
+							id: str = y
+							ctx: Load 
+						op: RShift 
+						right: Num 
+							n: int = 18
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = _index
+							ctx: Store 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = _index
+								ctx: Load 
+							op: Add 
+							right: Num 
+								n: int = 1
+						op: Mod 
+						right: Num 
+							n: int = 624
+				element: Return 
+					value: Name 
+						id: str = y
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = seed
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: Call 
+						func: Name 
+							id: str = int
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Name 
+									id: str = _bitmask3
+									ctx: Load 
+								op: Mult 
+								right: Call 
+									func: Attribute 
+										value: Name 
+											id: str = Math
+											ctx: Load 
+										attr: str = random
+										ctx: Load 
+									args: list 
+									keywords: list 
+						keywords: list 
+			body: list 
+				element: Global 
+					names: list 
+						element: str = _array
+				element: Global 
+					names: list 
+						element: str = _bitmask1
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = _array
+								ctx: Load 
+							slice: Index 
+								value: Num 
+									n: int = 0
+							ctx: Store 
+					value: Name 
+						id: str = x
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = i
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 624
+						keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = _array
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = i
+											ctx: Load 
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: BinOp 
+										left: Num 
+											n: int = 1812433253
+										op: Mult 
+										right: Subscript 
+											value: Name 
+												id: str = _array
+												ctx: Load 
+											slice: Index 
+												value: BinOp 
+													left: Name 
+														id: str = i
+														ctx: Load 
+													op: Sub 
+													right: Num 
+														n: int = 1
+											ctx: Load 
+									op: BitXor 
+									right: BinOp 
+										left: BinOp 
+											left: Subscript 
+												value: Name 
+													id: str = _array
+													ctx: Load 
+												slice: Index 
+													value: BinOp 
+														left: Name 
+															id: str = i
+															ctx: Load 
+														op: Sub 
+														right: Num 
+															n: int = 1
+												ctx: Load 
+											op: RShift 
+											right: Num 
+												n: int = 30
+										op: Add 
+										right: Name 
+											id: str = i
+											ctx: Load 
+								op: BitAnd 
+								right: Name 
+									id: str = _bitmask1
+									ctx: Load 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = randint
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = a
+						annotation: NoneType = None
+					element: arg 
+						arg: str = b
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Name 
+							id: str = a
+							ctx: Load 
+						op: Add 
+						right: BinOp 
+							left: Call 
+								func: Name 
+									id: str = _random_integer
+									ctx: Load 
+								args: list 
+								keywords: list 
+							op: Mod 
+							right: BinOp 
+								left: BinOp 
+									left: Name 
+										id: str = b
+										ctx: Load 
+									op: Sub 
+									right: Name 
+										id: str = a
+										ctx: Load 
+								op: Add 
+								right: Num 
+									n: int = 1
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = choice
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = seq
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Subscript 
+						value: Name 
+							id: str = seq
+							ctx: Load 
+						slice: Index 
+							value: Call 
+								func: Name 
+									id: str = randint
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 0
+									element: BinOp 
+										left: Call 
+											func: Name 
+												id: str = len
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = seq
+													ctx: Load 
+											keywords: list 
+										op: Sub 
+										right: Num 
+											n: int = 1
+								keywords: list 
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = random
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Call 
+							func: Name 
+								id: str = _random_integer
+								ctx: Load 
+							args: list 
+							keywords: list 
+						op: Div 
+						right: Name 
+							id: str = _bitmask3
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = seed
+					ctx: Load 
+				args: list 
+				keywords: list 

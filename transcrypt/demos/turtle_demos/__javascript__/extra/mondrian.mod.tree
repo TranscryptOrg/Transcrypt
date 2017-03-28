@@ -1,0 +1,837 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = turtle
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = random
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = speed
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 0
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = colors
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Str 
+						s: str = gray
+					element: Str 
+						s: str = green
+					element: Str 
+						s: str = red
+					element: Str 
+						s: str = white
+					element: Str 
+						s: str = blue
+					element: Str 
+						s: str = yellow
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = delta
+					ctx: Store 
+			value: Num 
+				n: int = 8
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = threshold
+					ctx: Store 
+			value: Num 
+				n: int = 100
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = color
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = black
+					element: Str 
+						s: str = black
+				keywords: list 
+		element: FunctionDef 
+			name: str = maybe
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = bias
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+			body: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = choice
+							ctx: Load 
+						args: list 
+							element: IfExp 
+								test: Compare 
+									left: Name 
+										id: str = bias
+										ctx: Load 
+									ops: list 
+										element: NotEq 
+									comparators: list 
+										element: NameConstant 
+											value: NoneType = None
+								body: List 
+									elts: list 
+										element: NameConstant 
+											value: bool = False
+										element: NameConstant 
+											value: bool = True
+										element: Name 
+											id: str = bias
+											ctx: Load 
+										element: Name 
+											id: str = bias
+											ctx: Load 
+									ctx: Load 
+								orelse: List 
+									elts: list 
+										element: NameConstant 
+											value: bool = False
+										element: NameConstant 
+											value: bool = True
+									ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = between
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = a
+						annotation: NoneType = None
+					element: arg 
+						arg: str = b
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Name 
+							id: str = a
+							ctx: Load 
+						op: Add 
+						right: BinOp 
+							left: BinOp 
+								left: Num 
+									n: float = 0.2
+								op: Add 
+								right: BinOp 
+									left: Num 
+										n: float = 0.3
+									op: Mult 
+									right: Call 
+										func: Name 
+											id: str = random
+											ctx: Load 
+										args: list 
+										keywords: list 
+							op: Mult 
+							right: BinOp 
+								left: Name 
+									id: str = b
+									ctx: Load 
+								op: Sub 
+								right: Name 
+									id: str = a
+									ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = recentColors
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: Str 
+						s: str = black
+					element: Str 
+						s: str = black
+				ctx: Load 
+		element: FunctionDef 
+			name: str = originalColor
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Global 
+					names: list 
+						element: str = recentColors
+				element: While 
+					test: NameConstant 
+						value: bool = True
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = result
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = choice
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = colors
+										ctx: Load 
+								keywords: list 
+						element: If 
+							test: BoolOp 
+								op: Or 
+								values: list 
+									element: Compare 
+										left: Name 
+											id: str = result
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Str 
+												s: str = white
+									element: UnaryOp 
+										op: Not 
+										operand: Compare 
+											left: Name 
+												id: str = result
+												ctx: Load 
+											ops: list 
+												element: In 
+											comparators: list 
+												element: Name 
+													id: str = recentColors
+													ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = recentColors
+											ctx: Store 
+									value: List 
+										elts: list 
+											element: Name 
+												id: str = result
+												ctx: Load 
+											element: Subscript 
+												value: Name 
+													id: str = recentColors
+													ctx: Load 
+												slice: Index 
+													value: Num 
+														n: int = 0
+												ctx: Load 
+										ctx: Load 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = print
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = result
+												ctx: Load 
+										keywords: list 
+											element: keyword 
+												arg: str = end
+												value: Str 
+													s: str =  
+								element: Return 
+									value: Name 
+										id: str = result
+										ctx: Load 
+							orelse: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = rect
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = xMin
+						annotation: NoneType = None
+					element: arg 
+						arg: str = yMin
+						annotation: NoneType = None
+					element: arg 
+						arg: str = xMax
+						annotation: NoneType = None
+					element: arg 
+						arg: str = yMax
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: For 
+					target: Name 
+						id: str = aColor
+						ctx: Store 
+					iter: Tuple 
+						elts: list 
+							element: Str 
+								s: str = black
+							element: Call 
+								func: Name 
+									id: str = originalColor
+									ctx: Load 
+								args: list 
+								keywords: list 
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = color
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = aColor
+										ctx: Load 
+									element: Name 
+										id: str = aColor
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = up
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = goto
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMin
+										ctx: Load 
+									element: Name 
+										id: str = yMin
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = down
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = begin_fill
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = goto
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMax
+										ctx: Load 
+									element: Name 
+										id: str = yMin
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = goto
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMax
+										ctx: Load 
+									element: Name 
+										id: str = yMax
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = goto
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMin
+										ctx: Load 
+									element: Name 
+										id: str = yMax
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = goto
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMin
+										ctx: Load 
+									element: Name 
+										id: str = yMin
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = end_fill
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: AugAssign 
+							target: Name 
+								id: str = xMin
+								ctx: Store 
+							op: Add 
+							value: Name 
+								id: str = delta
+								ctx: Load 
+						element: AugAssign 
+							target: Name 
+								id: str = yMin
+								ctx: Store 
+							op: Add 
+							value: Name 
+								id: str = delta
+								ctx: Load 
+						element: AugAssign 
+							target: Name 
+								id: str = xMax
+								ctx: Store 
+							op: Sub 
+							value: Name 
+								id: str = delta
+								ctx: Load 
+						element: AugAssign 
+							target: Name 
+								id: str = yMax
+								ctx: Store 
+							op: Sub 
+							value: Name 
+								id: str = delta
+								ctx: Load 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = draw
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = xMin
+						annotation: NoneType = None
+					element: arg 
+						arg: str = yMin
+						annotation: NoneType = None
+					element: arg 
+						arg: str = xMax
+						annotation: NoneType = None
+					element: arg 
+						arg: str = yMax
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: UnaryOp 
+						op: USub 
+						operand: Num 
+							n: int = 250
+					element: UnaryOp 
+						op: USub 
+						operand: Num 
+							n: int = 300
+					element: Num 
+						n: int = 250
+					element: Num 
+						n: int = 300
+			body: list 
+				element: If 
+					test: BoolOp 
+						op: And 
+						values: list 
+							element: Compare 
+								left: BinOp 
+									left: Name 
+										id: str = xMax
+										ctx: Load 
+									op: Sub 
+									right: Name 
+										id: str = xMin
+										ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = threshold
+										ctx: Load 
+							element: Compare 
+								left: BinOp 
+									left: Name 
+										id: str = yMax
+										ctx: Load 
+									op: Sub 
+									right: Name 
+										id: str = yMin
+										ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = threshold
+										ctx: Load 
+					body: list 
+						element: If 
+							test: Call 
+								func: Name 
+									id: str = maybe
+									ctx: Load 
+								args: list 
+									element: Compare 
+										left: BinOp 
+											left: Name 
+												id: str = xMax
+												ctx: Load 
+											op: Sub 
+											right: Name 
+												id: str = xMin
+												ctx: Load 
+										ops: list 
+											element: Gt 
+										comparators: list 
+											element: BinOp 
+												left: Name 
+													id: str = yMax
+													ctx: Load 
+												op: Sub 
+												right: Name 
+													id: str = yMin
+													ctx: Load 
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = xMid
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = between
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = xMin
+												ctx: Load 
+											element: Name 
+												id: str = xMax
+												ctx: Load 
+										keywords: list 
+								element: If 
+									test: Call 
+										func: Name 
+											id: str = maybe
+											ctx: Load 
+										args: list 
+										keywords: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = draw
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMid
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = rect
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMid
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = rect
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMid
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = draw
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMid
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+							orelse: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = yMid
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = between
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = yMin
+												ctx: Load 
+											element: Name 
+												id: str = yMax
+												ctx: Load 
+										keywords: list 
+								element: If 
+									test: Call 
+										func: Name 
+											id: str = maybe
+											ctx: Load 
+										args: list 
+										keywords: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = draw
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMid
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = rect
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMid
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = rect
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMin
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMid
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = draw
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = xMin
+														ctx: Load 
+													element: Name 
+														id: str = yMid
+														ctx: Load 
+													element: Name 
+														id: str = xMax
+														ctx: Load 
+													element: Name 
+														id: str = yMax
+														ctx: Load 
+												keywords: list 
+					orelse: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = rect
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xMin
+										ctx: Load 
+									element: Name 
+										id: str = yMin
+										ctx: Load 
+									element: Name 
+										id: str = xMax
+										ctx: Load 
+									element: Name 
+										id: str = yMax
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = ontimer
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Tuple 
+											elts: list 
+												element: Call 
+													func: Name 
+														id: str = print
+														ctx: Load 
+													args: list 
+													keywords: list 
+												element: Call 
+													func: Name 
+														id: str = clear
+														ctx: Load 
+													args: list 
+													keywords: list 
+												element: Call 
+													func: Name 
+														id: str = draw
+														ctx: Load 
+													args: list 
+													keywords: list 
+											ctx: Load 
+									element: Num 
+										n: int = 2000
+								keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = draw
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 

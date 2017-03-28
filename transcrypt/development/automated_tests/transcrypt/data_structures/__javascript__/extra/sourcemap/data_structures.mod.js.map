@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/data_structures/__javascript__/data_structures.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/data_structures/__init__.py"
+	],
+	"sourcesContent": [
+		"def run (autoTester):\n    aList = [1, 2, 3, 'moon', 'stars']\n    autoTester.check (aList)\n    aList.insert (3, 'sun')\n    autoTester.check (aList)\n    autoTester.check (aList [2:4:1])\n    autoTester.check (aList [:])\n    autoTester.check (aList [2:])\n    autoTester.check (len (aList))\n    aList.append ('milkyway')\n    autoTester.check (aList)\n    aList.extend (['m1', 'm31'])\n    autoTester.check (aList)\n\n    anotherList = list (('a', 'b', 'c'))\n    autoTester.check (anotherList)\n    autoTester.check ('b' in anotherList)\n    autoTester.check ('d' in anotherList)\n    \n    aDict = {1: 'plant', 'animal': 2}\n    autoTester.check (aDict)\n    autoTester.check (aDict [1], aDict ['animal'])\n    \n    def p ():\n        return 3\n        \n    q = 4\n    \n    autoTester.check ({p (): 'three', q: 'four'})\n    \n    aTuple = (1, 2, 3, 4, 5)\n    autoTester.check(aTuple)\n    autoTester.check (len (aTuple))\n\n    anotherTuple = (1,)\n    autoTester.check (anotherTuple)\n\n    aSet = {1, 2, 2, 3}\n    autoTester.check    (aSet)\n    autoTester.check (len (aSet))\n    autoTester.check (2 in aSet)\n    autoTester.check (4 in aSet)\n\n    anotherSet = set ((4, 5, 5, 6))\n    autoTester.check (anotherSet)\n\n    emptySet = set ()\n    autoTester.check (emptySet)\n    autoTester.check (len (emptySet))\n    \n    aString = 'c_cis_d_dis_e_f_fis_g_gis_a_ais_b_c'\n    autoTester.check ('cis' in aString)\n    autoTester.check ('g' in aString)\n    autoTester.check ('bes'  in aString)\n    autoTester.check ('z' in aString)\n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AACA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAAA;AAEA;AAEA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

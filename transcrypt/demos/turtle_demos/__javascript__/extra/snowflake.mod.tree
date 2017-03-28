@@ -1,0 +1,283 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = turtle
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = josh
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = Turtle
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: FunctionDef 
+			name: str = draw
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = length
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = length
+							ctx: Load 
+						ops: list 
+							element: Gt 
+						comparators: list 
+							element: Num 
+								n: int = 9
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = draw
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Name 
+											id: str = length
+											ctx: Load 
+										op: Div 
+										right: Num 
+											n: int = 3
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = josh
+										ctx: Load 
+									attr: str = left
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 60
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = draw
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Name 
+											id: str = length
+											ctx: Load 
+										op: Div 
+										right: Num 
+											n: int = 3
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = josh
+										ctx: Load 
+									attr: str = right
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 120
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = draw
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Name 
+											id: str = length
+											ctx: Load 
+										op: Div 
+										right: Num 
+											n: int = 3
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = josh
+										ctx: Load 
+									attr: str = left
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 60
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = draw
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Name 
+											id: str = length
+											ctx: Load 
+										op: Div 
+										right: Num 
+											n: int = 3
+								keywords: list 
+					orelse: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = josh
+										ctx: Load 
+									attr: str = forward
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = length
+										ctx: Load 
+								keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = length
+					ctx: Store 
+			value: Num 
+				n: int = 150
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = up
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = forward
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Name 
+							id: str = length
+							ctx: Load 
+						op: Div 
+						right: Num 
+							n: int = 2
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = left
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 90
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = forward
+					ctx: Load 
+				args: list 
+					element: BinOp 
+						left: Name 
+							id: str = length
+							ctx: Load 
+						op: Div 
+						right: Num 
+							n: int = 4
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = right
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 90
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = down
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: For 
+			target: Name 
+				id: str = i
+				ctx: Store 
+			iter: Call 
+				func: Name 
+					id: str = range
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 3
+				keywords: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = josh
+								ctx: Load 
+							attr: str = right
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 120
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = draw
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = length
+								ctx: Load 
+						keywords: list 
+			orelse: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = josh
+						ctx: Load 
+					attr: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 

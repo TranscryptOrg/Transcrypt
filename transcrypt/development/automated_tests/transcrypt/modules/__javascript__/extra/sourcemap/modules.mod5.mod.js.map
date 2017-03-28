@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/modules/__javascript__/modules.mod5.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/transcrypt/modules/mod5.py"
+	],
+	"sourcesContent": [
+		"def mod5Add2 (variable):\n    import modules.mod4\n    return modules.mod4.mod4Add1 (variable + 1)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAFA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

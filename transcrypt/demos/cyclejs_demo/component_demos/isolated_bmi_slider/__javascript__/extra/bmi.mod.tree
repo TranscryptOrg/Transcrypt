@@ -1,0 +1,476 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = components.labeled_slider
+			names: list 
+				element: alias 
+					name: str = ILabeledSlider
+					asname: NoneType = None
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Tuple 
+					elts: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+						element: Name 
+							id: str = dom
+							ctx: Store 
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Name 
+						id: str = dict
+						ctx: Load 
+					element: Name 
+						id: str = CycleDOM
+						ctx: Load 
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = isolate
+					ctx: Store 
+			value: Subscript 
+				value: Name 
+					id: str = CycleIsolate
+					ctx: Load 
+				slice: Index 
+					value: Str 
+						s: str = default
+				ctx: Load 
+		element: FunctionDef 
+			name: str = main
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = sources
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = xs
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = xstream
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = default
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = weight_propsS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = xs
+								ctx: Load 
+							attr: str = of
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = d
+									ctx: Load 
+								args: list 
+								keywords: list 
+									element: keyword 
+										arg: str = label
+										value: Str 
+											s: str = Weight
+									element: keyword 
+										arg: str = unit
+										value: Str 
+											s: str = kg
+									element: keyword 
+										arg: str = min
+										value: Num 
+											n: int = 40
+									element: keyword 
+										arg: str = value
+										value: Num 
+											n: int = 70
+									element: keyword 
+										arg: str = max
+										value: Num 
+											n: int = 150
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = height_propsS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = xs
+								ctx: Load 
+							attr: str = of
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = d
+									ctx: Load 
+								args: list 
+								keywords: list 
+									element: keyword 
+										arg: str = label
+										value: Str 
+											s: str = Height
+									element: keyword 
+										arg: str = unit
+										value: Str 
+											s: str = cm
+									element: keyword 
+										arg: str = min
+										value: Num 
+											n: int = 140
+									element: keyword 
+										arg: str = value
+										value: Num 
+											n: int = 170
+									element: keyword 
+										arg: str = max
+										value: Num 
+											n: int = 210
+						keywords: list 
+				element: FunctionDef 
+					name: str = ils
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = propsS
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = ILabeledSlider
+									ctx: Load 
+								args: list 
+									element: Dict 
+										keys: list 
+											element: Str 
+												s: str = DOM
+											element: Str 
+												s: str = props
+										values: list 
+											element: Attribute 
+												value: Name 
+													id: str = sources
+													ctx: Load 
+												attr: str = DOM
+												ctx: Load 
+											element: Name 
+												id: str = propsS
+												ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = weight_slider
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = ils
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = weight_propsS
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = height_slider
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = ils
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = height_propsS
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = weight_vdomS
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = weight_slider
+							ctx: Load 
+						attr: str = DOM
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = height_vdomS
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = height_slider
+							ctx: Load 
+						attr: str = DOM
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = weight_valueS
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = weight_slider
+							ctx: Load 
+						attr: str = value
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = height_valueS
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = height_slider
+							ctx: Load 
+						attr: str = value
+						ctx: Load 
+				element: FunctionDef 
+					name: str = bmi
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = wh
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Subscript 
+											value: Name 
+												id: str = wh
+												ctx: Load 
+											slice: Index 
+												value: Num 
+													n: int = 0
+											ctx: Load 
+										op: Div 
+										right: BinOp 
+											left: BinOp 
+												left: Subscript 
+													value: Name 
+														id: str = wh
+														ctx: Load 
+													slice: Index 
+														value: Num 
+															n: int = 1
+													ctx: Load 
+												op: Mult 
+												right: Num 
+													n: float = 0.01
+											op: Pow 
+											right: Num 
+												n: int = 2
+									element: Num 
+										n: int = 2
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = bmiS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = xs
+										ctx: Load 
+									attr: str = combine
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = weight_valueS
+										ctx: Load 
+									element: Name 
+										id: str = height_valueS
+										ctx: Load 
+								keywords: list 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = bmi
+								ctx: Load 
+						keywords: list 
+				element: FunctionDef 
+					name: str = render
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = v
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = bmi
+											ctx: Store 
+										element: Name 
+											id: str = weight_vdom
+											ctx: Store 
+										element: Name 
+											id: str = height_vdom
+											ctx: Store 
+									ctx: Store 
+							value: Name 
+								id: str = v
+								ctx: Load 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = dom
+										ctx: Load 
+									attr: str = div
+									ctx: Load 
+								args: list 
+									element: List 
+										elts: list 
+											element: Name 
+												id: str = weight_vdom
+												ctx: Load 
+											element: Name 
+												id: str = height_vdom
+												ctx: Load 
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = dom
+														ctx: Load 
+													attr: str = h2
+													ctx: Load 
+												args: list 
+													element: BinOp 
+														left: Str 
+															s: str = BMI is 
+														op: Add 
+														right: Name 
+															id: str = bmi
+															ctx: Load 
+												keywords: list 
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = vdomS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = xs
+										ctx: Load 
+									attr: str = combine
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = bmiS
+										ctx: Load 
+									element: Name 
+										id: str = weight_vdomS
+										ctx: Load 
+									element: Name 
+										id: str = height_vdomS
+										ctx: Load 
+								keywords: list 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = render
+								ctx: Load 
+						keywords: list 
+				element: Return 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = DOM
+						values: list 
+							element: Name 
+								id: str = vdomS
+								ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Cycle
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = main
+						ctx: Load 
+					element: Dict 
+						keys: list 
+							element: Str 
+								s: str = DOM
+						values: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = dom
+										ctx: Load 
+									attr: str = makeDOMDriver
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = #app
+								keywords: list 
+				keywords: list 

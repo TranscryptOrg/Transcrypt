@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/time/__javascript__/strptime.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/time/strptime.py"
+	],
+	"sourcesContent": [
+		"'''\ntesting strptime.\n\nNote, Py3 bug:\n\nwhile true; do\n    python3.5 -c \"import time; print(tuple(time.strptime('nov 1.1.1900', '%b %m.%d.%Y')))\"\ndone\n\n=> we simply cannot test conflicting %b %m switches,\nit decides per run which one it takes(!!!), so autotest would fail randomly.\n\nVerified with 3.4, 3.5 on mac and linux.\n\nRoot cause explained here: https://github.com/JdeH/Transcrypt/issues/85\n'''\n\nimport time\n\n# Note: The localized names for months and weekdays assumed to be english here.\n# And the js implementation takes the names of the locale. That may fail the\n# tests in other areas of the world. tried with export LANG other locales but\n# did not get an error though.\n# In any case the Js implementation of the checking the weekdays and monthnames\n# should be safe.\n\ndef run (autoTester):\n    def check(t, fmt):\n        s = tuple(time.strptime(t, fmt))\n        autoTester.check(' '.join([t, '[', fmt, '] = ']), s)\n\n    check('FEb .1.1902'               , '%b .%d.%Y')\n    check('3112199912:00:00pm'         , '%d%m%Y%H:%M:%S%p')\n    check('FEb .1.1902'               , '%b .%d.%Y')\n    check('M1.1.1901'                  , 'M%m.%d.%Y')\n    check('2.1.1900'                   , '%m.%d.%Y')\n    check('6.1.2000'                   , '%m.%d.%Y')\n    check('nov .1.1900'                , '%b .%d.%Y')\n    check('2.1.1900'                   , '%m.%d.%Y')\n    check('december 1.1999'            , '%B %d.%Y')\n    check('Tue Jul 18 19:32:11 2016'   , '%a %b %d %H:%M:%S %Y')\n    check('31.12.1999 12:00:00pm'      , '%d.%m.%Y %I:%M:%S%p')\n    check('TueJul 18 19:32:11 2016'    , '%a%b %d %H:%M:%S %Y')\n    check('TueJul18 19:32:11 2016'     , '%a%b%d %H:%M:%S %Y')\n    check('TueJul1819:32x112016'       , '%a%b%d%H:%Mx%S%Y')\n    check('TueJul1819:32xx112016'      , '%a%b%d%H:%Mxx%S%Y')\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AA6CA;AA5BA;AASA;AACA;AACA;AACA;AAAA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

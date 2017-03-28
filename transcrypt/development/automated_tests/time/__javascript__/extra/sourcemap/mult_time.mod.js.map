@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/time/__javascript__/mult_time.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/automated_tests/time/mult_time.py"
+	],
+	"sourcesContent": [
+		"'''\ntesting strftime.\n'''\n\nimport time\n\n\ndef run (autoTester):\n    t = [2000, 1, 1, 1, 1, 1, 1, 1, 0]\n    def check(fmt):\n        s = time.mktime(tuple(t))\n        autoTester.check('gmtime'   , tuple(time.gmtime(int(s))))\n        autoTester.check('localtime', tuple(time.localtime(int(s))))\n        autoTester.check('mktime'   , int(s))\n        autoTester.check('ctime'    , int(s))\n\n    for hour in (0, 1, 12, 14, 23):\n        t[3] = hour\n        for f in (\n             '%p %I.%d.%Y'\n            ,'%b .%d.%y'\n            ,'%b .%d.%Y'\n            ,'%d%m%Y%H:%M:%S%p'\n            ,'%b .%d.%Y'\n            ,'M%m.%d.%Y'\n            ,'%m.%d.%Y'\n            ,'%m.%d.%Y'\n            ,'%b .%d.%Y'\n            ,'%m.%d.%Y'\n            ,'%B %d.%Y'\n            ,'%a %b %d %H:%M:%S %Y'\n            ,'%d.%m.%Y %I:%M:%S%p'\n            ,'%a%b %d %H:%M:%S %Y'\n            ,'%a%b%d %H:%M:%S %Y'\n            ,'%a%b%d%H:%Mx%S%Y'\n            ,'%a%b%d%H:%Mxx%S%Y'\n            ,'%a%b%d%H:%Mxx%S%Y +000'\n            ,' %a%b%d%H:%Mxx%S%Y +000 '\n            ): check(f)\n\n    autoTester.check('asctime', t)\n\n\n\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAwCA;AApCA;AAGA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAEA;AACA;AACA;AAoBA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
