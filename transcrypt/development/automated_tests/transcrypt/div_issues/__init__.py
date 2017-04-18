@@ -273,3 +273,51 @@ def run (autoTester):
     except Exception as exception:
         autoTester.check (sorted (results))
         autoTester.check ('That\'s it')
+
+    autoTester.check ('Issue 314')
+    try:
+        autoTester.check (int (float (123)))
+    except:
+        autoTester.check ('a')
+        
+    try:
+        autoTester.check (float (12.3))
+    except:
+        autoTester.check ('b')
+        
+    try:
+        autoTester.check (int (float ('123')))
+    except:
+        autoTester.check ('c')
+        
+    try:
+        autoTester.check (int (float (' 123')))
+    except:
+        autoTester.check ('d')
+                        
+    try:
+        autoTester.check (float (''))
+    except:
+        autoTester.check ('e')
+        
+    try:
+        autoTester.check (float (' '))
+    except:
+        autoTester.check ('f')
+    try:
+        autoTester.check (float ('drie'))
+    except:
+        autoTester.check ('g')
+        
+    autoTester.check ('Issue 316')
+    autoTester.check (list (filter (None, [[1, 2], [3], [], [4, 5], [6]])))
+    autoTester.check (list (filter (lambda l: len (l) >= 2, [[1, 2], [3], [], [4, 5], [6]])))
+    
+    autoTester.check ('Issue 317')
+
+    mylist = []
+    try:
+        mylist.remove ('value')
+    except ValueError as exception:
+        autoTester.check (exception.__class__.__name__)
+    

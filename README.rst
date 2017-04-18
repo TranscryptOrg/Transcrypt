@@ -108,9 +108,13 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Fix for #317: Wrong exception type for aList ['aStringLiteral']
+- Enhancement for #316: filter doesn't support None for func
+- Enhancement for #314: hasattr () float (' ') returns 0
+- Enhancement for #310: hasattr () raises 'Uncaught TypeError'
 - Enhancement for # 306: dict.popitem () added + autotest
 - Integrated with newest API of mypy
-- Fix for issue # 304: Invalid JS when using global --opov flag
+- Fix for issue #304: Invalid JS when using global --opov flag
 - Fix for issue #301: zip broken for strings
 - Comment-like pragma's (issue #295) added: # \_\_pragma\_\_ (<parameters>)
 - Fix for issue #284 (+= problem) and autotest case

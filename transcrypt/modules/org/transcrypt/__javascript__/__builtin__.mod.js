@@ -166,7 +166,12 @@ __pragma__ ('endif')
     __all__.getattr= getattr;
 
     var hasattr = function (obj, name) {
-        return name in obj;
+        try {
+            return name in obj;
+        }
+        catch (exception) {
+            return false;
+        }
     };
     __all__.hasattr = hasattr;
 
@@ -249,7 +254,7 @@ __pragma__ ('endif')
         else if (any == '-inf') {
             return -Infinity;
         }
-        else if (isNaN (any)) {
+        else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
             throw ValueError (new Error ());
         }
         else {
@@ -805,7 +810,7 @@ __pragma__ ('endif')
     Array.prototype.remove = function (element) {
         var index = this.indexOf (element);
         if (index == -1) {
-            throw KeyError (new Error ());
+            throw ValueError (new Error ());
         }
         this.splice (index, 1);
     };

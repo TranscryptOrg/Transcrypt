@@ -205,9 +205,9 @@ An example of the use of this pragma is the following:
 	:tab-width: 4
 	:caption: Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass
 
-Keeping your code lean: __pragma__ ('jskeys') and __pragma__ ('nojskeys')
--------------------------------------------------------------------------
-Normally in Python, dictionary keyws without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+__pragma__ ('jskeys') and __pragma__ ('nojskeys')
+-------------------------------------------------
+Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
 
 Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
 -----------------------------------------------------------------------

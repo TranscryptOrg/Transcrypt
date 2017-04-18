@@ -114,6 +114,8 @@ def map (func, iterable):
 
 
 def filter (func, iterable):
+    if func == None:
+        func = bool
     return [item for item in iterable if func (item)]
     
 __pragma__ ('ifdef', '__complex__')
