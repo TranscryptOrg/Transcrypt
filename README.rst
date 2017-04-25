@@ -22,7 +22,7 @@ Latest stable release: Paris
 ============================
 
 To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation 
-<http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/>`_.
+<http://www.transcrypt.org/docs/html/index.html>`_.
 
 Thanks to everyone who contributed!
 
