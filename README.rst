@@ -22,7 +22,7 @@ Latest stable release: Paris
 ============================
 
 To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation 
-<http://sterlicht.alwaysdata.net/transcrypt.org/docs/html/>`_.
+<http://www.transcrypt.org/docs/html/>`_.
 
 Thanks to everyone who contributed!
 
@@ -108,9 +108,10 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Doc link repaired
 - Fix for #317: Wrong exception type for aList ['aStringLiteral']
 - Enhancement for #316: filter doesn't support None for func
-- Enhancement for #314: hasattr () float (' ') returns 0
+- Enhancement for #314: float (' ') returns 0
 - Enhancement for #310: hasattr () raises 'Uncaught TypeError'
 - Enhancement for # 306: dict.popitem () added + autotest
 - Integrated with newest API of mypy
