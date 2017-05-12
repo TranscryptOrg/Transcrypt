@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Demo added for three.js with encapsulated constructors
 - Doc link repaired
 - Fix for #317: Wrong exception type for aList ['aStringLiteral']
 - Enhancement for #316: filter doesn't support None for func

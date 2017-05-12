@@ -91,6 +91,7 @@ for esvSwitch in ('', '-e 6 '):
         test ('demos/react_demo', 'react_demo', False, False, switches)
         test ('demos/riot_demo', 'riot_demo', False, False, switches)
         test ('demos/plotly_demo', 'plotly_demo', False, False, switches)
+        test ('demos/three_demo', 'three_demo', False, False, switches)
         test ('demos/pong', 'pong', False, False, switches)
         
         test ('demos/turtle_demos', 'star', False, False, switches + '-p .user ')
