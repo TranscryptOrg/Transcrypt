@@ -1,4 +1,4 @@
-from com.threejs import api
+from org.threejs import api
 
 scene = api.Scene ();
 camera = api.PerspectiveCamera (30, window.innerWidth/window.innerHeight, 0.1, 1000)
@@ -32,5 +32,5 @@ def render ():
     
 render ()
 
-# The above are just examples, all needed constructors can be added to com.threejs.api in this way
+# The above are just examples, all needed constructors can be added to org.threejs.api in this way
 # THREE is just left in the global namespace, as three.js itself seems to need it
