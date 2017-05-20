@@ -555,8 +555,8 @@ __pragma__ ('endif')
     // Zip method for arrays and strings
     var zip = function () {
         var args = [] .slice.call (arguments);
-        if (typeof args [0] == 'string') {
-            for (var i = 0; i < args.length; i++) {
+        for (var i = 0; i < args.length; i++) {
+            if (typeof args [i] == 'string') {
                 args [i] = args [i] .split ('');
             }
         }
