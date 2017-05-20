@@ -4,7 +4,7 @@
 **.__pycache__/
 dist/
 transcrypt/docs/sphinx/_build/
-transcrypt.egg-info/
+*.egg-info/
 transcrypt/development/attic/
 transcrypt/development/docs/
 transcrypt/development/experiments/
