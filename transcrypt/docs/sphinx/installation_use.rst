@@ -17,9 +17,9 @@ Alternatively, for manual installation under Windows or Linux, follow the steps 
 
 To enable minification, additionally the Java Runtime Environment 6 or later has to be installed.
 
-N.B. If you install Transcrypt manually, Trancrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to by used side by side selectively.
+.. note:: If you install Transcrypt manually, Trancrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to be used side by side selectively.
 
-N.B.2 If you also use Numscrypt under Linux or OSX, use the MiniConda installer rather than *virtualenv*, as described in the Numscrypt documentation, since it will allow you to obtain the right version of NumPy.
+.. note:: If you also use Numscrypt under Linux or OSX, use the MiniConda installer rather than *virtualenv*, as described in the Numscrypt documentation, since it will allow you to obtain the right version of NumPy.
 
 You can test your installation as follows (replacing *transcrypt* by *run_transcrypt* if you installed manually rather than with pip):
 
@@ -86,7 +86,7 @@ Compiling to JavaScript 6
 
 Transcrypt is gradually moving towards constructs that require JavaScript 6 as output language. Currently this is the case when using iterators and generators. Still the minified end result can be used in any JavaScript 5 compatible browser. This is because the Google Closure compiler, that does the minification, translates these constructs to minified JavaScript 5 code. Since multilevel sourcemaps are provided, the minified code can be easily debugged, because it directly links back to the original Python sourcecode.
 
-If you want to include Python code that makes full use of generators and iterators, c.q. the *yield* statement, the following workflow is advised:
+If you want to include Python code that makes full use of generators and iterators, and the *yield* statement, the following workflow is advised:
 
 - Initially compile your code using the switches: *-b -m -e 6 -n*.
 - Debug your non-minified code in a JavaScript 6 compatible browser like Google Chrome. Both .js and the .py files will be human readable. The sourcemap will refer from the non-minified JavaScript target code to the Python source code, allowing you to debug both in Python and in JavaScript.
