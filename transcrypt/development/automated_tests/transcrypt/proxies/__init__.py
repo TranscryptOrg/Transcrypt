@@ -1,6 +1,41 @@
 from org.transcrypt.stubs.browser import __pragma__
 
 def run (autoTester):
+    class CodedStore:
+        def __init__ (self):
+            try:
+                __pragma__ ('js', '{}', 'self ["__dict__"] = {}')
+            except:
+                pass
+
+        def __setattr__ (self, name, message):
+            self.__dict__ ['_' + name] = 'coded_' + message
+
+        def __getattr__ (self, name):
+            return 'decoded_' + self.__dict__ ['_' + name]
+            
+        def peek (self, name):
+            return self.__dict__ ['_' + name]
+            
+    s = CodedStore ()
+
+    s.john = 'brown'
+    s.mary = 'white'
+
+    autoTester.check (s.peek ('john'))
+    autoTester.check (s.peek ('mary'))
+
+    autoTester.check (s.john)
+    autoTester.check (s.mary)
+    
+    '''
+    The code above produces the following output:
+        'coded_brown'
+        'coded_white'
+        'decoded_coded_brown'
+        'decoded_coded_white'
+    '''
+
     class A:
         def __init__ (self):
             self.p = 1

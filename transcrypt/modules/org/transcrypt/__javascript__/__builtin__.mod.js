@@ -1298,6 +1298,17 @@ __pragma__ ('endif')
         }
     }
     
+    function __values__ () {
+        var values = [];
+        for (var attrib in this) {
+            if (!__specialattrib__ (attrib)) {
+                values.push (this [attrib]);
+            }
+        }
+        return values;
+
+    }
+    
     function __dgetitem__ (aKey) {
         return this [aKey];
     }
@@ -1375,6 +1386,7 @@ __pragma__ ('endif')
         __setProperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
         __setProperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
         __setProperty__ (instance, 'py_update', {value: __update__, enumerable: false});
+        __setProperty__ (instance, 'py_values', {value: __values__, enumerable: false});
         __setProperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
         __setProperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices
         return instance;

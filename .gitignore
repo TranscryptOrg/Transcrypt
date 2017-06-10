@@ -1,10 +1,10 @@
 *.nogit
 *.pyc
 *.npp
+*.egg-info/
 **.__pycache__/
 dist/
 transcrypt/docs/sphinx/_build/
-*.egg-info/
 transcrypt/development/attic/
 transcrypt/development/docs/
 transcrypt/development/experiments/

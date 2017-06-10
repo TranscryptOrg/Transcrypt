@@ -156,28 +156,28 @@ __pragma__ ('endif')
             var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
             
 __pragma__ ('ifdef', '__esv6__')
-        if ('__getattr__' in this || '__setattr__' in this) {
-            instance = new Proxy (instance, {
-                get: function (target, name) {
-                    var result = target [name];
-                    if (result == undefined) {  // Target doesn't have attribute named name
-                        return target.__getattr__ (name);
+            if ('__getattr__' in this || '__setattr__' in this) {
+                instance = new Proxy (instance, {
+                    get: function (target, name) {
+                        var result = target [name];
+                        if (result == undefined) {  // Target doesn't have attribute named name
+                            return target.__getattr__ (name);
+                        }
+                        else {
+                            return result;
+                        }
+                    },
+                    set: function (target, name, value) {
+                        try {
+                            target.__setattr__ (name, value);
+                        }
+                        catch (exception) {         // Target doesn't have a __setattr__ method
+                            target [name] = value;
+                        }
+                        return true;
                     }
-                    else {
-                        return result;
-                    }
-                },
-                set: function (target, name, value) {
-                    try {
-                        target.__setattr__ (name, value);
-                    }
-                    catch (exception) {         // Target doesn't have a __setattr__ method
-                        target [name] = value;
-                    }
-                    return true;
-                }
-            })
-        }
+                })
+            }
 __pragma__ ('endif')
 
             // Call constructor

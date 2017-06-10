@@ -108,6 +108,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Better example of use of __getattr__ and __setattr__ added to autotest suite
+- Method dict.values () added
 - Demo added for three.js with encapsulated constructors
 - Doc link repaired
 - Fix for #317: Wrong exception type for aList ['aStringLiteral']
