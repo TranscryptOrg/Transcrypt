@@ -86,7 +86,7 @@ Compiling to JavaScript 6
 
 Transcrypt is gradually moving towards constructs that require JavaScript 6 as output language. Currently this is the case when using iterators and generators. Still the minified end result can be used in any JavaScript 5 compatible browser. This is because the Google Closure compiler, that does the minification, translates these constructs to minified JavaScript 5 code. Since multilevel sourcemaps are provided, the minified code can be easily debugged, because it directly links back to the original Python sourcecode.
 
-If you want to include Python code that makes full use of generators and iterators, and the *yield* statement, the following workflow is advised:
+If you want to include Python code that makes full use of generators, iterators and the *yield* statement, the following workflow is advised:
 
 - Initially compile your code using the switches: *-b -m -e 6 -n*.
 - Debug your non-minified code in a JavaScript 6 compatible browser like Google Chrome. Both .js and the .py files will be human readable. The sourcemap will refer from the non-minified JavaScript target code to the Python source code, allowing you to debug both in Python and in JavaScript.
