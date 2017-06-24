@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 Transcrypt CI testserver.
 
@@ -38,7 +38,8 @@ dirs.
 """
 import sys, os, time, subprocess, urllib, logging
 # make py2 >> py3:
-reload(sys); sys.setdefaultencoding('utf-8')
+from imp import reload
+reload(sys)
 from bottle import route, run, template, request
 
 # tests to run, filled in sys.argv:
@@ -265,7 +266,7 @@ def run_test(filepath):
         if not '__init__.py' in os.listdir(d):
             return redir % ('err', '/result?test=%s&flags=%s&res=ERROR' % (
                 d, flags))
-        print(M('creating ci autotest.py file'))
+        print ((M('creating ci autotest.py file')))
         fn = 'ci'
 
     d_was = d
@@ -498,87 +499,87 @@ L = lambda *s: _col(145, *s)
 R = lambda *s: _col(124, *s)
 
 def usage(h, p, exit=None, msg=None):
-    print
-    print I('Usage')
+    print ()
+    print (I('Usage'))
     f = sys.argv[0]
     usage = M('%s <[host:]port> [py_ver] [dev] [flags <flags>]' % f)
-    print
-    print usage
-    print
-    print 'e.g. %s 7777 or %s 0.0.0.0:7777' % (f, f)
-    print
-    print 'When started hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
-            h, p)
-    print
-    print '- all CLI args are positional, do not change their order'
-    print '- single tests via /chk, e.g. /chk/time'
-    print '- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time'
-    print
-    print I('Python Version')
-    print 'The python version to use for run_transcrypt (not for this test_server)'
-    print 'You have available: %s' % M(' or '.join(sorted(avail_pyvers)))
-    print 'Default:'
-    print R('-') if not avail_pyvers else M(avail_pyvers[-1])
-    print
-    print I('Logging')
-    print 'We log to a gitignored file in the same dir as the test_server'
-    print 'We log incl. ansi color codes, i.e. using cat you have colors'
-    print 'You can strip color codes like this:\n%s' % L(
-            """python -c 'import re; print(re.compile(r"\\x1b[^m]*m").sub("", open("tests.log").read()))'""")
-    print
-    print I('Testflags')
-    print 'You can configure which set of flags you want to test when transpiling.'
-    print 'See transcrypt -h output to understand the flags accepted by the transpiler.'
-    print 'Testflags via CLI: Supply a comma sep. list of flag sets: flags "<set1>, <set2>,..."'
-    print 'Testflags via ENV: The variable $TS_TEST_FLAGS is understood:'
-    print 'e.g. export TS_TEST_FLAGS="-b -n, -b -e 5"'
-    print 'Note: Urls with spaces are ugly and we do not unquote in all cases.'
-    print 'Therefore we allow to ', M('alias a space with two underscores'),' for testflags.'
-    print 'Default: %s' % M(', '.join(test_flags))
-    print
-    print I('Singe Tests')
-    print 'Calling /chk/<testname>[::<flags>] results in one single test hit,'
-    print 'displaying the result page'
-    print 'If no flags are provided we use the first entry of the test_flags array.'
-    print
-    print I('DEV Mode / FS Monitor')
-    print 'If you do not pass an empty string into $TS_MON_CMD we spawn a filesystem'
-    print 'monitor via \n"%s",\nwhere %%(FS_CHANGE_URL)s will be replaced by %s'\
-            % (M(dflt_fs_mon), M('http://<host>:<port>/dev_fs_changed'))
-    print '=> If you want to start your own FS monitor, have it hit this url and'
-    print 'export an empty string to $TS_MON_CMD.'
-    print 'You can also pass an alternative monitor command to $TS_MON_CMD, which'
-    print 'we then spawn.'
-    print 'In DEV mode the server is started multithreaded via paste, which is'
-    print 'a dependency.'
-    print
-    print I('Examples')
-    print M('Example URLs')
-    print 'http://%s:%s/do/time,hello (testing time and hello module)' % (h, p)
-    print 'http://%s:%s/do/set1 (testing a set of modules given in file set1)'\
-            % (h, p)
-    print 'http://%s:%s/chk/time (single module test, default flags)' % (h, p)
-    print 'http://%s:%s/chk/time::-bnc -da -e 6 (single module test, custom flags)' % (h, p)
-    print 'http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
-            % (h, p)
-    print M('Example Startup')
-    print "./test_server.py 7777 dev flags '-bnc__-da__-e__5, -b__-n__-c__-da__-e__6"
-    print
-    print
-    print I('Requirements')
-    print '- the "wget" command'
-    print
-    print I('dev mode') + ' requires:'
-    print ' - pip install paste (server is started multithreaded then)'
-    print ' - the "entr" command (for filesystem monitoring)'
-    print 'you can use your own filesystem monitor if you export a custom $TS_MON_CMD'
-    print '(default $TS_MON_CMD is printed out when starting in test mode)'
-    print
-    print I('Arguments Summary')
-    print usage
-    print
+    print ()
+    print (usage)
+    print ()
+    print ('e.g. %s 7777 or %s 0.0.0.0:7777' % (f, f))
+    print ()
+    print ('When started hit me with a browser at http://%s:%s/[dev/]do/<tests|testset>' % (
+            h, p))
+    print ()
+    print ('- all CLI args are positional, do not change their order')
+    print ('- single tests via /chk, e.g. /chk/time')
+    print ('- dev mode (auto page reload) via /dev/<orig url>, e.g. /dev/chk/time')
+    print ()
+    print (I('Python Version'))
+    print ('The python version to use for run_transcrypt (not for this test_server)')
+    print ('You have available: %s' % M(' or '.join(sorted(avail_pyvers))))
+    print ('Default:')
+    print (R('-') if not avail_pyvers else M(avail_pyvers[-1]))
+    print ()
+    print (I('Logging'))
+    print ('We log to a gitignored file in the same dir as the test_server')
+    print ('We log incl. ansi color codes, i.e. using cat you have colors')
+    print ('You can strip color codes like this:\n%s' % L(
+            """python -c 'import re; print ()(re.compile(r"\\x1b[^m]*m").sub("", open("tests.log").read()))'"""))
+    print ()
+    print (I('Testflags'))
+    print ('You can configure which set of flags you want to test when transpiling.')
+    print ('See transcrypt -h output to understand the flags accepted by the transpiler.')
+    print ('Testflags via CLI: Supply a comma sep. list of flag sets: flags "<set1>, <set2>,..."')
+    print ('Testflags via ENV: The variable $TS_TEST_FLAGS is understood:')
+    print ('e.g. export TS_TEST_FLAGS="-b -n, -b -e 5"')
+    print ('Note: Urls with spaces are ugly and we do not unquote in all cases.')
+    print ('Therefore we allow to ', M('alias a space with two underscores'),' for testflags.')
+    print ('Default: %s' % M(', '.join(test_flags)))
+    print ()
+    print (I('Singe Tests'))
+    print ('Calling /chk/<testname>[::<flags>] results in one single test hit,')
+    print ('displaying the result page')
+    print ('If no flags are provided we use the first entry of the test_flags array.')
+    print ()
+    print (I('DEV Mode / FS Monitor'))
+    print ('If you do not pass an empty string into $TS_MON_CMD we spawn a filesystem')
+    print ('monitor via \n"%s",\nwhere %%(FS_CHANGE_URL)s will be replaced by %s'\
+            % (M(dflt_fs_mon), M('http://<host>:<port>/dev_fs_changed')))
+    print ('=> If you want to start your own FS monitor, have it hit this url and')
+    print ('export an empty string to $TS_MON_CMD.')
+    print ('You can also pass an alternative monitor command to $TS_MON_CMD, which')
+    print ('we then spawn.')
+    print ('In DEV mode the server is started multithreaded via paste, which is')
+    print ('a dependency.')
+    print ()
+    print (I('Examples'))
+    print (M('Example URLs'))
+    print ('http://%s:%s/do/time,hello (testing time and hello module)' % (h, p))
+    print ('http://%s:%s/do/set1 (testing a set of modules given in file set1)'\
+            % (h, p))
+    print ('http://%s:%s/chk/time (single module test, default flags)' % (h, p))
+    print ('http://%s:%s/chk/time::-bnc -da -e 6 (single module test, custom flags)' % (h, p))
+    print ('http://%s:%s/dev/<do|chk>/<module or set> (dev mode, autoreload)' \
+            % (h, p))
+    print (M('Example Startup'))
+    print ("./test_server.py 7777 dev flags '-bnc__-da__-e__5, -b__-n__-c__-da__-e__6")
+    print ()
+    print ()
+    print (I('Requirements'))
+    print ('- the "wget" command')
+    print ()
+    print (I('dev mode') + ' requires:')
+    print (' - pip install paste (server is started multithreaded then)')
+    print (' - the "entr" command (for filesystem monitoring)')
+    print ('you can use your own filesystem monitor if you export a custom $TS_MON_CMD')
+    print ('(default $TS_MON_CMD is print ()ed out when starting in test mode)')
+    print ()
+    print (I('Arguments Summary'))
+    print (usage)
+    print ()
     if msg:
-        print R(msg)
+        print (R(msg))
     if exit is not None:
         sys.exit(exit)
 
@@ -591,8 +592,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if not avail_pyvers:
-        print R('You have not any supported python version (%s)' % \
-                ' or '.join(sorted(runners.keys())))
+        print (R('You have not any supported python version (%s)' % \
+                 ' or '.join(sorted(runners.keys()))))
         sys.exit(1)
 
     # taking highest as default:
@@ -646,5 +647,3 @@ if __name__ == '__main__':
         info(I('Starting multi threaded (dev mode)'))
         from bottle import PasteServer
         run(server=PasteServer, host=host, port=port)
-
-

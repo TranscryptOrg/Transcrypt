@@ -95,7 +95,7 @@ function killXVFB() {
 
 
 echo "Testserver port is: $port"
-python2 "$here/test_server.py" $port &
+python3 "$here/test_server.py" $port &
 if [ $? -ne 0 ]
 then
     echo "$R Failed to launch test server: $? $O"
