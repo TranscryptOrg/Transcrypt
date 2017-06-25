@@ -4,8 +4,8 @@
 
 (Just in case you wonder where the test assertions are hidden)
 
-Transcrypt's autotest framework verifies that the generated javascript
-produces the same output as the original python code.
+Transcrypt's autotest framework verifies that the generated JavaScript
+produces the same output as the original Python code.
 
 Instead of comparing JavaScript output to hardcoded assertions,
 Transcrypt's autotest framework *generates* those assertions by
