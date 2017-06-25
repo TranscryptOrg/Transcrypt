@@ -7,12 +7,12 @@
 Transcrypt's autotest framework verifies that the generated javascript
 produces the same output as the original python code.
 
-Instead of comparing javascript output to hardcoded assertions,
+Instead of comparing JavaScript output to hardcoded assertions,
 Transcrypt's autotest framework *generates* those assertions by
 running the testlets with *CPython* (`-r` switch), recording the
 results, and then comparing those results in a Javascript runtime
-(e.g. your browser) to the output of the javascript produced with
-transcrypt (`-b` switch).
+(e.g. your browser) to the output of the JavaScript produced with
+Transcrypt (`-b` switch).
 
 ## Usage
 
