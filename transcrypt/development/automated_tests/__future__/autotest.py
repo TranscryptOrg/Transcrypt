@@ -1,3 +1,10 @@
+import sys
+
+try:
+    sys.path.append ('.')
+except:
+    pass
+
 import division
 import generators
 import nested_scopes
