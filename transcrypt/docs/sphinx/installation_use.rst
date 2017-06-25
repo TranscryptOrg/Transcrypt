@@ -68,6 +68,8 @@ The minified JavaScript file *including the Transcrypt runtime* is only 10kB. Wi
 	:linenos:
 	:caption: In hello.py, JavaScript function document.getElementById is called directly from Python, using plain Python values
 	
+.. _command_line_switches:
+    
 Available command line switches
 -------------------------------
 
@@ -130,8 +132,6 @@ In addition to generating sourcemaps, you can use the *-a* switch to annotate no
 	:caption: Annotated target code for hello.py
 
 Source code annotation only happens for Python sources, not for JavaScript-only modules, that have a trivial correspondence between non-minified target code and source code.
-
-.. _command_line_switches:
 
 .. role:: raw-html(raw)
    :format: html

@@ -1,6 +1,8 @@
 Special facilities
 ==================
 
+.. _module_mechanism:
+
 Transcrypt's module mechanism
 -----------------------------
 
@@ -11,9 +13,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 - *org.python.pypi.<my module name>*
 - *com.<my company name>.<my module name>*
 
-To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g.
-
- 
+To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g. *math*.
 	
 Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, to keep it lightweight. Nevertheless porting (part of) some standard libraries might be handy. If you do, you're invited to make them available via PyPi, using 'Transcrypt' in your keyword list.
 
@@ -244,3 +244,10 @@ Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notco
 ------------------------------------------------------------------------------------
 
 When automatic conversion to truth value is activated, an empty array, dict or set has truth value False just as in CPyton, rather than True, as would be the case natively in JavaScript. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. To switch on automatic conversion to truth values locally, *__pragma__ ('tconv')* and *__pragma__ ('notconv')* can be used. The alternative is to switch on automatic conversion globally using the -t command line switch. Use of this switch is disadvised if a lot of boolean expressions are computed in inner loops, since it would result in many extra typechecks. When designing performance sensitive libraries, it's advisable to use *__pragma__ ('notconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -t switch, performance of won't suffer.
+
+Adding directories to the module search path: __pragma__ ('xpath', <directory list>)
+------------------------------------------------------------------------------------
+
+In addition to the :ref:`regular module mechanism <module_mechanism>` you can use *# __pragma__ ('xpath', <directory list>)* to add directories to the module search path. Note that resolving search paths happens compile time, so dynamic manipulation of the module search path doesn't apply. If you want to alter the search path in code that is used both by Transcrypt and CPython, you can additionally manipulate *sys.path* in a *try* clause or under an *if* with condition *__envir__.executor_name == __envir__.interpreter_name*.
+
+The *-xp / --xpath* :ref:`command line switch <command_line_switches>` has the same effect.

@@ -89,7 +89,13 @@ def main ():
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already
-                        
+           
+        global compilerPath
+        compilerPath += utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
+                       
+        for item in compilerPath:
+            print (item)
+                       
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
         if utils.commandArgs.complex:

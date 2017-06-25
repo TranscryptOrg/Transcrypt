@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Pragma and command line switch added to augment module search path
 - Better example of use of __getattr__ and __setattr__ added to autotest suite
 - Method dict.values () added
 - Demo added for three.js with encapsulated constructors

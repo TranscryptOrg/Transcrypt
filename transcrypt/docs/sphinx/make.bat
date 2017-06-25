@@ -2,7 +2,7 @@
 
 REM Command file for Sphinx documentation
 
-set SPHINXBUILD=python35 -m sphinx.__init__
+set SPHINXBUILD=python -m sphinx.__init__
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build

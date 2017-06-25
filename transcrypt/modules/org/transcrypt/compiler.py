@@ -1500,16 +1500,20 @@ class Generator (ast.NodeVisitor):
                     self.allowOperatorOverloading = True
                 elif node.args [0] .s == 'noopov':      # Operloading of a small sane subset of operators disallowed
                     self.allowOperatorOverloading = False
-
+                    
                 elif node.args [0] .s == 'redirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'{}\'', node.args [2])
                 elif node.args [0] .s == 'noredirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'__console__\'')
-
+                        
                 elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'ifndef', 'else', 'endif'):
                     pass                                # Easier dealth with on statement / expression level in self.visit
+                    
+                elif node.args [0] .s == 'xpath':
+                    self.module.program.moduleSearchDirs += [elt.s for elt in node.args [1] .elts]
+                    
                 else:
                     raise utils.Error (
                         lineNr = self.lineNr,
