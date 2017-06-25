@@ -10,7 +10,7 @@ produces the same output as the original python code.
 Instead of comparing JavaScript output to hardcoded assertions,
 Transcrypt's autotest framework *generates* those assertions by
 running the testlets with *CPython* (`-r` switch), recording the
-results, and then comparing those results in a Javascript runtime
+results, and then comparing those results in a JavaScript runtime environment
 (e.g. your browser) to the output of the JavaScript produced with
 Transcrypt (`-b` switch).
 
