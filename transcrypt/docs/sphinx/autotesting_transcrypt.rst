@@ -4,7 +4,7 @@ Autotesting Transcrypt code
 Why it's needed
 ---------------
 
-An simple autotest feature has been added to Transcrypt right from the start for the following reasons:
+A simple autotest feature was added to Transcrypt right from the start for the following reasons:
 
 1. Any programming language compiler has to be reliable, since a large investment in code may come to depend upon it. Languages and libraries should be able to evolve without regression bugs being introduced. In a rich language many constructs are possible which all should be tested with each new release. This can only be done if testing is automated.
 
@@ -30,7 +30,17 @@ An example of two testlets combined into the 'hello' autotest, that is part of t
 |        :caption: autotest.py                                               |         :caption: testlet0.py                                              |        :caption: testlet1.py                                               |
 +----------------------------------------------------------------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
-Output of the 'hello' autotest with a deliberate error:
+Steps to run the tests (assuming you are inside a virtual environment with an installed Transcrypt):
+
+.. code-block:: shell
+
+   transcrypt -b autotest.py
+   PYTHONPATH=".:$PYTHONPATH" transcrypt -r autotest.py
+
+The second line temporarily modifies your `PYTHONPATH` so that Transcrypt can find and import the testlets. At this point, if you open `autotest.html`, you will see that all tests passed. That is to be expected because Transcrypt has no problem transpiling and comparing a simple string to itself. In order to trigger an error, open `autotest.html`, search for `goodbye` and replace it with `badbye` to get the result below:
 
 .. figure:: ../images/autotest_hello.png
-	:alt: Output of 'hello autotest' 
+            :alt: Output of 'hello autotest'
+            
+Some testlets may require additional switches. The main *transcrypt* autotest e.g. requires and extra *-c -da*, since it uses both complex numbers and debugging assertions.
+
