@@ -8,5 +8,15 @@ transcrypt/docs/sphinx/_build/
 transcrypt/development/attic/
 transcrypt/development/docs/
 transcrypt/development/experiments/
+transcrypt/development/automated_tests/*/autotest.html
+transcrypt/development/automated_tests/*/autotest.min.html
+transcrypt/development/automated_tests/**/__javascript__/
+transcrypt/modules/re/__javascript__/
+transcrypt/modules/time/__javascript__/
+transcrypt/modules/math/__javascript__/
+transcrypt/modules/cmath/__javascript__/
+transcrypt/modules/logging/__javascript__/
+transcrypt/modules/warnings/__javascript__/
+transcrypt/modules/org/transcrypt/autotester/__javascript__/
 transcrypt/modules/org/transcrypt/__javascript__/__base__.mod.js
 transcrypt/modules/org/transcrypt/__javascript__/__standard__.mod.js
