@@ -41,3 +41,6 @@ The second line temporarily modifies your `PYTHONPATH` so that Transcrypt can fi
 
 .. figure:: ../images/autotest_hello.png
             :alt: Output of 'hello autotest'
+            
+Some testlets may require additional switches. The main *transcrypt* autotest e.g. requires and extra *-c -da*, since it uses both complex numbers and debugging assertions.
+
