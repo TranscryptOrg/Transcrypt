@@ -1,0 +1,23 @@
+transpiler:
+  name: Transcrypt
+  version: 3.6.28
+  produce_js_version: 5
+
+logging:
+  version: 1
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+  loggers:
+    __main__:
+      level: DEBUG
+      handlers: [console]
+      propagate: no
+  # root:
+  #   level: DEBUG
+  #   handlers: [console]

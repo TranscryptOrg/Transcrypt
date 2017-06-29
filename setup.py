@@ -27,11 +27,6 @@ setup (
 	install_requires = [
 		'mypy'
 	],
-	entry_points = {
-		'console_scripts': [
-			'transcrypt = transcrypt.__main__:main'
-		]
-	},
 	include_package_data = True,
 	classifiers = [
 		'Development Status :: 5 - Production/Stable',
