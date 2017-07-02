@@ -1,0 +1,2 @@
+Use arrow keys for thrust, brake, left, right.
+Use space bar to fire canon.
