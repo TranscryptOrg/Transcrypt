@@ -400,7 +400,7 @@ __pragma__ ('endif')
     var ord = function (aChar) {
         return aChar.charCodeAt (0);
     };
-    __all__.org = ord;
+    __all__.ord = ord;
 
     // Maximum of n numbers
     var max = Math.max;
