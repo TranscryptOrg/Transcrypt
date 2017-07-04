@@ -16,6 +16,7 @@ XNWRAP = 0
 YWRAP = 0
 YNWRAP = 0
 
+
 def set_limits(x: float, y: float):
     nonlocal XWRAP, XNWRAP, YWRAP, YNWRAP
     XWRAP = int(x)
@@ -25,7 +26,6 @@ def set_limits(x: float, y: float):
 
 
 def wrap(obj: three.Object3d):
-
     x, y, z = obj.position.x, obj.position.y, obj.position.z
     x = pad_wrap(XNWRAP, XWRAP, x)
     y = pad_wrap(YNWRAP, YWRAP, y)
@@ -106,7 +106,6 @@ def advance(cr, value):
 
 
 def coroutine(loop, callback):
-
     callback_fn = callback if callback is not None else lambda a: a
 
     def coroutine_generator():
@@ -118,7 +117,7 @@ def coroutine(loop, callback):
             yield result
         yield callback_fn(result)
 
-    cr =  coroutine_generator()
+    cr = coroutine_generator()
     cr.advance = lambda a: advance(cr, a)
     return cr
 
@@ -142,19 +141,4 @@ def timer(duration, loop, callback):
 
     tc = timer_coroutine()
     tc.advance = lambda a: advance(tc, a)
-    return  tc
-
-
-
-
-    # Context managers don't work'
-    # class TestContext:
-    #
-    #     def __init__(self):
-    #         self.x = True
-    #
-    #     def __enter__(self):
-    #         print ("entering")
-    #
-    #     def __exit__(self, exc_type, exc_val, exc_tb):
-    #         print ("exiting")
+    return tc

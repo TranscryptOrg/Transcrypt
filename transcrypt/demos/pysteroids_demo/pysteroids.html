@@ -1,18 +1,19 @@
 <html>
 <head>
     <link href="https://fonts.googleapis.com/css?family=Bungee+Hairline" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js"></script>
 </head>
 <style>
 
-.game{
-font-family: 'Bungee Hairline', cursive;
-}
+    .game {
+        font-family: 'Bungee Hairline', cursive;
+    }
 
- h1 {
- font-size: 300%;
- }
-    #game_frame{
+    h1 {
+        font-size: 300%;
+    }
+
+    #game_frame {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -20,72 +21,76 @@ font-family: 'Bungee Hairline', cursive;
         width: 100%;
     }
 
-    #title { position: absolute;
-    left: 32px;
-    top: 32px;
-    color: #AAAAAA;
+    #title {
+        position: absolute;
+        left: 32px;
+        top: 32px;
+        color: #AAAAAA;
     }
 
-    #FPS { position: absolute;
-    left: 32px;
-    top: 64px;
-    color: #AAAAAA;
+    #FPS {
+        position: absolute;
+        left: 32px;
+        top: 64px;
+        color: #AAAAAA;
     }
 
-
-    #game_canvas{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    cursor: none;
+    #game_canvas {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        cursor: none;
     }
 
-
-    #hud{
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    #hud {
+        position: absolute;
+        top: 0px;
+        left: 0px;
     }
 
     #score {
-    position: relative;
-    top: 32px;
-    right: 64px;
-    color: #AAAAAA;
-    text-align: right;
+        position: relative;
+        top: 32px;
+        right: 64px;
+        color: #AAAAAA;
+        text-align: right;
     }
 
     #game_over {
-    position: relative;
-    margin 100 auto;
-    color: gold;
-    z-index: 200;
-    text-align: center;
-    vertical-align: text-center;
-    visibility:  hidden;
-
+        position: relative;
+        margin 100 auto;
+        color: gold;
+        z-index: 200;
+        text-align: center;
+        vertical-align: text-center;
+        visibility: hidden;
     }
 
     #credits {
-    position: absolute;
-    left: 32px;
-    bottom: 32px;
-    color: #BBA0A0;
-    z-index: 100;
-    visibility:  hidden;
-
+        position: absolute;
+        left: 32px;
+        bottom: 32px;
+        color: #BBA0A0;
+        z-index: 100;
+        visibility: hidden;
     }
 
     a:link {
-    color: #FFFFFF
+        color: #FFFFFF
     }
 
     a:visited {
-    color: #BBBBBB
+        color: #BBBBBB
     }
 
-
-
+    .instructions {
+        color: yellow;
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        bottom: 32px;
+        opacity: 0;
+    }
 
 
 </style>
@@ -96,6 +101,10 @@ font-family: 'Bungee Hairline', cursive;
             <h2 id="title">Pysteroids</h2>
             <h2 id="score">0</h2>
             <h3 id="FPS"></h3>
+            <h3 id="instructions0" class="instructions">left /right arrows = turn</h3>
+            <h3 id="instructions1" class="instructions">up arrow = thrust</h3>
+            <h3 id="instructions2" class="instructions">space = shoot</h3>
+
             <h1 id="game_over">GAME OVER</h1>
             <h4 id="credits">
                 <p>(c) 2017 Steve Theodore</p>
