@@ -9,7 +9,7 @@ def run (sourcePath, targetPath, postMapPath, javaScriptVersion):
     params = [
         'java', '-jar',
         closureCompilerPath,
-        '--language_in=ES{}'.format (javaScriptVersion),
+        '--language_in={}'.format ('ES{}'.format (javaScriptVersion) if javaScriptVersion <=6 else 'ECMASCRIPT_NEXT'),
         '--language_out=ECMASCRIPT5_STRICT',
         '--compilation_level', 'SIMPLE_OPTIMIZATIONS',
         '--js', sourcePath,

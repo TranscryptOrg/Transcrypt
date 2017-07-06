@@ -21,28 +21,35 @@ import site
 import atexit
 import webbrowser
 
-programDir = os.getcwd () .replace ('\\', '/')
-transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
-    
-modulesDir = '{}/modules'.format (transpilerDir)
+programDir = os.getcwd () .replace ('\\', '/')                                      # Set dir of main program to be compiled, it's the current dir
+transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')   # Set of Transcrypt itself
+modulesDir = '{}/modules'.format (transpilerDir)                                    # Set dir of Transcrypt-only modules
 
-# Both CPython and Transcrypt will use all dirs in sys.path as search roots for modules
+# Both CPython and Transcrypt will use dirs in sys.path as search roots for modules
 # CPython will also search relatively from each module, Transcrypt only from the main module
-
+# Use / rather than \ pervasively
 sys.path = [item.replace ('\\', '/') for item in sys.path]
-compilerPath = [programDir, modulesDir] + sys.path  # Used by Transcrypt rather than CPython, programDir isn't always part of the path under Linux
 
+# Leave out Transcrypt dir to prevent importing modules root if there's a module by that name
+# This is needed for CPython and it won't hurt for Transcrypt 
 try:
-    sys.path.remove (transpilerDir)                     # Used by CPython, leave out Transcrypt dir to prevent importing modules root if there's a module by that name
+    sys.path.remove (transpilerDir)
 except:
     pass
-                                                    
-sys.path += [modulesDir]
-sys.modules.pop ('org', None)                       # Unload org from a packages dir, if it's there.
 
-from org.transcrypt import __base__                 # May reload org from a packages dir (or load org from different location)
+# Unload org from a packages dir, if it happens to be there in the CPython installation
+sys.modules.pop ('org', None)   
+
+# The following imports are need by Transcryp itself, not by transpiled or executed user code
+# They will either reload the previously unloaded org or load org from different location
+# In executing Transcrypt itself, CPython and its native imports needs to find modulesDir LAST, so it will favor CPython modules
+# Since in compiling or running user code it has to find modulesDir FIRST it is removed again, so user code will favor Transcrypt modules
+# Once the command line args have been parsed, e.g. --xpath, it will be part of a path list that is prepended, so it will indeed be searched FIRST
+sys.path.append (modulesDir)               
+from org.transcrypt import __base__                 
 from org.transcrypt import utils
 from org.transcrypt import compiler
+sys.path.remove (modulesDir)
 
 exitCodeNames = ('exitSuccess', 'exitCommandArgsError', 'exitNoLicense', 'exitSourceNotGiven', 'exitCannotRunSource', 'exitSpecificCompileError', 'exitGeneralCompileError')
 
@@ -89,12 +96,11 @@ def main ():
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already
-           
-        global compilerPath
-        compilerPath += utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
-                       
-        for item in compilerPath:
-            print (item)
+        
+        # Prepend paths that are needed by transpiled or executed user code, since they have to be searched first
+        # So user code favors Transcrypt modules over CPython modules
+        extraPath = utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
+        sys.path [ : 0] = [programDir] + extraPath + [modulesDir]
                        
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
@@ -107,9 +113,12 @@ def main ():
             __symbols__.append ('__esv{}__'.format (utils.commandArgs.esv))
         else:
             __symbols__.append ('__esv{}__'.format (utils.defaultJavaScriptVersion))
-            
-        from org.transcrypt.stubs.browser import __set_stubsymbols__    # Import (ignored when transpiling) late, since commandArgs must be set already
-        __set_stubsymbols__ (__symbols__)                               # Make symbols available to CPython, seems that exec can't do that directly
+         
+        # Import (ignored when transpiling) late, since commandArgs must be set already
+        from org.transcrypt.stubs.browser import __set_stubsymbols__
+        
+        # Make symbols available to CPython, seems that exec can't do that directly
+        __set_stubsymbols__ (__symbols__)
         
         if utils.commandArgs.run:
             try:
@@ -122,7 +131,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (compilerPath, __symbols__)
+                compiler.Program (sys.path, __symbols__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)

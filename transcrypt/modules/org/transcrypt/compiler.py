@@ -239,7 +239,7 @@ class Program:
         # Minify
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
-            minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None, 6) # Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
+            minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None, 8) # Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
             if utils.commandArgs.map:
                 utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
                 self.shrinkMap.load ()
@@ -1068,6 +1068,15 @@ class Generator (ast.NodeVisitor):
                     len (node.args),
                 )
 
+    def visit_AnnAssign (self, node):
+        if node.value != None:  # Rather than a node.value is a NameConstant with value None
+            self.visit (
+                ast.Assign (
+                    [node.target],
+                    node.value
+                )
+            )
+                        
     def visit_Assert (self, node):
         if utils.commandArgs.dassert:
             self.emit ('assert (')
@@ -1181,16 +1190,11 @@ class Generator (ast.NodeVisitor):
             self.emit (')')
 
         self.emit ('.{}', self.filterId (node.attr))
-
-    def visit_AnnAssign (self, node):
-        if node.value != None:  # Rather than a node.value is a NameConstant with value None
-            self.visit (
-                ast.Assign (
-                    [node.target],
-                    node.value
-                )
-            )
         
+    def visit_Await (self, node):
+        self.emit ('await ')
+        self.visit (node.value)
+
     def visit_AugAssign (self, node):
         if self.allowOperatorOverloading:
             rhsFunctionName = self.filterId (
@@ -2046,15 +2050,18 @@ class Generator (ast.NodeVisitor):
 
     def visit_FormattedValue (self, node):
         self.visit (node.value)
-
-    def visit_FunctionDef (self, node):
+        
+    def visit_AsyncFunctionDef (self, node):
+        self.visit_FunctionDef (node, async = True)
+    
+    def visit_FunctionDef (self, node, async = False):
         def emitScopedBody ():
             self.inscope (node)
 
             self.emitBody (node.body)
             self.dedent ()
 
-            if self.getScope (ast.FunctionDef) .containsYield:
+            if self.getScope (ast.AsyncFunctionDef if async else ast.FunctionDef) .containsYield:
                 self.targetFragments.insert (yieldStarIndex, '*')
 
             self.descope ()
@@ -2068,7 +2075,7 @@ class Generator (ast.NodeVisitor):
                     self.all.add (node.name)
 
                 self.adaptLineNrString (node)
-                self.emit ('var {} = function', self.filterId (node.name))
+                self.emit ('var {} = {}function', self.filterId (node.name), 'async ' if async else '')
 
                 yieldStarIndex = len (self.targetFragments)
                 yieldStarLevel = self.indentLevel
@@ -2752,7 +2759,7 @@ class Generator (ast.NodeVisitor):
         if (node.value != None):
             self.emit (' ')
             self.visit (node.value)
-
+            
     def visit_YieldFrom (self, node):
         self.getScope (ast.FunctionDef) .containsYield = True
         self.emit ('yield* ')
