@@ -19,7 +19,6 @@ class Unit:
         if self.visible:
             current_pos = self.geo.position
             move = three.Vector3().copy(self.momentum).multiplyScalar(t)
-            #move.multiplyScalar(t)
             current_pos = current_pos.add(move)
             self.geo.position.set(current_pos.x, current_pos.y, current_pos.z)
 
@@ -42,19 +41,20 @@ class Ship(Unit):
         self.keyboard = keyboard
 
         self.geo = three.Mesh(
-            three.BoxGeometry(2, 3, 2),
+            three.ConeBufferGeometry(1, 3, 8),
             three.MeshNormalMaterial()
         )
         exhaust = three.Mesh(
-            three.BoxGeometry(1, 2, 1),
+            three.ConeBufferGeometry(.5, 2, 8),
             three.MeshBasicMaterial({'color': 0xffff00})
         )
         self.geo.add(exhaust)
         exhaust.translateY(-2)
+        exhaust.rotateZ(3.14159)
         self.exhaust = exhaust
         self.momentum = three.Vector3(0, 0, 0)
         self.keyboard = keyboard
-        self.bbox = AABB(2, 2, self.geo.position)
+        self.bbox = AABB(2, 3, self.geo.position)
         self.game = game
 
     def thrust(self, amt):

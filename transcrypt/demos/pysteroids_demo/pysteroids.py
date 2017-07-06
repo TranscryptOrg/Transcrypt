@@ -8,13 +8,22 @@ from controls import Keyboard, ControlAxis
 from units import Ship, Asteroid, Bullet
 from utils import wrap, now, FPSCounter, coroutine, clamp, set_limits
 
-DEBUG = False  # set to false for production
+DEBUG = True
 logger = logging.getLogger('root')
 logger.addHandler(logging.StreamHandler())
 
 if DEBUG:
     logger.setLevel(logging.INFO)
     logger.info("====== debug logging on =====")
+
+
+def waiter(*args):
+    return True, args[0]
+
+
+def done(*args):
+    print("done at", args[0])
+
 
 def hfov(vfov, w, h):
     """gives horizontal fov (in rads) for given vertical fov (in rads) and aspect ratio"""
@@ -89,11 +98,12 @@ class Game:
         self.ship = None
         self.bullets = []
         self.asteroids = []
+        self.helptext = None
+        self.resetter = None
         self.setup()
         self.last_frame = now()
         self.audio = Audio()
         self.lives = 3
-        self.resetter = None
         self.score = 0
         self.score_display = document.getElementById('score')
         self.fps_counter = FPSCounter(document.getElementById("FPS"))
@@ -156,11 +166,14 @@ class Game:
             self.graphics.add(bullet)
             self.bullets.append(bullet)
 
+        self.helptext = self.help_display()
+
     def tick(self):
 
         if len(self.asteroids) == 0 or self.lives < 1:
             document.getElementById("game_over").style.visibility = 'visible'
             document.getElementById('credits').style.visibility = 'visible'
+            document.getElementById('game_canvas').style.cursor = 'auto'
             return
 
         requestAnimationFrame(self.tick)
@@ -191,7 +204,7 @@ class Game:
                     d = a.geo.position.distanceTo(self.ship.position)
                     if d < (a.radius + 0.5):
                         self.resetter = self.kill()
-                        logger.debug("resetter :{}".format(self.resetter))
+                        print("!!", self.resetter)
                         dead.append(a)
         else:
             self.resetter.advance(t)
@@ -224,8 +237,12 @@ class Game:
             item.update(t)
             wrap(item.geo)
 
+        # advance coroutines
         if self.resetter is not None:
             self.resetter.advance(t)
+
+        if self.helptext is not None:
+            self.helptext.advance(t)
 
         self.graphics.render()
         self.last_frame = now()
@@ -285,10 +302,46 @@ class Game:
         next(reset)
         return reset
 
+    def help_display(self):
+
+        """
+        cycle through the help messages, fading in and out
+        """
+
+        messages = 3
+        repeats = 2
+        elapsed = 0
+        count = 0
+        period = 2.25
+        def display_stuff(t):
+            nonlocal elapsed, count, messages, repeats
+            if count < messages * repeats:
+                elapsed += t / period
+                count = int(elapsed)
+                lintime = elapsed % 1
+                opacity = math.pow(math.sin(lintime * 3.1415), 2)
+                logger.info(lintime)
+                document.getElementById("instructions{}".format(count % 3)).style.opacity = opacity
+
+                return True, opacity
+            else:
+                return False, "OK"
+
+        def done():
+             document.getElementById("instructions1").style.visiblity = 'hidden'
+
+        displayer = coroutine(display_stuff, done)
+
+        next(displayer)
+        logger.debug("displayer", displayer)
+        return displayer
+
+
+
     def update_score(self, score):
         self.score += score
         self.score_display.innerHTML = self.score
-        logger.debug("update {}: {}".format(self.score, self.score_display))
+        print(self.score, self.score_display)
 
 
 canvas = document.getElementById("game_canvas")
