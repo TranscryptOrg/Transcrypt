@@ -1,0 +1,674 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = utils
+			names: list 
+				element: alias 
+					name: str = clamp
+					asname: NoneType = None
+			level: int = 0
+		element: ClassDef 
+			name: str = Keyboard
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = keyboard
+									ctx: Store 
+							value: Dict 
+								keys: list 
+									element: Num 
+										n: int = 0
+								values: list 
+									element: NameConstant 
+										value: bool = False
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = handlers
+									ctx: Store 
+							value: Dict 
+								keys: list 
+								values: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = key_down
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keyboard
+										ctx: Load 
+									slice: Index 
+										value: Attribute 
+											value: Name 
+												id: str = key
+												ctx: Load 
+											attr: str = key
+											ctx: Load 
+									ctx: Store 
+							value: NameConstant 
+								value: bool = True
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = key_up
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keyboard
+										ctx: Load 
+									slice: Index 
+										value: Attribute 
+											value: Name 
+												id: str = key
+												ctx: Load 
+											attr: str = key
+											ctx: Load 
+									ctx: Store 
+							value: NameConstant 
+								value: bool = False
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = get
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = keyboard
+										ctx: Load 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = key
+										ctx: Load 
+									element: NameConstant 
+										value: bool = False
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = get_axis
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = key
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Subscript 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = handlers
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = key
+											ctx: Load 
+									ctx: Load 
+								attr: str = value
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = add_handler
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = name
+								annotation: NoneType = None
+							element: arg 
+								arg: str = handler
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = handlers
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = name
+											ctx: Load 
+									ctx: Store 
+							value: Name 
+								id: str = handler
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = update
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = interval
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: For 
+							target: Tuple 
+								elts: list 
+									element: Name 
+										id: str = _
+										ctx: Store 
+									element: Name 
+										id: str = eachhandler
+										ctx: Store 
+								ctx: Store 
+							iter: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = handlers
+										ctx: Load 
+									attr: str = items
+									ctx: Load 
+								args: list 
+								keywords: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = eachhandler
+												ctx: Load 
+											attr: str = update
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = self
+												ctx: Load 
+											element: Name 
+												id: str = interval
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = clear
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = axis
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = handlers
+												ctx: Load 
+											attr: str = get
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = axis
+												ctx: Load 
+										keywords: list 
+									attr: str = value
+									ctx: Store 
+							value: Num 
+								n: int = 0
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = ControlAxis
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = kwargs
+						keywords: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = positive_key
+								annotation: Name 
+									id: str = str
+									ctx: Load 
+							element: arg 
+								arg: str = negative_key
+								annotation: Name 
+									id: str = str
+									ctx: Load 
+							element: arg 
+								arg: str = attack
+								annotation: NoneType = None
+							element: arg 
+								arg: str = decay
+								annotation: NoneType = None
+							element: arg 
+								arg: str = deadzone
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: float = 0.02
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = positive
+									ctx: Store 
+							value: Name 
+								id: str = positive_key
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = negative
+									ctx: Store 
+							value: Name 
+								id: str = negative_key
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = attack
+									ctx: Store 
+							value: Name 
+								id: str = attack
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = decay
+									ctx: Store 
+							value: Name 
+								id: str = decay
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = deadzone
+									ctx: Store 
+							value: Name 
+								id: str = deadzone
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = value
+									ctx: Store 
+							value: Num 
+								n: int = 0
+					decorator_list: list 
+					returns: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = nokwargs
+						keywords: list 
+				element: FunctionDef 
+					name: str = update
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = keyboard
+								annotation: Name 
+									id: str = Keyboard
+									ctx: Load 
+							element: arg 
+								arg: str = interval
+								annotation: Name 
+									id: str = float
+									ctx: Load 
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = value
+								ctx: Store 
+							op: Sub 
+							value: BinOp 
+								left: BinOp 
+									left: Name 
+										id: str = interval
+										ctx: Load 
+									op: Mult 
+									right: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = decay
+										ctx: Load 
+								op: Mult 
+								right: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = value
+									ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = dz
+									ctx: Store 
+							value: Compare 
+								left: Call 
+									func: Name 
+										id: str = abs
+										ctx: Load 
+									args: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = value
+											ctx: Load 
+									keywords: list 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = deadzone
+										ctx: Load 
+						element: If 
+							test: Call 
+								func: Attribute 
+									value: Name 
+										id: str = keyboard
+										ctx: Load 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = positive
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = dz
+											ctx: Store 
+									value: NameConstant 
+										value: bool = False
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = value
+										ctx: Store 
+									op: Add 
+									value: BinOp 
+										left: Name 
+											id: str = interval
+											ctx: Load 
+										op: Mult 
+										right: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = attack
+											ctx: Load 
+							orelse: list 
+						element: If 
+							test: Call 
+								func: Attribute 
+									value: Name 
+										id: str = keyboard
+										ctx: Load 
+									attr: str = get
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = negative
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = dz
+											ctx: Store 
+									value: NameConstant 
+										value: bool = False
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = value
+										ctx: Store 
+									op: Sub 
+									value: BinOp 
+										left: Name 
+											id: str = interval
+											ctx: Load 
+										op: Mult 
+										right: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = attack
+											ctx: Load 
+							orelse: list 
+						element: If 
+							test: Name 
+								id: str = dz
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = value
+											ctx: Store 
+									value: Num 
+										n: int = 0
+							orelse: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = value
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = clamp
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = value
+												ctx: Load 
+											element: UnaryOp 
+												op: USub 
+												operand: Num 
+													n: int = 1
+											element: Num 
+												n: int = 1
+										keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
