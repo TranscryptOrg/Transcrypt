@@ -108,7 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- Path search order fixed
+- Module search order fixed
 - Regular expressions autotest workaround added for Python 3.6 enums
 - Async/await added (EXPERIMENTAL) + manual test
 - Made Python 3.6 the default in several places
