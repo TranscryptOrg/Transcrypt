@@ -8,7 +8,7 @@ time
 transcrypt/arguments
 transcrypt/attribs_by_name
 transcrypt/classes
-#transcrypt/complex_numbers
+transcrypt/complex_numbers
 transcrypt/conditional_expressions
 transcrypt/control_structures
 transcrypt/data_structures
