@@ -1,0 +1,269 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = logging
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = logger
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = logging
+						ctx: Load 
+					attr: str = getLogger
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = root
+				keywords: list 
+		element: FunctionDef 
+			name: str = load
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = player_element
+						annotation: NoneType = None
+					element: arg 
+						arg: str = sourcefile
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Try 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = audio_element
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = player_element
+										ctx: Load 
+								keywords: list 
+						element: If 
+							test: UnaryOp 
+								op: Not 
+								operand: Call 
+									func: Name 
+										id: str = len
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = audio_element
+											ctx: Load 
+									keywords: list 
+							body: list 
+								element: Raise 
+									exc: Call 
+										func: Name 
+											id: str = Exception
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str = unable to load audio from element '{}'
+													attr: str = format
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = player_element
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+									cause: NoneType = None
+							orelse: list 
+						element: If 
+							test: Call 
+								func: Name 
+									id: str = len
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = sourcefile
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = audio_element
+												ctx: Load 
+											attr: str = src
+											ctx: Store 
+									value: Name 
+										id: str = sourcefile
+										ctx: Load 
+							orelse: list 
+						element: Return 
+							value: Name 
+								id: str = audio_element
+								ctx: Load 
+					handlers: list 
+						element: ExceptHandler 
+							type: Name 
+								id: str = Exception
+								ctx: Load 
+							name: str = e
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = logging
+												ctx: Load 
+											attr: str = exception
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = e
+												ctx: Load 
+										keywords: list 
+					orelse: list 
+					finalbody: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = clip
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = filename
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = player
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = __new__
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = Audio
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = filename
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Return 
+					value: Name 
+						id: str = player
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = loop
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = filename
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = player
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = __new__
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = Audio
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = filename
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: FunctionDef 
+					name: str = reset_player
+					args: arguments 
+						args: list 
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = player
+										ctx: Load 
+									attr: str = currentTime
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = player
+										ctx: Load 
+									attr: str = play
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = player
+								ctx: Load 
+							attr: str = addEventListener
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = ended
+							element: Name 
+								id: str = reset_player
+								ctx: Load 
+							element: NameConstant 
+								value: bool = False
+						keywords: list 
+				element: Return 
+					value: Name 
+						id: str = player
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None

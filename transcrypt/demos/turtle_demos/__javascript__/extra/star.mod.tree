@@ -1,0 +1,123 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = turtle
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = up
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = goto
+					ctx: Load 
+				args: list 
+					element: UnaryOp 
+						op: USub 
+						operand: Num 
+							n: int = 250
+					element: UnaryOp 
+						op: USub 
+						operand: Num 
+							n: int = 21
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = startPos
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = pos
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = down
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = color
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = red
+					element: Str 
+						s: str = yellow
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = begin_fill
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: While 
+			test: NameConstant 
+				value: bool = True
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = forward
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 500
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = right
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 170
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Call 
+							func: Name 
+								id: str = distance
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = startPos
+									ctx: Load 
+							keywords: list 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 1
+					body: list 
+						element: Break 
+					orelse: list 
+			orelse: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = end_fill
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 
