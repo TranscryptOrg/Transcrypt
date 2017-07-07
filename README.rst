@@ -108,7 +108,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
-- First stab at async, await
+- Re autotest workaround added for Python 3.6 enums
+- Async/await added (EXPERIMENTAL) + manual test
+- Made Python 3.6 the default in several places
 - Pragma and command line switch added to augment module search path
 - Better example of use of __getattr__ and __setattr__ added to autotest suite
 - Method dict.values () added

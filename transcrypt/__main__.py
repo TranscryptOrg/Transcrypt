@@ -123,7 +123,7 @@ def main ():
         if utils.commandArgs.run:
             try:
                 with open (utils.commandArgs.source) as sourceFile:
-                    exec (sourceFile.read ())
+                    exec (sourceFile.read (), globals (), locals ())
                     return setExitCode (exitSuccess)
             except Exception as exception:
                 utils.log (True, 'Error: cannot run {} using CPython: {}\n'.format (utils.commandArgs.source, str (exception) .replace (' (<string>', '') .replace (')', '')))

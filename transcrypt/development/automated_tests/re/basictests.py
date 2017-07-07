@@ -1,5 +1,5 @@
 
-from org.transcrypt.stubs.browser import __pragma__, __symbols__
+from org.transcrypt.stubs.browser import __pragma__, __symbols__, __envir__
 import re
 __pragma__("skip")
 re.J = (1<<19)
@@ -95,21 +95,25 @@ def checkRegexProperties(test, flags = 0):
         )
     else:
         test.checkPad("NULL", 8)
-
+        
+def aValue (flag):   # Workaround for Python 3.6 enums
+    result = flag.value
+    return result if result else flag
+        
 def checkFlagsExist(test):
-    test.check(re.T)
-    test.check(re.I)
-    test.check(re.IGNORECASE)
-    test.check(re.M)
-    test.check(re.MULTILINE)
-    test.check(re.S)
-    test.check(re.DOTALL)
-    test.check(re.U)
-    test.check(re.UNICODE)
-    test.check(re.X)
-    test.check(re.VERBOSE)
-    test.check(re.A)
-    test.check(re.ASCII)
+    test.check(aValue(re.T))
+    test.check(aValue(re.I))
+    test.check(aValue(re.IGNORECASE))
+    test.check(aValue(re.M))
+    test.check(aValue(re.MULTILINE))
+    test.check(aValue(re.S))
+    test.check(aValue(re.DOTALL))
+    test.check(aValue(re.U))
+    test.check(aValue(re.UNICODE))
+    test.check(aValue(re.X))
+    test.check(aValue(re.VERBOSE))
+    test.check(aValue(re.A))
+    test.check(aValue(re.ASCII))
 
 def escapeTests(test):
     test.check(re.escape("buf[34]"))

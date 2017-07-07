@@ -83,6 +83,7 @@ for esvSwitch in ('', '-e 6 '):
         test ('development/manual_tests/transcrypt_only', 'transcrypt_only', False, False, switches)
         test ('development/manual_tests/transcrypt_and_python_results_differ', 'results', False, False, switches)
         test ('development/manual_tests/static_types', 'static_types', False, False, switches + '-ds -dc -n ', 'static_types')
+        test ('development/manual_tests/async_await', 'test', False, False, switches, 'static_types')
         
         test ('demos/hello', 'hello', False, False, switches)
         test ('demos/jquery_demo', 'jquery_demo', False, False, switches)
@@ -93,6 +94,9 @@ for esvSwitch in ('', '-e 6 '):
         test ('demos/plotly_demo', 'plotly_demo', False, False, switches)
         test ('demos/three_demo', 'three_demo', False, False, switches)
         test ('demos/pong', 'pong', False, False, switches)
+        
+        if esvSwitch in '-e 6 ':
+            test ('demos/pysteroids_demo', 'pysteroids', False, False, switches)
         
         test ('demos/turtle_demos', 'star', False, False, switches + '-p .user ')
         test ('demos/turtle_demos', 'snowflake', False, False, switches + '-p .user ')

@@ -9,8 +9,6 @@ def _ctor(obj):
 api = __pragma__ ('js',
     '{}',
     'THREE'
-    ,
-    __include__('org/threejs/__javascript__/three.js')
 )
 
 WebGLRenderTargetCube = _ctor(api.WebGLRenderTargetCube)

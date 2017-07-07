@@ -697,10 +697,10 @@ class Generator (ast.NodeVisitor):
     def descope (self):
         self.scopes.pop ()
 
-    def getScope (self, nodeType = None):
-        if nodeType:
+    def getScope (self, *nodeTypes):
+        if nodeTypes:
             for scope in reversed (self.scopes):
-                if type (scope.node) == nodeType:
+                if type (scope.node) in nodeTypes:
                     return scope
         else:
             return self.scopes [-1]
@@ -712,7 +712,7 @@ class Generator (ast.NodeVisitor):
         reversedClassScopes = []
         for scope in reversed (self.scopes):
             if inMethod:
-                if type (scope.node) == ast.FunctionDef:
+                if type (scope.node) in (ast.FunctionDef, ast.AsyncFunctionDef):
                     continue
                 else:
                     inMethod = False
@@ -1736,7 +1736,7 @@ class Generator (ast.NodeVisitor):
         for stmt in node.body:
             if self.isDocString (stmt):
                 pass
-            elif type (stmt) in (ast.FunctionDef, ast.ClassDef):
+            elif type (stmt) in (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef):
                 self.emitComma (index, False)
                 self.visit (stmt)
                 index += 1
@@ -2062,6 +2062,7 @@ class Generator (ast.NodeVisitor):
             self.dedent ()
 
             if self.getScope (ast.AsyncFunctionDef if async else ast.FunctionDef) .containsYield:
+                # !!! Check: yield forbidden in AsyncFunctionDef
                 self.targetFragments.insert (yieldStarIndex, '*')
 
             self.descope ()
@@ -2070,7 +2071,7 @@ class Generator (ast.NodeVisitor):
                                             # Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
                                             # The rest of its use is only at compile time
 
-            if type (self.getScope () .node) in (ast.Module, ast.FunctionDef):  # Global or function scope, so it's no method
+            if type (self.getScope () .node) in (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef):  # Global or function scope, so it's no method
                 if type (self.getScope () .node) == ast.Module:
                     self.all.add (node.name)
 
@@ -2092,7 +2093,7 @@ class Generator (ast.NodeVisitor):
             else:                                                           # Class scope, so it's a method and needs the currying mechanism
                 self.emit ('\n')
                 self.adaptLineNrString (node)
-                self.emit ('get {} () {{return __get__ (this, function', self.filterId (node.name))
+                self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
 
                 yieldStarIndex = len (self.targetFragments)
                 yieldStarLevel = self.indentLevel
@@ -2128,7 +2129,7 @@ class Generator (ast.NodeVisitor):
         self.visit_ListComp (node, isGenExp = True)
 
     def visit_Global (self, node):
-        self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
+        self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .nonlocals.update (node.names)
 
         # raise utils.Error (
             # lineNr = self.lineNr,
@@ -2474,7 +2475,7 @@ class Generator (ast.NodeVisitor):
         self.emit (self.nameConsts [node.value])
 
     def visit_Nonlocal (self, node):
-        self.getScope (ast.FunctionDef) .nonlocals.update (node.names)
+        self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .nonlocals.update (node.names)
 
     def visit_Num (self, node):
         self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
@@ -2754,13 +2755,13 @@ class Generator (ast.NodeVisitor):
             self.emit ('.close ()')
 
     def visit_Yield (self, node):
-        self.getScope (ast.FunctionDef) .containsYield = True
+        self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True
         self.emit ('yield')
         if (node.value != None):
             self.emit (' ')
             self.visit (node.value)
             
     def visit_YieldFrom (self, node):
-        self.getScope (ast.FunctionDef) .containsYield = True
+        self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True
         self.emit ('yield* ')
         self.visit (node.value)
