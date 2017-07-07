@@ -1516,7 +1516,7 @@ class Generator (ast.NodeVisitor):
                     pass                                # Easier dealth with on statement / expression level in self.visit
                     
                 elif node.args [0] .s == 'xpath':
-                    self.module.program.moduleSearchDirs += [elt.s for elt in node.args [1] .elts]
+                    self.module.program.moduleSearchDirs [1 : 1] = [elt.s for elt in node.args [1] .elts]
                     
                 else:
                     raise utils.Error (

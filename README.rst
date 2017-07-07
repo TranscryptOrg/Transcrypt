@@ -107,6 +107,7 @@ Each release should be preceded by at least the following activities:
 What's new in the latest commits
 --------------------------------
 
+- Path search order fixed
 - Re autotest workaround added for Python 3.6 enums
 - Async/await added (EXPERIMENTAL) + manual test
 - Made Python 3.6 the default in several places
@@ -158,7 +159,7 @@ What's new in the latest commits
 Known bugs in latest commits
 ----------------------------
 
-- Search order of xpath differs between pragma and command line switch
+None
 
 Other packages you might like
 =============================

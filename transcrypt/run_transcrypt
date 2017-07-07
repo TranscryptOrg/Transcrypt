@@ -1,1 +1,1 @@
-python $(dirname $0)/__main__.py $*
+lpython $(dirname $0)/__main__.py $*
