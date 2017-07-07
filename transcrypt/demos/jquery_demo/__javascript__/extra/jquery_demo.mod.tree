@@ -1,0 +1,148 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = alias
+					element: Str 
+						s: str = S
+					element: Str 
+						s: str = $
+				keywords: list 
+		element: FunctionDef 
+			name: str = start
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: FunctionDef 
+					name: str = changeColors
+					args: arguments 
+						args: list 
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = div
+								ctx: Store 
+							iter: Name 
+								id: str = S__divs
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Call 
+												func: Name 
+													id: str = S
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = div
+														ctx: Load 
+												keywords: list 
+											attr: str = css
+											ctx: Load 
+										args: list 
+											element: Dict 
+												keys: list 
+													element: Str 
+														s: str = color
+												values: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = rgb({},{},{})
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Starred 
+																value: ListComp 
+																	elt: Call 
+																		func: Name 
+																			id: str = int
+																			ctx: Load 
+																		args: list 
+																			element: BinOp 
+																				left: Num 
+																					n: int = 256
+																				op: Mult 
+																				right: Call 
+																					func: Attribute 
+																						value: Name 
+																							id: str = Math
+																							ctx: Load 
+																						attr: str = random
+																						ctx: Load 
+																					args: list 
+																					keywords: list 
+																		keywords: list 
+																	generators: list 
+																		element: comprehension 
+																			target: Name 
+																				id: str = i
+																				ctx: Store 
+																			iter: Call 
+																				func: Name 
+																					id: str = range
+																					ctx: Load 
+																				args: list 
+																					element: Num 
+																						n: int = 3
+																				keywords: list 
+																			ifs: list 
+																ctx: Load 
+														keywords: list 
+										keywords: list 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = S__divs
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = S
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = div
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = changeColors
+							ctx: Load 
+						args: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = window
+								ctx: Load 
+							attr: str = setInterval
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = changeColors
+								ctx: Load 
+							element: Num 
+								n: int = 500
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

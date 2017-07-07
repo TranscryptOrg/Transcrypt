@@ -1,0 +1,312 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = http
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = require
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = http
+				keywords: list 
+		element: ClassDef 
+			name: str = Demo
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = texts
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: Str 
+								s: str = Welcome to the world of node.js
+							element: Str 
+								s: str = You can have your cake and eat it
+							element: Str 
+								s: str = Use node's ecosystem while programming in Python
+							element: Str 
+								s: str = Using node.js from Transcrypt is easy
+							element: Str 
+								s: str = Take a Python ride into the node.js world
+						ctx: Load 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = port
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Demo server started on port
+									element: Name 
+										id: str = port
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = server
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = http
+										ctx: Load 
+									attr: str = createServer
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = serve
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = server
+										ctx: Load 
+									attr: str = listen
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = port
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = oldIndex
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = newIndex
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = count
+									ctx: Store 
+							value: Num 
+								n: int = 0
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = serve
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = request
+								annotation: NoneType = None
+							element: arg 
+								arg: str = response
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = response
+										ctx: Load 
+									attr: str = writeHead
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 200
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Serving page
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = count
+										ctx: Load 
+								keywords: list 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = count
+								ctx: Store 
+							op: Add 
+							value: Num 
+								n: int = 1
+						element: While 
+							test: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = newIndex
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = oldIndex
+										ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = newIndex
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = int
+											ctx: Load 
+										args: list 
+											element: BinOp 
+												left: Call 
+													func: Attribute 
+														value: Name 
+															id: str = Math
+															ctx: Load 
+														attr: str = random
+														ctx: Load 
+													args: list 
+													keywords: list 
+												op: Mult 
+												right: Call 
+													func: Name 
+														id: str = len
+														ctx: Load 
+													args: list 
+														element: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = texts
+															ctx: Load 
+													keywords: list 
+										keywords: list 
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = oldIndex
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = newIndex
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = response
+										ctx: Load 
+									attr: str = end
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = <h1>{}</h1>
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Subscript 
+												value: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = texts
+													ctx: Load 
+												slice: Index 
+													value: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = newIndex
+														ctx: Load 
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = demo
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = Demo
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 8080
+				keywords: list 

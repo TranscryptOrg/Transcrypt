@@ -1,0 +1,459 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+				element: alias 
+					name: str = __envir__
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = {}
+					element: Str 
+						s: str = 
+    function waitAWhile (aTime, asio) {
+      return new Promise (resolve => {
+        setTimeout (() => {
+          resolve (aTime);
+        }, 1000 * aTime);
+      });
+    }
+
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = asyncio
+					asname: NoneType = None
+		element: FunctionDef 
+			name: str = waitAWhile
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = aTime
+						annotation: NoneType = None
+					element: arg 
+						arg: str = asio
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = asio
+								ctx: Load 
+							attr: str = sleep
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aTime
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 
+		element: AsyncFunctionDef 
+			name: str = f
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = waw
+						annotation: NoneType = None
+					element: arg 
+						arg: str = asio
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = f0
+						keywords: list 
+				element: Expr 
+					value: Await 
+						value: Call 
+							func: Name 
+								id: str = waw
+								ctx: Load 
+							args: list 
+								element: Num 
+									n: int = 2
+								element: Name 
+									id: str = asio
+									ctx: Load 
+							keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = f1
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = C
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = aTime
+									ctx: Store 
+							value: Num 
+								n: int = 2
+					decorator_list: list 
+					returns: NoneType = None
+				element: AsyncFunctionDef 
+					name: str = g
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = waw
+								annotation: NoneType = None
+							element: arg 
+								arg: str = asio
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = g0
+								keywords: list 
+						element: Expr 
+							value: Await 
+								value: Call 
+									func: Name 
+										id: str = waw
+										ctx: Load 
+									args: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = aTime
+											ctx: Load 
+										element: Name 
+											id: str = asio
+											ctx: Load 
+									keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = g1
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = c
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = C
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: If 
+			test: Compare 
+				left: Attribute 
+					value: Name 
+						id: str = __envir__
+						ctx: Load 
+					attr: str = executor_name
+					ctx: Load 
+				ops: list 
+					element: Eq 
+				comparators: list 
+					element: Attribute 
+						value: Name 
+							id: str = __envir__
+							ctx: Load 
+						attr: str = transpiler_name
+						ctx: Load 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = f
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = waitAWhile
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = c
+								ctx: Load 
+							attr: str = g
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = waitAWhile
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = c
+								ctx: Load 
+							attr: str = g
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = waitAWhile
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = f
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = waitAWhile
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+						keywords: list 
+			orelse: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = eventLoop
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = asyncio
+								ctx: Load 
+							attr: str = get_event_loop
+							ctx: Load 
+						args: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tasks
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = eventLoop
+										ctx: Load 
+									attr: str = create_task
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = f
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = waitAWhile
+												ctx: Load 
+											element: Name 
+												id: str = asyncio
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = eventLoop
+										ctx: Load 
+									attr: str = create_task
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = c
+												ctx: Load 
+											attr: str = g
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = waitAWhile
+												ctx: Load 
+											element: Name 
+												id: str = asyncio
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = eventLoop
+										ctx: Load 
+									attr: str = create_task
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = c
+												ctx: Load 
+											attr: str = g
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = waitAWhile
+												ctx: Load 
+											element: Name 
+												id: str = asyncio
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = eventLoop
+										ctx: Load 
+									attr: str = create_task
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = f
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = waitAWhile
+												ctx: Load 
+											element: Name 
+												id: str = asyncio
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = waitingTasks
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = asyncio
+								ctx: Load 
+							attr: str = wait
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tasks
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = eventLoop
+								ctx: Load 
+							attr: str = run_until_complete
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = waitingTasks
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = eventLoop
+								ctx: Load 
+							attr: str = close
+							ctx: Load 
+						args: list 
+						keywords: list 

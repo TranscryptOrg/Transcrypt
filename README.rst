@@ -85,21 +85,22 @@ In that case be sure to add the keyword Transcrypt to allow people to find your 
 Making your package pip-installable will also help it to catch on.
 Contributing packages via PyPi of course means total freedom for the developer.
 
-Available tests
----------------
+Development build status
+------------------------
 
-Continuous integration and testing on Travis is usually available.
-However due to recent changes in the used defaults, e.g. Python version, CI is currently broken.
+.. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
+    :target: https://travis-ci.org/QQuick/Transcrypt
 
-To keep the code healthy, please adhere to the following before each commit or pull request:
+The icon above shows the outcome of the continous integration test that is done on Linux after each commit.
+The test consists of running a set of testlets, systematically covering all facilities of Transcrypt. Each testlet performs an automated back to back test against CPython.
 
-As a rule, a complete shipment test should be performed, it can be found in /transcrypt/development/shipment.
-It a.o. runs a number of back to back automated unit tests, each consisting of a number of testlets.
 The full set of testlets is described in the documentation and comes with the distribution.
+Since the branching model has been deliberately kept simple, continuous integration may be transiently broken.
+In that case you can use the latest passing version, that you'll find by clicking on the icon above and then on 'Build History'.
 
-Each release should be preceded by at least the following activities:
+Each release, on the other hand, is preceded by at least the following tests:
 
-- The automated back to back unit tests described above, not only on Linux but also on Windows and, in case of relevant issues, on OsX.
+- The automated back to back test described above, not only on Linux but also on Windows and, in case of relevant issues, on OsX.
 - Automated compilation of the manual tests, human exercising of the resulting applications and a visual check of the results.
 - Automated compilation of the demo's, human exercising of the resulting applications and a visual check of the results.
 - A documentation build, followed by a visual sample check.
@@ -108,7 +109,7 @@ What's new in the latest commits
 --------------------------------
 
 - Path search order fixed
-- Re autotest workaround added for Python 3.6 enums
+- Regular expressions autotest workaround added for Python 3.6 enums
 - Async/await added (EXPERIMENTAL) + manual test
 - Made Python 3.6 the default in several places
 - Pragma and command line switch added to augment module search path

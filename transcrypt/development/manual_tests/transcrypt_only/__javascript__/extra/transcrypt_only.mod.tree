@@ -1,0 +1,588 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = random
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = result
+					ctx: Store 
+			value: Str 
+				s: str = 
+		element: FunctionDef 
+			name: str = output
+			args: arguments 
+				args: list 
+				vararg: arg 
+					arg: str = any
+					annotation: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: For 
+					target: Name 
+						id: str = item
+						ctx: Store 
+					iter: Name 
+						id: str = any
+						ctx: Load 
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = result
+								ctx: Store 
+							op: Add 
+							value: Call 
+								func: Name 
+									id: str = str
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = item
+										ctx: Load 
+								keywords: list 
+						element: AugAssign 
+							target: Name 
+								id: str = result
+								ctx: Store 
+							op: Add 
+							value: Str 
+								s: str =  
+					orelse: list 
+				element: AugAssign 
+					target: Name 
+						id: str = result
+						ctx: Store 
+					op: Add 
+					value: Str 
+						s: str = <br>
+
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Issue 96
+				keywords: list 
+		element: ClassDef 
+			name: str = Tolerant
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a
+							ctx: Store 
+					value: Num 
+						n: int = 3
+				element: FunctionDef 
+					name: str = f
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = cls
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+						element: Name 
+							id: str = classmethod
+							ctx: Load 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = b
+									ctx: Store 
+							value: Num 
+								n: int = 4
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = g
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tolerant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = Tolerant
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = T
+					element: Compare 
+						left: Str 
+							s: str = a
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = Tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = T
+					element: Compare 
+						left: Str 
+							s: str = f
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = Tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = b
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = Tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = T
+					element: Compare 
+						left: Str 
+							s: str = g
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = Tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = h
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = Tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = a
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = f
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = T
+					element: Compare 
+						left: Str 
+							s: str = b
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = g
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = F
+					element: Compare 
+						left: Str 
+							s: str = h
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = tolerant
+								ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = <br>Issue 102
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = {}
+					element: Str 
+						s: str = 
+        function Example () {};
+        Example.prototype.foo = function () {output (this, arguments);};
+
+        var example = new Example();
+        example.foo(1, 2, 3);
+        // Works as expected:
+        // Object {  } Arguments { , 5 more… }
+        
+
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = args
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 2
+					element: Num 
+						n: int = 3
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = example
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = __new__
+					ctx: Load 
+				args: list 
+					element: Call 
+						func: Name 
+							id: str = Example
+							ctx: Load 
+						args: list 
+						keywords: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = example
+						ctx: Load 
+					attr: str = foo
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 2
+					element: Num 
+						n: int = 3
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = example
+						ctx: Load 
+					attr: str = foo
+					ctx: Load 
+				args: list 
+					element: Starred 
+						value: Name 
+							id: str = args
+							ctx: Load 
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = ifdef
+					element: Str 
+						s: str = __esv6__
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = [object Object] rather than null in previous line
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = else
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = None rather than [object Object] in previous line
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = endif
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = <br>Issue 130
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = x
+					ctx: Store 
+			value: BinOp 
+				left: UnaryOp 
+					op: USub 
+					operand: Num 
+						n: int = 3
+				op: Mod 
+				right: Num 
+					n: int = 8
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = {}
+					element: Str 
+						s: str = 
+    var y = -3 % 8
+
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = jsmod
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = z
+					ctx: Store 
+			value: BinOp 
+				left: UnaryOp 
+					op: USub 
+					operand: Num 
+						n: int = 3
+				op: Mod 
+				right: Num 
+					n: int = 8
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nojsmod
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = output
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = x
+						ctx: Load 
+					element: Str 
+						s: str =  != 
+					element: Name 
+						id: str = y
+						ctx: Load 
+					element: Str 
+						s: str = ==
+					element: Name 
+						id: str = z
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = document
+								ctx: Load 
+							attr: str = getElementById
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = output
+						keywords: list 
+					attr: str = innerHTML
+					ctx: Store 
+			value: Name 
+				id: str = result
+				ctx: Load 
