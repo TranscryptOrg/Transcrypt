@@ -64,7 +64,7 @@ _ = os.path.abspath(__file__).rsplit
 env['d_0'] = d0 = _('/', 3)[0]
 
 
-runners = {'3.5': 'run_transcrypt',
+runners = {'3.5': 'run_transcrypt35',
            '3.6': 'run_transcrypt36'}
 
 avail_pyvers = []
@@ -73,7 +73,7 @@ for maj in '3.5', '3.6':
         avail_pyvers.append(maj)
 
 '''        
-runners = {'3.5': 'run_transcrypt',
+runners = {'3.5': 'run_transcrypt35',
            '3.6': 'run_transcrypt36',
            '3.7': 'run_transcrypt37'}
 
