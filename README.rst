@@ -108,6 +108,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 --------------------------------
 
+- Cleaned up some generated files
 - Module search order fixed, continuous integration functional again
 - Regular expressions autotest workaround added for Python 3.6 enums
 - Async/await added (EXPERIMENTAL) + manual test
