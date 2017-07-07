@@ -1,7 +1,7 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-07-07 16:07:46
+// Transcrypt'ed from Python, 2017-07-07 16:21:08
 function ios_app () {
-   var __symbols__ = ['__py3.5__', '__esv5__'];
+   var __symbols__ = ['__py3.5__', '__esv6__'];
     var __all__ = {};
     var __world__ = __all__;
     
@@ -47,6 +47,8 @@ function ios_app () {
     __all__.__init__ = __init__;
     
     
+    // Proxy switch, controlled by __pragma__ ('proxy') and __pragma ('noproxy')
+    var __proxy__ = false;  // No use assigning it to __all__, only its transient state is important
     
     
     // Since we want to assign functions, a = b.f should make b.f produce a bound function
@@ -105,6 +107,12 @@ function ios_app () {
                     var descrip = Object.getOwnPropertyDescriptor (base, attrib);
                     Object.defineProperty (cls, attrib, descrip);
                 }           
+
+                for (var symbol of Object.getOwnPropertySymbols (base)) {
+                    var descrip = Object.getOwnPropertyDescriptor (base, symbol);
+                    Object.defineProperty (cls, symbol, descrip);
+                }
+                
             }
             
             // Add class specific attributes to the created cls object
@@ -117,6 +125,12 @@ function ios_app () {
                 var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
                 Object.defineProperty (cls, attrib, descrip);
             }
+
+            for (var symbol of Object.getOwnPropertySymbols (attribs)) {
+                var descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
+                Object.defineProperty (cls, symbol, descrip);
+            }
+            
             // Return created cls object
             return cls;
         }
@@ -139,6 +153,28 @@ function ios_app () {
             // The descriptor produced by __get__ will return the right method flavor
             var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
             
+            if ('__getattr__' in this || '__setattr__' in this) {
+                instance = new Proxy (instance, {
+                    get: function (target, name) {
+                        var result = target [name];
+                        if (result == undefined) {  // Target doesn't have attribute named name
+                            return target.__getattr__ (name);
+                        }
+                        else {
+                            return result;
+                        }
+                    },
+                    set: function (target, name, value) {
+                        try {
+                            target.__setattr__ (name, value);
+                        }
+                        catch (exception) {         // Target doesn't have a __setattr__ method
+                            target [name] = value;
+                        }
+                        return true;
+                    }
+                })
+            }
 
             // Call constructor
             this.__init__.apply (null, [instance] .concat (args));
@@ -375,9 +411,7 @@ function ios_app () {
 					var map = function (func, iterable) {
 						return function () {
 							var __accu0__ = [];
-							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-								var item = __iterable0__ [__index0__];
+							for (var item of iterable) {
 								__accu0__.append (func (item));
 							}
 							return __accu0__;
@@ -389,9 +423,7 @@ function ios_app () {
 						}
 						return function () {
 							var __accu0__ = [];
-							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-								var item = __iterable0__ [__index0__];
+							for (var item of iterable) {
 								if (func (item)) {
 									__accu0__.append (item);
 								}
@@ -437,9 +469,7 @@ function ios_app () {
 							}
 							self.buffer = '{}{}{}'.format (self.buffer, sep.join (function () {
 								var __accu0__ = [];
-								var __iterable0__ = args;
-								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-									var arg = __iterable0__ [__index0__];
+								for (var arg of args) {
 									__accu0__.append (str (arg));
 								}
 								return __accu0__;
@@ -451,9 +481,7 @@ function ios_app () {
 							else {
 								console.log (sep.join (function () {
 									var __accu0__ = [];
-									var __iterable0__ = args;
-									for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-										var arg = __iterable0__ [__index0__];
+									for (var arg of args) {
 										__accu0__.append (str (arg));
 									}
 									return __accu0__;
@@ -596,8 +624,7 @@ function ios_app () {
         // Lean and fast, no C3 linearization, only call first implementation encountered
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
         
-        for (var index = 0; index < aClass.__bases__.length; index++) {
-            var base = aClass.__bases__ [index];
+        for (let base of aClass.__bases__) {
             if (methodName in base) {
                return base [methodName];
             }
@@ -807,8 +834,7 @@ function ios_app () {
         }
 
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
-            for (var index = 0; index < classinfo.length; index++) {
-                var aClass = classinfo [index];
+            for (let aClass of classinfo) {
                 if (isinstance (anObject, aClass)) {
                     return true;
                 }
@@ -1088,25 +1114,25 @@ function ios_app () {
     // Any, all and sum
 
     function any (iterable) {
-        for (var index = 0; index < iterable.length; index++) {
-            if (bool (iterable [index])) {
+        for (let item of iterable) {
+            if (bool (item)) {
                 return true;
             }
         }
         return false;
     }
     function all (iterable) {
-        for (var index = 0; index < iterable.length; index++) {
-            if (! bool (iterable [index])) {
+        for (let item of iterable) {
+            if (! bool (item)) {
                 return false;
             }
         }
         return true;
     }
     function sum (iterable) {
-        var result = 0;
-        for (var index = 0; index < iterable.length; index++) {
-            result += iterable [index];
+        let result = 0;
+        for (let item of iterable) {
+            result += item;
         }
         return result;
     }
@@ -1158,7 +1184,7 @@ function ios_app () {
     // List extensions to Array
 
     function list (iterable) {                                      // All such creators should be callable without new
-        var instance = iterable ? [] .slice.apply (iterable) : [];  // Spread iterable, n.b. array.slice (), so array before dot
+        var instance = iterable ? Array.from (iterable) : [];
         // Sort is the normal JavaScript sort, Python sort is a non-member function
         return instance;
     }
@@ -1583,6 +1609,7 @@ function ios_app () {
     };
 
     String.prototype.join = function (strings) {
+        strings = Array.from (strings); // Much faster than iterating through strings char by char
         return strings.join (this);
     };
 
@@ -2519,11 +2546,7 @@ function ios_app () {
 				self.pageWidth = window.innerWidth;
 				self.pageHeight = window.innerHeight;
 				var portrait = self.pageHeight > self.pageWidth;
-				var __iterable0__ = enumerate (self.dices);
-				for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-					var __left0__ = __iterable0__ [__index0__];
-					var index = __left0__ [0];
-					var dice = __left0__ [1];
+				for (var [index, dice] of enumerate (self.dices)) {
 					if (self.pageHeight > self.pageWidth) {
 						dice.style.height = 0.3 * self.pageHeight;
 						dice.style.width = 0.4 * self.pageWidth;

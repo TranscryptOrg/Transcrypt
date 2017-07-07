@@ -83,11 +83,7 @@
 				self.pageWidth = window.innerWidth;
 				self.pageHeight = window.innerHeight;
 				var portrait = self.pageHeight > self.pageWidth;
-				var __iterable0__ = enumerate (self.dices);
-				for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-					var __left0__ = __iterable0__ [__index0__];
-					var index = __left0__ [0];
-					var dice = __left0__ [1];
+				for (var [index, dice] of enumerate (self.dices)) {
 					if (self.pageHeight > self.pageWidth) {
 						dice.style.height = 0.3 * self.pageHeight;
 						dice.style.width = 0.4 * self.pageWidth;
