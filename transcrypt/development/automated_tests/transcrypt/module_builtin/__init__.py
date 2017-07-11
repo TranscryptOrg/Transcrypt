@@ -103,4 +103,8 @@ def run (autoTester):
             canonizeStringList (aString.rsplit (',', 4)),
             '<br>'
         )
-        
+
+    autoTester.check("".isalpha())
+    autoTester.check("123".isalpha())
+    autoTester.check("abc".isalpha())
+    autoTester.check("abc123".isalpha())
