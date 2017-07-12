@@ -1121,6 +1121,34 @@ __pragma__ ('endif')
         enumerable: true
     });
 
+    String.prototype.isalnum = function () {
+        return /^[0-9a-zA-Z]{1,}$/.test(this)
+    }
+
+    String.prototype.isalpha = function () {
+        return /^[a-zA-Z]{1,}$/.test(this)
+    }
+
+    String.prototype.isdecimal = function () {
+        return /^[0-9]{1,}$/.test(this)
+    }
+
+    String.prototype.isdigit = function () {
+        return this.isdecimal()
+    }
+
+    String.prototype.islower = function () {
+        return /^[a-z]{1,}$/.test(this)
+    }
+
+    String.prototype.isupper = function () {
+        return /^[A-Z]{1,}$/.test(this)
+    }
+
+    String.prototype.isspace = function () {
+        return /^[\s]{1,}$/.test(this)
+    }
+
     String.prototype.isnumeric = function () {
         return !isNaN (parseFloat (this)) && isFinite (this);
     };
