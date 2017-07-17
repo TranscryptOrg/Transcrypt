@@ -102,7 +102,7 @@ def main ():
         # Prepend paths that are needed by transpiled or executed user code, since they have to be searched first
         # So user code favors Transcrypt modules over CPython modules
         extraPath = utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
-        projectPath = [programDir] + extraPath
+        projectPath = [programDir, utils.commandArgs.source.rsplit('/', 1)[0]] + extraPath
         
         sys.path [0 : 0] = projectPath
         
