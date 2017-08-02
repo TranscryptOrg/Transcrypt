@@ -45,11 +45,8 @@ Main differences with CPython
 - A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
 
-Information for contributors
-============================
-
 How to contribute
------------------
+=================
 
 Transcrypt started out as a personal repo, owned by Jacques de Hooge.
 As the project caught on and the number of people contributing issues, ideas and code grew,
@@ -86,7 +83,7 @@ Making your package pip-installable will also help it to catch on.
 Contributing packages via PyPi of course means total freedom for the developer.
 
 Development build status
-------------------------
+========================
 
 .. image:: https://travis-ci.org/QQuick/Transcrypt.svg?branch=master
     :target: https://travis-ci.org/QQuick/Transcrypt
@@ -106,7 +103,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 - A documentation build, followed by a visual sample check.
 
 What's new in the latest commits
---------------------------------
+================================
 
 - Cleaned up some generated files
 - Module search order fixed, continuous integration functional again
@@ -159,11 +156,26 @@ What's new in the latest commits
 - Enhancement for issue #169: Add support for float('inf') and float('-inf')
 
 Known bugs in latest commits
-----------------------------
+============================
 
 None
 
-.. include:: ./transcrypt/license_reference.txt
+Licence
+=======
+
+Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 Other packages you might like
 =============================
