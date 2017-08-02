@@ -163,6 +163,8 @@ Known bugs in latest commits
 
 None
 
+.. include:: transcrypt/license_reference.txt
+
 Other packages you might like
 =============================
 
