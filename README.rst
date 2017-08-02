@@ -163,7 +163,7 @@ Known bugs in latest commits
 
 None
 
-.. literalinclude:: ./transcrypt/license_reference.txt
+.. include:: ./transcrypt/license_reference.txt
 
 Other packages you might like
 =============================
