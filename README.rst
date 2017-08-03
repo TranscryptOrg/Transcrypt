@@ -180,8 +180,6 @@ None
 Other packages you might like
 =============================
 
-- Multi-module Python source code obfuscator: https://pypi.python.org/pypi/Opy
+- Htmltree, effective, minimalistic HTML generator running both on the server using CPython and Bottle and on the client using Transcrypt: https://github.com/Michael-F-Ellis/NearlyPurePythonWebAppDemo (demo) and https://github.com/Michael-F-Ellis/htmltree (package).
+- Numscrypt (very early stage), experimental port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://pypi.python.org/pypi/Numscrypt
 - PLC simulator with Arduino code generation: https://pypi.python.org/pypi/SimPyLC
-- A lightweight Python course taking beginners seriously (under construction): https://pypi.python.org/pypi/LightOn
-- Event driven evaluation nodes: https://pypi.python.org/pypi/Eden
-- Numscrypt (under construction, very early stage), experimental port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://pypi.python.org/pypi/Numscrypt
