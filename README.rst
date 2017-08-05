@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- -xc (or --confimp) switch added, to confine imported names to the directly importing module (so prevent imports from being be transitive)
 - Cleaned up some generated files
 - Module search order fixed, continuous integration functional again
 - Regular expressions autotest workaround added for Python 3.6 enums
@@ -180,6 +181,6 @@ None
 Other packages you might like
 =============================
 
-- Htmltree, effective, minimalistic HTML generator running both on the server using CPython and Bottle and on the client using Transcrypt: https://github.com/Michael-F-Ellis/NearlyPurePythonWebAppDemo (demo) and https://github.com/Michael-F-Ellis/htmltree (package).
-- Numscrypt, port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://github.com/QQuick/Numscrypt
-- PLC simulator with Arduino code generation: https://github.com/QQuick/SimPyLC
+- Htmltree - effective, minimalistic HTML generator running both on the server using CPython and Bottle and on the client using Transcrypt: https://github.com/Michael-F-Ellis/NearlyPurePythonWebAppDemo (demo) and https://github.com/Michael-F-Ellis/htmltree (package).
+- Numscrypt - port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://github.com/QQuick/Numscrypt
+- SimPyLC - PLC simulator with Arduino code generation: https://github.com/QQuick/SimPyLC

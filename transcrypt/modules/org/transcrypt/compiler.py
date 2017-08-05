@@ -2233,7 +2233,8 @@ class Generator (ast.NodeVisitor):
 
                     if type (self.getScope ().node) == ast.Module:
                         # And export everything imported, if we are not importing inside of a function.
-                        self.all.update (module.all)
+                        if not utils.commandArgs.xconfimp or self.module.metadata.filePrename == '__init__':
+                            self.all.update (module.all)
                 else:
                     # Import something
                     # N.B. The emits in the try and except clauses have different placement of brackets
@@ -2254,10 +2255,11 @@ class Generator (ast.NodeVisitor):
 
                     if type (self.getScope ().node) == ast.Module:
                         # And export that something imported
-                        if alias.asname:
-                            self.all.add (alias.asname)
-                        else:
-                            self.all.add (alias.name)
+                        if not utils.commandArgs.xconfimp or self.module.metadata.filePrename == '__init__':
+                            if alias.asname:
+                                self.all.add (alias.asname)
+                            else:
+                                self.all.add (alias.name)
 
                     if index < len (node.names) - 1:
                         self.emit (';\n')

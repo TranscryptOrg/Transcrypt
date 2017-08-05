@@ -56,6 +56,7 @@ class CommandArgs:
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xp', '--xpath', nargs = '?', help = "additional module search paths, joined by $, #'s will be replaced by spaces")
+        self.argParser.add_argument ('-xc', '--xconfimp', help = "confine imported names to directly importing module", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)
