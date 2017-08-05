@@ -559,6 +559,9 @@ __pragma__ ('endif')
             if (typeof args [i] == 'string') {
                 args [i] = args [i] .split ('');
             }
+            else if (!Array.isArray (args [i])) {
+                args [i] = Array.from (args [i]);
+            }
         }
         var shortest = args.length == 0 ? [] : args.reduce (    // Find shortest array in arguments
             function (array0, array1) {

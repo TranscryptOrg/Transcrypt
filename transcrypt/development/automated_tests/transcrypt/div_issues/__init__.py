@@ -320,4 +320,28 @@ def run (autoTester):
         mylist.remove ('value')
     except ValueError as exception:
         autoTester.check (exception.__class__.__name__)
-    
+        
+    #__pragma__ ('ifdef', '__esv6__')   # Needed because Transcrypt imports are compile time
+    if '__esv6__' in __symbols__:      # Needed because CPython doesn't understand pragma's
+        autoTester.check ('Issue 369')
+        
+        class Vector:
+            def __init__ (self, *values):
+                self.values = values
+
+            def __iter__ (self):
+                for item in self.values:
+                    yield item
+
+            def __add__(self, other):
+                return Vector (* (x + y for x, y in zip (self, other)))
+                
+            def __str__ (self):
+                return str (list (self.values))
+            
+        #__pragma__ ('opov')
+
+        autoTester.check (str (Vector (1,2,3) + Vector (3,4,5)))
+
+        #__pragma__ ('noopov')
+    #__pragma__ ('endif')

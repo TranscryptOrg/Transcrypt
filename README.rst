@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- The zip function now also works for finite iterators (issue #369)
 - -xc (or --confimp) switch added, to confine imported names to the directly importing module (so prevent imports from being be transitive)
 - Cleaned up some generated files
 - Module search order fixed, continuous integration functional again
