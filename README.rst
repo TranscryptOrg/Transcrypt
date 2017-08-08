@@ -122,12 +122,13 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
-- The zip function now also works for finite iterators (issue #369)
+- Source file spec on command line can now be a full path (free afer pr #362)
+- The zip function now also works for finite iterators (issue #369) + autotest
 - -xc (or --confimp) switch added, to confine imported names to the directly importing module (so prevent imports from being be transitive)
 - Cleaned up some generated files
 - Module search order fixed, continuous integration functional again
 - Regular expressions autotest workaround added for Python 3.6 enums
-- Async/await added (EXPERIMENTAL) + manual test
+- Async/await added + manual test
 - Made Python 3.6 the default in several places
 - Pragma and command line switch added to augment module search path
 - Better example of use of __getattr__ and __setattr__ added to autotest suite

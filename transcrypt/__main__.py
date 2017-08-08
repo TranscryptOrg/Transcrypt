@@ -21,7 +21,6 @@ import site
 import atexit
 import webbrowser
 
-programDir = os.getcwd () .replace ('\\', '/')                                      # Set dir of main program to be compiled, it's the current dir
 transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')   # Set of Transcrypt itself
 modulesDir = '{}/modules'.format (transpilerDir)                                    # Set dir of Transcrypt-only modules
 
@@ -43,7 +42,7 @@ except:
 sys.modules.pop ('org', None)   
 
 # Transcrypt needs to find modulesDir before CPython modules, so it will favor Transcrypt modules
-transpilationPath = [modulesDir] + sys.path
+transpilationDirs = [modulesDir] + sys.path
 
 # The following imports are need by Transcryp itself, not by transpiled or executed user code
 # The following imports will either reload the previously unloaded org or load org from different location
@@ -101,13 +100,20 @@ def main ():
         
         # Prepend paths that are needed by transpiled or executed user code, since they have to be searched first
         # So user code favors Transcrypt modules over CPython modules
-        extraPath = utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
-        projectPath = [programDir] + extraPath
+        extraDirs = utils.commandArgs.xpath.replace ('#', ' ') .split ('$') if utils.commandArgs.xpath else []
         
-        sys.path [0 : 0] = projectPath
+        sourcePath = utils.commandArgs.source.replace ('\\', '/')               # May be absolute or relative, in the latter case it may or may not specify a directory
+        if '/' in sourcePath:                                                   # If directory specified
+            sourceDir = sourcePath.rsplit ('/', 1)[0]                           #   Use it as source directory
+        else:                                                                   # Else
+            sourceDir = os.getcwd () .replace ('\\', '/')                       #   Use current working directory as source directory
+            
+        projectDirs = [sourceDir] + extraDirs
         
-        global transpilationPath
-        transpilationPath [0 : 0] = projectPath 
+        sys.path [0 : 0] = projectDirs
+        
+        global transpilationDirs
+        transpilationDirs [0 : 0] = projectDirs 
                        
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
@@ -138,7 +144,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (transpilationPath, __symbols__)
+                compiler.Program (transpilationDirs, __symbols__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)
