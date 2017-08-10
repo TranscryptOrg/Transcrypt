@@ -65,7 +65,7 @@ __pragma__ ('endif')
     // Define current exception, there's at most one exception in the air at any time
     var __except__ = null;
     __all__.__except__ = __except__;
-    
+
      // Creator of a marked dictionary, used to pass **kwargs parameter
     var __kwargtrans__ = function (anObject) {
         anObject.__kwargtrans__ = null; // Removable marker
@@ -84,12 +84,12 @@ __pragma__ ('endif')
         }
     }
     __all__.__globals__ = __globals__
-    
+
     // Partial implementation of super () .<methodName> (<params>)
-    var __super__ = function (aClass, methodName) {        
+    var __super__ = function (aClass, methodName) {
         // Lean and fast, no C3 linearization, only call first implementation encountered
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
-        
+
 __pragma__ ('ifdef', '__esv6__')
         for (let base of aClass.__bases__) {
 __pragma__ ('else')
@@ -104,7 +104,7 @@ __pragma__ ('endif')
         throw new Exception ('Superclass method not found');    // !!! Improve!
     }
     __all__.__super__ = __super__
-        
+
     // Python property installer function, no member since that would bloat classes
     var property = function (getter, setter) {  // Returns a property descriptor rather than a property
         if (!setter) {  // ??? Make setter optional instead of dummy?
@@ -113,7 +113,7 @@ __pragma__ ('endif')
         return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
     }
     __all__.property = property;
-    
+
     // Conditional JavaScript property installer function, prevents redefinition of properties if multiple Transcrypt apps are on one page
     var __setProperty__ = function (anObject, name, descriptor) {
         if (!anObject.hasOwnProperty (name)) {
@@ -121,7 +121,7 @@ __pragma__ ('endif')
         }
     }
     __all__.__setProperty__ = __setProperty__
-    
+
     // Assert function, call to it only generated when compiling with --dassert option
     function assert (condition, message) {  // Message may be undefined
         if (!condition) {
@@ -144,7 +144,7 @@ __pragma__ ('endif')
     __all__.__merge__ = __merge__;
 
     // Manipulating attributes by name
-    
+
     var dir = function (obj) {
         var aList = [];
         for (var aKey in obj) {
@@ -979,12 +979,23 @@ __pragma__ ('endif')
         return this.union (other) .difference (this.intersection (other));
     };
 
-    Array.prototype.py_update = function () {   // O (n)
-        var updated = [] .concat.apply (this.slice (), arguments) .sort ();
-        this.clear ();
-        for (var i = 0; i < updated.length; i++) {
-            if (updated [i] != updated [i - 1]) {
-                this.push (updated [i]);
+    // Perform an update of set contents.
+    // Takes O(n log n) because of a sort.
+    Array.prototype.py_update = function () {
+        var that = this.slice()
+
+        for (var i = 0; i !== arguments.length; ++i) {
+            for (var j = 0; j !== arguments[i].length; ++j) {
+                that.push(arguments[i][j])
+            }
+        }
+
+        that.sort()
+        this.clear()
+
+        for (var i = 0; i !== that.length; ++i) {
+            if (that[i] !== that[i - 1]) {
+                this.push(that[i])
             }
         }
     };
@@ -1312,7 +1323,7 @@ __pragma__ ('endif')
         }
         return aDefault;
     }
-    
+
     function __popitem__ () {
         var aKey = Object.keys (this) [0];
         if (aKey == null) {
@@ -1322,13 +1333,13 @@ __pragma__ ('endif')
         delete this [aKey];
         return result;
     }
-    
+
     function __update__ (aDict) {
         for (var aKey in aDict) {
             this [aKey] = aDict [aKey];
         }
     }
-    
+
     function __values__ () {
         var values = [];
         for (var attrib in this) {
@@ -1339,11 +1350,11 @@ __pragma__ ('endif')
         return values;
 
     }
-    
+
     function __dgetitem__ (aKey) {
         return this [aKey];
     }
-    
+
     function __dsetitem__ (aKey, aValue) {
         this [aKey] = aValue;
     }
@@ -1368,7 +1379,7 @@ __pragma__ ('endif')
                          // checks to make sure that these objects
                          // get converted to dict objects instead of
                          // leaving them as js objects.
-                         
+
                          if (!isinstance (objectOrPairs, dict)) {
                              val = dict (val);
                          }
@@ -1383,7 +1394,7 @@ __pragma__ ('endif')
                 // N.B. - this is a shallow copy per python std - so
                 // it is assumed that children have already become
                 // python objects at some point.
-                
+
                 var aKeys = objectOrPairs.py_keys ();
                 for (var index = 0; index < aKeys.length; index++ ) {
                     var key = aKeys [index];
@@ -1396,7 +1407,7 @@ __pragma__ ('endif')
                 // We have already covered Array so this indicates
                 // that the passed object is not a js object - i.e.
                 // it is an int or a string, which is invalid.
-                
+
                 throw ValueError ("Invalid type of object for dict creation", new Error ());
             }
         }
@@ -1425,7 +1436,7 @@ __pragma__ ('endif')
 
     __all__.dict = dict;
     dict.__name__ = 'dict';
-    
+
     // Docstring setter
 
     function __setdoc__ (docString) {
@@ -1478,7 +1489,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__jsmod__ = __jsmod__;
-    
+
     var __mod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -1493,7 +1504,7 @@ __pragma__ ('endif')
     __all__.mod = __mod__;
 
     // Overloaded binary arithmetic
-    
+
     var __mul__ = function (a, b) {
         if (typeof a == 'object' && '__mul__' in a) {
             return a.__mul__ (b);
@@ -1553,7 +1564,7 @@ __pragma__ ('endif')
     __all__.__sub__ = __sub__;
 
     // Overloaded binary bitwise
-    
+
     var __lshift__ = function (a, b) {
         if (typeof a == 'object' && '__lshift__' in a) {
             return a.__lshift__ (b);
@@ -1617,10 +1628,10 @@ __pragma__ ('endif')
             return a & b;
         }
     };
-    __all__.__and__ = __and__;    
-        
+    __all__.__and__ = __and__;
+
     // Overloaded binary compare
-    
+
     var __eq__ = function (a, b) {
         if (typeof a == 'object' && '__eq__' in a) {
             return a.__eq__ (b);
@@ -1680,9 +1691,9 @@ __pragma__ ('endif')
         }
     };
     __all__.__ge__ = __ge__;
-    
+
     // Overloaded augmented general
-    
+
     var __imatmul__ = function (a, b) {
         if ('__imatmul__' in a) {
             return a.__imatmul__ (b);
@@ -1724,7 +1735,7 @@ __pragma__ ('endif')
         }
     };
     __all__.ijsmod__ = __ijsmod__;
-    
+
     var __imod__ = function (a, b) {
         if (typeof a == 'object' && '__imod__' in a) {
             return a.__imod__ (b);
@@ -1740,9 +1751,9 @@ __pragma__ ('endif')
         }
     };
     __all__.imod = __imod__;
-    
+
     // Overloaded augmented arithmetic
-    
+
     var __imul__ = function (a, b) {
         if (typeof a == 'object' && '__imul__' in a) {
             return a.__imul__ (b);
@@ -1814,7 +1825,7 @@ __pragma__ ('endif')
     __all__.__isub__ = __isub__;
 
     // Overloaded augmented bitwise
-    
+
     var __ilshift__ = function (a, b) {
         if (typeof a == 'object' && '__ilshift__' in a) {
             return a.__ilshift__ (b);
@@ -1894,7 +1905,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__iand__ = __iand__;
-    
+
     // Indices and slices
 
     var __getitem__ = function (container, key) {                           // Slice c.q. index, direct generated call to runtime switch
@@ -1936,4 +1947,3 @@ __pragma__ ('endif')
         }
     };
     __all__.__setslice__ = __setslice__;
-
