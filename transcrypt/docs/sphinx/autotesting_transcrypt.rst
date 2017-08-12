@@ -18,7 +18,7 @@ When code is being tested, a reference is needed of what is considered to be cor
 1. Along with developing production code, a growing set of *testlets* is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method *org.transcrypt.autotester.AutoTester.check (self, \*args)* to build a well defined sequence of output data.
 2. A series of testlets are imported into an application called an *autotest*.
 3. The autotest is first run from the command line: *python transcrypt -r autotest.py*. This will generate files *autotest.html* (using prettyfied code) and *autotest.min.html* (using minified code) in the working directory, both containing the *reference data sequence* produced by CPython, in an HTML DIV.
-4. After that, the autotest is compiled to JavaScript: *python transcryp -b autotest.py*. This will generate files *autotest.js* and *autotest.min.js* in the corresponding JavaScript directory.
+4. After that, the autotest is compiled to JavaScript: *python transcrypt -b autotest.py*. This will generate files *autotest.js* and *autotest.min.js* in the corresponding JavaScript directory. Note that you may need extra command line switches to activate options needed for your testcode, e.g. -c if you use complex numbers or -da if you use assertions.
 5. Click on *autotest.html* or *autotest.min.html* to load the autotest into the browser and run *autotest.js* or *autotest.min.js* respectively. This will generate the *test data sequence*, now using the Transcrypt runtime.
 6. After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.
 
