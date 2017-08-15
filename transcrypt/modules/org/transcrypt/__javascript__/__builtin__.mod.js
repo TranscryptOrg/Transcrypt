@@ -237,6 +237,10 @@ __pragma__ ('endif')
     // Try to follow python conventions of truthyness: __bool__, __len__, etc.
     function __t__(target) {
         // Take a quick shortcut if target is a simple type
+        if (target === undefined || target === null) {
+            return target
+        }
+
         if (['boolean', 'number'].indexOf(typeof target) >= 0) {
             return target
         }
