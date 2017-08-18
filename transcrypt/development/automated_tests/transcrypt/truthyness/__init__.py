@@ -112,5 +112,29 @@ def run (autoTester):
     class A:
         pass
         
+    class B:
+        def __bool__ ( self):
+            return False
+
+    class C:
+        def __bool__ (self):
+            return True
+
+        def __len__ (self):
+            return 0
+
+    class D:
+        def __len__ (self):
+            return 0
+
+    class E:
+        def __len__ (self):
+            return 1
+
+    autoTester.check ('instances of custom classes')
     autoTester.check (not not A ())
+    autoTester.check (not not B ())
+    autoTester.check (not not C ())
+    autoTester.check (not not D ())
+    autoTester.check (not not E ())
     

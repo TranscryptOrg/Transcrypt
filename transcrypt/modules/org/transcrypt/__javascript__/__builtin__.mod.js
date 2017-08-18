@@ -86,7 +86,7 @@ __pragma__ ('endif')
     __all__.__globals__ = __globals__
     
     // Partial implementation of super () .<methodName> (<params>)
-    var __super__ = function (aClass, methodName) {        
+    var __super__ = function (aClass, methodName) {
         // Lean and fast, no C3 linearization, only call first implementation encountered
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
         
@@ -233,11 +233,31 @@ __pragma__ ('endif')
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
 
-    function __t__ (any) {  // Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
-        return (['boolean', 'number'] .indexOf (typeof any) >= 0 || any instanceof Function || len (any)) ? any : false;
-        // JavaScript functions have a length attribute, denoting the number of parameters
-        // Python objects are JavaScript functions, but their length doesn't matter, only their existence
-        // By the term 'any instanceof Function' we make sure that Python objects aren't rejected when their length equals zero
+    function __t__ (target) { 
+        return (
+            // Avoid invalid checks
+            target === undefined || target === null ? false :
+            
+            // Take a quick shortcut if target is a simple type
+            ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
+            
+            // Use __bool__ (if present) to decide if target is true
+            target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
+            
+            // There is no __bool__, use __len__ (if present) instead
+            target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
+            
+            // There is no __bool__ and no __len__, declare Functions true.
+            // Python objects are transpiled into instances of Function and if
+            // there is no __bool__ or __len__, the object in Python is true.
+            target instanceof Function ? target :
+            
+            // Target is something else, compute its len to decide
+            len (target) !== 0 ? target :
+            
+            // When all else fails, declare target as false
+            false
+        );
     }
     __all__.__t__ = __t__;
 
@@ -1617,8 +1637,8 @@ __pragma__ ('endif')
             return a & b;
         }
     };
-    __all__.__and__ = __and__;    
-        
+    __all__.__and__ = __and__;
+
     // Overloaded binary compare
     
     var __eq__ = function (a, b) {
@@ -1936,4 +1956,3 @@ __pragma__ ('endif')
         }
     };
     __all__.__setslice__ = __setslice__;
-
