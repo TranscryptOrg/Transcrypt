@@ -233,50 +233,31 @@ __pragma__ ('endif')
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
 
-    // If the target object is somewhat true, return it. Otherwise return false.
-    // Try to follow python conventions of truthyness: __bool__, __len__, etc.
-    function __t__(target) {
-        // Take a quick shortcut if target is a simple type
-        if (target === undefined || target === null) {
-            return target
-        }
-
-        if (['boolean', 'number'].indexOf(typeof target) >= 0) {
-            return target
-        }
-
-        // Use __bool__ (if present) to decide if target is true
-        if (target.__bool__ instanceof Function) {
-            if (target.__bool__()) {
-                return target
-            } else {
-                return false
-            }
-        }
-
-        // There is no __bool__, use __len__ (if present) instead
-        if (target.__len__ instanceof Function) {
-            if (target.__len__() !== 0) {
-                return target
-            } else {
-                return false
-            }
-        }
-
-        // There is no __bool__ and no __len__, declare Functions true.
-        // Python objects are transpiled into instances of Function and if
-        // there is no __bool__ or __len__, the object in Python is true.
-        if (target instanceof Function) {
-            return target
-        }
-
-        // Target is something else, compute its len to decide
-        if (len(target) !== 0) {
-            return target
-        }
-
-        // When all else fails, declare target as false
-        return false
+    function __t__ (target) { 
+        return (
+            // Avoid invalid checks
+            target === undefined || target === null ? false :
+            
+            // Take a quick shortcut if target is a simple type
+            ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
+            
+            // Use __bool__ (if present) to decide if target is true
+            target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
+            
+            // There is no __bool__, use __len__ (if present) instead
+            target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
+            
+            // There is no __bool__ and no __len__, declare Functions true.
+            // Python objects are transpiled into instances of Function and if
+            // there is no __bool__ or __len__, the object in Python is true.
+            target instanceof Function ? target :
+            
+            // Target is something else, compute its len to decide
+            len (target) !== 0 ? target :
+            
+            // When all else fails, declare target as false
+            false
+        );
     }
     __all__.__t__ = __t__;
 
