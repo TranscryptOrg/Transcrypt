@@ -233,6 +233,8 @@ __pragma__ ('endif')
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
 
+    // If the target object is somewhat true, return it. Otherwise return false.
+    // Try to follow Python conventions of truthyness
     function __t__ (target) { 
         return (
             // Avoid invalid checks
