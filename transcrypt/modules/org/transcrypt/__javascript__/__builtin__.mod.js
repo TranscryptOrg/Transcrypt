@@ -207,25 +207,25 @@ __pragma__ ('endif')
     // Compute length of any object
     var len = function (anObject) {
         if (anObject === undefined || anObject === null) {
-            return 0
+            return 0;
         }
 
         if (anObject.__len__ instanceof Function) {
-            return anObject.__len__()
+            return anObject.__len__ ();
         }
 
         if (anObject.length !== undefined) {
-            return anObject.length
+            return anObject.length;
         }
 
-        var length = 0
+        var length = 0;
         for (var attr in anObject) {
-            if (!__specialattrib__(attr)) {
-                length++
+            if (!__specialattrib__ (attr)) {
+                length++;
             }
         }
 
-        return length
+        return length;
     };
     __all__.len = len;
 
