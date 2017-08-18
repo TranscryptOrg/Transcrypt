@@ -204,26 +204,28 @@ __pragma__ ('endif')
     };
     __all__.__specialattrib__ = __specialattrib__;
 
-    // Len function for any object
+    // Compute length of any object
     var len = function (anObject) {
-        if (anObject) {
-            var l = anObject.length;
-            if (l == undefined) {
-                var result = 0;
-                for (var attrib in anObject) {
-                    if (!__specialattrib__ (attrib)) {
-                        result++;
-                    }
-                }
-                return result;
-            }
-            else {
-                return l;
-            }
-        }
-        else {
+        if (anObject === undefined || anObject === null) {
             return 0;
         }
+
+        if (anObject.__len__ instanceof Function) {
+            return anObject.__len__ ();
+        }
+
+        if (anObject.length !== undefined) {
+            return anObject.length;
+        }
+
+        var length = 0;
+        for (var attr in anObject) {
+            if (!__specialattrib__ (attr)) {
+                length++;
+            }
+        }
+
+        return length;
     };
     __all__.len = len;
 
