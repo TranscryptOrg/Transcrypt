@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- More Pythonic truthyness when using -t (or --tconv) switch (pr 3.67 a.o.)
 - Source file spec on command line can now be a full path (free afer pr #362)
 - The zip function now also works for finite iterators (issue #369) + autotest
 - -xc (or --confimp) switch added, to confine imported names to the directly importing module (so prevent imports from being be transitive)
