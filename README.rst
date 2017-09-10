@@ -8,7 +8,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
-- Pure Python 3.5 syntax, using Python's native parser
+- Pure Python 3.6 syntax, using Python's native parser
 - Debug directly from Python sourcecode, through integrated sourcemaps
 - Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers
 - Lightning fast JavaScript 5 and 6 code: call caching, for-loop optimization, in-line JavaScript etc.
@@ -122,7 +122,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
-- More Pythonic truthyness when using -t (or --tconv) switch (pr 3.67 a.o.)
+- If an object doesn't have a specific string representation, function repr and str now return <object of type: object> rather than ???, and this case isn't reported as an error anymore
+- Function len now calls \_\_len\_\_ if it exists (pr 378)
+- More Pythonic truthyness when using -t (or --tconv) switch (pr 367 a.o.)
 - Source file spec on command line can now be a full path (free afer pr #362)
 - The zip function now also works for finite iterators (issue #369) + autotest
 - -xc (or --confimp) switch added, to confine imported names to the directly importing module (so prevent imports from being be transitive)
