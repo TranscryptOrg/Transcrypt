@@ -893,7 +893,11 @@ class Generator (ast.NodeVisitor):
                         targetName = '{}.{}'.format(classList, targetName)
 
                 for decorator in reversed (node.decorator_list):
-                    emitDecorator (sourceName, targetName, decorator)
+                    if type (decorator) == ast.Name:
+                        if decorator.id not in ('classmethod', 'staticmethod'):
+                            emitDecorator (sourceName, targetName, decorator)
+                    else:
+                        emitDecorator(sourceName, targetName, decorator)
 
                 for scope in scopes:
                     self.descope ()
