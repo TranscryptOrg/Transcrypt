@@ -892,6 +892,7 @@ class Generator (ast.NodeVisitor):
                     sourceName = context ['node'].name
 
                 targetName = sourceName
+                classList = ''
                 if context ['scopes']:
                     for scope in context ['scopes']:
                         self.inscope (scope.node)
