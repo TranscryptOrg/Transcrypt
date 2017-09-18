@@ -489,6 +489,7 @@ class Generator (ast.NodeVisitor):
         self.targetFragments = []
         self.indentLevel = 0
         self.scopes = []
+        self.classDecorators = []
         self.use = set ()
         self.all = set ()
         self.importHeads = set ()
@@ -829,42 +830,73 @@ class Generator (ast.NodeVisitor):
             self.emit (', ')
             self.visit (value)
             self.emit (')')
+
+    def pushDecorator (self, node):
+        if node.decorator_list:
+            self.classDecorators.insert (0, (node, self.scopes[1:]))
             
-    def emitDecorators (self, callable):
-        for decorator in reversed (callable.decorator_list):
+    def emitDecorators (self, callable=None):
+
+        def emitDecorator (sourceName, targetName, decorator):
             self.emit ('\n')
-            self.visit (
-                ast.Assign (
-                    targets = [ast.Name (
-                        id = callable.name,         # Rename to original callable
-                        ctx = ast.Store
+            self.visit(
+                ast.Assign(
+                    targets=[ast.Name(
+                        id=sourceName,  # Rename to original callable
+                        ctx=ast.Store
                     )],
-                    value = (
-                            # Simple decorator
-                            ast.Call (                              # Call to decorating callable
-                                func = ast.Name (                   # supplied literally by the name of the decorator
-                                    id = decorator.id,
-                                    ctx = ast.Load
-                                ),
-                                args = [ast.Name (                  # Original callable as parameter, supplied by name
-                                    id = callable.name,
-                                    ctx = ast.Load
-                                )],
-                                keywords = []
-                            )
-                        if type (decorator) == ast.Name else
-                            # Decorator factory
-                            ast.Call (                              # Call to decorating callable
-                                func = decorator,                   # Supplied to call by factory callable which is the decorator
-                                args = [ast.Name (                  # Original callable as parameter, supplied by name
-                                    id = callable.name,
-                                    ctx = ast.Load
-                                )],
-                                keywords = []
-                            )
+                    value=(
+                        # Simple decorator
+                        ast.Call(  # Call to decorating callable
+                            func=ast.Name(  # supplied literally by the name of the decorator
+                                id=decorator.id,
+                                ctx=ast.Load
+                            ),
+                            args=[ast.Name(  # Original callable as parameter, supplied by name
+                                id=targetName,
+                                ctx=ast.Load
+                            )],
+                            keywords=[]
+                        )
+                        if type(decorator) == ast.Name else
+                        # Decorator factory
+                        ast.Call(  # Call to decorating callable
+                            func=decorator,  # Supplied to call by factory callable which is the decorator
+                            args=[ast.Name(  # Original callable as parameter, supplied by name
+                                id=targetName,
+                                ctx=ast.Load
+                            )],
+                            keywords=[]
+                        )
                     )
                 )
             )
+
+        if callable:
+            for decorator in reversed (callable.decorator_list):
+                emitDecorator(callable.name, callable.name, decorator)
+        else:
+            while self.classDecorators:
+                node, scopes = self.classDecorators.pop ()
+
+                if type (node) in (ast.FunctionDef, ast.AsyncFunctionDef):
+                    sourceName = '__impl__{}'.format (node.name)
+                else:
+                    sourceName = node.name
+
+                targetName = sourceName
+                if scopes:
+                    for scope in scopes:
+                        self.inscope (scope.node)
+                    classList = '.'.join([_scope.node.name for _scope in self.getAdjacentClassScopes()])
+                    if classList:
+                        targetName = '{}.{}'.format(classList, targetName)
+
+                for decorator in reversed (node.decorator_list):
+                    emitDecorator (sourceName, targetName, decorator)
+
+                for scope in scopes:
+                    self.descope ()
 
     def nextTemp (self, name):
         if name in self.tempIndices:
@@ -1781,7 +1813,10 @@ class Generator (ast.NodeVisitor):
 
         self.descope () # No earlier, class vars need it
 
-        self.emitDecorators (node)
+        self.pushDecorator (node)
+
+        if type (self.getScope (). node) != ast.ClassDef:  # if outer class emit decorators
+            self.emitDecorators ()
 
     def visit_Compare (self, node):
         if len (node.comparators) > 1:
@@ -2093,7 +2128,26 @@ class Generator (ast.NodeVisitor):
             else:                                                           # Class scope, so it's a method and needs the currying mechanism
                 self.emit ('\n')
                 self.adaptLineNrString (node)
-                self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
+
+                if node.decorator_list:
+                    decorate = bool([d for d in node.decorator_list if d.id not in ('classmethod', 'staticmethod')])
+                    isClassMethod = bool([d for d in node.decorator_list if d.id == 'classmethod'])
+                    isStaticMethod = bool([d for d in node.decorator_list if d.id == 'staticmethod'])
+                else:
+                    decorate = False
+                    isClassMethod = False
+                    isStaticMethod = False
+
+                if decorate:
+                    implName = '__impl__{}'.format(node.name)
+                    self.emit ('{}: {}function', implName, 'async ' if async else '')
+                else:
+                    if isClassMethod:
+                        self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
+                    elif isStaticMethod:
+                        self.emit ('get {} () {{return {}function', self.filterId (node.name), 'async ' if async else '')
+                    else:
+                        self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
 
                 yieldStarIndex = len (self.targetFragments)
                 yieldStarLevel = self.indentLevel
@@ -2109,10 +2163,20 @@ class Generator (ast.NodeVisitor):
                 if self.allowMemoizeCalls:
                     self.emit (', \'{}\'', node.name)   # Name will be used as attribute name to add bound function to instance
 
-                self.emit (');}}')
-
-                # Method decorators ignored, but @classmethod trivially works, since the class is the prototype of the object
-                # So the object is an extension of the class, and anything you can do with a class, you can do with an object
+                if decorate:
+                    self.emit (',\n')
+                    if isClassMethod:
+                        self.emit ('get {} () {{return __getcm__ (this, this.{});}}', self.filterId (node.name), implName)
+                    elif isStaticMethod:
+                        self.emit ('get {} () {{return __getsm__ (this, this.{});}}', self.filterId (node.name), implName)
+                    else:
+                        self.emit ('get {} () {{return __get__ (this, this.{});}}', self.filterId (node.name), implName)
+                    self.pushDecorator (node)
+                else:
+                    if isStaticMethod:
+                        self.emit ('}}')
+                    else:
+                        self.emit (');}}')
 
                 if node.name == '__iter__':
                     self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')
