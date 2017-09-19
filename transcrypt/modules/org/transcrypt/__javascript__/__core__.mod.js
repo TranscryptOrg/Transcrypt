@@ -81,6 +81,27 @@ __pragma__ ('endif')
         }
     }
     __all__.__get__ = __get__;
+
+    var __getcm__ = function (self, func, quotedFuncName) {
+        if (self.hasOwnProperty ('__class__')) {
+            return function () {
+                var args = [] .slice.apply (arguments);
+                return func.apply (null, [self.__class__] .concat (args));
+            };
+        }
+        else {
+            return function () {
+                var args = [] .slice.apply (arguments);
+                return func.apply (null, [self] .concat (args));
+            };
+        }
+    }
+    __all__.__getcm__ = __getcm__;
+    
+    var __getsm__ = function (self, func, quotedFuncName) {
+        return func;
+    }
+    __all__.__getsm__ = __getsm__;
         
     // Mother of all metaclasses        
     var py_metatype = {
