@@ -42,6 +42,8 @@ from imp import reload
 reload(sys)
 from bottle import route, run, template, request
 
+os.system ('python3.7 -m pip install mypy')
+
 # tests to run, filled in sys.argv:
 T = []
 
