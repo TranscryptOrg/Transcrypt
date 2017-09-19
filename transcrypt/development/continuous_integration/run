@@ -4,6 +4,9 @@
 # or pointing to a file with one test per line
 
 export TZ="Europe/Berlin"
+export $(dbus-launch)
+export NSS_USE_SHARED_DB=ENABLED
+
 G="\e[1;38;5;154m"
 R="\e[1;38;5;124m"
 O="\e[0m"
