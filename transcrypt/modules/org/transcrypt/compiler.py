@@ -55,7 +55,7 @@ class ModuleMetadata:
             self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
             
             if (os.path.isfile (self.sourcePath)):
-                break;
+                break
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             raise utils.Error (
@@ -846,33 +846,33 @@ class Generator (ast.NodeVisitor):
             self.emit ('\n')
             self.visit (
                 ast.Assign (
-                    targets=[ast.Name (
-                        id=sourceName,  # Rename to original callable
-                        ctx=ast.Store
+                    targets = [ast.Name (
+                        id = sourceName,  # Rename to original callable
+                        ctx = ast.Store
                     )],
-                    value=(
-                        # Simple decorator
-                        ast.Call (  # Call to decorating callable
-                            func=ast.Name (  # supplied literally by the name of the decorator
-                                id=decorator.id,
-                                ctx=ast.Load
-                            ),
-                            args=[ast.Name (  # Original callable as parameter, supplied by name
-                                id=targetName,
-                                ctx=ast.Load
-                            )],
-                            keywords=[]
-                        )
+                    value = (
+                            # Simple decorator
+                            ast.Call (  # Call to decorating callable
+                                func = ast.Name (  # supplied literally by the name of the decorator
+                                    id = decorator.id,
+                                    ctx = ast.Load
+                                ),
+                                args = [ast.Name (  # Original callable as parameter, supplied by name
+                                    id = targetName,
+                                    ctx = ast.Load
+                                )],
+                                keywords = []
+                            )
                         if type (decorator) == ast.Name else
-                        # Decorator factory
-                        ast.Call (  # Call to decorating callable
-                            func=decorator,  # Supplied to call by factory callable which is the decorator
-                            args=[ast.Name (  # Original callable as parameter, supplied by name
-                                id=targetName,
-                                ctx=ast.Load
-                            )],
-                            keywords=[]
-                        )
+                            # Decorator factory
+                            ast.Call (  # Call to decorating callable
+                                func = decorator,  # Supplied to call by factory callable which is the decorator
+                                args = [ast.Name (  # Original callable as parameter, supplied by name
+                                    id = targetName,
+                                    ctx = ast.Load
+                                )],
+                                keywords = []
+                            )
                     )
                 )
             )
@@ -886,10 +886,10 @@ class Generator (ast.NodeVisitor):
                 oldOpov = self.allowOperatorOverloading
                 self.allowOperatorOverloading = context ['opov']
 
-                if type (context['node']) in (ast.FunctionDef, ast.AsyncFunctionDef):
-                    sourceName = '__impl__{}'.format (context ['node'].name)
+                if type (context ['node']) in (ast.FunctionDef, ast.AsyncFunctionDef):
+                    sourceName = '__impl__{}'.format (context ['node'] .name)
                 else:
-                    sourceName = context ['node'].name
+                    sourceName = context ['node'] .name
 
                 targetName = sourceName
                 classList = ''
@@ -906,7 +906,7 @@ class Generator (ast.NodeVisitor):
                         if classList:
                             self.emit (';')
 
-                for _ in range(len(context ['scopes'])):
+                for _ in range (len (context ['scopes'])):
                     self.descope ()
 
                 self.allowOperatorOverloading = oldOpov
@@ -1828,7 +1828,7 @@ class Generator (ast.NodeVisitor):
 
         self.pushDecorator (node)
 
-        if type (self.getScope (). node) != ast.ClassDef:  # if outer class emit decorators
+        if type (self.getScope (). node) != ast.ClassDef:  # If outer class emits decorators
             self.emitDecorators ()
 
     def visit_Compare (self, node):
