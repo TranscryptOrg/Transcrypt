@@ -19,7 +19,7 @@ def log (x, base):
     return (
         complex (x, 0) .__log__ () if __typeof__ (x) is 'number' else x.__log__ ()
     ) if base is js_undefined else (
-        __div__ (log (x), log (base))   # Recursive
+        __truediv__ (log (x), log (base))   # Recursive
     )
     
 def log10 (x):

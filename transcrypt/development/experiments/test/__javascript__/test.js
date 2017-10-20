@@ -1,3 +1,512 @@
+"use strict";
+// Transcrypt'ed from Python, 2017-10-04 11:55:08
+function test () {
+   var __symbols__ = ['__py3.6__', '__esv5__'];
+    var __all__ = {};
+    var __world__ = __all__;
+    
+    // Nested object creator, part of the nesting may already exist and have attributes
+    var __nest__ = function (headObject, tailNames, value) {
+        // In some cases this will be a global object, e.g. 'window'
+        var current = headObject;
+        
+        if (tailNames != '') {  // Split on empty string doesn't give empty list
+            // Find the last already created object in tailNames
+            var tailChain = tailNames.split ('.');
+            var firstNewIndex = tailChain.length;
+            for (var index = 0; index < tailChain.length; index++) {
+                if (!current.hasOwnProperty (tailChain [index])) {
+                    firstNewIndex = index;
+                    break;
+                }
+                current = current [tailChain [index]];
+            }
+            
+            // Create the rest of the objects, if any
+            for (var index = firstNewIndex; index < tailChain.length; index++) {
+                current [tailChain [index]] = {};
+                current = current [tailChain [index]];
+            }
+        }
+        
+        // Insert it new attributes, it may have been created earlier and have other attributes
+        for (var attrib in value) {
+            current [attrib] = value [attrib];          
+        }       
+    };
+    __all__.__nest__ = __nest__;
+    
+    // Initialize module if not yet done and return its globals
+    var __init__ = function (module) {
+        if (!module.__inited__) {
+            module.__all__.__init__ (module.__all__);
+            module.__inited__ = true;
+        }
+        return module.__all__;
+    };
+    __all__.__init__ = __init__;
+    
+    
+    
+    
+    // Since we want to assign functions, a = b.f should make b.f produce a bound function
+    // So __get__ should be called by a property rather then a function
+    // Factory __get__ creates one of three curried functions for func
+    // Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
+    var __get__ = function (self, func, quotedFuncName) {
+        if (self) {
+            if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {           // Object before the dot
+                if (quotedFuncName) {                                   // Memoize call since fcall is on, by installing bound function in instance
+                    Object.defineProperty (self, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
+                        value: function () {                            // So next time just call curry function that calls function
+                            var args = [] .slice.apply (arguments);
+                            return func.apply (null, [self] .concat (args));
+                        },              
+                        writable: true,
+                        enumerable: true,
+                        configurable: true
+                    });
+                }
+                return function () {                                    // Return bound function, code dupplication for efficiency if no memoizing
+                    var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
+                    return func.apply (null, [self] .concat (args));
+                };
+            }
+            else {                                                      // Class before the dot
+                return func;                                            // Return static method
+            }
+        }
+        else {                                                          // Nothing before the dot
+            return func;                                                // Return free function
+        }
+    }
+    __all__.__get__ = __get__;
+        
+    // Mother of all metaclasses        
+    var py_metatype = {
+        __name__: 'type',
+        __bases__: [],
+        
+        // Overridable class creation worker
+        __new__: function (meta, name, bases, attribs) {
+            // Create the class cls, a functor, which the class creator function will return
+            var cls = function () {                     // If cls is called with arg0, arg1, etc, it calls its __new__ method with [arg0, arg1, etc]
+                var args = [] .slice.apply (arguments); // It has a __new__ method, not yet but at call time, since it is copied from the parent in the loop below
+                return cls.__new__ (args);              // Each Python class directly or indirectly derives from object, which has the __new__ method
+            };                                          // If there are no bases in the Python source, the compiler generates [object] for this parameter
+            
+            // Copy all methods, including __new__, properties and static attributes from base classes to new cls object
+            // The new class object will simply be the prototype of its instances
+            // JavaScript prototypical single inheritance will do here, since any object has only one class
+            // This has nothing to do with Python multiple inheritance, that is implemented explictly in the copy loop below
+            for (var index = bases.length - 1; index >= 0; index--) {   // Reversed order, since class vars of first base should win
+                var base = bases [index];
+                for (var attrib in base) {
+                    var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+                    Object.defineProperty (cls, attrib, descrip);
+                }           
+            }
+            
+            // Add class specific attributes to the created cls object
+            cls.__metaclass__ = meta;
+            cls.__name__ = name;
+            cls.__bases__ = bases;
+            
+            // Add own methods, properties and own static attributes to the created cls object
+            for (var attrib in attribs) {
+                var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
+                Object.defineProperty (cls, attrib, descrip);
+            }
+            // Return created cls object
+            return cls;
+        }
+    };
+    py_metatype.__metaclass__ = py_metatype;
+    __all__.py_metatype = py_metatype;
+    
+    // Mother of all classes
+    var object = {
+        __init__: function (self) {},
+        
+        __metaclass__: py_metatype, // By default, all classes have metaclass type, since they derive from object
+        __name__: 'object',
+        __bases__: [],
+            
+        // Object creator function, is inherited by all classes (so could be global)
+        __new__: function (args) {  // Args are just the constructor args       
+            // In JavaScript the Python class is the prototype of the Python object
+            // In this way methods and static attributes will be available both with a class and an object before the dot
+            // The descriptor produced by __get__ will return the right method flavor
+            var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
+            
+
+            // Call constructor
+            this.__init__.apply (null, [instance] .concat (args));
+
+            // Return constructed instance
+            return instance;
+        }   
+    };
+    __all__.object = object;
+    
+    // Class creator facade function, calls class creation worker
+    var __class__ = function (name, bases, attribs, meta) {         // Parameter meta is optional
+        if (meta == undefined) {
+            meta = bases [0] .__metaclass__;
+        }
+                
+        return meta.__new__ (meta, name, bases, attribs);
+    }
+    __all__.__class__ = __class__;
+    
+    // Define __pragma__ to preserve '<all>' and '</all>', since it's never generated as a function, must be done early, so here
+    var __pragma__ = function () {};
+    __all__.__pragma__ = __pragma__;
+    
+    	__nest__ (
+		__all__,
+		'org.transcrypt.__base__', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var __Envir__ = __class__ ('__Envir__', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							self.interpreter_name = 'python';
+							self.transpiler_name = 'transcrypt';
+							self.transpiler_version = '3.6.45';
+							self.target_subdir = '__javascript__';
+						});}
+					});
+					var __envir__ = __Envir__ ();
+					__pragma__ ('<all>')
+						__all__.__Envir__ = __Envir__;
+						__all__.__envir__ = __envir__;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'org.transcrypt.__standard__', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var Exception = __class__ ('Exception', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							var kwargs = dict ();
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+										}
+									}
+									delete kwargs.__kwargtrans__;
+								}
+								var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
+							}
+							else {
+								var args = tuple ();
+							}
+							self.__args__ = args;
+							try {
+								self.stack = kwargs.error.stack;
+							}
+							catch (__except0__) {
+								self.stack = 'No stack trace available';
+							}
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							if (len (self.__args__)) {
+								return '{}{}'.format (self.__class__.__name__, repr (tuple (self.__args__)));
+							}
+							else {
+								return '{}()'.format (self.__class__.__name__);
+							}
+						});},
+						get __str__ () {return __get__ (this, function (self) {
+							if (len (self.__args__) > 1) {
+								return str (tuple (self.__args__));
+							}
+							else if (len (self.__args__)) {
+								return str (self.__args__ [0]);
+							}
+							else {
+								return '';
+							}
+						});}
+					});
+					var IterableError = __class__ ('IterableError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, error) {
+							Exception.__init__ (self, "Can't iterate over non-iterable", __kwargtrans__ ({error: error}));
+						});}
+					});
+					var StopIteration = __class__ ('StopIteration', [Exception], {
+						get __init__ () {return __get__ (this, function (self, error) {
+							Exception.__init__ (self, 'Iterator exhausted', __kwargtrans__ ({error: error}));
+						});}
+					});
+					var ValueError = __class__ ('ValueError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, error) {
+							Exception.__init__ (self, 'Erroneous value', __kwargtrans__ ({error: error}));
+						});}
+					});
+					var KeyError = __class__ ('KeyError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, error) {
+							Exception.__init__ (self, 'Invalid key', __kwargtrans__ ({error: error}));
+						});}
+					});
+					var AssertionError = __class__ ('AssertionError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							if (message) {
+								Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+							}
+							else {
+								Exception.__init__ (self, __kwargtrans__ ({error: error}));
+							}
+						});}
+					});
+					var NotImplementedError = __class__ ('NotImplementedError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+						});}
+					});
+					var IndexError = __class__ ('IndexError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+						});}
+					});
+					var AttributeError = __class__ ('AttributeError', [Exception], {
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+						});}
+					});
+					var Warning = __class__ ('Warning', [Exception], {
+					});
+					var UserWarning = __class__ ('UserWarning', [Warning], {
+					});
+					var DeprecationWarning = __class__ ('DeprecationWarning', [Warning], {
+					});
+					var RuntimeWarning = __class__ ('RuntimeWarning', [Warning], {
+					});
+					var __sort__ = function (iterable, key, reverse) {
+						if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
+							var key = null;
+						};
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
+							var reverse = false;
+						};
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+										case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+										case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						else {
+						}
+						if (key) {
+							iterable.sort ((function __lambda__ (a, b) {
+								if (arguments.length) {
+									var __ilastarg0__ = arguments.length - 1;
+									if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+										var __allkwargs0__ = arguments [__ilastarg0__--];
+										for (var __attrib0__ in __allkwargs0__) {
+											switch (__attrib0__) {
+												case 'a': var a = __allkwargs0__ [__attrib0__]; break;
+												case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+											}
+										}
+									}
+								}
+								else {
+								}
+								return (key (a) > key (b) ? 1 : -(1));
+							}));
+						}
+						else {
+							iterable.sort ();
+						}
+						if (reverse) {
+							iterable.reverse ();
+						}
+					};
+					var sorted = function (iterable, key, reverse) {
+						if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
+							var key = null;
+						};
+						if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
+							var reverse = false;
+						};
+						if (arguments.length) {
+							var __ilastarg0__ = arguments.length - 1;
+							if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+								var __allkwargs0__ = arguments [__ilastarg0__--];
+								for (var __attrib0__ in __allkwargs0__) {
+									switch (__attrib0__) {
+										case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+										case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+										case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+									}
+								}
+							}
+						}
+						else {
+						}
+						if (py_typeof (iterable) == dict) {
+							var result = copy (iterable.py_keys ());
+						}
+						else {
+							var result = copy (iterable);
+						}
+						__sort__ (result, key, reverse);
+						return result;
+					};
+					var map = function (func, iterable) {
+						return function () {
+							var __accu0__ = [];
+							var __iterable0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								var item = __iterable0__ [__index0__];
+								__accu0__.append (func (item));
+							}
+							return __accu0__;
+						} ();
+					};
+					var filter = function (func, iterable) {
+						if (func == null) {
+							var func = bool;
+						}
+						return function () {
+							var __accu0__ = [];
+							var __iterable0__ = iterable;
+							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								var item = __iterable0__ [__index0__];
+								if (func (item)) {
+									__accu0__.append (item);
+								}
+							}
+							return __accu0__;
+						} ();
+					};
+					var __Terminal__ = __class__ ('__Terminal__', [object], {
+						get __init__ () {return __get__ (this, function (self) {
+							self.buffer = '';
+							try {
+								self.element = document.getElementById ('__terminal__');
+							}
+							catch (__except0__) {
+								self.element = null;
+							}
+							if (self.element) {
+								self.element.style.overflowX = 'auto';
+								self.element.style.boxSizing = 'border-box';
+								self.element.style.padding = '5px';
+								self.element.innerHTML = '_';
+							}
+						});},
+						get print () {return __get__ (this, function (self) {
+							var sep = ' ';
+							var end = '\n';
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'sep': var sep = __allkwargs0__ [__attrib0__]; break;
+											case 'end': var end = __allkwargs0__ [__attrib0__]; break;
+										}
+									}
+								}
+								var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
+							}
+							else {
+								var args = tuple ();
+							}
+							self.buffer = '{}{}{}'.format (self.buffer, sep.join (function () {
+								var __accu0__ = [];
+								var __iterable0__ = args;
+								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+									var arg = __iterable0__ [__index0__];
+									__accu0__.append (str (arg));
+								}
+								return __accu0__;
+							} ()), end).__getslice__ (-(4096), null, 1);
+							if (self.element) {
+								self.element.innerHTML = self.buffer.py_replace ('\n', '<br>');
+								self.element.scrollTop = self.element.scrollHeight;
+							}
+							else {
+								console.log (sep.join (function () {
+									var __accu0__ = [];
+									var __iterable0__ = args;
+									for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+										var arg = __iterable0__ [__index0__];
+										__accu0__.append (str (arg));
+									}
+									return __accu0__;
+								} ()));
+							}
+						});},
+						get input () {return __get__ (this, function (self, question) {
+							if (arguments.length) {
+								var __ilastarg0__ = arguments.length - 1;
+								if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+									var __allkwargs0__ = arguments [__ilastarg0__--];
+									for (var __attrib0__ in __allkwargs0__) {
+										switch (__attrib0__) {
+											case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+											case 'question': var question = __allkwargs0__ [__attrib0__]; break;
+										}
+									}
+								}
+							}
+							else {
+							}
+							self.print ('{}'.format (question), __kwargtrans__ ({end: ''}));
+							var answer = window.prompt ('\n'.join (self.buffer.py_split ('\n').__getslice__ (-(16), null, 1)));
+							self.print (answer);
+							return answer;
+						});}
+					});
+					var __terminal__ = __Terminal__ ();
+					__pragma__ ('<all>')
+						__all__.AssertionError = AssertionError;
+						__all__.AttributeError = AttributeError;
+						__all__.DeprecationWarning = DeprecationWarning;
+						__all__.Exception = Exception;
+						__all__.IndexError = IndexError;
+						__all__.IterableError = IterableError;
+						__all__.KeyError = KeyError;
+						__all__.NotImplementedError = NotImplementedError;
+						__all__.RuntimeWarning = RuntimeWarning;
+						__all__.StopIteration = StopIteration;
+						__all__.UserWarning = UserWarning;
+						__all__.ValueError = ValueError;
+						__all__.Warning = Warning;
+						__all__.__Terminal__ = __Terminal__;
+						__all__.__sort__ = __sort__;
+						__all__.__terminal__ = __terminal__;
+						__all__.filter = filter;
+						__all__.map = map;
+						__all__.sorted = sorted;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
     var __call__ = function (/* <callee>, <this>, <params>* */) {   // Needed for __base__ and __standard__ if global 'opov' switch is on
         var args = [] .slice.apply (arguments);
         if (typeof args [0] == 'object' && '__call__' in args [0]) {        // Overloaded
@@ -45,9 +554,6 @@
     var map = __all__.map;
     var filter = __all__.filter;
 
-__pragma__ ('ifdef', '__complex__')
-    var complex = __all__.complex;
-__pragma__ ('endif')
     __all__.print = __all__.__terminal__.print;
     __all__.input = __all__.__terminal__.input;
 
@@ -86,16 +592,12 @@ __pragma__ ('endif')
     __all__.__globals__ = __globals__
     
     // Partial implementation of super () .<methodName> (<params>)
-    var __super__ = function (aClass, methodName) {
+    var __super__ = function (aClass, methodName) {        
         // Lean and fast, no C3 linearization, only call first implementation encountered
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
         
-__pragma__ ('ifdef', '__esv6__')
-        for (let base of aClass.__bases__) {
-__pragma__ ('else')
         for (var index = 0; index < aClass.__bases__.length; index++) {
             var base = aClass.__bases__ [index];
-__pragma__ ('endif')
             if (methodName in base) {
                return base [methodName];
             }
@@ -204,28 +706,26 @@ __pragma__ ('endif')
     };
     __all__.__specialattrib__ = __specialattrib__;
 
-    // Compute length of any object
+    // Len function for any object
     var len = function (anObject) {
-        if (anObject === undefined || anObject === null) {
-            return 0;
-        }
-
-        if (anObject.__len__ instanceof Function) {
-            return anObject.__len__ ();
-        }
-
-        if (anObject.length !== undefined) {
-            return anObject.length;
-        }
-
-        var length = 0;
-        for (var attr in anObject) {
-            if (!__specialattrib__ (attr)) {
-                length++;
+        if (anObject) {
+            var l = anObject.length;
+            if (l == undefined) {
+                var result = 0;
+                for (var attrib in anObject) {
+                    if (!__specialattrib__ (attrib)) {
+                        result++;
+                    }
+                }
+                return result;
+            }
+            else {
+                return l;
             }
         }
-
-        return length;
+        else {
+            return 0;
+        }
     };
     __all__.len = len;
 
@@ -235,33 +735,11 @@ __pragma__ ('endif')
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
 
-    // If the target object is somewhat true, return it. Otherwise return false.
-    // Try to follow Python conventions of truthyness
-    function __t__ (target) { 
-        return (
-            // Avoid invalid checks
-            target === undefined || target === null ? false :
-            
-            // Take a quick shortcut if target is a simple type
-            ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
-            
-            // Use __bool__ (if present) to decide if target is true
-            target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
-            
-            // There is no __bool__, use __len__ (if present) instead
-            target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
-            
-            // There is no __bool__ and no __len__, declare Functions true.
-            // Python objects are transpiled into instances of Function and if
-            // there is no __bool__ or __len__, the object in Python is true.
-            target instanceof Function ? target :
-            
-            // Target is something else, compute its len to decide
-            len (target) !== 0 ? target :
-            
-            // When all else fails, declare target as false
-            false
-        );
+    function __t__ (any) {  // Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
+        return (['boolean', 'number'] .indexOf (typeof any) >= 0 || any instanceof Function || len (any)) ? any : false;
+        // JavaScript functions have a length attribute, denoting the number of parameters
+        // Python objects are JavaScript functions, but their length doesn't matter, only their existence
+        // By the term 'any instanceof Function' we make sure that Python objects aren't rejected when their length equals zero
     }
     __all__.__t__ = __t__;
 
@@ -329,12 +807,8 @@ __pragma__ ('endif')
         }
 
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
-__pragma__ ('ifdef', '__esv6__')
-            for (let aClass of classinfo) {
-__pragma__ ('else')
             for (var index = 0; index < classinfo.length; index++) {
                 var aClass = classinfo [index];
-__pragma__ ('endif')
                 if (isinstance (anObject, aClass)) {
                     return true;
                 }
@@ -405,7 +879,9 @@ __pragma__ ('endif')
                     }
                 }
                 catch (exception) {
-                    return '<object of type: ' + typeof anObject + '>';
+                    console.log ('ERROR: Could not evaluate repr (<object of type ' + typeof anObject + '>)');
+                    console.log (exception);
+                    return '???';
                 }
             }
         }
@@ -433,19 +909,8 @@ __pragma__ ('endif')
     __all__.min = min;
 
     // Absolute value
-__pragma__ ('ifdef', '__complex__')
-    var abs = function (x) {
-        try {
-            return Math.abs (x);
-        }
-        catch (exception) {
-            return Math.sqrt (x.real * x.real + x.imag * x.imag);
-        }
-    };
-__pragma__ ('else')
     var abs = Math.abs;
     __all__.abs = abs;
-__pragma__ ('endif')
 
     // Bankers rounding
     var round = function (number, ndigits) {
@@ -625,31 +1090,6 @@ __pragma__ ('endif')
 
     // Any, all and sum
 
-__pragma__ ('ifdef', '__esv6__')
-    function any (iterable) {
-        for (let item of iterable) {
-            if (bool (item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    function all (iterable) {
-        for (let item of iterable) {
-            if (! bool (item)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    function sum (iterable) {
-        let result = 0;
-        for (let item of iterable) {
-            result += item;
-        }
-        return result;
-    }
-__pragma__ ('else')
     function any (iterable) {
         for (var index = 0; index < iterable.length; index++) {
             if (bool (iterable [index])) {
@@ -673,7 +1113,6 @@ __pragma__ ('else')
         }
         return result;
     }
-__pragma__ ('endif')
 
     __all__.any = any;
     __all__.all = all;
@@ -722,11 +1161,7 @@ __pragma__ ('endif')
     // List extensions to Array
 
     function list (iterable) {                                      // All such creators should be callable without new
-__pragma__ ('ifdef', '__esv6__')
-        var instance = iterable ? Array.from (iterable) : [];
-__pragma__ ('else')
         var instance = iterable ? [] .slice.apply (iterable) : [];  // Spread iterable, n.b. array.slice (), so array before dot
-__pragma__ ('endif')
         // Sort is the normal JavaScript sort, Python sort is a non-member function
         return instance;
     }
@@ -1179,9 +1614,6 @@ __pragma__ ('endif')
     };
 
     String.prototype.join = function (strings) {
-__pragma__ ('ifdef', '__esv6__')
-        strings = Array.from (strings); // Much faster than iterating through strings char by char
-__pragma__ ('endif')
         return strings.join (this);
     };
 
@@ -1535,14 +1967,8 @@ __pragma__ ('endif')
     };
     __all__.__mul__ = __mul__;
 
-    var __truediv__ = function (a, b) {
-        if (typeof a == 'object' && '__truediv__' in a) {
-            return a.__truediv__ (b);
-        }
-        else if (typeof b == 'object' && '__rtruediv__' in b) {
-            return b.__rtruediv__ (a);
-        }
-        else if (typeof a == 'object' && '__div__' in a) {
+    var __div__ = function (a, b) {
+        if (typeof a == 'object' && '__div__' in a) {
             return a.__div__ (b);
         }
         else if (typeof b == 'object' && '__rdiv__' in b) {
@@ -1552,26 +1978,7 @@ __pragma__ ('endif')
             return a / b;
         }
     };
-    __all__.__truediv__ = __truediv__;
-
-    var __floordiv__ = function (a, b) {
-        if (typeof a == 'object' && '__floordiv__' in a) {
-            return a.__floordiv__ (b);
-        }
-        else if (typeof b == 'object' && '__rfloordiv__' in b) {
-            return b.__rfloordiv__ (a);
-        }
-        else if (typeof a == 'object' && '__div__' in a) {
-            return a.__div__ (b);
-        }
-        else if (typeof b == 'object' && '__rdiv__' in b) {
-            return b.__rdiv__ (a);
-        }
-        else {
-            return Math.floor (a / b);
-        }
-    };
-    __all__.__floordiv__ = __floordiv__;
+    __all__.__div__ = __div__;
 
     var __add__ = function (a, b) {
         if (typeof a == 'object' && '__add__' in a) {
@@ -1664,8 +2071,8 @@ __pragma__ ('endif')
             return a & b;
         }
     };
-    __all__.__and__ = __and__;
-
+    __all__.__and__ = __and__;    
+        
     // Overloaded binary compare
     
     var __eq__ = function (a, b) {
@@ -1983,3 +2390,76 @@ __pragma__ ('endif')
         }
     };
     __all__.__setslice__ = __setslice__;
+
+	__nest__ (
+		__all__,
+		'org.transcrypt.stubs', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+				}
+			}
+		}
+	);
+	(function () {
+		var org = {};
+		__nest__ (org, 'transcrypt.stubs', __init__ (__world__.org.transcrypt.stubs));
+		
+		var terminal = document.getElementById ('__terminal__');
+		
+		var screenBuffer = "";
+		function write (aString) {
+		    screenBuffer = screenBuffer + aString;
+		    terminal.innerHTML = screenBuffer;
+		}
+		
+		var keyBuffer = "";
+		document.addEventListener('keydown', function (event) {
+		    keyBuffer += event.keyCode;
+		});
+		
+		function* readFn () {
+		    // keyBuffer = "";
+		    var counter = 0;
+		    while (! (keyBuffer.length && keyBuffer [keyBuffer.length - 1] == 13)) {
+		        yield false;
+		    }
+		    yield true;;
+		}
+		
+		var read = readFn ();
+		
+		function* inputFn () {
+		    while (!read ()) {
+		    }
+		    yield keyBuffer;
+		}
+		
+		var input = inputFn ();
+		
+		function* writeAllFn () {
+		    write ("What 's your name? ");
+		    yield;
+		    var name = input ();
+		    yield;
+		    write (name);
+		    yield;
+		}
+		
+		var writeAll = writeAllFn ();
+		
+		function repeater () {
+		    writeAll.next()
+		    setTimeout (repeater, 1000);
+		}
+		
+		repeater ()
+		
+		
+		__pragma__ ('<use>' +
+			'org.transcrypt.stubs' +
+		'</use>')
+	}) ();
+   return __all__;
+}
+window ['test'] = test ();

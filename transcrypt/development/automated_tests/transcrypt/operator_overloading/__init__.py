@@ -62,6 +62,12 @@ class Matrix:
     def __repr__ (self):
         return repr (self._)
         
+    def __floordiv__ (self, other):
+        return 'Overloading __floordiv__ has no meaning for matrices'
+        
+    def __truediv__ (self, other):
+        return 'Overloading __truediv__ has no meaning for matrices'
+        
 class Functor:
     def __init__ (self, factor):
         self.factor = factor
@@ -129,6 +135,9 @@ def run (autoTester):
     
     m5 @= m4
     m6 = m0 @ m1
+    
+    autoTester.check (m0 / m1)
+    autoTester.check (m0 // m1)
     
     __pragma__ ('noopov')
     
