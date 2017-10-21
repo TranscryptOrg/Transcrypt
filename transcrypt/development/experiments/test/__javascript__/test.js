@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-10-21 14:56:18
+// Transcrypt'ed from Python, 2017-10-21 16:07:47
 function test () {
    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -194,7 +194,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.52';
+							self.transpiler_version = '3.6.53';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -802,7 +802,15 @@ function test () {
             return -Infinity;
         }
         else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
-            return any ? true : false;
+            if (any === false) {
+                return 0;
+            }
+            else if (any === true) {
+                return 1;
+            }
+            else {  // Needed e.g. in autoTester.check, so "return any ? true : false" won't do
+                throw ValueError (new Error ());
+            }
         }
         else {
             return +any;
@@ -2458,12 +2466,1299 @@ function test () {
         }
     };
     __all__.__setslice__ = __setslice__;
+	__nest__ (
+		__all__,
+		're', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var translate = __init__ (__world__.re.translate).translate;
+					var T = 1 << 0;
+					var TEMPLATE = T;
+					var I = 1 << 1;
+					var IGNORECASE = I;
+					var L = 1 << 2;
+					var LOCALE = L;
+					var M = 1 << 3;
+					var MULTILINE = M;
+					var S = 1 << 4;
+					var DOTALL = S;
+					var U = 1 << 5;
+					var UNICODE = U;
+					var X = 1 << 6;
+					var VERBOSE = X;
+					var DEBUG = 1 << 7;
+					var A = 1 << 8;
+					var ASCII = A;
+					var Y = 1 << 16;
+					var STICKY = Y;
+					var G = 1 << 17;
+					var GLOBAL = G;
+					var J = 1 << 19;
+					var JSSTRICT = J;
+					var error = __class__ ('error', [Exception], {
+						get __init__ () {return __get__ (this, function (self, msg, error, pattern, flags, pos) {
+							if (typeof pattern == 'undefined' || (pattern != null && pattern .hasOwnProperty ("__kwargtrans__"))) {;
+								var pattern = null;
+							};
+							if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+								var flags = 0;
+							};
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = null;
+							};
+							Exception.__init__ (self, msg, __kwargtrans__ ({error: error}));
+							self.pattern = pattern;
+							self.flags = flags;
+							self.pos = pos;
+						});}
+					});
+					var ReIndexError = __class__ ('ReIndexError', [IndexError], {
+						get __init__ () {return __get__ (this, function (self) {
+							IndexError.__init__ (self, 'no such group');
+						});}
+					});
+					var Match = __class__ ('Match', [object], {
+						get __init__ () {return __get__ (this, function (self, mObj, string, pos, endpos, rObj, namedGroups) {
+							if (typeof namedGroups == 'undefined' || (namedGroups != null && namedGroups .hasOwnProperty ("__kwargtrans__"))) {;
+								var namedGroups = null;
+							};
+							var __iterable0__ = enumerate (mObj);
+							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								var __left0__ = __iterable0__ [__index0__];
+								var index = __left0__ [0];
+								var match = __left0__ [1];
+								mObj [index] = (mObj [index] == undefined ? null : mObj [index]);
+							}
+							self._obj = mObj;
+							self._pos = pos;
+							self._endpos = endpos;
+							self._re = rObj;
+							self._string = string;
+							self._namedGroups = namedGroups;
+							self._lastindex = self._lastMatchGroup ();
+							if (self._namedGroups !== null) {
+								self._lastgroup = self._namedGroups [self._lastindex];
+							}
+							else {
+								self._lastgroup = null;
+							}
+						});},
+						get _getPos () {return __get__ (this, function (self) {
+							return self._pos;
+						});},
+						get _setPos () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getEndPos () {return __get__ (this, function (self) {
+							return self._endpos;
+						});},
+						get _setEndPos () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getRe () {return __get__ (this, function (self) {
+							return self._re;
+						});},
+						get _setRe () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getString () {return __get__ (this, function (self) {
+							return self._string;
+						});},
+						get _setString () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getLastGroup () {return __get__ (this, function (self) {
+							return self._lastgroup;
+						});},
+						get _setLastGroup () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getLastIndex () {return __get__ (this, function (self) {
+							return self._lastindex;
+						});},
+						get _setLastIndex () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _lastMatchGroup () {return __get__ (this, function (self) {
+							if (len (self._obj) > 1) {
+								for (var i = len (self._obj) - 1; i > 0; i--) {
+									if (self._obj [i] !== null) {
+										return i;
+									}
+								}
+								return null;
+							}
+							else {
+								return null;
+							}
+						});},
+						get expand () {return __get__ (this, function (self, template) {
+							var __except0__ = NotImplementedError ();
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get group () {return __get__ (this, function (self) {
+							var args = tuple ([].slice.apply (arguments).slice (1));
+							var ret = list ([]);
+							if (len (args) > 0) {
+								var __iterable0__ = args;
+								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+									var index = __iterable0__ [__index0__];
+									if (py_typeof (index) === str) {
+										if (self._namedGroups !== null) {
+											if (!__in__ (index, self._namedGroups.py_keys ())) {
+												var __except0__ = ReIndexError ();
+												__except0__.__cause__ = null;
+												throw __except0__;
+											}
+											ret.append (self._obj [self._namedGroups [index]]);
+										}
+										else {
+											var __except0__ = NotImplementedError ('No NamedGroups Available');
+											__except0__.__cause__ = null;
+											throw __except0__;
+										}
+									}
+									else {
+										if (index >= len (self._obj)) {
+											var __except0__ = ReIndexError ();
+											__except0__.__cause__ = null;
+											throw __except0__;
+										}
+										ret.append (self._obj [index]);
+									}
+								}
+							}
+							else {
+								ret.append (self._obj [0]);
+							}
+							if (len (ret) == 1) {
+								return ret [0];
+							}
+							else {
+								return tuple (ret);
+							}
+						});},
+						get groups () {return __get__ (this, function (self, py_default) {
+							if (typeof py_default == 'undefined' || (py_default != null && py_default .hasOwnProperty ("__kwargtrans__"))) {;
+								var py_default = null;
+							};
+							if (len (self._obj) > 1) {
+								var ret = self._obj.__getslice__ (1, null, 1);
+								return tuple (function () {
+									var __accu0__ = [];
+									var __iterable0__ = ret;
+									for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+										var x = __iterable0__ [__index0__];
+										__accu0__.append ((x !== null ? x : py_default));
+									}
+									return __accu0__;
+								} ());
+							}
+							else {
+								return tuple ();
+							}
+						});},
+						get groupdict () {return __get__ (this, function (self, py_default) {
+							if (typeof py_default == 'undefined' || (py_default != null && py_default .hasOwnProperty ("__kwargtrans__"))) {;
+								var py_default = null;
+							};
+							if (self._namedGroups !== null) {
+								var ret = dict ({});
+								var __iterable0__ = self._namedGroups.py_items ();
+								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+									var __left0__ = __iterable0__ [__index0__];
+									var gName = __left0__ [0];
+									var gId = __left0__ [1];
+									var value = self._obj [gId];
+									ret [gName] = (value !== null ? value : py_default);
+								}
+								return ret;
+							}
+							else {
+								var __except0__ = NotImplementedError ('No NamedGroups Available');
+								__except0__.__cause__ = null;
+								throw __except0__;
+							}
+						});},
+						get start () {return __get__ (this, function (self, group) {
+							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
+								var group = 0;
+							};
+							var gId = 0;
+							if (py_typeof (group) === str) {
+								if (self._namedGroups !== null) {
+									if (!__in__ (group, self._namedGroups.py_keys ())) {
+										var __except0__ = ReIndexError ();
+										__except0__.__cause__ = null;
+										throw __except0__;
+									}
+									var gId = self._namedGroups [group];
+								}
+								else {
+									var __except0__ = NotImplementedError ('No NamedGroups Available');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+							}
+							else {
+								var gId = group;
+							}
+							if (gId >= len (self._obj)) {
+								var __except0__ = ReIndexError ();
+								__except0__.__cause__ = null;
+								throw __except0__;
+							}
+							if (gId == 0) {
+								return self._obj.index;
+							}
+							else if (self._obj [gId] !== null) {
+								var r = compile (escape (self._obj [gId]), self._re.flags);
+								var m = r.search (self._obj [0]);
+								if (m) {
+									return self._obj.index + m.start ();
+								}
+								else {
+									var __except0__ = Exception ('Failed to find capture group');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+							}
+							else {
+								return -(1);
+							}
+						});},
+						get end () {return __get__ (this, function (self, group) {
+							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
+								var group = 0;
+							};
+							var gId = 0;
+							if (py_typeof (group) === str) {
+								if (self._namedGroups !== null) {
+									if (!__in__ (group, self._namedGroups.py_keys ())) {
+										var __except0__ = ReIndexError ();
+										__except0__.__cause__ = null;
+										throw __except0__;
+									}
+									var gId = self._namedGroups [group];
+								}
+								else {
+									var __except0__ = NotImplementedError ('No NamedGroups Available');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+							}
+							else {
+								var gId = group;
+							}
+							if (gId >= len (self._obj)) {
+								var __except0__ = ReIndexError ();
+								__except0__.__cause__ = null;
+								throw __except0__;
+							}
+							if (gId == 0) {
+								return self._obj.index + len (self._obj [0]);
+							}
+							else if (self._obj [gId] !== null) {
+								var r = compile (escape (self._obj [gId]), self._re.flags);
+								var m = r.search (self._obj [0]);
+								if (m) {
+									return self._obj.index + m.end ();
+								}
+								else {
+									var __except0__ = Exception ('Failed to find capture group');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+							}
+							else {
+								return -(1);
+							}
+						});},
+						get span () {return __get__ (this, function (self, group) {
+							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
+								var group = 0;
+							};
+							return tuple ([self.start (group), self.end (group)]);
+						});}
+					});
+					Object.defineProperty (Match, 'pos', property.call (Match, Match._getPos, Match._setPos));;
+					Object.defineProperty (Match, 'endpos', property.call (Match, Match._getEndPos, Match._setEndPos));;
+					Object.defineProperty (Match, 're', property.call (Match, Match._getRe, Match._setRe));;
+					Object.defineProperty (Match, 'string', property.call (Match, Match._getString, Match._setString));;
+					Object.defineProperty (Match, 'lastgroup', property.call (Match, Match._getLastGroup, Match._setLastGroup));;
+					Object.defineProperty (Match, 'lastindex', property.call (Match, Match._getLastIndex, Match._setLastIndex));;
+					var Regex = __class__ ('Regex', [object], {
+						get __init__ () {return __get__ (this, function (self, pattern, flags) {
+							if (!((flags & ASCII) > 0)) {
+								flags |= UNICODE;
+							}
+							self._flags = flags;
+							var __left0__ = self._compileWrapper (pattern, flags);
+							self._jsFlags = __left0__ [0];
+							self._obj = __left0__ [1];
+							self._jspattern = pattern;
+							self._pypattern = pattern;
+							var __left0__ = self._compileWrapper (pattern + '|', flags);
+							var _ = __left0__ [0];
+							var groupCounterRegex = __left0__ [1];
+							self._groups = groupCounterRegex.exec ('').length - 1;
+							self._groupindex = null;
+						});},
+						get _getPattern () {return __get__ (this, function (self) {
+							var ret = self._pypattern.py_replace ('\\', '\\\\');
+							return ret;
+						});},
+						get _setPattern () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getFlags () {return __get__ (this, function (self) {
+							return self._flags;
+						});},
+						get _setFlags () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getGroups () {return __get__ (this, function (self) {
+							return self._groups;
+						});},
+						get _setGroups () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _getGroupIndex () {return __get__ (this, function (self) {
+							if (self._groupindex === null) {
+								return dict ({});
+							}
+							else {
+								return self._groupindex;
+							}
+						});},
+						get _setGroupIndex () {return __get__ (this, function (self, val) {
+							var __except0__ = AttributeError ('readonly attribute');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get _compileWrapper () {return __get__ (this, function (self, pattern, flags) {
+							if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+								var flags = 0;
+							};
+							var jsFlags = self._convertFlags (flags);
+							var rObj = null;
+							var errObj = null;
+							
+							                   try {
+							                     rObj = new RegExp(pattern, jsFlags)
+							                   } catch( err ) {
+							                     errObj = err
+							                   }
+							                   
+							if (errObj !== null) {
+								var __except0__ = error (errObj.message, errObj, pattern, flags);
+								__except0__.__cause__ = null;
+								throw __except0__;
+							}
+							return tuple ([jsFlags, rObj]);
+						});},
+						get _convertFlags () {return __get__ (this, function (self, flags) {
+							var bitmaps = list ([tuple ([DEBUG, '']), tuple ([IGNORECASE, 'i']), tuple ([MULTILINE, 'm']), tuple ([STICKY, 'y']), tuple ([GLOBAL, 'g']), tuple ([UNICODE, 'u'])]);
+							var ret = ''.join (function () {
+								var __accu0__ = [];
+								var __iterable0__ = bitmaps;
+								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+									var x = __iterable0__ [__index0__];
+									if ((x [0] & flags) > 0) {
+										__accu0__.append (x [1]);
+									}
+								}
+								return __accu0__;
+							} ());
+							return ret;
+						});},
+						get _getTargetStr () {return __get__ (this, function (self, string, pos, endpos) {
+							var endPtr = len (string);
+							if (endpos !== null) {
+								if (endpos < endPtr) {
+									var endPtr = endpos;
+								}
+							}
+							if (endPtr < 0) {
+								var endPtr = 0;
+							}
+							var ret = string.__getslice__ (pos, endPtr, 1);
+							return ret;
+						});},
+						get _patternHasCaptures () {return __get__ (this, function (self) {
+							return self._groups > 0;
+						});},
+						get search () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = 0;
+							};
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							if (endpos === null) {
+								var endpos = len (string);
+							}
+							var rObj = self._obj;
+							var m = rObj.exec (string);
+							if (m) {
+								if (m.index < pos || m.index > endpos) {
+									return null;
+								}
+								else {
+									return Match (m, string, pos, endpos, self, self._groupindex);
+								}
+							}
+							else {
+								return null;
+							}
+						});},
+						get match () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = 0;
+							};
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							var target = string;
+							if (endpos !== null) {
+								var target = target.__getslice__ (0, endpos, 1);
+							}
+							else {
+								var endpos = len (string);
+							}
+							var rObj = self._obj;
+							var m = rObj.exec (target);
+							if (m) {
+								if (m.index == pos) {
+									return Match (m, string, pos, endpos, self, self._groupindex);
+								}
+								else {
+									return null;
+								}
+							}
+							else {
+								return null;
+							}
+						});},
+						get fullmatch () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = 0;
+							};
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							var target = string;
+							var strEndPos = len (string);
+							if (endpos !== null) {
+								var target = target.__getslice__ (0, endpos, 1);
+								var strEndPos = endpos;
+							}
+							var rObj = self._obj;
+							var m = rObj.exec (target);
+							if (m) {
+								var obsEndPos = m.index + len (m [0]);
+								if (m.index == pos && obsEndPos == strEndPos) {
+									return Match (m, string, pos, strEndPos, self, self._groupindex);
+								}
+								else {
+									return null;
+								}
+							}
+							else {
+								return null;
+							}
+						});},
+						get py_split () {return __get__ (this, function (self, string, maxsplit) {
+							if (typeof maxsplit == 'undefined' || (maxsplit != null && maxsplit .hasOwnProperty ("__kwargtrans__"))) {;
+								var maxsplit = 0;
+							};
+							if (maxsplit < 0) {
+								return list ([string]);
+							}
+							var mObj = null;
+							var rObj = self._obj;
+							if (maxsplit == 0) {
+								var mObj = string.py_split (rObj);
+								return mObj;
+							}
+							else {
+								var flags = self._flags;
+								flags |= GLOBAL;
+								var __left0__ = self._compileWrapper (self._jspattern, flags);
+								var _ = __left0__ [0];
+								var rObj = __left0__ [1];
+								var ret = list ([]);
+								var lastM = null;
+								var cnt = 0;
+								for (var i = 0; i < maxsplit; i++) {
+									var m = rObj.exec (string);
+									if (m) {
+										cnt++;
+										if (lastM !== null) {
+											var start = lastM.index + len (lastM [0]);
+											var head = string.__getslice__ (start, m.index, 1);
+											ret.append (head);
+											if (len (m) > 1) {
+												ret.extend (m.__getslice__ (1, null, 1));
+											}
+										}
+										else {
+											var head = string.__getslice__ (0, m.index, 1);
+											ret.append (head);
+											if (len (m) > 1) {
+												ret.extend (m.__getslice__ (1, null, 1));
+											}
+										}
+										var lastM = m;
+									}
+									else {
+										break;
+									}
+								}
+								if (lastM !== null) {
+									var endPos = lastM.index + len (lastM [0]);
+									var end = string.__getslice__ (endPos, null, 1);
+									ret.append (end);
+								}
+								return ret;
+							}
+						});},
+						get _findAllMatches () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = 0;
+							};
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							var target = self._getTargetStr (string, pos, endpos);
+							var flags = self._flags;
+							flags |= GLOBAL;
+							var __left0__ = self._compileWrapper (self._jspattern, flags);
+							var _ = __left0__ [0];
+							var rObj = __left0__ [1];
+							var ret = list ([]);
+							while (true) {
+								var m = rObj.exec (target);
+								if (m) {
+									ret.append (m);
+								}
+								else {
+									break;
+								}
+							}
+							return ret;
+						});},
+						get findall () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
+								var pos = 0;
+							};
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							var mlist = self._findAllMatches (string, pos, endpos);
+							var mSelect = function (m) {
+								if (len (m) > 2) {
+									return tuple (m.__getslice__ (1, null, 1));
+								}
+								else if (len (m) == 2) {
+									return m [1];
+								}
+								else {
+									return m [0];
+								}
+							};
+							var ret = map (mSelect, mlist);
+							return ret;
+						});},
+						get finditer () {return __get__ (this, function (self, string, pos, endpos) {
+							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
+								var endpos = null;
+							};
+							var __except0__ = NotImplementedError ('No Iterator Support in es5');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						});},
+						get sub () {return __get__ (this, function (self, repl, string, count) {
+							if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
+								var count = 0;
+							};
+							var __left0__ = self.subn (repl, string, count);
+							var ret = __left0__ [0];
+							var _ = __left0__ [1];
+							return ret;
+						});},
+						get subn () {return __get__ (this, function (self, repl, string, count) {
+							if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
+								var count = 0;
+							};
+							var flags = self._flags;
+							flags |= GLOBAL;
+							var __left0__ = self._compileWrapper (self._jspattern, flags);
+							var _ = __left0__ [0];
+							var rObj = __left0__ [1];
+							var ret = '';
+							var totalMatch = 0;
+							var lastEnd = -(1);
+							while (true) {
+								if (count > 0) {
+									if (totalMatch >= count) {
+										if (lastEnd < 0) {
+											return tuple ([ret, totalMatch]);
+										}
+										else {
+											ret += string.__getslice__ (lastEnd, m.index, 1);
+											return tuple ([ret, totalMatch]);
+										}
+									}
+								}
+								var m = rObj.exec (string);
+								if (m) {
+									if (lastEnd < 0) {
+										ret += string.__getslice__ (0, m.index, 1);
+									}
+									else {
+										ret += string.__getslice__ (lastEnd, m.index, 1);
+									}
+									if (callable (repl)) {
+										var content = repl (Match (m, string, 0, len (string), self, self._groupindex));
+										ret += content;
+									}
+									else {
+										ret += repl;
+									}
+									totalMatch++;
+									var lastEnd = m.index + len (m [0]);
+								}
+								else if (lastEnd < 0) {
+									return tuple ([string, 0]);
+								}
+								else {
+									ret += string.__getslice__ (lastEnd, null, 1);
+									return tuple ([ret, totalMatch]);
+								}
+							}
+						});}
+					});
+					Object.defineProperty (Regex, 'pattern', property.call (Regex, Regex._getPattern, Regex._setPattern));;
+					Object.defineProperty (Regex, 'flags', property.call (Regex, Regex._getFlags, Regex._setFlags));;
+					Object.defineProperty (Regex, 'groups', property.call (Regex, Regex._getGroups, Regex._setGroups));;
+					Object.defineProperty (Regex, 'groupindex', property.call (Regex, Regex._getGroupIndex, Regex._setGroupIndex));;
+					var PyRegExp = __class__ ('PyRegExp', [Regex], {
+						get __init__ () {return __get__ (this, function (self, pyPattern, flags) {
+							var __left0__ = translate (pyPattern);
+							var jsTokens = __left0__ [0];
+							var inlineFlags = __left0__ [1];
+							var namedGroups = __left0__ [2];
+							var nCapGroups = __left0__ [3];
+							var n_splits = __left0__ [4];
+							flags |= inlineFlags;
+							var jsPattern = ''.join (jsTokens);
+							Regex.__init__ (self, jsPattern, flags);
+							self._pypattern = pyPattern;
+							self._nsplits = n_splits;
+							self._jsTokens = jsTokens;
+							self._capgroups = nCapGroups;
+							self._groupindex = namedGroups;
+						});}
+					});
+					var compile = function (pattern, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						if (flags & JSSTRICT) {
+							var p = Regex (pattern, flags);
+						}
+						else {
+							var p = PyRegExp (pattern, flags);
+						}
+						return p;
+					};
+					var search = function (pattern, string, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.search (string);
+					};
+					var match = function (pattern, string, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.match (string);
+					};
+					var fullmatch = function (pattern, string, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.fullmatch (string);
+					};
+					var py_split = function (pattern, string, maxsplit, flags) {
+						if (typeof maxsplit == 'undefined' || (maxsplit != null && maxsplit .hasOwnProperty ("__kwargtrans__"))) {;
+							var maxsplit = 0;
+						};
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.py_split (string, maxsplit);
+					};
+					var findall = function (pattern, string, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.findall (string);
+					};
+					var finditer = function (pattern, string, flags) {
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.finditer (string);
+					};
+					var sub = function (pattern, repl, string, count, flags) {
+						if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
+							var count = 0;
+						};
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.sub (repl, string, count);
+					};
+					var subn = function (pattern, repl, string, count, flags) {
+						if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
+							var count = 0;
+						};
+						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
+							var flags = 0;
+						};
+						var p = compile (pattern, flags);
+						return p.subn (repl, string, count);
+					};
+					var escape = function (string) {
+						var ret = null;
+						var replfunc = function (m) {
+							if (m [0] == '\\') {
+								return '\\\\\\\\';
+							}
+							else {
+								return '\\\\' + m [0];
+							}
+						};
+						
+						        var r = /[^A-Za-z\d]/g;
+						        ret = string.replace(r, replfunc);
+						        
+						if (ret !== null) {
+							return ret;
+						}
+						else {
+							var __except0__ = Exception ('Failed to escape the passed string');
+							__except0__.__cause__ = null;
+							throw __except0__;
+						}
+					};
+					var purge = function () {
+						// pass;
+					};
+					__pragma__ ('<use>' +
+						're.translate' +
+					'</use>')
+					__pragma__ ('<all>')
+						__all__.A = A;
+						__all__.ASCII = ASCII;
+						__all__.DEBUG = DEBUG;
+						__all__.DOTALL = DOTALL;
+						__all__.G = G;
+						__all__.GLOBAL = GLOBAL;
+						__all__.I = I;
+						__all__.IGNORECASE = IGNORECASE;
+						__all__.J = J;
+						__all__.JSSTRICT = JSSTRICT;
+						__all__.L = L;
+						__all__.LOCALE = LOCALE;
+						__all__.M = M;
+						__all__.MULTILINE = MULTILINE;
+						__all__.Match = Match;
+						__all__.PyRegExp = PyRegExp;
+						__all__.ReIndexError = ReIndexError;
+						__all__.Regex = Regex;
+						__all__.S = S;
+						__all__.STICKY = STICKY;
+						__all__.T = T;
+						__all__.TEMPLATE = TEMPLATE;
+						__all__.U = U;
+						__all__.UNICODE = UNICODE;
+						__all__.VERBOSE = VERBOSE;
+						__all__.X = X;
+						__all__.Y = Y;
+						__all__.compile = compile;
+						__all__.error = error;
+						__all__.escape = escape;
+						__all__.findall = findall;
+						__all__.finditer = finditer;
+						__all__.fullmatch = fullmatch;
+						__all__.match = match;
+						__all__.purge = purge;
+						__all__.search = search;
+						__all__.py_split = py_split;
+						__all__.sub = sub;
+						__all__.subn = subn;
+						__all__.translate = translate;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		're.translate', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var re = {};
+					var VERBOSE = false;
+					var MAX_SHIFTREDUCE_LOOPS = 1000;
+					var stringFlags = 'aiLmsux';
+					var Group = __class__ ('Group', [object], {
+						get __init__ () {return __get__ (this, function (self, start, end, klass) {
+							self.start = start;
+							self.end = end;
+							self.klass = klass;
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return str (tuple ([self.start, self.end, self.klass]));
+						});}
+					});
+					var generateGroupSpans = function (tokens) {
+						var groupInfo = list ([]);
+						var idx = 0;
+						var __iterable0__ = tokens;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var token = __iterable0__ [__index0__];
+							if (__t__ (token.py_name.startswith ('('))) {
+								groupInfo.append (Group (idx, null, token.py_name));
+							}
+							else if (__t__ (token.py_name == ')')) {
+								var __iterable1__ = py_reversed (groupInfo);
+								for (var __index1__ = 0; __index1__ < __iterable1__.length; __index1__++) {
+									var group = __iterable1__ [__index1__];
+									if (__t__ (group.end === null)) {
+										group.end = idx;
+									}
+								}
+							}
+							idx++;
+						}
+						return groupInfo;
+					};
+					var countCaptureGroups = function (tokens) {
+						var groupInfo = generateGroupSpans (tokens);
+						var count = 0;
+						var __iterable0__ = tokens;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var token = __iterable0__ [__index0__];
+							if (__t__ (token.py_name == '(')) {
+								count++;
+							}
+						}
+						return count;
+					};
+					var getCaptureGroup = function (groupInfo, namedGroups, groupRef) {
+						try {
+							var id = int (groupRef);
+						}
+						catch (__except0__) {
+							var id = namedGroups [groupRef];
+						}
+						var search = 0;
+						var __iterable0__ = groupInfo;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var group = __iterable0__ [__index0__];
+							if (__t__ (group.klass == '(')) {
+								search++;
+								if (__t__ (search == id)) {
+									return group;
+								}
+							}
+						}
+					};
+					var splitIfElse = function (tokens, namedGroups) {
+						var variants = list ([]);
+						var groupInfo = generateGroupSpans (tokens);
+						var __iterable0__ = groupInfo;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var group = __iterable0__ [__index0__];
+							if (__t__ (group.klass == '(?<')) {
+								var iff = tokens.__getslice__ (0, null, 1);
+								var els = tokens.__getslice__ (0, null, 1);
+								var conStart = group.start;
+								var conEnd = group.end;
+								var ref = tokens [conStart + 1].py_name;
+								var captureGroup = getCaptureGroup (groupInfo, namedGroups, ref);
+								var captureGroupModifier = tokens [captureGroup.end + 1];
+								if (__t__ (__t__ (__in__ (captureGroupModifier.py_name, list (['?', '*']))) || captureGroupModifier.py_name.startswith ('{0,'))) {
+									if (__t__ (captureGroupModifier.py_name == '?')) {
+										iff [captureGroup.end + 1] = null;
+									}
+									else if (__t__ (captureGroupModifier.py_name == '*')) {
+										iff [captureGroup.end + 1] = Token ('+');
+									}
+									else if (__t__ (captureGroupModifier.py_name.startswith ('{0,'))) {
+										iff [captureGroup.end + 1].py_name.__setslice__ (0, 3, null, '{1,');
+									}
+									els [captureGroup.end + 1] = null;
+									var hasElse = false;
+									for (var idx = conStart; idx < conEnd; idx++) {
+										if (__t__ (tokens [idx].py_name == '|')) {
+											var hasElse = true;
+											els.py_pop (conEnd);
+											iff.__setslice__ (idx, conEnd + 1, null, list ([]));
+											els.__setslice__ (conStart, idx + 1, null, list ([]));
+											break;
+										}
+									}
+									if (__t__ (!__t__ ((hasElse)))) {
+										els.__setslice__ (conStart, conEnd + 1, null, list ([]));
+										iff.py_pop (conEnd);
+									}
+									iff.__setslice__ (conStart, conStart + 3, null, list ([]));
+									els.__setslice__ (captureGroup.start, captureGroup.end + 1, null, list ([Token ('('), Token (')')]));
+									iff.remove (null);
+									els.remove (null);
+									variants.append (iff);
+									variants.append (els);
+								}
+								else {
+									var pastIff = false;
+									for (var idx = conStart; idx < conEnd; idx++) {
+										if (__t__ (iff [idx].py_name == '|')) {
+											var iff = tokens.__getslice__ (0, idx, 1);
+											iff.extend (tokens.__getslice__ (conEnd + 1, null, 1));
+											break;
+										}
+									}
+									iff.__setslice__ (conStart, conStart + 3, null, list ([]));
+									variants.append (iff);
+								}
+								break;
+							}
+						}
+						if (__t__ (!__t__ ((variants)))) {
+							return list ([tokens]);
+						}
+						var allVariants = list ([]);
+						var __iterable0__ = variants;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var variant = __iterable0__ [__index0__];
+							allVariants.extend (splitIfElse (variant, namedGroups));
+						}
+						return allVariants;
+					};
+					var Token = __class__ ('Token', [object], {
+						get __init__ () {return __get__ (this, function (self, py_name, paras, pure) {
+							if (typeof paras == 'undefined' || (paras != null && paras .hasOwnProperty ("__kwargtrans__"))) {;
+								var paras = null;
+							};
+							if (typeof pure == 'undefined' || (pure != null && pure .hasOwnProperty ("__kwargtrans__"))) {;
+								var pure = false;
+							};
+							if (__t__ (paras === null)) {
+								var paras = list ([]);
+							}
+							self.py_name = py_name;
+							self.paras = paras;
+							self.pure = pure;
+							self.isModeGroup = false;
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return self.py_name;
+						});},
+						get resolve () {return __get__ (this, function (self) {
+							var paras = '';
+							var __iterable0__ = self.paras;
+							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								var para = __iterable0__ [__index0__];
+								paras += str (para);
+							}
+							return self.py_name + paras;
+						});}
+					});
+					var shift = function (stack, queue) {
+						var done = !__t__ ((bool (queue)));
+						if (__t__ (!__t__ ((done)))) {
+							stack.append (Token (queue [0], list ([]), true));
+							var queue = queue.__getslice__ (1, null, 1);
+						}
+						return tuple ([stack, queue, done]);
+					};
+					var shiftReduce = function (stack, queue, namedGroups, flags) {
+						var done = false;
+						var high = len (stack) - 1;
+						if (__t__ (len (stack) < 2)) {
+							var __left0__ = shift (stack, queue);
+							var stack = __left0__ [0];
+							var queue = __left0__ [1];
+							var done = __left0__ [2];
+							return tuple ([stack, queue, flags, done]);
+						}
+						var s0 = (__t__ (len (stack) > 0) ? stack [high] : Token (''));
+						var s1 = (__t__ (len (stack) > 1) ? stack [high - 1] : Token (''));
+						if (__t__ (VERBOSE)) {
+							var __iterable0__ = stack;
+							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								var token = __iterable0__ [__index0__];
+								console.log (token.resolve (), '\t', __kwargtrans__ ({end: ''}));
+							}
+							console.log ('');
+						}
+						if (__t__ (s1.py_name == '\\')) {
+							if (__t__ (s0.py_name == 'A')) {
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('^')]));
+							}
+							else if (__t__ (s0.py_name == 'a')) {
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\07')]));
+							}
+							else if (__t__ (s0.py_name == 'Z')) {
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('$')]));
+							}
+							else {
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\' + s0.py_name)]));
+							}
+						}
+						else if (__t__ (__t__ (s0.py_name == '$') && s0.pure)) {
+							stack.py_pop ();
+							stack.extend (list ([Token ('(?='), Token ('\\n'), Token ('?'), Token ('$'), Token (')')]));
+						}
+						else if (__t__ (s1.py_name == '{')) {
+							if (__t__ (__t__ (s0.py_name == ',') && len (s1.paras) == 0)) {
+								s1.paras.append ('0');
+								s1.paras.append (',');
+							}
+							else if (__t__ (s0.py_name == '}')) {
+								s1.paras.append ('}');
+								s1.py_name = s1.resolve ();
+								s1.paras = list ([]);
+							}
+							else {
+								s1.paras.append (s0.py_name);
+							}
+							var stack = stack.__getslice__ (0, -__t__ ((1)), 1);
+						}
+						else if (__t__ (__t__ (s1.py_name == '[') && s0.py_name == '^')) {
+							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('[^')]));
+						}
+						else if (__t__ (__t__ (s1.py_name == '(') && s0.py_name == '?')) {
+							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(?')]));
+						}
+						else if (__t__ (__t__ (__in__ (s1.py_name, list (['*', '+', '?']))) && s0.py_name == '?')) {
+							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token (s1.py_name + '?')]));
+						}
+						else if (__t__ (__t__ (s1.isModeGroup) && s0.py_name == ')')) {
+							var stack = stack.__getslice__ (0, -__t__ ((2)), 1);
+						}
+						else if (__t__ (s1.py_name == '(?')) {
+							if (__t__ (__in__ (s0.py_name, stringFlags))) {
+								if (__t__ (s0.py_name == 'i')) {
+									flags |= re.IGNORECASE;
+								}
+								else if (__t__ (s0.py_name == 'L')) {
+									flags |= re.LOCALE;
+								}
+								else if (__t__ (s0.py_name == 'm')) {
+									flags |= re.MULTILINE;
+								}
+								else if (__t__ (s0.py_name == 's')) {
+									flags |= re.DOTALL;
+								}
+								else if (__t__ (s0.py_name == 'u')) {
+									flags |= re.UNICODE;
+								}
+								else if (__t__ (s0.py_name == 'x')) {
+									flags |= re.VERBOSE;
+								}
+								else if (__t__ (s0.py_name == 'a')) {
+									flags |= re.ASCII;
+								}
+								stack.py_pop ();
+								s1.isModeGroup = true;
+							}
+							else {
+								if (__t__ (s0.py_name == '(')) {
+									s0.py_name = '<';
+								}
+								var newToken = Token ('(?' + s0.py_name);
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([newToken]));
+							}
+						}
+						else if (__t__ (s1.py_name == '(?<')) {
+							if (__t__ (s0.py_name == ')')) {
+								stack.__setslice__ (-__t__ ((1)), null, null, list ([Token (''.join (s1.paras)), Token ('>')]));
+								s1.paras = list ([]);
+							}
+							else {
+								s1.paras.append (s0.py_name);
+								stack.py_pop ();
+							}
+						}
+						else if (__t__ (s1.py_name == '(?P')) {
+							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(?P' + s0.py_name)]));
+						}
+						else if (__t__ (s1.py_name == '(?P<')) {
+							if (__t__ (s0.py_name == '>')) {
+								namedGroups [''.join (s1.paras)] = countCaptureGroups (stack) + 1;
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(')]));
+							}
+							else {
+								s1.paras.append (s0.py_name);
+								stack.py_pop ();
+							}
+						}
+						else if (__t__ (s1.py_name == '(?P=')) {
+							if (__t__ (s0.py_name == ')')) {
+								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\' + str (namedGroups [s1.paras [0]]))]));
+							}
+							else if (__t__ (!__t__ ((s1.paras)))) {
+								s1.paras.append (s0.py_name);
+								stack.py_pop ();
+							}
+							else {
+								s1.paras [0] += s0.py_name;
+								stack.py_pop ();
+							}
+						}
+						else if (__t__ (s1.py_name == '(?#')) {
+							if (__t__ (s0.py_name == ')')) {
+								var stack = stack.__getslice__ (0, -__t__ ((2)), 1);
+							}
+							else {
+								var stack = stack.__getslice__ (0, -__t__ ((1)), 1);
+							}
+						}
+						else {
+							var __left0__ = shift (stack, queue);
+							var stack = __left0__ [0];
+							var queue = __left0__ [1];
+							var done = __left0__ [2];
+						}
+						return tuple ([stack, queue, flags, done]);
+					};
+					var translate = function (rgx) {
+						__nest__ (re, '', __init__ (__world__.re));
+						var stack = list ([]);
+						var queue = list (rgx);
+						var flags = 0;
+						var namedGroups = dict ();
+						var nloop = 0;
+						while (__t__ (true)) {
+							nloop++;
+							if (__t__ (nloop > MAX_SHIFTREDUCE_LOOPS)) {
+								var __except0__ = Exception ();
+								__except0__.__cause__ = null;
+								throw __except0__;
+							}
+							var __left0__ = shiftReduce (stack, queue, namedGroups, flags);
+							var stack = __left0__ [0];
+							var queue = __left0__ [1];
+							var flags = __left0__ [2];
+							var done = __left0__ [3];
+							if (__t__ (done)) {
+								break;
+							}
+						}
+						var variants = splitIfElse (stack, namedGroups);
+						var n_splits = len (variants);
+						var final = list ([]);
+						for (var i = 0; i < len (variants); i++) {
+							final.extend (variants [i]);
+							if (__t__ (i < len (variants) - 1)) {
+								final.append (Token ('|'));
+							}
+						}
+						var stack = final;
+						var groupInfo = generateGroupSpans (stack);
+						var resolvedTokens = list ([]);
+						var __iterable0__ = stack;
+						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							var token = __iterable0__ [__index0__];
+							var stringed = token.resolve ();
+							if (__t__ (__t__ (flags & re.DOTALL) && stringed == '.')) {
+								var stringed = '[\\s\\S]';
+							}
+							resolvedTokens.append (stringed);
+						}
+						return tuple ([resolvedTokens, flags, namedGroups, countCaptureGroups (stack), n_splits]);
+					};
+					__pragma__ ('<use>' +
+						're' +
+					'</use>')
+					__pragma__ ('<all>')
+						__all__.Group = Group;
+						__all__.MAX_SHIFTREDUCE_LOOPS = MAX_SHIFTREDUCE_LOOPS;
+						__all__.Token = Token;
+						__all__.VERBOSE = VERBOSE;
+						__all__.countCaptureGroups = countCaptureGroups;
+						__all__.generateGroupSpans = generateGroupSpans;
+						__all__.getCaptureGroup = getCaptureGroup;
+						__all__.shift = shift;
+						__all__.shiftReduce = shiftReduce;
+						__all__.splitIfElse = splitIfElse;
+						__all__.stringFlags = stringFlags;
+						__all__.translate = translate;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
 	(function () {
-		console.log ('PRE');
-		var a = int (false);
-		console.log ('POST', a);
+		var re = {};
+		__nest__ (re, '', __init__ (__world__.re));
+		var Example = __class__ ('Example', [object], {
+			d: dict ({'A': 1, 'B': 2}),
+			rec: re.compile ('(?P<decimal>\\d+)', re.ASCII),
+			get run () {return __get__ (this, function (self) {
+				var match = self.rec.match ('42');
+				if (!(match)) {
+					print ('ERROR: RE does not match');
+				}
+				var e = match.groupdict ();
+				print ('before: self.d=', self.d);
+				print ('before: e=', e);
+				self.d.py_update (e);
+				print ('after: self.d=', self.d);
+			});}
+		});
+		var example = Example ();
+		example.run ();
+		__pragma__ ('<use>' +
+			're' +
+		'</use>')
 		__pragma__ ('<all>')
-			__all__.a = a;
+			__all__.Example = Example;
+			__all__.example = example;
 		__pragma__ ('</all>')
 	}) ();
    return __all__;

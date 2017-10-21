@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Small fix of re module (issue 392)
 - Conversion from bool to int now succeeds (issue 391)
 - Overloadable operators __truediv__ and __floordiv__ added
 - Class methods, static methods, class decorators, method decorators and static method decorators
