@@ -279,7 +279,15 @@ __pragma__ ('endif')
             return -Infinity;
         }
         else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
-            throw ValueError (new Error ());
+            if (any === false) {
+                return 0;
+            }
+            else if (any === true) {
+                return 1;
+            }
+            else {  // Needed e.g. in autoTester.check, so "return any ? true : false" won't do
+                throw ValueError (new Error ());
+            }
         }
         else {
             return +any;

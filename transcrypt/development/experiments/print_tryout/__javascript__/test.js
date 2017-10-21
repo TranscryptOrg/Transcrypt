@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-10-21 14:56:18
+// Transcrypt'ed from Python, 2017-10-04 11:55:08
 function test () {
    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -81,27 +81,6 @@ function test () {
         }
     }
     __all__.__get__ = __get__;
-
-    var __getcm__ = function (self, func, quotedFuncName) {
-        if (self.hasOwnProperty ('__class__')) {
-            return function () {
-                var args = [] .slice.apply (arguments);
-                return func.apply (null, [self.__class__] .concat (args));
-            };
-        }
-        else {
-            return function () {
-                var args = [] .slice.apply (arguments);
-                return func.apply (null, [self] .concat (args));
-            };
-        }
-    }
-    __all__.__getcm__ = __getcm__;
-    
-    var __getsm__ = function (self, func, quotedFuncName) {
-        return func;
-    }
-    __all__.__getsm__ = __getsm__;
         
     // Mother of all metaclasses        
     var py_metatype = {
@@ -194,7 +173,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.52';
+							self.transpiler_version = '3.6.45';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -613,7 +592,7 @@ function test () {
     __all__.__globals__ = __globals__
     
     // Partial implementation of super () .<methodName> (<params>)
-    var __super__ = function (aClass, methodName) {
+    var __super__ = function (aClass, methodName) {        
         // Lean and fast, no C3 linearization, only call first implementation encountered
         // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
         
@@ -727,28 +706,26 @@ function test () {
     };
     __all__.__specialattrib__ = __specialattrib__;
 
-    // Compute length of any object
+    // Len function for any object
     var len = function (anObject) {
-        if (anObject === undefined || anObject === null) {
-            return 0;
-        }
-
-        if (anObject.__len__ instanceof Function) {
-            return anObject.__len__ ();
-        }
-
-        if (anObject.length !== undefined) {
-            return anObject.length;
-        }
-
-        var length = 0;
-        for (var attr in anObject) {
-            if (!__specialattrib__ (attr)) {
-                length++;
+        if (anObject) {
+            var l = anObject.length;
+            if (l == undefined) {
+                var result = 0;
+                for (var attrib in anObject) {
+                    if (!__specialattrib__ (attrib)) {
+                        result++;
+                    }
+                }
+                return result;
+            }
+            else {
+                return l;
             }
         }
-
-        return length;
+        else {
+            return 0;
+        }
     };
     __all__.len = len;
 
@@ -758,33 +735,11 @@ function test () {
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
 
-    // If the target object is somewhat true, return it. Otherwise return false.
-    // Try to follow Python conventions of truthyness
-    function __t__ (target) { 
-        return (
-            // Avoid invalid checks
-            target === undefined || target === null ? false :
-            
-            // Take a quick shortcut if target is a simple type
-            ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
-            
-            // Use __bool__ (if present) to decide if target is true
-            target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
-            
-            // There is no __bool__, use __len__ (if present) instead
-            target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
-            
-            // There is no __bool__ and no __len__, declare Functions true.
-            // Python objects are transpiled into instances of Function and if
-            // there is no __bool__ or __len__, the object in Python is true.
-            target instanceof Function ? target :
-            
-            // Target is something else, compute its len to decide
-            len (target) !== 0 ? target :
-            
-            // When all else fails, declare target as false
-            false
-        );
+    function __t__ (any) {  // Conversion to truthyness, __ ([1, 2, 3]) returns [1, 2, 3], needed for nonempty selection: l = list1 or list2]
+        return (['boolean', 'number'] .indexOf (typeof any) >= 0 || any instanceof Function || len (any)) ? any : false;
+        // JavaScript functions have a length attribute, denoting the number of parameters
+        // Python objects are JavaScript functions, but their length doesn't matter, only their existence
+        // By the term 'any instanceof Function' we make sure that Python objects aren't rejected when their length equals zero
     }
     __all__.__t__ = __t__;
 
@@ -802,7 +757,7 @@ function test () {
             return -Infinity;
         }
         else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
-            return any ? true : false;
+            throw ValueError (new Error ());
         }
         else {
             return +any;
@@ -924,7 +879,9 @@ function test () {
                     }
                 }
                 catch (exception) {
-                    return '<object of type: ' + typeof anObject + '>';
+                    console.log ('ERROR: Could not evaluate repr (<object of type ' + typeof anObject + '>)');
+                    console.log (exception);
+                    return '???';
                 }
             }
         }
@@ -2010,14 +1967,8 @@ function test () {
     };
     __all__.__mul__ = __mul__;
 
-    var __truediv__ = function (a, b) {
-        if (typeof a == 'object' && '__truediv__' in a) {
-            return a.__truediv__ (b);
-        }
-        else if (typeof b == 'object' && '__rtruediv__' in b) {
-            return b.__rtruediv__ (a);
-        }
-        else if (typeof a == 'object' && '__div__' in a) {
+    var __div__ = function (a, b) {
+        if (typeof a == 'object' && '__div__' in a) {
             return a.__div__ (b);
         }
         else if (typeof b == 'object' && '__rdiv__' in b) {
@@ -2027,26 +1978,7 @@ function test () {
             return a / b;
         }
     };
-    __all__.__truediv__ = __truediv__;
-
-    var __floordiv__ = function (a, b) {
-        if (typeof a == 'object' && '__floordiv__' in a) {
-            return a.__floordiv__ (b);
-        }
-        else if (typeof b == 'object' && '__rfloordiv__' in b) {
-            return b.__rfloordiv__ (a);
-        }
-        else if (typeof a == 'object' && '__div__' in a) {
-            return a.__div__ (b);
-        }
-        else if (typeof b == 'object' && '__rdiv__' in b) {
-            return b.__rdiv__ (a);
-        }
-        else {
-            return Math.floor (a / b);
-        }
-    };
-    __all__.__floordiv__ = __floordiv__;
+    __all__.__div__ = __div__;
 
     var __add__ = function (a, b) {
         if (typeof a == 'object' && '__add__' in a) {
@@ -2139,8 +2071,8 @@ function test () {
             return a & b;
         }
     };
-    __all__.__and__ = __and__;
-
+    __all__.__and__ = __and__;    
+        
     // Overloaded binary compare
     
     var __eq__ = function (a, b) {
@@ -2458,13 +2390,75 @@ function test () {
         }
     };
     __all__.__setslice__ = __setslice__;
+
+	__nest__ (
+		__all__,
+		'org.transcrypt.stubs', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+				}
+			}
+		}
+	);
 	(function () {
-		console.log ('PRE');
-		var a = int (false);
-		console.log ('POST', a);
-		__pragma__ ('<all>')
-			__all__.a = a;
-		__pragma__ ('</all>')
+		var org = {};
+		__nest__ (org, 'transcrypt.stubs', __init__ (__world__.org.transcrypt.stubs));
+		
+		var terminal = document.getElementById ('__terminal__');
+		
+		var screenBuffer = "";
+		function write (aString) {
+		    screenBuffer = screenBuffer + aString;
+		    terminal.innerHTML = screenBuffer;
+		}
+		
+		var keyBuffer = "";
+		document.addEventListener('keydown', function (event) {
+		    keyBuffer += event.keyCode;
+		});
+		
+		function* readFn () {
+		    // keyBuffer = "";
+		    var counter = 0;
+		    while (! (keyBuffer.length && keyBuffer [keyBuffer.length - 1] == 13)) {
+		        yield false;
+		    }
+		    yield true;;
+		}
+		
+		var read = readFn ();
+		
+		function* inputFn () {
+		    while (!read ()) {
+		    }
+		    yield keyBuffer;
+		}
+		
+		var input = inputFn ();
+		
+		function* writeAllFn () {
+		    write ("What 's your name? ");
+		    yield;
+		    var name = input ();
+		    yield;
+		    write (name);
+		    yield;
+		}
+		
+		var writeAll = writeAllFn ();
+		
+		function repeater () {
+		    writeAll.next()
+		    setTimeout (repeater, 1000);
+		}
+		
+		repeater ()
+		
+		
+		__pragma__ ('<use>' +
+			'org.transcrypt.stubs' +
+		'</use>')
 	}) ();
    return __all__;
 }

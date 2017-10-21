@@ -345,3 +345,9 @@ def run (autoTester):
 
         #__pragma__ ('noopov')
     #__pragma__ ('endif')
+    
+    autoTester.check ('Issue 391')
+    autoTester.check (int (False))
+    autoTester.check (int (True))
+    autoTester.check (int (1 == 2))
+    autoTester.check (int (1 != 2))
