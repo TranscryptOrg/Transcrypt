@@ -122,6 +122,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Small fix of re module (issue 392)
+- Conversion from bool to int now succeeds (issue 391)
+- Overloadable operators __truediv__ and __floordiv__ added
 - Class methods, static methods, class decorators, method decorators and static method decorators
 - If an object doesn't have a specific string representation, function repr and str now return <object of type: object> rather than ???, and this case isn't reported as an error anymore
 - Function len now calls \_\_len\_\_ if it exists (pr 378)

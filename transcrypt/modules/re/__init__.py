@@ -211,7 +211,7 @@ class Match(object):
         if ( self._namedGroups is not None ):
             ret = {}
             for gName, gId in self._namedGroups.items():
-                value = self._obj[gid]
+                value = self._obj[gId]
                 ret[gName] = value if value is not None else default
             return(ret)
         else:

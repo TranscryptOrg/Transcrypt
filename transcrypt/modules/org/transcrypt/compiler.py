@@ -1337,11 +1337,18 @@ class Generator (ast.NodeVisitor):
 
     def visit_BinOp (self, node):
         if type (node.op) == ast.FloorDiv:
-            self.emit ('Math.floor (')
-            self.visitSubExpr (node, node.left)
-            self.emit (' / ')
-            self.visitSubExpr (node, node.right)
-            self.emit (')')
+            if self.allowOperatorOverloading:
+                self.emit ('__floordiv__ (')
+                self.visitSubExpr (node, node.left)
+                self.emit (', ')
+                self.visitSubExpr (node, node.right)
+                self.emit (')')
+            else:
+                self.emit ('Math.floor (')
+                self.visitSubExpr (node, node.left)
+                self.emit (' / ')
+                self.visitSubExpr (node, node.right)
+                self.emit (')') 
         elif (
             type (node.op) in (ast.Pow, ast.MatMult) or
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
@@ -1352,13 +1359,14 @@ class Generator (ast.NodeVisitor):
         ):
             self.emit ('{} ('.format (self.filterId (
                 # Non-overloaded
+                ('__floordiv__' if self.allowOperatorOverloading else 'Math.floor') if type (node.op) == ast.FloorDiv else
                 ('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
                 '__matmul__' if type (node.op) == ast.MatMult else
                 ('__jsmod__' if self.allowJavaScriptMod else '__mod__') if type (node.op) == ast.Mod else
                 
                 # Overloaded arithmetic
                 '__mul__' if type (node.op) == ast.Mult else
-                '__div__' if type (node.op) == ast.Div else
+                '__truediv__' if type (node.op) == ast.Div else
                 '__add__' if type (node.op) == ast.Add else
                 '__sub__' if type (node.op) == ast.Sub else
                 
