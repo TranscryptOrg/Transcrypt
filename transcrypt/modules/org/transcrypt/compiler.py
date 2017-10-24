@@ -2304,7 +2304,7 @@ class Generator (ast.NodeVisitor):
             for index, alias in enumerate (node.names):
                 if alias.name == '*':                                           # * Never refers to modules, only to entities in modules
                     if len (node.names) > 1:
-                        raise Error (
+                        raise utils.Error (
                             lineNr = node.lineno,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
