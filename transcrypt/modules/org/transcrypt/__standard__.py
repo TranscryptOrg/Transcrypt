@@ -42,13 +42,13 @@ class StopIteration (Exception):
     def __init__ (self, error):
         Exception.__init__ (self, 'Iterator exhausted', error = error)
         
-class ValueError (Exception,):
-    def __init__ (self, error):
-        Exception.__init__ (self, 'Erroneous value', error = error)
+class ValueError (Exception):
+    def __init__ (self, message, error):
+        Exception.__init__ (self, message, error = error)
     
-class KeyError (Exception,):
-    def __init__ (self, error):
-        Exception.__init__ (self, 'Invalid key', error = error)
+class KeyError (Exception):
+    def __init__ (self, message, error):
+        Exception.__init__ (self, message, error = error)
     
 class AssertionError (Exception):
     def __init__ (self, message, error):
