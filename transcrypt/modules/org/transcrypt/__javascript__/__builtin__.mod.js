@@ -901,8 +901,6 @@ __pragma__ ('endif')
             for (var index = 0; index < iterable.length; index++) {
                 instance.add (iterable [index]);
             }
-
-
         }
         instance.__class__ = set;   // Not all arrays are sets
         return instance;
