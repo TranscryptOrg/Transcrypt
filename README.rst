@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Default messages for ValueError and KeyError removed for better CPython compatibility (pr 395)
 - Small fix of re module (issue 392)
 - Conversion from bool to int now succeeds (issue 391)
 - Overloadable operators __truediv__ and __floordiv__ added (issue 389)
