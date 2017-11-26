@@ -286,7 +286,7 @@ __pragma__ ('endif')
                 return 1;
             }
             else {  // Needed e.g. in autoTester.check, so "return any ? true : false" won't do
-                throw ValueError (new Error ());
+                throw ValueError ("could not convert string to float: '" + str(any) + "'", new Error ());
             }
         }
         else {
@@ -843,7 +843,7 @@ __pragma__ ('endif')
     Array.prototype.remove = function (element) {
         var index = this.indexOf (element);
         if (index == -1) {
-            throw ValueError (new Error ());
+            throw ValueError ("list.remove(x): x not in list", new Error ());
         }
         this.splice (index, 1);
     };
@@ -1344,7 +1344,7 @@ __pragma__ ('endif')
     function __popitem__ () {
         var aKey = Object.keys (this) [0];
         if (aKey == null) {
-            throw KeyError (aKey, new Error ());
+            throw KeyError ("popitem(): dictionary is empty", new Error ());
         }
         var result = tuple ([aKey, this [aKey]]);
         delete this [aKey];
