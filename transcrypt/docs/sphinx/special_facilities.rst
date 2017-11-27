@@ -193,6 +193,26 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
+Using an external transpiler: __pragma__ ('xtrans', <translator>, ...)
+--------------------------------------------------------------------------------------------
+This pragma works the same as *__pragma__ ('js', ...)*, only now an external translator application can be specified.
+The code offered to this pragma is routed through this external translator by means of pipes.
+This pragma can use *__include__ (...)* just like *__pragma__ ('js', ...)*.
+
+Example:
+
+.. literalinclude:: ../../development/manual_tests/xtrans/test.py
+	:tab-width: 4
+	:caption: Test program using __pragma__ ('xtrans', ...)
+    
+.. literalinclude:: ../../development/manual_tests/xtrans/capitalize.cpp
+	:tab-width: 4
+	:caption: Simple external translator capitalize.cpp, capitalizing stdin to stdout
+    
+.. literalinclude:: ../../development/manual_tests/xtrans/__javascript__/test.mod.js
+	:tab-width: 4
+	:caption: The resulting translated file test.mod.js
+
 Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')
 -------------------------------------------------------------------------------------------------------------------------------
 Normally a Python *{...}* literal is compiled to *dict ({...})* to include the special attributes and methods of a Python dict, including e.g. an iterator. When *__pragma__ ('jsiter')* is active, a *Python {...}* literal is compiled to a bare *{...}*, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when *__pragma__ ('jsiter')* is active, a Python *for ... in ...* is literally translated to a JavaScript *for (var ... in ...)*. The main use case for this pragma is conveniently looping through class attributes in the *__new__* method of a metaclass. As a more flexible, but less convenient alternative, *__pragma__ ('js', '{}', '''...''')* can be used.

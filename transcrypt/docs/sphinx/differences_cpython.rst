@@ -34,7 +34,7 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 - You can use 'require' to load JavaScript modules on the fly and access them just as you would from JavaScript.
 
 Differences due to running Transcrypt applications in the browser, rather than on the desktop
---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
 
 - Transcrypt doesn't directly support the use of libraries written in C++ since, without special measures like compiling to asm.js, C++ doesn't run in the browser.
 - The browser programming model is event driven, so Transcrypt programs are even driven, as are their JavaScript counterparts.

@@ -1550,30 +1550,35 @@ class Generator (ast.NodeVisitor):
                         self.emit ('{}\n', line)
                     
                 elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
-                    sourceCode = node.args [2] .s.format (* [
-                        eval (
-                            compile (
-                                ast.Expression (arg),   # Code to compile (can be AST or source)
-                                '<string>',             # Not read from a file
-                                'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
-                            ),
-                            {},
-                            {'__include__': include}
+                    try:
+                        sourceCode = node.args [2] .s.format (* [
+                            eval (
+                                compile (
+                                    ast.Expression (arg),   # Code to compile (can be AST or source)
+                                    '<string>',             # Not read from a file
+                                    'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
+                                ),
+                                {},
+                                {'__include__': include}
+                            )
+                            for arg in node.args [3:]
+                        ])
+                        
+                        process = subprocess.Popen (
+                            [node.args [1] .s],
+                            stdin = subprocess.PIPE,
+                            stdout = subprocess.PIPE
                         )
-                        for arg in node.args [3:]
-                    ])
-                    process = subprocess.Popen (
-                        [node.args [1] .s],
-                        stdin = subprocess.PIPE,
-                        stdout = subprocess.PIPE
-                    )
-                    process.stdin.write ((sourceCode).encode ('utf8'))
-                    process.stdin.close ()
-                    while process.returncode is None:
-                        process.poll ()
-                    targetCode = process.stdout.read (). decode ('utf8'). replace ('\r\n', '\n')
-                    for line in targetCode.split ('\n'):
-                        self.emit ('{}\n', line)
+                        print (111)
+                        targetCode = process.communicate (sourceCode.encode ('utf8'))[0]
+                        print (222)
+                        print (targetCode)
+                        print (333)
+                        
+                        for line in targetCode.split ('\n'):
+                            self.emit ('{}\n', line)
+                    except Exception as exception:
+                        print (traceback.format_exc ())
 
                 elif node.args [0] .s == 'kwargs':      # Start emitting kwargs code for FunctionDef's
                     self.allowKeywordArgs = True

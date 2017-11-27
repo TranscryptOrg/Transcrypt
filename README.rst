@@ -122,6 +122,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- __pragma__ ('xtrans', ...) added to facilitate partial translation by external tools (EXPERIMENTAL, issue 404, e.g. to deal with JSX)
 - Default messages for ValueError and KeyError removed for better CPython compatibility (pr 395)
 - Small fix of re module (issue 392)
 - Conversion from bool to int now succeeds (issue 391)
