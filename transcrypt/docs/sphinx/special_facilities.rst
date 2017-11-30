@@ -149,7 +149,7 @@ Fast calls or fcalls are method calls where the method isn't an attribute of an 
 Note that these pragmas have to be applied on the function definition location rather than the call location. Placing *__pragma__ ('fcall')* or *__pragma__ ('nofcall')* at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.
 
 Enabling Pythons *send* syntax: __pragma__ ('gsend') and __pragma ('nogsend')
-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 These pragmas enable respectively disable use of Pythons *send* syntax for generators, which is disabled by default. An example of its use is in the following code:
 
@@ -193,9 +193,10 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
-Using an external transpiler: __pragma__ ('xtrans', <translator>, ...)
---------------------------------------------------------------------------------------------
+Using an external transpiler: __pragma__ ('xtrans', <translator>, ..., cwd = <workingdirectory>)
+----------------------------------------------------------------------------------------------------
 This pragma works the same as *__pragma__ ('js', ...)*, only now an external translator application can be specified.
+If the *cwd* parameter is present, it the external translator will use it as working directory.
 The code offered to this pragma is routed through this external translator by means of pipes.
 This pragma can use *__include__ (...)* just like *__pragma__ ('js', ...)*.
 
