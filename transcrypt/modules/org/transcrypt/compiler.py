@@ -24,10 +24,9 @@ import datetime
 import math
 import traceback
 import io
-import subprocess
-import shlex
 
 from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, type_check
+from org.transcrypt.pragma import lookup_pragma_handler
 
 class ModuleMetadata:
     def __init__ (self, program, name):
@@ -1449,22 +1448,6 @@ class Generator (ast.NodeVisitor):
 
             self.emit (')')
             
-        def include (fileName):
-            searchedIncludePaths = []
-            for searchDir in self.module.program.moduleSearchDirs:
-                filePath = '{}/{}'.format (searchDir, fileName)
-                if os.path.isfile (filePath):
-                    return tokenize.open (filePath) .read ()
-                else:
-                    searchedIncludePaths.append (filePath)
-            else:
-                raise utils.Error (
-                    lineNr = self.lineNr,
-                    message = '\n\tAttempt to include file: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
-                        node.args [0], '\n\t\t'. join (searchedIncludePaths)
-                    )
-                )
-
         if type (node.func) == ast.Name:
             if node.func.id == 'type':
                 self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
@@ -1481,133 +1464,9 @@ class Generator (ast.NodeVisitor):
                 self.emit ('__globals__ (__all__)')
                 return
             elif node.func.id == '__pragma__':
-                if node.args [0] .s == 'alias':
-                    self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
-                elif node.args [0] .s == 'noalias':
-                    if len (node.args) == 1:
-                        self.aliasers = []
-                    else:
-                        for index in reversed (range (len (self.aliasers))):
-                            if self.aliasers [index][0] == node.args [1] .s:
-                                self.aliasers.pop (index)
-
-                elif node.args [0] .s == 'noanno':
-                    self.allowDebugMap = False
-
-                elif node.args [0] .s == 'fcall':
-                    self.allowMemoizeCalls = True
-                elif node.args [0] .s == 'nofcall':
-                    self.allowMemoizeCalls = False
-
-                elif node.args [0] .s == 'docat':
-                    self.allowDocAttribs = True
-                elif node.args [0] .s == 'nodocat':
-                    self.allowDocAttribs = False
-
-                elif node.args [0] .s == 'iconv':       # Automatic conversion to iterable supported
-                    self.allowConversionToIterable = True
-                elif node.args [0] .s == 'noiconv':     # Automatic conversion to iterable not supported
-                    self.allowConversionToIterable = False
-
-                elif node.args [0] .s == 'jsiter':      # Translate for ... in ... : ... literally to for (... in ...) {...},
-                    self.allowJavaScriptIter = True     # to enable iterating JavaScript objects that are not dicts
-                elif node.args [0] .s == 'nojsiter':    # Dictionary keys without quotes are identifiers
-                    self.allowJavaScriptIter = False
-
-                elif node.args [0] .s == 'jskeys':      # Dictionary keys without quotes are string literals
-                    self.allowJavaScriptKeys = True
-                elif node.args [0] .s == 'nojskeys':    # Dictionary keys without quotes are identifiers
-                    self.allowJavaScriptKeys = False
-
-                elif node.args [0] .s == 'jsmod':       # % has JavaScript behaviour
-                    self.allowJavaScriptMod = True
-                elif node.args [0] .s == 'nojsmod':     # % has Python behaviour
-                    self.allowJavaScriptMod = False
-
-                elif node.args [0] .s == 'gsend':       # Replace send by next.value
-                    self.replaceSend = True
-                elif node.args [0] .s == 'nogsend':     # Don't replace send by next.value
-                    self.replaceSend = False
-
-                elif node.args [0] .s == 'tconv':       # Automatic conversion to truth value supported
-                    self.allowConversionToTruthValue = True
-                elif node.args [0] .s == 'notconv':     # Automatic conversion to truth value not supported
-                    self.allowConversionToTruthValue = False
-
-                elif node.args [0] .s == 'js':          # Include JavaScript code literally in the output
-                    code = node.args [1] .s.format (* [
-                        eval (
-                            compile (
-                                ast.Expression (arg),   # Code to compile (can be AST or source)
-                                '<string>',             # Not read from a file
-                                'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
-                            ),
-                            {},
-                            {'__include__': include}
-                        )
-                        for arg in node.args [2:]
-                    ])
-                    for line in code.split ('\n'):
-                        self.emit ('{}\n', line)
-                    
-                elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
-                    try:
-                        sourceCode = node.args [2] .s.format (* [
-                            eval (
-                                compile (
-                                    ast.Expression (arg),   # Code to compile (can be AST or source)
-                                    '<string>',             # Not read from a file
-                                    'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
-                                ),
-                                {},
-                                {'__include__': include}
-                            )
-                            for arg in node.args [3:]
-                        ])
-                        workDir = '.'
-                        for keyword in node.keywords:
-                            if keyword.arg == 'cwd':
-                                workDir = keyword.value.s
-                        process = subprocess.Popen (
-                            shlex.split(node.args [1] .s),
-                            stdin = subprocess.PIPE,
-                            stdout = subprocess.PIPE,
-                            cwd = workDir
-                        )
-                        process.stdin.write ((sourceCode).encode ('utf8'))
-                        process.stdin.close ()
-                        while process.returncode is None:
-                            process.poll ()
-                        targetCode = process.stdout.read (). decode ('utf8'). replace ('\r\n', '\n')
-                        for line in targetCode.split ('\n'):
-                            self.emit ('{}\n', line)
-                    except Exception as e:
-                        print (e)
-                        print (traceback.format_exc ())
-
-                elif node.args [0] .s == 'kwargs':      # Start emitting kwargs code for FunctionDef's
-                    self.allowKeywordArgs = True
-                elif node.args [0] .s == 'nokwargs':    # Stop emitting kwargs code for FunctionDef's
-                    self.allowKeywordArgs = False
-
-                elif node.args [0] .s == 'opov':        # Overloading of a small sane subset of operators allowed
-                    self.allowOperatorOverloading = True
-                elif node.args [0] .s == 'noopov':      # Operloading of a small sane subset of operators disallowed
-                    self.allowOperatorOverloading = False
-                    
-                elif node.args [0] .s == 'redirect':
-                    if node.args [1] .s == 'stdout':
-                        self.emit ('__stdout__ = \'{}\'', node.args [2])
-                elif node.args [0] .s == 'noredirect':
-                    if node.args [1] .s == 'stdout':
-                        self.emit ('__stdout__ = \'__console__\'')
-                        
-                elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'ifndef', 'else', 'endif'):
-                    pass                                # Easier dealth with on statement / expression level in self.visit
-                    
-                elif node.args [0] .s == 'xpath':
-                    self.module.program.moduleSearchDirs [1 : 1] = [elt.s for elt in node.args [1] .elts]
-                    
+                func = lookup_pragma_handler(node.args [0] .s)
+                if func is not None:
+                    func(self, node)
                 else:
                     raise utils.Error (
                         lineNr = self.lineNr,
