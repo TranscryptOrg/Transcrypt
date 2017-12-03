@@ -194,8 +194,8 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
 Using an external transpiler: __pragma__ ('xtrans', <translator>, ..., cwd = <workingdirectory>)
-----------------------------------------------------------------------------------------------------
-This pragma works the same as *__pragma__ ('js', ...)*, only now an external translator application can be specified.
+------------------------------------------------------------------------------------------------
+This pragma works the same as *__pragma__ ('js', ...)*, only now an external translator application can be specified, e.g. to translate JSX code.
 If the *cwd* parameter is present, it the external translator will use it as working directory.
 The code offered to this pragma is routed through this external translator by means of pipes.
 This pragma can use *__include__ (...)* just like *__pragma__ ('js', ...)*.
@@ -206,9 +206,9 @@ Example:
 	:tab-width: 4
 	:caption: Test program using __pragma__ ('xtrans', ...)
     
-.. literalinclude:: ../../development/manual_tests/xtrans/capitalize.cpp
+.. literalinclude:: ../../development/manual_tests/xtrans/change_case.cpp
 	:tab-width: 4
-	:caption: Simple external translator capitalize.cpp, capitalizing stdin to stdout
+	:caption: Simple external translator change_case.cpp, changing the case to upper or lower, depending on -l switch
     
 .. literalinclude:: ../../development/manual_tests/xtrans/__javascript__/test.mod.js
 	:tab-width: 4
@@ -229,6 +229,10 @@ An example of the use of this pragma is the following:
 __pragma__ ('jskeys') and __pragma__ ('nojskeys')
 -------------------------------------------------
 Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
+__pragma__ ('keycheck') and __pragma__ ('nokeycheck')
+-----------------------------------------------------
+When *__pragma__ ('keycheck')* is active, an attempt to retrieve an element from a dictionary via a non-existing key results in a KeyError being raised, unless it happens at the lefthand side of an augmented assignment. The run time support for this is expensive, as it requires passing the result of every such retrieval to a function that checks the definedness of the result. While the -kc command line switch switches key checking on globally, the preferred way is to switch on and off this facility locally to prevent code bloat.
 
 Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
 -----------------------------------------------------------------------

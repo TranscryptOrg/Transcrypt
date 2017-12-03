@@ -121,6 +121,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Enhancement for issue 399: \_\_pragma\_\_ ('keycheck') + command line switch + autotest
+- Fixes for issues 398, 412, 413 + autotests
 - __pragma__ ('xtrans', ...) added to facilitate partial translation by external tools (EXPERIMENTAL, issue 404, e.g. to deal with JSX)
 - Default messages for ValueError and KeyError removed for better CPython compatibility (pr 395)
 - Small fix of re module (issue 392)
@@ -128,7 +130,7 @@ What's new in the latest commits
 - Overloadable operators __truediv__ and __floordiv__ added (issue 389)
 - Class methods, static methods, class decorators, method decorators and static method decorators
 - If an object doesn't have a specific string representation, function repr and str now return <object of type: object> rather than ???, and this case isn't reported as an error anymore
-- Function len now calls \_\_len\_\_ if it exists (pr 378)
+- Function len now calls __len__ if it exists (pr 378)
 - More Pythonic truthyness when using -t (or --tconv) switch (pr 367 a.o.)
 - Source file spec on command line can now be a full path (free afer pr #362)
 - The zip function now also works for finite iterators (issue #369) + autotest

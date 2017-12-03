@@ -19,7 +19,7 @@ Differences due to the 'lean and mean' design goal
 - Metaclasses only support overloading the __new__ method, covering 90% of the use cases.
 - The *super* keyword isn't supported, use explicit names of parent classes. The correct method resolution order is supported, also in case of multiple inheritance. Supporting *super* is still under discussion. It isn't hard, but doesn't have compelling benefits either. 
 - While class and function decorators are supported, method decorators are not, with the exception of @classmethod.
-- Currently only the  *, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
+- Currently only the  \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
 - The 'with' statement can currently only be used for file-like objects.
 
 Differences due to interoperability with JavaScript and JavaScript libraries

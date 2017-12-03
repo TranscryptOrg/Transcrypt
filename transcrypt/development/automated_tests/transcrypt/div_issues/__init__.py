@@ -374,4 +374,52 @@ def run (autoTester):
 
     example = Example ()
     example.run ()
+    
+    autoTester.check ('Issue 398')
+    # This used to give extra comma's so invalid syntax (no check calls needed)
+    
+    class Test398 (object):
+        #__pragma__ ('skip')
+        def method1 (self):
+            pass
 
+        def method2 (self):
+            pass
+        #__pragma__ ('noskip')
+        pass
+        
+    test398 = Test398 ()
+        
+    autoTester.check ('Issue 399')
+    
+    __pragma__ ('keycheck')
+    try:
+        surpressWarning = {'a':5}['a']
+        surpressWarning = {'a':5}['b']
+        autoTester.check ('no problem')
+    except KeyError:
+        autoTester.check ('not found')    
+    
+    autoTester.check ('Issue 413')
+    __pragma__ ('nokeycheck')
+    
+    class Foo:
+        def __len__ (self):
+            return 3
+        
+        def __getitem__ (self, i):
+            if i >= 3:
+                raise IndexError
+            return 'This is item ' + str (i)
+
+    foo = Foo ()
+
+    #__pragma__ ('opov')
+    autoTester.check ('Attempt 1:')
+    for i in foo:
+        autoTester.check (i)
+
+    autoTester.check ('Attempt 2:')
+    for i in range (len (foo)):
+        autoTester.check (foo [i])
+    #__pragma__('noopov')

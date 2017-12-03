@@ -16,6 +16,7 @@ int main (int argc, char *argv []) {
     }
     cout << buffer;
     
+    // Check if cwd parameter works correctly
     ofstream outputFile ("output.txt");
     outputFile << buffer;
     outputFile.close ();
