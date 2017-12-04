@@ -48,6 +48,7 @@ class CommandArgs:
         self.argParser.add_argument ('-kc', '--keycheck', help = "enable checking for existence of dictionary keys. In general this is disadvised, use __pragma__ ('keycheck') and __pragma__('nokeycheck') locally instead to prevent bloated code", action = 'store_true')
         self.argParser.add_argument ('-l', '--license', help = "show license", action = 'store_true')
         self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
+        self.argParser.add_argument ('-mc', '--modclass', help = "__module__ attribute added to classes", action = 'store_true')
         self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
         self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is disadvised, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
         self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold module, default is window. Use -p .none to generate orphan module, e.g. for use in node.js. Use -p .user to generate module that has to be explicitly initialized by calling <modulename> (), e.g. after the full page has loaded")

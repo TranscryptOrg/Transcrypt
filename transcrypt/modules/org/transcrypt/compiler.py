@@ -1852,7 +1852,9 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
-        self.emit ('\n__module__: \'{}\',', '.'.join ([scope.name for scope in self.scopes if type (scope.node) == ast.Module])) 
+        
+        if utils.commandArgs.modclass:
+            self.emit ('\n__module__: \'{}\',', '.'.join ([scope.name for scope in self.scopes if type (scope.node) == ast.Module])) 
         
         classVarAssigns = []
         index = 0
