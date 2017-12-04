@@ -2,9 +2,47 @@
     var __world__ = __all__;
     
     // Nested object creator, part of the nesting may already exist and have attributes
-    var __nest__ = function (headObject, tailNames, value) {
-        // In some cases this will be a global object, e.g. 'window'
+    
+    /*
+    In case of
+        import a
+        import a.b
+    a will have been created at the moment that a.b is imported,
+    so all a.b. is allowed to do is an extra attribute in a, namely a reference to b,
+    not recreate a, since that would destroy attributes previously present in a
+    
+    In case of
+        import a.b
+        import a
+    a will have to be created at the moment that a.b is imported
+    
+    In general in a chain
+        import a.b.c.d.e
+    a, a.b, a.b.c and a.b.c.d have to exist before e is created, since a.b.c.d should hold a reference to e.
+    Since this applies recursively, if e.g. c is already created, we can be sure a and a.b. will also be already created.
+    
+    So to be able to create e, we'll have to walk the chain a.b.c.d, starting with a.
+    As soon as we encounter a module in the chain that isn't already there, we'll have to create the remainder (tail) of the chain.
+    
+    e.g.
+        import a.b.c.d.e
+        import a.b.c
+    
+    will generate
+        var modules = {};
+        __nest__ (a, 'b.c.d.e', __init__ (__world__.a.b.c.d.e));
+        __nest__ (a, 'b.c', __init__ (__world__.a.b.c));
+        
+    The task of the __nest__ function is to start at the head object and then walk to the chain of objects behind it (tail),
+    creating the ones that do not exist already, and insert the necessary module reference attributes into them.   
+    */
+    
+    var __nest__ = function (headObject, tailNames, value) {        
         var current = headObject;
+        // In some cases this will be <main function>.__all__,
+        // which is the main module and is also known under the synonym <main function.__world__.
+        // N.B. <main function> is the entry point of a Transcrypt application,
+        // Carrying the same name as the application except the file name extension.
         
         if (tailNames != '') {  // Split on empty string doesn't give empty list
             // Find the last already created object in tailNames

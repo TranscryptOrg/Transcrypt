@@ -1,6 +1,8 @@
 from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbols__
 
-from div_issues.issue55 import *        # Names not exported from package's __init__.py
+from div_issues.issue55 import *        # Names not exported from package's __init__.py, no output, only compilation check
+from div_issues.issue387 import run387       # Support __module__ and __qualname__ for introspection (only __module__ done and
+                                        # __name__ set to '__main__ for main module'
 
 def run (autoTester):
     autoTester.check ('Issue 24')   # Non keyword switch generates javascript SyntaxError
@@ -345,6 +347,9 @@ def run (autoTester):
 
         #__pragma__ ('noopov')
     #__pragma__ ('endif')
+    
+    autoTester.check ('Issue 387')
+    run387 (autoTester)
     
     autoTester.check ('Issue 391')
     autoTester.check (int (False))

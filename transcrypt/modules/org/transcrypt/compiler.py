@@ -31,9 +31,10 @@ from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, ty
 
 class ModuleMetadata:
     def __init__ (self, program, name):
+        self.program = program
         self.name = name
         searchedModulePaths = []
-        for searchDir in program.moduleSearchDirs:
+        for searchDir in self.program.moduleSearchDirs:
             relPrepath = self.name.replace ('.', '/')
             prepath = '{}/{}'.format (searchDir, relPrepath)
             self.isDir = os.path.isdir (prepath)
@@ -92,6 +93,15 @@ class ModuleMetadata:
                     youngestPath = path
 
         return youngestPath == self.sourcePath
+        
+    def getStandardName (self):
+        try:
+            if self.name == self.program.mainModuleName:
+                return '__main__'
+            else:
+                return self.name
+        except:
+            print (traceback.format_exc ())
 
 class Program:
     def __init__ (self, moduleSearchDirs, symbols):
@@ -477,8 +487,19 @@ class Module:
             self.nrOfTargetLines = self.targetCode.count ('\n') + 1
 
 class Scope:
-    def __init__ (self, node):
+    def __init__ (self, node, name):
+        try:
+            if name == None:
+                if hasattr (node, 'name'):
+                    name = node.name
+                else:
+                    name = 'None'
+        except:
+            print (traceback.format_exc ())
+            print (777, type (name))
+                
         self.node = node
+        self.name = name if name != None else node.name if hasattr (node, 'name') else 'None'
         self.nonlocals = set ()
         self.containsYield = False
 
@@ -696,8 +717,9 @@ class Generator (ast.NodeVisitor):
     def dedent (self):
         self.indentLevel -= 1
 
-    def inscope (self, node):
-        self.scopes.append (Scope (node))
+    def inscope (self, node, name = None):
+        # Called at visiting modules, classes and functions
+        self.scopes.append (Scope (node, name))
 
     def descope (self):
         self.scopes.pop ()
@@ -1830,6 +1852,8 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
+        self.emit ('\n__module__: \'{}\',', '.'.join ([scope.name for scope in self.scopes if type (scope.node) == ast.Module])) 
+        
         classVarAssigns = []
         index = 0
         for stmt in node.body:
@@ -2515,7 +2539,7 @@ class Generator (ast.NodeVisitor):
     def visit_Module (self, node):
         self.adaptLineNrString (node)
 
-        self.inscope (node)
+        self.inscope (node, self.module.metadata.getStandardName ())
         self.indent ()
         if self.module.metadata.name == self.module.program.mainModuleName:
             self.emit ('(function () {{\n')
@@ -2610,7 +2634,7 @@ class Generator (ast.NodeVisitor):
             return
 
         elif node.id == '__name__':
-            self.visit (ast.Str (s = self.module.metadata.name))
+            self.visit (ast.Str (s = self.module.metadata.getStandardName ()))
             return
 
         elif type (node.ctx) == ast.Store:

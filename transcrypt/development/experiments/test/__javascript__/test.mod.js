@@ -1,28 +1,21 @@
 	(function () {
-		var re = {};
-		__nest__ (re, '', __init__ (__world__.re));
-		var Example = __class__ ('Example', [object], {
-			d: dict ({'A': 1, 'B': 2}),
-			rec: re.compile ('(?P<decimal>\\d+)', re.ASCII),
-			get run () {return __get__ (this, function (self) {
-				var match = self.rec.match ('42');
-				if (!(match)) {
-					print ('ERROR: RE does not match');
-				}
-				var e = match.groupdict ();
-				print ('before: self.d=', self.d);
-				print ('before: e=', e);
-				self.d.py_update (e);
-				print ('after: self.d=', self.d);
-			});}
-		});
-		var example = Example ();
-		example.run ();
+		var test1 = {};
+		__nest__ (test1, '', __init__ (__world__.test1));
+		__nest__ (test1, 'test2', __init__ (__world__.test1.test2));
+		var run = function (autoTester) {
+			autoTester.check ('From test: ', test1.test2.C.__module__);
+			autoTester.check ('__main__');
+			var D = __class__ ('D', [object], {
+				__module__: '__main__',
+			});
+			autoTester.check ('From test:', D.__module__);
+			autoTester.check (D.__name__);
+		};
 		__pragma__ ('<use>' +
-			're' +
+			'test1' +
+			'test1.test2' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.Example = Example;
-			__all__.example = example;
+			__all__.run = run;
 		__pragma__ ('</all>')
 	}) ();

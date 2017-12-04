@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Issue 397 a.o., __module__ attribute added to classes, __name__ of main module is noe '__main__'
 - Enhancement for issue 399: \_\_pragma\_\_ ('keycheck') + command line switch + autotest
 - Fixes for issues 398, 412, 413 + autotests
 - __pragma__ ('xtrans', ...) added to facilitate partial translation by external tools (EXPERIMENTAL, issue 404, e.g. to deal with JSX)

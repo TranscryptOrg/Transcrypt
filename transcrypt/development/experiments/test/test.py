@@ -1,22 +1,15 @@
-autoTester.check ('#392')
+import test1
+import test1.test2
 
-import re
+def run (autoTester):
+    autoTester.check ('From test: ', test1.test2.C.__module__)
 
-class Example:
+    autoTester.check (__name__)
 
-    d = {'A': 1, 'B': 2}
-    rec = re.compile('(?P<decimal>\d+)', re.ASCII)
+    class D:
+        pass
+    
+    autoTester.check ('From test:', D.__module__)
+    autoTester.check (D.__name__)
+    
 
-    def run(self):
-        match = self.rec.match('42')
-        if not match:
-            print('ERROR: RE does not match')
-        e = match.groupdict()
-        autoTester.check ("before: self.d=", self.d)
-        autoTester.check ("before: e=", e)
-        self.d.update(e)
-        autoTester.check ("after: self.d=", self.d)
-
-
-example = Example()
-example.run ()
