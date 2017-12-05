@@ -1,21 +1,17 @@
 	(function () {
-		var test1 = {};
-		__nest__ (test1, '', __init__ (__world__.test1));
-		__nest__ (test1, 'test2', __init__ (__world__.test1.test2));
-		var run = function (autoTester) {
-			autoTester.check ('From test: ', test1.test2.C.__module__);
-			autoTester.check ('__main__');
-			var D = __class__ ('D', [object], {
-				__module__: '__main__',
-			});
-			autoTester.check ('From test:', D.__module__);
-			autoTester.check (D.__name__);
-		};
+		var test2 = {};
+		var __name__ = '__main__';
+		__nest__ (test2, '', __init__ (__world__.test2));
+		var C = __class__ ('C', [object], {
+			__module__: __name__,
+		});
+		print (111, test2.D.__module__);
+		print (222, C.__module__);
 		__pragma__ ('<use>' +
-			'test1' +
-			'test1.test2' +
+			'test2' +
 		'</use>')
 		__pragma__ ('<all>')
-			__all__.run = run;
+			__all__.C = C;
+			__all__.__name__ = __name__;
 		__pragma__ ('</all>')
 	}) ();

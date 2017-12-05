@@ -1,15 +1,8 @@
-import test1
-import test1.test2
+import test2
 
-def run (autoTester):
-    autoTester.check ('From test: ', test1.test2.C.__module__)
-
-    autoTester.check (__name__)
-
-    class D:
-        pass
+class C:
+    pass
     
-    autoTester.check ('From test:', D.__module__)
-    autoTester.check (D.__name__)
-    
+print (111, test2.D.__module__)
+print (222, C.__module__)
 

@@ -262,6 +262,8 @@ class Program:
                     miniFile.write (self.miniMap.mapRef)
 
     def provide (self, moduleName):
+        # moduleName may contain dots if it's imported, but it'll have the same name in every import
+    
         if moduleName == '__main__':
             moduleName = self.mainModuleName
 
@@ -275,7 +277,7 @@ class Program:
 class Module:
     def __init__ (self, program, moduleMetadata):
         self.program = program
-        self.metadata = moduleMetadata  # May contain dots if it's imported
+        self.metadata = moduleMetadata
         self.program.moduleDict [self.metadata.name] = self
 
         # Names of module being under compilation and line nrs of current import
@@ -487,19 +489,8 @@ class Module:
             self.nrOfTargetLines = self.targetCode.count ('\n') + 1
 
 class Scope:
-    def __init__ (self, node, name):
-        try:
-            if name == None:
-                if hasattr (node, 'name'):
-                    name = node.name
-                else:
-                    name = 'None'
-        except:
-            print (traceback.format_exc ())
-            print (777, type (name))
-                
+    def __init__ (self, node):
         self.node = node
-        self.name = name if name != None else node.name if hasattr (node, 'name') else 'None'
         self.nonlocals = set ()
         self.containsYield = False
 
@@ -717,9 +708,9 @@ class Generator (ast.NodeVisitor):
     def dedent (self):
         self.indentLevel -= 1
 
-    def inscope (self, node, name = None):
+    def inscope (self, node):
         # Called at visiting modules, classes and functions
-        self.scopes.append (Scope (node, name))
+        self.scopes.append (Scope (node))
 
     def descope (self):
         self.scopes.pop ()
@@ -1852,10 +1843,7 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
-        
-        if utils.commandArgs.modclass:
-            self.emit ('\n__module__: \'{}\',', '.'.join ([scope.name for scope in self.scopes if type (scope.node) == ast.Module])) 
-        
+        self.emit ('\n__module__: __name__,')
         classVarAssigns = []
         index = 0
         for stmt in node.body:
@@ -2541,7 +2529,7 @@ class Generator (ast.NodeVisitor):
     def visit_Module (self, node):
         self.adaptLineNrString (node)
 
-        self.inscope (node, self.module.metadata.getStandardName ())
+        self.inscope (node)
         self.indent ()
         if self.module.metadata.name == self.module.program.mainModuleName:
             self.emit ('(function () {{\n')
@@ -2560,6 +2548,9 @@ class Generator (ast.NodeVisitor):
 
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
+        
+        self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
+        self.all.add ('__name__')
 
         for stmt in node.body:
             if self.isDocString (stmt):
@@ -2633,10 +2624,6 @@ class Generator (ast.NodeVisitor):
 
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
-            return
-
-        elif node.id == '__name__':
-            self.visit (ast.Str (s = self.module.metadata.getStandardName ()))
             return
 
         elif type (node.ctx) == ast.Store:
