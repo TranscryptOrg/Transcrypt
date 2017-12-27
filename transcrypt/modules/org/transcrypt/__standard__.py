@@ -61,11 +61,15 @@ class NotImplementedError (Exception):
     def __init__(self, message, error):
         Exception.__init__(self, message, error = error)
 
-class IndexError(Exception):
+class IndexError (Exception):
     def __init__(self, message, error):
         Exception.__init__(self, message, error = error)
 
-class AttributeError(Exception):
+class AttributeError (Exception):
+    def __init__(self, message, error):
+        Exception.__init__(self, message, error = error)
+
+class TypeError (Exception):
     def __init__(self, message, error):
         Exception.__init__(self, message, error = error)
 
@@ -230,7 +234,7 @@ class __Terminal__:
         self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ] 
         
         if self.element:
-            self.element.innerHTML = self.buffer.replace ('\n', '<br>')
+            self.element.innerHTML = self.buffer.replace ('\n', '<br>') .replace (' ', '&nbsp')
             self.element.scrollTop = self.element.scrollHeight
         else:
             console.log (sep.join ([str (arg) for arg in args]))

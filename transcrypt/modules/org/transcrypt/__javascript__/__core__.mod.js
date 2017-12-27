@@ -201,7 +201,7 @@ __pragma__ ('endif')
             
             // Add class specific attributes to the created cls object
             cls.__metaclass__ = meta;
-            cls.__name__ = name;
+            cls.__name__ = name.startsWith ('py_') ? name.slice (3) : name;
             cls.__bases__ = bases;
             
             // Add own methods, properties and own static attributes to the created cls object

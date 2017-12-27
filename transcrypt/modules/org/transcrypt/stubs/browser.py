@@ -1,3 +1,5 @@
+# This module emulates some browser functionality when running on the desktop using CPython
+
 import builtins
 
 from org.transcrypt.__base__ import __envir__

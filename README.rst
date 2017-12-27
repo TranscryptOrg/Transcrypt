@@ -121,6 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Exception type TypeError added, currently unused by Transcrypt itself (issue 365)
+- Name of main program file now really doesn't need .py extension anymore... (issue 416, bugfix)
+- Name of main program file doesn't need .py extension anymore (issue 416)
 - DRY implementation of __module__, lean enough to remove the -mc / --modclass switch
 - -mc / --modclass switch now controls generation of __module__ to prevent code bloat
 - Issue 397 a.o., __module__ attribute added to classes, __name__ of main module is now '__main__',

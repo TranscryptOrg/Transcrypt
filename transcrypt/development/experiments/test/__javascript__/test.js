@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-12-05 10:45:28
+// Transcrypt'ed from Python, 2017-12-27 15:51:49
 function test () {
    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -193,7 +193,7 @@ function test () {
             
             // Add class specific attributes to the created cls object
             cls.__metaclass__ = meta;
-            cls.__name__ = name;
+            cls.__name__ = name.startsWith ('py_') ? name.slice (3) : name;
             cls.__bases__ = bases;
             
             // Add own methods, properties and own static attributes to the created cls object
@@ -259,7 +259,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.60';
+							self.transpiler_version = '3.6.61';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -382,6 +382,12 @@ function test () {
 							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
+					var py_TypeError = __class__ ('py_TypeError', [Exception], {
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+						});}
+					});
 					var Warning = __class__ ('Warning', [Exception], {
 						__module__: __name__,
 					});
@@ -474,7 +480,7 @@ function test () {
 						return result;
 					};
 					var map = function (func, iterable) {
-						return function () {
+						return (function () {
 							var __accu0__ = [];
 							var __iterable0__ = iterable;
 							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
@@ -482,13 +488,13 @@ function test () {
 								__accu0__.append (func (item));
 							}
 							return __accu0__;
-						} ();
+						}) ();
 					};
 					var filter = function (func, iterable) {
 						if (func == null) {
 							var func = bool;
 						}
-						return function () {
+						return (function () {
 							var __accu0__ = [];
 							var __iterable0__ = iterable;
 							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
@@ -498,8 +504,98 @@ function test () {
 								}
 							}
 							return __accu0__;
-						} ();
+						}) ();
 					};
+					var complex = __class__ ('complex', [object], {
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, real, imag) {
+							if (typeof imag == 'undefined' || (imag != null && imag .hasOwnProperty ("__kwargtrans__"))) {;
+								var imag = null;
+							};
+							if (imag == null) {
+								if (py_typeof (real) == complex) {
+									self.real = real.real;
+									self.imag = real.imag;
+								}
+								else {
+									self.real = real;
+									self.imag = 0;
+								}
+							}
+							else {
+								self.real = real;
+								self.imag = imag;
+							}
+						});},
+						get __neg__ () {return __get__ (this, function (self) {
+							return complex (-(self.real), -(self.imag));
+						});},
+						get __exp__ () {return __get__ (this, function (self) {
+							var modulus = Math.exp (self.real);
+							return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag));
+						});},
+						get __log__ () {return __get__ (this, function (self) {
+							return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real));
+						});},
+						get __pow__ () {return __get__ (this, function (self, other) {
+							return self.__log__ ().__mul__ (other).__exp__ ();
+						});},
+						get __rpow__ () {return __get__ (this, function (self, real) {
+							return self.__mul__ (Math.log (real)).__exp__ ();
+						});},
+						get __mul__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real * other, self.imag * other);
+							}
+							else {
+								return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real);
+							}
+						});},
+						get __rmul__ () {return __get__ (this, function (self, real) {
+							return complex (self.real * real, self.imag * real);
+						});},
+						get __div__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real / other, self.imag / other);
+							}
+							else {
+								var denom = other.real * other.real + other.imag * other.imag;
+								return complex ((self.real * other.real + self.imag * other.imag) / denom, (self.imag * other.real - self.real * other.imag) / denom);
+							}
+						});},
+						get __rdiv__ () {return __get__ (this, function (self, real) {
+							var denom = self.real * self.real;
+							return complex ((real * self.real) / denom, (real * self.imag) / denom);
+						});},
+						get __add__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real + other, self.imag);
+							}
+							else {
+								return complex (self.real + other.real, self.imag + other.imag);
+							}
+						});},
+						get __radd__ () {return __get__ (this, function (self, real) {
+							return complex (self.real + real, self.imag);
+						});},
+						get __sub__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real - other, self.imag);
+							}
+							else {
+								return complex (self.real - other.real, self.imag - other.imag);
+							}
+						});},
+						get __rsub__ () {return __get__ (this, function (self, real) {
+							return complex (real - self.real, -(self.imag));
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return '({}{}{}j)'.format (self.real, (self.imag >= 0 ? '+' : ''), self.imag);
+						});},
+						get __str__ () {return __get__ (this, function (self) {
+							return __repr__ (self).__getslice__ (1, -(1), 1);
+						});}
+					});
 					var __Terminal__ = __class__ ('__Terminal__', [object], {
 						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
@@ -537,7 +633,7 @@ function test () {
 							else {
 								var args = tuple ();
 							}
-							self.buffer = '{}{}{}'.format (self.buffer, sep.join (function () {
+							self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
 								var __accu0__ = [];
 								var __iterable0__ = args;
 								for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
@@ -545,13 +641,13 @@ function test () {
 									__accu0__.append (str (arg));
 								}
 								return __accu0__;
-							} ()), end).__getslice__ (-(4096), null, 1);
+							}) ()), end).__getslice__ (-(4096), null, 1);
 							if (self.element) {
-								self.element.innerHTML = self.buffer.py_replace ('\n', '<br>');
+								self.element.innerHTML = self.buffer.py_replace ('\n', '<br>').py_replace (' ', '&nbsp');
 								self.element.scrollTop = self.element.scrollHeight;
 							}
 							else {
-								console.log (sep.join (function () {
+								console.log (sep.join ((function () {
 									var __accu0__ = [];
 									var __iterable0__ = args;
 									for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
@@ -559,7 +655,7 @@ function test () {
 										__accu0__.append (str (arg));
 									}
 									return __accu0__;
-								} ()));
+								}) ()));
 							}
 						});},
 						get input () {return __get__ (this, function (self, question) {
@@ -595,6 +691,7 @@ function test () {
 						__all__.NotImplementedError = NotImplementedError;
 						__all__.RuntimeWarning = RuntimeWarning;
 						__all__.StopIteration = StopIteration;
+						__all__.py_TypeError = py_TypeError;
 						__all__.UserWarning = UserWarning;
 						__all__.ValueError = ValueError;
 						__all__.Warning = Warning;
@@ -602,6 +699,7 @@ function test () {
 						__all__.__name__ = __name__;
 						__all__.__sort__ = __sort__;
 						__all__.__terminal__ = __terminal__;
+						__all__.complex = complex;
 						__all__.filter = filter;
 						__all__.map = map;
 						__all__.sorted = sorted;
@@ -644,6 +742,7 @@ function test () {
     var NotImplementedError = __all__.NotImplementedError;
     var IndexError = __all__.IndexError;
     var AttributeError = __all__.AttributeError;
+    var py_TypeError = __all__.py_TypeError;
 
     // Warnings Exceptions
     var Warning = __all__.Warning;
@@ -2554,38 +2653,10 @@ function test () {
         }
     };
     __all__.__setslice__ = __setslice__;
-	__nest__ (
-		__all__,
-		'test2', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var __name__ = 'test2';
-					var D = __class__ ('D', [object], {
-						__module__: __name__,
-					});
-					__pragma__ ('<all>')
-						__all__.D = D;
-						__all__.__name__ = __name__;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
 	(function () {
-		var test2 = {};
 		var __name__ = '__main__';
-		__nest__ (test2, '', __init__ (__world__.test2));
-		var C = __class__ ('C', [object], {
-			__module__: __name__,
-		});
-		print (111, test2.D.__module__);
-		print (222, C.__module__);
-		__pragma__ ('<use>' +
-			'test2' +
-		'</use>')
+		print ('hello');
 		__pragma__ ('<all>')
-			__all__.C = C;
 			__all__.__name__ = __name__;
 		__pragma__ ('</all>')
 	}) ();

@@ -323,6 +323,13 @@ def run (autoTester):
     except ValueError as exception:
         autoTester.check (exception.__class__.__name__)
         
+    autoTester.check ('issue 356')
+    
+    try:
+        raise TypeError("How are you?")
+    except TypeError as exception:
+        autoTester.check (exception)
+        
     #__pragma__ ('ifdef', '__esv6__')   # Needed because Transcrypt imports are compile time
     if '__esv6__' in __symbols__:      # Needed because CPython doesn't understand pragma's
         autoTester.check ('Issue 369')

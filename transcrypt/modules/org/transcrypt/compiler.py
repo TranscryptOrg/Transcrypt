@@ -48,7 +48,7 @@ class ModuleMetadata:
             self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
             self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
 
-            self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+            self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
             searchedModulePaths += [self.sourcePath, self.targetPath]
 
             if not os.path.isfile (self.sourcePath):
@@ -134,7 +134,7 @@ class Program:
         self.baseModuleName = '{}.{}'.format (prefix, '__base__')
         self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
         self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
-        self.mainModuleName = self.sourceFileName [ : -3]
+        self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
 
         # Compile inline modules
         Module (self, ModuleMetadata (self, self.coreModuleName))
@@ -2510,7 +2510,7 @@ class Generator (ast.NodeVisitor):
                 bodies [0][0]
             )
 
-        self.emit ('function () {{\n')
+        self.emit ('(function () {{\n')
         self.inscope (ast.FunctionDef ())
         self.indent ()
         self.emit ('var {} = [];\n', self.nextTemp ('accu'))
@@ -2524,7 +2524,7 @@ class Generator (ast.NodeVisitor):
         self.prevTemp ('accu')
         self.dedent ()
         self.descope ()
-        self.emit ('}} ()')
+        self.emit ('}}) ()')
 
     def visit_Module (self, node):
         self.adaptLineNrString (node)

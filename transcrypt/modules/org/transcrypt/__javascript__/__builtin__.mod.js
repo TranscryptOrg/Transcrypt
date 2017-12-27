@@ -32,6 +32,7 @@
     var NotImplementedError = __all__.NotImplementedError;
     var IndexError = __all__.IndexError;
     var AttributeError = __all__.AttributeError;
+    var py_TypeError = __all__.py_TypeError;
 
     // Warnings Exceptions
     var Warning = __all__.Warning;
