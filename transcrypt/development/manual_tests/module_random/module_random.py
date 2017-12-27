@@ -25,6 +25,13 @@ for fixedSeed in (False, True):
     for i in range (20):
         output (random ())
         
+    output ('<br>\n--- shuffle ---')
+    aList = [0, 1, 2, 3, 4, 5, 6]
+    output (aList)
+    for i in range (7):
+        shuffle (aList)
+        output (aList)
+    
     output ('<br>\n')
     
 document.getElementById ('output') .innerHTML = result

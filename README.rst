@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Fisher-Yates shuffle added to random module
 - Exception type TypeError added, currently unused by Transcrypt itself (issue 365)
 - Name of main program file now really doesn't need .py extension anymore... (issue 416, bugfix)
 - Name of main program file doesn't need .py extension anymore (issue 416)
