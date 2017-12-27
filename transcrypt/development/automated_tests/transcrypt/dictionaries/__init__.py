@@ -1,6 +1,11 @@
 from org.transcrypt.stubs.browser import __pragma__
 __pragma__ ('iconv')
 
+# Dictionaries are translated to JavaScript objects,
+# to achieve JSON-compatible syntax for JavaScript library object initialisation.
+# Keys that may denote a number are interpreted as such in Transcrypt.
+# All other keys are interpreted as strings.
+
 def run (autoTester):
     tel = {'guido': 4127, 'jack': 4098}
     autoTester.check (len (tel))
