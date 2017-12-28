@@ -1062,6 +1062,55 @@ __pragma__ ('endif')
         return this.issuperset (other) && !this.issubset (other);
     };
 
+    // Byte array extensions
+    
+    function bytearray (bytable, encoding) {
+        if (bytable == undefined) {
+            return new Uint8Array (0);
+        }
+        else {
+            var aType = py_typeof (bytable);
+            if (aType == int) {
+                return new Uint8Array (bytable);
+            }
+            else if (aType == str) {
+                var aBytes = new Uint8Array (len (bytable));
+                for (var i = 0; i < len (bytable); i++) {
+                    aBytes [i] = bytable.charCodeAt (i);
+                }
+                return aBytes;
+            }
+            else if (aType == list || aType == tuple) {
+                return new Uint8Array (bytable);
+            }
+            else {
+                throw py_TypeError;
+            }
+        }
+    }
+
+    var bytes = bytearray;
+    
+    __all__.bytearray = bytearray;
+    __all__.bytes = bytearray;
+   
+    Uint8Array.prototype.__add__ = function (aBytes) {
+        var result = new Uint8Array (this.length + aBytes.length);
+        result.set (this);
+        result.set (aBytes, this.length);
+        return result;
+    };
+
+    Uint8Array.prototype.__mul__ = function (scalar) {
+        var result = new Uint8Array (scalar * this.length);
+        for (var i = 0; i < scalar; i++) {
+            result.set (this, i * this.length);
+        }
+        return result;
+    };
+
+    Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
+    
     // String extensions
 
     function str (stringable) {

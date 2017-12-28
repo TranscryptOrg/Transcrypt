@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Initial support for bytes and bytearrays added (issue 405 a.o.)
 - Remark about heuristic interpretation of dictionary keys added to docs (issue 401)
 - Fisher-Yates shuffle added to random module
 - Exception type TypeError added, currently unused by Transcrypt itself (issue 365)

@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-12-27 15:51:49
+// Transcrypt'ed from Python, 2017-12-28 16:54:34
 function test () {
    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -259,7 +259,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.61';
+							self.transpiler_version = '3.6.65';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -506,96 +506,6 @@ function test () {
 							return __accu0__;
 						}) ();
 					};
-					var complex = __class__ ('complex', [object], {
-						__module__: __name__,
-						get __init__ () {return __get__ (this, function (self, real, imag) {
-							if (typeof imag == 'undefined' || (imag != null && imag .hasOwnProperty ("__kwargtrans__"))) {;
-								var imag = null;
-							};
-							if (imag == null) {
-								if (py_typeof (real) == complex) {
-									self.real = real.real;
-									self.imag = real.imag;
-								}
-								else {
-									self.real = real;
-									self.imag = 0;
-								}
-							}
-							else {
-								self.real = real;
-								self.imag = imag;
-							}
-						});},
-						get __neg__ () {return __get__ (this, function (self) {
-							return complex (-(self.real), -(self.imag));
-						});},
-						get __exp__ () {return __get__ (this, function (self) {
-							var modulus = Math.exp (self.real);
-							return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag));
-						});},
-						get __log__ () {return __get__ (this, function (self) {
-							return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real));
-						});},
-						get __pow__ () {return __get__ (this, function (self, other) {
-							return self.__log__ ().__mul__ (other).__exp__ ();
-						});},
-						get __rpow__ () {return __get__ (this, function (self, real) {
-							return self.__mul__ (Math.log (real)).__exp__ ();
-						});},
-						get __mul__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real * other, self.imag * other);
-							}
-							else {
-								return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real);
-							}
-						});},
-						get __rmul__ () {return __get__ (this, function (self, real) {
-							return complex (self.real * real, self.imag * real);
-						});},
-						get __div__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real / other, self.imag / other);
-							}
-							else {
-								var denom = other.real * other.real + other.imag * other.imag;
-								return complex ((self.real * other.real + self.imag * other.imag) / denom, (self.imag * other.real - self.real * other.imag) / denom);
-							}
-						});},
-						get __rdiv__ () {return __get__ (this, function (self, real) {
-							var denom = self.real * self.real;
-							return complex ((real * self.real) / denom, (real * self.imag) / denom);
-						});},
-						get __add__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real + other, self.imag);
-							}
-							else {
-								return complex (self.real + other.real, self.imag + other.imag);
-							}
-						});},
-						get __radd__ () {return __get__ (this, function (self, real) {
-							return complex (self.real + real, self.imag);
-						});},
-						get __sub__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real - other, self.imag);
-							}
-							else {
-								return complex (self.real - other.real, self.imag - other.imag);
-							}
-						});},
-						get __rsub__ () {return __get__ (this, function (self, real) {
-							return complex (real - self.real, -(self.imag));
-						});},
-						get __repr__ () {return __get__ (this, function (self) {
-							return '({}{}{}j)'.format (self.real, (self.imag >= 0 ? '+' : ''), self.imag);
-						});},
-						get __str__ () {return __get__ (this, function (self) {
-							return __repr__ (self).__getslice__ (1, -(1), 1);
-						});}
-					});
 					var __Terminal__ = __class__ ('__Terminal__', [object], {
 						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
@@ -699,7 +609,6 @@ function test () {
 						__all__.__name__ = __name__;
 						__all__.__sort__ = __sort__;
 						__all__.__terminal__ = __terminal__;
-						__all__.complex = complex;
 						__all__.filter = filter;
 						__all__.map = map;
 						__all__.sorted = sorted;
@@ -1720,6 +1629,55 @@ function test () {
         return this.issuperset (other) && !this.issubset (other);
     };
 
+    // Byte array extensions
+    
+    function bytearray (bytable, encoding) {
+        if (bytable == undefined) {
+            return new Uint8Array (0);
+        }
+        else {
+            var aType = py_typeof (bytable);
+            if (aType == int) {
+                return new Uint8Array (bytable);
+            }
+            else if (aType == str) {
+                var aBytes = new Uint8Array (len (bytable));
+                for (var i = 0; i < len (bytable); i++) {
+                    aBytes [i] = bytable.charCodeAt (i);
+                }
+                return aBytes;
+            }
+            else if (aType == list || aType == tuple) {
+                return new Uint8Array (bytable);
+            }
+            else {
+                throw py_TypeError;
+            }
+        }
+    }
+
+    var bytes = bytearray;
+    
+    __all__.bytearray = bytearray;
+    __all__.bytes = bytearray;
+   
+    Uint8Array.prototype.__add__ = function (aBytes) {
+        var result = new Uint8Array (this.length + aBytes.length);
+        result.set (this);
+        result.set (aBytes, this.length);
+        return result;
+    };
+
+    Uint8Array.prototype.__mul__ = function (scalar) {
+        var result = new Uint8Array (scalar * this.length);
+        for (var i = 0; i < scalar; i++) {
+            result.set (this, i * this.length);
+        }
+        return result;
+    };
+
+    Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
+    
     // String extensions
 
     function str (stringable) {
@@ -2655,9 +2613,49 @@ function test () {
     __all__.__setslice__ = __setslice__;
 	(function () {
 		var __name__ = '__main__';
-		print ('hello');
+		var b = bytes ('bike');
+		var s = bytes ('shop', 'utf8');
+		var e = bytes ('');
+		var bb = bytearray (list ([0, 1, 2, 3, 4]));
+		var bc = bytes (tuple ([5, 6, 7, 8, 9]));
+		var bps = __add__ (__add__ (b, bytes ('pump')), s);
+		var bps3 = __add__ (__mul__ (3, bps), bytes (' '));
+		var aBps3 = __add__ (__mul__ (bps, 3), bytes (' '));
+		var l = __add__ (list ([1, 2, 3]), list ([4, 5, 6]));
+		var formatCheck = function (aBytes) {
+			print ((function () {
+				var __accu0__ = [];
+				var __iterable0__ = aBytes;
+				for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+					var aByte = __iterable0__ [__index0__];
+					__accu0__.append (int (aByte));
+				}
+				return __accu0__;
+			}) ());
+		};
+		formatCheck (b);
+		formatCheck (s);
+		formatCheck (e);
+		formatCheck (bb);
+		formatCheck (bc);
+		formatCheck (bps);
+		formatCheck (bps3);
+		formatCheck (aBps3);
+		__call__ (formatCheck, null, __add__ (bb, bc));
+		__call__ (formatCheck, null, __add__ (__add__ (__call__ (bytearray, null, 'ding', 'utf8'), bytes ('dang')), __call__ (bytes, null, 'dong', 'utf8')));
+		formatCheck (l);
 		__pragma__ ('<all>')
 			__all__.__name__ = __name__;
+			__all__.aBps3 = aBps3;
+			__all__.b = b;
+			__all__.bb = bb;
+			__all__.bc = bc;
+			__all__.bps = bps;
+			__all__.bps3 = bps3;
+			__all__.e = e;
+			__all__.formatCheck = formatCheck;
+			__all__.l = l;
+			__all__.s = s;
 		__pragma__ ('</all>')
 	}) ();
    return __all__;

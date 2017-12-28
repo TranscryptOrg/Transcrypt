@@ -1425,6 +1425,9 @@ class Generator (ast.NodeVisitor):
         if not self.skippedTemp ('break'):
             self.emit ('{} = true;\n', self.getTemp ('break'))
         self.emit ('break')
+        
+    def visit_Bytes (self, node):
+        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
 
     def visit_Call (self, node):
         self.adaptLineNrString (node)
