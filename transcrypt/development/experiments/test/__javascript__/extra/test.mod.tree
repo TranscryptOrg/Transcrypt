@@ -1,9 +1,0 @@
-file: Module 
-	body: list 
-		element: Assign 
-			targets: list 
-				element: Name 
-					id: str = bbb
-					ctx: Store 
-			value: Bytes 
-				s: bytes = b'fiets'

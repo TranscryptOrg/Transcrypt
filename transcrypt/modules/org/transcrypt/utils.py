@@ -35,6 +35,7 @@ class CommandArgs:
         self.argParser.add_argument ('-dc', '--dcheck', help = "debug: perform lightweight consistency check", action = 'store_true')
         self.argParser.add_argument ('-da', '--dassert', help = "debug: activate assertions", action = 'store_true')
         self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
+        self.argParser.add_argument ('-dn', '--dnostrip', help = "debug: no comment stripping of __core__ and __builtin__ in-line modules", action = 'store_true')
         self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
         self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
         self.argParser.add_argument ('-ds', '--dstat', help = "debug: validate static typing using annotations", action = 'store_true')
@@ -58,6 +59,7 @@ class CommandArgs:
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xp', '--xpath', nargs = '?', help = "additional module search paths, joined by $, #'s will be replaced by spaces")
         self.argParser.add_argument ('-xc', '--xconfimp', help = "confine imported names to directly importing module", action = 'store_true')
+        self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases.", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)

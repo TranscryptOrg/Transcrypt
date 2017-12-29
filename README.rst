@@ -121,6 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Compiler switch -xt / --xtiny added to considerably reduce size of runtime if operator overloading isn't used
+- Compiler switch -dn / --dnostrip added to avoid stripping comments in __builtin__ and __core__
+- Comments in __builtin__ and __core__ JavaScript-only modules are now stripped by default
 - Initial support for bytes and bytearrays added (issue 405 a.o.)
 - Remark about heuristic interpretation of dictionary keys added to docs (issue 401)
 - Fisher-Yates shuffle added to random module

@@ -120,6 +120,9 @@ def main ():
         if utils.commandArgs.complex:
             __symbols__.append ('__complex__')
             
+        if utils.commandArgs.xtiny:
+            __symbols__.append ('__xtiny__')
+            
         __symbols__.append ('__py{}.{}__'.format (* sys.version_info [:2]))
             
         if utils.commandArgs.esv:

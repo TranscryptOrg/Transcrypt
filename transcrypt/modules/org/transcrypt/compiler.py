@@ -137,10 +137,10 @@ class Program:
         self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
 
         # Compile inline modules
-        Module (self, ModuleMetadata (self, self.coreModuleName))
+        Module (self, ModuleMetadata (self, self.coreModuleName), True)
         Module (self, ModuleMetadata (self, self.baseModuleName))
         Module (self, ModuleMetadata (self, self.standardModuleName))
-        Module (self, ModuleMetadata (self, self.builtinModuleName))
+        Module (self, ModuleMetadata (self, self.builtinModuleName), True)
 
         # Optionally perfom static typing validation
 
@@ -226,10 +226,10 @@ class Program:
             # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
             header +
             'function {} () {{\n'.format (self.mainModuleName) +
-            '   var __symbols__ = {};\n'.format (self.symbols) +
+            '    var __symbols__ = {};\n'.format (self.symbols) +
             # END prologue
             ''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +
-            '   return __all__;\n' +
+            '    return __all__;\n' +
             '}\n' +
             initializer
         )
@@ -275,9 +275,10 @@ class Program:
             return Module (self, moduleMetadata)
 
 class Module:
-    def __init__ (self, program, moduleMetadata):
+    def __init__ (self, program, moduleMetadata, stripCommentsIfAllowed = False):
         self.program = program
         self.metadata = moduleMetadata
+        self.stripComments = stripCommentsIfAllowed and not utils.commandArgs.dnostrip
         self.program.moduleDict [self.metadata.name] = self
 
         # Names of module being under compilation and line nrs of current import
@@ -380,6 +381,10 @@ class Module:
 
     def loadJavascript (self):
         def strip (code, symbols):
+            def stripSingleLineComments (line):
+                pos = line.find ('//')
+                return (line if pos < 0 else line [ : pos]) .rstrip ()
+        
             loading = True
 
             def loadable (targetLine):
@@ -398,7 +403,12 @@ class Module:
                         loading = True
 
                 strippedLine = targetLine.lstrip ()
-                if strippedLine.startswith ('__pragma__') and (
+                if self.stripComments and strippedLine.startswith ('/*'):
+                    loading = False
+                    return loading  # So skip this line
+                elif self.stripComments and strippedLine.endswith ('*/'):
+                    loading = True  # Load next line
+                elif strippedLine.startswith ('__pragma__') and (
                     'ifdef' in strippedLine or
                     'ifndef' in strippedLine or
                     'else' in strippedLine or
@@ -408,8 +418,11 @@ class Module:
                     return False    # Skip line anyhow
                 else:
                     return loading  # Skip line only if not in loading state
-
-            loadableLines = [line for line in code.split ('\n') if loadable (line)]
+            
+            if self.stripComments:
+                loadableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if loadable (line)] if commentlessLine]
+            else:
+                loadableLines = [line for line in code.split ('\n') if loadable (line)]
             return '\n'.join (loadableLines)
 
         with open (self.metadata.targetPath) as targetFile:

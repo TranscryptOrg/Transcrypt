@@ -1523,35 +1523,7 @@ __pragma__ ('endif')
     __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
 
     // General operator overloading, only the ones that make most sense in matrix and complex operations
-
-    var __neg__ = function (a) {
-        if (typeof a == 'object' && '__neg__' in a) {
-            return a.__neg__ ();
-        }
-        else {
-            return -a;
-        }
-    };
-    __all__.__neg__ = __neg__;
-
-    var __matmul__ = function (a, b) {
-        return a.__matmul__ (b);
-    };
-    __all__.__matmul__ = __matmul__;
-
-    var __pow__ = function (a, b) {
-        if (typeof a == 'object' && '__pow__' in a) {
-            return a.__pow__ (b);
-        }
-        else if (typeof b == 'object' && '__rpow__' in b) {
-            return b.__rpow__ (a);
-        }
-        else {
-            return Math.pow (a, b);
-        }
-    };
-    __all__.pow = __pow__;
-
+    
     var __jsmod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -1577,6 +1549,37 @@ __pragma__ ('endif')
         }
     };
     __all__.mod = __mod__;
+    
+
+    var __pow__ = function (a, b) {
+        if (typeof a == 'object' && '__pow__' in a) {
+            return a.__pow__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rpow__ (a);
+        }
+        else {
+            return Math.pow (a, b);
+        }
+    };
+    __all__.pow = __pow__;
+    
+    __pragma__ ('ifndef', '__xtiny__')    
+    
+    var __neg__ = function (a) {
+        if (typeof a == 'object' && '__neg__' in a) {
+            return a.__neg__ ();
+        }
+        else {
+            return -a;
+        }
+    };
+    __all__.__neg__ = __neg__;
+
+    var __matmul__ = function (a, b) {
+        return a.__matmul__ (b);
+    };
+    __all__.__matmul__ = __matmul__;
 
     // Overloaded binary arithmetic
     
@@ -2047,3 +2050,5 @@ __pragma__ ('endif')
         }
     };
     __all__.__setslice__ = __setslice__;
+    
+__pragma__ ('endif') 
