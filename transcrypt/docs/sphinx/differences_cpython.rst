@@ -21,6 +21,7 @@ Differences due to the 'lean and mean' design goal
 - While class and function decorators are supported, method decorators are not, with the exception of @classmethod.
 - Currently only the  \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
 - The 'with' statement can currently only be used for file-like objects.
+- C-style string formatting is not supported.
 
 Differences due to interoperability with JavaScript and JavaScript libraries
 ----------------------------------------------------------------------------

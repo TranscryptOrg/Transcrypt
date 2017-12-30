@@ -1,7 +1,7 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-12-29 11:54:41
+// Transcrypt'ed from Python, 2017-12-30 15:55:26
 function test () {
-    var __symbols__ = ['__xtiny__', '__py3.6__', '__esv5__'];
+    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
     var __nest__ = function (headObject, tailNames, value) {
@@ -140,7 +140,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.66';
+							self.transpiler_version = '3.6.67';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -597,7 +597,7 @@ function test () {
     var dir = function (obj) {
         var aList = [];
         for (var aKey in obj) {
-            aList.push (aKey);
+            aList.push (aKey.startsWith ('py_') ? aKey.slice (3) : aKey);
         }
         aList.sort ();
         return aList;
@@ -608,12 +608,12 @@ function test () {
     };
     __all__.setattr = setattr;
     var getattr = function (obj, name) {
-        return obj [name];
+        return name in obj ? obj [name] : obj ['py_' + name];
     };
     __all__.getattr= getattr;
     var hasattr = function (obj, name) {
         try {
-            return name in obj;
+            return name in obj || 'py_' + name in obj;
         }
         catch (exception) {
             return false;
@@ -621,7 +621,12 @@ function test () {
     };
     __all__.hasattr = hasattr;
     var delattr = function (obj, name) {
-        delete obj [name];
+        if (name in obj) {
+            delete obj [name];
+        }
+        else {
+            delete obj ['py_' + name];
+        }
     };
     __all__.delattr = (delattr);
     var __in__ = function (element, container) {
@@ -1545,6 +1550,9 @@ function test () {
     }
     function __getdefault__ (aKey, aDefault) {
         var result = this [aKey];
+        if (result == undefined) {
+            result = this ['py_' + aKey]
+        }
         return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
     }
     function __setdefault__ (aKey, aDefault) {
@@ -1656,51 +1664,525 @@ function test () {
         this.__doc__ = docString;
         return this;
     }
-    __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});	(function () {
+    __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
+    var __jsmod__ = function (a, b) {
+        if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return a % b;
+        }
+    };
+    __all__.__jsmod__ = __jsmod__;
+    var __mod__ = function (a, b) {
+        if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return ((a % b) + b) % b;
+        }
+    };
+    __all__.mod = __mod__;
+    var __pow__ = function (a, b) {
+        if (typeof a == 'object' && '__pow__' in a) {
+            return a.__pow__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rpow__ (a);
+        }
+        else {
+            return Math.pow (a, b);
+        }
+    };
+    __all__.pow = __pow__;
+    var __neg__ = function (a) {
+        if (typeof a == 'object' && '__neg__' in a) {
+            return a.__neg__ ();
+        }
+        else {
+            return -a;
+        }
+    };
+    __all__.__neg__ = __neg__;
+    var __matmul__ = function (a, b) {
+        return a.__matmul__ (b);
+    };
+    __all__.__matmul__ = __matmul__;
+    var __mul__ = function (a, b) {
+        if (typeof a == 'object' && '__mul__' in a) {
+            return a.__mul__ (b);
+        }
+        else if (typeof b == 'object' && '__rmul__' in b) {
+            return b.__rmul__ (a);
+        }
+        else if (typeof a == 'string') {
+            return a.__mul__ (b);
+        }
+        else if (typeof b == 'string') {
+            return b.__rmul__ (a);
+        }
+        else {
+            return a * b;
+        }
+    };
+    __all__.__mul__ = __mul__;
+    var __truediv__ = function (a, b) {
+        if (typeof a == 'object' && '__truediv__' in a) {
+            return a.__truediv__ (b);
+        }
+        else if (typeof b == 'object' && '__rtruediv__' in b) {
+            return b.__rtruediv__ (a);
+        }
+        else if (typeof a == 'object' && '__div__' in a) {
+            return a.__div__ (b);
+        }
+        else if (typeof b == 'object' && '__rdiv__' in b) {
+            return b.__rdiv__ (a);
+        }
+        else {
+            return a / b;
+        }
+    };
+    __all__.__truediv__ = __truediv__;
+    var __floordiv__ = function (a, b) {
+        if (typeof a == 'object' && '__floordiv__' in a) {
+            return a.__floordiv__ (b);
+        }
+        else if (typeof b == 'object' && '__rfloordiv__' in b) {
+            return b.__rfloordiv__ (a);
+        }
+        else if (typeof a == 'object' && '__div__' in a) {
+            return a.__div__ (b);
+        }
+        else if (typeof b == 'object' && '__rdiv__' in b) {
+            return b.__rdiv__ (a);
+        }
+        else {
+            return Math.floor (a / b);
+        }
+    };
+    __all__.__floordiv__ = __floordiv__;
+    var __add__ = function (a, b) {
+        if (typeof a == 'object' && '__add__' in a) {
+            return a.__add__ (b);
+        }
+        else if (typeof b == 'object' && '__radd__' in b) {
+            return b.__radd__ (a);
+        }
+        else {
+            return a + b;
+        }
+    };
+    __all__.__add__ = __add__;
+    var __sub__ = function (a, b) {
+        if (typeof a == 'object' && '__sub__' in a) {
+            return a.__sub__ (b);
+        }
+        else if (typeof b == 'object' && '__rsub__' in b) {
+            return b.__rsub__ (a);
+        }
+        else {
+            return a - b;
+        }
+    };
+    __all__.__sub__ = __sub__;
+    var __lshift__ = function (a, b) {
+        if (typeof a == 'object' && '__lshift__' in a) {
+            return a.__lshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rlshift__' in b) {
+            return b.__rlshift__ (a);
+        }
+        else {
+            return a << b;
+        }
+    };
+    __all__.__lshift__ = __lshift__;
+    var __rshift__ = function (a, b) {
+        if (typeof a == 'object' && '__rshift__' in a) {
+            return a.__rshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rrshift__' in b) {
+            return b.__rrshift__ (a);
+        }
+        else {
+            return a >> b;
+        }
+    };
+    __all__.__rshift__ = __rshift__;
+    var __or__ = function (a, b) {
+        if (typeof a == 'object' && '__or__' in a) {
+            return a.__or__ (b);
+        }
+        else if (typeof b == 'object' && '__ror__' in b) {
+            return b.__ror__ (a);
+        }
+        else {
+            return a | b;
+        }
+    };
+    __all__.__or__ = __or__;
+    var __xor__ = function (a, b) {
+        if (typeof a == 'object' && '__xor__' in a) {
+            return a.__xor__ (b);
+        }
+        else if (typeof b == 'object' && '__rxor__' in b) {
+            return b.__rxor__ (a);
+        }
+        else {
+            return a ^ b;
+        }
+    };
+    __all__.__xor__ = __xor__;
+    var __and__ = function (a, b) {
+        if (typeof a == 'object' && '__and__' in a) {
+            return a.__and__ (b);
+        }
+        else if (typeof b == 'object' && '__rand__' in b) {
+            return b.__rand__ (a);
+        }
+        else {
+            return a & b;
+        }
+    };
+    __all__.__and__ = __and__;
+    var __eq__ = function (a, b) {
+        if (typeof a == 'object' && '__eq__' in a) {
+            return a.__eq__ (b);
+        }
+        else {
+            return a == b;
+        }
+    };
+    __all__.__eq__ = __eq__;
+    var __ne__ = function (a, b) {
+        if (typeof a == 'object' && '__ne__' in a) {
+            return a.__ne__ (b);
+        }
+        else {
+            return a != b
+        }
+    };
+    __all__.__ne__ = __ne__;
+    var __lt__ = function (a, b) {
+        if (typeof a == 'object' && '__lt__' in a) {
+            return a.__lt__ (b);
+        }
+        else {
+            return a < b;
+        }
+    };
+    __all__.__lt__ = __lt__;
+    var __le__ = function (a, b) {
+        if (typeof a == 'object' && '__le__' in a) {
+            return a.__le__ (b);
+        }
+        else {
+            return a <= b;
+        }
+    };
+    __all__.__le__ = __le__;
+    var __gt__ = function (a, b) {
+        if (typeof a == 'object' && '__gt__' in a) {
+            return a.__gt__ (b);
+        }
+        else {
+            return a > b;
+        }
+    };
+    __all__.__gt__ = __gt__;
+    var __ge__ = function (a, b) {
+        if (typeof a == 'object' && '__ge__' in a) {
+            return a.__ge__ (b);
+        }
+        else {
+            return a >= b;
+        }
+    };
+    __all__.__ge__ = __ge__;
+    var __imatmul__ = function (a, b) {
+        if ('__imatmul__' in a) {
+            return a.__imatmul__ (b);
+        }
+        else {
+            return a.__matmul__ (b);
+        }
+    };
+    __all__.__imatmul__ = __imatmul__;
+    var __ipow__ = function (a, b) {
+        if (typeof a == 'object' && '__pow__' in a) {
+            return a.__ipow__ (b);
+        }
+        else if (typeof a == 'object' && '__ipow__' in a) {
+            return a.__pow__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rpow__ (a);
+        }
+        else {
+            return Math.pow (a, b);
+        }
+    };
+    __all__.ipow = __ipow__;
+    var __ijsmod__ = function (a, b) {
+        if (typeof a == 'object' && '__imod__' in a) {
+            return a.__ismod__ (b);
+        }
+        else if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return a % b;
+        }
+    };
+    __all__.ijsmod__ = __ijsmod__;
+    var __imod__ = function (a, b) {
+        if (typeof a == 'object' && '__imod__' in a) {
+            return a.__imod__ (b);
+        }
+        else if (typeof a == 'object' && '__mod__' in a) {
+            return a.__mod__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rmod__ (a);
+        }
+        else {
+            return ((a % b) + b) % b;
+        }
+    };
+    __all__.imod = __imod__;
+    var __imul__ = function (a, b) {
+        if (typeof a == 'object' && '__imul__' in a) {
+            return a.__imul__ (b);
+        }
+        else if (typeof a == 'object' && '__mul__' in a) {
+            return a = a.__mul__ (b);
+        }
+        else if (typeof b == 'object' && '__rmul__' in b) {
+            return a = b.__rmul__ (a);
+        }
+        else if (typeof a == 'string') {
+            return a = a.__mul__ (b);
+        }
+        else if (typeof b == 'string') {
+            return a = b.__rmul__ (a);
+        }
+        else {
+            return a *= b;
+        }
+    };
+    __all__.__imul__ = __imul__;
+    var __idiv__ = function (a, b) {
+        if (typeof a == 'object' && '__idiv__' in a) {
+            return a.__idiv__ (b);
+        }
+        else if (typeof a == 'object' && '__div__' in a) {
+            return a = a.__div__ (b);
+        }
+        else if (typeof b == 'object' && '__rdiv__' in b) {
+            return a = b.__rdiv__ (a);
+        }
+        else {
+            return a /= b;
+        }
+    };
+    __all__.__idiv__ = __idiv__;
+    var __iadd__ = function (a, b) {
+        if (typeof a == 'object' && '__iadd__' in a) {
+            return a.__iadd__ (b);
+        }
+        else if (typeof a == 'object' && '__add__' in a) {
+            return a = a.__add__ (b);
+        }
+        else if (typeof b == 'object' && '__radd__' in b) {
+            return a = b.__radd__ (a);
+        }
+        else {
+            return a += b;
+        }
+    };
+    __all__.__iadd__ = __iadd__;
+    var __isub__ = function (a, b) {
+        if (typeof a == 'object' && '__isub__' in a) {
+            return a.__isub__ (b);
+        }
+        else if (typeof a == 'object' && '__sub__' in a) {
+            return a = a.__sub__ (b);
+        }
+        else if (typeof b == 'object' && '__rsub__' in b) {
+            return a = b.__rsub__ (a);
+        }
+        else {
+            return a -= b;
+        }
+    };
+    __all__.__isub__ = __isub__;
+    var __ilshift__ = function (a, b) {
+        if (typeof a == 'object' && '__ilshift__' in a) {
+            return a.__ilshift__ (b);
+        }
+        else if (typeof a == 'object' && '__lshift__' in a) {
+            return a = a.__lshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rlshift__' in b) {
+            return a = b.__rlshift__ (a);
+        }
+        else {
+            return a <<= b;
+        }
+    };
+    __all__.__ilshift__ = __ilshift__;
+    var __irshift__ = function (a, b) {
+        if (typeof a == 'object' && '__irshift__' in a) {
+            return a.__irshift__ (b);
+        }
+        else if (typeof a == 'object' && '__rshift__' in a) {
+            return a = a.__rshift__ (b);
+        }
+        else if (typeof b == 'object' && '__rrshift__' in b) {
+            return a = b.__rrshift__ (a);
+        }
+        else {
+            return a >>= b;
+        }
+    };
+    __all__.__irshift__ = __irshift__;
+    var __ior__ = function (a, b) {
+        if (typeof a == 'object' && '__ior__' in a) {
+            return a.__ior__ (b);
+        }
+        else if (typeof a == 'object' && '__or__' in a) {
+            return a = a.__or__ (b);
+        }
+        else if (typeof b == 'object' && '__ror__' in b) {
+            return a = b.__ror__ (a);
+        }
+        else {
+            return a |= b;
+        }
+    };
+    __all__.__ior__ = __ior__;
+    var __ixor__ = function (a, b) {
+        if (typeof a == 'object' && '__ixor__' in a) {
+            return a.__ixor__ (b);
+        }
+        else if (typeof a == 'object' && '__xor__' in a) {
+            return a = a.__xor__ (b);
+        }
+        else if (typeof b == 'object' && '__rxor__' in b) {
+            return a = b.__rxor__ (a);
+        }
+        else {
+            return a ^= b;
+        }
+    };
+    __all__.__ixor__ = __ixor__;
+    var __iand__ = function (a, b) {
+        if (typeof a == 'object' && '__iand__' in a) {
+            return a.__iand__ (b);
+        }
+        else if (typeof a == 'object' && '__and__' in a) {
+            return a = a.__and__ (b);
+        }
+        else if (typeof b == 'object' && '__rand__' in b) {
+            return a = b.__rand__ (a);
+        }
+        else {
+            return a &= b;
+        }
+    };
+    __all__.__iand__ = __iand__;
+    var __getitem__ = function (container, key) {
+        if (typeof container == 'object' && '__getitem__' in container) {
+            return container.__getitem__ (key);
+        }
+        else {
+            return container [key];
+        }
+    };
+    __all__.__getitem__ = __getitem__;
+    var __setitem__ = function (container, key, value) {
+        if (typeof container == 'object' && '__setitem__' in container) {
+            container.__setitem__ (key, value);
+        }
+        else {
+            container [key] = value;
+        }
+    };
+    __all__.__setitem__ = __setitem__;
+    var __getslice__ = function (container, lower, upper, step) {
+        if (typeof container == 'object' && '__getitem__' in container) {
+            return container.__getitem__ ([lower, upper, step]);
+        }
+        else {
+            return container.__getslice__ (lower, upper, step);
+        }
+    };
+    __all__.__getslice__ = __getslice__;
+    var __setslice__ = function (container, lower, upper, step, value) {
+        if (typeof container == 'object' && '__setitem__' in container) {
+            container.__setitem__ ([lower, upper, step], value);
+        }
+        else {
+            container.__setslice__ (lower, upper, step, value);
+        }
+    };
+    __all__.__setslice__ = __setslice__;	(function () {
 		var __name__ = '__main__';
-		var b = bytes ('bike');
-		var s = bytes ('shop', 'utf8');
-		var e = bytes ('');
-		var bb = bytearray (list ([0, 1, 2, 3, 4]));
-		var bc = bytes (tuple ([5, 6, 7, 8, 9]));
-		var bps = __add__ (__add__ (b, bytes ('pump')), s);
-		var bps3 = __add__ (__mul__ (3, bps), bytes (' '));
-		var aBps3 = __add__ (__mul__ (bps, 3), bytes (' '));
-		var l = __add__ (list ([1, 2, 3]), list ([4, 5, 6]));
-		var formatCheck = function (aBytes) {
-			print ((function () {
-				var __accu0__ = [];
-				var __iterable0__ = aBytes;
-				for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-					var aByte = __iterable0__ [__index0__];
-					__accu0__.append (int (aByte));
+		var Foo = __class__ ('Foo', [object], {
+			__module__: __name__,
+		});
+		var foo = Foo ();
+		foo.bar = 'baz';
+		foo.py_name = 'hello';
+		foo.py_default = 'world';
+		print ((function () {
+			var __accu0__ = [];
+			var __iterable0__ = dir (foo);
+			for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+				var x = __iterable0__ [__index0__];
+				if (!(x.startswith ('__'))) {
+					__accu0__.append (x);
 				}
-				return __accu0__;
-			}) ());
+			}
+			return __accu0__;
+		}) ());
+		var foo = function () {
+			var kwargs = dict ();
+			if (arguments.length) {
+				var __ilastarg0__ = arguments.length - 1;
+				if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+					var __allkwargs0__ = arguments [__ilastarg0__--];
+					for (var __attrib0__ in __allkwargs0__) {
+						switch (__attrib0__) {
+							default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+						}
+					}
+					delete kwargs.__kwargtrans__;
+				}
+				var args = tuple ([].slice.apply (arguments).slice (0, __ilastarg0__ + 1));
+			}
+			else {
+				var args = tuple ();
+			}
+			var py_default = kwargs.py_get ('default', 'bar');
+			return py_default;
 		};
-		formatCheck (b);
-		formatCheck (s);
-		formatCheck (e);
-		formatCheck (bb);
-		formatCheck (bc);
-		formatCheck (bps);
-		formatCheck (bps3);
-		formatCheck (aBps3);
-		__call__ (formatCheck, null, __add__ (bb, bc));
-		__call__ (formatCheck, null, __add__ (__add__ (__call__ (bytearray, null, 'ding', 'utf8'), bytes ('dang')), __call__ (bytes, null, 'dong', 'utf8')));
-		formatCheck (l);
+		print (foo ());
+		print (foo (__kwargtrans__ ({py_default: 'Hello World'})));
 		__pragma__ ('<all>')
+			__all__.Foo = Foo;
 			__all__.__name__ = __name__;
-			__all__.aBps3 = aBps3;
-			__all__.b = b;
-			__all__.bb = bb;
-			__all__.bc = bc;
-			__all__.bps = bps;
-			__all__.bps3 = bps3;
-			__all__.e = e;
-			__all__.formatCheck = formatCheck;
-			__all__.l = l;
-			__all__.s = s;
+			__all__.foo = foo;
 		__pragma__ ('</all>')
 	}) ();
     return __all__;

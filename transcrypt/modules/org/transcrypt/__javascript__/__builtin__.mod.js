@@ -149,7 +149,7 @@ __pragma__ ('endif')
     var dir = function (obj) {
         var aList = [];
         for (var aKey in obj) {
-            aList.push (aKey);
+            aList.push (aKey.startsWith ('py_') ? aKey.slice (3) : aKey);
         }
         aList.sort ();
         return aList;
@@ -157,18 +157,18 @@ __pragma__ ('endif')
     __all__.dir = dir;
 
     var setattr = function (obj, name, value) {
-        obj [name] = value;
+        obj [name] = value; // Will not work in combination with static retrieval of aliased attributes, too expensive
     };
     __all__.setattr = setattr;
 
     var getattr = function (obj, name) {
-        return obj [name];
+        return name in obj ? obj [name] : obj ['py_' + name];
     };
     __all__.getattr= getattr;
 
     var hasattr = function (obj, name) {
         try {
-            return name in obj;
+            return name in obj || 'py_' + name in obj;
         }
         catch (exception) {
             return false;
@@ -177,7 +177,12 @@ __pragma__ ('endif')
     __all__.hasattr = hasattr;
 
     var delattr = function (obj, name) {
-        delete obj [name];
+        if (name in obj) {
+            delete obj [name];
+        }
+        else {
+            delete obj ['py_' + name];
+        }
     };
     __all__.delattr = (delattr);
 
@@ -1372,6 +1377,9 @@ __pragma__ ('endif')
 
     function __getdefault__ (aKey, aDefault) {  // Each Python object already has a function called __get__, so we call this one __getdefault__
         var result = this [aKey];
+        if (result == undefined) {
+            result = this ['py_' + aKey]
+        }
         return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
     }
 

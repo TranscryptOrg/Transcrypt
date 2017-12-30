@@ -684,15 +684,15 @@ class Generator (ast.NodeVisitor):
         else:
             self.visit (child)
 
-    def getAliaser (self, pyFragment, jsFragment):
-        return (pyFragment, re.compile ('''
+    def getAliaser (self, sourceFragment, targetFragment):
+        return (sourceFragment, re.compile ('''
             (^{0}$)|            # Whole word
             (.+__{0}__.+)|      # Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
             (^{0}__)|           # Starts with <pyFragment>__
             (__{0}$)|           # Ends with __<pyFragment>
             ((?<=\.){0}__)|     # Starts with '.<pyFragment>__'
             (__{0}(?=\.))       # Ends with '__<pyFragment>.'
-        '''.format (pyFragment), re.VERBOSE), jsFragment)
+        '''.format (sourceFragment), re.VERBOSE), targetFragment)
 
     def filterId (self, qualifiedId):   # Convention: only called at emission time
         if self.idFiltering:
@@ -2251,8 +2251,7 @@ class Generator (ast.NodeVisitor):
                             decorate = True
 
                 if decorate:
-                    implName = '__impl__{}'.format(node.name)
-                    self.emit ('{}: {}function', implName, 'async ' if async else '')
+                    self.emit ('__impl__{}: {}function', node.name, 'async ' if async else '')
                 else:
                     if isClassMethod:
                         self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
@@ -2278,11 +2277,11 @@ class Generator (ast.NodeVisitor):
                 if decorate:
                     self.emit (',\n')
                     if isClassMethod:
-                        self.emit ('get {} () {{return __getcm__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __getcm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     elif isStaticMethod:
-                        self.emit ('get {} () {{return __getsm__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __getsm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     else:
-                        self.emit ('get {} () {{return __get__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __get__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     self.pushDecorator (node)
                 else:
                     if isStaticMethod:

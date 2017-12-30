@@ -435,3 +435,23 @@ def run (autoTester):
     for i in range (len (foo)):
         autoTester.check (foo [i])
     #__pragma__('noopov')
+    
+    autoTester.check ('Issue 414')
+    
+    class Foo:
+        pass
+
+    foo = Foo ()
+    foo.bar = 'baz'
+    foo.name = 'hello'
+    foo.default = 'world'
+
+    autoTester.check ([x for x in dir (foo) if not x.startswith ('__')])
+
+    #__pragma__('kwargs')
+    def foo (*args, **kwargs):
+        default = kwargs.get ('default', 'bar')
+        return default
+
+    autoTester.check (foo())
+    autoTester.check (foo(default = 'Hello World'))
