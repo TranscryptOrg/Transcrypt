@@ -312,6 +312,7 @@ def run (autoTester):
         autoTester.check ('g')
         
     autoTester.check ('Issue 316')
+    
     autoTester.check (list (filter (None, [[1, 2], [3], [], [4, 5], [6]])))
     autoTester.check (list (filter (lambda l: len (l) >= 2, [[1, 2], [3], [], [4, 5], [6]])))
     
@@ -323,6 +324,16 @@ def run (autoTester):
     except ValueError as exception:
         autoTester.check (exception.__class__.__name__)
         
+    autoTester.check ('Issue 331')
+    
+    autoTester.check (max (-5, 4, 1, 2, -3, 2))
+    autoTester.check (max ([-5, 4, 1, 2, -3, 2]))
+    autoTester.check (max ((5, 6, 2, -2, -4)))
+
+    autoTester.check (min (-5, 4, 1, 2, -3, 2))
+    autoTester.check (min ([-5, 4, 1, 2, -3, 2]))
+    autoTester.check (min ((5, 6, 2, -2, -4)))
+    
     autoTester.check ('issue 356')
     
     try:

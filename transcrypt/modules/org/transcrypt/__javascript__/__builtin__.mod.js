@@ -447,11 +447,23 @@ __pragma__ ('endif')
     __all__.ord = ord;
 
     // Maximum of n numbers
-    var max = Math.max;
+    var max = function (nrOrSeq) {
+__pragma__ ('ifdef', '__esv6__')
+        return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);       
+__pragma__ ('else')
+        return arguments.length == 1 ? Math.max.apply (null, nrOrSeq) : Math.max.apply (null, arguments);       
+__pragma__ ('endif')
+    };
     __all__.max = max;
 
     // Minimum of n numbers
-    var min = Math.min;
+    var min = function (nrOrSeq) {
+__pragma__ ('ifdef', '__esv6__')
+        return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);       
+__pragma__ ('else')
+        return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);       
+__pragma__ ('endif')
+    };
     __all__.min = min;
 
     // Absolute value
