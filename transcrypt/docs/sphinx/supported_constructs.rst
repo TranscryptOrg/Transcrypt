@@ -32,6 +32,13 @@ Attribute proxies by name: __getattr__, __setattr__
 	:tab-width: 4
 	:caption: Testlet: proxies
 
+Bytes and bytearrays: initial support
+-------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/byte_arrays/__init__.py
+	:tab-width: 4
+	:caption: Testlet: byte_arrays
+
 Callable or not: using the callable () built-in function
 --------------------------------------------------------
 

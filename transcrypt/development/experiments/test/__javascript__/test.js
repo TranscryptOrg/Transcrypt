@@ -1,17 +1,12 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-10-21 16:07:47
+// Transcrypt'ed from Python, 2017-12-30 15:55:26
 function test () {
-   var __symbols__ = ['__py3.6__', '__esv5__'];
+    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
-    
-    // Nested object creator, part of the nesting may already exist and have attributes
     var __nest__ = function (headObject, tailNames, value) {
-        // In some cases this will be a global object, e.g. 'window'
         var current = headObject;
-        
-        if (tailNames != '') {  // Split on empty string doesn't give empty list
-            // Find the last already created object in tailNames
+        if (tailNames != '') {
             var tailChain = tailNames.split ('.');
             var firstNewIndex = tailChain.length;
             for (var index = 0; index < tailChain.length; index++) {
@@ -21,22 +16,16 @@ function test () {
                 }
                 current = current [tailChain [index]];
             }
-            
-            // Create the rest of the objects, if any
             for (var index = firstNewIndex; index < tailChain.length; index++) {
                 current [tailChain [index]] = {};
                 current = current [tailChain [index]];
             }
         }
-        
-        // Insert it new attributes, it may have been created earlier and have other attributes
         for (var attrib in value) {
-            current [attrib] = value [attrib];          
-        }       
+            current [attrib] = value [attrib];
+        }
     };
     __all__.__nest__ = __nest__;
-    
-    // Initialize module if not yet done and return its globals
     var __init__ = function (module) {
         if (!module.__inited__) {
             module.__all__.__init__ (module.__all__);
@@ -45,43 +34,34 @@ function test () {
         return module.__all__;
     };
     __all__.__init__ = __init__;
-    
-    
-    
-    
-    // Since we want to assign functions, a = b.f should make b.f produce a bound function
-    // So __get__ should be called by a property rather then a function
-    // Factory __get__ creates one of three curried functions for func
-    // Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
     var __get__ = function (self, func, quotedFuncName) {
         if (self) {
-            if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {           // Object before the dot
-                if (quotedFuncName) {                                   // Memoize call since fcall is on, by installing bound function in instance
-                    Object.defineProperty (self, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
-                        value: function () {                            // So next time just call curry function that calls function
+            if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {
+                if (quotedFuncName) {
+                    Object.defineProperty (self, quotedFuncName, {
+                        value: function () {
                             var args = [] .slice.apply (arguments);
                             return func.apply (null, [self] .concat (args));
-                        },              
+                        },
                         writable: true,
                         enumerable: true,
                         configurable: true
                     });
                 }
-                return function () {                                    // Return bound function, code dupplication for efficiency if no memoizing
-                    var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
+                return function () {
+                    var args = [] .slice.apply (arguments);
                     return func.apply (null, [self] .concat (args));
                 };
             }
-            else {                                                      // Class before the dot
-                return func;                                            // Return static method
+            else {
+                return func;
             }
         }
-        else {                                                          // Nothing before the dot
-            return func;                                                // Return free function
+        else {
+            return func;
         }
     }
     __all__.__get__ = __get__;
-
     var __getcm__ = function (self, func, quotedFuncName) {
         if (self.hasOwnProperty ('__class__')) {
             return function () {
@@ -97,104 +77,70 @@ function test () {
         }
     }
     __all__.__getcm__ = __getcm__;
-    
     var __getsm__ = function (self, func, quotedFuncName) {
         return func;
     }
     __all__.__getsm__ = __getsm__;
-        
-    // Mother of all metaclasses        
     var py_metatype = {
         __name__: 'type',
         __bases__: [],
-        
-        // Overridable class creation worker
         __new__: function (meta, name, bases, attribs) {
-            // Create the class cls, a functor, which the class creator function will return
-            var cls = function () {                     // If cls is called with arg0, arg1, etc, it calls its __new__ method with [arg0, arg1, etc]
-                var args = [] .slice.apply (arguments); // It has a __new__ method, not yet but at call time, since it is copied from the parent in the loop below
-                return cls.__new__ (args);              // Each Python class directly or indirectly derives from object, which has the __new__ method
-            };                                          // If there are no bases in the Python source, the compiler generates [object] for this parameter
-            
-            // Copy all methods, including __new__, properties and static attributes from base classes to new cls object
-            // The new class object will simply be the prototype of its instances
-            // JavaScript prototypical single inheritance will do here, since any object has only one class
-            // This has nothing to do with Python multiple inheritance, that is implemented explictly in the copy loop below
-            for (var index = bases.length - 1; index >= 0; index--) {   // Reversed order, since class vars of first base should win
+            var cls = function () {
+                var args = [] .slice.apply (arguments);
+                return cls.__new__ (args);
+            };
+            for (var index = bases.length - 1; index >= 0; index--) {
                 var base = bases [index];
                 for (var attrib in base) {
                     var descrip = Object.getOwnPropertyDescriptor (base, attrib);
                     Object.defineProperty (cls, attrib, descrip);
-                }           
+                }
             }
-            
-            // Add class specific attributes to the created cls object
             cls.__metaclass__ = meta;
-            cls.__name__ = name;
+            cls.__name__ = name.startsWith ('py_') ? name.slice (3) : name;
             cls.__bases__ = bases;
-            
-            // Add own methods, properties and own static attributes to the created cls object
             for (var attrib in attribs) {
                 var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
                 Object.defineProperty (cls, attrib, descrip);
             }
-            // Return created cls object
             return cls;
         }
     };
     py_metatype.__metaclass__ = py_metatype;
     __all__.py_metatype = py_metatype;
-    
-    // Mother of all classes
     var object = {
         __init__: function (self) {},
-        
-        __metaclass__: py_metatype, // By default, all classes have metaclass type, since they derive from object
+        __metaclass__: py_metatype,
         __name__: 'object',
         __bases__: [],
-            
-        // Object creator function, is inherited by all classes (so could be global)
-        __new__: function (args) {  // Args are just the constructor args       
-            // In JavaScript the Python class is the prototype of the Python object
-            // In this way methods and static attributes will be available both with a class and an object before the dot
-            // The descriptor produced by __get__ will return the right method flavor
+        __new__: function (args) {
             var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
-            
-
-            // Call constructor
             this.__init__.apply (null, [instance] .concat (args));
-
-            // Return constructed instance
             return instance;
-        }   
+        }
     };
     __all__.object = object;
-    
-    // Class creator facade function, calls class creation worker
-    var __class__ = function (name, bases, attribs, meta) {         // Parameter meta is optional
+    var __class__ = function (name, bases, attribs, meta) {
         if (meta == undefined) {
             meta = bases [0] .__metaclass__;
         }
-                
         return meta.__new__ (meta, name, bases, attribs);
     }
     __all__.__class__ = __class__;
-    
-    // Define __pragma__ to preserve '<all>' and '</all>', since it's never generated as a function, must be done early, so here
     var __pragma__ = function () {};
-    __all__.__pragma__ = __pragma__;
-    
-    	__nest__ (
+    __all__.__pragma__ = __pragma__;	__nest__ (
 		__all__,
 		'org.transcrypt.__base__', {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					var __name__ = 'org.transcrypt.__base__';
 					var __Envir__ = __class__ ('__Envir__', [object], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.53';
+							self.transpiler_version = '3.6.67';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -202,6 +148,7 @@ function test () {
 					__pragma__ ('<all>')
 						__all__.__Envir__ = __Envir__;
 						__all__.__envir__ = __envir__;
+						__all__.__name__ = __name__;
 					__pragma__ ('</all>')
 				}
 			}
@@ -213,7 +160,9 @@ function test () {
 			__all__: {
 				__inited__: false,
 				__init__: function (__all__) {
+					var __name__ = 'org.transcrypt.__standard__';
 					var Exception = __class__ ('Exception', [object], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
 							var kwargs = dict ();
 							if (arguments.length) {
@@ -262,26 +211,31 @@ function test () {
 						});}
 					});
 					var IterableError = __class__ ('IterableError', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, error) {
 							Exception.__init__ (self, "Can't iterate over non-iterable", __kwargtrans__ ({error: error}));
 						});}
 					});
 					var StopIteration = __class__ ('StopIteration', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, error) {
 							Exception.__init__ (self, 'Iterator exhausted', __kwargtrans__ ({error: error}));
 						});}
 					});
 					var ValueError = __class__ ('ValueError', [Exception], {
-						get __init__ () {return __get__ (this, function (self, error) {
-							Exception.__init__ (self, 'Erroneous value', __kwargtrans__ ({error: error}));
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
 					var KeyError = __class__ ('KeyError', [Exception], {
-						get __init__ () {return __get__ (this, function (self, error) {
-							Exception.__init__ (self, 'Invalid key', __kwargtrans__ ({error: error}));
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
 					var AssertionError = __class__ ('AssertionError', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, message, error) {
 							if (message) {
 								Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
@@ -292,27 +246,40 @@ function test () {
 						});}
 					});
 					var NotImplementedError = __class__ ('NotImplementedError', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, message, error) {
 							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
 					var IndexError = __class__ ('IndexError', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, message, error) {
 							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
 					var AttributeError = __class__ ('AttributeError', [Exception], {
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, message, error) {
+							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+						});}
+					});
+					var py_TypeError = __class__ ('py_TypeError', [Exception], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self, message, error) {
 							Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 						});}
 					});
 					var Warning = __class__ ('Warning', [Exception], {
+						__module__: __name__,
 					});
 					var UserWarning = __class__ ('UserWarning', [Warning], {
+						__module__: __name__,
 					});
 					var DeprecationWarning = __class__ ('DeprecationWarning', [Warning], {
+						__module__: __name__,
 					});
 					var RuntimeWarning = __class__ ('RuntimeWarning', [Warning], {
+						__module__: __name__,
 					});
 					var __sort__ = function (iterable, key, reverse) {
 						if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
@@ -394,33 +361,34 @@ function test () {
 						return result;
 					};
 					var map = function (func, iterable) {
-						return function () {
+						return (function () {
 							var __accu0__ = [];
 							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
 								var item = __iterable0__ [__index0__];
 								__accu0__.append (func (item));
 							}
 							return __accu0__;
-						} ();
+						}) ();
 					};
 					var filter = function (func, iterable) {
 						if (func == null) {
 							var func = bool;
 						}
-						return function () {
+						return (function () {
 							var __accu0__ = [];
 							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
 								var item = __iterable0__ [__index0__];
 								if (func (item)) {
 									__accu0__.append (item);
 								}
 							}
 							return __accu0__;
-						} ();
+						}) ();
 					};
 					var __Terminal__ = __class__ ('__Terminal__', [object], {
+						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
 							self.buffer = '';
 							try {
@@ -456,29 +424,29 @@ function test () {
 							else {
 								var args = tuple ();
 							}
-							self.buffer = '{}{}{}'.format (self.buffer, sep.join (function () {
+							self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
 								var __accu0__ = [];
 								var __iterable0__ = args;
-								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+								for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
 									var arg = __iterable0__ [__index0__];
 									__accu0__.append (str (arg));
 								}
 								return __accu0__;
-							} ()), end).__getslice__ (-(4096), null, 1);
+							}) ()), end).__getslice__ (-(4096), null, 1);
 							if (self.element) {
-								self.element.innerHTML = self.buffer.py_replace ('\n', '<br>');
+								self.element.innerHTML = self.buffer.py_replace ('\n', '<br>').py_replace (' ', '&nbsp');
 								self.element.scrollTop = self.element.scrollHeight;
 							}
 							else {
-								console.log (sep.join (function () {
+								console.log (sep.join ((function () {
 									var __accu0__ = [];
 									var __iterable0__ = args;
-									for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
+									for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
 										var arg = __iterable0__ [__index0__];
 										__accu0__.append (str (arg));
 									}
 									return __accu0__;
-								} ()));
+								}) ()));
 							}
 						});},
 						get input () {return __get__ (this, function (self, question) {
@@ -514,10 +482,12 @@ function test () {
 						__all__.NotImplementedError = NotImplementedError;
 						__all__.RuntimeWarning = RuntimeWarning;
 						__all__.StopIteration = StopIteration;
+						__all__.py_TypeError = py_TypeError;
 						__all__.UserWarning = UserWarning;
 						__all__.ValueError = ValueError;
 						__all__.Warning = Warning;
 						__all__.__Terminal__ = __Terminal__;
+						__all__.__name__ = __name__;
 						__all__.__sort__ = __sort__;
 						__all__.__terminal__ = __terminal__;
 						__all__.filter = filter;
@@ -528,31 +498,19 @@ function test () {
 			}
 		}
 	);
-    var __call__ = function (/* <callee>, <this>, <params>* */) {   // Needed for __base__ and __standard__ if global 'opov' switch is on
+    var __call__ = function (/* <callee>, <this>, <params>* */) {
         var args = [] .slice.apply (arguments);
-        if (typeof args [0] == 'object' && '__call__' in args [0]) {        // Overloaded
+        if (typeof args [0] == 'object' && '__call__' in args [0]) {
             return args [0] .__call__ .apply (args [1], args.slice (2));
         }
-        else {                                                              // Native
+        else {
             return args [0] .apply (args [1], args.slice (2));
         }
     };
     __all__.__call__ = __call__;
-
-    // Initialize non-nested modules __base__ and __standard__ and make its names available directly and via __all__
-    // They can't do that itself, because they're regular Python modules
-    // The compiler recognizes their names and generates them inline rather than nesting them
-    // In this way it isn't needed to import them everywhere
-
-    // __base__
-
     __nest__ (__all__, '', __init__ (__all__.org.transcrypt.__base__));
     var __envir__ = __all__.__envir__;
-
-    // __standard__
-
     __nest__ (__all__, '', __init__ (__all__.org.transcrypt.__standard__));
-
     var Exception = __all__.Exception;
     var IterableError = __all__.IterableError;
     var StopIteration = __all__.StopIteration;
@@ -562,48 +520,33 @@ function test () {
     var NotImplementedError = __all__.NotImplementedError;
     var IndexError = __all__.IndexError;
     var AttributeError = __all__.AttributeError;
-
-    // Warnings Exceptions
+    var py_TypeError = __all__.py_TypeError;
     var Warning = __all__.Warning;
     var UserWarning = __all__.UserWarning;
     var DeprecationWarning = __all__.DeprecationWarning;
     var RuntimeWarning = __all__.RuntimeWarning;
-
     var __sort__ = __all__.__sort__;
     var sorted = __all__.sorted;
-
     var map = __all__.map;
     var filter = __all__.filter;
-
     __all__.print = __all__.__terminal__.print;
     __all__.input = __all__.__terminal__.input;
-
     var __terminal__ = __all__.__terminal__;
     var print = __all__.print;
     var input = __all__.input;
-
-    // Complete __envir__, that was created in __base__, for non-stub mode
     __envir__.executor_name = __envir__.transpiler_name;
-
-    // Make make __main__ available in browser
     var __main__ = {__file__: ''};
     __all__.main = __main__;
-
-    // Define current exception, there's at most one exception in the air at any time
     var __except__ = null;
     __all__.__except__ = __except__;
-    
-     // Creator of a marked dictionary, used to pass **kwargs parameter
     var __kwargtrans__ = function (anObject) {
-        anObject.__kwargtrans__ = null; // Removable marker
+        anObject.__kwargtrans__ = null;
         anObject.constructor = Object;
         return anObject;
     }
     __all__.__kwargtrans__ = __kwargtrans__;
-
-    // 'Oneshot' dict promotor, used to enrich __all__ and help globals () return a true dict
     var __globals__ = function (anObject) {
-        if (isinstance (anObject, dict)) {  // Don't attempt to promote (enrich) again, since it will make a copy
+        if (isinstance (anObject, dict)) {
             return anObject;
         }
         else {
@@ -611,49 +554,35 @@ function test () {
         }
     }
     __all__.__globals__ = __globals__
-    
-    // Partial implementation of super () .<methodName> (<params>)
     var __super__ = function (aClass, methodName) {
-        // Lean and fast, no C3 linearization, only call first implementation encountered
-        // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
-        
         for (var index = 0; index < aClass.__bases__.length; index++) {
             var base = aClass.__bases__ [index];
             if (methodName in base) {
                return base [methodName];
             }
         }
-
-        throw new Exception ('Superclass method not found');    // !!! Improve!
+        throw new Exception ('Superclass method not found');
     }
     __all__.__super__ = __super__
-        
-    // Python property installer function, no member since that would bloat classes
-    var property = function (getter, setter) {  // Returns a property descriptor rather than a property
-        if (!setter) {  // ??? Make setter optional instead of dummy?
+    var property = function (getter, setter) {
+        if (!setter) {
             setter = function () {};
         }
         return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
     }
     __all__.property = property;
-    
-    // Conditional JavaScript property installer function, prevents redefinition of properties if multiple Transcrypt apps are on one page
     var __setProperty__ = function (anObject, name, descriptor) {
         if (!anObject.hasOwnProperty (name)) {
             Object.defineProperty (anObject, name, descriptor);
         }
     }
     __all__.__setProperty__ = __setProperty__
-    
-    // Assert function, call to it only generated when compiling with --dassert option
-    function assert (condition, message) {  // Message may be undefined
+    function assert (condition, message) {
         if (!condition) {
             throw AssertionError (message, new Error ());
         }
     }
-
     __all__.assert = assert;
-
     var __merge__ = function (object0, object1) {
         var result = {};
         for (var attrib in object0) {
@@ -665,135 +594,104 @@ function test () {
         return result;
     };
     __all__.__merge__ = __merge__;
-
-    // Manipulating attributes by name
-    
     var dir = function (obj) {
         var aList = [];
         for (var aKey in obj) {
-            aList.push (aKey);
+            aList.push (aKey.startsWith ('py_') ? aKey.slice (3) : aKey);
         }
         aList.sort ();
         return aList;
     };
     __all__.dir = dir;
-
     var setattr = function (obj, name, value) {
         obj [name] = value;
     };
     __all__.setattr = setattr;
-
     var getattr = function (obj, name) {
-        return obj [name];
+        return name in obj ? obj [name] : obj ['py_' + name];
     };
     __all__.getattr= getattr;
-
     var hasattr = function (obj, name) {
         try {
-            return name in obj;
+            return name in obj || 'py_' + name in obj;
         }
         catch (exception) {
             return false;
         }
     };
     __all__.hasattr = hasattr;
-
     var delattr = function (obj, name) {
-        delete obj [name];
+        if (name in obj) {
+            delete obj [name];
+        }
+        else {
+            delete obj ['py_' + name];
+        }
     };
     __all__.delattr = (delattr);
-
-    // The __in__ function, used to mimic Python's 'in' operator
-    // In addition to CPython's semantics, the 'in' operator is also allowed to work on objects, avoiding a counterintuitive separation between Python dicts and JavaScript objects
-    // In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
-    // If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
     var __in__ = function (element, container) {
-        if (py_typeof (container) == dict) {        // Currently only implemented as an augmented JavaScript object
+        if (py_typeof (container) == dict) {
             return container.hasOwnProperty (element);
         }
-        else {                                      // Parameter 'element' itself is an array, string or a plain, non-dict JavaScript object
+        else {
             return (
-                container.indexOf ?                 // If it has an indexOf
-                container.indexOf (element) > -1 :  // it's an array or a string,
-                container.hasOwnProperty (element)  // else it's a plain, non-dict JavaScript object
+                container.indexOf ?
+                container.indexOf (element) > -1 :
+                container.hasOwnProperty (element)
             );
         }
     };
     __all__.__in__ = __in__;
-
-    // Find out if an attribute is special
     var __specialattrib__ = function (attrib) {
         return (attrib.startswith ('__') && attrib.endswith ('__')) || attrib == 'constructor' || attrib.startswith ('py_');
     };
     __all__.__specialattrib__ = __specialattrib__;
-
-    // Compute length of any object
     var len = function (anObject) {
         if (anObject === undefined || anObject === null) {
             return 0;
         }
-
         if (anObject.__len__ instanceof Function) {
             return anObject.__len__ ();
         }
-
         if (anObject.length !== undefined) {
             return anObject.length;
         }
-
         var length = 0;
         for (var attr in anObject) {
             if (!__specialattrib__ (attr)) {
                 length++;
             }
         }
-
         return length;
     };
     __all__.len = len;
-
-    // General conversions
-
-    function __i__ (any) {  //  Conversion to iterable
+    function __i__ (any) {
         return py_typeof (any) == dict ? any.py_keys () : any;
     }
-
-    // If the target object is somewhat true, return it. Otherwise return false.
-    // Try to follow Python conventions of truthyness
-    function __t__ (target) { 
+    function __k__ (keyed, key) {
+        var result = keyed [key];
+        if (typeof result == 'undefined') {
+             throw KeyError (key, new Error());
+        }
+        return result;
+    }
+    function __t__ (target) {
         return (
-            // Avoid invalid checks
             target === undefined || target === null ? false :
-            
-            // Take a quick shortcut if target is a simple type
             ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
-            
-            // Use __bool__ (if present) to decide if target is true
             target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
-            
-            // There is no __bool__, use __len__ (if present) instead
             target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
-            
-            // There is no __bool__ and no __len__, declare Functions true.
-            // Python objects are transpiled into instances of Function and if
-            // there is no __bool__ or __len__, the object in Python is true.
             target instanceof Function ? target :
-            
-            // Target is something else, compute its len to decide
             len (target) !== 0 ? target :
-            
-            // When all else fails, declare target as false
             false
         );
     }
     __all__.__t__ = __t__;
-
-    var bool = function (any) {     // Always truly returns a bool, rather than something truthy or falsy
+    var bool = function (any) {
         return !!__t__ (any);
     };
-    bool.__name__ = 'bool';         // So it can be used as a type with a name
+    bool.__name__ = 'bool';
     __all__.bool = bool;
-
     var float = function (any) {
         if (any == 'inf') {
             return Infinity;
@@ -801,15 +699,15 @@ function test () {
         else if (any == '-inf') {
             return -Infinity;
         }
-        else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
+        else if (isNaN (parseFloat (any))) {
             if (any === false) {
                 return 0;
             }
             else if (any === true) {
                 return 1;
             }
-            else {  // Needed e.g. in autoTester.check, so "return any ? true : false" won't do
-                throw ValueError (new Error ());
+            else {
+                throw ValueError ("could not convert string to float: '" + str(any) + "'", new Error ());
             }
         }
         else {
@@ -818,16 +716,14 @@ function test () {
     };
     float.__name__ = 'float';
     __all__.float = float;
-
     var int = function (any) {
         return float (any) | 0
     };
     int.__name__ = 'int';
     __all__.int = int;
-
     var py_typeof = function (anObject) {
         var aType = typeof anObject;
-        if (aType == 'object') {    // Directly trying '__class__ in anObject' turns out to wreck anObject in Chrome if its a primitive
+        if (aType == 'object') {
             try {
                 return anObject.__class__;
             }
@@ -836,7 +732,7 @@ function test () {
             }
         }
         else {
-            return (    // Odly, the braces are required here
+            return (
                 aType == 'boolean' ? bool :
                 aType == 'string' ? str :
                 aType == 'number' ? (anObject % 1 == 0 ? int : float) :
@@ -845,7 +741,6 @@ function test () {
         }
     };
     __all__.py_typeof = py_typeof;
-
     var isinstance = function (anObject, classinfo) {
         function isA (queryClass) {
             if (queryClass == classinfo) {
@@ -858,8 +753,7 @@ function test () {
             }
             return false;
         }
-
-        if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
+        if (classinfo instanceof Array) {
             for (var index = 0; index < classinfo.length; index++) {
                 var aClass = classinfo [index];
                 if (isinstance (anObject, aClass)) {
@@ -868,17 +762,15 @@ function test () {
             }
             return false;
         }
-
-        try {                   // Most frequent use case first
+        try {
             return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
         }
-        catch (exception) {     // Using isinstance on primitives assumed rare
+        catch (exception) {
             var aType = py_typeof (anObject);
             return aType == classinfo || (aType == bool && classinfo == int);
         }
     };
     __all__.isinstance = isinstance;
-
     var callable = function (anObject) {
         if ( typeof anObject == 'object' && '__call__' in anObject ) {
             return true;
@@ -888,8 +780,6 @@ function test () {
         }
     };
     __all__.callable = callable;
-
-    // Repr function uses __repr__ method, then __str__, then toString
     var repr = function (anObject) {
         try {
             return anObject.__repr__ ();
@@ -898,7 +788,7 @@ function test () {
             try {
                 return anObject.__str__ ();
             }
-            catch (exception) { // anObject has no __repr__ and no __str__
+            catch (exception) {
                 try {
                     if (anObject == null) {
                         return 'None';
@@ -909,12 +799,11 @@ function test () {
                         for (var attrib in anObject) {
                             if (!__specialattrib__ (attrib)) {
                                 if (attrib.isnumeric ()) {
-                                    var attribRepr = attrib;                // If key can be interpreted as numerical, we make it numerical
-                                }                                           // So we accept that '1' is misrepresented as 1
-                                else {
-                                    var attribRepr = '\'' + attrib + '\'';  // Alpha key in dict
+                                    var attribRepr = attrib;
                                 }
-
+                                else {
+                                    var attribRepr = '\'' + attrib + '\'';
+                                }
                                 if (comma) {
                                     result += ', ';
                                 }
@@ -938,54 +827,36 @@ function test () {
         }
     };
     __all__.repr = repr;
-
-    // Char from Unicode or ASCII
     var chr = function (charCode) {
         return String.fromCharCode (charCode);
     };
     __all__.chr = chr;
-
-    // Unicode or ASCII from char
     var ord = function (aChar) {
         return aChar.charCodeAt (0);
     };
     __all__.ord = ord;
-
-    // Maximum of n numbers
     var max = Math.max;
     __all__.max = max;
-
-    // Minimum of n numbers
     var min = Math.min;
     __all__.min = min;
-
-    // Absolute value
     var abs = Math.abs;
     __all__.abs = abs;
-
-    // Bankers rounding
     var round = function (number, ndigits) {
         if (ndigits) {
             var scale = Math.pow (10, ndigits);
             number *= scale;
         }
-
         var rounded = Math.round (number);
-        if (rounded - number == 0.5 && rounded % 2) {   // Has rounded up to odd, should have rounded down to even
+        if (rounded - number == 0.5 && rounded % 2) {
             rounded -= 1;
         }
-
         if (ndigits) {
             rounded /= scale;
         }
-
         return rounded;
     };
     __all__.round = round;
-
-    // BEGIN unified iterator model
-
-    function __jsUsePyNext__ () {       // Add as 'next' method to make Python iterator JavaScript compatible
+    function __jsUsePyNext__ () {
         try {
             var result = this.__next__ ();
             return {value: result, done: false};
@@ -994,8 +865,7 @@ function test () {
             return {value: undefined, done: true};
         }
     }
-
-    function __pyUseJsNext__ () {       // Add as '__next__' method to make JavaScript iterator Python compatible
+    function __pyUseJsNext__ () {
         var result = this.next ();
         if (result.done) {
             throw StopIteration (new Error ());
@@ -1004,38 +874,36 @@ function test () {
             return result.value;
         }
     }
-
-    function py_iter (iterable) {                   // Alias for Python's iter function, produces a universal iterator / iterable, usable in Python and JavaScript
-        if (typeof iterable == 'string' || '__iter__' in iterable) {    // JavaScript Array or string or Python iterable (string has no 'in')
-            var result = iterable.__iter__ ();                          // Iterator has a __next__
-            result.next = __jsUsePyNext__;                              // Give it a next
+    function py_iter (iterable) {
+        if (typeof iterable == 'string' || '__iter__' in iterable) {
+            var result = iterable.__iter__ ();
+            result.next = __jsUsePyNext__;
         }
-        else if ('selector' in iterable) {                              // Assume it's a JQuery iterator
-            var result = list (iterable) .__iter__ ();                  // Has a __next__
-            result.next = __jsUsePyNext__;                              // Give it a next
+        else if ('selector' in iterable) {
+            var result = list (iterable) .__iter__ ();
+            result.next = __jsUsePyNext__;
         }
-        else if ('next' in iterable) {                                  // It's a JavaScript iterator already,  maybe a generator, has a next and may have a __next__
+        else if ('next' in iterable) {
             var result = iterable
-            if (! ('__next__' in result)) {                             // If there's no danger of recursion
-                result.__next__ = __pyUseJsNext__;                      // Give it a __next__
+            if (! ('__next__' in result)) {
+                result.__next__ = __pyUseJsNext__;
             }
         }
-        else if (Symbol.iterator in iterable) {                         // It's a JavaScript iterable such as a typed array, but not an iterator
-            var result = iterable [Symbol.iterator] ();                 // Has a next
-            result.__next__ = __pyUseJsNext__;                          // Give it a __next__
+        else if (Symbol.iterator in iterable) {
+            var result = iterable [Symbol.iterator] ();
+            result.__next__ = __pyUseJsNext__;
         }
         else {
-            throw IterableError (new Error ()); // No iterator at all
+            throw IterableError (new Error ());
         }
         result [Symbol.iterator] = function () {return result;};
         return result;
     }
-
-    function py_next (iterator) {               // Called only in a Python context, could receive Python or JavaScript iterator
-        try {                                   // Primarily assume Python iterator, for max speed
+    function py_next (iterator) {
+        try {
             var result = iterator.__next__ ();
         }
-        catch (exception) {                     // JavaScript iterators are the exception here
+        catch (exception) {
             var result = iterator.next ();
             if (result.done) {
                 throw StopIteration (new Error ());
@@ -1051,12 +919,10 @@ function test () {
             return result;
         }
     }
-
     function __PyIterator__ (iterable) {
         this.iterable = iterable;
         this.index = 0;
     }
-
     __PyIterator__.prototype.__next__ = function () {
         if (this.index < this.iterable.length) {
             return this.iterable [this.index++];
@@ -1065,12 +931,10 @@ function test () {
             throw StopIteration (new Error ());
         }
     };
-
     function __JsIterator__ (iterable) {
         this.iterable = iterable;
         this.index = 0;
     }
-
     __JsIterator__.prototype.next = function () {
         if (this.index < this.iterable.py_keys.length) {
             return {value: this.index++, done: false};
@@ -1079,18 +943,12 @@ function test () {
             return {value: undefined, done: true};
         }
     };
-
-    // END unified iterator model
-
-    // Reversed function for arrays
     var py_reversed = function (iterable) {
         iterable = iterable.slice ();
         iterable.reverse ();
         return iterable;
     };
     __all__.py_reversed = py_reversed;
-
-    // Zip method for arrays and strings
     var zip = function () {
         var args = [] .slice.call (arguments);
         for (var i = 0; i < args.length; i++) {
@@ -1101,27 +959,24 @@ function test () {
                 args [i] = Array.from (args [i]);
             }
         }
-        var shortest = args.length == 0 ? [] : args.reduce (    // Find shortest array in arguments
+        var shortest = args.length == 0 ? [] : args.reduce (
             function (array0, array1) {
                 return array0.length < array1.length ? array0 : array1;
             }
         );
-        return shortest.map (                   // Map each element of shortest array
-            function (current, index) {         // To the result of this function
-                return args.map (               // Map each array in arguments
-                    function (current) {        // To the result of this function
-                        return current [index]; // Namely it's index't entry
+        return shortest.map (
+            function (current, index) {
+                return args.map (
+                    function (current) {
+                        return current [index];
                     }
                 );
             }
         );
     };
     __all__.zip = zip;
-
-    // Range method, returning an array
     function range (start, stop, step) {
         if (stop == undefined) {
-            // one param defined
             stop = start;
             start = 0;
         }
@@ -1138,9 +993,6 @@ function test () {
         return result;
     };
     __all__.range = range;
-
-    // Any, all and sum
-
     function any (iterable) {
         for (var index = 0; index < iterable.length; index++) {
             if (bool (iterable [index])) {
@@ -1164,19 +1016,13 @@ function test () {
         }
         return result;
     }
-
     __all__.any = any;
     __all__.all = all;
     __all__.sum = sum;
-
-    // Enumerate method, returning a zipped list
     function enumerate (iterable) {
         return zip (range (len (iterable)), iterable);
     }
     __all__.enumerate = enumerate;
-
-    // Shallow and deepcopy
-
     function copy (anObject) {
         if (anObject == null || typeof anObject == "object") {
             return anObject;
@@ -1192,7 +1038,6 @@ function test () {
         }
     }
     __all__.copy = copy;
-
     function deepcopy (anObject) {
         if (anObject == null || typeof anObject == "object") {
             return anObject;
@@ -1208,35 +1053,18 @@ function test () {
         }
     }
     __all__.deepcopy = deepcopy;
-
-    // List extensions to Array
-
-    function list (iterable) {                                      // All such creators should be callable without new
-        var instance = iterable ? [] .slice.apply (iterable) : [];  // Spread iterable, n.b. array.slice (), so array before dot
-        // Sort is the normal JavaScript sort, Python sort is a non-member function
+    function list (iterable) {
+        var instance = iterable ? [] .slice.apply (iterable) : [];
         return instance;
     }
     __all__.list = list;
-    Array.prototype.__class__ = list;   // All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
+    Array.prototype.__class__ = list;
     list.__name__ = 'list';
-
-    /*
-    Array.from = function (iterator) { // !!! remove
-        result = [];
-        for (item of iterator) {
-            result.push (item);
-        }
-        return result;
-    }
-    */
-
     Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
-
     Array.prototype.__getslice__ = function (start, stop, step) {
         if (start < 0) {
             start = this.length + start;
         }
-
         if (stop == null) {
             stop = this.length;
         }
@@ -1246,110 +1074,86 @@ function test () {
         else if (stop > this.length) {
             stop = this.length;
         }
-
         var result = list ([]);
         for (var index = start; index < stop; index += step) {
             result.push (this [index]);
         }
-
         return result;
     };
-
     Array.prototype.__setslice__ = function (start, stop, step, source) {
         if (start < 0) {
             start = this.length + start;
         }
-
         if (stop == null) {
             stop = this.length;
         }
         else if (stop < 0) {
             stop = this.length + stop;
         }
-
-        if (step == null) { // Assign to 'ordinary' slice, replace subsequence
+        if (step == null) {
             Array.prototype.splice.apply (this, [start, stop - start] .concat (source));
         }
-        else {              // Assign to extended slice, replace designated items one by one
+        else {
             var sourceIndex = 0;
             for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
                 this [targetIndex] = source [sourceIndex++];
             }
         }
     };
-
     Array.prototype.__repr__ = function () {
         if (this.__class__ == set && !this.length) {
             return 'set()';
         }
-
         var result = !this.__class__ || this.__class__ == list ? '[' : this.__class__ == tuple ? '(' : '{';
-
         for (var index = 0; index < this.length; index++) {
             if (index) {
                 result += ', ';
             }
             result += repr (this [index]);
         }
-
         if (this.__class__ == tuple && this.length == 1) {
             result += ',';
         }
-
         result += !this.__class__ || this.__class__ == list ? ']' : this.__class__ == tuple ? ')' : '}';;
         return result;
     };
-
     Array.prototype.__str__ = Array.prototype.__repr__;
-
     Array.prototype.append = function (element) {
         this.push (element);
     };
-
-    Array.prototype.clear = function () {
+    Array.prototype.py_clear = function () {
         this.length = 0;
     };
-
     Array.prototype.extend = function (aList) {
         this.push.apply (this, aList);
     };
-
     Array.prototype.insert = function (index, element) {
         this.splice (index, 0, element);
     };
-
     Array.prototype.remove = function (element) {
         var index = this.indexOf (element);
         if (index == -1) {
-            throw ValueError (new Error ());
+            throw ValueError ("list.remove(x): x not in list", new Error ());
         }
         this.splice (index, 1);
     };
-
     Array.prototype.index = function (element) {
         return this.indexOf (element);
     };
-
     Array.prototype.py_pop = function (index) {
         if (index == undefined) {
-            return this.pop ();  // Remove last element
+            return this.pop ();
         }
         else {
             return this.splice (index, 1) [0];
         }
     };
-
     Array.prototype.py_sort = function () {
-        __sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));    // Can't work directly with arguments
-        // Python params: (iterable, key = None, reverse = False)
-        // py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
-        // __sort__ is def'ed with the Transcrypt kwargs mechanism
+        __sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));
     };
-
     Array.prototype.__add__ = function (aList) {
         return list (this.concat (aList));
     };
-
     Array.prototype.__mul__ = function (scalar) {
         var result = this;
         for (var i = 1; i < scalar; i++) {
@@ -1357,49 +1161,33 @@ function test () {
         }
         return result;
     };
-
     Array.prototype.__rmul__ = Array.prototype.__mul__;
-
-    // Tuple extensions to Array
-
     function tuple (iterable) {
         var instance = iterable ? [] .slice.apply (iterable) : [];
-        instance.__class__ = tuple; // Not all arrays are tuples
+        instance.__class__ = tuple;
         return instance;
     }
     __all__.tuple = tuple;
     tuple.__name__ = 'tuple';
-
-    // Set extensions to Array
-    // N.B. Since sets are unordered, set operations will occasionally alter the 'this' array by sorting it
-
     function set (iterable) {
         var instance = [];
         if (iterable) {
             for (var index = 0; index < iterable.length; index++) {
                 instance.add (iterable [index]);
             }
-
-
         }
-        instance.__class__ = set;   // Not all arrays are sets
+        instance.__class__ = set;
         return instance;
     }
     __all__.set = set;
     set.__name__ = 'set';
-
-    Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
-    // Since sorting is lex, compare has to be lex. This also allows for mixed lists
-
+    Array.prototype.__bindexOf__ = function (element) {
         element += '';
-
         var mindex = 0;
         var maxdex = this.length - 1;
-
         while (mindex <= maxdex) {
             var index = (mindex + maxdex) / 2 | 0;
             var middle = this [index] + '';
-
             if (middle < element) {
                 mindex = index + 1;
             }
@@ -1410,23 +1198,19 @@ function test () {
                 return index;
             }
         }
-
         return -1;
     };
-
     Array.prototype.add = function (element) {
-        if (this.indexOf (element) == -1) { // Avoid duplicates in set
+        if (this.indexOf (element) == -1) {
             this.push (element);
         }
     };
-
     Array.prototype.discard = function (element) {
         var index = this.indexOf (element);
         if (index != -1) {
             this.splice (index, 1);
         }
     };
-
     Array.prototype.isdisjoint = function (other) {
         this.sort ();
         for (var i = 0; i < other.length; i++) {
@@ -1436,7 +1220,6 @@ function test () {
         }
         return true;
     };
-
     Array.prototype.issuperset = function (other) {
         this.sort ();
         for (var i = 0; i < other.length; i++) {
@@ -1446,11 +1229,9 @@ function test () {
         }
         return true;
     };
-
     Array.prototype.issubset = function (other) {
-        return set (other.slice ()) .issuperset (this); // Sort copy of 'other', not 'other' itself, since it may be an ordered sequence
+        return set (other.slice ()) .issuperset (this);
     };
-
     Array.prototype.union = function (other) {
         var result = set (this.slice () .sort ());
         for (var i = 0; i < other.length; i++) {
@@ -1460,7 +1241,6 @@ function test () {
         }
         return result;
     };
-
     Array.prototype.intersection = function (other) {
         this.sort ();
         var result = set ();
@@ -1471,7 +1251,6 @@ function test () {
         }
         return result;
     };
-
     Array.prototype.difference = function (other) {
         var sother = set (other.slice () .sort ());
         var result = set ();
@@ -1482,22 +1261,19 @@ function test () {
         }
         return result;
     };
-
     Array.prototype.symmetric_difference = function (other) {
         return this.union (other) .difference (this.intersection (other));
     };
-
-    Array.prototype.py_update = function () {   // O (n)
+    Array.prototype.py_update = function () {
         var updated = [] .concat.apply (this.slice (), arguments) .sort ();
-        this.clear ();
+        this.py_clear ();
         for (var i = 0; i < updated.length; i++) {
             if (updated [i] != updated [i - 1]) {
                 this.push (updated [i]);
             }
         }
     };
-
-    Array.prototype.__eq__ = function (other) { // Also used for list
+    Array.prototype.__eq__ = function (other) {
         if (this.length != other.length) {
             return false;
         }
@@ -1512,29 +1288,62 @@ function test () {
         }
         return true;
     };
-
-    Array.prototype.__ne__ = function (other) { // Also used for list
+    Array.prototype.__ne__ = function (other) {
         return !this.__eq__ (other);
     };
-
     Array.prototype.__le__ = function (other) {
         return this.issubset (other);
     };
-
     Array.prototype.__ge__ = function (other) {
         return this.issuperset (other);
     };
-
     Array.prototype.__lt__ = function (other) {
         return this.issubset (other) && !this.issuperset (other);
     };
-
     Array.prototype.__gt__ = function (other) {
         return this.issuperset (other) && !this.issubset (other);
     };
-
-    // String extensions
-
+    function bytearray (bytable, encoding) {
+        if (bytable == undefined) {
+            return new Uint8Array (0);
+        }
+        else {
+            var aType = py_typeof (bytable);
+            if (aType == int) {
+                return new Uint8Array (bytable);
+            }
+            else if (aType == str) {
+                var aBytes = new Uint8Array (len (bytable));
+                for (var i = 0; i < len (bytable); i++) {
+                    aBytes [i] = bytable.charCodeAt (i);
+                }
+                return aBytes;
+            }
+            else if (aType == list || aType == tuple) {
+                return new Uint8Array (bytable);
+            }
+            else {
+                throw py_TypeError;
+            }
+        }
+    }
+    var bytes = bytearray;
+    __all__.bytearray = bytearray;
+    __all__.bytes = bytearray;
+    Uint8Array.prototype.__add__ = function (aBytes) {
+        var result = new Uint8Array (this.length + aBytes.length);
+        result.set (this);
+        result.set (aBytes, this.length);
+        return result;
+    };
+    Uint8Array.prototype.__mul__ = function (scalar) {
+        var result = new Uint8Array (scalar * this.length);
+        for (var i = 0; i < scalar; i++) {
+            result.set (this, i * this.length);
+        }
+        return result;
+    };
+    Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
     function str (stringable) {
         try {
             return stringable.__str__ ();
@@ -1544,49 +1353,39 @@ function test () {
                 return repr (stringable);
             }
             catch (exception) {
-                return String (stringable); // No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
+                return String (stringable);
             }
         }
     };
     __all__.str = str;
-
-    String.prototype.__class__ = str;   // All strings are str
+    String.prototype.__class__ = str;
     str.__name__ = 'str';
-
     String.prototype.__iter__ = function () {new __PyIterator__ (this);};
-
     String.prototype.__repr__ = function () {
         return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .py_replace ('\t', '\\t') .py_replace ('\n', '\\n');
     };
-
     String.prototype.__str__ = function () {
         return this;
     };
-
     String.prototype.capitalize = function () {
         return this.charAt (0).toUpperCase () + this.slice (1);
     };
-
     String.prototype.endswith = function (suffix) {
         return suffix == '' || this.slice (-suffix.length) == suffix;
     };
-
     String.prototype.find  = function (sub, start) {
         return this.indexOf (sub, start);
     };
-
     String.prototype.__getslice__ = function (start, stop, step) {
         if (start < 0) {
             start = this.length + start;
         }
-
         if (stop == null) {
             stop = this.length;
         }
         else if (stop < 0) {
             stop = this.length + stop;
         }
-
         var result = '';
         if (step == 1) {
             result = this.substring (start, stop);
@@ -1598,15 +1397,6 @@ function test () {
         }
         return result;
     }
-
-    // Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
-    // __get__ will produce a bound function if there's something before the dot
-    // Since a call using *args is compiled to e.g. <object>.<function>.apply (null, args), the function has to be bound already
-    // Otherwise it will never be, because of the null argument
-    // Using 'this' rather than 'null' contradicts the requirement to be able to pass bound functions around
-    // The object 'before the dot' won't be available at call time in that case, unless implicitly via the function bound to it
-    // While for Python methods this mechanism is generated by the compiler, for JavaScript methods it has to be provided manually
-    // Call memoizing is unattractive here, since every string would then have to hold a reference to a bound format method
     __setProperty__ (String.prototype, 'format', {
         get: function () {return __get__ (this, function (self) {
             var args = tuple ([] .slice.apply (arguments).slice (1));
@@ -1615,14 +1405,13 @@ function test () {
                 if (key == '') {
                     key = autoIndex++;
                 }
-                if (key == +key) {  // So key is numerical
+                if (key == +key) {
                     return args [key] == undefined ? match : str (args [key]);
                 }
-                else {              // Key is a string
+                else {
                     for (var index = 0; index < args.length; index++) {
-                        // Find first 'dict' that has that key and the right field
                         if (typeof args [index] == 'object' && args [index][key] != undefined) {
-                            return str (args [index][key]); // Return that field field
+                            return str (args [index][key]);
                         }
                     }
                     return match;
@@ -1631,60 +1420,46 @@ function test () {
         });},
         enumerable: true
     });
-
     String.prototype.isalnum = function () {
         return /^[0-9a-zA-Z]{1,}$/.test(this)
     }
-
     String.prototype.isalpha = function () {
         return /^[a-zA-Z]{1,}$/.test(this)
     }
-
     String.prototype.isdecimal = function () {
         return /^[0-9]{1,}$/.test(this)
     }
-
     String.prototype.isdigit = function () {
         return this.isdecimal()
     }
-
     String.prototype.islower = function () {
         return /^[a-z]{1,}$/.test(this)
     }
-
     String.prototype.isupper = function () {
         return /^[A-Z]{1,}$/.test(this)
     }
-
     String.prototype.isspace = function () {
         return /^[\s]{1,}$/.test(this)
     }
-
     String.prototype.isnumeric = function () {
         return !isNaN (parseFloat (this)) && isFinite (this);
     };
-
     String.prototype.join = function (strings) {
         return strings.join (this);
     };
-
     String.prototype.lower = function () {
         return this.toLowerCase ();
     };
-
     String.prototype.py_replace = function (old, aNew, maxreplace) {
         return this.split (old, maxreplace) .join (aNew);
     };
-
     String.prototype.lstrip = function () {
         return this.replace (/^\s*/g, '');
     };
-
     String.prototype.rfind = function (sub, start) {
         return this.lastIndexOf (sub, start);
     };
-
-    String.prototype.rsplit = function (sep, maxsplit) {    // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+    String.prototype.rsplit = function (sep, maxsplit) {
         if (sep == undefined || sep == null) {
             sep = /\s+/;
             var stripped = this.strip ();
@@ -1692,7 +1467,6 @@ function test () {
         else {
             var stripped = this;
         }
-
         if (maxsplit == undefined || maxsplit == -1) {
             return stripped.split (sep);
         }
@@ -1707,12 +1481,10 @@ function test () {
             }
         }
     };
-
     String.prototype.rstrip = function () {
         return this.replace (/\s*$/g, '');
     };
-
-    String.prototype.py_split = function (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+    String.prototype.py_split = function (sep, maxsplit) {
         if (sep == undefined || sep == null) {
             sep = /\s+/;
             var stripped = this.strip ();
@@ -1720,7 +1492,6 @@ function test () {
         else {
             var stripped = this;
         }
-
         if (maxsplit == undefined || maxsplit == -1) {
             return stripped.split (sep);
         }
@@ -1734,19 +1505,15 @@ function test () {
             }
         }
     };
-
     String.prototype.startswith = function (prefix) {
         return this.indexOf (prefix) == 0;
     };
-
     String.prototype.strip = function () {
         return this.trim ();
     };
-
     String.prototype.upper = function () {
         return this.toUpperCase ();
     };
-
     String.prototype.__mul__ = function (scalar) {
         var result = this;
         for (var i = 1; i < scalar; i++) {
@@ -1754,11 +1521,7 @@ function test () {
         }
         return result;
     };
-
     String.prototype.__rmul__ = String.prototype.__mul__;
-
-    // Dict extensions to object
-
     function __keys__ () {
         var keys = [];
         for (var attrib in this) {
@@ -1768,7 +1531,6 @@ function test () {
         }
         return keys;
     }
-
     function __items__ () {
         var items = [];
         for (var attrib in this) {
@@ -1778,22 +1540,21 @@ function test () {
         }
         return items;
     }
-
     function __del__ (key) {
         delete this [key];
     }
-
     function __clear__ () {
         for (var attrib in this) {
             delete this [attrib];
         }
     }
-
-    function __getdefault__ (aKey, aDefault) {  // Each Python object already has a function called __get__, so we call this one __getdefault__
+    function __getdefault__ (aKey, aDefault) {
         var result = this [aKey];
+        if (result == undefined) {
+            result = this ['py_' + aKey]
+        }
         return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
     }
-
     function __setdefault__ (aKey, aDefault) {
         var result = this [aKey];
         if (result != undefined) {
@@ -1803,37 +1564,32 @@ function test () {
         this [aKey] = val;
         return val;
     }
-
     function __pop__ (aKey, aDefault) {
         var result = this [aKey];
         if (result != undefined) {
             delete this [aKey];
             return result;
         } else {
-            // Identify check because user could pass None
             if ( aDefault === undefined ) {
                 throw KeyError (aKey, new Error());
             }
         }
         return aDefault;
     }
-    
     function __popitem__ () {
         var aKey = Object.keys (this) [0];
         if (aKey == null) {
-            throw KeyError (aKey, new Error ());
+            throw KeyError ("popitem(): dictionary is empty", new Error ());
         }
         var result = tuple ([aKey, this [aKey]]);
         delete this [aKey];
         return result;
     }
-    
     function __update__ (aDict) {
         for (var aKey in aDict) {
             this [aKey] = aDict [aKey];
         }
     }
-    
     function __values__ () {
         var values = [];
         for (var attrib in this) {
@@ -1842,20 +1598,16 @@ function test () {
             }
         }
         return values;
-
     }
-    
     function __dgetitem__ (aKey) {
         return this [aKey];
     }
-    
     function __dsetitem__ (aKey, aValue) {
         this [aKey] = aValue;
     }
-
     function dict (objectOrPairs) {
         var instance = {};
-        if (!objectOrPairs || objectOrPairs instanceof Array) { // It's undefined or an array of pairs
+        if (!objectOrPairs || objectOrPairs instanceof Array) {
             if (objectOrPairs) {
                 for (var index = 0; index < objectOrPairs.length; index++) {
                     var pair = objectOrPairs [index];
@@ -1868,12 +1620,6 @@ function test () {
                     var key = pair [0];
                     var val = pair [1];
                     if (!(objectOrPairs instanceof Array) && objectOrPairs instanceof Object) {
-                         // User can potentially pass in an object
-                         // that has a hierarchy of objects. This
-                         // checks to make sure that these objects
-                         // get converted to dict objects instead of
-                         // leaving them as js objects.
-                         
                          if (!isinstance (objectOrPairs, dict)) {
                              val = dict (val);
                          }
@@ -1884,32 +1630,17 @@ function test () {
         }
         else {
             if (isinstance (objectOrPairs, dict)) {
-                // Passed object is a dict already so we need to be a little careful
-                // N.B. - this is a shallow copy per python std - so
-                // it is assumed that children have already become
-                // python objects at some point.
-                
                 var aKeys = objectOrPairs.py_keys ();
                 for (var index = 0; index < aKeys.length; index++ ) {
                     var key = aKeys [index];
                     instance [key] = objectOrPairs [key];
                 }
             } else if (objectOrPairs instanceof Object) {
-                // Passed object is a JavaScript object but not yet a dict, don't copy it
                 instance = objectOrPairs;
             } else {
-                // We have already covered Array so this indicates
-                // that the passed object is not a js object - i.e.
-                // it is an int or a string, which is invalid.
-                
                 throw ValueError ("Invalid type of object for dict creation", new Error ());
             }
         }
-
-        // Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
-        // So dict literals rather than bare Object literals will be passed to JavaScript libraries
-        // Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
-        // So the properties of a dict should be non-enumerable
         __setProperty__ (instance, '__class__', {value: dict, enumerable: false, writable: true});
         __setProperty__ (instance, 'py_keys', {value: __keys__, enumerable: false});
         __setProperty__ (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
@@ -1923,54 +1654,17 @@ function test () {
         __setProperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
         __setProperty__ (instance, 'py_update', {value: __update__, enumerable: false});
         __setProperty__ (instance, 'py_values', {value: __values__, enumerable: false});
-        __setProperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
-        __setProperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices
+        __setProperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});
+        __setProperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});
         return instance;
     }
-
     __all__.dict = dict;
     dict.__name__ = 'dict';
-    
-    // Docstring setter
-
     function __setdoc__ (docString) {
         this.__doc__ = docString;
         return this;
     }
-
-    // Python classes, methods and functions are all translated to JavaScript functions
     __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
-
-    // General operator overloading, only the ones that make most sense in matrix and complex operations
-
-    var __neg__ = function (a) {
-        if (typeof a == 'object' && '__neg__' in a) {
-            return a.__neg__ ();
-        }
-        else {
-            return -a;
-        }
-    };
-    __all__.__neg__ = __neg__;
-
-    var __matmul__ = function (a, b) {
-        return a.__matmul__ (b);
-    };
-    __all__.__matmul__ = __matmul__;
-
-    var __pow__ = function (a, b) {
-        if (typeof a == 'object' && '__pow__' in a) {
-            return a.__pow__ (b);
-        }
-        else if (typeof b == 'object' && '__rpow__' in b) {
-            return b.__rpow__ (a);
-        }
-        else {
-            return Math.pow (a, b);
-        }
-    };
-    __all__.pow = __pow__;
-
     var __jsmod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -1983,7 +1677,6 @@ function test () {
         }
     };
     __all__.__jsmod__ = __jsmod__;
-    
     var __mod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -1996,9 +1689,31 @@ function test () {
         }
     };
     __all__.mod = __mod__;
-
-    // Overloaded binary arithmetic
-    
+    var __pow__ = function (a, b) {
+        if (typeof a == 'object' && '__pow__' in a) {
+            return a.__pow__ (b);
+        }
+        else if (typeof b == 'object' && '__rpow__' in b) {
+            return b.__rpow__ (a);
+        }
+        else {
+            return Math.pow (a, b);
+        }
+    };
+    __all__.pow = __pow__;
+    var __neg__ = function (a) {
+        if (typeof a == 'object' && '__neg__' in a) {
+            return a.__neg__ ();
+        }
+        else {
+            return -a;
+        }
+    };
+    __all__.__neg__ = __neg__;
+    var __matmul__ = function (a, b) {
+        return a.__matmul__ (b);
+    };
+    __all__.__matmul__ = __matmul__;
     var __mul__ = function (a, b) {
         if (typeof a == 'object' && '__mul__' in a) {
             return a.__mul__ (b);
@@ -2017,7 +1732,6 @@ function test () {
         }
     };
     __all__.__mul__ = __mul__;
-
     var __truediv__ = function (a, b) {
         if (typeof a == 'object' && '__truediv__' in a) {
             return a.__truediv__ (b);
@@ -2036,7 +1750,6 @@ function test () {
         }
     };
     __all__.__truediv__ = __truediv__;
-
     var __floordiv__ = function (a, b) {
         if (typeof a == 'object' && '__floordiv__' in a) {
             return a.__floordiv__ (b);
@@ -2055,7 +1768,6 @@ function test () {
         }
     };
     __all__.__floordiv__ = __floordiv__;
-
     var __add__ = function (a, b) {
         if (typeof a == 'object' && '__add__' in a) {
             return a.__add__ (b);
@@ -2068,7 +1780,6 @@ function test () {
         }
     };
     __all__.__add__ = __add__;
-
     var __sub__ = function (a, b) {
         if (typeof a == 'object' && '__sub__' in a) {
             return a.__sub__ (b);
@@ -2081,9 +1792,6 @@ function test () {
         }
     };
     __all__.__sub__ = __sub__;
-
-    // Overloaded binary bitwise
-    
     var __lshift__ = function (a, b) {
         if (typeof a == 'object' && '__lshift__' in a) {
             return a.__lshift__ (b);
@@ -2096,7 +1804,6 @@ function test () {
         }
     };
     __all__.__lshift__ = __lshift__;
-
     var __rshift__ = function (a, b) {
         if (typeof a == 'object' && '__rshift__' in a) {
             return a.__rshift__ (b);
@@ -2109,7 +1816,6 @@ function test () {
         }
     };
     __all__.__rshift__ = __rshift__;
-
     var __or__ = function (a, b) {
         if (typeof a == 'object' && '__or__' in a) {
             return a.__or__ (b);
@@ -2122,7 +1828,6 @@ function test () {
         }
     };
     __all__.__or__ = __or__;
-
     var __xor__ = function (a, b) {
         if (typeof a == 'object' && '__xor__' in a) {
             return a.__xor__ (b);
@@ -2135,7 +1840,6 @@ function test () {
         }
     };
     __all__.__xor__ = __xor__;
-
     var __and__ = function (a, b) {
         if (typeof a == 'object' && '__and__' in a) {
             return a.__and__ (b);
@@ -2148,9 +1852,6 @@ function test () {
         }
     };
     __all__.__and__ = __and__;
-
-    // Overloaded binary compare
-    
     var __eq__ = function (a, b) {
         if (typeof a == 'object' && '__eq__' in a) {
             return a.__eq__ (b);
@@ -2160,7 +1861,6 @@ function test () {
         }
     };
     __all__.__eq__ = __eq__;
-
     var __ne__ = function (a, b) {
         if (typeof a == 'object' && '__ne__' in a) {
             return a.__ne__ (b);
@@ -2170,7 +1870,6 @@ function test () {
         }
     };
     __all__.__ne__ = __ne__;
-
     var __lt__ = function (a, b) {
         if (typeof a == 'object' && '__lt__' in a) {
             return a.__lt__ (b);
@@ -2180,7 +1879,6 @@ function test () {
         }
     };
     __all__.__lt__ = __lt__;
-
     var __le__ = function (a, b) {
         if (typeof a == 'object' && '__le__' in a) {
             return a.__le__ (b);
@@ -2190,7 +1888,6 @@ function test () {
         }
     };
     __all__.__le__ = __le__;
-
     var __gt__ = function (a, b) {
         if (typeof a == 'object' && '__gt__' in a) {
             return a.__gt__ (b);
@@ -2200,7 +1897,6 @@ function test () {
         }
     };
     __all__.__gt__ = __gt__;
-
     var __ge__ = function (a, b) {
         if (typeof a == 'object' && '__ge__' in a) {
             return a.__ge__ (b);
@@ -2210,9 +1906,6 @@ function test () {
         }
     };
     __all__.__ge__ = __ge__;
-    
-    // Overloaded augmented general
-    
     var __imatmul__ = function (a, b) {
         if ('__imatmul__' in a) {
             return a.__imatmul__ (b);
@@ -2222,7 +1915,6 @@ function test () {
         }
     };
     __all__.__imatmul__ = __imatmul__;
-
     var __ipow__ = function (a, b) {
         if (typeof a == 'object' && '__pow__' in a) {
             return a.__ipow__ (b);
@@ -2238,7 +1930,6 @@ function test () {
         }
     };
     __all__.ipow = __ipow__;
-
     var __ijsmod__ = function (a, b) {
         if (typeof a == 'object' && '__imod__' in a) {
             return a.__ismod__ (b);
@@ -2254,7 +1945,6 @@ function test () {
         }
     };
     __all__.ijsmod__ = __ijsmod__;
-    
     var __imod__ = function (a, b) {
         if (typeof a == 'object' && '__imod__' in a) {
             return a.__imod__ (b);
@@ -2270,9 +1960,6 @@ function test () {
         }
     };
     __all__.imod = __imod__;
-    
-    // Overloaded augmented arithmetic
-    
     var __imul__ = function (a, b) {
         if (typeof a == 'object' && '__imul__' in a) {
             return a.__imul__ (b);
@@ -2294,7 +1981,6 @@ function test () {
         }
     };
     __all__.__imul__ = __imul__;
-
     var __idiv__ = function (a, b) {
         if (typeof a == 'object' && '__idiv__' in a) {
             return a.__idiv__ (b);
@@ -2310,7 +1996,6 @@ function test () {
         }
     };
     __all__.__idiv__ = __idiv__;
-
     var __iadd__ = function (a, b) {
         if (typeof a == 'object' && '__iadd__' in a) {
             return a.__iadd__ (b);
@@ -2326,7 +2011,6 @@ function test () {
         }
     };
     __all__.__iadd__ = __iadd__;
-
     var __isub__ = function (a, b) {
         if (typeof a == 'object' && '__isub__' in a) {
             return a.__isub__ (b);
@@ -2342,9 +2026,6 @@ function test () {
         }
     };
     __all__.__isub__ = __isub__;
-
-    // Overloaded augmented bitwise
-    
     var __ilshift__ = function (a, b) {
         if (typeof a == 'object' && '__ilshift__' in a) {
             return a.__ilshift__ (b);
@@ -2360,7 +2041,6 @@ function test () {
         }
     };
     __all__.__ilshift__ = __ilshift__;
-
     var __irshift__ = function (a, b) {
         if (typeof a == 'object' && '__irshift__' in a) {
             return a.__irshift__ (b);
@@ -2376,7 +2056,6 @@ function test () {
         }
     };
     __all__.__irshift__ = __irshift__;
-
     var __ior__ = function (a, b) {
         if (typeof a == 'object' && '__ior__' in a) {
             return a.__ior__ (b);
@@ -2392,7 +2071,6 @@ function test () {
         }
     };
     __all__.__ior__ = __ior__;
-
     var __ixor__ = function (a, b) {
         if (typeof a == 'object' && '__ixor__' in a) {
             return a.__ixor__ (b);
@@ -2408,7 +2086,6 @@ function test () {
         }
     };
     __all__.__ixor__ = __ixor__;
-
     var __iand__ = function (a, b) {
         if (typeof a == 'object' && '__iand__' in a) {
             return a.__iand__ (b);
@@ -2424,1343 +2101,90 @@ function test () {
         }
     };
     __all__.__iand__ = __iand__;
-    
-    // Indices and slices
-
-    var __getitem__ = function (container, key) {                           // Slice c.q. index, direct generated call to runtime switch
+    var __getitem__ = function (container, key) {
         if (typeof container == 'object' && '__getitem__' in container) {
-            return container.__getitem__ (key);                             // Overloaded on container
+            return container.__getitem__ (key);
         }
         else {
-            return container [key];                                         // Container must support bare JavaScript brackets
+            return container [key];
         }
     };
     __all__.__getitem__ = __getitem__;
-
-    var __setitem__ = function (container, key, value) {                    // Slice c.q. index, direct generated call to runtime switch
+    var __setitem__ = function (container, key, value) {
         if (typeof container == 'object' && '__setitem__' in container) {
-            container.__setitem__ (key, value);                             // Overloaded on container
+            container.__setitem__ (key, value);
         }
         else {
-            container [key] = value;                                        // Container must support bare JavaScript brackets
+            container [key] = value;
         }
     };
     __all__.__setitem__ = __setitem__;
-
-    var __getslice__ = function (container, lower, upper, step) {           // Slice only, no index, direct generated call to runtime switch
+    var __getslice__ = function (container, lower, upper, step) {
         if (typeof container == 'object' && '__getitem__' in container) {
-            return container.__getitem__ ([lower, upper, step]);            // Container supports overloaded slicing c.q. indexing
+            return container.__getitem__ ([lower, upper, step]);
         }
         else {
-            return container.__getslice__ (lower, upper, step);             // Container only supports slicing injected natively in prototype
+            return container.__getslice__ (lower, upper, step);
         }
     };
     __all__.__getslice__ = __getslice__;
-
-    var __setslice__ = function (container, lower, upper, step, value) {    // Slice, no index, direct generated call to runtime switch
+    var __setslice__ = function (container, lower, upper, step, value) {
         if (typeof container == 'object' && '__setitem__' in container) {
-            container.__setitem__ ([lower, upper, step], value);            // Container supports overloaded slicing c.q. indexing
+            container.__setitem__ ([lower, upper, step], value);
         }
         else {
-            container.__setslice__ (lower, upper, step, value);             // Container only supports slicing injected natively in prototype
+            container.__setslice__ (lower, upper, step, value);
         }
     };
-    __all__.__setslice__ = __setslice__;
-	__nest__ (
-		__all__,
-		're', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var translate = __init__ (__world__.re.translate).translate;
-					var T = 1 << 0;
-					var TEMPLATE = T;
-					var I = 1 << 1;
-					var IGNORECASE = I;
-					var L = 1 << 2;
-					var LOCALE = L;
-					var M = 1 << 3;
-					var MULTILINE = M;
-					var S = 1 << 4;
-					var DOTALL = S;
-					var U = 1 << 5;
-					var UNICODE = U;
-					var X = 1 << 6;
-					var VERBOSE = X;
-					var DEBUG = 1 << 7;
-					var A = 1 << 8;
-					var ASCII = A;
-					var Y = 1 << 16;
-					var STICKY = Y;
-					var G = 1 << 17;
-					var GLOBAL = G;
-					var J = 1 << 19;
-					var JSSTRICT = J;
-					var error = __class__ ('error', [Exception], {
-						get __init__ () {return __get__ (this, function (self, msg, error, pattern, flags, pos) {
-							if (typeof pattern == 'undefined' || (pattern != null && pattern .hasOwnProperty ("__kwargtrans__"))) {;
-								var pattern = null;
-							};
-							if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-								var flags = 0;
-							};
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = null;
-							};
-							Exception.__init__ (self, msg, __kwargtrans__ ({error: error}));
-							self.pattern = pattern;
-							self.flags = flags;
-							self.pos = pos;
-						});}
-					});
-					var ReIndexError = __class__ ('ReIndexError', [IndexError], {
-						get __init__ () {return __get__ (this, function (self) {
-							IndexError.__init__ (self, 'no such group');
-						});}
-					});
-					var Match = __class__ ('Match', [object], {
-						get __init__ () {return __get__ (this, function (self, mObj, string, pos, endpos, rObj, namedGroups) {
-							if (typeof namedGroups == 'undefined' || (namedGroups != null && namedGroups .hasOwnProperty ("__kwargtrans__"))) {;
-								var namedGroups = null;
-							};
-							var __iterable0__ = enumerate (mObj);
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-								var __left0__ = __iterable0__ [__index0__];
-								var index = __left0__ [0];
-								var match = __left0__ [1];
-								mObj [index] = (mObj [index] == undefined ? null : mObj [index]);
-							}
-							self._obj = mObj;
-							self._pos = pos;
-							self._endpos = endpos;
-							self._re = rObj;
-							self._string = string;
-							self._namedGroups = namedGroups;
-							self._lastindex = self._lastMatchGroup ();
-							if (self._namedGroups !== null) {
-								self._lastgroup = self._namedGroups [self._lastindex];
-							}
-							else {
-								self._lastgroup = null;
-							}
-						});},
-						get _getPos () {return __get__ (this, function (self) {
-							return self._pos;
-						});},
-						get _setPos () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getEndPos () {return __get__ (this, function (self) {
-							return self._endpos;
-						});},
-						get _setEndPos () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getRe () {return __get__ (this, function (self) {
-							return self._re;
-						});},
-						get _setRe () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getString () {return __get__ (this, function (self) {
-							return self._string;
-						});},
-						get _setString () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getLastGroup () {return __get__ (this, function (self) {
-							return self._lastgroup;
-						});},
-						get _setLastGroup () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getLastIndex () {return __get__ (this, function (self) {
-							return self._lastindex;
-						});},
-						get _setLastIndex () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _lastMatchGroup () {return __get__ (this, function (self) {
-							if (len (self._obj) > 1) {
-								for (var i = len (self._obj) - 1; i > 0; i--) {
-									if (self._obj [i] !== null) {
-										return i;
-									}
-								}
-								return null;
-							}
-							else {
-								return null;
-							}
-						});},
-						get expand () {return __get__ (this, function (self, template) {
-							var __except0__ = NotImplementedError ();
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get group () {return __get__ (this, function (self) {
-							var args = tuple ([].slice.apply (arguments).slice (1));
-							var ret = list ([]);
-							if (len (args) > 0) {
-								var __iterable0__ = args;
-								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-									var index = __iterable0__ [__index0__];
-									if (py_typeof (index) === str) {
-										if (self._namedGroups !== null) {
-											if (!__in__ (index, self._namedGroups.py_keys ())) {
-												var __except0__ = ReIndexError ();
-												__except0__.__cause__ = null;
-												throw __except0__;
-											}
-											ret.append (self._obj [self._namedGroups [index]]);
-										}
-										else {
-											var __except0__ = NotImplementedError ('No NamedGroups Available');
-											__except0__.__cause__ = null;
-											throw __except0__;
-										}
-									}
-									else {
-										if (index >= len (self._obj)) {
-											var __except0__ = ReIndexError ();
-											__except0__.__cause__ = null;
-											throw __except0__;
-										}
-										ret.append (self._obj [index]);
-									}
-								}
-							}
-							else {
-								ret.append (self._obj [0]);
-							}
-							if (len (ret) == 1) {
-								return ret [0];
-							}
-							else {
-								return tuple (ret);
-							}
-						});},
-						get groups () {return __get__ (this, function (self, py_default) {
-							if (typeof py_default == 'undefined' || (py_default != null && py_default .hasOwnProperty ("__kwargtrans__"))) {;
-								var py_default = null;
-							};
-							if (len (self._obj) > 1) {
-								var ret = self._obj.__getslice__ (1, null, 1);
-								return tuple (function () {
-									var __accu0__ = [];
-									var __iterable0__ = ret;
-									for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-										var x = __iterable0__ [__index0__];
-										__accu0__.append ((x !== null ? x : py_default));
-									}
-									return __accu0__;
-								} ());
-							}
-							else {
-								return tuple ();
-							}
-						});},
-						get groupdict () {return __get__ (this, function (self, py_default) {
-							if (typeof py_default == 'undefined' || (py_default != null && py_default .hasOwnProperty ("__kwargtrans__"))) {;
-								var py_default = null;
-							};
-							if (self._namedGroups !== null) {
-								var ret = dict ({});
-								var __iterable0__ = self._namedGroups.py_items ();
-								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-									var __left0__ = __iterable0__ [__index0__];
-									var gName = __left0__ [0];
-									var gId = __left0__ [1];
-									var value = self._obj [gId];
-									ret [gName] = (value !== null ? value : py_default);
-								}
-								return ret;
-							}
-							else {
-								var __except0__ = NotImplementedError ('No NamedGroups Available');
-								__except0__.__cause__ = null;
-								throw __except0__;
-							}
-						});},
-						get start () {return __get__ (this, function (self, group) {
-							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
-								var group = 0;
-							};
-							var gId = 0;
-							if (py_typeof (group) === str) {
-								if (self._namedGroups !== null) {
-									if (!__in__ (group, self._namedGroups.py_keys ())) {
-										var __except0__ = ReIndexError ();
-										__except0__.__cause__ = null;
-										throw __except0__;
-									}
-									var gId = self._namedGroups [group];
-								}
-								else {
-									var __except0__ = NotImplementedError ('No NamedGroups Available');
-									__except0__.__cause__ = null;
-									throw __except0__;
-								}
-							}
-							else {
-								var gId = group;
-							}
-							if (gId >= len (self._obj)) {
-								var __except0__ = ReIndexError ();
-								__except0__.__cause__ = null;
-								throw __except0__;
-							}
-							if (gId == 0) {
-								return self._obj.index;
-							}
-							else if (self._obj [gId] !== null) {
-								var r = compile (escape (self._obj [gId]), self._re.flags);
-								var m = r.search (self._obj [0]);
-								if (m) {
-									return self._obj.index + m.start ();
-								}
-								else {
-									var __except0__ = Exception ('Failed to find capture group');
-									__except0__.__cause__ = null;
-									throw __except0__;
-								}
-							}
-							else {
-								return -(1);
-							}
-						});},
-						get end () {return __get__ (this, function (self, group) {
-							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
-								var group = 0;
-							};
-							var gId = 0;
-							if (py_typeof (group) === str) {
-								if (self._namedGroups !== null) {
-									if (!__in__ (group, self._namedGroups.py_keys ())) {
-										var __except0__ = ReIndexError ();
-										__except0__.__cause__ = null;
-										throw __except0__;
-									}
-									var gId = self._namedGroups [group];
-								}
-								else {
-									var __except0__ = NotImplementedError ('No NamedGroups Available');
-									__except0__.__cause__ = null;
-									throw __except0__;
-								}
-							}
-							else {
-								var gId = group;
-							}
-							if (gId >= len (self._obj)) {
-								var __except0__ = ReIndexError ();
-								__except0__.__cause__ = null;
-								throw __except0__;
-							}
-							if (gId == 0) {
-								return self._obj.index + len (self._obj [0]);
-							}
-							else if (self._obj [gId] !== null) {
-								var r = compile (escape (self._obj [gId]), self._re.flags);
-								var m = r.search (self._obj [0]);
-								if (m) {
-									return self._obj.index + m.end ();
-								}
-								else {
-									var __except0__ = Exception ('Failed to find capture group');
-									__except0__.__cause__ = null;
-									throw __except0__;
-								}
-							}
-							else {
-								return -(1);
-							}
-						});},
-						get span () {return __get__ (this, function (self, group) {
-							if (typeof group == 'undefined' || (group != null && group .hasOwnProperty ("__kwargtrans__"))) {;
-								var group = 0;
-							};
-							return tuple ([self.start (group), self.end (group)]);
-						});}
-					});
-					Object.defineProperty (Match, 'pos', property.call (Match, Match._getPos, Match._setPos));;
-					Object.defineProperty (Match, 'endpos', property.call (Match, Match._getEndPos, Match._setEndPos));;
-					Object.defineProperty (Match, 're', property.call (Match, Match._getRe, Match._setRe));;
-					Object.defineProperty (Match, 'string', property.call (Match, Match._getString, Match._setString));;
-					Object.defineProperty (Match, 'lastgroup', property.call (Match, Match._getLastGroup, Match._setLastGroup));;
-					Object.defineProperty (Match, 'lastindex', property.call (Match, Match._getLastIndex, Match._setLastIndex));;
-					var Regex = __class__ ('Regex', [object], {
-						get __init__ () {return __get__ (this, function (self, pattern, flags) {
-							if (!((flags & ASCII) > 0)) {
-								flags |= UNICODE;
-							}
-							self._flags = flags;
-							var __left0__ = self._compileWrapper (pattern, flags);
-							self._jsFlags = __left0__ [0];
-							self._obj = __left0__ [1];
-							self._jspattern = pattern;
-							self._pypattern = pattern;
-							var __left0__ = self._compileWrapper (pattern + '|', flags);
-							var _ = __left0__ [0];
-							var groupCounterRegex = __left0__ [1];
-							self._groups = groupCounterRegex.exec ('').length - 1;
-							self._groupindex = null;
-						});},
-						get _getPattern () {return __get__ (this, function (self) {
-							var ret = self._pypattern.py_replace ('\\', '\\\\');
-							return ret;
-						});},
-						get _setPattern () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getFlags () {return __get__ (this, function (self) {
-							return self._flags;
-						});},
-						get _setFlags () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getGroups () {return __get__ (this, function (self) {
-							return self._groups;
-						});},
-						get _setGroups () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _getGroupIndex () {return __get__ (this, function (self) {
-							if (self._groupindex === null) {
-								return dict ({});
-							}
-							else {
-								return self._groupindex;
-							}
-						});},
-						get _setGroupIndex () {return __get__ (this, function (self, val) {
-							var __except0__ = AttributeError ('readonly attribute');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get _compileWrapper () {return __get__ (this, function (self, pattern, flags) {
-							if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-								var flags = 0;
-							};
-							var jsFlags = self._convertFlags (flags);
-							var rObj = null;
-							var errObj = null;
-							
-							                   try {
-							                     rObj = new RegExp(pattern, jsFlags)
-							                   } catch( err ) {
-							                     errObj = err
-							                   }
-							                   
-							if (errObj !== null) {
-								var __except0__ = error (errObj.message, errObj, pattern, flags);
-								__except0__.__cause__ = null;
-								throw __except0__;
-							}
-							return tuple ([jsFlags, rObj]);
-						});},
-						get _convertFlags () {return __get__ (this, function (self, flags) {
-							var bitmaps = list ([tuple ([DEBUG, '']), tuple ([IGNORECASE, 'i']), tuple ([MULTILINE, 'm']), tuple ([STICKY, 'y']), tuple ([GLOBAL, 'g']), tuple ([UNICODE, 'u'])]);
-							var ret = ''.join (function () {
-								var __accu0__ = [];
-								var __iterable0__ = bitmaps;
-								for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-									var x = __iterable0__ [__index0__];
-									if ((x [0] & flags) > 0) {
-										__accu0__.append (x [1]);
-									}
-								}
-								return __accu0__;
-							} ());
-							return ret;
-						});},
-						get _getTargetStr () {return __get__ (this, function (self, string, pos, endpos) {
-							var endPtr = len (string);
-							if (endpos !== null) {
-								if (endpos < endPtr) {
-									var endPtr = endpos;
-								}
-							}
-							if (endPtr < 0) {
-								var endPtr = 0;
-							}
-							var ret = string.__getslice__ (pos, endPtr, 1);
-							return ret;
-						});},
-						get _patternHasCaptures () {return __get__ (this, function (self) {
-							return self._groups > 0;
-						});},
-						get search () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = 0;
-							};
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							if (endpos === null) {
-								var endpos = len (string);
-							}
-							var rObj = self._obj;
-							var m = rObj.exec (string);
-							if (m) {
-								if (m.index < pos || m.index > endpos) {
-									return null;
-								}
-								else {
-									return Match (m, string, pos, endpos, self, self._groupindex);
-								}
-							}
-							else {
-								return null;
-							}
-						});},
-						get match () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = 0;
-							};
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							var target = string;
-							if (endpos !== null) {
-								var target = target.__getslice__ (0, endpos, 1);
-							}
-							else {
-								var endpos = len (string);
-							}
-							var rObj = self._obj;
-							var m = rObj.exec (target);
-							if (m) {
-								if (m.index == pos) {
-									return Match (m, string, pos, endpos, self, self._groupindex);
-								}
-								else {
-									return null;
-								}
-							}
-							else {
-								return null;
-							}
-						});},
-						get fullmatch () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = 0;
-							};
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							var target = string;
-							var strEndPos = len (string);
-							if (endpos !== null) {
-								var target = target.__getslice__ (0, endpos, 1);
-								var strEndPos = endpos;
-							}
-							var rObj = self._obj;
-							var m = rObj.exec (target);
-							if (m) {
-								var obsEndPos = m.index + len (m [0]);
-								if (m.index == pos && obsEndPos == strEndPos) {
-									return Match (m, string, pos, strEndPos, self, self._groupindex);
-								}
-								else {
-									return null;
-								}
-							}
-							else {
-								return null;
-							}
-						});},
-						get py_split () {return __get__ (this, function (self, string, maxsplit) {
-							if (typeof maxsplit == 'undefined' || (maxsplit != null && maxsplit .hasOwnProperty ("__kwargtrans__"))) {;
-								var maxsplit = 0;
-							};
-							if (maxsplit < 0) {
-								return list ([string]);
-							}
-							var mObj = null;
-							var rObj = self._obj;
-							if (maxsplit == 0) {
-								var mObj = string.py_split (rObj);
-								return mObj;
-							}
-							else {
-								var flags = self._flags;
-								flags |= GLOBAL;
-								var __left0__ = self._compileWrapper (self._jspattern, flags);
-								var _ = __left0__ [0];
-								var rObj = __left0__ [1];
-								var ret = list ([]);
-								var lastM = null;
-								var cnt = 0;
-								for (var i = 0; i < maxsplit; i++) {
-									var m = rObj.exec (string);
-									if (m) {
-										cnt++;
-										if (lastM !== null) {
-											var start = lastM.index + len (lastM [0]);
-											var head = string.__getslice__ (start, m.index, 1);
-											ret.append (head);
-											if (len (m) > 1) {
-												ret.extend (m.__getslice__ (1, null, 1));
-											}
-										}
-										else {
-											var head = string.__getslice__ (0, m.index, 1);
-											ret.append (head);
-											if (len (m) > 1) {
-												ret.extend (m.__getslice__ (1, null, 1));
-											}
-										}
-										var lastM = m;
-									}
-									else {
-										break;
-									}
-								}
-								if (lastM !== null) {
-									var endPos = lastM.index + len (lastM [0]);
-									var end = string.__getslice__ (endPos, null, 1);
-									ret.append (end);
-								}
-								return ret;
-							}
-						});},
-						get _findAllMatches () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = 0;
-							};
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							var target = self._getTargetStr (string, pos, endpos);
-							var flags = self._flags;
-							flags |= GLOBAL;
-							var __left0__ = self._compileWrapper (self._jspattern, flags);
-							var _ = __left0__ [0];
-							var rObj = __left0__ [1];
-							var ret = list ([]);
-							while (true) {
-								var m = rObj.exec (target);
-								if (m) {
-									ret.append (m);
-								}
-								else {
-									break;
-								}
-							}
-							return ret;
-						});},
-						get findall () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof pos == 'undefined' || (pos != null && pos .hasOwnProperty ("__kwargtrans__"))) {;
-								var pos = 0;
-							};
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							var mlist = self._findAllMatches (string, pos, endpos);
-							var mSelect = function (m) {
-								if (len (m) > 2) {
-									return tuple (m.__getslice__ (1, null, 1));
-								}
-								else if (len (m) == 2) {
-									return m [1];
-								}
-								else {
-									return m [0];
-								}
-							};
-							var ret = map (mSelect, mlist);
-							return ret;
-						});},
-						get finditer () {return __get__ (this, function (self, string, pos, endpos) {
-							if (typeof endpos == 'undefined' || (endpos != null && endpos .hasOwnProperty ("__kwargtrans__"))) {;
-								var endpos = null;
-							};
-							var __except0__ = NotImplementedError ('No Iterator Support in es5');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						});},
-						get sub () {return __get__ (this, function (self, repl, string, count) {
-							if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
-								var count = 0;
-							};
-							var __left0__ = self.subn (repl, string, count);
-							var ret = __left0__ [0];
-							var _ = __left0__ [1];
-							return ret;
-						});},
-						get subn () {return __get__ (this, function (self, repl, string, count) {
-							if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
-								var count = 0;
-							};
-							var flags = self._flags;
-							flags |= GLOBAL;
-							var __left0__ = self._compileWrapper (self._jspattern, flags);
-							var _ = __left0__ [0];
-							var rObj = __left0__ [1];
-							var ret = '';
-							var totalMatch = 0;
-							var lastEnd = -(1);
-							while (true) {
-								if (count > 0) {
-									if (totalMatch >= count) {
-										if (lastEnd < 0) {
-											return tuple ([ret, totalMatch]);
-										}
-										else {
-											ret += string.__getslice__ (lastEnd, m.index, 1);
-											return tuple ([ret, totalMatch]);
-										}
-									}
-								}
-								var m = rObj.exec (string);
-								if (m) {
-									if (lastEnd < 0) {
-										ret += string.__getslice__ (0, m.index, 1);
-									}
-									else {
-										ret += string.__getslice__ (lastEnd, m.index, 1);
-									}
-									if (callable (repl)) {
-										var content = repl (Match (m, string, 0, len (string), self, self._groupindex));
-										ret += content;
-									}
-									else {
-										ret += repl;
-									}
-									totalMatch++;
-									var lastEnd = m.index + len (m [0]);
-								}
-								else if (lastEnd < 0) {
-									return tuple ([string, 0]);
-								}
-								else {
-									ret += string.__getslice__ (lastEnd, null, 1);
-									return tuple ([ret, totalMatch]);
-								}
-							}
-						});}
-					});
-					Object.defineProperty (Regex, 'pattern', property.call (Regex, Regex._getPattern, Regex._setPattern));;
-					Object.defineProperty (Regex, 'flags', property.call (Regex, Regex._getFlags, Regex._setFlags));;
-					Object.defineProperty (Regex, 'groups', property.call (Regex, Regex._getGroups, Regex._setGroups));;
-					Object.defineProperty (Regex, 'groupindex', property.call (Regex, Regex._getGroupIndex, Regex._setGroupIndex));;
-					var PyRegExp = __class__ ('PyRegExp', [Regex], {
-						get __init__ () {return __get__ (this, function (self, pyPattern, flags) {
-							var __left0__ = translate (pyPattern);
-							var jsTokens = __left0__ [0];
-							var inlineFlags = __left0__ [1];
-							var namedGroups = __left0__ [2];
-							var nCapGroups = __left0__ [3];
-							var n_splits = __left0__ [4];
-							flags |= inlineFlags;
-							var jsPattern = ''.join (jsTokens);
-							Regex.__init__ (self, jsPattern, flags);
-							self._pypattern = pyPattern;
-							self._nsplits = n_splits;
-							self._jsTokens = jsTokens;
-							self._capgroups = nCapGroups;
-							self._groupindex = namedGroups;
-						});}
-					});
-					var compile = function (pattern, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						if (flags & JSSTRICT) {
-							var p = Regex (pattern, flags);
-						}
-						else {
-							var p = PyRegExp (pattern, flags);
-						}
-						return p;
-					};
-					var search = function (pattern, string, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.search (string);
-					};
-					var match = function (pattern, string, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.match (string);
-					};
-					var fullmatch = function (pattern, string, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.fullmatch (string);
-					};
-					var py_split = function (pattern, string, maxsplit, flags) {
-						if (typeof maxsplit == 'undefined' || (maxsplit != null && maxsplit .hasOwnProperty ("__kwargtrans__"))) {;
-							var maxsplit = 0;
-						};
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.py_split (string, maxsplit);
-					};
-					var findall = function (pattern, string, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.findall (string);
-					};
-					var finditer = function (pattern, string, flags) {
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.finditer (string);
-					};
-					var sub = function (pattern, repl, string, count, flags) {
-						if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
-							var count = 0;
-						};
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.sub (repl, string, count);
-					};
-					var subn = function (pattern, repl, string, count, flags) {
-						if (typeof count == 'undefined' || (count != null && count .hasOwnProperty ("__kwargtrans__"))) {;
-							var count = 0;
-						};
-						if (typeof flags == 'undefined' || (flags != null && flags .hasOwnProperty ("__kwargtrans__"))) {;
-							var flags = 0;
-						};
-						var p = compile (pattern, flags);
-						return p.subn (repl, string, count);
-					};
-					var escape = function (string) {
-						var ret = null;
-						var replfunc = function (m) {
-							if (m [0] == '\\') {
-								return '\\\\\\\\';
-							}
-							else {
-								return '\\\\' + m [0];
-							}
-						};
-						
-						        var r = /[^A-Za-z\d]/g;
-						        ret = string.replace(r, replfunc);
-						        
-						if (ret !== null) {
-							return ret;
-						}
-						else {
-							var __except0__ = Exception ('Failed to escape the passed string');
-							__except0__.__cause__ = null;
-							throw __except0__;
-						}
-					};
-					var purge = function () {
-						// pass;
-					};
-					__pragma__ ('<use>' +
-						're.translate' +
-					'</use>')
-					__pragma__ ('<all>')
-						__all__.A = A;
-						__all__.ASCII = ASCII;
-						__all__.DEBUG = DEBUG;
-						__all__.DOTALL = DOTALL;
-						__all__.G = G;
-						__all__.GLOBAL = GLOBAL;
-						__all__.I = I;
-						__all__.IGNORECASE = IGNORECASE;
-						__all__.J = J;
-						__all__.JSSTRICT = JSSTRICT;
-						__all__.L = L;
-						__all__.LOCALE = LOCALE;
-						__all__.M = M;
-						__all__.MULTILINE = MULTILINE;
-						__all__.Match = Match;
-						__all__.PyRegExp = PyRegExp;
-						__all__.ReIndexError = ReIndexError;
-						__all__.Regex = Regex;
-						__all__.S = S;
-						__all__.STICKY = STICKY;
-						__all__.T = T;
-						__all__.TEMPLATE = TEMPLATE;
-						__all__.U = U;
-						__all__.UNICODE = UNICODE;
-						__all__.VERBOSE = VERBOSE;
-						__all__.X = X;
-						__all__.Y = Y;
-						__all__.compile = compile;
-						__all__.error = error;
-						__all__.escape = escape;
-						__all__.findall = findall;
-						__all__.finditer = finditer;
-						__all__.fullmatch = fullmatch;
-						__all__.match = match;
-						__all__.purge = purge;
-						__all__.search = search;
-						__all__.py_split = py_split;
-						__all__.sub = sub;
-						__all__.subn = subn;
-						__all__.translate = translate;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	__nest__ (
-		__all__,
-		're.translate', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var re = {};
-					var VERBOSE = false;
-					var MAX_SHIFTREDUCE_LOOPS = 1000;
-					var stringFlags = 'aiLmsux';
-					var Group = __class__ ('Group', [object], {
-						get __init__ () {return __get__ (this, function (self, start, end, klass) {
-							self.start = start;
-							self.end = end;
-							self.klass = klass;
-						});},
-						get __repr__ () {return __get__ (this, function (self) {
-							return str (tuple ([self.start, self.end, self.klass]));
-						});}
-					});
-					var generateGroupSpans = function (tokens) {
-						var groupInfo = list ([]);
-						var idx = 0;
-						var __iterable0__ = tokens;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var token = __iterable0__ [__index0__];
-							if (__t__ (token.py_name.startswith ('('))) {
-								groupInfo.append (Group (idx, null, token.py_name));
-							}
-							else if (__t__ (token.py_name == ')')) {
-								var __iterable1__ = py_reversed (groupInfo);
-								for (var __index1__ = 0; __index1__ < __iterable1__.length; __index1__++) {
-									var group = __iterable1__ [__index1__];
-									if (__t__ (group.end === null)) {
-										group.end = idx;
-									}
-								}
-							}
-							idx++;
-						}
-						return groupInfo;
-					};
-					var countCaptureGroups = function (tokens) {
-						var groupInfo = generateGroupSpans (tokens);
-						var count = 0;
-						var __iterable0__ = tokens;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var token = __iterable0__ [__index0__];
-							if (__t__ (token.py_name == '(')) {
-								count++;
-							}
-						}
-						return count;
-					};
-					var getCaptureGroup = function (groupInfo, namedGroups, groupRef) {
-						try {
-							var id = int (groupRef);
-						}
-						catch (__except0__) {
-							var id = namedGroups [groupRef];
-						}
-						var search = 0;
-						var __iterable0__ = groupInfo;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var group = __iterable0__ [__index0__];
-							if (__t__ (group.klass == '(')) {
-								search++;
-								if (__t__ (search == id)) {
-									return group;
-								}
-							}
-						}
-					};
-					var splitIfElse = function (tokens, namedGroups) {
-						var variants = list ([]);
-						var groupInfo = generateGroupSpans (tokens);
-						var __iterable0__ = groupInfo;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var group = __iterable0__ [__index0__];
-							if (__t__ (group.klass == '(?<')) {
-								var iff = tokens.__getslice__ (0, null, 1);
-								var els = tokens.__getslice__ (0, null, 1);
-								var conStart = group.start;
-								var conEnd = group.end;
-								var ref = tokens [conStart + 1].py_name;
-								var captureGroup = getCaptureGroup (groupInfo, namedGroups, ref);
-								var captureGroupModifier = tokens [captureGroup.end + 1];
-								if (__t__ (__t__ (__in__ (captureGroupModifier.py_name, list (['?', '*']))) || captureGroupModifier.py_name.startswith ('{0,'))) {
-									if (__t__ (captureGroupModifier.py_name == '?')) {
-										iff [captureGroup.end + 1] = null;
-									}
-									else if (__t__ (captureGroupModifier.py_name == '*')) {
-										iff [captureGroup.end + 1] = Token ('+');
-									}
-									else if (__t__ (captureGroupModifier.py_name.startswith ('{0,'))) {
-										iff [captureGroup.end + 1].py_name.__setslice__ (0, 3, null, '{1,');
-									}
-									els [captureGroup.end + 1] = null;
-									var hasElse = false;
-									for (var idx = conStart; idx < conEnd; idx++) {
-										if (__t__ (tokens [idx].py_name == '|')) {
-											var hasElse = true;
-											els.py_pop (conEnd);
-											iff.__setslice__ (idx, conEnd + 1, null, list ([]));
-											els.__setslice__ (conStart, idx + 1, null, list ([]));
-											break;
-										}
-									}
-									if (__t__ (!__t__ ((hasElse)))) {
-										els.__setslice__ (conStart, conEnd + 1, null, list ([]));
-										iff.py_pop (conEnd);
-									}
-									iff.__setslice__ (conStart, conStart + 3, null, list ([]));
-									els.__setslice__ (captureGroup.start, captureGroup.end + 1, null, list ([Token ('('), Token (')')]));
-									iff.remove (null);
-									els.remove (null);
-									variants.append (iff);
-									variants.append (els);
-								}
-								else {
-									var pastIff = false;
-									for (var idx = conStart; idx < conEnd; idx++) {
-										if (__t__ (iff [idx].py_name == '|')) {
-											var iff = tokens.__getslice__ (0, idx, 1);
-											iff.extend (tokens.__getslice__ (conEnd + 1, null, 1));
-											break;
-										}
-									}
-									iff.__setslice__ (conStart, conStart + 3, null, list ([]));
-									variants.append (iff);
-								}
-								break;
-							}
-						}
-						if (__t__ (!__t__ ((variants)))) {
-							return list ([tokens]);
-						}
-						var allVariants = list ([]);
-						var __iterable0__ = variants;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var variant = __iterable0__ [__index0__];
-							allVariants.extend (splitIfElse (variant, namedGroups));
-						}
-						return allVariants;
-					};
-					var Token = __class__ ('Token', [object], {
-						get __init__ () {return __get__ (this, function (self, py_name, paras, pure) {
-							if (typeof paras == 'undefined' || (paras != null && paras .hasOwnProperty ("__kwargtrans__"))) {;
-								var paras = null;
-							};
-							if (typeof pure == 'undefined' || (pure != null && pure .hasOwnProperty ("__kwargtrans__"))) {;
-								var pure = false;
-							};
-							if (__t__ (paras === null)) {
-								var paras = list ([]);
-							}
-							self.py_name = py_name;
-							self.paras = paras;
-							self.pure = pure;
-							self.isModeGroup = false;
-						});},
-						get __repr__ () {return __get__ (this, function (self) {
-							return self.py_name;
-						});},
-						get resolve () {return __get__ (this, function (self) {
-							var paras = '';
-							var __iterable0__ = self.paras;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-								var para = __iterable0__ [__index0__];
-								paras += str (para);
-							}
-							return self.py_name + paras;
-						});}
-					});
-					var shift = function (stack, queue) {
-						var done = !__t__ ((bool (queue)));
-						if (__t__ (!__t__ ((done)))) {
-							stack.append (Token (queue [0], list ([]), true));
-							var queue = queue.__getslice__ (1, null, 1);
-						}
-						return tuple ([stack, queue, done]);
-					};
-					var shiftReduce = function (stack, queue, namedGroups, flags) {
-						var done = false;
-						var high = len (stack) - 1;
-						if (__t__ (len (stack) < 2)) {
-							var __left0__ = shift (stack, queue);
-							var stack = __left0__ [0];
-							var queue = __left0__ [1];
-							var done = __left0__ [2];
-							return tuple ([stack, queue, flags, done]);
-						}
-						var s0 = (__t__ (len (stack) > 0) ? stack [high] : Token (''));
-						var s1 = (__t__ (len (stack) > 1) ? stack [high - 1] : Token (''));
-						if (__t__ (VERBOSE)) {
-							var __iterable0__ = stack;
-							for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-								var token = __iterable0__ [__index0__];
-								console.log (token.resolve (), '\t', __kwargtrans__ ({end: ''}));
-							}
-							console.log ('');
-						}
-						if (__t__ (s1.py_name == '\\')) {
-							if (__t__ (s0.py_name == 'A')) {
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('^')]));
-							}
-							else if (__t__ (s0.py_name == 'a')) {
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\07')]));
-							}
-							else if (__t__ (s0.py_name == 'Z')) {
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('$')]));
-							}
-							else {
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\' + s0.py_name)]));
-							}
-						}
-						else if (__t__ (__t__ (s0.py_name == '$') && s0.pure)) {
-							stack.py_pop ();
-							stack.extend (list ([Token ('(?='), Token ('\\n'), Token ('?'), Token ('$'), Token (')')]));
-						}
-						else if (__t__ (s1.py_name == '{')) {
-							if (__t__ (__t__ (s0.py_name == ',') && len (s1.paras) == 0)) {
-								s1.paras.append ('0');
-								s1.paras.append (',');
-							}
-							else if (__t__ (s0.py_name == '}')) {
-								s1.paras.append ('}');
-								s1.py_name = s1.resolve ();
-								s1.paras = list ([]);
-							}
-							else {
-								s1.paras.append (s0.py_name);
-							}
-							var stack = stack.__getslice__ (0, -__t__ ((1)), 1);
-						}
-						else if (__t__ (__t__ (s1.py_name == '[') && s0.py_name == '^')) {
-							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('[^')]));
-						}
-						else if (__t__ (__t__ (s1.py_name == '(') && s0.py_name == '?')) {
-							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(?')]));
-						}
-						else if (__t__ (__t__ (__in__ (s1.py_name, list (['*', '+', '?']))) && s0.py_name == '?')) {
-							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token (s1.py_name + '?')]));
-						}
-						else if (__t__ (__t__ (s1.isModeGroup) && s0.py_name == ')')) {
-							var stack = stack.__getslice__ (0, -__t__ ((2)), 1);
-						}
-						else if (__t__ (s1.py_name == '(?')) {
-							if (__t__ (__in__ (s0.py_name, stringFlags))) {
-								if (__t__ (s0.py_name == 'i')) {
-									flags |= re.IGNORECASE;
-								}
-								else if (__t__ (s0.py_name == 'L')) {
-									flags |= re.LOCALE;
-								}
-								else if (__t__ (s0.py_name == 'm')) {
-									flags |= re.MULTILINE;
-								}
-								else if (__t__ (s0.py_name == 's')) {
-									flags |= re.DOTALL;
-								}
-								else if (__t__ (s0.py_name == 'u')) {
-									flags |= re.UNICODE;
-								}
-								else if (__t__ (s0.py_name == 'x')) {
-									flags |= re.VERBOSE;
-								}
-								else if (__t__ (s0.py_name == 'a')) {
-									flags |= re.ASCII;
-								}
-								stack.py_pop ();
-								s1.isModeGroup = true;
-							}
-							else {
-								if (__t__ (s0.py_name == '(')) {
-									s0.py_name = '<';
-								}
-								var newToken = Token ('(?' + s0.py_name);
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([newToken]));
-							}
-						}
-						else if (__t__ (s1.py_name == '(?<')) {
-							if (__t__ (s0.py_name == ')')) {
-								stack.__setslice__ (-__t__ ((1)), null, null, list ([Token (''.join (s1.paras)), Token ('>')]));
-								s1.paras = list ([]);
-							}
-							else {
-								s1.paras.append (s0.py_name);
-								stack.py_pop ();
-							}
-						}
-						else if (__t__ (s1.py_name == '(?P')) {
-							stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(?P' + s0.py_name)]));
-						}
-						else if (__t__ (s1.py_name == '(?P<')) {
-							if (__t__ (s0.py_name == '>')) {
-								namedGroups [''.join (s1.paras)] = countCaptureGroups (stack) + 1;
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('(')]));
-							}
-							else {
-								s1.paras.append (s0.py_name);
-								stack.py_pop ();
-							}
-						}
-						else if (__t__ (s1.py_name == '(?P=')) {
-							if (__t__ (s0.py_name == ')')) {
-								stack.__setslice__ (-__t__ ((2)), null, null, list ([Token ('\\' + str (namedGroups [s1.paras [0]]))]));
-							}
-							else if (__t__ (!__t__ ((s1.paras)))) {
-								s1.paras.append (s0.py_name);
-								stack.py_pop ();
-							}
-							else {
-								s1.paras [0] += s0.py_name;
-								stack.py_pop ();
-							}
-						}
-						else if (__t__ (s1.py_name == '(?#')) {
-							if (__t__ (s0.py_name == ')')) {
-								var stack = stack.__getslice__ (0, -__t__ ((2)), 1);
-							}
-							else {
-								var stack = stack.__getslice__ (0, -__t__ ((1)), 1);
-							}
-						}
-						else {
-							var __left0__ = shift (stack, queue);
-							var stack = __left0__ [0];
-							var queue = __left0__ [1];
-							var done = __left0__ [2];
-						}
-						return tuple ([stack, queue, flags, done]);
-					};
-					var translate = function (rgx) {
-						__nest__ (re, '', __init__ (__world__.re));
-						var stack = list ([]);
-						var queue = list (rgx);
-						var flags = 0;
-						var namedGroups = dict ();
-						var nloop = 0;
-						while (__t__ (true)) {
-							nloop++;
-							if (__t__ (nloop > MAX_SHIFTREDUCE_LOOPS)) {
-								var __except0__ = Exception ();
-								__except0__.__cause__ = null;
-								throw __except0__;
-							}
-							var __left0__ = shiftReduce (stack, queue, namedGroups, flags);
-							var stack = __left0__ [0];
-							var queue = __left0__ [1];
-							var flags = __left0__ [2];
-							var done = __left0__ [3];
-							if (__t__ (done)) {
-								break;
-							}
-						}
-						var variants = splitIfElse (stack, namedGroups);
-						var n_splits = len (variants);
-						var final = list ([]);
-						for (var i = 0; i < len (variants); i++) {
-							final.extend (variants [i]);
-							if (__t__ (i < len (variants) - 1)) {
-								final.append (Token ('|'));
-							}
-						}
-						var stack = final;
-						var groupInfo = generateGroupSpans (stack);
-						var resolvedTokens = list ([]);
-						var __iterable0__ = stack;
-						for (var __index0__ = 0; __index0__ < __iterable0__.length; __index0__++) {
-							var token = __iterable0__ [__index0__];
-							var stringed = token.resolve ();
-							if (__t__ (__t__ (flags & re.DOTALL) && stringed == '.')) {
-								var stringed = '[\\s\\S]';
-							}
-							resolvedTokens.append (stringed);
-						}
-						return tuple ([resolvedTokens, flags, namedGroups, countCaptureGroups (stack), n_splits]);
-					};
-					__pragma__ ('<use>' +
-						're' +
-					'</use>')
-					__pragma__ ('<all>')
-						__all__.Group = Group;
-						__all__.MAX_SHIFTREDUCE_LOOPS = MAX_SHIFTREDUCE_LOOPS;
-						__all__.Token = Token;
-						__all__.VERBOSE = VERBOSE;
-						__all__.countCaptureGroups = countCaptureGroups;
-						__all__.generateGroupSpans = generateGroupSpans;
-						__all__.getCaptureGroup = getCaptureGroup;
-						__all__.shift = shift;
-						__all__.shiftReduce = shiftReduce;
-						__all__.splitIfElse = splitIfElse;
-						__all__.stringFlags = stringFlags;
-						__all__.translate = translate;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-	(function () {
-		var re = {};
-		__nest__ (re, '', __init__ (__world__.re));
-		var Example = __class__ ('Example', [object], {
-			d: dict ({'A': 1, 'B': 2}),
-			rec: re.compile ('(?P<decimal>\\d+)', re.ASCII),
-			get run () {return __get__ (this, function (self) {
-				var match = self.rec.match ('42');
-				if (!(match)) {
-					print ('ERROR: RE does not match');
-				}
-				var e = match.groupdict ();
-				print ('before: self.d=', self.d);
-				print ('before: e=', e);
-				self.d.py_update (e);
-				print ('after: self.d=', self.d);
-			});}
+    __all__.__setslice__ = __setslice__;	(function () {
+		var __name__ = '__main__';
+		var Foo = __class__ ('Foo', [object], {
+			__module__: __name__,
 		});
-		var example = Example ();
-		example.run ();
-		__pragma__ ('<use>' +
-			're' +
-		'</use>')
+		var foo = Foo ();
+		foo.bar = 'baz';
+		foo.py_name = 'hello';
+		foo.py_default = 'world';
+		print ((function () {
+			var __accu0__ = [];
+			var __iterable0__ = dir (foo);
+			for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+				var x = __iterable0__ [__index0__];
+				if (!(x.startswith ('__'))) {
+					__accu0__.append (x);
+				}
+			}
+			return __accu0__;
+		}) ());
+		var foo = function () {
+			var kwargs = dict ();
+			if (arguments.length) {
+				var __ilastarg0__ = arguments.length - 1;
+				if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+					var __allkwargs0__ = arguments [__ilastarg0__--];
+					for (var __attrib0__ in __allkwargs0__) {
+						switch (__attrib0__) {
+							default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+						}
+					}
+					delete kwargs.__kwargtrans__;
+				}
+				var args = tuple ([].slice.apply (arguments).slice (0, __ilastarg0__ + 1));
+			}
+			else {
+				var args = tuple ();
+			}
+			var py_default = kwargs.py_get ('default', 'bar');
+			return py_default;
+		};
+		print (foo ());
+		print (foo (__kwargtrans__ ({py_default: 'Hello World'})));
 		__pragma__ ('<all>')
-			__all__.Example = Example;
-			__all__.example = example;
+			__all__.Foo = Foo;
+			__all__.__name__ = __name__;
+			__all__.foo = foo;
 		__pragma__ ('</all>')
 	}) ();
-   return __all__;
+    return __all__;
 }
 window ['test'] = test ();

@@ -1,6 +1,8 @@
 from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbols__
 
-from div_issues.issue55 import *        # Names not exported from package's __init__.py
+from div_issues.issue55 import *        # Names not exported from package's __init__.py, no output, only compilation check
+from div_issues.issue387 import run387       # Support __module__ and __qualname__ for introspection (only __module__ done and
+                                        # __name__ set to '__main__ for main module'
 
 def run (autoTester):
     autoTester.check ('Issue 24')   # Non keyword switch generates javascript SyntaxError
@@ -310,6 +312,7 @@ def run (autoTester):
         autoTester.check ('g')
         
     autoTester.check ('Issue 316')
+    
     autoTester.check (list (filter (None, [[1, 2], [3], [], [4, 5], [6]])))
     autoTester.check (list (filter (lambda l: len (l) >= 2, [[1, 2], [3], [], [4, 5], [6]])))
     
@@ -320,6 +323,23 @@ def run (autoTester):
         mylist.remove ('value')
     except ValueError as exception:
         autoTester.check (exception.__class__.__name__)
+        
+    autoTester.check ('Issue 331')
+    
+    autoTester.check (max (-5, 4, 1, 2, -3, 2))
+    autoTester.check (max ([-5, 4, 1, 2, -3, 2]))
+    autoTester.check (max ((5, 6, 2, -2, -4)))
+
+    autoTester.check (min (-5, 4, 1, 2, -3, 2))
+    autoTester.check (min ([-5, 4, 1, 2, -3, 2]))
+    autoTester.check (min ((5, 6, 2, -2, -4)))
+    
+    autoTester.check ('issue 356')
+    
+    try:
+        raise TypeError("How are you?")
+    except TypeError as exception:
+        autoTester.check (exception)
         
     #__pragma__ ('ifdef', '__esv6__')   # Needed because Transcrypt imports are compile time
     if '__esv6__' in __symbols__:      # Needed because CPython doesn't understand pragma's
@@ -345,6 +365,9 @@ def run (autoTester):
 
         #__pragma__ ('noopov')
     #__pragma__ ('endif')
+    
+    autoTester.check ('Issue 387')
+    run387 (autoTester)
     
     autoTester.check ('Issue 391')
     autoTester.check (int (False))
@@ -374,4 +397,72 @@ def run (autoTester):
 
     example = Example ()
     example.run ()
+    
+    autoTester.check ('Issue 398')
+    # This used to give extra comma's so invalid syntax (no check calls needed)
+    
+    class Test398 (object):
+        #__pragma__ ('skip')
+        def method1 (self):
+            pass
 
+        def method2 (self):
+            pass
+        #__pragma__ ('noskip')
+        pass
+        
+    test398 = Test398 ()
+        
+    autoTester.check ('Issue 399')
+    
+    __pragma__ ('keycheck')
+    try:
+        surpressWarning = {'a':5}['a']
+        surpressWarning = {'a':5}['b']
+        autoTester.check ('no problem')
+    except KeyError:
+        autoTester.check ('not found')    
+    
+    autoTester.check ('Issue 413')
+    __pragma__ ('nokeycheck')
+    
+    class Foo:
+        def __len__ (self):
+            return 3
+        
+        def __getitem__ (self, i):
+            if i >= 3:
+                raise IndexError
+            return 'This is item ' + str (i)
+
+    foo = Foo ()
+
+    #__pragma__ ('opov')
+    autoTester.check ('Attempt 1:')
+    for i in foo:
+        autoTester.check (i)
+
+    autoTester.check ('Attempt 2:')
+    for i in range (len (foo)):
+        autoTester.check (foo [i])
+    #__pragma__('noopov')
+    
+    autoTester.check ('Issue 414')
+    
+    class Foo:
+        pass
+
+    foo = Foo ()
+    foo.bar = 'baz'
+    foo.name = 'hello'
+    foo.default = 'world'
+
+    autoTester.check ([x for x in dir (foo) if not x.startswith ('__')])
+
+    #__pragma__('kwargs')
+    def foo (*args, **kwargs):
+        default = kwargs.get ('default', 'bar')
+        return default
+
+    autoTester.check (foo())
+    autoTester.check (foo(default = 'Hello World'))

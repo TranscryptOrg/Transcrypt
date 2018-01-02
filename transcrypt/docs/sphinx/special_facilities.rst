@@ -149,7 +149,7 @@ Fast calls or fcalls are method calls where the method isn't an attribute of an 
 Note that these pragmas have to be applied on the function definition location rather than the call location. Placing *__pragma__ ('fcall')* or *__pragma__ ('nofcall')* at the beginning of a module will influence all methods defined in that module. The fcall mechanism is a form of memoization and one example of a transpiler being able to generate optimized code that surpasses common hand coding practice. The fcall mechanism influences neither the pure Python syntax nor the semantics of your program.
 
 Enabling Pythons *send* syntax: __pragma__ ('gsend') and __pragma ('nogsend')
-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 These pragmas enable respectively disable use of Pythons *send* syntax for generators, which is disabled by default. An example of its use is in the following code:
 
@@ -193,6 +193,27 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
+Using an external transpiler: __pragma__ ('xtrans', <translator>, ..., cwd = <workingdirectory>)
+------------------------------------------------------------------------------------------------
+This pragma works the same as *__pragma__ ('js', ...)*, only now an external translator application can be specified, e.g. to translate JSX code.
+If the *cwd* parameter is present, it the external translator will use it as working directory.
+The code offered to this pragma is routed through this external translator by means of pipes.
+This pragma can use *__include__ (...)* just like *__pragma__ ('js', ...)*.
+
+Example:
+
+.. literalinclude:: ../../development/manual_tests/xtrans/test.py
+	:tab-width: 4
+	:caption: Test program using __pragma__ ('xtrans', ...)
+    
+.. literalinclude:: ../../development/manual_tests/xtrans/change_case.cpp
+	:tab-width: 4
+	:caption: Simple external translator change_case.cpp, changing the case to upper or lower, depending on -l switch
+    
+.. literalinclude:: ../../development/manual_tests/xtrans/__javascript__/test.mod.js
+	:tab-width: 4
+	:caption: The resulting translated file test.mod.js
+
 Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')
 -------------------------------------------------------------------------------------------------------------------------------
 Normally a Python *{...}* literal is compiled to *dict ({...})* to include the special attributes and methods of a Python dict, including e.g. an iterator. When *__pragma__ ('jsiter')* is active, a *Python {...}* literal is compiled to a bare *{...}*, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when *__pragma__ ('jsiter')* is active, a Python *for ... in ...* is literally translated to a JavaScript *for (var ... in ...)*. The main use case for this pragma is conveniently looping through class attributes in the *__new__* method of a metaclass. As a more flexible, but less convenient alternative, *__pragma__ ('js', '{}', '''...''')* can be used.
@@ -208,6 +229,10 @@ An example of the use of this pragma is the following:
 __pragma__ ('jskeys') and __pragma__ ('nojskeys')
 -------------------------------------------------
 Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
+__pragma__ ('keycheck') and __pragma__ ('nokeycheck')
+-----------------------------------------------------
+When *__pragma__ ('keycheck')* is active, an attempt to retrieve an element from a dictionary via a non-existing key results in a KeyError being raised, unless it happens at the lefthand side of an augmented assignment. The run time support for this is expensive, as it requires passing the result of every such retrieval to a function that checks the definedness of the result. While the -kc command line switch switches key checking on globally, the preferred way is to switch on and off this facility locally to prevent code bloat.
 
 Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
 -----------------------------------------------------------------------

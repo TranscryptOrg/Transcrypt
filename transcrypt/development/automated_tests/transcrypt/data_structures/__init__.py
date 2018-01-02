@@ -36,10 +36,12 @@ def run (autoTester):
     autoTester.check (anotherTuple)
 
     aSet = {1, 2, 2, 3}
-    autoTester.check    (aSet)
+    autoTester.check (aSet)
     autoTester.check (len (aSet))
     autoTester.check (2 in aSet)
     autoTester.check (4 in aSet)
+    aSet.clear ()
+    autoTester.check (aSet)
 
     anotherSet = set ((4, 5, 5, 6))
     autoTester.check (anotherSet)

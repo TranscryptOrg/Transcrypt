@@ -24,14 +24,17 @@ import datetime
 import math
 import traceback
 import io
+import subprocess
+import shlex
 
 from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, type_check
 
 class ModuleMetadata:
     def __init__ (self, program, name):
+        self.program = program
         self.name = name
         searchedModulePaths = []
-        for searchDir in program.moduleSearchDirs:
+        for searchDir in self.program.moduleSearchDirs:
             relPrepath = self.name.replace ('.', '/')
             prepath = '{}/{}'.format (searchDir, relPrepath)
             self.isDir = os.path.isdir (prepath)
@@ -45,7 +48,7 @@ class ModuleMetadata:
             self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
             self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
 
-            self.sourcePath = '{}/{}.py' .format (self.sourceDir, self.filePrename)
+            self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
             searchedModulePaths += [self.sourcePath, self.targetPath]
 
             if not os.path.isfile (self.sourcePath):
@@ -90,6 +93,15 @@ class ModuleMetadata:
                     youngestPath = path
 
         return youngestPath == self.sourcePath
+        
+    def getStandardName (self):
+        try:
+            if self.name == self.program.mainModuleName:
+                return '__main__'
+            else:
+                return self.name
+        except:
+            print (traceback.format_exc ())
 
 class Program:
     def __init__ (self, moduleSearchDirs, symbols):
@@ -122,13 +134,13 @@ class Program:
         self.baseModuleName = '{}.{}'.format (prefix, '__base__')
         self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
         self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
-        self.mainModuleName = self.sourceFileName [ : -3]
+        self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
 
         # Compile inline modules
-        Module (self, ModuleMetadata (self, self.coreModuleName))
+        Module (self, ModuleMetadata (self, self.coreModuleName), True)
         Module (self, ModuleMetadata (self, self.baseModuleName))
         Module (self, ModuleMetadata (self, self.standardModuleName))
-        Module (self, ModuleMetadata (self, self.builtinModuleName))
+        Module (self, ModuleMetadata (self, self.builtinModuleName), True)
 
         # Optionally perfom static typing validation
 
@@ -214,10 +226,10 @@ class Program:
             # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
             header +
             'function {} () {{\n'.format (self.mainModuleName) +
-            '   var __symbols__ = {};\n'.format (self.symbols) +
+            '    var __symbols__ = {};\n'.format (self.symbols) +
             # END prologue
             ''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +
-            '   return __all__;\n' +
+            '    return __all__;\n' +
             '}\n' +
             initializer
         )
@@ -250,6 +262,8 @@ class Program:
                     miniFile.write (self.miniMap.mapRef)
 
     def provide (self, moduleName):
+        # moduleName may contain dots if it's imported, but it'll have the same name in every import
+    
         if moduleName == '__main__':
             moduleName = self.mainModuleName
 
@@ -261,9 +275,10 @@ class Program:
             return Module (self, moduleMetadata)
 
 class Module:
-    def __init__ (self, program, moduleMetadata):
+    def __init__ (self, program, moduleMetadata, stripCommentsIfAllowed = False):
         self.program = program
-        self.metadata = moduleMetadata  # May contain dots if it's imported
+        self.metadata = moduleMetadata
+        self.stripComments = stripCommentsIfAllowed and not utils.commandArgs.dnostrip
         self.program.moduleDict [self.metadata.name] = self
 
         # Names of module being under compilation and line nrs of current import
@@ -366,6 +381,10 @@ class Module:
 
     def loadJavascript (self):
         def strip (code, symbols):
+            def stripSingleLineComments (line):
+                pos = line.find ('//')
+                return (line if pos < 0 else line [ : pos]) .rstrip ()
+        
             loading = True
 
             def loadable (targetLine):
@@ -384,7 +403,12 @@ class Module:
                         loading = True
 
                 strippedLine = targetLine.lstrip ()
-                if strippedLine.startswith ('__pragma__') and (
+                if self.stripComments and strippedLine.startswith ('/*'):
+                    loading = False
+                    return loading  # So skip this line
+                elif self.stripComments and strippedLine.endswith ('*/'):
+                    loading = True  # Load next line
+                elif strippedLine.startswith ('__pragma__') and (
                     'ifdef' in strippedLine or
                     'ifndef' in strippedLine or
                     'else' in strippedLine or
@@ -394,8 +418,11 @@ class Module:
                     return False    # Skip line anyhow
                 else:
                     return loading  # Skip line only if not in loading state
-
-            loadableLines = [line for line in code.split ('\n') if loadable (line)]
+            
+            if self.stripComments:
+                loadableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if loadable (line)] if commentlessLine]
+            else:
+                loadableLines = [line for line in code.split ('\n') if loadable (line)]
             return '\n'.join (loadableLines)
 
         with open (self.metadata.targetPath) as targetFile:
@@ -495,6 +522,7 @@ class Generator (ast.NodeVisitor):
         self.importHeads = set ()
         self.docString = None
         self.docStringEmitted = False
+        self.expectingNonOverloadedLhsIndex = False
         self.lineNr = 1
 
         self.aliasers = [self.getAliaser (*alias) for alias in (
@@ -609,6 +637,7 @@ class Generator (ast.NodeVisitor):
         self.allowOperatorOverloading = utils.commandArgs.opov
         self.allowConversionToIterable = utils.commandArgs.iconv
         self.allowConversionToTruthValue = utils.commandArgs.tconv
+        self.allowKeyCheck = utils.commandArgs.keycheck
         self.allowDebugMap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
         self.allowJavaScriptIter = False
@@ -655,15 +684,15 @@ class Generator (ast.NodeVisitor):
         else:
             self.visit (child)
 
-    def getAliaser (self, pyFragment, jsFragment):
-        return (pyFragment, re.compile ('''
+    def getAliaser (self, sourceFragment, targetFragment):
+        return (sourceFragment, re.compile ('''
             (^{0}$)|            # Whole word
             (.+__{0}__.+)|      # Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
             (^{0}__)|           # Starts with <pyFragment>__
             (__{0}$)|           # Ends with __<pyFragment>
             ((?<=\.){0}__)|     # Starts with '.<pyFragment>__'
             (__{0}(?=\.))       # Ends with '__<pyFragment>.'
-        '''.format (pyFragment), re.VERBOSE), jsFragment)
+        '''.format (sourceFragment), re.VERBOSE), targetFragment)
 
     def filterId (self, qualifiedId):   # Convention: only called at emission time
         if self.idFiltering:
@@ -693,6 +722,7 @@ class Generator (ast.NodeVisitor):
         self.indentLevel -= 1
 
     def inscope (self, node):
+        # Called at visiting modules, classes and functions
         self.scopes.append (Scope (node))
 
     def descope (self):
@@ -724,7 +754,7 @@ class Generator (ast.NodeVisitor):
         return reversed (reversedClassScopes)
 
     def emitComma (self, index, blank = True):
-        if index:
+        if self.noskipCodeGeneration and self.conditionalCodeGeneration and index:
             self.emit (', ' if blank else ',')
 
     def emitBeginTruthy (self):
@@ -764,7 +794,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (stmt)
                 self.emit (';\n')
                 
-    def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None):              
+    def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None): 
         if type (target.slice) == ast.Index:        # Always overloaded
             if type (target.slice.value) == ast.Tuple:
                 self.visit (target.value)
@@ -785,7 +815,9 @@ class Generator (ast.NodeVisitor):
                 emitPathIndices ()
                 self.emit (')')
             else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
-                self.visit (target)                 # which is called indirectly here
+                                                    # which is called indirectly here
+                self.expectingNonOverloadedLhsIndex = True
+                self.visit (target)
                 self.emit (' = ')
                 self.visit (value)
                 emitPathIndices ()
@@ -1305,7 +1337,8 @@ class Generator (ast.NodeVisitor):
                 targets = [node.target],
                 value = ast.BinOp (left = node.target, op = node.op, right = node.value)
             ))         
-        else:   # No overloading in this branch                           
+        else:   # No overloading in this branch
+            self.expectingNonOverloadedLhsIndex = True
             self.visit (node.target)        # No need to emit var first, it has to exist already
 
             # Optimize for ++ and --
@@ -1405,6 +1438,9 @@ class Generator (ast.NodeVisitor):
         if not self.skippedTemp ('break'):
             self.emit ('{} = true;\n', self.getTemp ('break'))
         self.emit ('break')
+        
+    def visit_Bytes (self, node):
+        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
 
     def visit_Call (self, node):
         self.adaptLineNrString (node)
@@ -1446,7 +1482,7 @@ class Generator (ast.NodeVisitor):
                     self.emit ('}}')    # Only if not terminated already because hasKwargs
 
             self.emit (')')
-
+            
         def include (fileName):
             searchedIncludePaths = []
             for searchDir in self.module.program.moduleSearchDirs:
@@ -1517,6 +1553,11 @@ class Generator (ast.NodeVisitor):
                 elif node.args [0] .s == 'nojskeys':    # Dictionary keys without quotes are identifiers
                     self.allowJavaScriptKeys = False
 
+                elif node.args [0] .s == 'keycheck':    # Nonexistent dict keys or list indices generate an exception
+                    self.allowKeyCheck = True
+                elif node.args [0] .s == 'nokeycheck':  # Nonexistent dict keys or list indices produce undefined values
+                    self.allowKeyCheck = False
+
                 elif node.args [0] .s == 'jsmod':       # % has JavaScript behaviour
                     self.allowJavaScriptMod = True
                 elif node.args [0] .s == 'nojsmod':     # % has Python behaviour
@@ -1538,7 +1579,7 @@ class Generator (ast.NodeVisitor):
                             compile (
                                 ast.Expression (arg),   # Code to compile (can be AST or source)
                                 '<string>',             # Not read from a file
-                                'eval'                  # Code is an expression
+                                'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
                             ),
                             {},
                             {'__include__': include}
@@ -1547,6 +1588,40 @@ class Generator (ast.NodeVisitor):
                     ])
                     for line in code.split ('\n'):
                         self.emit ('{}\n', line)
+                    
+                elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
+                    try:
+                        sourceCode = node.args [2] .s.format (* [
+                            eval (
+                                compile (
+                                    ast.Expression (arg),   # Code to compile (can be AST or source)
+                                    '<string>',             # Not read from a file
+                                    'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
+                                ),
+                                {},
+                                {'__include__': include}
+                            )
+                            for arg in node.args [3:]
+                        ])
+                        workDir = '.'
+                        for keyword in node.keywords:
+                            if keyword.arg == 'cwd':
+                                workDir = keyword.value.s
+                        process = subprocess.Popen (
+                            shlex.split(node.args [1] .s),
+                            stdin = subprocess.PIPE,
+                            stdout = subprocess.PIPE,
+                            cwd = workDir
+                        )
+                        process.stdin.write ((sourceCode).encode ('utf8'))
+                        process.stdin.close ()
+                        while process.returncode is None:
+                            process.poll ()
+                        targetCode = process.stdout.read (). decode ('utf8'). replace ('\r\n', '\n')
+                        for line in targetCode.split ('\n'):
+                            self.emit ('{}\n', line)
+                    except:
+                        print (traceback.format_exc ())
 
                 elif node.args [0] .s == 'kwargs':      # Start emitting kwargs code for FunctionDef's
                     self.allowKeywordArgs = True
@@ -1784,6 +1859,7 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
+        self.emit ('\n__module__: __name__,')
         classVarAssigns = []
         index = 0
         for stmt in node.body:
@@ -1991,7 +2067,10 @@ class Generator (ast.NodeVisitor):
             self.emit (') {{\n')
             self.indent ()
 
-        elif self.module.program.javaScriptVersion >= 6:
+        elif (
+            self.module.program.javaScriptVersion >= 6 and  # Supports for ... of
+            not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
+        ):
             self.emit ('for (var ')
             self.stripTuples = True
             self.visit (node.target)
@@ -2056,7 +2135,7 @@ class Generator (ast.NodeVisitor):
             if self.allowConversionToIterable:
                 self.emit ('{0} = __i__ ({0});\n', self.getTemp ('iterable'))
 
-            self.emit ('for (var {0} = 0; {0} < {1}.length; {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iterable'))
+            self.emit ('for (var {0} = 0; {0} < len ({1}); {0}++) {{\n', self.nextTemp ('index'), self.getTemp ('iterable'))
             self.indent ()
 
             # Create and visit Assign node on the fly to benefit from tupple assignment
@@ -2083,7 +2162,10 @@ class Generator (ast.NodeVisitor):
         self.emit ('}}\n')
 
         if not (self.allowJavaScriptIter or optimize):
-            if self.module.program.javaScriptVersion >= 6:
+            if (
+                self.module.program.javaScriptVersion >= 6 and  # Supports for ... of
+                not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
+            ):
                 pass
                 # self.prevTemp ('iterator')    # Leave in for now, see outcommented fragment (1) above
             else:
@@ -2169,8 +2251,7 @@ class Generator (ast.NodeVisitor):
                             decorate = True
 
                 if decorate:
-                    implName = '__impl__{}'.format(node.name)
-                    self.emit ('{}: {}function', implName, 'async ' if async else '')
+                    self.emit ('__impl__{}: {}function', node.name, 'async ' if async else '')
                 else:
                     if isClassMethod:
                         self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
@@ -2196,11 +2277,11 @@ class Generator (ast.NodeVisitor):
                 if decorate:
                     self.emit (',\n')
                     if isClassMethod:
-                        self.emit ('get {} () {{return __getcm__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __getcm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     elif isStaticMethod:
-                        self.emit ('get {} () {{return __getsm__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __getsm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     else:
-                        self.emit ('get {} () {{return __get__ (this, this.{});}}', self.filterId (node.name), implName)
+                        self.emit ('get {} () {{return __get__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
                     self.pushDecorator (node)
                 else:
                     if isStaticMethod:
@@ -2444,7 +2525,7 @@ class Generator (ast.NodeVisitor):
                 bodies [0][0]
             )
 
-        self.emit ('function () {{\n')
+        self.emit ('(function () {{\n')
         self.inscope (ast.FunctionDef ())
         self.indent ()
         self.emit ('var {} = [];\n', self.nextTemp ('accu'))
@@ -2458,7 +2539,7 @@ class Generator (ast.NodeVisitor):
         self.prevTemp ('accu')
         self.dedent ()
         self.descope ()
-        self.emit ('}} ()')
+        self.emit ('}}) ()')
 
     def visit_Module (self, node):
         self.adaptLineNrString (node)
@@ -2482,6 +2563,9 @@ class Generator (ast.NodeVisitor):
 
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
+        
+        self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
+        self.all.add ('__name__')
 
         for stmt in node.body:
             if self.isDocString (stmt):
@@ -2555,10 +2639,6 @@ class Generator (ast.NodeVisitor):
 
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
-            return
-
-        elif node.id == '__name__':
-            self.visit (ast.Str (s = self.module.metadata.name))
             return
 
         elif type (node.ctx) == ast.Store:
@@ -2670,10 +2750,22 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.slice.value)
                 self.emit (')')
             else:                                       # It may be an LHS or RHS index
-                self.visit (node.value)
-                self.emit (' [')
-                self.visit (node.slice.value)
-                self.emit (']')
+                try:
+                    isRhsIndex = not self.expectingNonOverloadedLhsIndex
+                    self.expectingNonOverloadedLhsIndex = False
+                    if isRhsIndex and self.allowKeyCheck:
+                        self.emit ('__k__ (')
+                        self.visit (node.value)
+                        self.emit (', ')
+                        self.visit (node.slice.value)
+                        self.emit (')')
+                    else:
+                        self.visit (node.value)
+                        self.emit (' [')
+                        self.visit (node.slice.value)
+                        self.emit (']')
+                except:
+                    print (traceback.format_exc ())
         elif type (node.slice) == ast.Slice:
             if self.allowOperatorOverloading:
                 self.emit ('__getslice__ (')            # Free function, tries .__getitem__ (overload) and .__getslice__ (native)

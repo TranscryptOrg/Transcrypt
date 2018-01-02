@@ -1,0 +1,6 @@
+How to compile
+    This demo requires  the -e 6 compiler switch.
+
+How to play:
+    Use arrow keys for thrust, brake, left, right.
+    Use space bar to fire canon.

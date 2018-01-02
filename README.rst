@@ -41,8 +41,7 @@ Also, code can be tested from the command prompt using stubs.
 Main differences with CPython
 =============================
 
-- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. math, cmath, random, itertools, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
-- A few methods of builtin types are currently left out, especially when they (almost) duplicate functionality of other methods. Also method decorators (as opposed to function decorators and class decorators) are not supported, with the exception of @classmethod. This results from a deliberate choice to keep Transcrypt lean and fast.
+- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. math, cmath, random, itertools, re, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
 
 License
@@ -122,12 +121,30 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Max and min now accept sequences (issue 331)
+- Aliasers more completely dealt with in combination with keyword args and getattr, setattr, hasattr, delattr (issue 414)
+- Compiler switch -xt / --xtiny added to considerably reduce size of runtime if operator overloading isn't used
+- Compiler switch -dn / --dnostrip added to avoid stripping comments in __builtin__ and __core__
+- Comments in __builtin__ and __core__ JavaScript-only modules are now stripped by default
+- Initial support for bytes and bytearrays added (issue 405 a.o.)
+- Remark about heuristic interpretation of dictionary keys added to docs (issue 401)
+- Fisher-Yates shuffle added to random module
+- Exception type TypeError added, currently unused by Transcrypt itself (issue 365)
+- Name of main program file now really doesn't need .py extension anymore... (issue 416, bugfix)
+- Name of main program file doesn't need .py extension anymore (issue 416)
+- DRY implementation of __module__, lean enough to remove the -mc / --modclass switch
+- -mc / --modclass switch now controls generation of __module__ to prevent code bloat
+- Issue 397 a.o., __module__ attribute added to classes, __name__ of main module is now '__main__',
+- Enhancement for issue 399: __pragma__ ('keycheck') + command line switch + autotest
+- Fixes for issues 398, 412, 413 + autotests
+- __pragma__ ('xtrans', ...) added to facilitate partial translation by external tools (EXPERIMENTAL, issue 404, e.g. to deal with JSX)
+- Default messages for ValueError and KeyError removed for better CPython compatibility (pr 395)
 - Small fix of re module (issue 392)
 - Conversion from bool to int now succeeds (issue 391)
-- Overloadable operators __truediv__ and __floordiv__ added
+- Overloadable operators __truediv__ and __floordiv__ added (issue 389)
 - Class methods, static methods, class decorators, method decorators and static method decorators
 - If an object doesn't have a specific string representation, function repr and str now return <object of type: object> rather than ???, and this case isn't reported as an error anymore
-- Function len now calls \_\_len\_\_ if it exists (pr 378)
+- Function len now calls __len__ if it exists (pr 378)
 - More Pythonic truthyness when using -t (or --tconv) switch (pr 367 a.o.)
 - Source file spec on command line can now be a full path (free afer pr #362)
 - The zip function now also works for finite iterators (issue #369) + autotest

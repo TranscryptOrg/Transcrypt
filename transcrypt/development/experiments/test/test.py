@@ -1,22 +1,17 @@
-autoTester.check ('#392')
+class Foo:
+	pass
 
-import re
+foo = Foo ()
+foo.bar = 'baz'
+foo.name = 'hello'
+foo.default = 'world'
 
-class Example:
+print ([x for x in dir (foo) if not x.startswith ('__')])
 
-    d = {'A': 1, 'B': 2}
-    rec = re.compile('(?P<decimal>\d+)', re.ASCII)
+#__pragma__('kwargs')
+def foo (*args, **kwargs):
+	default = kwargs.get ('default', 'bar')
+	return default
 
-    def run(self):
-        match = self.rec.match('42')
-        if not match:
-            print('ERROR: RE does not match')
-        e = match.groupdict()
-        autoTester.check ("before: self.d=", self.d)
-        autoTester.check ("before: e=", e)
-        self.d.update(e)
-        autoTester.check ("after: self.d=", self.d)
-
-
-example = Example()
-example.run ()
+print (foo())
+print (foo(default = 'Hello World'))

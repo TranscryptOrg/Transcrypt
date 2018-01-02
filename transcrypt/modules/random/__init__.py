@@ -1,4 +1,6 @@
-# Mersenne-Twister algorithm
+# Mersenne-Twister random number algorithm
+
+import math
 
 _array = [0 for i in range (624)]
 _index = 0
@@ -43,5 +45,12 @@ def choice (seq):
 
 def random ():
     return _random_integer () / _bitmask3
+
+def shuffle (x):    # Fisher-Yates unbiased shuffle
+    for i in range (len (x) - 1, 0, -1):
+        j = math.floor (random () * (i + 1))
+        temp = x [i]
+        x [i] = x [j]
+        x [j] = temp
     
 seed ()

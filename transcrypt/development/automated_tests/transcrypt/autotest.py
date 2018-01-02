@@ -3,6 +3,7 @@ import org.transcrypt.autotester
 import arguments
 import attribs_by_name
 import builtin_super
+import byte_arrays
 import callable_test
 import classes
 import complex_numbers
@@ -73,6 +74,7 @@ autoTester = org.transcrypt.autotester.AutoTester ()
 autoTester.run (arguments, 'arguments')
 autoTester.run (attribs_by_name, 'attribs_by_name')
 autoTester.run (builtin_super, 'builtin_super')
+autoTester.run (byte_arrays, 'byte_arrays')
 autoTester.run (callable_test, 'callable')
 autoTester.run (classes, 'classes')
 autoTester.run (complex_numbers, 'complex_numbers')

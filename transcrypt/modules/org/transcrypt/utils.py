@@ -35,6 +35,7 @@ class CommandArgs:
         self.argParser.add_argument ('-dc', '--dcheck', help = "debug: perform lightweight consistency check", action = 'store_true')
         self.argParser.add_argument ('-da', '--dassert', help = "debug: activate assertions", action = 'store_true')
         self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
+        self.argParser.add_argument ('-dn', '--dnostrip', help = "debug: no comment stripping of __core__ and __builtin__ in-line modules", action = 'store_true')
         self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
         self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
         self.argParser.add_argument ('-ds', '--dstat', help = "debug: validate static typing using annotations", action = 'store_true')
@@ -45,6 +46,7 @@ class CommandArgs:
         self.argParser.add_argument ('-jk', '--jskeys', help = "interpret {key: 'value'} as {'key': 'value'} and forbid {key (): 'value'}, as JavaScript does. Disadvised, since it's less flexible than the Python interpretation. Either follow Python semantics by using {'key': 'value'} explicitly if you want literal keys or use __pragma__ ('jskeys') and __pragma__ ('nojskeys') locally instead to make clear local deviation from Python semantics", action = 'store_true')
         self.argParser.add_argument ('-jm', '--jsmod', help = "give %% and %%= JavaScript rather than Python behaviour. Disadvised, since it deviates from the mathematical 'modulo' operator. Either follow Python semantics or use __pragma__ ('jskeys') and __pragma__ ('nojskeys') locally instead to make clear local deviation.", action = 'store_true')
         self.argParser.add_argument ('-k', '--kwargs', help = "enable keyword arguments by default. In general this is disadvised, use __pragma__ ('kwargs') and __pragma__('nokwargs') locally instead to prevent bloated code", action = 'store_true')
+        self.argParser.add_argument ('-kc', '--keycheck', help = "enable checking for existence of dictionary keys. In general this is disadvised, use __pragma__ ('keycheck') and __pragma__('nokeycheck') locally instead to prevent bloated code", action = 'store_true')
         self.argParser.add_argument ('-l', '--license', help = "show license", action = 'store_true')
         self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
         self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
@@ -57,6 +59,7 @@ class CommandArgs:
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xp', '--xpath', nargs = '?', help = "additional module search paths, joined by $, #'s will be replaced by spaces")
         self.argParser.add_argument ('-xc', '--xconfimp', help = "confine imported names to directly importing module", action = 'store_true')
+        self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases.", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)

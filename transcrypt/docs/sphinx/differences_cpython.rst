@@ -19,13 +19,15 @@ Differences due to the 'lean and mean' design goal
 - Metaclasses only support overloading the __new__ method, covering 90% of the use cases.
 - The *super* keyword isn't supported, use explicit names of parent classes. The correct method resolution order is supported, also in case of multiple inheritance. Supporting *super* is still under discussion. It isn't hard, but doesn't have compelling benefits either. 
 - While class and function decorators are supported, method decorators are not, with the exception of @classmethod.
-- Currently only the  *, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
+- Currently only the  \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
 - The 'with' statement can currently only be used for file-like objects.
+- C-style string formatting is not supported.
 
 Differences due to interoperability with JavaScript and JavaScript libraries
 ----------------------------------------------------------------------------
 
 - Python objects, functions and methods and their JavaScript counterparts can in general be mixed freely without special syntax.
+- To be able to use JSON-like syntax in configuring JavaScript libraries, Transcrypt dicts are in fact JavaScript objects. Attribute keys that may denote a number are interpreted as such, all others are interpreted as strings.
 - Any amount of literal JavaScript can be included in-line or from a separate file using :ref:`\_\_pragma\_\_ ('js', ..., ...) <pragma_js>`.
 - The print function can be used to print to a DOM element or to the browser console.
 - The methods console.dir and console.log are also available when programming for the browser, as are in fact all JavaScript facilities, including the complete DOM-manipulation API.
@@ -34,7 +36,7 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 - You can use 'require' to load JavaScript modules on the fly and access them just as you would from JavaScript.
 
 Differences due to running Transcrypt applications in the browser, rather than on the desktop
---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
 
 - Transcrypt doesn't directly support the use of libraries written in C++ since, without special measures like compiling to asm.js, C++ doesn't run in the browser.
 - The browser programming model is event driven, so Transcrypt programs are even driven, as are their JavaScript counterparts.
