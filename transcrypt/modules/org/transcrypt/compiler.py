@@ -523,6 +523,7 @@ class Generator (ast.NodeVisitor):
         self.docStringEmitted = False
         self.expectingNonOverloadedLhsIndex = False
         self.lineNr = 1
+        self.propList = []
 
         self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
@@ -904,6 +905,31 @@ class Generator (ast.NodeVisitor):
             if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else
             None
         )
+
+    def pushProperty(self, node):
+        context = {
+            'node': node,
+            'scopes': self.scopes [1:],
+        }
+        self.propList.insert (0, context)
+
+    def emitProperties(self):
+        if self.propList:
+            self.emit (';')
+        while self.propList:
+            context = self.propList.pop ()
+
+            for scope in context ['scopes']:
+                self.inscope (scope.node)
+            className = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes()])
+            propName = context ['node'].name
+
+            self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propName))
+            self.emit ('property.call ({}, {}.{})'.format (className, className, '_get_' + propName))
+            self.emit (');')
+
+            for _ in range (len (context ['scopes'])):
+                self.descope ()
 
     def visit (self, node):
         try:
@@ -1849,6 +1875,9 @@ class Generator (ast.NodeVisitor):
 
         self.descope () # No earlier, class vars need it
 
+        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if there is outer class
+            self.emitProperties ()
+
     def visit_Compare (self, node):
         if len (node.comparators) > 1:
             self.emit ('(')
@@ -2155,6 +2184,7 @@ class Generator (ast.NodeVisitor):
             decorate = False
             isClassMethod = False
             isStaticMethod = False
+            isProperty = False
 
             if node.decorator_list:
                 for decorator in node.decorator_list:
@@ -2167,6 +2197,8 @@ class Generator (ast.NodeVisitor):
                         isClassMethod = True
                     elif nameCheck == 'staticmethod':
                         isStaticMethod = True
+                    elif nameCheck == 'property':
+                        isProperty = True
                     else:
                         decorate = True
 
@@ -2178,6 +2210,9 @@ class Generator (ast.NodeVisitor):
                     self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (node.name))
                 elif isStaticMethod:
                     self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (node.name))
+                elif isProperty:
+                    self.emit ('get {} () {{return __get__ (this, ', self.filterId ('_get_' + node.name))
+                    self.pushProperty (node)
                 else:
                     self.emit ('get {} () {{return __get__ (this, ', self.filterId (node.name))
 
@@ -2205,6 +2240,9 @@ class Generator (ast.NodeVisitor):
                     self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name), 'async ' if async else '')
                 elif isStaticMethod:
                     self.emit ('get {} () {{return {}function', self.filterId (node.name), 'async ' if async else '')
+                elif isProperty:
+                    self.emit('get {} () {{return __get__ (this, {}function', self.filterId('_get_' + node.name), 'async ' if async else '')
+                    self.pushProperty (node)
                 else:
                     self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name), 'async ' if async else '')
 
