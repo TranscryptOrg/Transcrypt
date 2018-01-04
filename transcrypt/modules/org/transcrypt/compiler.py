@@ -2202,19 +2202,21 @@ class Generator (ast.NodeVisitor):
                     else:
                         decorate = True
 
+            nodeName = node.name if not isProperty else '_get_' + node.name
+
             decoratorsUsed = 0
             if decorate:
                 if isGlobal:
-                    self.emit ('var {} = ', self.filterId (node.name))
+                    self.emit ('var {} = ', self.filterId (nodeName))
                 elif isClassMethod:
-                    self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (node.name))
+                    self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (nodeName))
                 elif isStaticMethod:
-                    self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (node.name))
+                    self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (nodeName))
                 elif isProperty:
-                    self.emit ('get {} () {{return __get__ (this, ', self.filterId ('_get_' + node.name))
+                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
                     self.pushProperty (node)
                 else:
-                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (node.name))
+                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
 
                 if self.allowOperatorOverloading:
                     self.emit ('__call__ (')
@@ -2235,16 +2237,16 @@ class Generator (ast.NodeVisitor):
 
             else:
                 if isGlobal:
-                    self.emit ('var {} = {}function', self.filterId (node.name), 'async ' if async else '')
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
                 elif isClassMethod:
-                    self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name), 'async ' if async else '')
+                    self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
                 elif isStaticMethod:
-                    self.emit ('get {} () {{return {}function', self.filterId (node.name), 'async ' if async else '')
+                    self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
                 elif isProperty:
-                    self.emit('get {} () {{return __get__ (this, {}function', self.filterId('_get_' + node.name), 'async ' if async else '')
+                    self.emit('get {} () {{return __get__ (this, {}function', self.filterId(nodeName), 'async ' if async else '')
                     self.pushProperty (node)
                 else:
-                    self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name), 'async ' if async else '')
+                    self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
 
             yieldStarIndex = len (self.targetFragments)
             # yieldStarLevel = self.indentLevel  # Unused variable, should we keep it?
@@ -2265,13 +2267,13 @@ class Generator (ast.NodeVisitor):
                     self.emit (';}}')
                 else:
                     if self.allowMemoizeCalls:
-                        self.emit (', \'{}\'', node.name)  # Name will be used as attribute name to add bound function to instance
+                        self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
                     self.emit (');}}')
 
-                if node.name == '__iter__':
+                if nodeName == '__iter__':
                     self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')
 
-                if node.name == '__next__':
+                if nodeName == '__next__':
                     self.emit (',\nnext: __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound method pointers
 
     def visit_GeneratorExp (self, node):
