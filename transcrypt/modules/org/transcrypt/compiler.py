@@ -516,7 +516,6 @@ class Generator (ast.NodeVisitor):
         self.targetFragments = []
         self.indentLevel = 0
         self.scopes = []
-        self.classDecorators = []
         self.use = set ()
         self.all = set ()
         self.importHeads = set ()
@@ -524,6 +523,7 @@ class Generator (ast.NodeVisitor):
         self.docStringEmitted = False
         self.expectingNonOverloadedLhsIndex = False
         self.lineNr = 1
+        self.propList = []
 
         self.aliasers = [self.getAliaser (*alias) for alias in (
 # START predef_aliases
@@ -863,86 +863,6 @@ class Generator (ast.NodeVisitor):
             self.visit (value)
             self.emit (')')
 
-    def pushDecorator (self, node):
-        if node.decorator_list:
-            context = {
-                'node': node,
-                'scopes': self.scopes [1:],
-                'opov': self.allowOperatorOverloading
-            }
-            self.classDecorators.insert (0, context)
-            
-    def emitDecorators (self, callable=None):
-
-        def emitDecorator (sourceName, targetName, decorator):
-            self.emit ('\n')
-            self.visit (
-                ast.Assign (
-                    targets = [ast.Name (
-                        id = sourceName,  # Rename to original callable
-                        ctx = ast.Store
-                    )],
-                    value = (
-                            # Simple decorator
-                            ast.Call (  # Call to decorating callable
-                                func = ast.Name (  # supplied literally by the name of the decorator
-                                    id = decorator.id,
-                                    ctx = ast.Load
-                                ),
-                                args = [ast.Name (  # Original callable as parameter, supplied by name
-                                    id = targetName,
-                                    ctx = ast.Load
-                                )],
-                                keywords = []
-                            )
-                        if type (decorator) == ast.Name else
-                            # Decorator factory
-                            ast.Call (  # Call to decorating callable
-                                func = decorator,  # Supplied to call by factory callable which is the decorator
-                                args = [ast.Name (  # Original callable as parameter, supplied by name
-                                    id = targetName,
-                                    ctx = ast.Load
-                                )],
-                                keywords = []
-                            )
-                    )
-                )
-            )
-
-        if callable:
-            for decorator in reversed (callable.decorator_list):
-                emitDecorator (callable.name, callable.name, decorator)
-        else:
-            while self.classDecorators:
-                context = self.classDecorators.pop ()
-                oldOpov = self.allowOperatorOverloading
-                self.allowOperatorOverloading = context ['opov']
-
-                if type (context ['node']) in (ast.FunctionDef, ast.AsyncFunctionDef):
-                    sourceName = '__impl__{}'.format (context ['node'] .name)
-                else:
-                    sourceName = context ['node'] .name
-
-                targetName = sourceName
-                classList = ''
-                if context ['scopes']:
-                    for scope in context ['scopes']:
-                        self.inscope (scope.node)
-                    classList = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes ()])
-                    if classList:
-                        targetName = '{}.{}'.format (classList, targetName)
-
-                for decorator in reversed (context ['node'].decorator_list):
-                    if not (type (decorator) == ast.Name and decorator.id in ('classmethod', 'staticmethod')):
-                        emitDecorator (sourceName, targetName, decorator)
-                        if classList:
-                            self.emit (';')
-
-                for _ in range (len (context ['scopes'])):
-                    self.descope ()
-
-                self.allowOperatorOverloading = oldOpov
-
     def nextTemp (self, name):
         if name in self.tempIndices:
             self.tempIndices [name] += 1
@@ -985,6 +905,31 @@ class Generator (ast.NodeVisitor):
             if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else
             None
         )
+
+    def pushProperty(self, node):
+        context = {
+            'node': node,
+            'scopes': self.scopes [1:],
+        }
+        self.propList.insert (0, context)
+
+    def emitProperties(self):
+        if self.propList:
+            self.emit (';')
+        while self.propList:
+            context = self.propList.pop ()
+
+            for scope in context ['scopes']:
+                self.inscope (scope.node)
+            className = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes()])
+            propName = context ['node'].name
+
+            self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propName))
+            self.emit ('property.call ({}, {}.{})'.format (className, className, '_get_' + propName))
+            self.emit (');')
+
+            for _ in range (len (context ['scopes'])):
+                self.descope ()
 
     def visit (self, node):
         try:
@@ -1756,7 +1701,7 @@ class Generator (ast.NodeVisitor):
                 node.func.id == '__call__'
             )
         ):
-            self.visit (ast.Call (                  # generate __call__ node on the fly and visit it                                                            
+            self.visit (ast.Call (                  # generate __call__ node on the fly and visit it
                 func = ast.Name (
                     id = '__call__',
                     ctx = ast.Load  # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too the overloading mechanism
@@ -1841,6 +1786,23 @@ class Generator (ast.NodeVisitor):
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
 
+        decoratorsUsed = 0
+        if node.decorator_list:
+            self.emit (' ')
+            if self.allowOperatorOverloading:
+                self.emit ('__call__ (')
+
+            for decorator in node.decorator_list:
+                if decoratorsUsed > 0:
+                    self.emit (' (')
+                self.visit (decorator)
+                decoratorsUsed += 1
+
+            if self.allowOperatorOverloading:
+                self.emit (', null, ')
+            else:
+                self.emit (' (')
+
         self.emit (' __class__ (\'{}\', [', self.filterId (node.name))
         if node.bases:
             for index, expr in enumerate (node.bases):
@@ -1901,6 +1863,9 @@ class Generator (ast.NodeVisitor):
 
         self.emit (')')
 
+        if decoratorsUsed:
+            self.emit (')' * decoratorsUsed)
+
         if self.allowDocAttribs and self.isDocString (node.body [0]):
             self.emitSetDoc (node.body [0])
 
@@ -1910,10 +1875,8 @@ class Generator (ast.NodeVisitor):
 
         self.descope () # No earlier, class vars need it
 
-        self.pushDecorator (node)
-
-        if type (self.getScope (). node) != ast.ClassDef:  # If outer class emits decorators
-            self.emitDecorators ()
+        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if there is outer class
+            self.emitProperties ()
 
     def visit_Compare (self, node):
         if len (node.comparators) > 1:
@@ -2209,90 +2172,108 @@ class Generator (ast.NodeVisitor):
                                             # Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
                                             # The rest of its use is only at compile time
 
-            if type (self.getScope () .node) in (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef):  # Global or function scope, so it's no method
-                if type (self.getScope () .node) == ast.Module:
-                    self.all.add (node.name)
+            isGlobal = type (self.getScope () .node) in (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef)  # Global or function scope, so it's no method
 
-                self.adaptLineNrString (node)
-                self.emit ('var {} = {}function', self.filterId (node.name), 'async ' if async else '')
+            if isGlobal and type (self.getScope () .node) == ast.Module:
+                self.all.add (node.name)
 
-                yieldStarIndex = len (self.targetFragments)
-                yieldStarLevel = self.indentLevel
-
-                self.emit (' ')
-                self.visit (node.args)
-                emitScopedBody ()
-                self.emit ('}}')
-
-                if self.allowDocAttribs and self.isDocString (node.body [0]):
-                    self.emitSetDoc (node.body [0])
-
-                self.emitDecorators (node)
-            else:                                                           # Class scope, so it's a method and needs the currying mechanism
+            if not isGlobal:
                 self.emit ('\n')
-                self.adaptLineNrString (node)
+            self.adaptLineNrString (node)
 
-                decorate = False
-                isClassMethod = False
-                isStaticMethod = False
+            decorate = False
+            isClassMethod = False
+            isStaticMethod = False
+            isProperty = False
 
-                if node.decorator_list:
-                    for decorator in node.decorator_list:
-                        if type(decorator) == ast.Name:
-                            nameCheck = decorator.id
-                        elif type(decorator) == ast.Call:
-                            nameCheck = decorator.func.id
+            if node.decorator_list:
+                for decorator in node.decorator_list:
+                    if type (decorator) == ast.Name:
+                        nameCheck = decorator.id
+                    elif type (decorator) == ast.Call:
+                        nameCheck = decorator.func.id
 
-                        if nameCheck == 'classmethod':
-                            isClassMethod = True
-                        elif nameCheck == 'staticmethod':
-                            isStaticMethod = True
-                        else:
-                            decorate = True
+                    if nameCheck == 'classmethod':
+                        isClassMethod = True
+                    elif nameCheck == 'staticmethod':
+                        isStaticMethod = True
+                    elif nameCheck == 'property':
+                        isProperty = True
+                    else:
+                        decorate = True
 
-                if decorate:
-                    self.emit ('__impl__{}: {}function', node.name, 'async ' if async else '')
+            nodeName = node.name if not isProperty else '_get_' + node.name
+
+            decoratorsUsed = 0
+            if decorate:
+                if isGlobal:
+                    self.emit ('var {} = ', self.filterId (nodeName))
+                elif isClassMethod:
+                    self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (nodeName))
+                elif isStaticMethod:
+                    self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (nodeName))
+                elif isProperty:
+                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
+                    self.pushProperty (node)
                 else:
-                    if isClassMethod:
-                        self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
-                    elif isStaticMethod:
-                        self.emit ('get {} () {{return {}function', self.filterId (node.name), 'async ' if async else '')
-                    else:
-                        self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (node.name),  'async ' if async else '')
+                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
 
-                yieldStarIndex = len (self.targetFragments)
-                yieldStarLevel = self.indentLevel
+                if self.allowOperatorOverloading:
+                    self.emit ('__call__ (')
 
-                self.emit (' ')
-                self.visit (node.args)
-                emitScopedBody ()
-                self.emit ('}}')
+                for decorator in node.decorator_list:
+                    if not (type (decorator) == ast.Name and decorator.id in ('classmethod', 'staticmethod')):
+                        if decoratorsUsed > 0:
+                            self.emit (' (')
+                        self.visit (decorator)
+                        decoratorsUsed += 1
 
-                if self.allowDocAttribs and self.isDocString (node.body [0]):
-                    self.emitSetDoc (node.body [0])
-
-                if self.allowMemoizeCalls:
-                    self.emit (', \'{}\'', node.name)   # Name will be used as attribute name to add bound function to instance
-
-                if decorate:
-                    self.emit (',\n')
-                    if isClassMethod:
-                        self.emit ('get {} () {{return __getcm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
-                    elif isStaticMethod:
-                        self.emit ('get {} () {{return __getsm__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
-                    else:
-                        self.emit ('get {} () {{return __get__ (this, this.__impl__{});}}', self.filterId (node.name), node.name)
-                    self.pushDecorator (node)
+                if self.allowOperatorOverloading:
+                    self.emit (', null, ')
                 else:
-                    if isStaticMethod:
-                        self.emit ('}}')
-                    else:
-                        self.emit (');}}')
+                    self.emit (' (')
 
-                if node.name == '__iter__':
+                self.emit ('{}function', 'async ' if async else '')
+
+            else:
+                if isGlobal:
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
+                elif isClassMethod:
+                    self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
+                elif isStaticMethod:
+                    self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
+                elif isProperty:
+                    self.emit('get {} () {{return __get__ (this, {}function', self.filterId(nodeName), 'async ' if async else '')
+                    self.pushProperty (node)
+                else:
+                    self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
+
+            yieldStarIndex = len (self.targetFragments)
+            # yieldStarLevel = self.indentLevel  # Unused variable, should we keep it?
+
+            self.emit (' ')
+            self.visit (node.args)
+            emitScopedBody ()
+            self.emit ('}}')
+
+            if self.allowDocAttribs and self.isDocString (node.body [0]):
+                self.emitSetDoc (node.body [0])
+
+            if decorate:
+                self.emit (')' * decoratorsUsed)
+
+            if not isGlobal:
+                if isStaticMethod:
+                    self.emit (';}}')
+                else:
+                    if self.allowMemoizeCalls:
+                        self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
+                    self.emit (');}}')
+
+                if nodeName == '__iter__':
                     self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')
 
-                if node.name == '__next__':
+                if nodeName == '__next__':
                     self.emit (',\nnext: __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound method pointers
 
     def visit_GeneratorExp (self, node):
@@ -2393,7 +2374,7 @@ class Generator (ast.NodeVisitor):
             for index, alias in enumerate (node.names):
                 if alias.name == '*':                                           # * Never refers to modules, only to entities in modules
                     if len (node.names) > 1:
-                        raise Error (
+                        raise utils.Error (
                             lineNr = node.lineno,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )

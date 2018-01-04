@@ -95,6 +95,10 @@ def run (autoTester):
                 autoTester.check(a, b)
                 return a + b
 
+            @property
+            def inner_property(self):
+                return 'I am property'
+
         def __init__(self):
             self.greetings = 'Hello'
 
@@ -123,6 +127,10 @@ def run (autoTester):
             autoTester.check(a + b)
             return a + b
 
+        @property
+        def simple_property(self):
+            return self.greetings
+
         def run(self):
             inner_obj = self.InnerClass()
             inner_obj.mymethod('Dog')
@@ -132,6 +140,7 @@ def run (autoTester):
             result1 = inner_obj.mystaticmethod('param1', 'param2')
             result2 = self.InnerClass.mystaticmethod('param1', 'param2')
             autoTester.check(result1 == result2)
+            autoTester.check(inner_obj.inner_property)
 
     myobj = MyClass()
     myobj.mymethod('Cat')
@@ -144,4 +153,5 @@ def run (autoTester):
     result2 = MyClass.mystaticmethod('param1', 'param2')
     autoTester.check(result1 == result2)
     autoTester.check(myobj.number(3))
+    autoTester.check(myobj.simple_property)
     myobj.run()
