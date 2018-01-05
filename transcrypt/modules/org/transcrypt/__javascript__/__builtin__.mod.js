@@ -48,7 +48,9 @@
 
 __pragma__ ('ifdef', '__complex__')
     var complex = __all__.complex;
+    var __conj__ = __all__.__conj__;
 __pragma__ ('endif')
+
     __all__.print = __all__.__terminal__.print;
     __all__.input = __all__.__terminal__.input;
 

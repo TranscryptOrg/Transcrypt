@@ -4,6 +4,7 @@ def run (autoTester):
     x = 567
     y = -3
     z = 5 * x + 2 * y
+    autoTester.check (x.conjugate () .real, x.conjugate () .imag)
     autoTester.check (x, y, z)
 
     __pragma__ ('opov')
@@ -11,7 +12,9 @@ def run (autoTester):
     a = 234 + 3j
     b = 4 - 5j
     c = complex (-6, 7)
+    d = 1
     autoTester.check (a, b, c)
+    autoTester.check (d.conjugate () .real, d.conjugate () .imag)
     
     t = 6 * x - 3 * y + 7   # Just to check, faster with 'noopov'
     autoTester.check (t)

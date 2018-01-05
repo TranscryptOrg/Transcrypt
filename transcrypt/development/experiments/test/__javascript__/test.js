@@ -1,7 +1,7 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-01-05 11:59:02
+// Transcrypt'ed from Python, 2018-01-05 16:22:57
 function test () {
-    var __symbols__ = ['__py3.6__', '__esv5__'];
+    var __symbols__ = ['__complex__', '__py3.6__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
     var __nest__ = function (headObject, tailNames, value) {
@@ -387,6 +387,123 @@ function test () {
 							return __accu0__;
 						}) ();
 					};
+					var complex = __class__ ('complex', [object], {
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, real, imag) {
+							if (typeof imag == 'undefined' || (imag != null && imag .hasOwnProperty ("__kwargtrans__"))) {;
+								var imag = null;
+							};
+							if (imag == null) {
+								if (py_typeof (real) == complex) {
+									self.real = real.real;
+									self.imag = real.imag;
+								}
+								else {
+									self.real = real;
+									self.imag = 0;
+								}
+							}
+							else {
+								self.real = real;
+								self.imag = imag;
+							}
+						});},
+						get __neg__ () {return __get__ (this, function (self) {
+							return complex (-(self.real), -(self.imag));
+						});},
+						get __exp__ () {return __get__ (this, function (self) {
+							var modulus = Math.exp (self.real);
+							return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag));
+						});},
+						get __log__ () {return __get__ (this, function (self) {
+							return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real));
+						});},
+						get __pow__ () {return __get__ (this, function (self, other) {
+							return self.__log__ ().__mul__ (other).__exp__ ();
+						});},
+						get __rpow__ () {return __get__ (this, function (self, real) {
+							return self.__mul__ (Math.log (real)).__exp__ ();
+						});},
+						get __mul__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real * other, self.imag * other);
+							}
+							else {
+								return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real);
+							}
+						});},
+						get __rmul__ () {return __get__ (this, function (self, real) {
+							return complex (self.real * real, self.imag * real);
+						});},
+						get __div__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real / other, self.imag / other);
+							}
+							else {
+								var denom = other.real * other.real + other.imag * other.imag;
+								return complex ((self.real * other.real + self.imag * other.imag) / denom, (self.imag * other.real - self.real * other.imag) / denom);
+							}
+						});},
+						get __rdiv__ () {return __get__ (this, function (self, real) {
+							var denom = self.real * self.real;
+							return complex ((real * self.real) / denom, (real * self.imag) / denom);
+						});},
+						get __add__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real + other, self.imag);
+							}
+							else {
+								return complex (self.real + other.real, self.imag + other.imag);
+							}
+						});},
+						get __radd__ () {return __get__ (this, function (self, real) {
+							return complex (self.real + real, self.imag);
+						});},
+						get __sub__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return complex (self.real - other, self.imag);
+							}
+							else {
+								return complex (self.real - other.real, self.imag - other.imag);
+							}
+						});},
+						get __rsub__ () {return __get__ (this, function (self, real) {
+							return complex (real - self.real, -(self.imag));
+						});},
+						get __repr__ () {return __get__ (this, function (self) {
+							return '({}{}{}j)'.format (self.real, (self.imag >= 0 ? '+' : ''), self.imag);
+						});},
+						get __str__ () {return __get__ (this, function (self) {
+							return __repr__ (self).__getslice__ (1, -(1), 1);
+						});},
+						get __eq__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return self.real == other;
+							}
+							else {
+								return self.real == other.real && self.imag == other.imag;
+							}
+						});},
+						get __ne__ () {return __get__ (this, function (self, other) {
+							if (typeof other === 'number') {
+								return self.real != other;
+							}
+							else {
+								return self.real != other.real || self.imag != other.imag;
+							}
+						});},
+						get conjugate () {return __get__ (this, function (self) {
+							return complex (self.real, -(self.imag));
+						});}
+					});
+					var __conj__ = function (aNumber) {
+						if (isinstance (aNumber, complex)) {
+							return complex (aNumber.real, -(aNumber.imag));
+						}
+						else {
+							return complex (aNumber, 0);
+						}
+					};
 					var __Terminal__ = __class__ ('__Terminal__', [object], {
 						__module__: __name__,
 						get __init__ () {return __get__ (this, function (self) {
@@ -487,9 +604,11 @@ function test () {
 						__all__.ValueError = ValueError;
 						__all__.Warning = Warning;
 						__all__.__Terminal__ = __Terminal__;
+						__all__.__conj__ = __conj__;
 						__all__.__name__ = __name__;
 						__all__.__sort__ = __sort__;
 						__all__.__terminal__ = __terminal__;
+						__all__.complex = complex;
 						__all__.filter = filter;
 						__all__.map = map;
 						__all__.sorted = sorted;
@@ -529,6 +648,8 @@ function test () {
     var sorted = __all__.sorted;
     var map = __all__.map;
     var filter = __all__.filter;
+    var complex = __all__.complex;
+    var __conj__ = __all__.__conj__;
     __all__.print = __all__.__terminal__.print;
     __all__.input = __all__.__terminal__.input;
     var __terminal__ = __all__.__terminal__;
@@ -843,8 +964,14 @@ function test () {
         return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);
     };
     __all__.min = min;
-    var abs = Math.abs;
-    __all__.abs = abs;
+    var abs = function (x) {
+        try {
+            return Math.abs (x);
+        }
+        catch (exception) {
+            return Math.sqrt (x.real * x.real + x.imag * x.imag);
+        }
+    };
     var round = function (number, ndigits) {
         if (ndigits) {
             var scale = Math.pow (10, ndigits);
@@ -2142,9 +2269,11 @@ function test () {
     };
     __all__.__setslice__ = __setslice__;	(function () {
 		var __name__ = '__main__';
-		__conj__ (a.b.c.d.f ());
+		var a = 1;
+		autoTester.check (__conj__ (a));
 		__pragma__ ('<all>')
 			__all__.__name__ = __name__;
+			__all__.a = a;
 		__pragma__ ('</all>')
 	}) ();
     return __all__;

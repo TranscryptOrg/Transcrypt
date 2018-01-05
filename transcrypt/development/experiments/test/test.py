@@ -1,3 +1,2 @@
-a.b.c.d.f () .conjugate ()
-
-
+a = 1
+autoTester.check (a.conjugate ())

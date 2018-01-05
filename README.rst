@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Conjugate of real now compiled correctly
 - Property decorators now supported for getters and setters
 - Metaclasses and method decorators now execute in correct order (issue 430)
 - Complex numbers now support comparison operators and conjugate
