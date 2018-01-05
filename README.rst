@@ -121,6 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Property decorators now supported for getters and setters
+- Metaclasses and method decorators now execute in correct order (issue 430)
+- Complex numbers now support comparison operators and conjugate
 - Max and min now accept sequences (issue 331)
 - Aliasers more completely dealt with in combination with keyword args and getattr, setattr, hasattr, delattr (issue 414)
 - Compiler switch -xt / --xtiny added to considerably reduce size of runtime if operator overloading isn't used
