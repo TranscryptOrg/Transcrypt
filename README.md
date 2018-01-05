@@ -1,5 +1,6 @@
 Python in the browser, precompiled for fast, small code
 =======================================================
+**Montly downloads from PyPi: 13,286**
 
 ![logo](http://www.transcrypt.org/illustrations/ruler_banner2.png "")
 
