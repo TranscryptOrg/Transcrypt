@@ -227,6 +227,13 @@ Metaclasses: overriding type.__new__ in a descendant metaclass
 	:tab-width: 4
 	:caption: Testlet: metaclasses
 
+Method and class decorators
+---------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/method_and_class_decorators/__init__.py
+	:tab-width: 4
+	:caption: Testlet: method_and_class_decorators
+
 Module builtin: a small part of it demo'ed
 ------------------------------------------
 
