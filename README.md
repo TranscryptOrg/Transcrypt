@@ -1,5 +1,5 @@
-Python in the browser, precompiled for speed
-============================================
+Python in the browser, precompiled for fast, small code
+=======================================================
 
 [http://www.transcrypt.org](http://www.transcrypt.org)
 
