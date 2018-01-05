@@ -26,3 +26,8 @@ Features
 - Extensive documentation with many code examples
 - Apache 2.0 license
 - Pip-install and go!
+
+As can be seen below, the compiled code is highly readable and resembles the Python original:
+
+![examplecode]http://www.transcrypt.org/illustrations/class_compare_doc.png "")
+
