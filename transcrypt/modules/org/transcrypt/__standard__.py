@@ -202,6 +202,21 @@ class complex:
     def __str__ (self):
         return __repr__ (self) [1 : -1]
         
+    def __eq__ (self, other):
+        if __typeof__ (other) is 'number':
+            return self.real == other
+        else:
+            return self.real == other.real and self.imag == other.imag
+        
+    def __neq__ (self, other):
+        if __typeof__ (other) is 'number':
+            return self.real != other
+        else:
+            return self.real != other.real or self.imag != other.imag
+        
+    def conjugate (self):
+        return complex (self.real, -self.imag)
+        
 __pragma__ ('endif')
 
 class __Terminal__:

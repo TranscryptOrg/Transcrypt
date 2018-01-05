@@ -86,7 +86,7 @@ Data structures: tuple, list, dict, set
 Decorators: function and class, with and without parameters
 -----------------------------------------------------------
 
-Transcrypt supports decorators on methods and classes. A decorator itself can be a function or an object with an overloaded __call__ operator. Parameterized decorator factories are also supported. Decorators on methods are not supported, except trivially for @classmethod. Methods decorated with @classmethod can be called on an object as demonstrated in the code below, not on a class. All flavours of properties are fully supported, though directly and not through decorator syntax. Extensive use of properties is demonstrated in the :ref:`properties testlet <autotest_properties>`.
+Transcrypt supports decorators on methods and classes. A decorator itself can be a function or an object with an overloaded __call__ operator. Parameterized decorator factories are also supported. All flavours of properties can be used directly or through decorator syntax. Extensive use of properties is demonstrated in the :ref:`properties testlet <autotest_properties>`.
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/decorators/__init__.py
 	:tab-width: 4
