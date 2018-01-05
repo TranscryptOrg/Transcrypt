@@ -1,7 +1,7 @@
 Python in the browser, precompiled for fast, small code
 =======================================================
 
-![logo](http://www.transcrypt.org/docs/html/_static/logo_sphinx.png "")
+![logo](http://www.transcrypt.org/illustrations/ruler_banner2.png "")
 
 This package requires Python 3.6, install from the command prompt by typing:
 
