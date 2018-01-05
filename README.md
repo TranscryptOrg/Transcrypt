@@ -1,7 +1,18 @@
 Python in the browser, precompiled for fast, small code
 =======================================================
 
+![logo](http://www.transcrypt.org/docs/html/_static/logo_sphinx.png "")
+
+This package requires Python 3.6, install from the command prompt by typing:
+
+*python -m pip install transcrypt*
+
+or in several alternative ways as explained in the docs, which can be found at:
+
 [http://www.transcrypt.org](http://www.transcrypt.org)
+
+Features
+========
 
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
