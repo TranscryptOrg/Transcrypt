@@ -29,4 +29,4 @@ Features
 
 As can be seen below, the compiled code is highly readable and resembles the Python original:
 
-![examplecode]http://www.transcrypt.org/illustrations/class_compare_doc.png "")
+![examplecode] (http://www.transcrypt.org/illustrations/class_compare_doc.png "")
