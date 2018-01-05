@@ -1,0 +1,100 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish',
+1 verbose cli   '--update-readme' ]
+2 info using npm@3.7.3
+3 info using node@v5.9.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'D:\\activ_tosh\\geatec\\transcrypt\\qquick\\Transcrypt',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\info_000\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle transcrypt@3.6.70~prepublish: transcrypt@3.6.70
+11 silly lifecycle transcrypt@3.6.70~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\info_000\\AppData\\Roaming\\npm-cache\\transcrypt\\3.6.70\\package.tgz',
+12 verbose tar pack   'D:\\activ_tosh\\geatec\\transcrypt\\qquick\\Transcrypt' ]
+13 verbose tarball C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package.tgz
+14 verbose folder D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt
+15 verbose addLocalTarball adding from inside cache C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package.tgz
+16 verbose correctMkdir C:\Users\info_000\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd transcrypt@3.6.70
+18 verbose afterAdd C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\info_000\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package\package.json written
+21 silly publish { name: 'transcrypt',
+21 silly publish   version: '3.6.70',
+21 silly publish   description: 'Python 3.6 to JavaScript compiler, small downloads, fast code, works with any JavaScript library, features embedded JSX.',
+21 silly publish   license: 'Apache-2.0',
+21 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/qquick/Transcrypt.git' },
+21 silly publish   keywords: [ 'python', 'compiler', 'browser', 'javascript' ],
+21 silly publish   author: { name: 'Jacques de Hooge' },
+21 silly publish   homepage: 'hhttp://www.transcrypt.org/',
+21 silly publish   readme: 'Python in the browser, precompiled for speed\r\n============================================\r\n\r\n[http://www.transcrypt.org](http://www.transcrypt.org)\r\n\r\n- Precompiled into highly readable, efficient JavaScript, downloads kB\'s rather than MB\'s\r\n- Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.\r\n- Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones\r\n- Pure Python 3.6 syntax, using Python\'s native parser\r\n- Debug directly from Python sourcecode, through integrated sourcemaps\r\n- Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers\r\n- Lightning fast JavaScript 5 and 6 code: call caching, for-loop optimization, in-line JavaScript etc.\r\n- Integrated static typechecking and minification at the tip of a command line switch\r\n- Also runs on top of node.js\r\n- Extensive documentation with many code examples\r\n- Apache 2.0 license\r\n- Pip-install and go!\r\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'f5e62f6d4c6a177b130cb27be1e738486fa44abf',
+21 silly publish   bugs: { url: 'https://github.com/qquick/Transcrypt/issues' },
+21 silly publish   _id: 'transcrypt@3.6.70',
+21 silly publish   _shasum: 'a3cca27cca084be8f34b08933657e299bb1f453b',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name transcrypt
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry uri https://registry.npmjs.org/transcrypt
+27 verbose publish registryBase https://registry.npmjs.org/
+28 silly publish uploading C:\Users\info_000\AppData\Roaming\npm-cache\transcrypt\3.6.70\package.tgz
+29 verbose request uri https://registry.npmjs.org/transcrypt
+30 verbose request sending authorization for write operation
+31 info attempt registry request try #1 at 1:48:19 PM
+32 verbose request using bearer token for auth
+33 verbose request id c5fd9b77fa7915d8
+34 http request PUT https://registry.npmjs.org/transcrypt
+35 http 403 https://registry.npmjs.org/transcrypt
+36 verbose headers { 'content-type': 'application/json',
+36 verbose headers   'cache-control': 'max-age=300',
+36 verbose headers   'content-length': '92',
+36 verbose headers   'accept-ranges': 'bytes',
+36 verbose headers   date: 'Fri, 05 Jan 2018 12:48:43 GMT',
+36 verbose headers   via: '1.1 varnish',
+36 verbose headers   connection: 'keep-alive',
+36 verbose headers   'x-served-by': 'cache-ams4130-AMS',
+36 verbose headers   'x-cache': 'MISS',
+36 verbose headers   'x-cache-hits': '0',
+36 verbose headers   'x-timer': 'S1515156500.639361,VS0,VE24244',
+36 verbose headers   vary: 'Accept-Encoding, Accept' }
+37 verbose request invalidating C:\Users\info_000\AppData\Roaming\npm-cache\registry.npmjs.org\transcrypt on PUT
+38 error publish Failed PUT 403
+39 verbose stack Error: You cannot publish over the previously published version 3.6.70. : transcrypt
+39 verbose stack     at makeError (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:264:12)
+39 verbose stack     at CachingRegistryClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:252:14)
+39 verbose stack     at Request._callback (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:172:14)
+39 verbose stack     at Request.self.callback (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:199:22)
+39 verbose stack     at emitTwo (events.js:100:13)
+39 verbose stack     at Request.emit (events.js:185:7)
+39 verbose stack     at Request.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1036:10)
+39 verbose stack     at emitOne (events.js:95:20)
+39 verbose stack     at Request.emit (events.js:182:7)
+39 verbose stack     at IncomingMessage.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:963:12)
+40 verbose statusCode 403
+41 verbose pkgid transcrypt
+42 verbose cwd D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt
+43 error Windows_NT 10.0.15063
+44 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish" "--update-readme"
+45 error node v5.9.1
+46 error npm  v3.7.3
+47 error code E403
+48 error You cannot publish over the previously published version 3.6.70. : transcrypt
+49 error If you need help, you may report this error at:
+49 error     <https://github.com/npm/npm/issues>
+50 verbose exit [ 1, true ]

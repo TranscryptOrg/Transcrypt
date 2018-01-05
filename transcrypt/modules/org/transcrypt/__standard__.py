@@ -123,6 +123,7 @@ def filter (func, iterable):
     return [item for item in iterable if func (item)]
     
 __pragma__ ('ifdef', '__complex__')
+
 class complex:
     def __init__ (self, real, imag = None):
         if imag == None:
@@ -208,7 +209,7 @@ class complex:
         else:
             return self.real == other.real and self.imag == other.imag
         
-    def __neq__ (self, other):
+    def __ne__ (self, other):
         if __typeof__ (other) is 'number':
             return self.real != other
         else:
@@ -216,6 +217,12 @@ class complex:
         
     def conjugate (self):
         return complex (self.real, -self.imag)
+        
+def __conj__ (aNumber):
+    if isinstance (aNumber, complex):
+        return complex (aNumber.real, -aNumber.imag)
+    else:
+        return complex (aNumber, 0)
         
 __pragma__ ('endif')
 

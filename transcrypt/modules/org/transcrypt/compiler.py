@@ -1660,7 +1660,26 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.args [0])
                 self.emit ('--')
                 return
-
+                
+        elif (
+            type (node.func) == ast.Attribute and
+            node.func.attr == 'conjugate'
+        ):
+            try:
+                self.visit (
+                    ast.Call (
+                        func = ast.Name (
+                            id = '__conj__',
+                            ctx = ast.Load
+                        ),
+                        args = [node.func.value],
+                        keywords = []
+                    )
+                )
+                return
+            except:
+                print (7777, traceback.format_exc ())
+            
         elif (
             type (node.func) == ast.Attribute and 
             self.replaceSend and

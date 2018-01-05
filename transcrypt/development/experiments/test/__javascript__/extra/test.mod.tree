@@ -1,0 +1,21 @@
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = c1
+						ctx: Load 
+					attr: str = conjugate
+					ctx: Load 
+				args: list 
+				keywords: list 
+                
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = conjugate
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = c2
+						ctx: Load 
+				keywords: list

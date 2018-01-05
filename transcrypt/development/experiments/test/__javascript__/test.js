@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2017-12-30 15:55:26
+// Transcrypt'ed from Python, 2018-01-05 11:59:02
 function test () {
     var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -140,7 +140,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.67';
+							self.transpiler_version = '3.6.70';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -835,9 +835,13 @@ function test () {
         return aChar.charCodeAt (0);
     };
     __all__.ord = ord;
-    var max = Math.max;
+    var max = function (nrOrSeq) {
+        return arguments.length == 1 ? Math.max.apply (null, nrOrSeq) : Math.max.apply (null, arguments);
+    };
     __all__.max = max;
-    var min = Math.min;
+    var min = function (nrOrSeq) {
+        return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);
+    };
     __all__.min = min;
     var abs = Math.abs;
     __all__.abs = abs;
@@ -2138,51 +2142,9 @@ function test () {
     };
     __all__.__setslice__ = __setslice__;	(function () {
 		var __name__ = '__main__';
-		var Foo = __class__ ('Foo', [object], {
-			__module__: __name__,
-		});
-		var foo = Foo ();
-		foo.bar = 'baz';
-		foo.py_name = 'hello';
-		foo.py_default = 'world';
-		print ((function () {
-			var __accu0__ = [];
-			var __iterable0__ = dir (foo);
-			for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-				var x = __iterable0__ [__index0__];
-				if (!(x.startswith ('__'))) {
-					__accu0__.append (x);
-				}
-			}
-			return __accu0__;
-		}) ());
-		var foo = function () {
-			var kwargs = dict ();
-			if (arguments.length) {
-				var __ilastarg0__ = arguments.length - 1;
-				if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-					var __allkwargs0__ = arguments [__ilastarg0__--];
-					for (var __attrib0__ in __allkwargs0__) {
-						switch (__attrib0__) {
-							default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
-						}
-					}
-					delete kwargs.__kwargtrans__;
-				}
-				var args = tuple ([].slice.apply (arguments).slice (0, __ilastarg0__ + 1));
-			}
-			else {
-				var args = tuple ();
-			}
-			var py_default = kwargs.py_get ('default', 'bar');
-			return py_default;
-		};
-		print (foo ());
-		print (foo (__kwargtrans__ ({py_default: 'Hello World'})));
+		__conj__ (a.b.c.d.f ());
 		__pragma__ ('<all>')
-			__all__.Foo = Foo;
 			__all__.__name__ = __name__;
-			__all__.foo = foo;
 		__pragma__ ('</all>')
 	}) ();
     return __all__;

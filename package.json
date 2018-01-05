@@ -1,0 +1,16 @@
+{
+  "name": "transcrypt",
+  "version": "3.6.70",
+  "description": "Python 3.6 to JavaScript compiler, small downloads, fast code, works with any JavaScript library, features embedded JSX.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qquick/Transcrypt"
+  },
+  "keywords": ["python", "compiler", "browser", "javascript"],
+  "author": "Jacques de Hooge",
+  "homepage": "hhttp://www.transcrypt.org/"
+}
