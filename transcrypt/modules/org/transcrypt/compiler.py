@@ -906,14 +906,23 @@ class Generator (ast.NodeVisitor):
             None
         )
 
-    def pushProperty(self, node):
+    def pushProperty(self, functionName):
         context = {
-            'node': node,
+            'funcname': functionName,
             'scopes': self.scopes [1:],
         }
-        self.propList.insert (0, context)
+        self.propList.append (context)
 
     def emitProperties(self):
+
+        def emmitProperty(className, propertyName, getterFunction, setterFunction=None):
+            self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propertyName))
+            if setterFunction:
+                self.emit ('property.call ({0}, {0}.{1}, {0}.{2})'.format (className, getterFunction, setterFunction))
+            else:
+                self.emit ('property.call ({0}, {0}.{1})'.format (className, getterFunction))
+            self.emit (');')
+
         if self.propList:
             self.emit (';')
         while self.propList:
@@ -921,15 +930,43 @@ class Generator (ast.NodeVisitor):
 
             for scope in context ['scopes']:
                 self.inscope (scope.node)
-            className = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes()])
-            propName = context ['node'].name
-
-            self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propName))
-            self.emit ('property.call ({}, {}.{})'.format (className, className, '_get_' + propName))
-            self.emit (');')
-
+            className = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes ()])
             for _ in range (len (context ['scopes'])):
                 self.descope ()
+
+            propName = context ['funcname'] [5:]
+            funcName = context ['funcname']
+            isGetter = funcName [:5] == '_get_'
+
+            # find a pair
+            pairFound = False
+            for context2 in self.propList:
+                for scope in context ['scopes']:
+                    self.inscope (scope.node)
+                className2 = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes ()])
+                for _ in range(len (context ['scopes'])):
+                    self.descope ()
+
+                propName2 = context2 ['funcname'] [5:]
+                funcName2 = context2 ['funcname']
+                isGetter2 = funcName2 [:5] == '_get_'
+                if className == className2 and propName == propName2 and isGetter != isGetter2:
+                    # remove pair
+                    self.propList.remove (context2)
+                    if isGetter:
+                        emmitProperty (className, propName, funcName, funcName2)
+                    else:
+                        emmitProperty (className, propName, funcName2, funcName)
+                    pairFound = True
+                    break
+
+            if not pairFound:
+                if isGetter:
+                    emmitProperty (className, propName, funcName)
+                else:
+                    raise utils.Error(
+                        message='\n\tProperty setter declared without getter\n'
+                    )
 
     def visit (self, node):
         try:
@@ -2184,7 +2221,9 @@ class Generator (ast.NodeVisitor):
             decorate = False
             isClassMethod = False
             isStaticMethod = False
-            isProperty = False
+            isPropertyGetter = False
+            isPropertySetter = False
+            propertyFuncName = ''
 
             if node.decorator_list:
                 for decorator in node.decorator_list:
@@ -2192,17 +2231,37 @@ class Generator (ast.NodeVisitor):
                         nameCheck = decorator.id
                     elif type (decorator) == ast.Call:
                         nameCheck = decorator.func.id
+                    elif type(decorator) == ast.Attribute:
+                        nameCheck = '.'.join((decorator.value.id, decorator.attr))
+                    else:
+                        raise utils.Error(
+                            lineNr=self.lineNr,
+                            message='\n\tUnknown decorator type\n'
+                        )
 
                     if nameCheck == 'classmethod':
                         isClassMethod = True
                     elif nameCheck == 'staticmethod':
                         isStaticMethod = True
                     elif nameCheck == 'property':
-                        isProperty = True
+                        isPropertyGetter = True
+                        propertyFuncName = '_get_' + node.name
+                    elif re.match('[a-zA-Z0-9_]+\.setter', nameCheck):
+                        isPropertySetter = True
+                        propertyFuncName = '_set_' + re.match('([a-zA-Z0-9_]+)\.setter', nameCheck).group(1)
                     else:
                         decorate = True
 
-            nodeName = node.name if not isProperty else '_get_' + node.name
+            if sum([isClassMethod, isStaticMethod, isPropertyGetter, isPropertySetter]) > 1:
+                raise utils.Error(
+                    lineNr = self.lineNr,
+                    message = '\n\tstaticmethod, classmethod and property decorators can\'t be mixed\n'
+                )
+
+            if isPropertyGetter or isPropertySetter:
+                nodeName = propertyFuncName
+            else:
+                nodeName = node.name
 
             decoratorsUsed = 0
             if decorate:
@@ -2212,9 +2271,9 @@ class Generator (ast.NodeVisitor):
                     self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (nodeName))
                 elif isStaticMethod:
                     self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (nodeName))
-                elif isProperty:
+                elif isPropertyGetter or isPropertySetter:
                     self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
-                    self.pushProperty (node)
+                    self.pushProperty (nodeName)
                 else:
                     self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
 
@@ -2242,9 +2301,9 @@ class Generator (ast.NodeVisitor):
                     self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
                 elif isStaticMethod:
                     self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
-                elif isProperty:
+                elif isPropertyGetter or isPropertySetter:
                     self.emit('get {} () {{return __get__ (this, {}function', self.filterId(nodeName), 'async ' if async else '')
-                    self.pushProperty (node)
+                    self.pushProperty (nodeName)
                 else:
                     self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
 

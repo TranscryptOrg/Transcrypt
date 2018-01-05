@@ -97,7 +97,7 @@ def run (autoTester):
 
             @property
             def inner_property(self):
-                return 'I am property'
+                return 'I am a property'
 
         def __init__(self):
             self.greetings = 'Hello'
@@ -131,6 +131,10 @@ def run (autoTester):
         def simple_property(self):
             return self.greetings
 
+        @simple_property.setter
+        def simple_property(self, value):
+            self.greetings = value
+
         def run(self):
             inner_obj = self.InnerClass()
             inner_obj.mymethod('Dog')
@@ -154,4 +158,7 @@ def run (autoTester):
     autoTester.check(result1 == result2)
     autoTester.check(myobj.number(3))
     autoTester.check(myobj.simple_property)
+    myobj.simple_property = 'New value'
+    autoTester.check(myobj.simple_property)
+    autoTester.check(myobj.greetings == myobj.simple_property)
     myobj.run()
