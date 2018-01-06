@@ -31,6 +31,16 @@ def zfill(s, c):
         return s
 
 
+def rjust(s, c):
+    s = str(s)
+    if len(s) < c:
+        # __pragma__('opov')
+        return ' ' * (c - len(s)) + s
+        # __pragma__('noopov')
+    else:
+        return s
+
+
 def _cmp(x, y):
     return 0 if x == y else 1 if x > y else -1
 
@@ -768,7 +778,7 @@ class date:
         return "{} {} {} 00:00:00 {}".format(
             _DAYNAMES[weekday],
             _MONTHNAMES[self._month],
-            zfill(self._day, 2), zfill(self._year, 4))
+            rjust(self._day, 2), zfill(self._year, 4))
 
     def strftime(self, fmt):
         """Format using strftime()."""
