@@ -46,6 +46,7 @@ import metaclasses
 import method_and_class_decorators
 import module_builtin
 import module_cmath
+import module_datetime
 
 # __pragma__ ('ifdef', '__esv6__')
 if '__esv6__' in __symbols__:
@@ -117,6 +118,7 @@ autoTester.run (metaclasses, 'metaclasses')
 autoTester.run (method_and_class_decorators, 'method_and_class_decorators')
 autoTester.run (module_builtin, 'module_builtin')
 autoTester.run (module_cmath, 'module_cmath')
+autoTester.run (module_datetime, 'module_datetime')
 
 # __pragma__ ('ifdef', '__esv6__')
 if '__esv6__' in __symbols__:
