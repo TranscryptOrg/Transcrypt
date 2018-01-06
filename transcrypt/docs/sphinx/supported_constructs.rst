@@ -248,6 +248,13 @@ Module cmath: allmost all of Python's cmath module
 	:tab-width: 4
 	:caption: Testlet: module_cmath
 
+Module datetime: transcryption of Python's datetime module
+----------------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/module_datetime/__init__.py
+	:tab-width: 4
+	:caption: Testlet: module_datetime
+
 Module itertools: allmost all of Python's itertools module
 ----------------------------------------------------------
 
@@ -268,6 +275,44 @@ Module random: most important functions of Python's random module
 .. literalinclude:: ../../development/manual_tests/module_random/module_random.py
 	:tab-width: 4
 	:caption: Manual_test: module_random
+
+Module re: transcryption of Python's re module
+----------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/re/autotest.py
+	:tab-width: 4
+	:caption: Testlet: re/autotest
+
+.. literalinclude:: ../../development/automated_tests/re/basictests.py
+	:tab-width: 4
+	:caption: Testlet: re/basictests
+
+.. literalinclude:: ../../development/automated_tests/re/basic_pyre.py
+	:tab-width: 4
+	:caption: Testlet: re/basic_pyre
+
+.. literalinclude:: ../../development/automated_tests/re/basic_jsre.py
+	:tab-width: 4
+	:caption: Testlet: re/basictests
+
+Module time: transcryption of Python's time module
+--------------------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/time/autotest.py
+	:tab-width: 4
+	:caption: Testlet: time/testlet0
+
+.. literalinclude:: ../../development/automated_tests/time/testlet0.py
+	:tab-width: 4
+	:caption: Testlet: time/testlet0
+
+.. literalinclude:: ../../development/automated_tests/time/mult_time.py
+	:tab-width: 4
+	:caption: Testlet: time/mult_time
+
+.. literalinclude:: ../../development/automated_tests/time/strptime.py
+	:tab-width: 4
+	:caption: Testlet: time/strptime
 
 Modules: hierarchical, both local to the project and global url-based
 ---------------------------------------------------------------------

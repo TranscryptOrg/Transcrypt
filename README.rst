@@ -41,7 +41,7 @@ Also, code can be tested from the command prompt using stubs.
 Main differences with CPython
 =============================
 
-- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. math, cmath, random, itertools, re, time and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
+- Web batteries: Seamless access to any existing JavaScript library has been favored over inclusion of many Python libraries in the distribution. There are some exceptions to this rule, e.g. math, cmath, random, itertools, re, time, datetime and turtle, and some more may follow, but in general the accent is on libraries that are relevant in the browser.
 - No eval and exec of Python code. This is again part of the concept. Transcrypt code is compiled, optimized and minified in advance to warant fast page loads. In this respect its design goal is fundamentally different from tools that compile on the fly in the browser. Transcrypt is targeted towards building professional, extensive, real world web applications that load and run as fast as their JavaScript counterparts, but offers Pythonically clean, modular structure and maintainability.
 
 License
@@ -121,6 +121,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Examples for datetime, time and re added to docs
+- Module datetime added (pr 435)
 - Conjugate of real now compiled correctly
 - Property decorators now supported for getters and setters
 - Metaclasses and method decorators now execute in correct order (issue 430)
