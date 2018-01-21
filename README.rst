@@ -1,6 +1,3 @@
-`TRY IT NOW! <http://www.transcrypt.org/#hello>`_
-=================================================
-
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
     :alt: Logo
     :target: http://www.transcrypt.org
@@ -20,6 +17,9 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Extensive documentation with many code examples
 - Apache 2.0 license
 - Pip-install and go!
+
+`TRY IT NOW! <http://www.transcrypt.org/#hello>`_
+=================================================
 
 Latest stable release: Paris
 ============================
