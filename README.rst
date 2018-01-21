@@ -2,11 +2,15 @@
     :alt: Logo
     :target: http://www.transcrypt.org
     
+.. figure:: http://www.transcrypt.org/illustrations/workflow.png
+    :alt: Workflow
+    :target: http://www.python.org
+    
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
-- Multiple inheritance, optional operator overloading, metaclasses, properties, class and function decorators, hierarchical modules etc.
+- Multiple inheritance, optional operator overloading, metaclasses, async/await, properties, decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
 - Pure Python 3.6 syntax, using Python's native parser
 - Debug directly from Python sourcecode, through integrated sourcemaps
