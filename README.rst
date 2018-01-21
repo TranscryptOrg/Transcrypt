@@ -18,13 +18,11 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-`>>> TRY IT NOW!_ <http://www.transcrypt.org/#hello>`_
-======================================================
-
 Latest stable release: Paris
 ============================
 
-To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation <http://www.transcrypt.org/docs/html/index.html>`_.
+`>>> INSTALL IT NOW!_ <http://www.transcrypt.org/#hello>`_
+======================================================
 
 Thanks to everyone who contributed!
 
