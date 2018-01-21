@@ -21,7 +21,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 Latest stable release: Paris
 ============================
 
-`>>> INSTALL IT NOW!_ <http://www.transcrypt.org/#hello>`_
+`>>> GET STARTED!_ <http://www.transcrypt.org/#hello>`_
 ======================================================
 
 Thanks to everyone who contributed!
