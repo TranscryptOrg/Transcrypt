@@ -5,7 +5,7 @@
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 
-.. figure:: http://www.transcrypt.org/illustrations/workflow.png
+.. figure:: http://www.transcrypt.org/illustrations/workflow.png?v=2
     :alt: Workflow
     :target: http://www.transcrypt.org
     
