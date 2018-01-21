@@ -1,6 +1,6 @@
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
     :alt: Logo
-    :target: http://www.transcrypt.org
+    :target: http://www.transcrypt.org/#hello
         
 `TRY IT NOW! <http://www.transcrypt.org/#hello>`_
 =================================================
