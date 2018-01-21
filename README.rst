@@ -4,10 +4,6 @@
     
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
-
-.. figure:: http://www.transcrypt.org/illustrations/workflow.png?v=2
-    :alt: Workflow
-    :target: http://www.transcrypt.org
     
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, async/await, properties, decorators, hierarchical modules etc.
@@ -21,6 +17,9 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Extensive documentation with many code examples
 - Apache 2.0 license
 - Pip-install and go!
+
+.. figure:: http://www.transcrypt.org/illustrations/workflow.png?v=2
+    :alt: Workflow
 
 Latest stable release: Paris
 ============================
