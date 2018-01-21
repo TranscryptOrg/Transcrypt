@@ -18,7 +18,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-`TRY IT NOW! <http://www.transcrypt.org/#hello>`_
+`>>> TRY IT NOW!_ <http://www.transcrypt.org/#hello>`_
 =================================================
 
 Latest stable release: Paris
