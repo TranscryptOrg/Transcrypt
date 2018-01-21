@@ -2,8 +2,7 @@
     :alt: Logo
     :target: http://www.transcrypt.org
     
-`Try it! 
-<http://www.transcrypt.org/#hello>`_
+
     
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
@@ -21,11 +20,13 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
+`Try it! <http://www.transcrypt.org/#hello>`_
+=============================================
+
 Latest stable release: Paris
 ============================
 
-To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation 
-<http://www.transcrypt.org/docs/html/index.html>`_.
+To obtain the latest stable release including all updates, install it from PyPi as described in the `documentation <http://www.transcrypt.org/docs/html/index.html>`_.
 
 Thanks to everyone who contributed!
 
