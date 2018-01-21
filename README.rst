@@ -2,9 +2,6 @@
     :alt: Logo
     :target: http://www.transcrypt.org
         
-.. figure:: http://www.transcrypt.org/illustrations_moving/pong_demo.gif?v=3
-    :alt: Pong
-        
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
 
