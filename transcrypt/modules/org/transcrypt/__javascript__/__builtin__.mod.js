@@ -339,44 +339,19 @@ __pragma__ ('endif')
     };
     __all__.py_typeof = py_typeof;
     
-    var isA = function (queryClass, classinfo) {
-        if (queryClass == classinfo) {
-            return true;
-        }
-        for (var index = 0; index < queryClass.__bases__.length; index++) {
-            if (isA (queryClass.__bases__ [index], classinfo)) {
+    var issubclass = function (aClass, classinfo) {
+        function isA (queryClass) {
+            if (queryClass == classinfo) {
                 return true;
             }
-        }
-        return false;
-    };
-
-    var isinstance = function (anObject, classinfo) {
-        if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
-__pragma__ ('ifdef', '__esv6__')
-            for (let aClass of classinfo) {
-__pragma__ ('else')
-            for (var index = 0; index < classinfo.length; index++) {
-                var aClass = classinfo [index];
-__pragma__ ('endif')
-                if (isinstance (anObject, aClass)) {
+            for (var index = 0; index < queryClass.__bases__.length; index++) {
+                if (isA (queryClass.__bases__ [index], classinfo)) {
                     return true;
                 }
             }
             return false;
-        }
-
-        try {                   // Most frequent use case first
-            return '__class__' in anObject ? isA (anObject.__class__, classinfo) : anObject instanceof classinfo;
-        }
-        catch (exception) {     // Using isinstance on primitives assumed rare
-            var aType = py_typeof (anObject);
-            return aType == classinfo || classinfo == object || (aType == bool && classinfo == int);
-        }
-    };
-    __all__.isinstance = isinstance;
-    
-    var issubclass = function (aClass, classinfo) {
+        };
+        
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
 __pragma__ ('ifdef', '__esv6__')
             for (let aClass2 of classinfo) {
@@ -392,13 +367,23 @@ __pragma__ ('endif')
         }
 
         try {                   // Most frequent use case first
-            return isA (aClass, classinfo);
+            return isA (aClass);
         }
         catch (exception) {     // Using issubclass on primitives assumed rare 
             return aClass == classinfo || classinfo == object || (aClass == bool && classinfo == int);
         }
     };
     __all__.issubclass = issubclass;
+
+    var isinstance = function (anObject, classinfo) {
+        try {
+            return '__class__' in anObject ? issubclass (anObject.__class__, classinfo) : issubclass (py_typeof (anObject), classinfo);
+        }
+        catch (exception) {
+            return issubclass (py_typeof (anObject), classinfo);
+        }
+    };
+    __all__.isinstance = isinstance;
     
     var callable = function (anObject) {
         return anObject && typeof anObject == 'object' && '__call__' in anObject ? true : typeof anObject === 'function';
