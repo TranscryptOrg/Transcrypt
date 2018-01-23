@@ -121,6 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Fix for callable (None) (issue 450)
+- Start made with /tutorials/baseline mini Python tutorial
+- Fix for decorator from module (issue 448)
 - Examples for datetime, time and re added to docs
 - Module datetime added (pr 435)
 - Conjugate of real now compiled correctly
