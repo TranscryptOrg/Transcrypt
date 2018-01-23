@@ -2247,17 +2247,18 @@ class Generator (ast.NodeVisitor):
 
             if node.decorator_list:
                 for decorator in node.decorator_list:
-                    if type (decorator) == ast.Name:
-                        nameCheck = decorator.id
-                    elif type (decorator) == ast.Call:
-                        nameCheck = decorator.func.id
-                    elif type(decorator) == ast.Attribute:
-                        nameCheck = '.'.join((decorator.value.id, decorator.attr))
-                    else:
-                        raise utils.Error(
-                            lineNr=self.lineNr,
-                            message='\n\tUnknown decorator type\n'
-                        )
+                    decoratorNode = decorator
+                    decoratorType = type (decoratorNode)
+                    nameCheck = ''
+                    while decoratorType != ast.Name:
+                        if decoratorType == ast.Call:
+                            decoratorNode = decoratorNode.func
+                        elif decoratorType == ast.Attribute:
+                            nameCheck = '.' + decoratorNode.attr + nameCheck
+                            decoratorNode = decoratorNode.value
+                        decoratorType = type (decoratorNode)
+
+                    nameCheck = decoratorNode.id + nameCheck
 
                     if nameCheck == 'classmethod':
                         isClassMethod = True
@@ -2266,14 +2267,14 @@ class Generator (ast.NodeVisitor):
                     elif nameCheck == 'property':
                         isPropertyGetter = True
                         propertyFuncName = '_get_' + node.name
-                    elif re.match('[a-zA-Z0-9_]+\.setter', nameCheck):
+                    elif re.match ('[a-zA-Z0-9_]+\.setter', nameCheck):
                         isPropertySetter = True
-                        propertyFuncName = '_set_' + re.match('([a-zA-Z0-9_]+)\.setter', nameCheck).group(1)
+                        propertyFuncName = '_set_' + re.match ('([a-zA-Z0-9_]+)\.setter', nameCheck).group (1)
                     else:
                         decorate = True
 
-            if sum([isClassMethod, isStaticMethod, isPropertyGetter, isPropertySetter]) > 1:
-                raise utils.Error(
+            if sum ([isClassMethod, isStaticMethod, isPropertyGetter, isPropertySetter]) > 1:
+                raise utils.Error (
                     lineNr = self.lineNr,
                     message = '\n\tstaticmethod, classmethod and property decorators can\'t be mixed\n'
                 )
