@@ -338,18 +338,18 @@ __pragma__ ('endif')
         }
     };
     __all__.py_typeof = py_typeof;
-	
-	var isA = function (queryClass, classinfo) {
-		if (queryClass == classinfo) {
-			return true;
-		}
-		for (var index = 0; index < queryClass.__bases__.length; index++) {
-			if (isA (queryClass.__bases__ [index], classinfo)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    
+    var isA = function (queryClass, classinfo) {
+        if (queryClass == classinfo) {
+            return true;
+        }
+        for (var index = 0; index < queryClass.__bases__.length; index++) {
+            if (isA (queryClass.__bases__ [index], classinfo)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     var isinstance = function (anObject, classinfo) {
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
