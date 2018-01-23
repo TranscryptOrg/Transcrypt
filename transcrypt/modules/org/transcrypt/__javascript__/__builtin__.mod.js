@@ -338,8 +338,8 @@ __pragma__ ('endif')
         }
     };
     __all__.py_typeof = py_typeof;
-
-    var isinstance = function (anObject, classinfo) {
+    
+    var issubclass = function (aClass, classinfo) {
         function isA (queryClass) {
             if (queryClass == classinfo) {
                 return true;
@@ -350,16 +350,16 @@ __pragma__ ('endif')
                 }
             }
             return false;
-        }
-
+        };
+        
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
 __pragma__ ('ifdef', '__esv6__')
-            for (let aClass of classinfo) {
+            for (let aClass2 of classinfo) {
 __pragma__ ('else')
             for (var index = 0; index < classinfo.length; index++) {
-                var aClass = classinfo [index];
+                var aClass2 = classinfo [index];
 __pragma__ ('endif')
-                if (isinstance (anObject, aClass)) {
+                if (issubclass (aClass, aClass2)) {
                     return true;
                 }
             }
@@ -367,24 +367,27 @@ __pragma__ ('endif')
         }
 
         try {                   // Most frequent use case first
-            return '__class__' in anObject ? isA (anObject.__class__) : anObject instanceof classinfo;
+            return isA (aClass);
         }
-        catch (exception) {     // Using isinstance on primitives assumed rare
-            var aType = py_typeof (anObject);
-            return aType == classinfo || (aType == bool && classinfo == int);
+        catch (exception) {     // Using issubclass on primitives assumed rare 
+            return aClass == classinfo || classinfo == object || (aClass == bool && classinfo == int);
+        }
+    };
+    __all__.issubclass = issubclass;
+
+    var isinstance = function (anObject, classinfo) {
+        try {
+            return '__class__' in anObject ? issubclass (anObject.__class__, classinfo) : issubclass (py_typeof (anObject), classinfo);
+        }
+        catch (exception) {
+            return issubclass (py_typeof (anObject), classinfo);
         }
     };
     __all__.isinstance = isinstance;
     
     var callable = function (anObject) {
-        if (anObject && typeof anObject == 'object' && '__call__' in anObject) {
-            return true;
-        }
-        else {
-            return typeof anObject === 'function';
-        }
+        return anObject && typeof anObject == 'object' && '__call__' in anObject ? true : typeof anObject === 'function';
     };
-    
     __all__.callable = callable;
 
     // Repr function uses __repr__ method, then __str__, then toString
