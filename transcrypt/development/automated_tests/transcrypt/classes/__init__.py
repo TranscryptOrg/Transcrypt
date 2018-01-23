@@ -65,17 +65,24 @@ def run (autoTester):
     autoTester.check (hasattr (a, 'p'))
     autoTester.check (hasattr (a, 'q'))
     
-    autoTester.check ('<br><br>Augmented isinstance<br>')
+    autoTester.check ('<br><br>Augmented isinstance and issubclass<br>')
     # Augmented meaning: compatible with native JavaScript types
         
-    simpleTypes = (dict, list, A, B, C, bool, str, float, int)
-    tupleTypes = ((dict, list), (bool, int), (bool, A), (C, B))
+    simpleTypes = (dict, list, A, B, C, bool, str, float, int, object)
+    tupleTypes = ((dict, list), (bool, int), (bool, A), (C, B), (B, object))
     for i, types in enumerate ((simpleTypes, tupleTypes)):
         for j, aType in enumerate (types):
             for k, anObject in enumerate (({'a': 1}, [], a, C, c, C, b, True, 'a', 1, 1.2)):
                 autoTester.check (i, j, k, isinstance (anObject, aType))
                 if types == simpleTypes:
                     autoTester.check (i, j, k, isinstance (anObject, simpleTypes))
+
+    for i, types in enumerate((simpleTypes, tupleTypes)):
+        for j, aType in enumerate(types):
+            for k, aClass in enumerate ((dict, list, A, C, B, bool, str, int, float)):
+                autoTester.check (i + 2, j, k, issubclass (aClass, aType))
+                if types == simpleTypes:
+                    autoTester.check (i + 2, j, k, issubclass (aClass, simpleTypes))
                     
     autoTester.check ('<br><br>Method resolution order<br>')
     
