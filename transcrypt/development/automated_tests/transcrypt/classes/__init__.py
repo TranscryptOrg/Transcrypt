@@ -77,8 +77,8 @@ def run (autoTester):
                 if types == simpleTypes:
                     autoTester.check (i, j, k, isinstance (anObject, simpleTypes))
 
-    for i, types in enumerate((simpleTypes, tupleTypes)):
-        for j, aType in enumerate(types):
+    for i, types in enumerate ((simpleTypes, tupleTypes)):
+        for j, aType in enumerate (types):
             for k, aClass in enumerate ((dict, list, A, C, B, bool, str, int, float)):
                 autoTester.check (i + 2, j, k, issubclass (aClass, aType))
                 if types == simpleTypes:

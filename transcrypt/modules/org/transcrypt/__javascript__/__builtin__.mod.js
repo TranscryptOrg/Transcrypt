@@ -349,7 +349,7 @@ __pragma__ ('endif')
             }
         }
         return false;
-    }
+    };
 
     var isinstance = function (anObject, classinfo) {
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
@@ -401,14 +401,8 @@ __pragma__ ('endif')
     __all__.issubclass = issubclass;
     
     var callable = function (anObject) {
-        if (anObject && typeof anObject == 'object' && '__call__' in anObject) {
-            return true;
-        }
-        else {
-            return typeof anObject === 'function';
-        }
+        return anObject && typeof anObject == 'object' && '__call__' in anObject ? true : typeof anObject === 'function';
     };
-    
     __all__.callable = callable;
 
     // Repr function uses __repr__ method, then __str__, then toString
