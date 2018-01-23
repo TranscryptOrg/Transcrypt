@@ -4,23 +4,23 @@
     /* Nested module-object creator, part of the nesting may already exist and have attributes
     
     A Transcrypt applicaton consists of a main module and additional modules.
-    Transcrypt modules constitute a unique, unambigous tree by their dotted names, no matter which of the alternative module root paths they come from.
-    The main module is represented by a main function by the name of the application.
+    Transcrypt modules constitute a unique, unambiguous tree by their dotted names, no matter which of the alternative module root paths they come from.
+    The main module is represented by a main function with the name of the application.
     The locals of this function constitute the outer namespace of the Transcrypt application.
     References to all local variables of this function are also assigned to attributes of local variable __all__, using the variable names as an attribute names.
     The main function returns this local variable __all__ (that inside the function is also known by the name __world__)
     Normally this function result is assigned to window.<application name>.
-    The function may than be exited (unless its main line starts an ongoing activity), but the application namespace stays alive tby the reference that window has to it.
-    In case of the ongoing activity including the script is enough to start it, in other cases it has to be started explicitly by calling window.<application name>.<a function>.
+    The function may than be exitted (unless its main line starts an ongoing activity), but the application namespace stays alive by the reference that window has to it.
+    In case of the ongoing activity including the script is enough to start it, in other cases it has to be started explicitly by calling window.<application name>.<entrypoint function>.
     There may be multiple such entrypoint functions.
     
     Additional modules are represented by objects rather than functions, nested into __world__ (so into __all__ of the main function).
     This nesting can be directly or indirectly, according to the dotted paths of the additional modules.
     One of the methods of the module object is the __init__ function, that's executed once at module initialisation time.
     
-    The additional modues also have an __all__ variable, an attribute rather than a local variable.
+    The additional modules also have an __all__ variable, an attribute rather than a local variable.
     However this __all__ object is passed to the __init__ function, so becomes a local variable there.
-    Variables in additional modules first become locals to the __init__ function but references to all of them are assigend to __all__ under their same names.
+    Variables in additional modules first become locals to the __init__ function but references to all of them are assigned to __all__ under their same names.
     This resembles the cause of affairs in the main function.
     However __world__ only referes to the __all__ of the main module, not of any additional modules.
     Importing a module boils down to adding all members of its __all__ to the local namespace, directly or via dotted access, depending on the way of import.
@@ -88,7 +88,7 @@
             }
         }
         
-        // Insert it new attributes, it may have been created earlier and have other attributes
+        // Insert its new attributes, it may have been created earlier and have other attributes
         for (var attrib in value) {
             current [attrib] = value [attrib];          
         }       
