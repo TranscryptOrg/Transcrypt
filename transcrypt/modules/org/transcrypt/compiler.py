@@ -423,7 +423,7 @@ class Module:
                 loadableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if loadable (line)] if commentlessLine]
             else:
                 loadableLines = [line for line in code.split ('\n') if loadable (line)]
-            return '\n'.join (loadableLines)
+            return '\n'.join (loadableLines) + '\n'
 
         with open (self.metadata.targetPath) as targetFile:
             self.targetCode = strip (targetFile.read (), self.program.symbols)
