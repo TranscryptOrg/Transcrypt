@@ -85,6 +85,14 @@ for esvSwitch in ('', '-e 6 '):
         test ('development/manual_tests/static_types', 'static_types', False, False, switches + '-ds -dc -n ', 'static_types')
         test ('development/manual_tests/async_await', 'test', False, False, switches, 'static_types')
         
+        test ('tutorials/baseline/bl_010_hello_world', 'hello_world', False, False, switches)
+        test ('tutorials/baseline/bl_020_assign', 'assign', False, False, switches)
+        test ('tutorials/baseline/bl_030_if_else_prompt', 'if_else_prompt', False, False, switches)
+        test ('tutorials/baseline/bl_035_if_else_event', 'if_else_event', False, False, switches)
+        test ('tutorials/baseline/bl_040_for_simple', 'for_simple', False, False, switches)
+        test ('tutorials/baseline/bl_042_for_nested', 'for_nested', False, False, switches)
+        test ('tutorials/baseline/bl_045_while_simple', 'while_simple', False, False, switches)
+        
         test ('demos/hello', 'hello', False, False, switches)
         test ('demos/jquery_demo', 'jquery_demo', False, False, switches)
         test ('demos/d3js_demo', 'd3js_demo', False, False, switches)

@@ -15,7 +15,7 @@ Firstly, in Transcrypt it is good practice to use url-based unique module identi
 
 To achieve optimal CPython compatibility, an exception is made for modules that are part of the CPython distribution, e.g. *math*.
 	
-Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, to keep it lightweight. Nevertheless porting (part of) some standard libraries might be handy. If you do, you're invited to make them available via PyPi, using 'Transcrypt' in your keyword list.
+Note that Transcrypt is meant be to used with JavaScript rather than Python libraries, since its focus isn't on the desktop but on the browser. Nevertheless a growing set of standard Python modules is part of the distribution, currently cmat, datetime, itertools, logging, math, random (partially), re (almost complete), time, turtle and warnings. Other modules are in the making.
 
 Finding the code for a module proceeds as follows:
 

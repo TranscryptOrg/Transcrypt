@@ -1,7 +1,7 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-01-05 16:22:57
+// Transcrypt'ed from Python, 2018-01-13 11:24:57
 function test () {
-    var __symbols__ = ['__complex__', '__py3.6__', '__esv5__'];
+    var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
     var __nest__ = function (headObject, tailNames, value) {
@@ -140,7 +140,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.70';
+							self.transpiler_version = '3.6.82';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -363,9 +363,7 @@ function test () {
 					var map = function (func, iterable) {
 						return (function () {
 							var __accu0__ = [];
-							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-								var item = __iterable0__ [__index0__];
+							for (var item of iterable) {
 								__accu0__.append (func (item));
 							}
 							return __accu0__;
@@ -377,132 +375,13 @@ function test () {
 						}
 						return (function () {
 							var __accu0__ = [];
-							var __iterable0__ = iterable;
-							for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-								var item = __iterable0__ [__index0__];
+							for (var item of iterable) {
 								if (func (item)) {
 									__accu0__.append (item);
 								}
 							}
 							return __accu0__;
 						}) ();
-					};
-					var complex = __class__ ('complex', [object], {
-						__module__: __name__,
-						get __init__ () {return __get__ (this, function (self, real, imag) {
-							if (typeof imag == 'undefined' || (imag != null && imag .hasOwnProperty ("__kwargtrans__"))) {;
-								var imag = null;
-							};
-							if (imag == null) {
-								if (py_typeof (real) == complex) {
-									self.real = real.real;
-									self.imag = real.imag;
-								}
-								else {
-									self.real = real;
-									self.imag = 0;
-								}
-							}
-							else {
-								self.real = real;
-								self.imag = imag;
-							}
-						});},
-						get __neg__ () {return __get__ (this, function (self) {
-							return complex (-(self.real), -(self.imag));
-						});},
-						get __exp__ () {return __get__ (this, function (self) {
-							var modulus = Math.exp (self.real);
-							return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag));
-						});},
-						get __log__ () {return __get__ (this, function (self) {
-							return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real));
-						});},
-						get __pow__ () {return __get__ (this, function (self, other) {
-							return self.__log__ ().__mul__ (other).__exp__ ();
-						});},
-						get __rpow__ () {return __get__ (this, function (self, real) {
-							return self.__mul__ (Math.log (real)).__exp__ ();
-						});},
-						get __mul__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real * other, self.imag * other);
-							}
-							else {
-								return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real);
-							}
-						});},
-						get __rmul__ () {return __get__ (this, function (self, real) {
-							return complex (self.real * real, self.imag * real);
-						});},
-						get __div__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real / other, self.imag / other);
-							}
-							else {
-								var denom = other.real * other.real + other.imag * other.imag;
-								return complex ((self.real * other.real + self.imag * other.imag) / denom, (self.imag * other.real - self.real * other.imag) / denom);
-							}
-						});},
-						get __rdiv__ () {return __get__ (this, function (self, real) {
-							var denom = self.real * self.real;
-							return complex ((real * self.real) / denom, (real * self.imag) / denom);
-						});},
-						get __add__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real + other, self.imag);
-							}
-							else {
-								return complex (self.real + other.real, self.imag + other.imag);
-							}
-						});},
-						get __radd__ () {return __get__ (this, function (self, real) {
-							return complex (self.real + real, self.imag);
-						});},
-						get __sub__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return complex (self.real - other, self.imag);
-							}
-							else {
-								return complex (self.real - other.real, self.imag - other.imag);
-							}
-						});},
-						get __rsub__ () {return __get__ (this, function (self, real) {
-							return complex (real - self.real, -(self.imag));
-						});},
-						get __repr__ () {return __get__ (this, function (self) {
-							return '({}{}{}j)'.format (self.real, (self.imag >= 0 ? '+' : ''), self.imag);
-						});},
-						get __str__ () {return __get__ (this, function (self) {
-							return __repr__ (self).__getslice__ (1, -(1), 1);
-						});},
-						get __eq__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return self.real == other;
-							}
-							else {
-								return self.real == other.real && self.imag == other.imag;
-							}
-						});},
-						get __ne__ () {return __get__ (this, function (self, other) {
-							if (typeof other === 'number') {
-								return self.real != other;
-							}
-							else {
-								return self.real != other.real || self.imag != other.imag;
-							}
-						});},
-						get conjugate () {return __get__ (this, function (self) {
-							return complex (self.real, -(self.imag));
-						});}
-					});
-					var __conj__ = function (aNumber) {
-						if (isinstance (aNumber, complex)) {
-							return complex (aNumber.real, -(aNumber.imag));
-						}
-						else {
-							return complex (aNumber, 0);
-						}
 					};
 					var __Terminal__ = __class__ ('__Terminal__', [object], {
 						__module__: __name__,
@@ -543,9 +422,7 @@ function test () {
 							}
 							self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
 								var __accu0__ = [];
-								var __iterable0__ = args;
-								for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-									var arg = __iterable0__ [__index0__];
+								for (var arg of args) {
 									__accu0__.append (str (arg));
 								}
 								return __accu0__;
@@ -557,9 +434,7 @@ function test () {
 							else {
 								console.log (sep.join ((function () {
 									var __accu0__ = [];
-									var __iterable0__ = args;
-									for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-										var arg = __iterable0__ [__index0__];
+									for (var arg of args) {
 										__accu0__.append (str (arg));
 									}
 									return __accu0__;
@@ -604,11 +479,9 @@ function test () {
 						__all__.ValueError = ValueError;
 						__all__.Warning = Warning;
 						__all__.__Terminal__ = __Terminal__;
-						__all__.__conj__ = __conj__;
 						__all__.__name__ = __name__;
 						__all__.__sort__ = __sort__;
 						__all__.__terminal__ = __terminal__;
-						__all__.complex = complex;
 						__all__.filter = filter;
 						__all__.map = map;
 						__all__.sorted = sorted;
@@ -648,8 +521,6 @@ function test () {
     var sorted = __all__.sorted;
     var map = __all__.map;
     var filter = __all__.filter;
-    var complex = __all__.complex;
-    var __conj__ = __all__.__conj__;
     __all__.print = __all__.__terminal__.print;
     __all__.input = __all__.__terminal__.input;
     var __terminal__ = __all__.__terminal__;
@@ -964,14 +835,8 @@ function test () {
         return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);
     };
     __all__.min = min;
-    var abs = function (x) {
-        try {
-            return Math.abs (x);
-        }
-        catch (exception) {
-            return Math.sqrt (x.real * x.real + x.imag * x.imag);
-        }
-    };
+    var abs = Math.abs;
+    __all__.abs = abs;
     var round = function (number, ndigits) {
         if (ndigits) {
             var scale = Math.pow (10, ndigits);
@@ -2267,13 +2132,851 @@ function test () {
             container.__setslice__ (lower, upper, step, value);
         }
     };
-    __all__.__setslice__ = __setslice__;	(function () {
+    __all__.__setslice__ = __setslice__;	__nest__ (
+		__all__,
+		'sys', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'test.pystone', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var sys = {};
+					var __name__ = 'test.pystone';
+					var LOOPS = 50000;
+					var time = __init__ (__world__.time).time;
+					var __version__ = '1.2';
+					var __left0__ = range (1, 6);
+					var Ident1 = __left0__ [0];
+					var Ident2 = __left0__ [1];
+					var Ident3 = __left0__ [2];
+					var Ident4 = __left0__ [3];
+					var Ident5 = __left0__ [4];
+					var Record = __class__ ('Record', [object], {
+						__module__: __name__,
+						get __init__ () {return __get__ (this, function (self, PtrComp, Discr, EnumComp, IntComp, StringComp) {
+							if (typeof PtrComp == 'undefined' || (PtrComp != null && PtrComp .hasOwnProperty ("__kwargtrans__"))) {;
+								var PtrComp = null;
+							};
+							if (typeof Discr == 'undefined' || (Discr != null && Discr .hasOwnProperty ("__kwargtrans__"))) {;
+								var Discr = 0;
+							};
+							if (typeof EnumComp == 'undefined' || (EnumComp != null && EnumComp .hasOwnProperty ("__kwargtrans__"))) {;
+								var EnumComp = 0;
+							};
+							if (typeof IntComp == 'undefined' || (IntComp != null && IntComp .hasOwnProperty ("__kwargtrans__"))) {;
+								var IntComp = 0;
+							};
+							if (typeof StringComp == 'undefined' || (StringComp != null && StringComp .hasOwnProperty ("__kwargtrans__"))) {;
+								var StringComp = 0;
+							};
+							self.PtrComp = PtrComp;
+							self.Discr = Discr;
+							self.EnumComp = EnumComp;
+							self.IntComp = IntComp;
+							self.StringComp = StringComp;
+						});},
+						get copy () {return __get__ (this, function (self) {
+							return Record (self.PtrComp, self.Discr, self.EnumComp, self.IntComp, self.StringComp);
+						});}
+					});
+					var TRUE = 1;
+					var FALSE = 0;
+					var main = function (loops) {
+						if (typeof loops == 'undefined' || (loops != null && loops .hasOwnProperty ("__kwargtrans__"))) {;
+							var loops = LOOPS;
+						};
+						var __left0__ = pystones (loops);
+						var benchtime = __left0__ [0];
+						var stones = __left0__ [1];
+						print (__mod__ ('Pystone(%s) time for %d passes = %g', tuple ([__version__, loops, benchtime])));
+						print (__mod__ ('This machine benchmarks at %g pystones/second', stones));
+					};
+					var pystones = function (loops) {
+						if (typeof loops == 'undefined' || (loops != null && loops .hasOwnProperty ("__kwargtrans__"))) {;
+							var loops = LOOPS;
+						};
+						return Proc0 (loops);
+					};
+					var IntGlob = 0;
+					var BoolGlob = FALSE;
+					var Char1Glob = '\x00';
+					var Char2Glob = '\x00';
+					var Array1Glob = list ([0]) * 51;
+					var Array2Glob = (function () {
+						var __accu0__ = [];
+						var __iterable0__ = list ([Array1Glob]) * 51;
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var x = __iterable0__ [__index0__];
+							__accu0__.append (x.__getslice__ (0, null, 1));
+						}
+						return __accu0__;
+					}) ();
+					var PtrGlb = null;
+					var PtrGlbNext = null;
+					var Proc0 = function (loops) {
+						if (typeof loops == 'undefined' || (loops != null && loops .hasOwnProperty ("__kwargtrans__"))) {;
+							var loops = LOOPS;
+						};
+						var starttime = time ();
+						for (var i = 0; i < loops; i++) {
+							// pass;
+						}
+						var nulltime = time () - starttime;
+						PtrGlbNext = Record ();
+						PtrGlb = Record ();
+						PtrGlb.PtrComp = PtrGlbNext;
+						PtrGlb.Discr = Ident1;
+						PtrGlb.EnumComp = Ident3;
+						PtrGlb.IntComp = 40;
+						PtrGlb.StringComp = 'DHRYSTONE PROGRAM, SOME STRING';
+						var String1Loc = "DHRYSTONE PROGRAM, 1'ST STRING";
+						Array2Glob [8] [7] = 10;
+						var starttime = time ();
+						for (var i = 0; i < loops; i++) {
+							Proc5 ();
+							Proc4 ();
+							var IntLoc1 = 2;
+							var IntLoc2 = 3;
+							var String2Loc = "DHRYSTONE PROGRAM, 2'ND STRING";
+							var EnumLoc = Ident2;
+							BoolGlob = !(Func2 (String1Loc, String2Loc));
+							while (IntLoc1 < IntLoc2) {
+								var IntLoc3 = 5 * IntLoc1 - IntLoc2;
+								var IntLoc3 = Proc7 (IntLoc1, IntLoc2);
+								var IntLoc1 = IntLoc1 + 1;
+							}
+							Proc8 (Array1Glob, Array2Glob, IntLoc1, IntLoc3);
+							PtrGlb = Proc1 (PtrGlb);
+							var CharIndex = 'A';
+							while (CharIndex <= Char2Glob) {
+								if (EnumLoc == Func1 (CharIndex, 'C')) {
+									var EnumLoc = Proc6 (Ident1);
+								}
+								var CharIndex = chr (ord (CharIndex) + 1);
+							}
+							var IntLoc3 = IntLoc2 * IntLoc1;
+							var IntLoc2 = Math.floor (IntLoc3 / IntLoc1);
+							var IntLoc2 = 7 * (IntLoc3 - IntLoc2) - IntLoc1;
+							var IntLoc1 = Proc2 (IntLoc1);
+						}
+						var benchtime = (time () - starttime) - nulltime;
+						if (benchtime == 0.0) {
+							var loopsPerBenchtime = 0.0;
+						}
+						else {
+							var loopsPerBenchtime = loops / benchtime;
+						}
+						return tuple ([benchtime, loopsPerBenchtime]);
+					};
+					var Proc1 = function (PtrParIn) {
+						var __left0__ = PtrGlb.copy ();
+						PtrParIn.PtrComp = __left0__;
+						var NextRecord = __left0__;
+						PtrParIn.IntComp = 5;
+						NextRecord.IntComp = PtrParIn.IntComp;
+						NextRecord.PtrComp = PtrParIn.PtrComp;
+						NextRecord.PtrComp = Proc3 (NextRecord.PtrComp);
+						if (NextRecord.Discr == Ident1) {
+							NextRecord.IntComp = 6;
+							NextRecord.EnumComp = Proc6 (PtrParIn.EnumComp);
+							NextRecord.PtrComp = PtrGlb.PtrComp;
+							NextRecord.IntComp = Proc7 (NextRecord.IntComp, 10);
+						}
+						else {
+							var PtrParIn = NextRecord.copy ();
+						}
+						NextRecord.PtrComp = null;
+						return PtrParIn;
+					};
+					var Proc2 = function (IntParIO) {
+						var IntLoc = IntParIO + 10;
+						while (1) {
+							if (Char1Glob == 'A') {
+								var IntLoc = IntLoc - 1;
+								var IntParIO = IntLoc - IntGlob;
+								var EnumLoc = Ident1;
+							}
+							if (EnumLoc == Ident1) {
+								break;
+							}
+						}
+						return IntParIO;
+					};
+					var Proc3 = function (PtrParOut) {
+						if (PtrGlb !== null) {
+							var PtrParOut = PtrGlb.PtrComp;
+						}
+						else {
+							IntGlob = 100;
+						}
+						PtrGlb.IntComp = Proc7 (10, IntGlob);
+						return PtrParOut;
+					};
+					var Proc4 = function () {
+						var BoolLoc = Char1Glob == 'A';
+						var BoolLoc = BoolLoc || BoolGlob;
+						Char2Glob = 'B';
+					};
+					var Proc5 = function () {
+						Char1Glob = 'A';
+						BoolGlob = FALSE;
+					};
+					var Proc6 = function (EnumParIn) {
+						var EnumParOut = EnumParIn;
+						if (!(Func3 (EnumParIn))) {
+							var EnumParOut = Ident4;
+						}
+						if (EnumParIn == Ident1) {
+							var EnumParOut = Ident1;
+						}
+						else if (EnumParIn == Ident2) {
+							if (IntGlob > 100) {
+								var EnumParOut = Ident1;
+							}
+							else {
+								var EnumParOut = Ident4;
+							}
+						}
+						else if (EnumParIn == Ident3) {
+							var EnumParOut = Ident2;
+						}
+						else if (EnumParIn == Ident4) {
+							// pass;
+						}
+						else if (EnumParIn == Ident5) {
+							var EnumParOut = Ident3;
+						}
+						return EnumParOut;
+					};
+					var Proc7 = function (IntParI1, IntParI2) {
+						var IntLoc = IntParI1 + 2;
+						var IntParOut = IntParI2 + IntLoc;
+						return IntParOut;
+					};
+					var Proc8 = function (Array1Par, Array2Par, IntParI1, IntParI2) {
+						var IntLoc = IntParI1 + 5;
+						Array1Par [IntLoc] = IntParI2;
+						Array1Par [IntLoc + 1] = Array1Par [IntLoc];
+						Array1Par [IntLoc + 30] = IntLoc;
+						for (var IntIndex = IntLoc; IntIndex < IntLoc + 2; IntIndex++) {
+							Array2Par [IntLoc] [IntIndex] = IntLoc;
+						}
+						Array2Par [IntLoc] [IntLoc - 1] = Array2Par [IntLoc] [IntLoc - 1] + 1;
+						Array2Par [IntLoc + 20] [IntLoc] = Array1Par [IntLoc];
+						IntGlob = 5;
+					};
+					var Func1 = function (CharPar1, CharPar2) {
+						var CharLoc1 = CharPar1;
+						var CharLoc2 = CharLoc1;
+						if (CharLoc2 != CharPar2) {
+							return Ident1;
+						}
+						else {
+							return Ident2;
+						}
+					};
+					var Func2 = function (StrParI1, StrParI2) {
+						var IntLoc = 1;
+						while (IntLoc <= 1) {
+							if (Func1 (StrParI1 [IntLoc], StrParI2 [IntLoc + 1]) == Ident1) {
+								var CharLoc = 'A';
+								var IntLoc = IntLoc + 1;
+							}
+						}
+						if (CharLoc >= 'W' && CharLoc <= 'Z') {
+							var IntLoc = 7;
+						}
+						if (CharLoc == 'X') {
+							return TRUE;
+						}
+						else if (StrParI1 > StrParI2) {
+							var IntLoc = IntLoc + 7;
+							return TRUE;
+						}
+						else {
+							return FALSE;
+						}
+					};
+					var Func3 = function (EnumParIn) {
+						var EnumLoc = EnumParIn;
+						if (EnumLoc == Ident3) {
+							return TRUE;
+						}
+						return FALSE;
+					};
+					if (__name__ == '__main__') {
+						__nest__ (sys, '', __init__ (__world__.sys));
+						var error = function (msg) {
+							print (msg, __kwargtrans__ ({end: ' ', file: sys.stderr}));
+							print (__mod__ ('usage: %s [number_of_loops]', sys.argv [0]), __kwargtrans__ ({file: sys.stderr}));
+							sys.exit (100);
+						};
+						var nargs = len (sys.argv) - 1;
+						if (nargs > 1) {
+							error (__mod__ ('%d arguments are too many;', nargs));
+						}
+						else if (nargs == 1) {
+							try {
+								var loops = int (sys.argv [1]);
+							}
+							catch (__except0__) {
+								if (isinstance (__except0__, ValueError)) {
+									error (__mod__ ('Invalid argument %r;', sys.argv [1]));
+								}
+								else {
+									throw __except0__;
+								}
+							}
+						}
+						else {
+							var loops = LOOPS;
+						}
+						main (loops);
+					}
+					__pragma__ ('<use>' +
+						'sys' +
+						'time' +
+					'</use>')
+					__pragma__ ('<all>')
+						__all__.Array1Glob = Array1Glob;
+						__all__.Array2Glob = Array2Glob;
+						__all__.BoolGlob = BoolGlob;
+						__all__.Char1Glob = Char1Glob;
+						__all__.Char2Glob = Char2Glob;
+						__all__.FALSE = FALSE;
+						__all__.Func1 = Func1;
+						__all__.Func2 = Func2;
+						__all__.Func3 = Func3;
+						__all__.Ident1 = Ident1;
+						__all__.Ident2 = Ident2;
+						__all__.Ident3 = Ident3;
+						__all__.Ident4 = Ident4;
+						__all__.Ident5 = Ident5;
+						__all__.IntGlob = IntGlob;
+						__all__.LOOPS = LOOPS;
+						__all__.Proc0 = Proc0;
+						__all__.Proc1 = Proc1;
+						__all__.Proc2 = Proc2;
+						__all__.Proc3 = Proc3;
+						__all__.Proc4 = Proc4;
+						__all__.Proc5 = Proc5;
+						__all__.Proc6 = Proc6;
+						__all__.Proc7 = Proc7;
+						__all__.Proc8 = Proc8;
+						__all__.PtrGlb = PtrGlb;
+						__all__.PtrGlbNext = PtrGlbNext;
+						__all__.Record = Record;
+						__all__.TRUE = TRUE;
+						__all__.__name__ = __name__;
+						__all__.__version__ = __version__;
+						__all__.error = error;
+						__all__.loops = loops;
+						__all__.main = main;
+						__all__.nargs = nargs;
+						__all__.pystones = pystones;
+						__all__.time = time;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	__nest__ (
+		__all__,
+		'time', {
+			__all__: {
+				__inited__: false,
+				__init__: function (__all__) {
+					var __name__ = 'time';
+					var __date = new Date (0);
+					var __now = new Date ();
+					var __weekdays = list ([]);
+					var __weekdays_long = list ([]);
+					var __d = new Date (1467662339080);
+					for (var i = 0; i < 7; i++) {
+						var __iterable0__ = tuple ([tuple ([__weekdays, 'short']), tuple ([__weekdays_long, 'long'])]);
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var __left0__ = __iterable0__ [__index0__];
+							var l = __left0__ [0];
+							var s = __left0__ [1];
+							l.append (__d.toLocaleString (window.navigator.language, dict ({'weekday': s})).lower ());
+						}
+						__d.setDate (__d.getDate () + 1);
+					}
+					var __months = list ([]);
+					var __months_long = list ([]);
+					var __d = new Date (946681200000.0);
+					for (var i = 0; i < 12; i++) {
+						var __iterable0__ = tuple ([tuple ([__months, 'short']), tuple ([__months_long, 'long'])]);
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var __left0__ = __iterable0__ [__index0__];
+							var l = __left0__ [0];
+							var s = __left0__ [1];
+							l.append (__d.toLocaleString (window.navigator.language, dict ({'month': s})).lower ());
+						}
+						__d.setMonth (__d.getMonth () + 1);
+					}
+					var __lu = dict ({'Y': 0, 'm': 1, 'd': 2, 'H': 3, 'M': 4, 'S': 5});
+					var _lsplit = function (s, sep, maxsplit) {
+						if (maxsplit == 0) {
+							return list ([s]);
+						}
+						var py_split = s.py_split (sep);
+						if (!(maxsplit)) {
+							return py_split;
+						}
+						var ret = py_split.slice (0, maxsplit, 1);
+						if (len (ret) == len (py_split)) {
+							return ret;
+						}
+						ret.append (sep.join (py_split.__getslice__ (maxsplit, null, 1)));
+						return ret;
+					};
+					var _local_time_tuple = function (jd) {
+						var res = tuple ([jd.getFullYear (), jd.getMonth () + 1, jd.getDate (), jd.getHours (), jd.getMinutes (), jd.getSeconds (), (jd.getDay () > 0 ? jd.getDay () - 1 : 6), _day_of_year (jd, true), _daylight_in_effect (jd), jd.getMilliseconds ()]);
+						return res;
+					};
+					var _utc_time_tuple = function (jd) {
+						var res = tuple ([jd.getUTCFullYear (), jd.getUTCMonth () + 1, jd.getUTCDate (), jd.getUTCHours (), jd.getUTCMinutes (), jd.getUTCSeconds (), jd.getUTCDay () - 1, _day_of_year (jd, false), 0, jd.getUTCMilliseconds ()]);
+						return res;
+					};
+					var _day_of_year = function (jd, local) {
+						var day_offs = 0;
+						if (jd.getHours () + (jd.getTimezoneOffset () * 60) / 3600 < 0) {
+							var day_offs = -(1);
+						}
+						var was = jd.getTime ();
+						var cur = jd.setHours (23);
+						jd.setUTCDate (1);
+						jd.setUTCMonth (0);
+						jd.setUTCHours (0);
+						jd.setUTCMinutes (0);
+						jd.setUTCSeconds (0);
+						var res = round ((cur - jd) / 86400000);
+						if (!(local)) {
+							res += day_offs;
+						}
+						if (res == 0) {
+							var res = 365;
+							jd.setTime (jd.getTime () - 86400);
+							var last_year = jd.getUTCFullYear ();
+							if (_is_leap (last_year)) {
+								var res = 366;
+							}
+						}
+						jd.setTime (was);
+						return res;
+					};
+					var _is_leap = function (year) {
+						return __mod__ (year, 4) == 0 && (__mod__ (year, 100) != 0 || __mod__ (year, 400) == 0);
+					};
+					var __jan_jun_tz = function (t, func) {
+						var was = t.getTime ();
+						t.setDate (1);
+						var res = list ([]);
+						var __iterable0__ = tuple ([0, 6]);
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var m = __iterable0__ [__index0__];
+							t.setMonth (m);
+							if (!(func)) {
+								res.append (t.getTimezoneOffset ());
+							}
+							else {
+								res.append (func (t));
+							}
+						}
+						t.setTime (was);
+						return res;
+					};
+					var _daylight = function (t) {
+						var jj = __jan_jun_tz (t);
+						if (jj [0] != jj [1]) {
+							return 1;
+						}
+						return 0;
+					};
+					var _daylight_in_effect = function (t) {
+						var jj = __jan_jun_tz (t);
+						if (min (jj [0], jj [1]) == t.getTimezoneOffset ()) {
+							return 1;
+						}
+						return 0;
+					};
+					var _timezone = function (t) {
+						var jj = __jan_jun_tz (t);
+						return max (jj [0], jj [1]);
+					};
+					var __tzn = function (t) {
+						try {
+							return str (t).py_split ('(') [1].py_split (')') [0];
+						}
+						catch (__except0__) {
+							return 'n.a.';
+						}
+					};
+					var _tzname = function (t) {
+						var cn = __tzn (t);
+						var ret = list ([cn, cn]);
+						var jj = __jan_jun_tz (t, __tzn);
+						var ind = 0;
+						if (!(_daylight_in_effect (t))) {
+							var ind = 1;
+						}
+						var __iterable0__ = jj;
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var i = __iterable0__ [__index0__];
+							if (i != cn) {
+								ret [ind] = i;
+							}
+						}
+						return tuple (ret);
+					};
+					var altzone = __now.getTimezoneOffset ();
+					if (!(_daylight_in_effect (__now))) {
+						var _jj = __jan_jun_tz (__now);
+						var altzone = (altzone == _jj [1] ? _jj [0] : _jj [1]);
+					}
+					var altzone = altzone * 60;
+					var timezone = _timezone (__now) * 60;
+					var daylight = _daylight (__now);
+					var tzname = _tzname (__now);
+					var time = function () {
+						return Date.now () / 1000;
+					};
+					var asctime = function (t) {
+						return strftime ('%a %b %d %H:%M:%S %Y', t);
+					};
+					var mktime = function (t) {
+						var d = new Date (t [0], t [1] - 1, t [2], t [3], t [4], t [5], 0);
+						return (d - 0) / 1000;
+					};
+					var ctime = function (seconds) {
+						if (!(seconds)) {
+							var seconds = time ();
+						}
+						return asctime (localtime (seconds));
+					};
+					var localtime = function (seconds) {
+						if (!(seconds)) {
+							var seconds = time ();
+						}
+						return gmtime (seconds, true);
+					};
+					var gmtime = function (seconds, localtime) {
+						if (!(seconds)) {
+							var seconds = time ();
+						}
+						var millis = seconds * 1000;
+						__date.setTime (millis);
+						if (localtime) {
+							var t = _local_time_tuple (__date);
+						}
+						else {
+							var t = _utc_time_tuple (__date);
+						}
+						return t.__getslice__ (0, 9, 1);
+					};
+					var strptime = function (string, format) {
+						if (!(format)) {
+							var format = '%a %b %d %H:%M:%S %Y';
+						}
+						var __left0__ = tuple ([string, format]);
+						var ts = __left0__ [0];
+						var fmt = __left0__ [1];
+						var get_next = function (fmt) {
+							var get_sep = function (fmt) {
+								var res = list ([]);
+								if (!(fmt)) {
+									return tuple (['', '']);
+								}
+								for (var i = 0; i < len (fmt) - 1; i++) {
+									var c = fmt [i];
+									if (c == '%') {
+										break;
+									}
+									res.append (c);
+								}
+								return tuple ([''.join (res), fmt.__getslice__ (i, null, 1)]);
+							};
+							var __left0__ = tuple ([null, null, null]);
+							var d = __left0__ [0];
+							var sep = __left0__ [1];
+							var f = __left0__ [2];
+							if (fmt) {
+								if (fmt [0] == '%') {
+									var d = fmt [1];
+									var __left0__ = get_sep (fmt.__getslice__ (2, null, 1));
+									var sep = __left0__ [0];
+									var f = __left0__ [1];
+								}
+								else {
+									var __left0__ = get_sep (fmt);
+									var sep = __left0__ [0];
+									var f = __left0__ [1];
+								}
+							}
+							return tuple ([d, sep, f]);
+						};
+						var dir_val = dict ({});
+						while (ts) {
+							var __left0__ = get_next (fmt);
+							var d = __left0__ [0];
+							var sep = __left0__ [1];
+							var fmt = __left0__ [2];
+							if (sep == '') {
+								var lv = null;
+								if (d) {
+									var l = -(1);
+									if (d == 'Y') {
+										var l = 4;
+									}
+									else if (d == 'a') {
+										var l = len (__weekdays [0]);
+									}
+									else if (d == 'A') {
+										var l = len (__weekdays_long [0]);
+									}
+									else if (d == 'b') {
+										var l = len (__months [0]);
+									}
+									else if (__in__ (d, tuple (['d', 'm', 'H', 'M', 'S']))) {
+										var l = 2;
+									}
+									if (l > -(1)) {
+										var lv = list ([ts.__getslice__ (0, l, 1), ts.__getslice__ (l, null, 1)]);
+									}
+								}
+								if (!(lv)) {
+									var lv = list ([ts, '']);
+								}
+							}
+							else {
+								var lv = _lsplit (ts, sep, 1);
+							}
+							if (d == null) {
+								var ts = lv [1];
+								continue;
+							}
+							var __left0__ = tuple ([lv [1], lv [0]]);
+							var ts = __left0__ [0];
+							dir_val [d] = __left0__ [1];
+							if (fmt == '') {
+								break;
+							}
+						}
+						var t = list ([1900, 1, 1, 0, 0, 0, 0, 1, -(1)]);
+						var ignore_keys = list ([]);
+						var have_weekday = false;
+						var __iterable0__ = dir_val.py_items ();
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var __left0__ = __iterable0__ [__index0__];
+							var d = __left0__ [0];
+							var v = __left0__ [1];
+							if (__in__ (d, ignore_keys)) {
+								continue;
+							}
+							if (d == 'p') {
+								continue;
+							}
+							if (__in__ (d, __lu.py_keys ())) {
+								t [__lu [d]] = int (v);
+								continue;
+							}
+							if (__in__ (d, tuple (['a', 'A', 'b', 'B']))) {
+								var v = v.lower ();
+							}
+							if (d == 'm') {
+								ignore_keys.append ('b');
+								ignore_keys.append ('B');
+							}
+							if (d == 'a') {
+								if (!(__in__ (v, __weekdays))) {
+									var __except0__ = ValueError ('Weekday unknown in your locale');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+								var have_weekday = true;
+								t [6] = __weekdays.index (v);
+							}
+							else if (d == 'A') {
+								if (!(__in__ (v, __weekdays_long))) {
+									var __except0__ = ValueError ('Weekday unknown in your locale');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+								var have_weekday = true;
+								t [6] = __weekdays_long.index (v);
+							}
+							else if (d == 'b') {
+								if (!(__in__ (v, __months))) {
+									var __except0__ = ValueError ('Month unknown in your locale');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+								t [1] = __months.index (v) + 1;
+							}
+							else if (d == 'B') {
+								if (!(__in__ (v, __months_long))) {
+									var __except0__ = ValueError ('Month unknown in your locale');
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+								t [1] = __months_long.index (v) + 1;
+							}
+							else if (d == 'I') {
+								var ampm = dir_val ['p'] || 'am';
+								var ampm = ampm.lower ();
+								var v = int (v);
+								if (v == 12) {
+									var v = 0;
+								}
+								else if (v > 12) {
+									var __except0__ = ValueError (((("time data '" + string) + "' does not match format '") + format) + "'");
+									__except0__.__cause__ = null;
+									throw __except0__;
+								}
+								if (ampm == 'pm') {
+									v += 12;
+								}
+								t [__lu ['H']] = v;
+							}
+							else if (d == 'y') {
+								t [0] = 2000 + int (v);
+							}
+							else if (d == 'Z') {
+								if (__in__ (v.lower (), list (['gmt', 'utc']))) {
+									t [-(1)] = 0;
+								}
+							}
+						}
+						var __date = new Date (0);
+						__date.setUTCFullYear (t [0]);
+						__date.setUTCMonth (t [1] - 1);
+						__date.setUTCDate (t [2]);
+						__date.setUTCHours (t [3]);
+						t [7] = _day_of_year (__date);
+						if (!(have_weekday)) {
+							t [6] = __date.getUTCDay () - 1;
+						}
+						return t;
+					};
+					var strftime = function (format, t) {
+						var zf2 = function (v) {
+							if (v < 10) {
+								return '0' + str (v);
+							}
+							return v;
+						};
+						if (!(t)) {
+							var t = localtime ();
+						}
+						var f = format;
+						var __iterable0__ = __lu.py_keys ();
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var d = __iterable0__ [__index0__];
+							var k = '%' + d;
+							if (!(__in__ (k, f))) {
+								continue;
+							}
+							var v = zf2 (t [__lu [d]]);
+							var f = f.py_replace (k, v);
+						}
+						var __iterable0__ = tuple ([tuple (['b', __months, 1]), tuple (['B', __months_long, 1]), tuple (['a', __weekdays, 6]), tuple (['A', __weekdays_long, 6])]);
+						for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
+							var __left0__ = __iterable0__ [__index0__];
+							var d = __left0__ [0];
+							var l = __left0__ [1];
+							var pos = __left0__ [2];
+							var p = t [pos];
+							if (pos == 1) {
+								var p = p - 1;
+							}
+							var v = l [p].capitalize ();
+							var f = f.py_replace ('%' + d, v);
+						}
+						if (__in__ ('%p', f)) {
+							if (t [3] > 11) {
+								var ap = 'PM';
+							}
+							else {
+								var ap = 'AM';
+							}
+							var f = f.py_replace ('%p', ap);
+						}
+						if (__in__ ('%y', f)) {
+							var f = f.py_replace ('%y', str (t [0]).__getslice__ (-(2), null, 1));
+						}
+						if (__in__ ('%I', f)) {
+							var v = t [3];
+							if (v == 0) {
+								var v = 12;
+							}
+							else if (v > 12) {
+								var v = v - 12;
+							}
+							var f = f.py_replace ('%I', zf2 (v));
+						}
+						return f;
+					};
+					__pragma__ ('<all>')
+						__all__.__d = __d;
+						__all__.__date = __date;
+						__all__.__jan_jun_tz = __jan_jun_tz;
+						__all__.__lu = __lu;
+						__all__.__months = __months;
+						__all__.__months_long = __months_long;
+						__all__.__name__ = __name__;
+						__all__.__now = __now;
+						__all__.__tzn = __tzn;
+						__all__.__weekdays = __weekdays;
+						__all__.__weekdays_long = __weekdays_long;
+						__all__._day_of_year = _day_of_year;
+						__all__._daylight = _daylight;
+						__all__._daylight_in_effect = _daylight_in_effect;
+						__all__._is_leap = _is_leap;
+						__all__._jj = _jj;
+						__all__._local_time_tuple = _local_time_tuple;
+						__all__._lsplit = _lsplit;
+						__all__._timezone = _timezone;
+						__all__._tzname = _tzname;
+						__all__._utc_time_tuple = _utc_time_tuple;
+						__all__.altzone = altzone;
+						__all__.asctime = asctime;
+						__all__.ctime = ctime;
+						__all__.daylight = daylight;
+						__all__.gmtime = gmtime;
+						__all__.i = i;
+						__all__.l = l;
+						__all__.localtime = localtime;
+						__all__.mktime = mktime;
+						__all__.s = s;
+						__all__.strftime = strftime;
+						__all__.strptime = strptime;
+						__all__.time = time;
+						__all__.timezone = timezone;
+						__all__.tzname = tzname;
+					__pragma__ ('</all>')
+				}
+			}
+		}
+	);
+	(function () {
 		var __name__ = '__main__';
-		var a = 1;
-		autoTester.check (__conj__ (a));
+		var pystone = __init__ (__world__.test.pystone);
+		pystone.main ();
+		__pragma__ ('<use>' +
+			'test.pystone' +
+		'</use>')
 		__pragma__ ('<all>')
 			__all__.__name__ = __name__;
-			__all__.a = a;
+			__all__.pystone = pystone;
 		__pragma__ ('</all>')
 	}) ();
     return __all__;
