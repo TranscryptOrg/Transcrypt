@@ -642,6 +642,7 @@ class Generator (ast.NodeVisitor):
         self.allowDebugMap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
         self.allowJavaScriptIter = False
+        self.allowJavaScriptCall = utils.commandArgs.jscall
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
         self.allowJavaScriptMod = utils.commandArgs.jsmod
         self.allowMemoizeCalls = utils.commandArgs.fcall
@@ -1531,6 +1532,11 @@ class Generator (ast.NodeVisitor):
                 elif node.args [0] .s == 'nojsiter':    # Dictionary keys without quotes are identifiers
                     self.allowJavaScriptIter = False
 
+                elif node.args [0] .s == 'jscall':      # Python calls get compiled to direct JavaScript calls
+                    self.allowJavaScriptCall = True
+                elif node.args [0] .s == 'nojscall':    # Python calls get compiled to calls via a JavaScript property, allowing bound method assignment
+                    self.allowJavaScriptCall = False
+
                 elif node.args [0] .s == 'jskeys':      # Dictionary keys without quotes are string literals
                     self.allowJavaScriptKeys = True
                 elif node.args [0] .s == 'nojskeys':    # Dictionary keys without quotes are identifiers
@@ -2295,8 +2301,11 @@ class Generator (ast.NodeVisitor):
                 elif isPropertyGetter or isPropertySetter:
                     self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
                     self.pushProperty (nodeName)
+                elif self.allowJavaScriptCall:
+                    self.emit ('{}: function', self.filterId (nodeName))
                 else:
                     self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
+                    
 
                 if self.allowOperatorOverloading:
                     self.emit ('__call__ (')
@@ -2325,14 +2334,27 @@ class Generator (ast.NodeVisitor):
                 elif isPropertyGetter or isPropertySetter:
                     self.emit('get {} () {{return __get__ (this, {}function', self.filterId(nodeName), 'async ' if async else '')
                     self.pushProperty (nodeName)
+                elif self.allowJavaScriptCall:
+                    self.emit ('{}: function', self.filterId (nodeName), 'async ' if async else '')
                 else:
                     self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
 
             yieldStarIndex = len (self.targetFragments)
-            # yieldStarLevel = self.indentLevel  # Unused variable, should we keep it?
 
             self.emit (' ')
+            
+            if self.allowJavaScriptCall and not (
+                isGlobal or isClassMethod or isStaticMethod or isPropertyGetter or isPropertySetter
+            ):
+                node.args.args = node.args.args [1:]
+
             self.visit (node.args)
+
+            if self.allowJavaScriptCall and not (
+                isGlobal or isClassMethod or isStaticMethod or isPropertyGetter or isPropertySetter
+            ):
+               self.emit ('var self = this;\n')
+            
             emitScopedBody ()
             self.emit ('}}')
 
@@ -2348,7 +2370,9 @@ class Generator (ast.NodeVisitor):
                 else:
                     if self.allowMemoizeCalls:
                         self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
-                    self.emit (');}}')
+                        
+                    if not self.allowJavaScriptCall:
+                        self.emit (');}}')
 
                 if nodeName == '__iter__':
                     self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')
