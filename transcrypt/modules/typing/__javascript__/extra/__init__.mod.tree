@@ -1,0 +1,43 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = __pragma__
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Pass 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = __new__
+					ctx: Store 
+				element: Name 
+					id: str = __include__
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 

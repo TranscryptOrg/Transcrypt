@@ -1,0 +1,12 @@
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\async_await>python D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 test.py 
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\async_await>call D:\python36_anaconda\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 test.py 
+
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.6.85
+Copyright (C) Geatec Engineering. License: Apache 2.0
+
+Saving result in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/async_await/__javascript__/test.js
+Saving minified result in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/async_await/__javascript__/test.min.js
+
+Ready

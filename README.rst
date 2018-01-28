@@ -121,6 +121,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Negative list indices allowed when operator overloading is enabled (issue 460)
+- Added pragma's and switches jscall and nojscall, 30% speedup, use only locally for insulated methods in a class
 - Fix for callable (None) (issue 450)
 - Start made with /tutorials/baseline mini Python tutorial
 - Fix for decorator from module (issue 448)

@@ -1567,7 +1567,7 @@ __pragma__ ('endif')
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
         }
-        else if (typeof b == 'object' && '__rpow__' in b) {
+        else if (typeof b == 'object' && '__rmod__' in b) {
             return b.__rmod__ (a);
         }
         else {
@@ -2041,8 +2041,18 @@ __pragma__ ('endif')
         if (typeof container == 'object' && '__getitem__' in container) {
             return container.__getitem__ (key);                             // Overloaded on container
         }
+        else if ((typeof container == 'string' || container instanceof Array) && key < 0) {
+            return container [container.length + key];
+        }
         else {
-            return container [key];                                         // Container must support bare JavaScript brackets
+            return container [key];                                         // Container must support bare JavaScript brackets          
+            /*
+            // If it turns out keychecks really have to be supported here, the following will work
+            return __k__ (container, key);
+            // Could be inlined rather than a call, but performance not crucial since non overloaded [] in context of overloaded [] is rare
+            // High volume numerical code will use Numscrypt anyhow which does many things via shortcuts
+
+            */
         }
     };
     __all__.__getitem__ = __getitem__;
@@ -2050,6 +2060,9 @@ __pragma__ ('endif')
     var __setitem__ = function (container, key, value) {                    // Slice c.q. index, direct generated call to runtime switch
         if (typeof container == 'object' && '__setitem__' in container) {
             container.__setitem__ (key, value);                             // Overloaded on container
+        }
+        else if ((typeof container == 'string' || container instanceof Array) && key < 0) {
+            container [container.length + key] = value;
         }
         else {
             container [key] = value;                                        // Container must support bare JavaScript brackets

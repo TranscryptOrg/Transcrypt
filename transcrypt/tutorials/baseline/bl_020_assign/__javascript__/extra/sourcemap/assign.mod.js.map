@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_020_assign/__javascript__/assign.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_020_assign/assign.py"
+	],
+	"sourcesContent": [
+		"boy_name = 'John'\ngirl_name = 'Mary'\nboth = boy_name + ' and ' + girl_name\nprint (both)\n\nprint ('one', 'two', 'three')\n\nx = 7\ny = 8\nz = 10 * (x * y + 44)\nprint (x, y, z)\n\nprint (1, '+', 1, '=', 1 + 1)\n\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AACA;AACA;AACA;AAEA;AAEA;AACA;AACA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

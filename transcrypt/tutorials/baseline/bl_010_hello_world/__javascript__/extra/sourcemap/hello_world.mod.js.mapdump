@@ -1,0 +1,15 @@
+mapVersion: 3
+
+targetPath: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_010_hello_world/__javascript__/hello_world.mod.js
+
+sourcePaths: ['D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_010_hello_world/hello_world.py']
+
+mappings:
+	[0, 0, 0, 0, 0]
+	[1, 0, 0, 0, 0]
+	[2, 0, 0, 0, 0]
+	[3, 0, 0, 0, 0]
+	[4, 0, 0, 0, 0]
+	[5, 0, 0, 0, 0]
+	[6, 0, 0, 0, 0]
+	[7, 0, 0, 0, 0]

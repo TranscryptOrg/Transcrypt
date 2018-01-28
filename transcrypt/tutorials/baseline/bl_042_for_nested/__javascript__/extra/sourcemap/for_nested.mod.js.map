@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_042_for_nested/__javascript__/for_nested.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_042_for_nested/for_nested.py"
+	],
+	"sourcesContent": [
+		"tableText = ''\n\nfor tableNr in range (1, 11):\n    tableText += f'<b>Table of {tableNr}:</b><br>'\n    \n    for lineNr in range (1, 11):\n        tableText += f'{lineNr} x {tableNr} = {lineNr * tableNr}<br>'\n        \n    tableText += '<br>'\n\ndocument.getElementById ('output') .innerHTML = tableText\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAEA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAKA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

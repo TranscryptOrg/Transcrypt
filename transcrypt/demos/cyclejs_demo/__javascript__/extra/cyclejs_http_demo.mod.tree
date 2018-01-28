@@ -1,0 +1,426 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Tuple 
+					elts: list 
+						element: Name 
+							id: str = dom
+							ctx: Store 
+						element: Name 
+							id: str = http
+							ctx: Store 
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Name 
+						id: str = CycleDOM
+						ctx: Load 
+					element: Name 
+						id: str = CycleHTTPDriver
+						ctx: Load 
+				ctx: Load 
+		element: FunctionDef 
+			name: str = render
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = user
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = dom
+								ctx: Load 
+							attr: str = div
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = .users
+							element: List 
+								elts: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dom
+												ctx: Load 
+											attr: str = button
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = .get-random
+											element: Str 
+												s: str = Get random user
+										keywords: list 
+									element: IfExp 
+										test: UnaryOp 
+											op: Not 
+											operand: Name 
+												id: str = user
+												ctx: Load 
+										body: NameConstant 
+											value: NoneType = None
+										orelse: Call 
+											func: Attribute 
+												value: Name 
+													id: str = dom
+													ctx: Load 
+												attr: str = div
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = .user-details
+												element: List 
+													elts: list 
+														element: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = dom
+																	ctx: Load 
+																attr: str = h1
+																ctx: Load 
+															args: list 
+																element: Str 
+																	s: str = .user-name
+																element: Attribute 
+																	value: Name 
+																		id: str = user
+																		ctx: Load 
+																	attr: str = name
+																	ctx: Load 
+															keywords: list 
+														element: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = dom
+																	ctx: Load 
+																attr: str = h4
+																ctx: Load 
+															args: list 
+																element: Str 
+																	s: str = .user-email
+																element: Attribute 
+																	value: Name 
+																		id: str = user
+																		ctx: Load 
+																	attr: str = email
+																	ctx: Load 
+															keywords: list 
+														element: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = dom
+																	ctx: Load 
+																attr: str = a
+																ctx: Load 
+															args: list 
+																element: Str 
+																	s: str = .user-website
+																element: Dict 
+																	keys: list 
+																		element: Str 
+																			s: str = attrs
+																	values: list 
+																		element: Dict 
+																			keys: list 
+																				element: Str 
+																					s: str = href
+																			values: list 
+																				element: Attribute 
+																					value: Name 
+																						id: str = user
+																						ctx: Load 
+																					attr: str = website
+																					ctx: Load 
+																element: Attribute 
+																	value: Name 
+																		id: str = user
+																		ctx: Load 
+																	attr: str = website
+																	ctx: Load 
+															keywords: list 
+													ctx: Load 
+											keywords: list 
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = main
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = sources
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = This **declares** your app. Evaluated only once(!)
+				element: FunctionDef 
+					name: str = get_url_params
+					args: arguments 
+						args: list 
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = rand
+									ctx: Store 
+							value: BinOp 
+								left: Call 
+									func: Attribute 
+										value: Name 
+											id: str = Math
+											ctx: Load 
+										attr: str = round
+										ctx: Load 
+									args: list 
+										element: BinOp 
+											left: Call 
+												func: Attribute 
+													value: Name 
+														id: str = Math
+														ctx: Load 
+													attr: str = random
+													ctx: Load 
+												args: list 
+												keywords: list 
+											op: Mult 
+											right: Num 
+												n: int = 9
+									keywords: list 
+								op: Add 
+								right: Num 
+									n: int = 1
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = url
+									ctx: Store 
+							value: Dict 
+								keys: list 
+									element: Str 
+										s: str = url
+									element: Str 
+										s: str = category
+									element: Str 
+										s: str = method
+								values: list 
+									element: BinOp 
+										left: Str 
+											s: str = http://jsonplaceholder.typicode.com/users/
+										op: Add 
+										right: Call 
+											func: Name 
+												id: str = str
+												ctx: Load 
+											args: list 
+												element: Name 
+													id: str = rand
+													ctx: Load 
+											keywords: list 
+									element: Str 
+										s: str = users
+									element: Str 
+										s: str = GET
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = console
+										ctx: Load 
+									attr: str = log
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = url
+										ctx: Load 
+								keywords: list 
+						element: Return 
+							value: Name 
+								id: str = url
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = get_random_user_s
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = sources
+													ctx: Load 
+												attr: str = DOM
+												ctx: Load 
+											attr: str = select
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = .get-random
+										keywords: list 
+									attr: str = events
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = click
+								keywords: list 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = get_url_params
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = user_s
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Call 
+												func: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = sources
+															ctx: Load 
+														attr: str = HTTP
+														ctx: Load 
+													attr: str = select
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = users
+												keywords: list 
+											attr: str = flatten
+											ctx: Load 
+										args: list 
+										keywords: list 
+									attr: str = map
+									ctx: Load 
+								args: list 
+									element: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = res
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Attribute 
+											value: Name 
+												id: str = res
+												ctx: Load 
+											attr: str = body
+											ctx: Load 
+								keywords: list 
+							attr: str = startWith
+							ctx: Load 
+						args: list 
+							element: NameConstant 
+								value: NoneType = None
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = vdom_s
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = user_s
+								ctx: Load 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = render
+								ctx: Load 
+						keywords: list 
+				element: Return 
+					value: Dict 
+						keys: list 
+							element: Str 
+								s: str = DOM
+							element: Str 
+								s: str = HTTP
+						values: list 
+							element: Name 
+								id: str = vdom_s
+								ctx: Load 
+							element: Name 
+								id: str = get_random_user_s
+								ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Cycle
+						ctx: Load 
+					attr: str = run
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = main
+						ctx: Load 
+					element: Dict 
+						keys: list 
+							element: Str 
+								s: str = DOM
+							element: Str 
+								s: str = HTTP
+						values: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = dom
+										ctx: Load 
+									attr: str = makeDOMDriver
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = #app
+								keywords: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = http
+										ctx: Load 
+									attr: str = makeHTTPDriver
+									ctx: Load 
+								args: list 
+								keywords: list 
+				keywords: list 

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/hello/__javascript__/hello.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/hello/hello.py"
+	],
+	"sourcesContent": [
+		"from itertools import chain\n\nclass SolarSystem:\n    planets = [list (chain (planet, (index + 1,))) for index, planet in enumerate ((\n        ('Mercury', 'hot', 2240),\n        ('Venus', 'sulphurous', 6052),\n        ('Earth', 'fertile', 6378),\n        ('Mars', 'reddish', 3397),\n        ('Jupiter', 'stormy', 71492),\n        ('Saturn', 'ringed', 60268),\n        ('Uranus', 'cold', 25559),\n        ('Neptune', 'very cold', 24766) \n    ))]\n    \n    lines = (\n        '{} is a {} planet',\n        'The radius of {} is {} km',\n        '{} is planet nr. {} counting from the sun'\n    )\n    \n    def __init__ (self):\n        self.lineIndex = 0\n    \n    def greet (self):\n        self.planet = self.planets [int (Math.random () * len (self.planets))]\n        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])\n        self.explain ()\n        \n    def explain (self):\n        document.getElementById ('explain').innerHTML = (\n            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])\n        )\n        self.lineIndex = (self.lineIndex + 1) % 3\n        \nsolarSystem = SolarSystem ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAWA;AAMA;AACA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAEA;AAEA;AAEA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

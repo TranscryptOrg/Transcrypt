@@ -1,0 +1,39 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noanno
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = api
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = {}
+					element: Str 
+						s: str = 
+        {
+            Scene: function () {return new THREE.Scene (...arguments);},
+            PerspectiveCamera: function () {return new THREE.PerspectiveCamera (...arguments);},
+            BoxGeometry: function () {return new THREE.BoxGeometry (...arguments);},
+            WebGLRenderer: function () {return new THREE.WebGLRenderer (...arguments);},
+            MeshLambertMaterial: function () {return new THREE.MeshLambertMaterial (...arguments);},
+            Mesh: function () {return new THREE.Mesh (...arguments);},
+            AmbientLight: function () {return new THREE.AmbientLight (...arguments);},
+            DirectionalLight: function () {return new THREE.DirectionalLight (...arguments);}
+        }
+     
+				keywords: list 

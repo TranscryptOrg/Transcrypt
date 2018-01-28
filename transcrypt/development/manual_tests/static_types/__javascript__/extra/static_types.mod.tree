@@ -1,0 +1,248 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = __pragma__
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Pass 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = __new__
+					ctx: Store 
+				element: Name 
+					id: str = __include__
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 
+		element: ImportFrom 
+			module: str = typing
+			names: list 
+				element: alias 
+					name: str = Iterator
+					asname: NoneType = None
+			level: int = 0
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = mod1
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = mod2
+					asname: NoneType = None
+		element: AnnAssign 
+			target: Name 
+				id: str = testVar
+				ctx: Store 
+			annotation: Name 
+				id: str = int
+				ctx: Load 
+			value: Num 
+				n: float = 3.5
+			simple: int = 1
+		element: FunctionDef 
+			name: str = fib
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = n
+						annotation: Name 
+							id: str = int
+							ctx: Load 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = a
+									ctx: Store 
+								element: Name 
+									id: str = b
+									ctx: Store 
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: int = 1
+						ctx: Load 
+				element: While 
+					test: Compare 
+						left: Name 
+							id: str = a
+							ctx: Load 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Name 
+								id: str = n
+								ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = a
+											ctx: Store 
+										element: Name 
+											id: str = b
+											ctx: Store 
+									ctx: Store 
+							value: Tuple 
+								elts: list 
+									element: Name 
+										id: str = b
+										ctx: Load 
+									element: BinOp 
+										left: Name 
+											id: str = a
+											ctx: Load 
+										op: Add 
+										right: Name 
+											id: str = b
+											ctx: Load 
+								ctx: Load 
+					orelse: list 
+				element: Return 
+					value: Num 
+						n: int = 3
+			decorator_list: list 
+			returns: Subscript 
+				value: Name 
+					id: str = Iterator
+					ctx: Load 
+				slice: Index 
+					value: Name 
+						id: str = int
+						ctx: Load 
+				ctx: Load 
+		element: FunctionDef 
+			name: str = add
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = a
+						annotation: Name 
+							id: str = int
+							ctx: Load 
+					element: arg 
+						arg: str = b
+						annotation: Name 
+							id: str = int
+							ctx: Load 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Name 
+							id: str = a
+							ctx: Load 
+						op: Add 
+						right: Name 
+							id: str = b
+							ctx: Load 
+			decorator_list: list 
+			returns: NameConstant 
+				value: NoneType = None
+		element: ClassDef 
+			name: str = A
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+					returns: NameConstant 
+						value: NoneType = None
+				element: FunctionDef 
+					name: str = test
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Str 
+								s: str = test
+					decorator_list: list 
+					returns: NameConstant 
+						value: NoneType = None
+			decorator_list: list 
+		element: Expr 
+			value: Str 
+				s: str = 
+__pragma__ ('ifdef', '__undefined__')   # Needed because Transcrypt imports are compile time
+if '__undefined__' in __symbols__:      # Needed because CPython doesn't understand pragmas
+
+    # Variable annotations
+
+    aList: List [int] = []
+
+    aString: str    # Note: no initial value!
+
+    class aClass:
+        aClassVar: ClassVar [Dict [str, int]] = {}
+        
+    aList = [1.1, 2.2]
+    aString = 1000
+    aClass.aClassVar = {'aString', 3.14}
+
+__pragma__ ('endif')

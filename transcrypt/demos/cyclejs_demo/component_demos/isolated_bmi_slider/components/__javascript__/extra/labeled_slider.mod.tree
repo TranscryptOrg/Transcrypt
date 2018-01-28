@@ -1,0 +1,409 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = components.snabbdom
+			names: list 
+				element: alias 
+					name: str = span
+					asname: NoneType = None
+				element: alias 
+					name: str = input
+					asname: NoneType = None
+				element: alias 
+					name: str = div
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = LabeledSlider
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = sources
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = A cycle js component
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = dom_source
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = sources
+							ctx: Load 
+						attr: str = DOM
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = propsS
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = sources
+							ctx: Load 
+						attr: str = props
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = new_valueS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dom_source
+												ctx: Load 
+											attr: str = select
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = .slider
+										keywords: list 
+									attr: str = events
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = input
+								keywords: list 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Lambda 
+								args: arguments 
+									args: list 
+										element: arg 
+											arg: str = ev
+											annotation: NoneType = None
+									vararg: NoneType = None
+									kwonlyargs: list 
+									kw_defaults: list 
+									kwarg: NoneType = None
+									defaults: list 
+								body: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = ev
+											ctx: Load 
+										attr: str = target
+										ctx: Load 
+									attr: str = value
+									ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = stateS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = propsS
+												ctx: Load 
+											attr: str = map
+											ctx: Load 
+										args: list 
+											element: Lambda 
+												args: arguments 
+													args: list 
+														element: arg 
+															arg: str = props
+															annotation: NoneType = None
+													vararg: NoneType = None
+													kwonlyargs: list 
+													kw_defaults: list 
+													kwarg: NoneType = None
+													defaults: list 
+												body: Call 
+													func: Attribute 
+														value: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = new_valueS
+																	ctx: Load 
+																attr: str = map
+																ctx: Load 
+															args: list 
+																element: Lambda 
+																	args: arguments 
+																		args: list 
+																			element: arg 
+																				arg: str = val
+																				annotation: NoneType = None
+																		vararg: NoneType = None
+																		kwonlyargs: list 
+																		kw_defaults: list 
+																		kwarg: NoneType = None
+																		defaults: list 
+																	body: Dict 
+																		keys: list 
+																			element: Str 
+																				s: str = label
+																			element: Str 
+																				s: str = unit
+																			element: Str 
+																				s: str = min
+																			element: Str 
+																				s: str = max
+																			element: Str 
+																				s: str = value
+																		values: list 
+																			element: Attribute 
+																				value: Name 
+																					id: str = props
+																					ctx: Load 
+																				attr: str = label
+																				ctx: Load 
+																			element: Attribute 
+																				value: Name 
+																					id: str = props
+																					ctx: Load 
+																				attr: str = unit
+																				ctx: Load 
+																			element: Attribute 
+																				value: Name 
+																					id: str = props
+																					ctx: Load 
+																				attr: str = min
+																				ctx: Load 
+																			element: Attribute 
+																				value: Name 
+																					id: str = props
+																					ctx: Load 
+																				attr: str = max
+																				ctx: Load 
+																			element: Name 
+																				id: str = val
+																				ctx: Load 
+															keywords: list 
+														attr: str = startWith
+														ctx: Load 
+													args: list 
+														element: Name 
+															id: str = props
+															ctx: Load 
+													keywords: list 
+										keywords: list 
+									attr: str = flatten
+									ctx: Load 
+								args: list 
+								keywords: list 
+							attr: str = remember
+							ctx: Load 
+						args: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = vdomS
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = stateS
+								ctx: Load 
+							attr: str = map
+							ctx: Load 
+						args: list 
+							element: Lambda 
+								args: arguments 
+									args: list 
+										element: arg 
+											arg: str = state
+											annotation: NoneType = None
+									vararg: NoneType = None
+									kwonlyargs: list 
+									kw_defaults: list 
+									kwarg: NoneType = None
+									defaults: list 
+								body: Call 
+									func: Name 
+										id: str = div
+										ctx: Load 
+									args: list 
+										element: Str 
+											s: str = .labeled-slider
+										element: List 
+											elts: list 
+												element: Call 
+													func: Name 
+														id: str = span
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = .label
+														element: BinOp 
+															left: BinOp 
+																left: BinOp 
+																	left: Attribute 
+																		value: Name 
+																			id: str = state
+																			ctx: Load 
+																		attr: str = label
+																		ctx: Load 
+																	op: Add 
+																	right: Str 
+																		s: str =  
+																op: Add 
+																right: Attribute 
+																	value: Name 
+																		id: str = state
+																		ctx: Load 
+																	attr: str = value
+																	ctx: Load 
+															op: Add 
+															right: Attribute 
+																value: Name 
+																	id: str = state
+																	ctx: Load 
+																attr: str = unit
+																ctx: Load 
+													keywords: list 
+												element: Call 
+													func: Name 
+														id: str = input
+														ctx: Load 
+													args: list 
+														element: Str 
+															s: str = .slider
+														element: Dict 
+															keys: list 
+																element: Str 
+																	s: str = attrs
+															values: list 
+																element: Dict 
+																	keys: list 
+																		element: Str 
+																			s: str = type
+																		element: Str 
+																			s: str = min
+																		element: Str 
+																			s: str = max
+																		element: Str 
+																			s: str = value
+																	values: list 
+																		element: Str 
+																			s: str = range
+																		element: Attribute 
+																			value: Name 
+																				id: str = state
+																				ctx: Load 
+																			attr: str = min
+																			ctx: Load 
+																		element: Attribute 
+																			value: Name 
+																				id: str = state
+																				ctx: Load 
+																			attr: str = max
+																			ctx: Load 
+																		element: Attribute 
+																			value: Name 
+																				id: str = state
+																				ctx: Load 
+																			attr: str = value
+																			ctx: Load 
+													keywords: list 
+											ctx: Load 
+									keywords: list 
+						keywords: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = dict
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = DOM
+								value: Name 
+									id: str = vdomS
+									ctx: Load 
+							element: keyword 
+								arg: str = value
+								value: Call 
+									func: Attribute 
+										value: Name 
+											id: str = stateS
+											ctx: Load 
+										attr: str = map
+										ctx: Load 
+									args: list 
+										element: Lambda 
+											args: arguments 
+												args: list 
+													element: arg 
+														arg: str = state
+														annotation: NoneType = None
+												vararg: NoneType = None
+												kwonlyargs: list 
+												kw_defaults: list 
+												kwarg: NoneType = None
+												defaults: list 
+											body: Attribute 
+												value: Name 
+													id: str = state
+													ctx: Load 
+												attr: str = value
+												ctx: Load 
+									keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = isolate
+					ctx: Store 
+			value: Subscript 
+				value: Name 
+					id: str = CycleIsolate
+					ctx: Load 
+				slice: Index 
+					value: Str 
+						s: str = default
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ILabeledSlider
+					ctx: Store 
+			value: Lambda 
+				args: arguments 
+					args: list 
+						element: arg 
+							arg: str = sources
+							annotation: NoneType = None
+					vararg: NoneType = None
+					kwonlyargs: list 
+					kw_defaults: list 
+					kwarg: NoneType = None
+					defaults: list 
+				body: Call 
+					func: Call 
+						func: Name 
+							id: str = isolate
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = LabeledSlider
+								ctx: Load 
+						keywords: list 
+					args: list 
+						element: Name 
+							id: str = sources
+							ctx: Load 
+					keywords: list 

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/org/threejs/__javascript__/org.threejs.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/org/threejs/__init__.py"
+	],
+	"sourcesContent": [
+		"__pragma__ ('noanno')\n\napi = __pragma__ ('js',\n    '{}',\n    '''\n        {\n            Scene: function () {return new THREE.Scene (...arguments);},\n            PerspectiveCamera: function () {return new THREE.PerspectiveCamera (...arguments);},\n            BoxGeometry: function () {return new THREE.BoxGeometry (...arguments);},\n            WebGLRenderer: function () {return new THREE.WebGLRenderer (...arguments);},\n            MeshLambertMaterial: function () {return new THREE.MeshLambertMaterial (...arguments);},\n            Mesh: function () {return new THREE.Mesh (...arguments);},\n            AmbientLight: function () {return new THREE.AmbientLight (...arguments);},\n            DirectionalLight: function () {return new THREE.DirectionalLight (...arguments);}\n        }\n     '''\n)\n\n# The above are just examples, all needed constructors can be added in this way\n# THREE is just left in the global namespace as three.js itself seems to need it"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

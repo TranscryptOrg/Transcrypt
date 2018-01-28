@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/__javascript__/cyclejs_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/cyclejs_demo.py"
+	],
+	"sourcesContent": [
+		"# This is the first 'checkbox' example, with only change:\n# view function factored into a render function, for readability:\n\ndom = CycleDOM\ndiv, input, p, h1 = dom.div, dom.input, dom.p\n\ndef render(toggled):\n    return div([\n        input({'attrs': {'type': 'checkbox'}}),\n        'Toggle me',\n        p('ON' if toggled else 'off')])\n\ndef main(drivers):\n    xs = xstream['default']\n    driver_sinks = {\n        'DOM': drivers['DOM'].select('input').events('change')     \\\n                .map(lambda ev: ev.target.checked)                 \\\n                .startWith(False)                                  \\\n                .map(render)\n            }\n    return driver_sinks\n\n\ndrivers = {'DOM': dom.makeDOMDriver('#app')}\n\n\nCycle.run(main, drivers)\n"
+	],
+	"mappings": "AAAA;AAAA;AAGA;AACA;AAAA;AAAA;AAAA;AAAA;AAEA;AAIA;AAAA;AAEA;AACA;AAEA;AAAA;AAAA;AAKA;AAAA;AAGA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

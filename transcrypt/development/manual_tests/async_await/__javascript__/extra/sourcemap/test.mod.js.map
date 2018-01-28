@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/async_await/__javascript__/test.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/async_await/test.py"
+	],
+	"sourcesContent": [
+		"from org.transcrypt.stubs.browser import __pragma__, __envir__\n\n# Note that CPython will ignore all pragma's\n\n\n\n# Provide waitAWhile for Transcrypt\n\n__pragma__ ('js', '{}', '''\n    function waitAWhile (aTime, asio) {\n      return new Promise (resolve => {\n        setTimeout (() => {\n          resolve (aTime);\n        }, 1000 * aTime);\n      });\n    }\n''')\n\n\n\n# Provide waitAWhile for CPython\n\n__pragma__ ('skip') # Compile time, needed because import is done compile time\n\nimport asyncio\n\ndef waitAWhile (aTime, asio):\n    return asio.sleep (aTime)\n        \n__pragma__ ('noskip')\n\n\n    \n# Actual code to be tested    \n    \nasync def f (waw, asio):\n    print ('f0')\n    await waw (2, asio)\n    print ('f1')\n \nclass C:\n    def __init__ (self):\n        self.aTime = 2\n        \n    async def g (self, waw, asio):\n        print ('g0')\n        await waw (self.aTime, asio)\n        print ('g1')\n\nc = C ()\n    \n\n# Just call async functions for Transcrypt, since in the browser JavaScript is event driven by default\n    \nif __envir__.executor_name == __envir__.transpiler_name:\n    f (waitAWhile, None)\n    c.g (waitAWhile, None)\n    c.g (waitAWhile, None)\n    f (waitAWhile, None)\n    \n    \n    \n# Create event loop and tasks for CPython, since it isn't event driven by default\n    \nelse:\n    eventLoop = asyncio.get_event_loop ()\n    tasks = [\n        eventLoop.create_task (f (waitAWhile, asyncio)),\n        eventLoop.create_task (c.g (waitAWhile, asyncio)),\n        eventLoop.create_task (c.g (waitAWhile, asyncio)),\n        eventLoop.create_task (f (waitAWhile, asyncio)),\n    ]\n\n    waitingTasks = asyncio.wait (tasks)\n    eventLoop.run_until_complete (waitingTasks)\n    eventLoop.close ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAQA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AA2BA;AACA;AACA;AACA;AAAA;AAEA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AAKA;AACA;AACA;AACA;AACA;AAAA;AACA;AAMA;AAKA;AAGA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

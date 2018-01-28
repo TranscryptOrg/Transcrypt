@@ -1,21 +1,45 @@
-		element: Expr 
-			value: Call 
-				func: Attribute 
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = a
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: Num 
+						n: int = 10
+					element: Num 
+						n: int = 20
+					element: Num 
+						n: int = 30
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = b
+					ctx: Store 
+			value: Subscript 
+				value: Name 
+					id: str = a
+					ctx: Load 
+				slice: Index 
+					value: UnaryOp 
+						op: USub 
+						operand: Num 
+							n: int = 1
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Subscript 
 					value: Name 
-						id: str = c1
+						id: str = a
 						ctx: Load 
-					attr: str = conjugate
-					ctx: Load 
-				args: list 
-				keywords: list 
-                
-		element: Expr 
-			value: Call 
-				func: Name 
-					id: str = conjugate
-					ctx: Load 
-				args: list 
-					element: Name 
-						id: str = c2
-						ctx: Load 
-				keywords: list
+					slice: Index 
+						value: UnaryOp 
+							op: USub 
+							operand: Num 
+								n: int = 2
+					ctx: Store 
+			value: Num 
+				n: int = 3

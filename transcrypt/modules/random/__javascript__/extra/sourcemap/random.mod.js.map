@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/random/__javascript__/random.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/random/__init__.py"
+	],
+	"sourcesContent": [
+		"# Mersenne-Twister random number algorithm\n\nimport math\n\n_array = [0 for i in range (624)]\n_index = 0\n_bitmask1 = (2 ** 32) - 1\n_bitmask2 = 2 ** 31\n_bitmask3 = (2 ** 31) - 1\n\ndef _fill_array():\n    global _array\n    for i in range (624):\n        y = (_array [i] & _bitmask2) + (_array [(i + 1) % 624] & _bitmask3)\n        _array [i] = _array [(i + 397) % 624] ^ (y >> 1)\n        if y % 2 != 0:\n            _array[i] ^= 2567483615\n            \ndef _random_integer ():\n    global _index\n    global _array\n    if _index == 0:\n        _fill_array ()\n    y = _array [_index]\n    y ^= y >> 11\n    y ^= (y << 7) & 2636928640\n    y ^= (y << 15) & 4022730752\n    y ^= y >> 18\n\n    _index = (_index + 1) % 624\n    return y\n\ndef seed (x = int (_bitmask3 * Math.random ())):\n    global _array\n    global _bitmask1\n    _array [0] = x\n    for i in  range (1, 624):\n        _array [i] = ((1812433253 * _array [i - 1]) ^ ((_array [i - 1] >> 30) + i)) & _bitmask1\n\ndef randint (a, b):\n    return a + _random_integer () % (b - a + 1)\n\ndef choice (seq):\n    return seq [randint (0, len (seq) - 1)]\n\ndef random ():\n    return _random_integer () / _bitmask3\n\ndef shuffle (x):    # Fisher-Yates unbiased shuffle\n    for i in range (len (x) - 1, 0, -1):\n        j = math.floor (random () * (i + 1))\n        temp = x [i]\n        x [i] = x [j]\n        x [j] = temp\n    \nseed ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAuDA;AAvDA;AAEA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AACA;AACA;AAEA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAGA;AAGA;AACA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAMA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAGA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

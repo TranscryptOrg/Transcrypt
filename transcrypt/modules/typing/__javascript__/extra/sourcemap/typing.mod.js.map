@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/typing/__javascript__/typing.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/typing/__init__.py"
+	],
+	"sourcesContent": [
+		"# Dummy module to prevent import in Transcrypt of its CPython\n# counterpart, that depends on several standard lib modules"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

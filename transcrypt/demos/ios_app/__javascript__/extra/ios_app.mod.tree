@@ -1,0 +1,1806 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = random
+					asname: NoneType = None
+		element: ClassDef 
+			name: str = Dice
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = document
+											ctx: Load 
+										attr: str = body
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = touchstart
+									element: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = event
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Name 
+													id: str = event
+													ctx: Load 
+												attr: str = preventDefault
+												ctx: Load 
+											args: list 
+											keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = document
+											ctx: Load 
+										attr: str = body
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = mousedown
+									element: Lambda 
+										args: arguments 
+											args: list 
+												element: arg 
+													arg: str = event
+													annotation: NoneType = None
+											vararg: NoneType = None
+											kwonlyargs: list 
+											kw_defaults: list 
+											kwarg: NoneType = None
+											defaults: list 
+										body: Call 
+											func: Attribute 
+												value: Name 
+													id: str = event
+													ctx: Load 
+												attr: str = preventDefault
+												ctx: Load 
+											args: list 
+											keywords: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = body
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = margin
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = body
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = overflow
+									ctx: Store 
+							value: Str 
+								s: str = hidden
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = all
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = createElement
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = div
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = color
+									ctx: Store 
+							value: Str 
+								s: str = white
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = backgroundColor
+									ctx: Store 
+							value: Str 
+								s: str = black
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = height
+									ctx: Store 
+							value: Str 
+								s: str = 100%
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = width
+									ctx: Store 
+							value: Str 
+								s: str = 100%
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = padding
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = all
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = margin
+									ctx: Store 
+							value: Num 
+								n: int = 0
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = document
+											ctx: Load 
+										attr: str = body
+										ctx: Load 
+									attr: str = appendChild
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = all
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = dices
+									ctx: Store 
+							value: List 
+								elts: list 
+								ctx: Load 
+						element: For 
+							target: Name 
+								id: str = index
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = range
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 6
+								keywords: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = dice
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = createElement
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = div
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = dice
+												ctx: Load 
+											attr: str = normalColor
+											ctx: Store 
+									value: IfExp 
+										test: Compare 
+											left: Name 
+												id: str = index
+												ctx: Load 
+											ops: list 
+												element: Lt 
+											comparators: list 
+												element: Num 
+													n: int = 3
+										body: Str 
+											s: str = #770000
+										orelse: Str 
+											s: str = #0000ff
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = position
+											ctx: Store 
+									value: Str 
+										s: str = absolute
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = backgroundColor
+											ctx: Store 
+									value: Attribute 
+										value: Name 
+											id: str = dice
+											ctx: Load 
+										attr: str = normalColor
+										ctx: Load 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dice
+												ctx: Load 
+											attr: str = addEventListener
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = touchstart
+											element: Call 
+												func: Lambda 
+													args: arguments 
+														args: list 
+															element: arg 
+																arg: str = aDice
+																annotation: NoneType = None
+														vararg: NoneType = None
+														kwonlyargs: list 
+														kw_defaults: list 
+														kwarg: NoneType = None
+														defaults: list 
+													body: Lambda 
+														args: arguments 
+															args: list 
+															vararg: NoneType = None
+															kwonlyargs: list 
+															kw_defaults: list 
+															kwarg: NoneType = None
+															defaults: list 
+														body: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = roll
+																ctx: Load 
+															args: list 
+																element: Name 
+																	id: str = aDice
+																	ctx: Load 
+															keywords: list 
+												args: list 
+													element: Name 
+														id: str = dice
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dice
+												ctx: Load 
+											attr: str = addEventListener
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = mousedown
+											element: Call 
+												func: Lambda 
+													args: arguments 
+														args: list 
+															element: arg 
+																arg: str = aDice
+																annotation: NoneType = None
+														vararg: NoneType = None
+														kwonlyargs: list 
+														kw_defaults: list 
+														kwarg: NoneType = None
+														defaults: list 
+													body: Lambda 
+														args: arguments 
+															args: list 
+															vararg: NoneType = None
+															kwonlyargs: list 
+															kw_defaults: list 
+															kwarg: NoneType = None
+															defaults: list 
+														body: Call 
+															func: Attribute 
+																value: Name 
+																	id: str = self
+																	ctx: Load 
+																attr: str = roll
+																ctx: Load 
+															args: list 
+																element: Name 
+																	id: str = aDice
+																	ctx: Load 
+															keywords: list 
+												args: list 
+													element: Name 
+														id: str = dice
+														ctx: Load 
+												keywords: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = dices
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = dice
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = all
+												ctx: Load 
+											attr: str = appendChild
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = dice
+												ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = dice
+												ctx: Load 
+											attr: str = inner
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = document
+												ctx: Load 
+											attr: str = createElement
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = div
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = inner
+												ctx: Load 
+											attr: str = setAttribute
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = unselectable
+											element: Str 
+												s: str = on
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = fontWeight
+											ctx: Store 
+									value: Str 
+										s: str = bold
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = textAlign
+											ctx: Store 
+									value: Str 
+										s: str = center
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = position
+											ctx: Store 
+									value: Str 
+										s: str = absolute
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = inner
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Str 
+										s: str = ?
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = dice
+												ctx: Load 
+											attr: str = appendChild
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = inner
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = banner
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = createElement
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = div
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = banner
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = position
+									ctx: Store 
+							value: Str 
+								s: str = absolute
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = banner
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = cursor
+									ctx: Store 
+							value: Str 
+								s: str = pointer
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = banner
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = touchstart
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = gotoTranscryptSite
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = banner
+										ctx: Load 
+									attr: str = addEventListener
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = mousedown
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = gotoTranscryptSite
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = banner
+											ctx: Load 
+										attr: str = style
+										ctx: Load 
+									attr: str = fontFamily
+									ctx: Store 
+							value: Str 
+								s: str = arial
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = banner
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: BinOp 
+										left: BinOp 
+											left: Str 
+												s: str = <span id="bannerLarge"><font color="777777">www.<b><i>
+											op: Add 
+											right: Str 
+												s: str = <font color="ff4422">T<font color="ffb000">r<font color="228822">a<font color="3366ff">n
+										op: Add 
+										right: Str 
+											s: str = <font color="ff4422">s<font color="ffb000">c<font color="228822">r<font color="3366ff">y<font color="ffb000">p<font color="228822">t
+									op: Add 
+									right: Str 
+										s: str = </i></b><font color="777777">.org<font size={}><font color="cccccc"></span>
+								op: Add 
+								right: Str 
+									s: str = <span id="bannerSmall"><i> Write your apps in Python for free!</i></span>
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = all
+										ctx: Load 
+									attr: str = appendChild
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = banner
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = bannerLarge
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = bannerLarge
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = bannerSmall
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = bannerSmall
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = audio
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = __new__
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = Audio
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = ios_app.mp3
+										keywords: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = window
+										ctx: Load 
+									attr: str = onresize
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = rightSize
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = rightSize
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = gotoTranscryptSite
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = document
+											ctx: Load 
+										attr: str = location
+										ctx: Load 
+									attr: str = href
+									ctx: Store 
+							value: Str 
+								s: str = http://www.transcrypt.org
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = roll
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = dice
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = frameIndex
+									ctx: Store 
+							value: Num 
+								n: int = 10
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = audio
+										ctx: Load 
+									attr: str = play
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: FunctionDef 
+							name: str = frame
+							args: arguments 
+								args: list 
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Nonlocal 
+									names: list 
+										element: str = frameIndex
+								element: AugAssign 
+									target: Name 
+										id: str = frameIndex
+										ctx: Store 
+									op: Sub 
+									value: Num 
+										n: int = 1
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = inner
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = random
+												ctx: Load 
+											attr: str = randint
+											ctx: Load 
+										args: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 6
+										keywords: list 
+								element: If 
+									test: Name 
+										id: str = frameIndex
+										ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = color
+													ctx: Store 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = random
+														ctx: Load 
+													attr: str = choice
+													ctx: Load 
+												args: list 
+													element: Tuple 
+														elts: list 
+															element: Str 
+																s: str = red
+															element: Str 
+																s: str = green
+															element: Str 
+																s: str = blue
+															element: Str 
+																s: str = yellow
+														ctx: Load 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Name 
+													id: str = setTimeout
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = frame
+														ctx: Load 
+													element: Num 
+														n: int = 100
+												keywords: list 
+									orelse: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = backgroundColor
+													ctx: Store 
+											value: Attribute 
+												value: Name 
+													id: str = dice
+													ctx: Load 
+												attr: str = normalColor
+												ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = color
+													ctx: Store 
+											value: Str 
+												s: str = white
+							decorator_list: list 
+							returns: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = frame
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = rightSize
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = pageWidth
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = window
+									ctx: Load 
+								attr: str = innerWidth
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = pageHeight
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = window
+									ctx: Load 
+								attr: str = innerHeight
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = portrait
+									ctx: Store 
+							value: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = pageHeight
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = pageWidth
+										ctx: Load 
+						element: For 
+							target: Tuple 
+								elts: list 
+									element: Name 
+										id: str = index
+										ctx: Store 
+									element: Name 
+										id: str = dice
+										ctx: Store 
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = enumerate
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = dices
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: If 
+									test: Compare 
+										left: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = pageHeight
+											ctx: Load 
+										ops: list 
+											element: Gt 
+										comparators: list 
+											element: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = pageWidth
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = height
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.3
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = width
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.4
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.03
+													op: Add 
+													right: BinOp 
+														left: IfExp 
+															test: Compare 
+																left: Name 
+																	id: str = index
+																	ctx: Load 
+																ops: list 
+																	element: Lt 
+																comparators: list 
+																	element: Num 
+																		n: int = 3
+															body: Name 
+																id: str = index
+																ctx: Load 
+															orelse: BinOp 
+																left: Name 
+																	id: str = index
+																	ctx: Load 
+																op: Sub 
+																right: Num 
+																	n: int = 3
+														op: Mult 
+														right: Num 
+															n: float = 0.32
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: IfExp 
+													test: Compare 
+														left: Name 
+															id: str = index
+															ctx: Load 
+														ops: list 
+															element: Lt 
+														comparators: list 
+															element: Num 
+																n: int = 3
+													body: Num 
+														n: float = 0.06
+													orelse: Num 
+														n: float = 0.54
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = charBoxSide
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.3
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = dice
+																ctx: Load 
+															attr: str = inner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.15
+													op: Mult 
+													right: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = pageHeight
+														ctx: Load 
+												op: Sub 
+												right: BinOp 
+													left: Num 
+														n: float = 0.6
+													op: Mult 
+													right: Name 
+														id: str = charBoxSide
+														ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = dice
+																ctx: Load 
+															attr: str = inner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.2
+													op: Mult 
+													right: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = pageWidth
+														ctx: Load 
+												op: Sub 
+												right: BinOp 
+													left: Num 
+														n: float = 0.5
+													op: Mult 
+													right: Name 
+														id: str = charBoxSide
+														ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = banner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.975
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = banner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.06
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = bannerLarge
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = fontSize
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.017
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = bannerSmall
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = fontSize
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.014
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+									orelse: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = height
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.4
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = width
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.3
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: IfExp 
+													test: Compare 
+														left: Name 
+															id: str = index
+															ctx: Load 
+														ops: list 
+															element: Lt 
+														comparators: list 
+															element: Num 
+																n: int = 3
+													body: Num 
+														n: float = 0.06
+													orelse: Num 
+														n: float = 0.54
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = dice
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.03
+													op: Add 
+													right: BinOp 
+														left: IfExp 
+															test: Compare 
+																left: Name 
+																	id: str = index
+																	ctx: Load 
+																ops: list 
+																	element: Lt 
+																comparators: list 
+																	element: Num 
+																		n: int = 3
+															body: Name 
+																id: str = index
+																ctx: Load 
+															orelse: BinOp 
+																left: Name 
+																	id: str = index
+																	ctx: Load 
+																op: Sub 
+																right: Num 
+																	n: int = 3
+														op: Mult 
+														right: Num 
+															n: float = 0.32
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = charBoxSide
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.4
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = dice
+																ctx: Load 
+															attr: str = inner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.2
+													op: Mult 
+													right: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = pageHeight
+														ctx: Load 
+												op: Sub 
+												right: BinOp 
+													left: Num 
+														n: float = 0.6
+													op: Mult 
+													right: Name 
+														id: str = charBoxSide
+														ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = dice
+																ctx: Load 
+															attr: str = inner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: BinOp 
+													left: Num 
+														n: float = 0.15
+													op: Mult 
+													right: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = pageWidth
+														ctx: Load 
+												op: Sub 
+												right: BinOp 
+													left: Num 
+														n: float = 0.5
+													op: Mult 
+													right: Name 
+														id: str = charBoxSide
+														ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = banner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = top
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.95
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageHeight
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = banner
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = left
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.03
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = bannerLarge
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = fontSize
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.015
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Attribute 
+														value: Attribute 
+															value: Name 
+																id: str = self
+																ctx: Load 
+															attr: str = bannerSmall
+															ctx: Load 
+														attr: str = style
+														ctx: Load 
+													attr: str = fontSize
+													ctx: Store 
+											value: BinOp 
+												left: Num 
+													n: float = 0.012
+												op: Mult 
+												right: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = pageWidth
+													ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = height
+											ctx: Store 
+									value: Name 
+										id: str = charBoxSide
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = width
+											ctx: Store 
+									value: Name 
+										id: str = charBoxSide
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Attribute 
+												value: Attribute 
+													value: Name 
+														id: str = dice
+														ctx: Load 
+													attr: str = inner
+													ctx: Load 
+												attr: str = style
+												ctx: Load 
+											attr: str = fontSize
+											ctx: Store 
+									value: Name 
+										id: str = charBoxSide
+										ctx: Load 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = dice
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = Dice
+					ctx: Load 
+				args: list 
+				keywords: list 

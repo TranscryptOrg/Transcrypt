@@ -1,0 +1,11 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Hello, world!
+				keywords: list 

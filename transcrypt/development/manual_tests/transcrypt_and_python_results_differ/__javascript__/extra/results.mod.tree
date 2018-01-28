@@ -1,0 +1,81 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Str 
+				s: str = 
+Test to find out if we can determine correctly wether we are in the Transcrypt/JavaScript or the CPython environment
+
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __envir__
+					asname: NoneType = None
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: If 
+			test: Compare 
+				left: Attribute 
+					value: Name 
+						id: str = __envir__
+						ctx: Load 
+					attr: str = executor_name
+					ctx: Load 
+				ops: list 
+					element: Eq 
+				comparators: list 
+					element: Attribute 
+						value: Name 
+							id: str = __envir__
+							ctx: Load 
+						attr: str = transpiler_name
+						ctx: Load 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Attribute 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = document
+										ctx: Load 
+									attr: str = getElementById
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = output
+								keywords: list 
+							attr: str = innerHTML
+							ctx: Store 
+					value: Str 
+						s: str = Using Transcrypt
+			orelse: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Using CPython
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 

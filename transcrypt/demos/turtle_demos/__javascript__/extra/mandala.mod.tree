@@ -1,0 +1,228 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = turtle
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = bgcolor
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = black
+				keywords: list 
+		element: For 
+			target: Tuple 
+				elts: list 
+					element: Name 
+						id: str = a_color
+						ctx: Store 
+					element: Name 
+						id: str = a_pensize
+						ctx: Store 
+					element: Name 
+						id: str = start_radius
+						ctx: Store 
+					element: Name 
+						id: str = stop_radius
+						ctx: Store 
+					element: Name 
+						id: str = radius_step
+						ctx: Store 
+				ctx: Store 
+			iter: Tuple 
+				elts: list 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = green
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 82
+							element: Num 
+								n: int = 40
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 6
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = red
+							element: Num 
+								n: int = 1
+							element: Num 
+								n: int = 84
+							element: Num 
+								n: int = 40
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 6
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = white
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 98
+							element: Num 
+								n: int = 50
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 5
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = yellow
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 70
+							element: Num 
+								n: int = 50
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 5
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = blue
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 97
+							element: Num 
+								n: int = 70
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 5
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = orange
+							element: Num 
+								n: int = 2
+							element: Num 
+								n: int = 87
+							element: Num 
+								n: int = 40
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 17
+						ctx: Load 
+					element: Tuple 
+						elts: list 
+							element: Str 
+								s: str = pink
+							element: Num 
+								n: int = 3
+							element: Num 
+								n: int = 102
+							element: Num 
+								n: int = 60
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 17
+						ctx: Load 
+				ctx: Load 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = pensize
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = a_pensize
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = color
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = a_color
+								ctx: Load 
+						keywords: list 
+				element: For 
+					target: Name 
+						id: str = angle_index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Num 
+								n: int = 10
+						keywords: list 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = radius
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = range
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = start_radius
+										ctx: Load 
+									element: Name 
+										id: str = stop_radius
+										ctx: Load 
+									element: Name 
+										id: str = radius_step
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = circle
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = radius
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = right
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 36
+								keywords: list 
+					orelse: list 
+			orelse: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = done
+					ctx: Load 
+				args: list 
+				keywords: list 

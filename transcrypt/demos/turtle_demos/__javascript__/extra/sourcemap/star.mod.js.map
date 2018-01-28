@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/turtle_demos/__javascript__/star.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/turtle_demos/star.py"
+	],
+	"sourcesContent": [
+		"# Free after the example from the Python 3.5 manual\n\nfrom turtle import *\n\nup ()\ngoto (-250, -21)\nstartPos = pos ()\n\ndown ()\ncolor ('red', 'yellow')\nbegin_fill ()\nwhile True:\n    forward (500)\n    right (170)\n    if distance (startPos) < 1:\n        break\nend_fill ()\ndone ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

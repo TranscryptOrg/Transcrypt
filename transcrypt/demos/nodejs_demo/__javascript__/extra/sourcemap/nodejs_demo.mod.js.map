@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/nodejs_demo/__javascript__/nodejs_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/nodejs_demo/nodejs_demo.py"
+	],
+	"sourcesContent": [
+		"# Compile with p. command line switch (see docs).\n# The example will be served at URL: http://localhost:8080 in your browser\n\nhttp = require ('http')\n\nclass Demo:\n    texts = (\n        'Welcome to the world of node.js',\n        'You can have your cake and eat it',\n        'Use node\\'s ecosystem while programming in Python',\n        'Using node.js from Transcrypt is easy',\n        'Take a Python ride into the node.js world'\n    )\n\n    def __init__ (self, port):\n        print ('Demo server started on port', port)\n        self.server = http.createServer (self.serve)\n        self.server.listen (port)\n        self.oldIndex = 0\n        self.newIndex = 0\n        self.count = 0\n        \n    def serve (self, request, response):\n        response.writeHead (200)\n        \n        print ('Serving page', self.count)\n        self.count += 1\n        \n        while self.newIndex == self.oldIndex:\n            self.newIndex = int (Math.random () * len (self.texts))\n        self.oldIndex = self.newIndex\n        \n        response.end ('<h1>{}</h1>'.format (\n            self.texts [self.newIndex]\n        ))\n\ndemo = Demo (8080)\n"
+	],
+	"mappings": "AAAA;AAAA;AAGA;AAEA;AAAA;AACA;AAQA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAEA;AACA;AAEA;AAAA;AAGA;AACA;AAAA;AACA;AAEA;AAAA;AAAA;AAIA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

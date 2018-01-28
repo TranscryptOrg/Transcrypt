@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-01-25 19:46:45
+// Transcrypt'ed from Python, 2018-01-28 17:10:48
 function test () {
     var __symbols__ = ['__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -141,7 +141,7 @@ function test () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.84';
+							self.transpiler_version = '3.6.85';
 							self.target_subdir = '__javascript__';
 						});}
 					});
@@ -155,6 +155,7 @@ function test () {
 			}
 		}
 	);
+
 	__nest__ (
 		__all__,
 		'org.transcrypt.__standard__', {
@@ -499,6 +500,7 @@ function test () {
 			}
 		}
 	);
+
     var __call__ = function (/* <callee>, <this>, <params>* */) {
         var args = [] .slice.apply (arguments);
         if (typeof args [0] == 'object' && '__call__' in args [0]) {
@@ -2147,36 +2149,10 @@ function test () {
     __all__.__setslice__ = __setslice__;
 	(function () {
 		var __name__ = '__main__';
-		var A = __class__ ('A', [object], {
-			__module__: __name__,
-			get __init__ () {return __get__ (this, function (self, x) {
-				self.x = x;
-			});},
-			f: function (param) {
-				var self = this;
-				return self.x * param;
-			},
-			get g () {return __get__ (this, function (self, param) {
-				return self.x * param;
-			});}
-		});
-		var a = A (2);
-		var a2 = A (3);
-		print (a.f (4), a2.f (5));
-		var B = __class__ ('B', [A], {
-			__module__: __name__,
-		});
-		var b = B (4);
-		var b2 = B (5);
-		print (b.f (6), b2.f (7));
+		var a = null;
 		__pragma__ ('<all>')
-			__all__.A = A;
-			__all__.B = B;
 			__all__.__name__ = __name__;
 			__all__.a = a;
-			__all__.a2 = a2;
-			__all__.b = b;
-			__all__.b2 = b2;
 		__pragma__ ('</all>')
 	}) ();
     return __all__;

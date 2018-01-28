@@ -1,0 +1,17 @@
+mapVersion: 3
+
+targetPath: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/transcrypt_and_python_results_differ/__javascript__/results.mod.js
+
+sourcePaths: ['D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/transcrypt_and_python_results_differ/results.py']
+
+mappings:
+	[0, 0, 0, 0, 0]
+	[1, 0, 0, 0, 0]
+	[2, 0, 0, 6, 0]
+	[3, 0, 0, 7, 0]
+	[4, 0, 0, 7, 0]
+	[5, 0, 0, 11, 0]
+	[6, 0, 0, 11, 0]
+	[7, 0, 0, 11, 0]
+	[8, 0, 0, 11, 0]
+	[9, 0, 0, 11, 0]

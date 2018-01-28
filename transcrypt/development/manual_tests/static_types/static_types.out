@@ -1,0 +1,27 @@
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\static_types>python D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 -ds -dc -n static_types.py 
+
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\static_types>call D:\python36_anaconda\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -dm -dt -da -e 6 -ds -dc -n static_types.py 
+
+Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.6.85
+Copyright (C) Geatec Engineering. License: Apache 2.0
+
+Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types.py
+The following inconsistencies were found:
+	mod2\__init__.py:2: error: Incompatible return value type (got "int", expected "str")
+	mod1.py:3: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+	mod1.py:4: error: Incompatible return value type (got "str", expected "int")
+	static_types.py:8: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+	static_types.py:16: error: Incompatible return value type (got "int", expected "Iterator[int]")
+	static_types.py:19: error: No return value expected
+	static_types.py:26: error: No return value expected
+	
+
+Checking: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types.py
+	Internal error in lightweight consistency checker, remainder of module skipped
+Performing lightweight consistency check on module: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/mod1.py
+	Line 3: local variable 'a' is assigned to but never used
+
+Saving result in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__javascript__/static_types.js
+
+Ready

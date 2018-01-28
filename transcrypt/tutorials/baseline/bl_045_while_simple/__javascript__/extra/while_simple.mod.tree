@@ -1,0 +1,206 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = random
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = a
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = random
+						ctx: Load 
+					attr: str = randint
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 10
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = b
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = random
+						ctx: Load 
+					attr: str = randint
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 10
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = answer
+					ctx: Store 
+			value: Num 
+				n: int = 1
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Type 0 to quit
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: While 
+			test: Compare 
+				left: Name 
+					id: str = answer
+					ctx: Load 
+				ops: list 
+					element: Gt 
+				comparators: list 
+					element: Num 
+						n: int = 0
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = answer
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = float
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = input
+									ctx: Load 
+								args: list 
+									element: JoinedStr 
+										values: list 
+											element: Str 
+												s: str = How much is 
+											element: FormattedValue 
+												value: Name 
+													id: str = a
+													ctx: Load 
+												conversion: int = -1
+												format_spec: NoneType = None
+											element: Str 
+												s: str =  x 
+											element: FormattedValue 
+												value: Name 
+													id: str = b
+													ctx: Load 
+												conversion: int = -1
+												format_spec: NoneType = None
+											element: Str 
+												s: str = ? 
+								keywords: list 
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = answer
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: BinOp 
+								left: Name 
+									id: str = a
+									ctx: Load 
+								op: Mult 
+								right: Name 
+									id: str = b
+									ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Right
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = a
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = random
+										ctx: Load 
+									attr: str = randint
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 1
+									element: Num 
+										n: int = 10
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = b
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = random
+										ctx: Load 
+									attr: str = randint
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 1
+									element: Num 
+										n: int = 10
+								keywords: list 
+					orelse: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = answer
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Num 
+										n: int = 0
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = print
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = Wrong, try again...
+										keywords: list 
+							orelse: list 
+			orelse: list 

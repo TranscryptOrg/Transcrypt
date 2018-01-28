@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/react_demo/__javascript__/react_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/react_demo/react_demo.py"
+	],
+	"sourcesContent": [
+		"# Helper functions\n\n\ndef h(elm_type, props='', *args):\n    return React.createElement(elm_type, props, *args)\n\n\ndef render(react_element, destination_id, callback=lambda: None):\n    container = document.getElementById(destination_id)\n    ReactDOM.render(react_element, container, callback)\n\n\n# Create a component\n\n\nHello = React.createClass({\n    'displayName': 'Hello',\n\n    'getInitialState': lambda: {'counter': 0},\n\n    'updateCounter': lambda: (this.setState({'counter': this.state['counter']+1})),\n\n    'componentDidMount': lambda: (setInterval(this.updateCounter, 1000)),\n\n    'render': lambda: h('div', {'className': 'maindiv'},\n                          h('h1', None, 'Hello ', this.props['name']),\n                          h('p', None, 'Lorem ipsum dolor sit ame.'),\n                          h('p', None, 'Counter: ', this.state['counter'])\n                        )\n})\n\n\n# Render the component in a 'container' div\n\nelement = React.createElement(Hello, {'name': 'React!'})\nrender(element, 'container')\n"
+	],
+	"mappings": "AAAA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AACA;AAAA;AAMA;AAAA;AAAA;AAKA;AAAA;AAEA;AAAA;AAKA;AAAA;AAOA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

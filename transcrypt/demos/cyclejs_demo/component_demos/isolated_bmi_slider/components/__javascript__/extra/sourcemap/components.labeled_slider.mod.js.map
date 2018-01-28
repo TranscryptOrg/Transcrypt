@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/components/__javascript__/components.labeled_slider.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/isolated_bmi_slider/components/labeled_slider.py"
+	],
+	"sourcesContent": [
+		"from components.snabbdom import span, input, div\n\n\ndef LabeledSlider(sources):\n    'A cycle js component'\n    dom_source = sources.DOM\n    propsS = sources.props\n\n    new_valueS = dom_source \\\n            .select('.slider') \\\n            .events('input') \\\n            .map(lambda ev: ev.target.value)\n\n    stateS = propsS \\\n            .map(lambda props: new_valueS \\\n                .map(lambda val: {\n                    'label': props.label,\n                    'unit' : props.unit,\n                    'min'  : props.min,\n                    'max'  : props.max,\n                    'value': val}) \\\n                .startWith(props)\n                ) \\\n            .flatten() \\\n            .remember() # https://github.com/staltz/xstream/wiki/Migrating-from-RxJS\n                        # all streams are hot, the start with would be forgotten w/o this:\n\n    vdomS = stateS \\\n            .map(lambda state: \\\n                div('.labeled-slider', [\n                    span('.label',\n                        state.label + ' ' + state.value + state.unit),\n                    input('.slider', {'attrs': {\n                        'type': 'range', 'min': state.min,\n                        'max': state.max, 'value': state.value}}),\n                    ]))\n    # sinks:\n    return dict(DOM=vdomS, value=stateS.map(lambda state: state.value))\n\nisolate = CycleIsolate['default']\nILabeledSlider = lambda sources: isolate(LabeledSlider)(sources)\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAGA;AAEA;AACA;AAEA;AAAA;AAAA;AAKA;AACA;AAAA;AAAA;AAAA;AAaA;AAKA;AAAA;AAKA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
