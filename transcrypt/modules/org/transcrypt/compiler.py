@@ -326,14 +326,27 @@ class Module:
         
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
             pragmaCommentLineIndices = []
+            shortPragmaCommentLineIndices = []
             for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in tokens:
-                if tokenType == tokenize.COMMENT and tokenString [1 : ] .lstrip () .startswith ('__pragma__'):
-                    pragmaCommentLineIndices.append (startRowColumn [0] - 1)
+                if tokenType == tokenize.COMMENT:
+                    strippedComment = tokenString [1 : ] .lstrip ()
+                    if  strippedComment.startswith ('__pragma__'):
+                        pragmaCommentLineIndices.append (startRowColumn [0] - 1)
+                    elif strippedComment.replace (' ', '') .replace ('\t', '') .startswith ('__:'):
+                        shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
+                        
                     
-            sourceLines = sourceCode.split ('\n') 
+            sourceLines = sourceCode.split ('\n')
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 head, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
                 sourceLines [pragmaCommentLineIndex] = head + tail.lstrip ()
+                
+            for shortPragmaCommentLineIndex in shortPragmaCommentLineIndices:
+                head, tail = sourceLines [shortPragmaCommentLineIndex] .rsplit ('#', 1)
+                strippedHead = head.lstrip ()
+                indent = head [: len (head) - len (strippedHead)]
+                pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
+                sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
 
             return '\n'.join (sourceLines)
             

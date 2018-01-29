@@ -70,7 +70,7 @@ As a third alternative, encapsulation can be done in Python rather than JavaScri
 The __pragma__ mechanism
 ------------------------
 
-Pragma's are directives in the source code, that locally alter the behaviour of the compiler. Pragma's come in two varieties.
+Pragma's are directives in the source code, that locally alter the behaviour of the compiler. Pragma's come in three varieties.
 
 The function-like variety:
 
@@ -86,7 +86,22 @@ The comment-like variety:
 
 is acceptable both to Transcrypt and CPython. In CPython it does nothing.
 
-N.B. Both varieties have to be properly indented, matching indentation of their context.
+N.B. Both varieties above have to be properly indented, matching indentation of their context.
+
+The single line variety:
+
+<line of code> # __:<single parameter>
+
+It will switch a facility on just before the line it's part of and switch it of again just afterwards.
+Single line pragma's can only be used for pragma's with have a single parameter, it's name.
+
+For example the following line:
+
+*vector2 = vector0 + vector1 # __:opov*
+
+will be compiled identially to:
+
+*__pragma__ ('opov'); vector2 = vector0 + vector1; __pragma__ ('noopov')*
 
 .. _pragma_alias:
 
