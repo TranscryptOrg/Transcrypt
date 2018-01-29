@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Time module made suitable for use in combination with Node.js
 - Single line pragma's (issue 460) + doc + autotest
 - Negative list indices allowed when operator overloading is enabled (issue 460)
 - Added pragma's and switches jscall and nojscall, 30% speedup, use only locally for insulated methods in a class

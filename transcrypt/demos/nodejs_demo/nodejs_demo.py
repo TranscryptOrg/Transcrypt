@@ -1,6 +1,8 @@
 # Compile with p. command line switch (see docs).
 # The example will be served at URL: http://localhost:8080 in your browser
 
+import time
+
 http = require ('http')
 
 class Demo:
@@ -20,7 +22,9 @@ class Demo:
         self.newIndex = 0
         self.count = 0
         
-    def serve (self, request, response):
+    def serve (self, request, response): 
+        time.__adapt__ (request)
+    
         response.writeHead (200)
         
         print ('Serving page', self.count)
@@ -30,8 +34,8 @@ class Demo:
             self.newIndex = int (Math.random () * len (self.texts))
         self.oldIndex = self.newIndex
         
-        response.end ('<h1>{}</h1>'.format (
-            self.texts [self.newIndex]
+        response.end ('<h1>{}</h1><h1>{}</h1>'.format (
+            self.texts [self.newIndex], time.localtime ()
         ))
 
 demo = Demo (8080)

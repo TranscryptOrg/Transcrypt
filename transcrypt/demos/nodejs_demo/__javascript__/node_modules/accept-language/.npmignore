@@ -1,0 +1,12 @@
+
+.editorconfig
+.gitignore
+.travis.yml
+
+index.ts
+tsconfig.json
+
+Source/
+Typings/
+Tests/
+Build/Tests/

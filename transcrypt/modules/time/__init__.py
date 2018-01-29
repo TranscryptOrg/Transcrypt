@@ -20,6 +20,17 @@ Jul 2016, Gunther Klessinger, Axiros GmbH
 # we don't need those:
 __pragma__ ('nokwargs')
 
+try:
+    __language = window.navigator.language
+except:
+    __language = 'en-US'
+    
+def __debugGetLanguage ():
+    return __language
+    
+def __adapt__ (request): # Needed when running on top of Node.js rather than in browser
+    global __language
+    __language = request.headers ['accept-language'] .split (',')[0]
 
 # for js dates:
 from org.transcrypt.stubs.browser import __new__
@@ -35,7 +46,7 @@ __weekdays_long = []
 __d = __new__(Date(1467662339080)) # a monday
 for i in range(7):
     for l, s in (__weekdays, 'short'), (__weekdays_long, 'long'):
-        l.append(__d.toLocaleString(window.navigator.language,
+        l.append(__d.toLocaleString(__language,
                                         {'weekday': s}).lower())
     __d.setDate(__d.getDate() + 1)
 
@@ -46,7 +57,7 @@ __months_long = []
 __d = __new__(Date(946681200000.0)) # 1.1.2000
 for i in range(12):
     for l, s in ((__months, 'short'), (__months_long, 'long')):
-        l.append(__d.toLocaleString(window.navigator.language,
+        l.append(__d.toLocaleString(__language,
                                         {'month': s}).lower())
     __d.setMonth(__d.getMonth() + 1)
 
