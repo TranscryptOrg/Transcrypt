@@ -72,7 +72,8 @@ The __pragma__ mechanism
 
 Pragma's are directives in the source code, that locally alter the behaviour of the compiler. Pragma's come in three varieties.
 
-The function-like variety:
+The function-like variety
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *__pragma__ (<parameters>)*
 
@@ -80,7 +81,8 @@ is acceptable only to Transcrypt, CPython requires a stub with parameter *\*args
 
 *from org.transcrypt.stubs.browser import __pragma__*
 
-The comment-like variety:
+The comment-like variety
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 # __pragma__ (<parameters>)
 
@@ -88,11 +90,12 @@ is acceptable both to Transcrypt and CPython. In CPython it does nothing.
 
 N.B. Both varieties above have to be properly indented, matching indentation of their context.
 
-The single line variety:
+The single line activation variety
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 <line of code> # __:<single parameter>
 
-It will switch a facility on just before the line it's part of and switch it of again just afterwards.
+It will switch a facility on or off just for the line of code it's part of.
 Single line pragma's can only be used for pragma's with have a single parameter, it's name.
 
 For example the following line:
@@ -102,6 +105,15 @@ For example the following line:
 will be compiled identially to:
 
 *__pragma__ ('opov'); vector2 = vector0 + vector1; __pragma__ ('noopov')*
+
+The single line deactivation variety
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*scalar2 = scalar0 + scalar1 # __:noopov*
+
+will be compiled identially to:
+
+*__pragma__ ('noopov'); scalar2 = scalar0 + scalar1; __pragma__ ('opov')*
 
 .. _pragma_alias:
 

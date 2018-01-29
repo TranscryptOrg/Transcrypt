@@ -344,9 +344,12 @@ class Module:
             for shortPragmaCommentLineIndex in shortPragmaCommentLineIndices:
                 head, tail = sourceLines [shortPragmaCommentLineIndex] .rsplit ('#', 1)
                 strippedHead = head.lstrip ()
-                indent = head [: len (head) - len (strippedHead)]
+                indent = head [ : len (head) - len (strippedHead)]
                 pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
-                sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
+                if pragmaName.startswith ('no'):
+                    sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])
+                else:
+                    sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
 
             return '\n'.join (sourceLines)
             

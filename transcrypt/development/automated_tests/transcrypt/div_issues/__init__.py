@@ -514,14 +514,25 @@ def run (autoTester):
 
     if __envir__.executor_name == __envir__.transpiler_name:
         autoTester.check (a + b)
-        autoTester.check (a + b)   #__:opov
+        autoTester.check (a + b)    #__:opov
         autoTester.check (a + b)
     else:
         autoTester.check (c)
-        autoTester.check (a + b)   #__:opov
+        autoTester.check (a + b)    #__:opov
         autoTester.check (c)
 
+    #__pragma__ ('opov')
+        
+    if __envir__.executor_name == __envir__.transpiler_name:
+        autoTester.check (a + b)    #__:noopov
+        autoTester.check (a + b)
+        autoTester.check (a + b)    #__:noopov
+    else:
+        autoTester.check (c)        #__:noopov
+        autoTester.check (a + b)
+        autoTester.check (c)        #__:noopov
 
+    #__pragma__ ('noopov')
 
     
             
