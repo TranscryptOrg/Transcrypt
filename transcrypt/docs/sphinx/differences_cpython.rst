@@ -14,14 +14,12 @@ Differences due to the 'lean and mean' design goal
 --------------------------------------------------
 
 - Facilities like operator overloading, automatic truth value conversion and named parameters can be switched on and off locally using pragmas, to keep the generated code small.
-- String formatting is done through the *format* method as it is considered most flexible. Using % for formatting isn't supported. There's currently no 'string formatting mini language'. Python 3.6 style string formatting may be supported in the future. In addition you can use all of JavaScript's string formatting facilities.
+- Interpreting negative indices as offsets from the end of a list or string requires operator overloading to be switched on.
+- String formatting is done through the *format* method or through f-strings, as this is considered most flexible. Using % for formatting isn't supported. There's currently no 'string formatting mini language'. All of JavaScript's string formatting facilities are supported.
 - Some methods of container types like list, set and dict, that duplicate functionality of other methods, have been left out of the core libraries. If needed they can be supplied in separate libraries.
 - Metaclasses only support overloading the __new__ method, covering 90% of the use cases.
-- The *super* keyword isn't supported, use explicit names of parent classes. The correct method resolution order is supported, also in case of multiple inheritance. Supporting *super* is still under discussion. It isn't hard, but doesn't have compelling benefits either. 
-- While class and function decorators are supported, method decorators are not, with the exception of @classmethod.
 - Currently only the  \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >= operators can be overloaded, covering almost all usecases.
 - The 'with' statement can currently only be used for file-like objects.
-- C-style string formatting is not supported.
 
 Differences due to interoperability with JavaScript and JavaScript libraries
 ----------------------------------------------------------------------------
