@@ -191,8 +191,8 @@ __pragma__ ('endif')
                 }           
 __pragma__ ('ifdef', '__esv6__')
 
-                for (var symbol of Object.getOwnPropertySymbols (base)) {
-                    var descrip = Object.getOwnPropertyDescriptor (base, symbol);
+                for (let symbol of Object.getOwnPropertySymbols (base)) {
+                    let descrip = Object.getOwnPropertyDescriptor (base, symbol);
                     Object.defineProperty (cls, symbol, descrip);
                 }
                 
@@ -211,8 +211,8 @@ __pragma__ ('endif')
             }
 __pragma__ ('ifdef', '__esv6__')
 
-            for (var symbol of Object.getOwnPropertySymbols (attribs)) {
-                var descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
+            for (let symbol of Object.getOwnPropertySymbols (attribs)) {
+                let descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
                 Object.defineProperty (cls, symbol, descrip);
             }
             
@@ -243,7 +243,7 @@ __pragma__ ('ifdef', '__esv6__')
             if ('__getattr__' in this || '__setattr__' in this) {
                 instance = new Proxy (instance, {
                     get: function (target, name) {
-                        var result = target [name];
+                        let result = target [name];
                         if (result == undefined) {  // Target doesn't have attribute named name
                             return target.__getattr__ (name);
                         }
@@ -275,7 +275,7 @@ __pragma__ ('endif')
     
     // Class creator facade function, calls class creation worker
     var __class__ = function (name, bases, attribs, meta) {         // Parameter meta is optional
-        if (meta == undefined) {
+        if (meta === undefined) { // ??? @neriusmika: Why === prefered here? Have usually used ==, disadvantages?
             meta = bases [0] .__metaclass__;
         }
                 

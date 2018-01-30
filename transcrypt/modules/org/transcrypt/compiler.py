@@ -401,29 +401,26 @@ class Module:
                 pos = line.find ('//')
                 return (line if pos < 0 else line [ : pos]) .rstrip ()
         
-            loading = True
+            loadStack = []
 
             def loadable (targetLine):
-                nonlocal loading
-
                 def __pragma__ (name, *args):
-                    nonlocal loading
 
                     if name == 'ifdef':
-                        loading = args [0] in symbols
+                        loadStack.append (args [0] in symbols)
                     elif name == 'ifndef':
-                        loading = not args [0] in symbols
+                        loadStack.append (not args [0] in symbols)
                     elif name == 'else':
-                        loading = not loading
+                        loadStack [-1] = not loadStack [-1]
                     elif name == 'endif':
-                        loading = True
+                        loadStack.pop ()
 
                 strippedLine = targetLine.lstrip ()
                 if self.stripComments and strippedLine.startswith ('/*'):
-                    loading = False
-                    return loading  # So skip this line
+                    loadStack.append (False)
+                    return all (loadStack)  # So skip this line
                 elif self.stripComments and strippedLine.endswith ('*/'):
-                    loading = True  # Load next line
+                    loadStack.pop ()        # Possibly load next line
                 elif strippedLine.startswith ('__pragma__') and (
                     'ifdef' in strippedLine or
                     'ifndef' in strippedLine or
@@ -431,9 +428,9 @@ class Module:
                     'endif' in strippedLine
                 ):
                     exec (strippedLine)
-                    return False    # Skip line anyhow
+                    return False            # Skip line anyhow, independent of loadStack
                 else:
-                    return loading  # Skip line only if not in loading state
+                    return all (loadStack)  # Skip line only if not in loading state according to loadStack
             
             if self.stripComments:
                 loadableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if loadable (line)] if commentlessLine]
@@ -2260,12 +2257,12 @@ class Generator (ast.NodeVisitor):
                 self.emit ('\n')
             self.adaptLineNrString (node)
 
+            nodeName = node.name
             decorate = False
             isClassMethod = False
             isStaticMethod = False
-            isPropertyGetter = False
-            isPropertySetter = False
-            propertyFuncName = ''
+            isProperty = False
+            getter = '__get__'
 
             if node.decorator_list:
                 for decorator in node.decorator_list:
@@ -2284,44 +2281,44 @@ class Generator (ast.NodeVisitor):
 
                     if nameCheck == 'classmethod':
                         isClassMethod = True
+                        getter = '__getcm__'
                     elif nameCheck == 'staticmethod':
                         isStaticMethod = True
+                        getter = '__getsm__'
                     elif nameCheck == 'property':
-                        isPropertyGetter = True
-                        propertyFuncName = '_get_' + node.name
+                        isProperty = True
+                        nodeName = '_get_' + node.name
+                        self.pushProperty (nodeName)
                     elif re.match ('[a-zA-Z0-9_]+\.setter', nameCheck):
-                        isPropertySetter = True
-                        propertyFuncName = '_set_' + re.match ('([a-zA-Z0-9_]+)\.setter', nameCheck).group (1)
+                        isProperty = True
+                        nodeName = '_set_' + re.match ('([a-zA-Z0-9_]+)\.setter', nameCheck).group (1)
+                        self.pushProperty (nodeName)
                     else:
                         decorate = True
 
-            if sum ([isClassMethod, isStaticMethod, isPropertyGetter, isPropertySetter]) > 1:
+            if sum ([isClassMethod, isStaticMethod, isProperty]) > 1:
                 raise utils.Error (
                     lineNr = self.lineNr,
                     message = '\n\tstaticmethod, classmethod and property decorators can\'t be mixed\n'
                 )
 
-            if isPropertyGetter or isPropertySetter:
-                nodeName = propertyFuncName
-            else:
-                nodeName = node.name
+            jsCall = self.allowJavaScriptCall and nodeName != '__init__'
 
             decoratorsUsed = 0
             if decorate:
                 if isGlobal:
                     self.emit ('var {} = ', self.filterId (nodeName))
-                elif isClassMethod:
-                    self.emit ('get {} () {{return __getcm__ (this, ', self.filterId (nodeName))
-                elif isStaticMethod:
-                    self.emit ('get {} () {{return __getsm__ (this, ', self.filterId (nodeName))
-                elif isPropertyGetter or isPropertySetter:
-                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
-                    self.pushProperty (nodeName)
-                elif self.allowJavaScriptCall:
-                    self.emit ('{}: function', self.filterId (nodeName))
                 else:
-                    self.emit ('get {} () {{return __get__ (this, ', self.filterId (nodeName))
-                    
+                    if jsCall:
+                        # Decorators are not supported until we resolve, how to pass self or cls
+                        raise utils.Error (
+                            lineNr=self.lineNr,
+                            message='\n\tdecorators are not supported with jscall\n'
+                        )
+
+                        self.emit ('{}: ', self.filterId (nodeName))
+                    else:
+                        self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
 
                 if self.allowOperatorOverloading:
                     self.emit ('__call__ (')
@@ -2343,33 +2340,40 @@ class Generator (ast.NodeVisitor):
             else:
                 if isGlobal:
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
-                elif isClassMethod:
-                    self.emit ('get {} () {{return __getcm__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
-                elif isStaticMethod:
-                    self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
-                elif isPropertyGetter or isPropertySetter:
-                    self.emit('get {} () {{return __get__ (this, {}function', self.filterId(nodeName), 'async ' if async else '')
-                    self.pushProperty (nodeName)
-                elif self.allowJavaScriptCall:
-                    self.emit ('{}: function', self.filterId (nodeName), 'async ' if async else '')
                 else:
-                    self.emit ('get {} () {{return __get__ (this, {}function', self.filterId (nodeName), 'async ' if async else '')
+                    if jsCall:
+                        self.emit ('{}: function', self.filterId (nodeName), 'async ' if async else '')
+                    else:
+                        if isStaticMethod:
+                            self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
+                        else:
+                            self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if async else '')
 
             yieldStarIndex = len (self.targetFragments)
 
             self.emit (' ')
+
+            skipFirstArg = jsCall and not (isGlobal or isStaticMethod or isProperty)
             
-            if self.allowJavaScriptCall and not (
-                isGlobal or isClassMethod or isStaticMethod or isPropertyGetter or isPropertySetter
-            ):
+            if skipFirstArg:
+                # Remove first argument from methods when jscall enabled
+                # Exceptions:
+                #   1. staticmethods - don't have "self" or "cls" as first parameter
+                #   2. properties - "self" is passed from property getters, setters
+                #   3. __init__ methods don't work with jscall
+                firstArg = node.args.args [0].arg
                 node.args.args = node.args.args [1:]
 
             self.visit (node.args)
 
-            if self.allowJavaScriptCall and not (
-                isGlobal or isClassMethod or isStaticMethod or isPropertyGetter or isPropertySetter
-            ):
-               self.emit ('var self = this;\n')
+            if skipFirstArg:
+                # Assign first removed parameter when jscall enabled
+                # Exceptions:
+                #   1. classmethods - need to resolve who is the caller, class or instance
+                if isClassMethod:
+                    self.emit ('var {} = \'__class__\' in this ? this.__class__ : this;\n', firstArg)
+                else:
+                    self.emit ('var {} = this;\n', firstArg)
             
             emitScopedBody ()
             self.emit ('}}')
@@ -2381,13 +2385,13 @@ class Generator (ast.NodeVisitor):
                 self.emit (')' * decoratorsUsed)
 
             if not isGlobal:
-                if isStaticMethod:
-                    self.emit (';}}')
-                else:
-                    if self.allowMemoizeCalls:
-                        self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
-                        
-                    if not self.allowJavaScriptCall:
+                if not jsCall:
+                    if isStaticMethod:
+                        self.emit (';}}')
+                    else:
+                        if self.allowMemoizeCalls:
+                            self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
+
                         self.emit (');}}')
 
                 if nodeName == '__iter__':

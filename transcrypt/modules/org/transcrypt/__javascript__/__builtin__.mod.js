@@ -774,16 +774,6 @@ __pragma__ ('endif')
     Array.prototype.__class__ = list;   // All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
     list.__name__ = 'list';
 
-    /*
-    Array.from = function (iterator) { // !!! remove
-        result = [];
-        for (item of iterator) {
-            result.push (item);
-        }
-        return result;
-    }
-    */
-
     Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
     Array.prototype.__getslice__ = function (start, stop, step) {
@@ -1590,7 +1580,7 @@ __pragma__ ('endif')
     };
     __all__.pow = __pow__;
     
-    __pragma__ ('ifndef', '__xtiny__')    
+__pragma__ ('ifndef', '__xtiny__')    
     
     var __neg__ = function (a) {
         if (typeof a == 'object' && '__neg__' in a) {
@@ -1601,7 +1591,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__neg__ = __neg__;
-
+    
     var __matmul__ = function (a, b) {
         return a.__matmul__ (b);
     };
@@ -1691,7 +1681,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__sub__ = __sub__;
-
+    
     // Overloaded binary bitwise
     
     var __lshift__ = function (a, b) {
@@ -1872,7 +1862,7 @@ __pragma__ ('endif')
         else if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
         }
-        else if (typeof b == 'object' && '__rpow__' in b) {
+        else if (typeof b == 'object' && '__rmod__' in b) {
             return b.__rmod__ (a);
         }
         else {
@@ -2002,7 +1992,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__ior__ = __ior__;
-
+        
     var __ixor__ = function (a, b) {
         if (typeof a == 'object' && '__ixor__' in a) {
             return a.__ixor__ (b);
@@ -2047,16 +2037,15 @@ __pragma__ ('endif')
         else {
             return container [key];                                         // Container must support bare JavaScript brackets          
             /*
-            // If it turns out keychecks really have to be supported here, the following will work
+            If it turns out keychecks really have to be supported here, the following will work
             return __k__ (container, key);
-            // Could be inlined rather than a call, but performance not crucial since non overloaded [] in context of overloaded [] is rare
-            // High volume numerical code will use Numscrypt anyhow which does many things via shortcuts
-
+            Could be inlined rather than a call, but performance not crucial since non overloaded [] in context of overloaded [] is rare
+            High volume numerical code will use Numscrypt anyhow which does many things via shortcuts
             */
         }
     };
     __all__.__getitem__ = __getitem__;
-
+    
     var __setitem__ = function (container, key, value) {                    // Slice c.q. index, direct generated call to runtime switch
         if (typeof container == 'object' && '__setitem__' in container) {
             container.__setitem__ (key, value);                             // Overloaded on container
@@ -2069,7 +2058,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__setitem__ = __setitem__;
-
+    
     var __getslice__ = function (container, lower, upper, step) {           // Slice only, no index, direct generated call to runtime switch
         if (typeof container == 'object' && '__getitem__' in container) {
             return container.__getitem__ ([lower, upper, step]);            // Container supports overloaded slicing c.q. indexing
@@ -2079,7 +2068,7 @@ __pragma__ ('endif')
         }
     };
     __all__.__getslice__ = __getslice__;
-
+    
     var __setslice__ = function (container, lower, upper, step, value) {    // Slice, no index, direct generated call to runtime switch
         if (typeof container == 'object' && '__setitem__' in container) {
             container.__setitem__ ([lower, upper, step], value);            // Container supports overloaded slicing c.q. indexing
@@ -2090,4 +2079,4 @@ __pragma__ ('endif')
     };
     __all__.__setslice__ = __setslice__;
     
-__pragma__ ('endif') 
+__pragma__ ('endif')
