@@ -166,7 +166,7 @@ __pragma__ ('endif')
     var getattr = function (obj, name) {
         return name in obj ? obj [name] : obj ['py_' + name];
     };
-    __all__.getattr= getattr;
+    __all__.getattr = getattr;
 
     var hasattr = function (obj, name) {
         try {
@@ -193,8 +193,11 @@ __pragma__ ('endif')
     // In general many Transcrypt compound types feature a deliberate blend of Python and JavaScript facilities, facilitating efficient integration with JavaScript libraries
     // If only Python objects and Python dicts are dealt with in a certain context, the more pythonic 'hasattr' is preferred for the objects as opposed to 'in' for the dicts
     var __in__ = function (element, container) {
-        if (py_typeof (container) == dict) {        // Currently only implemented as an augmented JavaScript object
-            return container.hasOwnProperty (element);
+        if (container === undefined || container === null) {
+            return false;
+        }
+        if (container.__contains__ instanceof Function) {
+            return container.__contains__ (element);
         }
         else {                                      // Parameter 'element' itself is an array, string or a plain, non-dict JavaScript object
             return (
@@ -246,7 +249,13 @@ __pragma__ ('endif')
     function __k__ (keyed, key) {  //  Check existence of dict key via retrieved element
         var result = keyed [key];
         if (typeof result == 'undefined') {
-             throw KeyError (key, new Error());
+            if (keyed instanceof Array)
+                if (key == +key && key >= 0 && keyed.length > key)
+                    return result;
+                else
+                    throw IndexError (key, new Error());
+            else
+                throw KeyError (key, new Error());
         }
         return result;
     }
@@ -281,18 +290,15 @@ __pragma__ ('endif')
     }
     __all__.__t__ = __t__;
 
-    var bool = function (any) {     // Always truly returns a bool, rather than something truthy or falsy
-        return !!__t__ (any);
-    };
-    bool.__name__ = 'bool';         // So it can be used as a type with a name
-    __all__.bool = bool;
-
     var float = function (any) {
         if (any == 'inf') {
             return Infinity;
         }
         else if (any == '-inf') {
             return -Infinity;
+        }
+        else if (any == 'nan') {
+            return NaN;
         }
         else if (isNaN (parseFloat (any))) {    // Call to parseFloat needed to exclude '', ' ' etc.
             if (any === false) {
@@ -310,19 +316,244 @@ __pragma__ ('endif')
         }
     };
     float.__name__ = 'float';
+    float.__bases__ = [object];
     __all__.float = float;
 
     var int = function (any) {
         return float (any) | 0
     };
     int.__name__ = 'int';
+    int.__bases__ = [object];
     __all__.int = int;
+    
+__pragma__ ('ifdef', '__sform__')
+    Number.prototype.__format__ = function (fmt_spec) {
+        if (fmt_spec == undefined || fmt_spec.strip ().length == 0)
+			return this.toString ();
+        var thousand_sep = false;
+        var g_default = false;
+        var width = 0;
+        var zero = false;
+        var alternate = false;
+        var sign = '-';
+        var align = '>';
+        var fill = ' ';
+        var precision = undefined;
+        var ftype = undefined;
+        var val = this.valueOf ();
+        var is_negative = val < 0;
+        val = Math.abs (val);
+        
+        var pad = function (s, width, fill, align) {
+            if (fill == undefined)
+                var fill = ' ';
+            if (align == undefined)
+                var align = '>';
+            var alt = '';
+            var sign = '';
+            if (s.startswith (['+', '-'])) {
+                sign = s [0];
+                s = s.substr (1);
+            }
+            if (alternate && s.startswith (['0b', '0o', '0x'])) {
+                alt = s.slice (0, 2);
+                s = s.substr (2);
+            }
+            var len = s.length + sign.length + alt.length;
+            var c = width - len;
+            switch (align) {
+                case '=':
+                    return sign + alt + __mul__ (fill, c) + s;
+                case '>':
+                    return __mul__ (fill, c) + sign + alt + s;
+                case '<':
+                    return sign + alt + s + __mul__ (fill, c);
+                case '^':
+                    var m = ((c % 2) + 2) % 2;
+                    var c = Math.floor (c / 2);
+                    return __mul__ (fill, c) + sign + alt + s + __mul__ (fill, c + m);
+                default:
+                    throw ValueError ("Invalid align type: '" + align + "'", new Error ());
+            }
+        };
+        
+        var format_float = function (val) {
+            if (val.indexOf ('e+') == -1 && (ftype == 'g' || ftype == 'G')) {
+                var parts = val.py_split ('.');
+                var d = parts [0];
+                var t = parts [1];
+                while (t [t.length - 1] == '0') {
+                    t = t.slice (0, -1);
+                }
+                var val = t != '' ? '.'.join ([d, t]) : d;
+            }
+            if (alternate && val.indexOf ('.') == -1)
+                var val = val + '.';
+            return val;
+        };
+               
+        if (fmt_spec.endswith (['b', 'c', 'd', 'e', 'E', 'f', 'F', 'g', 'G', 'n', 'o', 'x', 'X', '%'])) {
+            ftype = fmt_spec [fmt_spec.length - 1];
+            fmt_spec = fmt_spec.slice (0, -1);
+            if (ftype == 'n')
+                ftype = Number.isInteger (val) ? 'd' : 'f';
+        }
+        else {
+            ftype = Number.isInteger (val) ? 'd' : 'g';
+            g_default = true;
+        }
+        
+        var parts = fmt_spec.split ('.');
+        fmt_spec = parts [0];
+        precision = parts [1];
+        if (precision != undefined)
+            precision = parseInt (precision);
+        if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == ',') {
+            thousand_sep = true;
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (fmt_spec.length > 0) {
+            var _width = '';
+            while (fmt_spec && fmt_spec [fmt_spec.length - 1].isnumeric ()) {
+                _width = fmt_spec [fmt_spec.length - 1] + _width;
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (_width.length > 0) {
+                if (_width [0] == '0') {
+                    width = parseInt (_width.substr (1));
+                    zero = true;
+                }
+                else
+                    width = parseInt (_width);
+            }
+            if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == '#') {
+                alternate = true;
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (fmt_spec.length > 0 && fmt_spec.endswith (['+', '-', ' '])) {
+                sign = fmt_spec [fmt_spec.length - 1];
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (fmt_spec.length > 0 && fmt_spec.endswith (['<', '>', '=', '^'])) {
+                align = fmt_spec [fmt_spec.length - 1];
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (fmt_spec.length > 0)
+                fill = fmt_spec [0];
+        }
+        
+        if (isNaN (val))
+            val = 'nan';
+        else if (val == Infinity)
+            val = 'inf';
+        else {
+            switch (ftype) {
+                case 'b':
+                    val = Math.floor (val).toString (2);
+                    if (alternate)
+                        val = '0b' + val;
+                    break;
+                case 'c':
+                    val = String.fromCharCode (Math.floor (val));
+                    break;
+                case 'd':
+                    val = Math.floor (val).toString ();
+                    if (thousand_sep)
+                        val = val.replace (/\B(?=(\d{3})+(?!\d))/g, ',');
+                    break;
+                case 'o':
+                    val = Math.floor (val).toString (8);
+                    if (alternate)
+                        val = '0o' + val;
+                    break;
+                case 'x':
+                case 'X':
+                    val = Math.floor (val).toString (16);
+                    if (alternate)
+                        val = '0x' + val;
+                    break;
+                case 'e':
+                case 'E':
+                    if (precision == undefined)
+                        precision = 6;
+                    var num_exp = val.toExponential (precision).split ('e+');
+                    var num = num_exp [0];
+                    var exp = num_exp [1];
+                    val = num.toString () + 'e+' + pad (exp.toString(), 2, '0');
+                    val = format_float (val);
+                    break;
+                case 'f':
+                case 'F':
+                case '%':
+                    if (precision == undefined)
+                        precision = 6;
+                    if (ftype == '%')
+                        val *= 100;
+                    val = val.toFixed (precision);
+                    val = format_float (val);
+                    if (ftype == '%')
+                        val += '%';
+                    break;
+                case 'g':
+                case 'G':
+                    if (precision == undefined)
+                        precision = g_default ? 1 : 6;
+                    if (precision == 0)
+                        precision = 1;
+                    var convert_to_exponent = false;
+                    if (g_default) {
+                        var parts = val.toString ().split ('.');
+                        var digit_count = parts [0].length + parts [1].length;
+                        if (digit_count >= precision)
+                            convert_to_exponent = true;
+                    }
+                    var num_exp = val.toExponential (precision - 1).split ('e+');
+                    var num = num_exp [0];
+                    var exp = num_exp [1];
+                    convert_to_exponent |= !((-4 <= exp && exp < precision));
+                    if (convert_to_exponent)
+                        val = num.toString() + 'e+' + pad (exp.toString(), 2, '0');
+                    else {
+                        val = val.toFixed (precision - 1 - exp);
+                    }
+                    val = format_float (val);
+                    break;
+                default:
+                    throw ValueError ("Invalid format type: '" + ftype + "'", new Error ());
+            }
+        }
+        if (ftype === ftype.toUpperCase ())
+            val = val.toUpperCase ()
+        if (ftype != 'c') {
+            if (sign == '-') {
+                if (is_negative)
+                    val = '-' + val;
+            }
+            else
+                val = is_negative ? '-' + val : sign + val;
+        }
+        if (zero) {
+            fill = '0';
+            align = '=';
+        }
+        if (width > 0)
+            val = pad (val, width, fill, align);
+        return val;
+    };
+__pragma__ ('endif')
+       
+    var bool = function (any) {     // Always truly returns a bool, rather than something truthy or falsy
+        return !!__t__ (any);
+    };
+    bool.__name__ = 'bool';         // So it can be used as a type with a name
+    bool.__bases__ = [int];
+    __all__.bool = bool;
 
     var py_typeof = function (anObject) {
         var aType = typeof anObject;
         if (aType == 'object') {    // Directly trying '__class__ in anObject' turns out to wreck anObject in Chrome if its a primitive
             try {
-                return anObject.__class__;
+                return '__class__' in anObject ? anObject.__class__ : object;
             }
             catch (exception) {
                 return aType;
@@ -340,18 +571,6 @@ __pragma__ ('endif')
     __all__.py_typeof = py_typeof;
     
     var issubclass = function (aClass, classinfo) {
-        function isA (queryClass) {
-            if (queryClass == classinfo) {
-                return true;
-            }
-            for (var index = 0; index < queryClass.__bases__.length; index++) {
-                if (isA (queryClass.__bases__ [index], classinfo)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-        
         if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
 __pragma__ ('ifdef', '__esv6__')
             for (let aClass2 of classinfo) {
@@ -365,12 +584,24 @@ __pragma__ ('endif')
             }
             return false;
         }
-
-        try {                   // Most frequent use case first
-            return isA (aClass);
+        try {
+            var aClass2 = aClass;
+            if (aClass2 == classinfo)
+                return true;
+            else {
+                var bases = [].slice.call (aClass2.__bases__);
+                while (bases.length) {
+                    aClass2 = bases.shift ();
+                    if (aClass2 == classinfo)
+                        return true;
+                    if (aClass2.__bases__.length)
+                        bases = [].slice.call (aClass2.__bases__).concat (bases);
+                }
+                return false;
+            }
         }
         catch (exception) {     // Using issubclass on primitives assumed rare 
-            return aClass == classinfo || classinfo == object || (aClass == bool && classinfo == int);
+            return aClass == classinfo || classinfo == object;
         }
     };
     __all__.issubclass = issubclass;
@@ -506,6 +737,30 @@ __pragma__ ('endif')
         return rounded;
     };
     __all__.round = round;
+    
+__pragma__ ('ifdef', '__sform__')
+    var format = function (value, fmt_spec) {
+        if (value == undefined)
+            return 'None';
+        fmt_spec = fmt_spec || '';
+        var tval = typeof value;
+        switch (tval) {
+            case 'number':
+            case 'string':
+                return value.__format__(fmt_spec);
+            case 'boolean':
+                return fmt_spec ? (value ? 1 : 0).__format__(fmt_spec) : str (value);
+            case 'object':
+                if ('__format__' in value)
+                    return value.__format__ (fmt_spec);
+                else
+                    return str (value).__format__ (fmt_spec);
+            default:
+                return str (value).__format__ (fmt_spec);
+        }        
+    }
+    __all__.format = format;
+__pragma__ ('endif')
 
     // BEGIN unified iterator model
 
@@ -773,6 +1028,7 @@ __pragma__ ('endif')
     __all__.list = list;
     Array.prototype.__class__ = list;   // All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
     list.__name__ = 'list';
+    list.__bases__ = [object];
 
     Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
@@ -913,6 +1169,7 @@ __pragma__ ('endif')
     }
     __all__.tuple = tuple;
     tuple.__name__ = 'tuple';
+    tuple.__bases__ = [object];
 
     // Set extensions to Array
     // N.B. Since sets are unordered, set operations will occasionally alter the 'this' array by sorting it
@@ -929,6 +1186,7 @@ __pragma__ ('endif')
     }
     __all__.set = set;
     set.__name__ = 'set';
+    set.__bases__ = [object];
 
     Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
     // Since sorting is lex, compare has to be lex. This also allows for mixed lists
@@ -1127,15 +1385,19 @@ __pragma__ ('endif')
     // String extensions
 
     function str (stringable) {
-        try {
-            return stringable.__str__ ();
-        }
-        catch (exception) {
+        if (typeof stringable === 'number')
+            return stringable.toString();
+        else {
             try {
-                return repr (stringable);
+                return stringable.__str__ ();
             }
             catch (exception) {
-                return String (stringable); // No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
+                try {
+                    return repr (stringable);
+                }
+                catch (exception) {
+                    return String (stringable); // No new, so no permanent String object but a primitive in a temporary 'just in time' wrapper
+                }
             }
         }
     };
@@ -1143,6 +1405,7 @@ __pragma__ ('endif')
 
     String.prototype.__class__ = str;   // All strings are str
     str.__name__ = 'str';
+    str.__bases__ = [object];
 
     String.prototype.__iter__ = function () {new __PyIterator__ (this);};
 
@@ -1159,7 +1422,14 @@ __pragma__ ('endif')
     };
 
     String.prototype.endswith = function (suffix) {
-        return suffix == '' || this.slice (-suffix.length) == suffix;
+        if (suffix instanceof Array) {
+            for (var i=0;i<suffix.length;i++) {
+                if (this.slice (-suffix[i].length) == suffix[i])
+                    return true;
+            }
+        } else
+            return suffix == '' || this.slice (-suffix.length) == suffix;
+        return false;
     };
 
     String.prototype.find  = function (sub, start) {
@@ -1188,7 +1458,56 @@ __pragma__ ('endif')
             }
         }
         return result;
-    }
+    };
+    
+__pragma__ ('ifdef', '__sform__')
+    String.prototype.__format__ = function (fmt_spec) {
+        if (fmt_spec == undefined || fmt_spec.strip ().length == 0)
+			return this.valueOf ();
+        var width = 0;
+        var align = '<';
+        var fill = ' ';
+        var val = this.valueOf ();
+        
+        var pad = function (s, width, fill, align) {
+            var len = s.length;
+            var c = width - len;
+            switch (align) {
+                case '>':
+                    return __mul__ (fill, c) + s;
+                case '<':
+                    return s + __mul__ (fill, c);
+                case '^':
+                    var m = ((c % 2) + 2) % 2;
+                    var c = Math.floor (c / 2);
+                    return __mul__ (fill, c) + s + __mul__ (fill, c + m);
+                default:
+                    return s;
+            }
+        };
+
+        if (fmt_spec [fmt_spec.length - 1] == 's')
+            fmt_spec = fmt_spec.slice (0, -1);
+        if (fmt_spec.length > 0) {
+            var _width = '';
+            while (fmt_spec && fmt_spec [fmt_spec.length - 1].isnumeric ()) {
+                _width = fmt_spec [fmt_spec.length - 1] + _width;
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (_width.length > 0)
+                width = parseInt (_width);
+            if (fmt_spec.length > 0 && fmt_spec.endswith (['<', '>', '^'])) {
+                align = fmt_spec [fmt_spec.length - 1];
+                fmt_spec = fmt_spec.slice (0, -1);
+            }
+            if (fmt_spec.length > 0)
+                fill = fmt_spec [0];
+        }
+        if (width > 0)
+            val = pad (val, width, fill, align);
+        return val;
+    };
+__pragma__ ('endif')
 
     // Since it's worthwhile for the 'format' function to be able to deal with *args, it is defined as a property
     // __get__ will produce a bound function if there's something before the dot
@@ -1202,6 +1521,64 @@ __pragma__ ('endif')
         get: function () {return __get__ (this, function (self) {
             var args = tuple ([] .slice.apply (arguments).slice (1));
             var autoIndex = 0;
+__pragma__ ('ifdef', '__sform__')
+            return self.replace (/\{([^\{]*)\}/g, function (match, key) {
+                var parts = key.split (':');
+                key = parts [0];
+                var fmt_spec = parts [1];
+                parts = key.split ('!')
+                key = parts [0];
+                var conversion = parts [1];
+                var value = undefined;
+                if (key == '') {
+                    key = autoIndex++;
+                }
+                if (key == +key && args [key] != undefined) {  // So key is numerical
+                    value = args [key];
+                }
+                else {              // Key is a string
+                    var attr = undefined;
+                    var idx = key.indexOf ('.');
+                    if (idx != -1) {
+                        attr = key.substring (idx + 1);
+                        key = key.substring (0, idx);
+                    }
+                    else {
+                        idx = key.indexOf ('[');
+                        if (idx != -1) {
+                            attr = key.substring (idx + 1).slice (0, -1);
+                            key = key.substring (0, idx);
+                        }
+                    }
+                        
+                    if ((key == +key) && attr && args [key] != undefined) {
+                        value = args [key][attr];
+                    }
+                    else {
+                        for (var index = 0; index < args.length; index++) {
+                            // Find first 'dict' that has that key and the right field
+                            if (typeof args [index] == 'object' && args [index][key] != undefined) {
+                                // Return that field field
+                                if (attr)
+                                    value = args [index][key][attr];
+                                else
+                                    value = args [index][key]; 
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (value == undefined)
+                    return match;
+                if (conversion == 'r')
+                    value = repr (value);
+                else if (conversion == 's')
+                    value = str (value);
+                else if (conversion == 'a')
+                    throw ValueError ("Conversion to ascii not yet supported: '" + match + "'", new Error ());
+                return format (value, fmt_spec);
+            });
+__pragma__ ('else')
             return self.replace (/\{(\w*)\}/g, function (match, key) {
                 if (key == '') {
                     key = autoIndex++;
@@ -1219,6 +1596,7 @@ __pragma__ ('endif')
                     return match;
                 }
             });
+__pragma__ ('endif')
         });},
         enumerable: true
     });
@@ -1330,7 +1708,14 @@ __pragma__ ('endif')
     };
 
     String.prototype.startswith = function (prefix) {
-        return this.indexOf (prefix) == 0;
+        if (prefix instanceof Array) {
+            for (var i=0;i<prefix.length;i++) {
+                if (this.indexOf (prefix [i]) == 0)
+                    return true;
+            }
+        } else
+            return this.indexOf (prefix) == 0;
+        return false;
     };
 
     String.prototype.strip = function () {
@@ -1342,8 +1727,8 @@ __pragma__ ('endif')
     };
 
     String.prototype.__mul__ = function (scalar) {
-        var result = this;
-        for (var i = 1; i < scalar; i++) {
+        var result = '';
+        for (var i = 0; i < scalar; i++) {
             result = result + this;
         }
         return result;
@@ -1352,6 +1737,10 @@ __pragma__ ('endif')
     String.prototype.__rmul__ = String.prototype.__mul__;
 
     // Dict extensions to object
+    
+    function __contains__ (element) {
+        return this.hasOwnProperty (element);
+    }
 
     function __keys__ () {
         var keys = [];
@@ -1508,6 +1897,7 @@ __pragma__ ('endif')
         // Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
         // So the properties of a dict should be non-enumerable
         __setProperty__ (instance, '__class__', {value: dict, enumerable: false, writable: true});
+        __setProperty__ (instance, '__contains__', {value: __contains__, enumerable: false});
         __setProperty__ (instance, 'py_keys', {value: __keys__, enumerable: false});
         __setProperty__ (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
         __setProperty__ (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.py_keys ());}, enumerable: false});
@@ -1527,6 +1917,7 @@ __pragma__ ('endif')
 
     __all__.dict = dict;
     dict.__name__ = 'dict';
+    dict.__bases__ = [object];
     
     // Docstring setter
 
@@ -1544,7 +1935,7 @@ __pragma__ ('endif')
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
         }
-        else if (typeof b == 'object' && '__rpow__' in b) {
+        else if (typeof b == 'object' && '__rmod__' in b) {
             return b.__rmod__ (a);
         }
         else {

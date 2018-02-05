@@ -119,6 +119,9 @@ def main ():
         
         if utils.commandArgs.complex:
             __symbols__.append ('__complex__')
+
+        if utils.commandArgs.sform:
+            __symbols__.append ('__sform__')
             
         if utils.commandArgs.xtiny:
             __symbols__.append ('__xtiny__')

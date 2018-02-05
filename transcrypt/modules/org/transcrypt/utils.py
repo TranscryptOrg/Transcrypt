@@ -55,6 +55,7 @@ class CommandArgs:
         self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold module, default is window. Use -p .none to generate orphan module, e.g. for use in node.js. Use -p .user to generate module that has to be explicitly initialized by calling <modulename> (), e.g. after the full page has loaded")
         self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
         self.argParser.add_argument ('-s', '--symbols', nargs='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
+        self.argParser.add_argument ('-sf', '--sform', help = "enable support for string formatting mini language", action = 'store_true')
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
