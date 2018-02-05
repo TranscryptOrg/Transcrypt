@@ -328,8 +328,9 @@ __pragma__ ('endif')
     
 __pragma__ ('ifdef', '__sform__')
     Number.prototype.__format__ = function (fmt_spec) {
-        if (fmt_spec == undefined || fmt_spec.strip ().length == 0)
+        if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
 			return this.toString ();
+        }
         var thousand_sep = false;
         var g_default = false;
         var width = 0;
@@ -345,10 +346,12 @@ __pragma__ ('ifdef', '__sform__')
         val = Math.abs (val);
         
         var pad = function (s, width, fill, align) {
-            if (fill == undefined)
-                var fill = ' ';
-            if (align == undefined)
-                var align = '>';
+            if (fill == undefined) {
+                fill = ' ';
+            }
+            if (align == undefined) {
+                align = '>';
+            }
             var alt = '';
             var sign = '';
             if (s.startswith (['+', '-'])) {
@@ -385,18 +388,20 @@ __pragma__ ('ifdef', '__sform__')
                 while (t [t.length - 1] == '0') {
                     t = t.slice (0, -1);
                 }
-                var val = t != '' ? '.'.join ([d, t]) : d;
+                val = t != '' ? '.'.join ([d, t]) : d;
             }
-            if (alternate && val.indexOf ('.') == -1)
-                var val = val + '.';
+            if (alternate && val.indexOf ('.') == -1) {
+                val = val + '.';
+            }
             return val;
         };
                
         if (fmt_spec.endswith (['b', 'c', 'd', 'e', 'E', 'f', 'F', 'g', 'G', 'n', 'o', 'x', 'X', '%'])) {
             ftype = fmt_spec [fmt_spec.length - 1];
             fmt_spec = fmt_spec.slice (0, -1);
-            if (ftype == 'n')
+            if (ftype == 'n') {
                 ftype = Number.isInteger (val) ? 'd' : 'f';
+            }
         }
         else {
             ftype = Number.isInteger (val) ? 'd' : 'g';
@@ -406,8 +411,9 @@ __pragma__ ('ifdef', '__sform__')
         var parts = fmt_spec.split ('.');
         fmt_spec = parts [0];
         precision = parts [1];
-        if (precision != undefined)
+        if (precision != undefined) {
             precision = parseInt (precision);
+        }
         if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == ',') {
             thousand_sep = true;
             fmt_spec = fmt_spec.slice (0, -1);
@@ -423,8 +429,9 @@ __pragma__ ('ifdef', '__sform__')
                     width = parseInt (_width.substr (1));
                     zero = true;
                 }
-                else
+                else {
                     width = parseInt (_width);
+                }
             }
             if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == '#') {
                 alternate = true;
@@ -438,44 +445,52 @@ __pragma__ ('ifdef', '__sform__')
                 align = fmt_spec [fmt_spec.length - 1];
                 fmt_spec = fmt_spec.slice (0, -1);
             }
-            if (fmt_spec.length > 0)
+            if (fmt_spec.length > 0) {
                 fill = fmt_spec [0];
+            }
         }
         
-        if (isNaN (val))
+        if (isNaN (val)) {
             val = 'nan';
-        else if (val == Infinity)
+        }
+        else if (val == Infinity) {
             val = 'inf';
+        }
         else {
             switch (ftype) {
                 case 'b':
                     val = Math.floor (val).toString (2);
-                    if (alternate)
+                    if (alternate) {
                         val = '0b' + val;
+                    }
                     break;
                 case 'c':
                     val = String.fromCharCode (Math.floor (val));
                     break;
                 case 'd':
                     val = Math.floor (val).toString ();
-                    if (thousand_sep)
+                    if (thousand_sep) {
                         val = val.replace (/\B(?=(\d{3})+(?!\d))/g, ',');
+                    }
                     break;
                 case 'o':
                     val = Math.floor (val).toString (8);
-                    if (alternate)
+                    if (alternate) {
                         val = '0o' + val;
+                    }
                     break;
                 case 'x':
                 case 'X':
                     val = Math.floor (val).toString (16);
-                    if (alternate)
+                    if (alternate) {
                         val = '0x' + val;
+                    }
                     break;
                 case 'e':
                 case 'E':
-                    if (precision == undefined)
+                    if (precision == undefined) {
                         precision = 6;
+                    }
                     var num_exp = val.toExponential (precision).split ('e+');
                     var num = num_exp [0];
                     var exp = num_exp [1];
@@ -485,34 +500,41 @@ __pragma__ ('ifdef', '__sform__')
                 case 'f':
                 case 'F':
                 case '%':
-                    if (precision == undefined)
+                    if (precision == undefined) {
                         precision = 6;
-                    if (ftype == '%')
+                    }
+                    if (ftype == '%') {
                         val *= 100;
+                    }
                     val = val.toFixed (precision);
                     val = format_float (val);
-                    if (ftype == '%')
+                    if (ftype == '%') {
                         val += '%';
+                    }
                     break;
                 case 'g':
                 case 'G':
-                    if (precision == undefined)
+                    if (precision == undefined) {
                         precision = g_default ? 1 : 6;
-                    if (precision == 0)
+                    }
+                    if (precision == 0) {
                         precision = 1;
+                    }
                     var convert_to_exponent = false;
                     if (g_default) {
                         var parts = val.toString ().split ('.');
                         var digit_count = parts [0].length + parts [1].length;
-                        if (digit_count >= precision)
+                        if (digit_count >= precision) {
                             convert_to_exponent = true;
+                        }
                     }
                     var num_exp = val.toExponential (precision - 1).split ('e+');
                     var num = num_exp [0];
                     var exp = num_exp [1];
                     convert_to_exponent |= !((-4 <= exp && exp < precision));
-                    if (convert_to_exponent)
+                    if (convert_to_exponent) {
                         val = num.toString() + 'e+' + pad (exp.toString(), 2, '0');
+                    }
                     else {
                         val = val.toFixed (precision - 1 - exp);
                     }
@@ -522,22 +544,26 @@ __pragma__ ('ifdef', '__sform__')
                     throw ValueError ("Invalid format type: '" + ftype + "'", new Error ());
             }
         }
-        if (ftype === ftype.toUpperCase ())
+        if (ftype === ftype.toUpperCase ()) {
             val = val.toUpperCase ()
+        }
         if (ftype != 'c') {
             if (sign == '-') {
-                if (is_negative)
+                if (is_negative) {
                     val = '-' + val;
+                }
             }
-            else
+            else {
                 val = is_negative ? '-' + val : sign + val;
+            }
         }
         if (zero) {
             fill = '0';
             align = '=';
         }
-        if (width > 0)
+        if (width > 0) {
             val = pad (val, width, fill, align);
+        }
         return val;
     };
 __pragma__ ('endif')
@@ -586,16 +612,19 @@ __pragma__ ('endif')
         }
         try {
             var aClass2 = aClass;
-            if (aClass2 == classinfo)
+            if (aClass2 == classinfo) {
                 return true;
+            }
             else {
                 var bases = [].slice.call (aClass2.__bases__);
                 while (bases.length) {
                     aClass2 = bases.shift ();
-                    if (aClass2 == classinfo)
+                    if (aClass2 == classinfo) {
                         return true;
-                    if (aClass2.__bases__.length)
+                    }
+                    if (aClass2.__bases__.length) {
                         bases = [].slice.call (aClass2.__bases__).concat (bases);
+                    }
                 }
                 return false;
             }
@@ -740,8 +769,9 @@ __pragma__ ('endif')
     
 __pragma__ ('ifdef', '__sform__')
     var format = function (value, fmt_spec) {
-        if (value == undefined)
+        if (value == undefined) {
             return 'None';
+        }
         fmt_spec = fmt_spec || '';
         var tval = typeof value;
         switch (tval) {
@@ -751,10 +781,12 @@ __pragma__ ('ifdef', '__sform__')
             case 'boolean':
                 return fmt_spec ? (value ? 1 : 0).__format__(fmt_spec) : str (value);
             case 'object':
-                if ('__format__' in value)
+                if ('__format__' in value) {
                     return value.__format__ (fmt_spec);
-                else
+                }
+                else {
                     return str (value).__format__ (fmt_spec);
+                }
             default:
                 return str (value).__format__ (fmt_spec);
         }        
@@ -1462,8 +1494,9 @@ __pragma__ ('endif')
     
 __pragma__ ('ifdef', '__sform__')
     String.prototype.__format__ = function (fmt_spec) {
-        if (fmt_spec == undefined || fmt_spec.strip ().length == 0)
+        if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
 			return this.valueOf ();
+        }
         var width = 0;
         var align = '<';
         var fill = ' ';
@@ -1486,25 +1519,29 @@ __pragma__ ('ifdef', '__sform__')
             }
         };
 
-        if (fmt_spec [fmt_spec.length - 1] == 's')
+        if (fmt_spec [fmt_spec.length - 1] == 's') {
             fmt_spec = fmt_spec.slice (0, -1);
+        }
         if (fmt_spec.length > 0) {
             var _width = '';
             while (fmt_spec && fmt_spec [fmt_spec.length - 1].isnumeric ()) {
                 _width = fmt_spec [fmt_spec.length - 1] + _width;
                 fmt_spec = fmt_spec.slice (0, -1);
             }
-            if (_width.length > 0)
+            if (_width.length > 0) {
                 width = parseInt (_width);
+            }
             if (fmt_spec.length > 0 && fmt_spec.endswith (['<', '>', '^'])) {
                 align = fmt_spec [fmt_spec.length - 1];
                 fmt_spec = fmt_spec.slice (0, -1);
             }
-            if (fmt_spec.length > 0)
+            if (fmt_spec.length > 0) {
                 fill = fmt_spec [0];
+            }
         }
-        if (width > 0)
+        if (width > 0) {
             val = pad (val, width, fill, align);
+        }
         return val;
     };
 __pragma__ ('endif')
@@ -1559,23 +1596,29 @@ __pragma__ ('ifdef', '__sform__')
                             // Find first 'dict' that has that key and the right field
                             if (typeof args [index] == 'object' && args [index][key] != undefined) {
                                 // Return that field field
-                                if (attr)
+                                if (attr) {
                                     value = args [index][key][attr];
-                                else
+                                }
+                                else {
                                     value = args [index][key]; 
+                                }
                                 break;
                             }
                         }
                     }
                 }
-                if (value == undefined)
+                if (value == undefined) {
                     return match;
-                if (conversion == 'r')
+                }
+                if (conversion == 'r') {
                     value = repr (value);
-                else if (conversion == 's')
+                }
+                else if (conversion == 's') {
                     value = str (value);
-                else if (conversion == 'a')
+                }
+                else if (conversion == 'a') {
                     throw ValueError ("Conversion to ascii not yet supported: '" + match + "'", new Error ());
+                }
                 return format (value, fmt_spec);
             });
 __pragma__ ('else')
