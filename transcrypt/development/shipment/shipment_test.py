@@ -42,15 +42,15 @@ def test (relPath, fileNamePrefix, run = False, nodejs = False, switches = '', o
 
     redirect = ' > {}.out'.format (outputFileNamePrefix) if outputFileNamePrefix else ''
     
-    os.system ('{} -b -m -dm -dt -da {}{}.py{}'.format (transpileCommand, switches, fileNamePrefix, redirect))
+    os.system ('{} -b -m -dm -dt -da -sf {}{}.py{}'.format (transpileCommand, switches, fileNamePrefix, redirect))
 
     if run:
         os.chdir (getAbsPath (relPath))
         
         if ' -e 6 ' in (' ' + switches + ' '):
-            os.system ('{} -r -e 6 {}.py'.format (transpileCommand, fileNamePrefix))
+            os.system ('{} -sf -r -e 6 {}.py'.format (transpileCommand, fileNamePrefix))
         else:
-            os.system ('{} -r {}.py'.format (transpileCommand, fileNamePrefix))     
+            os.system ('{} -sf -r {}.py'.format (transpileCommand, fileNamePrefix))     
     
     if not commandArgs.blind:
         if nodejs:

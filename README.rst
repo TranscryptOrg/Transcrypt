@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- String formatting mini language added as an option (-sf / --sform switch) + autotest
 - Div internal improvements and fixes
 - Time module made suitable for use in combination with Node.js
 - Single line pragma's (issue 460) + doc + autotest
