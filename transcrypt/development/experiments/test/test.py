@@ -1,15 +1,9 @@
-class C:
-    def __init__ (self, s):
-        self.s = s
-        
-    def f (self):
-        console.log (self.s, 'world')
-
-c = C ('hellooooo')    
-c.f ()
-
-g = c.f
-
-g ()
-
-
+#__pragma__ ('keycheck')
+try:
+    a=[1,2,3]
+    print('a[10]=', a[10])
+except IndexError:
+    print('indexError')
+except KeyError:
+    print('KeyError')
+    

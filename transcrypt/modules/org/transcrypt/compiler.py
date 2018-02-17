@@ -129,19 +129,21 @@ class Program:
         self.sourceFileName = self.sourcePath.split ('/') [-1]
 
         # Define names early, since they are cross-used in module compilation
-        prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
-        self.coreModuleName = '{}.{}'.format (prefix, '__core__')
-        self.baseModuleName = '{}.{}'.format (prefix, '__base__')
-        self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
-        self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
+        if not ('__sunit__' in self.symbols):
+            prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
+            self.coreModuleName = '{}.{}'.format (prefix, '__core__')
+            self.baseModuleName = '{}.{}'.format (prefix, '__base__')
+            self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
+            self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
         self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
 
         # Compile inline modules
-        Module (self, ModuleMetadata (self, self.coreModuleName), True)
-        Module (self, ModuleMetadata (self, self.baseModuleName))
-        Module (self, ModuleMetadata (self, self.standardModuleName))
-        Module (self, ModuleMetadata (self, self.builtinModuleName), True)
-
+        if not ('__sunit__' in self.symbols):
+            Module (self, ModuleMetadata (self, self.coreModuleName), True)
+            Module (self, ModuleMetadata (self, self.baseModuleName))
+            Module (self, ModuleMetadata (self, self.standardModuleName))
+            Module (self, ModuleMetadata (self, self.builtinModuleName), True)
+        
         # Optionally perfom static typing validation
 
         if utils.commandArgs.dstat:
@@ -195,12 +197,16 @@ class Program:
 
         # And sandwich them between the in-line modules
         self.allModules = (
-            [
-                self.moduleDict [self.coreModuleName],
-                self.moduleDict [self.baseModuleName],
-                self.moduleDict [self.standardModuleName],
-                self.moduleDict [self.builtinModuleName]
-            ] +
+            (
+                    []
+                if '__sunit__' in self.symbols else
+                    [
+                        self.moduleDict [self.coreModuleName],
+                        self.moduleDict [self.baseModuleName],
+                        self.moduleDict [self.standardModuleName],
+                        self.moduleDict [self.builtinModuleName]
+                    ] 
+            ) +
             importedModules +
             [self.moduleDict [self.mainModuleName]]
         )
@@ -2672,6 +2678,11 @@ class Generator (ast.NodeVisitor):
         self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
         self.all.add ('__name__')
 
+        ''' No need for this yet
+        self.emit ('var __unit__ = \'{}\';\n', self.module.program.mainModuleName)
+        self.all.add ('__unit__')
+        '''
+        
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')

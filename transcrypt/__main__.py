@@ -117,6 +117,11 @@ def main ():
                        
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
+        if '.main' in util.commandArgs.unit:
+            __symbols__.append ('__munit__')
+        elif '.sub' in util.commandArgs.unit:
+            __symbols__.append ('__sunit__')
+            
         if utils.commandArgs.complex:
             __symbols__.append ('__complex__')
 

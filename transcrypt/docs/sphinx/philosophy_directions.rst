@@ -102,6 +102,13 @@ Efficiency is the reason. While it seems very sophisticated to globally support 
 
 In general compiler facilities that may have a negative impact on performance if applied in the wrong places can be switched on and off locally. The reason they sometimes also are available as a global option is educational use. If straightforward pythonic code matters more than performance, which is the case in an educational situation, setting all switches to maximize CPython compliance may be a good idea, especially if the generated JavaScript code is taken for granted as are assembly instructions with a C compiler.
 
+The following benchmark results give an indication of the performance of Transcrypt'ed code with default settings:
+
+.. figure:: ../images/benchmark.png
+    :alt: Relative performance measured by Pystone benchmark
+    
+Note that Transcrypt avoids constructs that cannot be made to perform in the browser. This means that Transcrypt and CPython are playing in different leagues. Transcrypt makes it possible for Python programmers to take a lot of their skills to the browser, but it is in no way a replacement for, or an equivalent to CPython. The two should be regarded as complementary.
+
 Why were the \_\_pragma\_\_'s added
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -90,6 +90,43 @@ class DeprecationWarning (Warning):
 
 class RuntimeWarning (Warning):
     pass
+    
+__pragma__ ('ifdef', '__munit__')
+
+def fetch (urls):
+   head = document.getElementsByTagName ('head')[0]
+   for url in urls:
+       script = document.createElement ('script')
+       script.type = 'text/javascript'
+       script.src = url
+       head.appendChild (script)
+
+def unfetch (urls):
+    pass
+
+def link (file_names):
+    for url in urls:
+        bareUrl = url [url.rfind ('/') : ]
+        moduleName = bareUrl [ : bareUrl.rfind ('.')]
+        window [moduleName] = exec (f'{moduleName} ()')
+        
+        __pragma__ ('jsiter')
+        for attrib in window [moduleName]:
+            __world__ [attrib] = attrib
+        __pragma__ ('nojsiter')
+        
+def unlink (file_names):
+    pass
+
+def load (file_names):
+    fetch (file_names):
+    link (file_names)
+
+def unload (file_names):
+    unlink (file_names)
+    unfetch (file_names)
+
+__pragma__ ('endif')
 
 __pragma__ ('kwargs')
 
