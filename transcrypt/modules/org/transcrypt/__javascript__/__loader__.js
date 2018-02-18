@@ -11,8 +11,9 @@ function getParts (url) {
     return [path, name, extension];
 }
 
-loaderUrlParts = getParts (mainUrl);
+loaderUrlParts = getParts (loaderUrl);
 mainUrl = loaderUrlParts [0] + '/__' + loaderUrlParts [1] + '__.' + loaderUrlParts [2];
+mainUrl = loaderUrl;
 
 function getUnit (url) {
     var promise = new Promise (function (resolve, reject) {
@@ -50,12 +51,10 @@ async function load (urls) {
     var mainScript = document.createElement ('script');
     mainScript.type = 'text/javascript';
     var loaderOrOtherScript = document.getElementsByTagName ('script')[0];
-    script.text = mainUnit;
+    mainScript.text = mainUnit;
     loaderOrOtherScript.parentNode.insertBefore (mainScript, loaderOrOtherScript);
+
+    aniplant.run ()
 }
 
-load (sub0Url);
-
-
-
-
+load ([sub0Url]);
