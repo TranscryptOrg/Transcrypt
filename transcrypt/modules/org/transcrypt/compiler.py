@@ -189,12 +189,12 @@ class Program:
 
         if not '__sunit__' in self.symbols:
          
-            # Produce header
+            # Produce header           
             header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
                 __base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
             )
 
-            # Produce runtime modules
+            # Produce runtime modules           
             runtimeModules = [
                 self.moduleDict [self.coreModuleName],
                 self.moduleDict [self.baseModuleName],
@@ -203,7 +203,6 @@ class Program:
             ]
             
             # Produce initializer
-            
             if utils.commandArgs.parent == '.none':
                 initializer = '{0} ();\n' .format (self.mainModuleName)
             elif utils.commandArgs.parent == '.user':
@@ -227,7 +226,6 @@ class Program:
         mainModule = self.moduleDict [self.mainModuleName]
         
         # Assemble target code
-        
         def getJoinedModules (modules):
             return ''.join ([module.getModuleCaption () + module.targetCode for module in modules])
                 
