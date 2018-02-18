@@ -57,7 +57,7 @@ class CommandArgs:
         self.argParser.add_argument ('-s', '--symbols', nargs='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
         self.argParser.add_argument ('-sf', '--sform', help = "enable support for string formatting mini language", action = 'store_true')
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
-        self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .main to generate the main module. Use -u .sub to generate a sub module.", action = 'store_true')
+        self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .main to generate the main module. Use -u .sub to generate a sub module.")
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xc', '--xconfimp', help = "confine imported names to directly importing module", action = 'store_true')
@@ -83,10 +83,9 @@ class CommandArgs:
             logAndExit (f'{invalidCombi}: -p / --parent and -u / --unit') 
             
         # Set dependent switches
+        
+        # (for future use)
             
-        if self.unit:
-            self.parent = '.user'
-
         # Correcting line counts for source map
             
         global extraLines
@@ -108,82 +107,6 @@ class CommandArgs:
         extraLines = '\n'.join (extraLines)
                 
 commandArgs = CommandArgs ()  
-
-'''
-The -u / --unit switch: Dynamically loadable units (DLU's)
-==========================================================
-
-A unit is a precompiled group of modules that is loaded on demand.
-Each unit can have an entrypoint that is executed when it's loaded.
-Sourcemaps are disabled when compiling to units, since they are purely a JS-only distribution facility.
-Debugging is done on a statically linked version of the page, since it is semantically equivalent.
-
-Compiling modules into units happens explicitly, much like building a DLL.
-All or some of them can be minified at will.
-
-Loading is also done explicitly.
-Loading consists of fetching and linking.
-In the browser, fetching is getting a piece of JavaScript in the window namespace, e.g. by a HTML script statement.
-Fetching should be done only once.
-Linking, on the other hand, is copying the attribute references of __all__ (so the return value of the outer unit function) to the same namespace object.
-It can happen multiple times, just overwriting old attribute references, which doesn't result in any extra code.
-Since reloading is possible, references overwritten by other modules can be repaired.
-
-Units and module namespaces are orthogonal.
-Modules on one page share one global namespace.
-To have per-component namespaces, modules should be used.
-
-How it works.
-=============
-
-The loader is named <namespace name> and it is compiled without any special switches.
-This means that it will end on the statement:
-
-window ['<namespace name>'] = <namespace name> ();
-
-It will contain definitions of the following functions:
-
-    fetch (<filename list>);    // Gets a unit into the window namespace under its own name
-    unfetch (<filename list>);  // Reserved for future use.
-    
-    link (<filename list>);     // Merges the unit attributes into window.<namepace name>
-    unlink(<filename list>);    // Deletes the unit attributes from window.<namespace name>, which will then be freed by the garbage collector.
-    
-    load (<filename list>);     // Calls fetch and then link
-    unload (<filename list>);   // Cals unlink and then unfetch
-    
-In many cases only load <filename list> will be used.
-
-Units are compiled similarly to ordinary Transcrypt applications. So e.g. their filenames can be arbitrary, they can be minified or not etc..
-Typically there's one runtime unit containing __core__, __base__, __builtin__, __standard__ and __loader__.
-
-Units compiled with -u .main will contain the runtime including the loader.
-Units compiled with -u .sub will not contain the runtime, so also not the loader.
-
-
-All units end on the statement
-
-window ['<unit name>'] = <unit name> ();
-
-It's no use NOT making this assignment,
-since the global namespace will be polluted by the unit function name anyhow.
-So we may just as well replace it by the unit object.
-The loader copies the unit objects into the __world__ of the main unit.
-
-For now, loading is static and but be different for each page.
-In a second stage it will be dynamic.
-
-In an HTML page, the loader is activated as follows:
-
-<script src = '<namespace name>(.min).js'>
-    <namespace name>.load (
-        '<runtime unit name>(.min).js',
-        '<another unit name>(.min).js',
-        '<yet another unit name>(.min).js',
-        etc.
-    )
-</script>
-'''
    
 def create (path):
     os.makedirs (os.path.dirname (path), exist_ok = True)

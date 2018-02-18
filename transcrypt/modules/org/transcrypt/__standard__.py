@@ -93,40 +93,52 @@ class RuntimeWarning (Warning):
     
 __pragma__ ('ifdef', '__munit__')
 
-def fetch (urls):
-   head = document.getElementsByTagName ('head')[0]
-   for url in urls:
-       script = document.createElement ('script')
-       script.type = 'text/javascript'
-       script.src = url
-       head.appendChild (script)
+class __Loader__:
+    def fetch (self, urls):
+       head = document.getElementsByTagName ('head')[0]
+       for url in urls:
+           script = document.createElement ('script')
+           script.type = 'text/javascript'
+           script.src = url
+           head.appendChild (script)
 
-def unfetch (urls):
-    pass
+    def unfetch (self, urls):
+        pass
 
-def link (file_names):
-    for url in urls:
-        bareUrl = url [url.rfind ('/') : ]
-        moduleName = bareUrl [ : bareUrl.rfind ('.')]
-        window [moduleName] = exec (f'{moduleName} ()')
-        
-        __pragma__ ('jsiter')
-        for attrib in window [moduleName]:
-            __world__ [attrib] = attrib
-        __pragma__ ('nojsiter')
-        
-def unlink (file_names):
-    pass
+    def link (self, urls):
+        for url in urls:
+       
+            console.log (777, url)
+       
+            bareUrl = url [url.rfind ('/') + 1 : ]
+            moduleName = bareUrl [ : bareUrl.rfind ('.')]
+            
+            console.log (888, moduleName)
+            
+            window [moduleName] = eval (f'{moduleName} ()')
+            
+            console.log (999)
+            
+            __pragma__ ('jsiter')
+            console.log ('module', window [moduleName])
+            for attrib in window [moduleName]:
+                console.log ('attrib:', attrib)
+                eval ('var attrib = attrib')
+                __world__ [attrib] = attrib
+            __pragma__ ('nojsiter')
+            
+    def unlink (self, urls):
+        pass
 
-def load (file_names):
-    fetch (file_names):
-    link (file_names)
+    def load (self, urls):
+        self.fetch (urls)
+        self.link (surls)
 
-def unload (file_names):
-    unlink (file_names)
-    unfetch (file_names)
+    def unload (self, urls):
+        self.unlink (urls)
+        self.unfetch (urls)
 
-__pragma__ ('endif')
+#__pragma__ ('endif')
 
 __pragma__ ('kwargs')
 

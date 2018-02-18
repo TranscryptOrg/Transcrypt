@@ -129,12 +129,11 @@ class Program:
         self.sourceFileName = self.sourcePath.split ('/') [-1]
 
         # Define names early, since they are cross-used in module compilation
-        if not ('__sunit__' in self.symbols):
-            prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
-            self.coreModuleName = '{}.{}'.format (prefix, '__core__')
-            self.baseModuleName = '{}.{}'.format (prefix, '__base__')
-            self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
-            self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
+        prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
+        self.coreModuleName = '{}.{}'.format (prefix, '__core__')
+        self.baseModuleName = '{}.{}'.format (prefix, '__base__')
+        self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
+        self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
         self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
 
         # Compile inline modules
@@ -188,59 +187,69 @@ class Program:
                     self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
                 )
 
-        # Round up imported modules
+        if not '__sunit__' in self.symbols:
+         
+            # Produce header
+            header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
+                __base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+            )
+
+            # Produce runtime modules
+            runtimeModules = [
+                self.moduleDict [self.coreModuleName],
+                self.moduleDict [self.baseModuleName],
+                self.moduleDict [self.standardModuleName],
+                self.moduleDict [self.builtinModuleName]
+            ]
+            
+            # Produce initializer
+            
+            if utils.commandArgs.parent == '.none':
+                initializer = '{0} ();\n' .format (self.mainModuleName)
+            elif utils.commandArgs.parent == '.user':
+                initializer = ''
+            else:
+                if utils.commandArgs.parent == None:
+                    parent = 'window'
+                else:
+                    parent = utils.commandArgs.parent
+
+                initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
+        
+        # Produce imported modules
         importedModules = [
             self.moduleDict [moduleName]
             for moduleName in sorted (self.moduleDict)
             if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
         ]
-
-        # And sandwich them between the in-line modules
-        self.allModules = (
-            (
-                    []
-                if '__sunit__' in self.symbols else
-                    [
-                        self.moduleDict [self.coreModuleName],
-                        self.moduleDict [self.baseModuleName],
-                        self.moduleDict [self.standardModuleName],
-                        self.moduleDict [self.builtinModuleName]
-                    ] 
-            ) +
-            importedModules +
-            [self.moduleDict [self.mainModuleName]]
-        )
-
-        # Encapsulate target code for all modules
-        header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
-            __base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-        )
-
-        if utils.commandArgs.parent == '.none':
-            initializer = '{0} ();\n' .format (self.mainModuleName)
-        elif utils.commandArgs.parent == '.user':
-            initializer = ''
+        
+        # Produce main module
+        mainModule = self.moduleDict [self.mainModuleName]
+        
+        # Assemble target code
+        
+        def getJoinedModules (modules):
+            return ''.join ([module.getModuleCaption () + module.targetCode for module in modules])
+                
+        if '__sunit__' in self.symbols:
+            targetCode = getJoinedModules (importedModules + [mainModule])
         else:
-            if utils.commandArgs.parent == None:
-                parent = 'window'
-            else:
-                parent = utils.commandArgs.parent
+            modulesPlaceholder = '/*<..modules..>*/'
+            
+            targetCode = (
+                # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
+                header +
+                'function {} () {{\n'.format (self.mainModuleName) +
+                '    var __symbols__ = {};\n'.format (self.symbols) +
+                # END prologue
+                getJoinedModules (runtimeModules + importedModules + [mainModule]) +
+                (modulesPlaceholder if '__munit__' in self.symbols else '') +
+                '    return __all__;\n' +
+                '}\n' +
+                initializer
+            )
 
-            initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
-
-        targetCode = (
-            # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
-            header +
-            'function {} () {{\n'.format (self.mainModuleName) +
-            '    var __symbols__ = {};\n'.format (self.symbols) +
-            # END prologue
-            ''.join ([module.getModuleCaption () + module.targetCode for module in self.allModules]) +
-            '    return __all__;\n' +
-            '}\n' +
-            initializer
-        )
-
-        # Write encapsulated target code
+        # Write target code
         utils.log (True, 'Saving result in: {}\n', self.targetPath)
         with utils.create (self.targetPath) as aFile:
             aFile.write (targetCode)
@@ -371,7 +380,7 @@ class Module:
                 syntaxError,
                 lineNr = syntaxError.lineno,
                 message = (
-                        '\n\t{} <SYNTAX FAULT] {}'.format (
+                        '\n\t{} [<-SYNTAX FAULT] {}'.format (
                             syntaxError.text [:syntaxError.offset].lstrip (),
                             syntaxError.text [syntaxError.offset:].rstrip ()
                         )
