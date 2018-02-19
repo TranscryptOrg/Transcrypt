@@ -34,6 +34,7 @@ class ModuleMetadata:
         self.program = program
         self.name = name
         searchedModulePaths = []
+        
         for searchDir in self.program.moduleSearchDirs:
             relPrepath = self.name.replace ('.', '/')
             prepath = '{}/{}'.format (searchDir, relPrepath)
@@ -47,7 +48,7 @@ class ModuleMetadata:
 
             self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
             self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
-
+            
             self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
             searchedModulePaths += [self.sourcePath, self.targetPath]
 
@@ -104,12 +105,13 @@ class ModuleMetadata:
             print (traceback.format_exc ())
 
 class Program:
-    def __init__ (self, moduleSearchDirs, symbols):
+    def __init__ (self, moduleSearchDirs, modulesDir, symbols):
         utils.setProgram (self)
     
         self.moduleSearchDirs = moduleSearchDirs
+        self.modulesDir = modulesDir
         self.symbols = symbols
-
+        
         self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
 
         if utils.commandArgs.esv == None:
@@ -127,7 +129,8 @@ class Program:
         self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
         self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
         self.sourceFileName = self.sourcePath.split ('/') [-1]
-
+        self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)      
+        
         # Define names early, since they are cross-used in module compilation
         prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
         self.coreModuleName = '{}.{}'.format (prefix, '__core__')
@@ -135,6 +138,14 @@ class Program:
         self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
         self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
         self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
+        
+        # Set loader paths
+        self.loaderTemplatePath = '{}/org/{}/{}/__loader_template__.js'.format (
+            self.modulesDir, __base__.__envir__.transpiler_name, __base__.__envir__.target_subdir 
+        )
+        self.loaderName = 'load_{}'.format (self.mainModuleName)
+        self.loaderTargetPath = '{}/{}.js'.format (self.targetDir, self.loaderName)
+        self.loaderMiniTargetPath = '{}/{}.min.js'.format (self.targetDir, self.loaderName)
 
         # Compile inline modules
         if not ('__sunit__' in self.symbols):
@@ -187,7 +198,7 @@ class Program:
                     self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
                 )
 
-        if not '__sunit__' in self.symbols:
+        if not '__sunit__' in self.symbols: # So it's a monolith or a main unit, subunits don't need these parts
          
             # Produce header           
             header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
@@ -215,14 +226,14 @@ class Program:
 
                 initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
         
-        # Produce imported modules
+        # Produce imported modules, needed for monolith or any type of unit
         importedModules = [
             self.moduleDict [moduleName]
             for moduleName in sorted (self.moduleDict)
             if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
         ]
         
-        # Produce main module
+        # Produce main module, needed for monolith or any type of unit
         mainModule = self.moduleDict [self.mainModuleName]
         
         # Assemble target code
@@ -230,9 +241,9 @@ class Program:
             return ''.join ([module.getModuleCaption () + module.targetCode for module in modules])
                 
         if '__sunit__' in self.symbols:
-            targetCode = getJoinedModules (importedModules + [mainModule])
+            targetCode = getJoinedModules (importedModules + [mainModule])      # So no header, runtime modules and initializer
         else:
-            modulesPlaceholder = '/*<..modules..>*/'
+            modulesPlaceholder = '\n__pragma__ (\'<sub_units>\')\n'           # Placeholder made, but used only if it's a main unit, not if it's a monolith
             
             targetCode = (
                 # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
@@ -241,14 +252,32 @@ class Program:
                 '    var __symbols__ = {};\n'.format (self.symbols) +
                 # END prologue
                 getJoinedModules (runtimeModules + importedModules + [mainModule]) +
-                (modulesPlaceholder if '__munit__' in self.symbols else '') +
+                (modulesPlaceholder if '__munit__' in self.symbols else '') +   # No placeholder needed if it's a monolith
                 '    return __all__;\n' +
                 '}\n' +
                 initializer
             )
+            
+            if '__munit__' in self.symbols:
+                # Generate loader from template
+                loaderTemplate = tokenize.open (self.loaderTemplatePath) .read ()
+                loader = (loaderTemplate
+                ) .replace ('__pragma__ (\'<loader_name>\')', self.loaderName
+                ) .replace ('__pragma__ (\'<main_unit_name>\')', self.mainModuleName    # The main unit name is the name of its main module
+                )
+                
+                # Write loader
+                utils.log (True, 'Saving loader in: {}\n', self.loaderTargetPath)
+                with utils.create (self.loaderTargetPath) as aFile:
+                    aFile.write (loader)
+                    
+                # Minify loader
+                if not utils.commandArgs.nomin:
+                    utils.log (True, 'Saving minified loader in: {}\n', self.loaderMiniTargetPath)        
+                    minify.run (self.loaderTargetPath, self.loaderMiniTargetPath, None, 8)
 
         # Write target code
-        utils.log (True, 'Saving result in: {}\n', self.targetPath)
+        utils.log (True, 'Saving target code in: {}\n', self.targetPath)
         with utils.create (self.targetPath) as aFile:
             aFile.write (targetCode)
 
@@ -261,9 +290,9 @@ class Program:
             self.prettyMap.concatenate ([module.modMap for module in self.allModules], self.moduleCaptionSkip)
             self.prettyMap.save ()
 
-        # Minify
+        # Minify target code
         if not utils.commandArgs.nomin:
-            utils.log (True, 'Saving minified result in: {}\n', self.miniTargetPath)
+            utils.log (True, 'Saving minified target code in: {}\n', self.miniTargetPath)
             minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None, 8) # Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
             if utils.commandArgs.map:
                 utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)

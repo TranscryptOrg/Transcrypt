@@ -91,55 +91,6 @@ class DeprecationWarning (Warning):
 class RuntimeWarning (Warning):
     pass
     
-__pragma__ ('ifdef', '__munit__')
-
-class __Loader__:
-    def fetch (self, urls):
-       head = document.getElementsByTagName ('head')[0]
-       for url in urls:
-           script = document.createElement ('script')
-           script.type = 'text/javascript'
-           script.src = url
-           head.appendChild (script)
-
-    def unfetch (self, urls):
-        pass
-
-    def link (self, urls):
-        for url in urls:
-       
-            console.log (777, url)
-       
-            bareUrl = url [url.rfind ('/') + 1 : ]
-            moduleName = bareUrl [ : bareUrl.rfind ('.')]
-            
-            console.log (888, moduleName)
-            
-            window [moduleName] = eval (f'{moduleName} ()')
-            
-            console.log (999)
-            
-            __pragma__ ('jsiter')
-            console.log ('module', window [moduleName])
-            for attrib in window [moduleName]:
-                console.log ('attrib:', attrib)
-                eval ('var attrib = attrib')
-                __world__ [attrib] = attrib
-            __pragma__ ('nojsiter')
-            
-    def unlink (self, urls):
-        pass
-
-    def load (self, urls):
-        self.fetch (urls)
-        self.link (surls)
-
-    def unload (self, urls):
-        self.unlink (urls)
-        self.unfetch (urls)
-
-#__pragma__ ('endif')
-
 __pragma__ ('kwargs')
 
 def __sort__ (iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
