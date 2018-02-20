@@ -78,9 +78,9 @@ class CommandArgs:
         if not (self.license or self.star or self.source):
             logAndExit (self.argParser.format_usage () .capitalize ())
         elif self.map and self.unit:
-            logAndExit (f'{invalidCombi}: -m / --map and -u / --unit')   
+            logAndExit ('{}: -m / --map and -u / --unit'.format (invalidCombi))   
         elif self.parent and self.unit:
-            logAndExit (f'{invalidCombi}: -p / --parent and -u / --unit') 
+            logAndExit ('{}: -p / --parent and -u / --unit'.format (invalidCombi)) 
             
         # Set dependent switches
         

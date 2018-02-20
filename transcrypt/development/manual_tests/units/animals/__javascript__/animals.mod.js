@@ -1,5 +1,6 @@
 	(function () {
 		var __name__ = '__main__';
+		var asm =  __init__ (__world__.animals_submodule);
 		var _individuals = dict ({});
 		var find = function (py_name) {
 			return _individuals [py_name];
@@ -12,7 +13,7 @@
 				self.food = food;
 				self.sound = sound;
 				self.fed = false;
-				document.getElementById (self.py_name).innerHTML = self.speak ('I was born just now!');
+				document.getElementById (self.py_name).innerHTML = self.speak ('I was born just now! My kingdom is: {}. My species is {}'.format (asm.getTaxoTag (), self.species));
 			});},
 			get speak () {return __get__ (this, function (self, text) {
 				return '{} says: '.format (self.py_name) + text;
@@ -26,6 +27,9 @@
 				self.fed = false;
 			});}
 		});
+		__pragma__ ('<use>' +
+			'animals_submodule' +
+		'</use>')
 		__pragma__ ('<all>')
 			__all__.Animal = Animal;
 			__all__.__name__ = __name__;

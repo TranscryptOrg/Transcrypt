@@ -59,23 +59,35 @@ Transcrypt's unit mechanism and creating native JavaScript component frameworks 
 
 It is possible to create native JavaScript component frameworks using Transcrypt. Components can be freely mixed on a page without requiring recompilation. A developer doesn't need Transcrypt or any knowledge of it to use such a framework. Each page has one unit that contains the Transcrypt runtime and, if needed, any central facilities. It is compiled with the *-u .run* switch. In addition each page can hold as many separate components as needed. Compile these with the *-u .com* switch. A loader is generated, accepting a list of components. By varying this list, each page can have it's own subset of components, without the need to recompile. The generated JavaScript code for components can be very small, typically a few hundred bytes. The runtime and central facilities are included in the page only once.
 
-Note that the unit mechanism is still experimental and might undergo refinements. An example of the use of units is the following:
+Note that the concepts of a unit and a module are orthogonal. All units of a framework share the same namespace. Modules, on the other hand, constitute a distinct namespace. An example of using a combination of units and modules is the following:
 
 .. literalinclude:: ../../development/manual_tests/units/animals/animals.html
    :tab-width: 4
    :caption: animals.html - the webpage that invokes the loader to load the runtime unit and certain components of the animals framework
 
+.. literalinclude:: ../../development/manual_tests/units/animals/animals_submodule.py
+   :tab-width: 4
+   :caption: animals_submodule.py - imported in the runtime unit
+
 .. literalinclude:: ../../development/manual_tests/units/animals/animals.py
    :tab-width: 4
    :caption: animals.py - the runtime unit
+
+.. literalinclude:: ../../development/manual_tests/units/animals/cats_submodule.py
+   :tab-width: 4
+   :caption: cats_submodule.py - imported in the first component
 
 .. literalinclude:: ../../development/manual_tests/units/animals/cats.py
    :tab-width: 4
    :caption: cats.py - the first component
 
+.. literalinclude:: ../../development/manual_tests/units/animals/dogs_submodule.py
+   :tab-width: 4
+   :caption: dogs.py - imported in the second component
+
 .. literalinclude:: ../../development/manual_tests/units/animals/dogs.py
    :tab-width: 4
-   :caption: dogs.py - the second component
+   :caption: dogs_submodule.py - the second component
 
 Using browser stubs to test non-GUI code that uses console.log and window.alert
 -------------------------------------------------------------------------------

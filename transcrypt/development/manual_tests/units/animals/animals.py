@@ -1,3 +1,5 @@
+import animals_submodule as asm
+
 _individuals = {}
 
 def find (name):
@@ -10,7 +12,7 @@ class Animal:
         self.food = food
         self.sound = sound
         self.fed = False
-        document.getElementById (self.name) .innerHTML  = self.speak ('I was born just now!')       
+        document.getElementById (self.name) .innerHTML  = self.speak (f'I was born just now! My kingdom is: {asm.getTaxoTag ()}. My species is {self.species}')       
         
     def speak (self, text):
         return f'{self.name} says: ' + text
