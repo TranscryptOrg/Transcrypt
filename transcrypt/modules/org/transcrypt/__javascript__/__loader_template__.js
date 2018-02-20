@@ -7,19 +7,19 @@ function __pragma__ ('<loader_name>') (urls, args) {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        // console.log ('Retrieved: ', url);
+                        console.log ('Retrieved: ', url);
                         resolve (xhr.responseText);
                     }
                     else {
                         reject (xhr.status);
-                        // console.log ('Could not retrieve: ', url);
+                        console.log ('Could not retrieve: ', url);
                     }
                 }
                 else {
-                    // console.log ('Busy retrieving: ', url);
+                    console.log ('Busy retrieving: ', url);
                 }
             }
-            // console.log ('Requested: ', url);
+            console.log ('Requested: ', url);
         });
         return promise;
     }
@@ -30,7 +30,11 @@ function __pragma__ ('<loader_name>') (urls, args) {
         for (url of urls.slice (1)) {
             subUnits += await (getUnit (url));
         }
-        mainUnit = mainUnitTemplate.replace ('__pragma__ (\'<sub_units>\')', subUnits);
+        mainUnit = mainUnitTemplate.replace ('\t\t__pragma__ (\'<components>\')', subUnits);
+        
+        console.log ('======')
+        console.log (mainUnit)
+        console.log ('======')
         
         var mainScript = document.createElement ('script');
         mainScript.type = 'text/javascript';
@@ -38,10 +42,10 @@ function __pragma__ ('<loader_name>') (urls, args) {
         mainScript.text = mainUnit;
         loaderOrOtherScript.parentNode.insertBefore (mainScript, loaderOrOtherScript);
 
-        // The main line of the main unit is run before the main lines of all other units,
-        // but the main unit can have an __run__ function, that is called after the main lines of all units
-        if ('__run__' in window.__pragma__ ('<main_unit_name>')) {
-            window.__pragma__ ('<main_unit_name>').__run__ (args);
+        // The main line of the runtime unit is run before the main lines of all component units,
+        // but the runtime unit can have an __run__ function, that is called after the main lines of all component units
+        if ('__run__' in window.__pragma__ ('<runit_name>')) {
+            window.__pragma__ ('<runit_name>').__run__ (args);
         }
     }
 

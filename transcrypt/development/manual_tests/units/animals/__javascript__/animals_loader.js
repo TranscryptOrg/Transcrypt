@@ -1,4 +1,4 @@
-function aniplant_loader (urls, args) {
+function animals_loader (urls, args) {
     function getUnit (url) {
         var promise = new Promise (function (resolve, reject) {
             var xhr = new XMLHttpRequest ();
@@ -30,7 +30,11 @@ function aniplant_loader (urls, args) {
         for (url of urls.slice (1)) {
             subUnits += await (getUnit (url));
         }
-        mainUnit = mainUnitTemplate.replace ('__pragma__ (\'<sub_units>\')', subUnits);
+        mainUnit = mainUnitTemplate.replace ('\t\t__pragma__ (\'<components>\')', subUnits);
+        
+        console.log ('======')
+        console.log (mainUnit)
+        console.log ('======')
         
         var mainScript = document.createElement ('script');
         mainScript.type = 'text/javascript';
@@ -38,10 +42,10 @@ function aniplant_loader (urls, args) {
         mainScript.text = mainUnit;
         loaderOrOtherScript.parentNode.insertBefore (mainScript, loaderOrOtherScript);
 
-        // The main line of the main unit is run before the main lines of all other units,
-        // but the main unit can have an __run__ function, that is called after the main lines of all units
-        if ('__run__' in window.aniplant) {
-            window.aniplant.__run__ (args);
+        // The main line of the runtime unit is run before the main lines of all component units,
+        // but the runtime unit can have an __run__ function, that is called after the main lines of all component units
+        if ('__run__' in window.animals) {
+            window.animals.__run__ (args);
         }
     }
 

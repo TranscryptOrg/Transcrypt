@@ -143,12 +143,12 @@ class Program:
         self.loaderTemplatePath = '{}/org/{}/{}/__loader_template__.js'.format (
             self.modulesDir, __base__.__envir__.transpiler_name, __base__.__envir__.target_subdir 
         )
-        self.loaderName = 'load_{}'.format (self.mainModuleName)
+        self.loaderName = '{}_loader'.format (self.mainModuleName)
         self.loaderTargetPath = '{}/{}.js'.format (self.targetDir, self.loaderName)
         self.loaderMiniTargetPath = '{}/{}.min.js'.format (self.targetDir, self.loaderName)
 
         # Compile inline modules
-        if not ('__sunit__' in self.symbols):
+        if not ('__cunit__' in self.symbols):
             Module (self, ModuleMetadata (self, self.coreModuleName), True)
             Module (self, ModuleMetadata (self, self.baseModuleName))
             Module (self, ModuleMetadata (self, self.standardModuleName))
@@ -198,7 +198,7 @@ class Program:
                     self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
                 )
 
-        if not '__sunit__' in self.symbols: # So it's a monolith or a main unit, subunits don't need these parts
+        if not '__cunit__' in self.symbols: # So it's a monolith or a runtime unit, components don't need these parts
          
             # Produce header           
             header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
@@ -240,11 +240,9 @@ class Program:
         def getJoinedModules (modules):
             return ''.join ([module.getModuleCaption () + module.targetCode for module in modules])
                 
-        if '__sunit__' in self.symbols:
+        if '__cunit__' in self.symbols:
             targetCode = getJoinedModules (importedModules + [mainModule])      # So no header, runtime modules and initializer
         else:
-            modulesPlaceholder = '\n__pragma__ (\'<sub_units>\')\n'           # Placeholder made, but used only if it's a main unit, not if it's a monolith
-            
             targetCode = (
                 # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
                 header +
@@ -252,18 +250,17 @@ class Program:
                 '    var __symbols__ = {};\n'.format (self.symbols) +
                 # END prologue
                 getJoinedModules (runtimeModules + importedModules + [mainModule]) +
-                (modulesPlaceholder if '__munit__' in self.symbols else '') +   # No placeholder needed if it's a monolith
                 '    return __all__;\n' +
                 '}\n' +
                 initializer
             )
             
-            if '__munit__' in self.symbols:
+            if '__runit__' in self.symbols:
                 # Generate loader from template
                 loaderTemplate = tokenize.open (self.loaderTemplatePath) .read ()
                 loader = (loaderTemplate
                 ) .replace ('__pragma__ (\'<loader_name>\')', self.loaderName
-                ) .replace ('__pragma__ (\'<main_unit_name>\')', self.mainModuleName    # The main unit name is the name of its main module
+                ) .replace ('__pragma__ (\'<runit_name>\')', self.mainModuleName    # The main unit name is the name of its main module
                 )
                 
                 # Write loader
@@ -696,6 +693,7 @@ class Generator (ast.NodeVisitor):
         self.allowKeyCheck = utils.commandArgs.keycheck
         self.allowDebugMap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
+        self.allowExtern = False
         self.allowJavaScriptIter = False
         self.allowJavaScriptCall = utils.commandArgs.jscall
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
@@ -948,10 +946,11 @@ class Generator (ast.NodeVisitor):
             del self.tempIndices [name]
 
     def useModule (self, name):
-        self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-        result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
-        self.use.add (name)                                     # Must not be done if the healthy exception occurs
-        return result
+        if not self.allowExtern:
+            self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
+            result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
+            self.use.add (name)                                     # Must not be done if the healthy exception occurs
+            return result
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -1576,6 +1575,11 @@ class Generator (ast.NodeVisitor):
                     self.allowDocAttribs = True
                 elif node.args [0] .s == 'nodocat':
                     self.allowDocAttribs = False
+                    
+                elif node.args [0] .s == 'extern':
+                    self.allowExtern = True
+                elif node.args [0] .s == 'noextern':
+                    self.allowExtern = False                
 
                 elif node.args [0] .s == 'iconv':       # Automatic conversion to iterable supported
                     self.allowConversionToIterable = True
@@ -2539,12 +2543,18 @@ class Generator (ast.NodeVisitor):
             # N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
             for index, alias in enumerate (node.names):
                 if alias.name == '*':                                           # * Never refers to modules, only to entities in modules
+                    if self.allowExtern:
+                        raise utils.Error (
+                            lineNr = node.lineno,
+                            message = '\n\tCan\'t import * from external module \'{}\''.format (node.module)
+                        )
+                    
                     if len (node.names) > 1:
                         raise utils.Error (
                             lineNr = node.lineno,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
-
+                    
                     module = self.useModule (node.module)
 
                     # Import everything
@@ -2694,7 +2704,8 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
         self.indent ()
         if self.module.metadata.name == self.module.program.mainModuleName:
-            self.emit ('(function () {{\n')
+            if not '__cunit__' in self.module.program.symbols:
+                self.emit ('(function () {{\n')
             self.indent ()
         else:
             self.emit ('__nest__ (\n')
@@ -2711,14 +2722,10 @@ class Generator (ast.NodeVisitor):
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
         
-        self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
-        self.all.add ('__name__')
+        if not '__cunit__'  in self.module.program.symbols:
+            self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
+            self.all.add ('__name__')
 
-        ''' No need for this yet
-        self.emit ('var __unit__ = \'{}\';\n', self.module.program.mainModuleName)
-        self.all.add ('__unit__')
-        '''
-        
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
@@ -2752,11 +2759,15 @@ class Generator (ast.NodeVisitor):
                 self.emit ('__all__.{0} = {0};\n', self.filterId (name))
             self.dedent ()
             self.emit ('__pragma__ (\'</all>\')\n')
+            
+        if self.module.metadata.name == self.module.program.mainModuleName and '__runit__' in self.module.program.symbols:
+            self.emit ('__pragma__ (\'<components>\')\n')
 
         self.dedent ()
 
         if self.module.metadata.name == self.module.program.mainModuleName:
-            self.emit ('}}) ();\n')
+            if not '__cunit__' in self.module.program.symbols:
+                self.emit ('}}) ();\n')
         else:
             self.emit ('}}\n')
             self.dedent ()

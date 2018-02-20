@@ -1,7 +1,7 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-02-19 13:19:00
-function aniplant () {
-    var __symbols__ = ['__munit__', '__py3.6__', '__esv5__'];
+// Transcrypt'ed from Python, 2018-02-20 14:35:33
+function animals () {
+    var __symbols__ = ['__runit__', '__py3.6__', '__esv5__'];
     var __all__ = {};
     var __world__ = __all__;
     var __nest__ = function (headObject, tailNames, value) {
@@ -155,7 +155,6 @@ function aniplant () {
 			}
 		}
 	);
-
 	__nest__ (
 		__all__,
 		'org.transcrypt.__standard__', {
@@ -500,7 +499,6 @@ function aniplant () {
 			}
 		}
 	);
-
     var __call__ = function (/* <callee>, <this>, <params>* */) {
         var args = [] .slice.apply (arguments);
         if (typeof args [0] == 'object' && '__call__' in args [0]) {
@@ -2200,45 +2198,46 @@ function aniplant () {
         }
     };
     __all__.__setslice__ = __setslice__;
-	__nest__ (
-		__all__,
-		'reporter', {
-			__all__: {
-				__inited__: false,
-				__init__: function (__all__) {
-					var __name__ = 'reporter';
-					print ('I am reporter.py, the sub module of the main unit');
-					var report = function () {
-						print ('report report report');
-					};
-					__pragma__ ('<all>')
-						__all__.__name__ = __name__;
-						__all__.report = report;
-					__pragma__ ('</all>')
-				}
-			}
-		}
-	);
-
 	(function () {
-		var reporter = {};
 		var __name__ = '__main__';
-		__nest__ (reporter, '', __init__ (__world__.reporter));
-		print ('I am aniplant.py, the main module of the main unit');
-		var run = function () {
-			reporter.report ();
-		};
-		__pragma__ ('<use>' +
-			'reporter' +
-		'</use>')
+        
+        var animals = {};
+        
+        function py_get (py_name) {
+            console.dir (animals);
+            return animals [py_name];
+        }
+        
+		var Animal = __class__ ('Animal', [object], {
+			__module__: __name__,
+			get __init__ () {return __get__ (this, function (self, py_name, food, sound) {
+				self.py_name = py_name;
+				animals [self.py_name] = self;
+				self.fed = false;
+			});},
+			get speak () {return __get__ (this, function (self, text) {
+				return '{} says: '.format (self.py_name) + text;
+			});},
+			get feed () {return __get__ (this, function (self) {
+				document.getElementById (self.py_name).innerHTML = self.speak ((self.fed ? 'No thanks, I first want to greet you with {}!'.format (self.sound) : 'Thanks a lot, I am now eating {}!'.format (self.food)));
+                self.fed = true;
+			});},
+			get greet () {return __get__ (this, function (self) {
+				document.getElementById (self.py_name).innerHTML = self.speak ((self.fed ? '{}, {}, {}!'.format (self.sound, self.sound, self.sound) : 'Sorry, I want to eat {} first!'.format (self.food)));
+                self.fed = false;
+			});}
+		});
+__pragma__ ('<components>')
 		__pragma__ ('<all>')
+            __all__.animals = animals;
+            __all__.py_get = py_get;
+			__all__.Animal = Animal;
+			__all__.Dog = Dog;
+            __all__.Cat = Cat;
 			__all__.__name__ = __name__;
-			__all__.run = run;
 		__pragma__ ('</all>')
 	}) ();
 
-
-__pragma__ ('<sub_units>')
     return __all__;
 }
-window ['aniplant'] = aniplant ();
+window ['animals'] = animals ();

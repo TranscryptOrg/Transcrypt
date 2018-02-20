@@ -117,10 +117,11 @@ def main ():
                        
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
-        if '.main' in utils.commandArgs.unit:
-            __symbols__.append ('__munit__')
-        elif '.sub' in utils.commandArgs.unit:
-            __symbols__.append ('__sunit__')
+        if utils.commandArgs.unit:
+            if '.runt' in utils.commandArgs.unit:
+                __symbols__.append ('__runit__')
+            elif '.comp' in utils.commandArgs.unit:
+                __symbols__.append ('__cunit__')
             
         if utils.commandArgs.complex:
             __symbols__.append ('__complex__')
