@@ -283,18 +283,18 @@ class Program:
 
         # Join and save source maps
         
-        self.allModules = (
-            [
-                self.moduleDict [self.coreModuleName],
-                self.moduleDict [self.baseModuleName],
-                self.moduleDict [self.standardModuleName],
-                self.moduleDict [self.builtinModuleName]
-            ] +
-            importedModules +
-            [self.moduleDict [self.mainModuleName]]
-        )        
-        
         if utils.commandArgs.map:
+            self.allModules = (
+                [
+                    self.moduleDict [self.coreModuleName],
+                    self.moduleDict [self.baseModuleName],
+                    self.moduleDict [self.standardModuleName],
+                    self.moduleDict [self.builtinModuleName]
+                ] +
+                importedModules +
+                [self.moduleDict [self.mainModuleName]]
+            )        
+        
             utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMap.mapPath)
             self.prettyMap.concatenate ([module.modMap for module in self.allModules], self.moduleCaptionSkip)
             self.prettyMap.save ()

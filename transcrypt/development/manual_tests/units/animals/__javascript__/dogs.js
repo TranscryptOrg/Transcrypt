@@ -7,3 +7,4 @@
 		__pragma__ ('<all>')
 			__all__.Dog = Dog;
 		__pragma__ ('</all>')
+
