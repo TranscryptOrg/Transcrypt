@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-02-20 16:45:45
+// Transcrypt'ed from Python, 2018-02-20 18:19:53
 function animals () {
     var __symbols__ = ['__runit__', '__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -155,6 +155,7 @@ function animals () {
 			}
 		}
 	);
+
 	__nest__ (
 		__all__,
 		'org.transcrypt.__standard__', {
@@ -499,6 +500,7 @@ function animals () {
 			}
 		}
 	);
+
     var __call__ = function (/* <callee>, <this>, <params>* */) {
         var args = [] .slice.apply (arguments);
         if (typeof args [0] == 'object' && '__call__' in args [0]) {
