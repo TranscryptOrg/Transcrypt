@@ -271,7 +271,12 @@ class Program:
                 # Minify loader
                 if not utils.commandArgs.nomin:
                     utils.log (True, 'Saving minified loader in: {}\n', self.loaderMiniTargetPath)        
-                    minify.run (self.loaderTargetPath, self.loaderMiniTargetPath, None, 8)
+                    minify.run (
+                        self.loaderTargetPath,
+                        self.loaderMiniTargetPath,
+                        None,
+                        unitsUsed = True
+                    )
 
         # Write target code
         utils.log (True, 'Saving target code in: {}\n', self.targetPath)
@@ -302,7 +307,12 @@ class Program:
         # Minify target code
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified target code in: {}\n', self.miniTargetPath)
-            minify.run (self.targetPath, self.miniTargetPath, self.shrinkMap.mapPath if utils.commandArgs.map else None, 8) # Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
+            minify.run (
+                self.targetPath,
+                self.miniTargetPath,
+                self.shrinkMap.mapPath if utils.commandArgs.map else None,
+                unitsUsed = '__runit__' in self.symbols or '__cunit__'  in self.symbols
+            )
             if utils.commandArgs.map:
                 utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
                 self.shrinkMap.load ()
@@ -2773,7 +2783,7 @@ class Generator (ast.NodeVisitor):
             self.emit ('__pragma__ (\'</all>\')\n')
             
         if self.module.metadata.name == self.module.program.mainModuleName and '__runit__' in self.module.program.symbols:
-            self.emit ('__pragma__ (\'<components>\')\n')
+            self.emit ('\n__pragma__("<components>")\n')  # Make the pragma a string literal to prevent distortion by Closure, like replacing ' by "
 
         self.dedent ()
 

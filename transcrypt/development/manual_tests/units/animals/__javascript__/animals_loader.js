@@ -7,34 +7,36 @@ function animals_loader (urls, args) {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log ('Retrieved: ', url);
+                        // console.log ('Retrieved: ', url);
                         resolve (xhr.responseText);
                     }
                     else {
                         reject (xhr.status);
-                        console.log ('Could not retrieve: ', url);
+                        // console.log ('Could not retrieve: ', url);
                     }
                 }
                 else {
-                    console.log ('Busy retrieving: ', url);
+                    // console.log ('Busy retrieving: ', url);
                 }
             }
-            console.log ('Requested: ', url);
+            // console.log ('Requested: ', url);
         });
         return promise;
     }
 
     async function load (urls) {
-        mainUnitTemplate = await (getUnit (urls [0]));
-        subUnits = ''
-        for (url of urls.slice (1)) {
+        var mainUnitTemplate = await (getUnit (urls [0]));
+        var subUnits = ''
+        for (let url of urls.slice (1)) {
             subUnits += await (getUnit (url));
         }
-        mainUnit = mainUnitTemplate.replace ('\t\t__pragma__ (\'<components>\')', subUnits);
+        var mainUnit = mainUnitTemplate.replace ('__pragma__("<components>")', subUnits);
         
+        /*
         console.log ('======')
         console.log (mainUnit)
         console.log ('======')
+        */
         
         var mainScript = document.createElement ('script');
         mainScript.type = 'text/javascript';

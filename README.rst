@@ -121,8 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Simple minification added for units (only remove whitespace, names have to stay compatible).
 - Unit example expanded to show combination of units and modules, docs adapted accordingly
-- Python 3.5 imcompatibility bug fixed
+- Python 3.5 incompatibility bug fixed
 - Units, making it possible to create compact native JavaScript component frameworks with Transcrypt
 - String formatting mini language added as an option (-sf / --sform switch) + autotest
 - Div internal improvements and fixes

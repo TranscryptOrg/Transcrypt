@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script src = "__javascript__/animals_loader.min.js"></script>
+        <script>
+            animals_loader ([
+                '__javascript__/animals.min.js',
+                '__javascript__/cats.min.js',
+                '__javascript__/dogs.min.js'
+            ]);
+        </script>
+        <style>button {width:200px;}</style>
+    </head>
+    <body>  
+        <div id = "Felix">...</div>
+        <button onclick="animals.Cat ('Felix');">Create cat Felix</button><br/>
+        <button onclick="animals.find ('Felix') .feed ();">Feed cat Felix</button><br/>
+        <button onclick="animals.find ('Felix') .greet ();">Greet cat Felix</button><br/>
+        <br/>
+        <div id = "Tiger">...</div>
+        <button onclick="animals.Cat ('Tiger');">Create cat Tiger</button><br>
+        <button onclick="animals.find ('Tiger') .feed ();">Feed cat Tiger</button><br/>
+        <button onclick="animals.find ('Tiger') .greet ();">Greet cat Tiger</button><br/>
+        <br/>
+        <div id = "Pluto">...</div>
+        <button onclick="animals.Dog ('Pluto');">Create dog Pluto</button><br>
+        <button onclick="animals.find ('Pluto') .feed ();">Feed dog Pluto</button><br/>
+        <button onclick="animals.find ('Pluto') .greet ();">Greet dog Pluto</button><br/>
+    </body>
+</html>

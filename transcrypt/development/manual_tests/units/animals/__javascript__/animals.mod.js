@@ -36,5 +36,6 @@
 			__all__._individuals = _individuals;
 			__all__.find = find;
 		__pragma__ ('</all>')
-		__pragma__ ('<components>')
+		
+		__pragma__("<components>")
 	}) ();
