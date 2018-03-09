@@ -244,11 +244,11 @@ class Program:
             targetCode = getJoinedModules (importedModules + [mainModule])      # So no header, runtime modules and initializer
         else:
             targetCode = (
-                # BEGIN prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
+                # BEGIN default prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
                 header +
                 'function {} () {{\n'.format (self.mainModuleName) +
                 '    var __symbols__ = {};\n'.format (self.symbols) +
-                # END prologue
+                # END default prologue
                 getJoinedModules (runtimeModules + importedModules + [mainModule]) +
                 '    return __all__;\n' +
                 '}\n' +
@@ -1558,7 +1558,7 @@ class Generator (ast.NodeVisitor):
                         node.args [0], '\n\t\t'. join (searchedIncludePaths)
                     )
                 )
-
+                
         if type (node.func) == ast.Name:
             if node.func.id == 'type':
                 self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
@@ -1657,8 +1657,7 @@ class Generator (ast.NodeVisitor):
                         for arg in node.args [2:]
                     ])
                     for line in code.split ('\n'):
-                        self.emit ('{}\n', line)
-                    
+                        self.emit ('{}\n', line)                 
                 elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
                     try:
                         sourceCode = node.args [2] .s.format (* [
@@ -1689,7 +1688,7 @@ class Generator (ast.NodeVisitor):
                             process.poll ()
                         targetCode = process.stdout.read (). decode ('utf8'). replace ('\r\n', '\n')
                         for line in targetCode.split ('\n'):
-                            self.emit ('{}\n', line)
+                            self.emit ('{}\n', line) 
                     except:
                         print (traceback.format_exc ())
 

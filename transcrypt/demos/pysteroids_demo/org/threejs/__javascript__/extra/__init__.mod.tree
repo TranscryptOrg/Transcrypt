@@ -1,0 +1,6505 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noanno
+				keywords: list 
+		element: FunctionDef 
+			name: str = _ctor
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = obj
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: FunctionDef 
+					name: str = _c_
+					args: arguments 
+						args: list 
+						vararg: arg 
+							arg: str = args
+							annotation: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = __new__
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = obj
+											ctx: Load 
+										args: list 
+											element: Starred 
+												value: Name 
+													id: str = args
+													ctx: Load 
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: Return 
+					value: Name 
+						id: str = _c_
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = api
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = js
+					element: Str 
+						s: str = {}
+					element: Str 
+						s: str = THREE
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WebGLRenderTargetCube
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WebGLRenderTargetCube
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WebGLRenderTarget
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WebGLRenderTarget
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WebGLRenderer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WebGLRenderer
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShaderLib
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShaderLib
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UniformsLib
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UniformsLib
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UniformsUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UniformsUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShaderChunk
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShaderChunk
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FogExp2
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FogExp2
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Fog
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Fog
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Scene
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Scene
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LensFlare
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LensFlare
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Sprite
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Sprite
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LOD
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LOD
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SkinnedMesh
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SkinnedMesh
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Skeleton
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Skeleton
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Bone
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Bone
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Mesh
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Mesh
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineSegments
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineSegments
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineLoop
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineLoop
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Line
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Line
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Points
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Points
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Group
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Group
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = VideoTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = VideoTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DataTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DataTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CompressedTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CompressedTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CanvasTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CanvasTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DepthTexture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DepthTexture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Texture
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Texture
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CompressedTextureLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CompressedTextureLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DataTextureLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DataTextureLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeTextureLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeTextureLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TextureLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TextureLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ObjectLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ObjectLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MaterialLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MaterialLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BufferGeometryLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BufferGeometryLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DefaultLoadingManager
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DefaultLoadingManager
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LoadingManager
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LoadingManager
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = JSONLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = JSONLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ImageLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ImageLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FontLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FontLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FileLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FileLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Loader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Loader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Cache
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Cache
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AudioLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AudioLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SpotLightShadow
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SpotLightShadow
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SpotLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SpotLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PointLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PointLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RectAreaLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RectAreaLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = HemisphereLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = HemisphereLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DirectionalLightShadow
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DirectionalLightShadow
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DirectionalLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DirectionalLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AmbientLight
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AmbientLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LightShadow
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LightShadow
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Light
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Light
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = StereoCamera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = StereoCamera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PerspectiveCamera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PerspectiveCamera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OrthographicCamera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OrthographicCamera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeCamera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeCamera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ArrayCamera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ArrayCamera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Camera
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Camera
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AudioListener
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AudioListener
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PositionalAudio
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PositionalAudio
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AudioContext
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AudioContext
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AudioAnalyser
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AudioAnalyser
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Audio
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Audio
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = VectorKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = VectorKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = StringKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = StringKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = QuaternionKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = QuaternionKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NumberKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NumberKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ColorKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ColorKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BooleanKeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BooleanKeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PropertyMixer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PropertyMixer
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PropertyBinding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PropertyBinding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = KeyframeTrack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = KeyframeTrack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AnimationUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AnimationUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AnimationObjectGroup
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AnimationObjectGroup
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AnimationMixer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AnimationMixer
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AnimationClip
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AnimationClip
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uniform
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uniform
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InstancedBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InstancedBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GeometryIdCount
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GeometryIdCount
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Geometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Geometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InterleavedBufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InterleavedBufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InstancedInterleavedBuffer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InstancedInterleavedBuffer
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InterleavedBuffer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InterleavedBuffer
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InstancedBufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InstancedBufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Face3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Face3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Object3D
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Object3D
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Raycaster
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Raycaster
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Layers
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Layers
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EventDispatcher
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EventDispatcher
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Clock
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Clock
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = QuaternionLinearInterpolant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = QuaternionLinearInterpolant
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearInterpolant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearInterpolant
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DiscreteInterpolant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DiscreteInterpolant
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubicInterpolant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubicInterpolant
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Interpolant
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Interpolant
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Triangle
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Triangle
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Math
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Math
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Spherical
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Spherical
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Cylindrical
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Cylindrical
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Plane
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Plane
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Frustum
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Frustum
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Sphere
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Sphere
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Ray
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Ray
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Matrix4
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Matrix4
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Matrix3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Matrix3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Box3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Box3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Box2
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Box2
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Line3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Line3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Euler
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Euler
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Vector3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Vector3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Quaternion
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Quaternion
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Color
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Color
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MorphBlendMesh
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MorphBlendMesh
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ImmediateRenderObject
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ImmediateRenderObject
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = VertexNormalsHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = VertexNormalsHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SpotLightHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SpotLightHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SkeletonHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SkeletonHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PointLightHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PointLightHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RectAreaLightHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RectAreaLightHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = HemisphereLightHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = HemisphereLightHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GridHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GridHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PolarGridHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PolarGridHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FaceNormalsHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FaceNormalsHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DirectionalLightHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DirectionalLightHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CameraHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CameraHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BoxHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BoxHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ArrowHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ArrowHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AxisHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AxisHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CatmullRomCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CatmullRomCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubicBezierCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubicBezierCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = QuadraticBezierCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = QuadraticBezierCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ArcCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ArcCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EllipseCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EllipseCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SplineCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SplineCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubicBezierCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubicBezierCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = QuadraticBezierCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = QuadraticBezierCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineCurve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineCurve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Shape
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Shape
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Path
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Path
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShapePath
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShapePath
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Font
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Font
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CurvePath
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CurvePath
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Curve
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Curve
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShapeUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShapeUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SceneUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SceneUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WireframeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WireframeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ParametricGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ParametricGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ParametricBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ParametricBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TetrahedronGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TetrahedronGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TetrahedronBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TetrahedronBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OctahedronGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OctahedronGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OctahedronBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OctahedronBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = IcosahedronGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = IcosahedronGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = IcosahedronBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = IcosahedronBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DodecahedronGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DodecahedronGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DodecahedronBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DodecahedronBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PolyhedronGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PolyhedronGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PolyhedronBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PolyhedronBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TubeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TubeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TubeBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TubeBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TorusKnotGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TorusKnotGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TorusKnotBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TorusKnotBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TorusGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TorusGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TorusBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TorusBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TextGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TextGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TextBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TextBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SphereGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SphereGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SphereBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SphereBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RingGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RingGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RingBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RingBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PlaneGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PlaneGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PlaneBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PlaneBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LatheGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LatheGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LatheBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LatheBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShapeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShapeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShapeBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShapeBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ExtrudeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ExtrudeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ExtrudeBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ExtrudeBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EdgesGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EdgesGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ConeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ConeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ConeBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ConeBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CylinderGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CylinderGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CylinderBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CylinderBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CircleGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CircleGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CircleBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CircleBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BoxGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BoxGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BoxBufferGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BoxBufferGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShadowMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShadowMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SpriteMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SpriteMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RawShaderMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RawShaderMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShaderMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShaderMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PointsMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PointsMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshPhysicalMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshPhysicalMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshStandardMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshStandardMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshPhongMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshPhongMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshToonMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshToonMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshNormalMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshNormalMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshLambertMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshLambertMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshDepthMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshDepthMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshBasicMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshBasicMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineDashedMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineDashedMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineBasicMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineBasicMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Material
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Material
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Float64BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Float64BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Float32BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Float32BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint32BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint32BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int32BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int32BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint16BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint16BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int16BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int16BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint8ClampedBufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint8ClampedBufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint8BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint8BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int8BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int8BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = REVISION
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = REVISION
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MOUSE
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MOUSE
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CullFaceNone
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CullFaceNone
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CullFaceBack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CullFaceBack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CullFaceFront
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CullFaceFront
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CullFaceFrontBack
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CullFaceFrontBack
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FrontFaceDirectionCW
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FrontFaceDirectionCW
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FrontFaceDirectionCCW
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FrontFaceDirectionCCW
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BasicShadowMap
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BasicShadowMap
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PCFShadowMap
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PCFShadowMap
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PCFSoftShadowMap
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PCFSoftShadowMap
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FrontSide
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FrontSide
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BackSide
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BackSide
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DoubleSide
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DoubleSide
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FlatShading
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FlatShading
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SmoothShading
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SmoothShading
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NoColors
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NoColors
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FaceColors
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FaceColors
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = VertexColors
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = VertexColors
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NoBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NoBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NormalBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NormalBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AdditiveBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AdditiveBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SubtractiveBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SubtractiveBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MultiplyBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MultiplyBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CustomBlending
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CustomBlending
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AddEquation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AddEquation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SubtractEquation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SubtractEquation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ReverseSubtractEquation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ReverseSubtractEquation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MinEquation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MinEquation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MaxEquation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MaxEquation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ZeroFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ZeroFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OneFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OneFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SrcColorFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SrcColorFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OneMinusSrcColorFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OneMinusSrcColorFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SrcAlphaFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SrcAlphaFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OneMinusSrcAlphaFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OneMinusSrcAlphaFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DstAlphaFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DstAlphaFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OneMinusDstAlphaFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OneMinusDstAlphaFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DstColorFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DstColorFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = OneMinusDstColorFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = OneMinusDstColorFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SrcAlphaSaturateFactor
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SrcAlphaSaturateFactor
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NeverDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NeverDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AlwaysDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AlwaysDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LessDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LessDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LessEqualDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LessEqualDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EqualDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EqualDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GreaterEqualDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GreaterEqualDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GreaterDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GreaterDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NotEqualDepth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NotEqualDepth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MultiplyOperation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MultiplyOperation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MixOperation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MixOperation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AddOperation
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AddOperation
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NoToneMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NoToneMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearToneMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearToneMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ReinhardToneMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ReinhardToneMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uncharted2ToneMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uncharted2ToneMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CineonToneMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CineonToneMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UVMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UVMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeReflectionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeReflectionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeRefractionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeRefractionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EquirectangularReflectionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EquirectangularReflectionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EquirectangularRefractionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EquirectangularRefractionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SphericalReflectionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SphericalReflectionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeUVReflectionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeUVReflectionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeUVRefractionMapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeUVRefractionMapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RepeatWrapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RepeatWrapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ClampToEdgeWrapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ClampToEdgeWrapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MirroredRepeatWrapping
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MirroredRepeatWrapping
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NearestFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NearestFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NearestMipMapNearestFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NearestMipMapNearestFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = NearestMipMapLinearFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = NearestMipMapLinearFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearMipMapNearestFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearMipMapNearestFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearMipMapLinearFilter
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearMipMapLinearFilter
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedByteType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedByteType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ByteType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ByteType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ShortType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ShortType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedShortType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedShortType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = IntType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = IntType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedIntType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedIntType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = FloatType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = FloatType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = HalfFloatType
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = HalfFloatType
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedShort4444Type
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedShort4444Type
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedShort5551Type
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedShort5551Type
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedShort565Type
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedShort565Type
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = UnsignedInt248Type
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = UnsignedInt248Type
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = AlphaFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = AlphaFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBAFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBAFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LuminanceFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LuminanceFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LuminanceAlphaFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LuminanceAlphaFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBEFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBEFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DepthFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DepthFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DepthStencilFormat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DepthStencilFormat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGB_S3TC_DXT1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGB_S3TC_DXT1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBA_S3TC_DXT1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBA_S3TC_DXT1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBA_S3TC_DXT3_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBA_S3TC_DXT3_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBA_S3TC_DXT5_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBA_S3TC_DXT5_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGB_PVRTC_4BPPV1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGB_PVRTC_4BPPV1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGB_PVRTC_2BPPV1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGB_PVRTC_2BPPV1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBA_PVRTC_4BPPV1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBA_PVRTC_4BPPV1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBA_PVRTC_2BPPV1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBA_PVRTC_2BPPV1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGB_ETC1_Format
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGB_ETC1_Format
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LoopOnce
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LoopOnce
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LoopRepeat
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LoopRepeat
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LoopPingPong
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LoopPingPong
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InterpolateDiscrete
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InterpolateDiscrete
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InterpolateLinear
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InterpolateLinear
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = InterpolateSmooth
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = InterpolateSmooth
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ZeroCurvatureEnding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ZeroCurvatureEnding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ZeroSlopeEnding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ZeroSlopeEnding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WrapAroundEnding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WrapAroundEnding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TrianglesDrawMode
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TrianglesDrawMode
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TriangleStripDrawMode
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TriangleStripDrawMode
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = TriangleFanDrawMode
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = TriangleFanDrawMode
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinearEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinearEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sRGBEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = sRGBEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GammaEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GammaEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBEEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBEEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LogLuvEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LogLuvEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBM7Encoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBM7Encoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBM16Encoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBM16Encoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBDEncoding
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBDEncoding
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BasicDepthPacking
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BasicDepthPacking
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = RGBADepthPacking
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = RGBADepthPacking
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CubeGeometry
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CubeGeometry
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Face4
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Face4
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LineStrip
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LineStrip
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = LinePieces
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = LinePieces
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MeshFaceMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MeshFaceMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = MultiMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = MultiMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PointCloud
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PointCloud
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Particle
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Particle
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ParticleSystem
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ParticleSystem
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = PointCloudMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = PointCloudMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ParticleBasicMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ParticleBasicMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ParticleSystemMaterial
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ParticleSystemMaterial
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Vertex
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Vertex
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = DynamicBufferAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = DynamicBufferAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int8Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int8Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint8Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint8Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint8ClampedAttribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint8ClampedAttribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int16Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int16Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint16Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint16Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Int32Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Int32Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Uint32Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Uint32Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Float32Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Float32Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Float64Attribute
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Float64Attribute
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ClosedSplineCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ClosedSplineCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = SplineCurve3
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = SplineCurve3
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Spline
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Spline
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BoundingBoxHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BoundingBoxHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = EdgesHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = EdgesHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = WireframeHelper
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = WireframeHelper
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = XHRLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = XHRLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = BinaryTextureLoader
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = BinaryTextureLoader
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = GeometryUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = GeometryUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ImageUtils
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = ImageUtils
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = Projector
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = Projector
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CanvasRenderer
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = _ctor
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = api
+							ctx: Load 
+						attr: str = CanvasRenderer
+						ctx: Load 
+				keywords: list 

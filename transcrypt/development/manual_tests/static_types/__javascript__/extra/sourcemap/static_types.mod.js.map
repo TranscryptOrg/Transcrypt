@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__javascript__/static_types.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types.py"
+	],
+	"sourcesContent": [
+		"# from org.transcrypt.stubs.browser import __pragma__\n\nfrom typing import Iterator #, List, Dict, ClassVar\n\nimport mod1\nimport mod2\n\ntestVar: int = 3.5\n\ndef fib (n: int) -> Iterator [int]:\n    a, b = 0, 1\n    while a < n:\n        # yield a\n        a, b = b, a + b\n        \n    return 3\n        \ndef add (a: int, b: int) -> None:\n    return a + b\n    \nclass A:\n    def __init__ (self) -> None:\n        pass\n    \n    def test (self) -> None:\n        return 'test'\n        \n'''\n__pragma__ ('ifdef', '__undefined__')   # Needed because Transcrypt imports are compile time\nif '__undefined__' in __symbols__:      # Needed because CPython doesn't understand pragmas\n\n    # Variable annotations\n\n    aList: List [int] = []\n\n    aString: str    # Note: no initial value!\n\n    class aClass:\n        aClassVar: ClassVar [Dict [str, int]] = {}\n        \n    aList = [1.1, 2.2]\n    aString = 1000\n    aClass.aClassVar = {'aString', 3.14}\n\n__pragma__ ('endif')\n'''"
+	],
+	"mappings": "AAAA;AA6BA;AAAA;AA7BA;AAMA;AAEA;AACA;AAEA;AAEA;AACA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

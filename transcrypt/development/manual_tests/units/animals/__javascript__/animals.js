@@ -1,5 +1,5 @@
 "use strict";
-// Transcrypt'ed from Python, 2018-02-21 14:40:33
+// Transcrypt'ed from Python, 2018-03-09 13:41:41
 function animals () {
     var __symbols__ = ['__runit__', '__py3.6__', '__esv5__'];
     var __all__ = {};
@@ -141,7 +141,7 @@ function animals () {
 						get __init__ () {return __get__ (this, function (self) {
 							self.interpreter_name = 'python';
 							self.transpiler_name = 'transcrypt';
-							self.transpiler_version = '3.6.100';
+							self.transpiler_version = '3.6.101';
 							self.target_subdir = '__javascript__';
 						});}
 					});

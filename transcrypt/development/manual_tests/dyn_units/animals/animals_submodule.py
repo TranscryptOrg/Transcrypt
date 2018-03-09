@@ -1,0 +1,3 @@
+def getTaxoTag ():
+    return ('animal')
+    

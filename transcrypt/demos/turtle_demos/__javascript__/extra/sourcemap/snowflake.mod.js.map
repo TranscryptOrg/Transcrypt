@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/turtle_demos/__javascript__/snowflake.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/turtle_demos/snowflake.py"
+	],
+	"sourcesContent": [
+		"from turtle import *\n\njosh = Turtle ()\n\ndef draw (length):\n    if length > 9:\n        draw (length / 3)\n        josh.left (60)\n        draw (length / 3)\n        josh.right (120)\n        draw (length / 3)\n        josh.left (60)\n        draw (length / 3)\n    else:\n        josh.forward (length)\n\nlength = 150\njosh.up ()\njosh.forward (length / 2)\njosh.left (90)\njosh.forward (length / 4)\njosh.right (90)\njosh.down ()\n\nfor i in range (3):\n    josh.right (120)\n    draw (length)\n    \njosh.done ()\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

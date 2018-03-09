@@ -57,7 +57,7 @@ As a consequence of the above, modules may be distributed as Python *.py* files,
 Transcrypt's unit mechanism and creating native JavaScript component frameworks
 -------------------------------------------------------------------------------
 
-It is possible to create native JavaScript component frameworks using Transcrypt. Components can be freely mixed on a page without requiring recompilation. A developer doesn't need Transcrypt or any knowledge of it to use such a framework. Each page has one unit that contains the Transcrypt runtime and, if needed, any central facilities. It is compiled with the *-u .run* switch. In addition each page can hold as many separate components as needed. Compile these with the *-u .com* switch. A loader is generated, accepting a list of components. By varying this list, each page can have it's own subset of components, without the need to recompile. The generated JavaScript code for components can be very small, typically a few hundred bytes. The runtime and central facilities are included in the page only once.
+It is possible to create native JavaScript component frameworks using Transcrypt. Components can be freely mixed on a page without requiring recompilation. A developer doesn't need Transcrypt or any knowledge of it to use such a framework. Each page has one unit that contains the Transcrypt runtime and, if needed, any central facilities. It is compiled with the *-u .run* switch. In addition each page can hold as many separate components as needed. Compile these with the *-u .com* switch. A loader is generated, accepting a list of components. By varying this list, each page can have its own subset of components, without the need to recompile. The generated JavaScript code for components can be very small, typically a few hundred bytes. The runtime and central facilities are included in the page only once.
 
 Note that the concepts of a unit and a module are orthogonal. All units of a framework share the same namespace. Modules, on the other hand, constitute a distinct namespace. An example of using a combination of units and modules is the following:
 
@@ -89,7 +89,7 @@ Note that the concepts of a unit and a module are orthogonal. All units of a fra
    :tab-width: 4
    :caption: dogs_submodule.py - the second component
    
-To utilize minification, use *.min.js* files intead of *.js* files in your page. Since corresponding names have to be used in all units, minification is less effective than without the use of units.
+To utilize minification, use *.min.js* files instead of *.js* files in your page. Since corresponding names have to be used in all units, minification is less effective than without the use of units.
 
 Using browser stubs to test non-GUI code that uses console.log and window.alert
 -------------------------------------------------------------------------------

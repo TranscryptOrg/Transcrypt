@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/pysteroids_demo/__javascript__/audio.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/pysteroids_demo/audio.py"
+	],
+	"sourcesContent": [
+		"import logging\n\nlogger = logging.getLogger('root')\n\ndef load(player_element, sourcefile):\n    try:\n        audio_element = document.getElementById(player_element)\n\n        if not len(audio_element):\n            raise Exception(\"unable to load audio from element '{}'\".format(player_element))\n\n        if len(sourcefile):\n            audio_element.src = sourcefile\n        return audio_element\n\n    except Exception as e:\n        logging.exception(e)\n\ndef clip(filename):\n    player = __new__(Audio(filename))\n    return player\n\ndef loop(filename):\n\n    player = __new__(Audio(filename))\n    def reset_player():\n        player.currentTime = 0\n        player.play()\n    player.addEventListener('ended', reset_player, False)\n\n    return player"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AA8BA;AA9BA;AAAA;AAEA;AAEA;AACA;AACA;AAEA;AACA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AACA;AACA;AAAA;AAEA;AAEA;AACA;AACA;AACA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

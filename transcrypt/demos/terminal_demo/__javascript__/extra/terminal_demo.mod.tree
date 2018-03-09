@@ -1,0 +1,123 @@
+file: Module 
+	body: list 
+		element: While 
+			test: NameConstant 
+				value: bool = True
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = name
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = input
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = Whats your name? (leave blank to quit)
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = name
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Str 
+								s: str = 
+					body: list 
+						element: Break 
+					orelse: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = Hi
+							element: Name 
+								id: str = name
+								ctx: Load 
+							element: Str 
+								s: str = I am your computer.
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = age
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = float
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = input
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = How old are you? 
+								keywords: list 
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = age
+							ctx: Load 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 18
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = Sorry
+									element: Name 
+										id: str = name
+										ctx: Load 
+									element: Str 
+										s: str = ,
+									element: Name 
+										id: str = age
+										ctx: Load 
+									element: Str 
+										s: str = is too young to drive a car in the Netherlands.
+								keywords: list 
+					orelse: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = OK
+									element: Name 
+										id: str = name
+										ctx: Load 
+									element: Str 
+										s: str = ,
+									element: Name 
+										id: str = age
+										ctx: Load 
+									element: Str 
+										s: str = is old enough to drive a car in the Netherlands.
+								keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+						keywords: list 
+			orelse: list 

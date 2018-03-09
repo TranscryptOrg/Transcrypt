@@ -118,7 +118,9 @@ def main ():
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
         
         if utils.commandArgs.unit:
-            if '.run' in utils.commandArgs.unit:
+            if '.auto' in utils.commandArgs.unit:
+                __symbols__.append ('__aunit__')
+            elif '.run' in utils.commandArgs.unit:
                 __symbols__.append ('__runit__')
             elif '.com' in utils.commandArgs.unit:
                 __symbols__.append ('__cunit__')

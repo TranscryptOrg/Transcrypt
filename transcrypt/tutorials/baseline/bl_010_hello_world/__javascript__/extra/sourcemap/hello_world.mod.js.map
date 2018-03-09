@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_010_hello_world/__javascript__/hello_world.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_010_hello_world/hello_world.py"
+	],
+	"sourcesContent": [
+		"print ('Hello, world!')\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

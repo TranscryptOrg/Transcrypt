@@ -1,0 +1,1737 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = jskeys
+				keywords: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = random
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = math
+					asname: NoneType = None
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = itertools
+					asname: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = xValues
+					ctx: Store 
+			value: ListComp 
+				elt: BinOp 
+					left: BinOp 
+						left: BinOp 
+							left: Num 
+								n: int = 2
+							op: Mult 
+							right: Attribute 
+								value: Name 
+									id: str = math
+									ctx: Load 
+								attr: str = pi
+								ctx: Load 
+						op: Mult 
+						right: Name 
+							id: str = step
+							ctx: Load 
+					op: Div 
+					right: Num 
+						n: int = 200
+				generators: list 
+					element: comprehension 
+						target: Name 
+							id: str = step
+							ctx: Store 
+						iter: Call 
+							func: Name 
+								id: str = range
+								ctx: Load 
+							args: list 
+								element: Num 
+									n: int = 201
+							keywords: list 
+						ifs: list 
+						is_async: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = yValuesList
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: ListComp 
+						elt: BinOp 
+							left: Call 
+								func: Attribute 
+									value: Name 
+										id: str = math
+										ctx: Load 
+									attr: str = sin
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = xValue
+										ctx: Load 
+								keywords: list 
+							op: Add 
+							right: BinOp 
+								left: Num 
+									n: float = 0.5
+								op: Mult 
+								right: Call 
+									func: Attribute 
+										value: Name 
+											id: str = math
+											ctx: Load 
+										attr: str = sin
+										ctx: Load 
+									args: list 
+										element: BinOp 
+											left: BinOp 
+												left: Name 
+													id: str = xValue
+													ctx: Load 
+												op: Mult 
+												right: Num 
+													n: int = 3
+											op: Add 
+											right: BinOp 
+												left: Num 
+													n: float = 0.25
+												op: Mult 
+												right: Call 
+													func: Attribute 
+														value: Name 
+															id: str = math
+															ctx: Load 
+														attr: str = sin
+														ctx: Load 
+													args: list 
+														element: BinOp 
+															left: Name 
+																id: str = xValue
+																ctx: Load 
+															op: Mult 
+															right: Num 
+																n: int = 5
+													keywords: list 
+									keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = xValue
+									ctx: Store 
+								iter: Name 
+									id: str = xValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					element: ListComp 
+						elt: IfExp 
+							test: Compare 
+								left: Name 
+									id: str = xValue
+									ctx: Load 
+								ops: list 
+									element: LtE 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = math
+											ctx: Load 
+										attr: str = pi
+										ctx: Load 
+							body: Num 
+								n: int = 1
+							orelse: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 1
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = xValue
+									ctx: Store 
+								iter: Name 
+									id: str = xValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = linear
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: ListComp 
+						elt: Dict 
+							keys: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+								element: Name 
+									id: str = y
+									ctx: Load 
+							values: list 
+								element: Name 
+									id: str = xValues
+									ctx: Load 
+								element: Name 
+									id: str = yValues
+									ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = yValues
+									ctx: Store 
+								iter: Name 
+									id: str = yValuesList
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+							element: Name 
+								id: str = xaxis
+								ctx: Load 
+							element: Name 
+								id: str = yaxis
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = title
+										ctx: Load 
+								values: list 
+									element: Str 
+										s: str = U (t) [V]
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = title
+										ctx: Load 
+								values: list 
+									element: Str 
+										s: str = t [s]
+				keywords: list 
+		element: Try 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = xValues
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = list
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = range
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 10
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = yValues
+							ctx: Store 
+					value: ListComp 
+						elt: Call 
+							func: Attribute 
+								value: Name 
+									id: str = math
+									ctx: Load 
+								attr: str = exp
+								ctx: Load 
+							args: list 
+								element: BinOp 
+									left: Name 
+										id: str = x
+										ctx: Load 
+									op: Pow 
+									right: Num 
+										n: int = 2
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Name 
+									id: str = xValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = kind
+							ctx: Store 
+					value: Str 
+						s: str = logarithmic
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = Plotly
+								ctx: Load 
+							attr: str = plot
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+							element: List 
+								elts: list 
+									element: Dict 
+										keys: list 
+											element: Name 
+												id: str = x
+												ctx: Load 
+											element: Name 
+												id: str = y
+												ctx: Load 
+										values: list 
+											element: Name 
+												id: str = xValues
+												ctx: Load 
+											element: Name 
+												id: str = yValues
+												ctx: Load 
+								ctx: Load 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = title
+										ctx: Load 
+									element: Name 
+										id: str = xaxis
+										ctx: Load 
+									element: Name 
+										id: str = yaxis
+										ctx: Load 
+								values: list 
+									element: Name 
+										id: str = kind
+										ctx: Load 
+									element: Dict 
+										keys: list 
+											element: Name 
+												id: str = title
+												ctx: Load 
+										values: list 
+											element: Str 
+												s: str = x
+									element: Dict 
+										keys: list 
+											element: Name 
+												id: str = type
+												ctx: Load 
+											element: Name 
+												id: str = tickformat
+												ctx: Load 
+											element: Name 
+												id: str = title
+												ctx: Load 
+										values: list 
+											element: Str 
+												s: str = log
+											element: Str 
+												s: str = 2e
+											element: Str 
+												s: str = exp (x**2)
+						keywords: list 
+			handlers: list 
+				element: ExceptHandler 
+					type: NoneType = None
+					name: NoneType = None
+					body: list 
+						element: Pass 
+			orelse: list 
+			finalbody: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tangentialValues
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = list
+					ctx: Load 
+				args: list 
+					element: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: UnaryOp 
+								op: USub 
+								operand: Num 
+									n: int = 180
+							element: Num 
+								n: int = 180
+						keywords: list 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = radialValuesList
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: ListComp 
+						elt: Call 
+							func: Name 
+								id: str = abs
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = t
+									ctx: Load 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = t
+									ctx: Store 
+								iter: Name 
+									id: str = tangentialValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					element: ListComp 
+						elt: BinOp 
+							left: Num 
+								n: int = 180
+							op: Sub 
+							right: Call 
+								func: Name 
+									id: str = abs
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = t
+										ctx: Load 
+								keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = t
+									ctx: Store 
+								iter: Name 
+									id: str = tangentialValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					element: ListComp 
+						elt: Call 
+							func: Name 
+								id: str = abs
+								ctx: Load 
+							args: list 
+								element: BinOp 
+									left: Num 
+										n: int = 2
+									op: Mult 
+									right: Name 
+										id: str = t
+										ctx: Load 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = t
+									ctx: Store 
+								iter: Name 
+									id: str = tangentialValues
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = polar
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: ListComp 
+						elt: Dict 
+							keys: list 
+								element: Name 
+									id: str = t
+									ctx: Load 
+								element: Name 
+									id: str = r
+									ctx: Load 
+								element: Name 
+									id: str = name
+									ctx: Load 
+							values: list 
+								element: Name 
+									id: str = tangentialValues
+									ctx: Load 
+								element: Name 
+									id: str = radialValues
+									ctx: Load 
+								element: Call 
+									func: Attribute 
+										value: Str 
+											s: str = Cardioid {}
+										attr: str = format
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = i
+											ctx: Load 
+									keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Tuple 
+									elts: list 
+										element: Name 
+											id: str = i
+											ctx: Store 
+										element: Name 
+											id: str = radialValues
+											ctx: Store 
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = enumerate
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = radialValuesList
+											ctx: Load 
+									keywords: list 
+								ifs: list 
+								is_async: int = 0
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = denseGrid
+					ctx: Store 
+			value: ListComp 
+				elt: BinOp 
+					left: BinOp 
+						left: BinOp 
+							left: Num 
+								n: int = 8
+							op: Mult 
+							right: Attribute 
+								value: Name 
+									id: str = math
+									ctx: Load 
+								attr: str = pi
+								ctx: Load 
+						op: Mult 
+						right: Name 
+							id: str = step
+							ctx: Load 
+					op: Div 
+					right: Num 
+						n: int = 200
+				generators: list 
+					element: comprehension 
+						target: Name 
+							id: str = step
+							ctx: Store 
+						iter: Call 
+							func: Name 
+								id: str = range
+								ctx: Load 
+							args: list 
+								element: UnaryOp 
+									op: USub 
+									operand: Num 
+										n: int = 100
+								element: Num 
+									n: int = 101
+							keywords: list 
+						ifs: list 
+						is_async: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sparseGrid
+					ctx: Store 
+			value: ListComp 
+				elt: BinOp 
+					left: BinOp 
+						left: BinOp 
+							left: Num 
+								n: int = 8
+							op: Mult 
+							right: Attribute 
+								value: Name 
+									id: str = math
+									ctx: Load 
+								attr: str = pi
+								ctx: Load 
+						op: Mult 
+						right: Name 
+							id: str = step
+							ctx: Load 
+					op: Div 
+					right: Num 
+						n: int = 200
+				generators: list 
+					element: comprehension 
+						target: Name 
+							id: str = step
+							ctx: Store 
+						iter: Call 
+							func: Name 
+								id: str = range
+								ctx: Load 
+							args: list 
+								element: UnaryOp 
+									op: USub 
+									operand: Num 
+										n: int = 100
+								element: Num 
+									n: int = 101
+								element: Num 
+									n: int = 10
+							keywords: list 
+						ifs: list 
+						is_async: int = 0
+		element: FunctionDef 
+			name: str = getZValues
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = xGrid
+						annotation: NoneType = None
+					element: arg 
+						arg: str = yGrid
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: ListComp 
+						elt: ListComp 
+							elt: BinOp 
+								left: Call 
+									func: Attribute 
+										value: Name 
+											id: str = math
+											ctx: Load 
+										attr: str = sin
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = r
+											ctx: Load 
+									keywords: list 
+								op: Div 
+								right: Name 
+									id: str = r
+									ctx: Load 
+							generators: list 
+								element: comprehension 
+									target: Name 
+										id: str = r
+										ctx: Store 
+									iter: ListComp 
+										elt: Call 
+											func: Attribute 
+												value: Name 
+													id: str = math
+													ctx: Load 
+												attr: str = sqrt
+												ctx: Load 
+											args: list 
+												element: BinOp 
+													left: BinOp 
+														left: Name 
+															id: str = x
+															ctx: Load 
+														op: Mult 
+														right: Name 
+															id: str = x
+															ctx: Load 
+													op: Add 
+													right: BinOp 
+														left: Name 
+															id: str = y
+															ctx: Load 
+														op: Mult 
+														right: Name 
+															id: str = y
+															ctx: Load 
+											keywords: list 
+										generators: list 
+											element: comprehension 
+												target: Name 
+													id: str = x
+													ctx: Store 
+												iter: Name 
+													id: str = xGrid
+													ctx: Load 
+												ifs: list 
+												is_async: int = 0
+									ifs: list 
+									is_async: int = 0
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = y
+									ctx: Store 
+								iter: Name 
+									id: str = yGrid
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = wireframe
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = ifdef
+					element: Str 
+						s: str = __esv6__
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = document
+								ctx: Load 
+							attr: str = getElementById
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+						keywords: list 
+					attr: str = innerHTML
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Str 
+						s: str = Plotly {} not yet functional for JS6
+					attr: str = format
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = else
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = type
+					ctx: Store 
+			value: Str 
+				s: str = scatter3d
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: Call 
+						func: Attribute 
+							value: Name 
+								id: str = itertools
+								ctx: Load 
+							attr: str = chain
+							ctx: Load 
+						args: list 
+							element: ListComp 
+								elt: Dict 
+									keys: list 
+										element: Name 
+											id: str = x
+											ctx: Load 
+										element: Name 
+											id: str = y
+											ctx: Load 
+										element: Name 
+											id: str = z
+											ctx: Load 
+										element: Name 
+											id: str = type
+											ctx: Load 
+										element: Name 
+											id: str = mode
+											ctx: Load 
+										element: Name 
+											id: str = line
+											ctx: Load 
+										element: Name 
+											id: str = zmin
+											ctx: Load 
+										element: Name 
+											id: str = zmax
+											ctx: Load 
+										element: Name 
+											id: str = showscale
+											ctx: Load 
+									values: list 
+										element: Name 
+											id: str = denseGrid
+											ctx: Load 
+										element: ListComp 
+											elt: Subscript 
+												value: Name 
+													id: str = sparseGrid
+													ctx: Load 
+												slice: Index 
+													value: Name 
+														id: str = i
+														ctx: Load 
+												ctx: Load 
+											generators: list 
+												element: comprehension 
+													target: Name 
+														id: str = value
+														ctx: Store 
+													iter: Name 
+														id: str = denseGrid
+														ctx: Load 
+													ifs: list 
+													is_async: int = 0
+										element: Subscript 
+											value: Call 
+												func: Name 
+													id: str = getZValues
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = denseGrid
+														ctx: Load 
+													element: Name 
+														id: str = sparseGrid
+														ctx: Load 
+												keywords: list 
+											slice: Index 
+												value: Name 
+													id: str = i
+													ctx: Load 
+											ctx: Load 
+										element: Name 
+											id: str = type
+											ctx: Load 
+										element: Str 
+											s: str = lines
+										element: Dict 
+											keys: list 
+												element: Name 
+													id: str = color
+													ctx: Load 
+											values: list 
+												element: Str 
+													s: str = rgb(0,0,255)
+										element: UnaryOp 
+											op: USub 
+											operand: Num 
+												n: float = 0.2
+										element: Num 
+											n: int = 1
+										element: UnaryOp 
+											op: Not 
+											operand: Name 
+												id: str = i
+												ctx: Load 
+								generators: list 
+									element: comprehension 
+										target: Name 
+											id: str = i
+											ctx: Store 
+										iter: Call 
+											func: Name 
+												id: str = range
+												ctx: Load 
+											args: list 
+												element: Num 
+													n: int = 20
+											keywords: list 
+										ifs: list 
+										is_async: int = 0
+							element: ListComp 
+								elt: Dict 
+									keys: list 
+										element: Name 
+											id: str = x
+											ctx: Load 
+										element: Name 
+											id: str = y
+											ctx: Load 
+										element: Name 
+											id: str = z
+											ctx: Load 
+										element: Name 
+											id: str = type
+											ctx: Load 
+										element: Name 
+											id: str = mode
+											ctx: Load 
+										element: Name 
+											id: str = line
+											ctx: Load 
+										element: Name 
+											id: str = zmin
+											ctx: Load 
+										element: Name 
+											id: str = zmax
+											ctx: Load 
+										element: Name 
+											id: str = showscale
+											ctx: Load 
+									values: list 
+										element: ListComp 
+											elt: Subscript 
+												value: Name 
+													id: str = sparseGrid
+													ctx: Load 
+												slice: Index 
+													value: Name 
+														id: str = i
+														ctx: Load 
+												ctx: Load 
+											generators: list 
+												element: comprehension 
+													target: Name 
+														id: str = value
+														ctx: Store 
+													iter: Name 
+														id: str = denseGrid
+														ctx: Load 
+													ifs: list 
+													is_async: int = 0
+										element: Name 
+											id: str = denseGrid
+											ctx: Load 
+										element: Subscript 
+											value: Call 
+												func: Name 
+													id: str = zip
+													ctx: Load 
+												args: list 
+													element: Starred 
+														value: Call 
+															func: Name 
+																id: str = getZValues
+																ctx: Load 
+															args: list 
+																element: Name 
+																	id: str = sparseGrid
+																	ctx: Load 
+																element: Name 
+																	id: str = denseGrid
+																	ctx: Load 
+															keywords: list 
+														ctx: Load 
+												keywords: list 
+											slice: Index 
+												value: Name 
+													id: str = i
+													ctx: Load 
+											ctx: Load 
+										element: Name 
+											id: str = type
+											ctx: Load 
+										element: Str 
+											s: str = lines
+										element: Dict 
+											keys: list 
+												element: Name 
+													id: str = color
+													ctx: Load 
+											values: list 
+												element: Str 
+													s: str = rgb(0,0,255)
+										element: UnaryOp 
+											op: USub 
+											operand: Num 
+												n: float = 0.2
+										element: Num 
+											n: int = 1
+										element: UnaryOp 
+											op: Not 
+											operand: Name 
+												id: str = i
+												ctx: Load 
+								generators: list 
+									element: comprehension 
+										target: Name 
+											id: str = i
+											ctx: Store 
+										iter: Call 
+											func: Name 
+												id: str = range
+												ctx: Load 
+											args: list 
+												element: Num 
+													n: int = 20
+											keywords: list 
+										ifs: list 
+										is_async: int = 0
+						keywords: list 
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+							element: Name 
+								id: str = showlegend
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+							element: NameConstant 
+								value: bool = False
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = endif
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = ribbon
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: ListComp 
+						elt: Dict 
+							keys: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+								element: Name 
+									id: str = y
+									ctx: Load 
+								element: Name 
+									id: str = z
+									ctx: Load 
+								element: Name 
+									id: str = type
+									ctx: Load 
+								element: Name 
+									id: str = zmin
+									ctx: Load 
+								element: Name 
+									id: str = zmax
+									ctx: Load 
+								element: Name 
+									id: str = showscale
+									ctx: Load 
+							values: list 
+								element: Name 
+									id: str = denseGrid
+									ctx: Load 
+								element: Call 
+									func: Name 
+										id: str = list
+										ctx: Load 
+									args: list 
+										element: Call 
+											func: Name 
+												id: str = range
+												ctx: Load 
+											args: list 
+												element: BinOp 
+													left: Name 
+														id: str = i
+														ctx: Load 
+													op: Mult 
+													right: Num 
+														n: int = 20
+												element: BinOp 
+													left: BinOp 
+														left: Name 
+															id: str = i
+															ctx: Load 
+														op: Add 
+														right: Num 
+															n: float = 0.7
+													op: Mult 
+													right: Num 
+														n: int = 20
+											keywords: list 
+									keywords: list 
+								element: Subscript 
+									value: Call 
+										func: Name 
+											id: str = getZValues
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = denseGrid
+												ctx: Load 
+											element: Name 
+												id: str = denseGrid
+												ctx: Load 
+										keywords: list 
+									slice: Slice 
+										lower: BinOp 
+											left: Name 
+												id: str = i
+												ctx: Load 
+											op: Mult 
+											right: Num 
+												n: int = 20
+										upper: BinOp 
+											left: BinOp 
+												left: Name 
+													id: str = i
+													ctx: Load 
+												op: Add 
+												right: Num 
+													n: float = 0.7
+											op: Mult 
+											right: Num 
+												n: int = 20
+										step: NoneType = None
+									ctx: Load 
+								element: Str 
+									s: str = surface
+								element: UnaryOp 
+									op: USub 
+									operand: Num 
+										n: float = 0.2
+								element: Num 
+									n: int = 1
+								element: UnaryOp 
+									op: Not 
+									operand: Name 
+										id: str = i
+										ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 10
+									keywords: list 
+								ifs: list 
+								is_async: int = 0
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = surface
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = x
+										ctx: Load 
+									element: Name 
+										id: str = y
+										ctx: Load 
+									element: Name 
+										id: str = z
+										ctx: Load 
+									element: Name 
+										id: str = type
+										ctx: Load 
+									element: Name 
+										id: str = zmin
+										ctx: Load 
+									element: Name 
+										id: str = zmax
+										ctx: Load 
+								values: list 
+									element: Name 
+										id: str = denseGrid
+										ctx: Load 
+									element: Name 
+										id: str = denseGrid
+										ctx: Load 
+									element: Call 
+										func: Name 
+											id: str = getZValues
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = denseGrid
+												ctx: Load 
+											element: Name 
+												id: str = denseGrid
+												ctx: Load 
+										keywords: list 
+									element: Name 
+										id: str = kind
+										ctx: Load 
+									element: UnaryOp 
+										op: USub 
+										operand: Num 
+											n: float = 0.2
+									element: Num 
+										n: int = 1
+						ctx: Load 
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = labels
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: Str 
+						s: str = much
+					element: Str 
+						s: str = more
+					element: Str 
+						s: str = most
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = bar
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = name
+										ctx: Load 
+									element: Name 
+										id: str = x
+										ctx: Load 
+									element: Name 
+										id: str = y
+										ctx: Load 
+									element: Name 
+										id: str = type
+										ctx: Load 
+								values: list 
+									element: Str 
+										s: str = rare
+									element: Name 
+										id: str = labels
+										ctx: Load 
+									element: List 
+										elts: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+											element: Num 
+												n: int = 4
+										ctx: Load 
+									element: Name 
+										id: str = kind
+										ctx: Load 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = name
+										ctx: Load 
+									element: Name 
+										id: str = x
+										ctx: Load 
+									element: Name 
+										id: str = y
+										ctx: Load 
+									element: Name 
+										id: str = type
+										ctx: Load 
+								values: list 
+									element: Str 
+										s: str = common
+									element: Name 
+										id: str = labels
+										ctx: Load 
+									element: List 
+										elts: list 
+											element: Num 
+												n: int = 8
+											element: Num 
+												n: int = 16
+											element: Num 
+												n: int = 32
+										ctx: Load 
+									element: Name 
+										id: str = kind
+										ctx: Load 
+						ctx: Load 
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+							element: Name 
+								id: str = barmode
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+							element: Str 
+								s: str = group
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = pie
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Dict 
+								keys: list 
+									element: Name 
+										id: str = values
+										ctx: Load 
+									element: Name 
+										id: str = labels
+										ctx: Load 
+									element: Name 
+										id: str = type
+										ctx: Load 
+								values: list 
+									element: List 
+										elts: list 
+											element: Num 
+												n: int = 1
+											element: Num 
+												n: int = 2
+											element: Num 
+												n: int = 3
+											element: Num 
+												n: int = 4
+											element: Num 
+												n: int = 5
+											element: Num 
+												n: int = 6
+										ctx: Load 
+									element: List 
+										elts: list 
+											element: Str 
+												s: str = least
+											element: Str 
+												s: str = less
+											element: Str 
+												s: str = little
+											element: Str 
+												s: str = much
+											element: Str 
+												s: str = more
+											element: Str 
+												s: str = most
+										ctx: Load 
+									element: Name 
+										id: str = kind
+										ctx: Load 
+						ctx: Load 
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = kind
+					ctx: Store 
+			value: Str 
+				s: str = scatter3d
+		element: FunctionDef 
+			name: str = getRandoms
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = aMax
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: ListComp 
+						elt: Call 
+							func: Attribute 
+								value: Name 
+									id: str = random
+									ctx: Load 
+								attr: str = randint
+								ctx: Load 
+							args: list 
+								element: Num 
+									n: int = 0
+								element: Name 
+									id: str = aMax
+									ctx: Load 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 20
+									keywords: list 
+								ifs: list 
+								is_async: int = 0
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = Plotly
+						ctx: Load 
+					attr: str = plot
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = kind
+						ctx: Load 
+					element: ListComp 
+						elt: Dict 
+							keys: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+								element: Name 
+									id: str = y
+									ctx: Load 
+								element: Name 
+									id: str = z
+									ctx: Load 
+								element: Name 
+									id: str = mode
+									ctx: Load 
+								element: Name 
+									id: str = marker
+									ctx: Load 
+								element: Name 
+									id: str = type
+									ctx: Load 
+							values: list 
+								element: Call 
+									func: Name 
+										id: str = getRandoms
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = aMax
+											ctx: Load 
+									keywords: list 
+								element: Call 
+									func: Name 
+										id: str = getRandoms
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = aMax
+											ctx: Load 
+									keywords: list 
+								element: Call 
+									func: Name 
+										id: str = getRandoms
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = aMax
+											ctx: Load 
+									keywords: list 
+								element: Str 
+									s: str = markers
+								element: Dict 
+									keys: list 
+										element: Name 
+											id: str = color
+											ctx: Load 
+										element: Name 
+											id: str = size
+											ctx: Load 
+										element: Name 
+											id: str = symbol
+											ctx: Load 
+										element: Name 
+											id: str = line
+											ctx: Load 
+									values: list 
+										element: Call 
+											func: Attribute 
+												value: Str 
+													s: str = rgb({}, 127, {})
+												attr: str = format
+												ctx: Load 
+											args: list 
+												element: BinOp 
+													left: Num 
+														n: int = 127
+													op: Sub 
+													right: BinOp 
+														left: Name 
+															id: str = aMax
+															ctx: Load 
+														op: Mult 
+														right: Num 
+															n: int = 12
+												element: BinOp 
+													left: Name 
+														id: str = aMax
+														ctx: Load 
+													op: Mult 
+													right: Num 
+														n: int = 12
+											keywords: list 
+										element: Num 
+											n: int = 12
+										element: Str 
+											s: str = circle
+										element: Dict 
+											keys: list 
+												element: Name 
+													id: str = color
+													ctx: Load 
+												element: Name 
+													id: str = width
+													ctx: Load 
+											values: list 
+												element: Call 
+													func: Attribute 
+														value: Str 
+															s: str = rgb({}, 255, {})
+														attr: str = format
+														ctx: Load 
+													args: list 
+														element: BinOp 
+															left: Num 
+																n: int = 255
+															op: Sub 
+															right: BinOp 
+																left: Name 
+																	id: str = aMax
+																	ctx: Load 
+																op: Mult 
+																right: Num 
+																	n: int = 25
+														element: BinOp 
+															left: Name 
+																id: str = aMax
+																ctx: Load 
+															op: Mult 
+															right: Num 
+																n: int = 25
+													keywords: list 
+												element: Num 
+													n: int = 1
+								element: Name 
+									id: str = kind
+									ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = aMax
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Num 
+											n: int = 2
+										element: Num 
+											n: int = 5
+										element: Num 
+											n: int = 10
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					element: Dict 
+						keys: list 
+							element: Name 
+								id: str = title
+								ctx: Load 
+						values: list 
+							element: Name 
+								id: str = kind
+								ctx: Load 
+				keywords: list 

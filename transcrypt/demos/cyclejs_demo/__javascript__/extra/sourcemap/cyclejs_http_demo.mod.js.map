@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/__javascript__/cyclejs_http_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/cyclejs_http_demo.py"
+	],
+	"sourcesContent": [
+		"# This is the second 'http' example, demoing the interplay of 'drivers'\ndom, http = CycleDOM, CycleHTTPDriver\n\n\ndef render(user):\n    return dom.div('.users', [\n        dom.button('.get-random', 'Get random user'),\n        None if not user else dom.div('.user-details', [\n            dom.h1('.user-name' , user.name),\n            dom.h4('.user-email', user.email),\n            dom.a ('.user-website',\n                       {'attrs': {'href': user.website}}, user.website)\n            ])\n        ])\n\ndef main(sources):\n    '''This **declares** your app. Evaluated only once(!)'''\n\n    def get_url_params():\n        rand = Math.round(Math.random() * 9) + 1\n        url = {\n            'url': 'http://jsonplaceholder.typicode.com/users/' + str(rand),\n            'category': 'users',\n            'method': 'GET'\n            }\n        console.log(url)\n        return url\n\n    get_random_user_s = sources.DOM       \\\n            .select('.get-random')        \\\n            .events('click')              \\\n            .map(get_url_params)\n\n    user_s = sources.HTTP.select('users') \\\n            .flatten()                    \\\n            .map(lambda res: res.body)    \\\n            .startWith(None)\n\n    vdom_s = user_s.map(render)\n\n    return { 'DOM' : vdom_s, 'HTTP': get_random_user_s}\n\n\nCycle.run(main, {\n    'DOM' : dom.makeDOMDriver('#app'),\n    'HTTP': http.makeHTTPDriver()\n})\n\n"
+	],
+	"mappings": "AAAA;AAAA;AACA;AAAA;AAAA;AAGA;AAMA;AAAA;AAKA;AAGA;AACA;AAEA;AAIA;AACA;AAAA;AAEA;AAKA;AAAA;AAAA;AAKA;AAEA;AAAA;AAKA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

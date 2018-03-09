@@ -1,0 +1,128 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = boy_name
+					ctx: Store 
+			value: Str 
+				s: str = John
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = girl_name
+					ctx: Store 
+			value: Str 
+				s: str = Mary
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = both
+					ctx: Store 
+			value: BinOp 
+				left: BinOp 
+					left: Name 
+						id: str = boy_name
+						ctx: Load 
+					op: Add 
+					right: Str 
+						s: str =  and 
+				op: Add 
+				right: Name 
+					id: str = girl_name
+					ctx: Load 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = both
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = one
+					element: Str 
+						s: str = two
+					element: Str 
+						s: str = three
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = x
+					ctx: Store 
+			value: Num 
+				n: int = 7
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = y
+					ctx: Store 
+			value: Num 
+				n: int = 8
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = z
+					ctx: Store 
+			value: BinOp 
+				left: Num 
+					n: int = 10
+				op: Mult 
+				right: BinOp 
+					left: BinOp 
+						left: Name 
+							id: str = x
+							ctx: Load 
+						op: Mult 
+						right: Name 
+							id: str = y
+							ctx: Load 
+					op: Add 
+					right: Num 
+						n: int = 44
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = x
+						ctx: Load 
+					element: Name 
+						id: str = y
+						ctx: Load 
+					element: Name 
+						id: str = z
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Str 
+						s: str = +
+					element: Num 
+						n: int = 1
+					element: Str 
+						s: str = =
+					element: BinOp 
+						left: Num 
+							n: int = 1
+						op: Add 
+						right: Num 
+							n: int = 1
+				keywords: list 

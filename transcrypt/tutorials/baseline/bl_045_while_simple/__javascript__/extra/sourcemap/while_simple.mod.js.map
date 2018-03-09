@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_045_while_simple/__javascript__/while_simple.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_045_while_simple/while_simple.py"
+	],
+	"sourcesContent": [
+		"import random\n\na = random.randint (1, 10)\nb = random.randint (1, 10)\nanswer = 1\n\nprint ('Type 0 to quit')\nprint ()\n\nwhile answer > 0:\n    answer = float (input (f'How much is {a} x {b}? '))\n  \n    if answer == a * b:\n        print ('Right')\n        print ()\n        \n        a = random.randint (1, 10)\n        b = random.randint (1, 10)\n    \n    elif answer > 0:\n        print ('Wrong, try again...')\n\n"
+	],
+	"mappings": "AAAA;AAoBA;AApBA;AAAA;AAEA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

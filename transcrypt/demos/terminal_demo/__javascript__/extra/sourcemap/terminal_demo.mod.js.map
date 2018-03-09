@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/terminal_demo/__javascript__/terminal_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/terminal_demo/terminal_demo.py"
+	],
+	"sourcesContent": [
+		"while True:\n    name = input ('What''s your name? (leave blank to quit)')\n    \n    if name == '':\n        break;\n    \n    print ('Hi', name, 'I am your computer.')\n\n    age = float (input ('How old are you? '))\n    if age < 18:\n        print ('Sorry', name, ',', age, 'is too young to drive a car in the Netherlands.')\n    else:\n        print ('OK', name, ',', age, 'is old enough to drive a car in the Netherlands.')\n        \n    print ()\n    "
+	],
+	"mappings": "AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAGA;AAEA;AACA;AACA;AAAA;AACA;AACA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

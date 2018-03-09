@@ -52,12 +52,12 @@ class CommandArgs:
         self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
         self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
         self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is disadvised, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
-        self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js. Use -p .user to generate an application that has to be explicitly initialized by calling <application name> (), e.g. after the full page has loaded")
+        self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js")
         self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
         self.argParser.add_argument ('-s', '--symbols', nargs='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
         self.argParser.add_argument ('-sf', '--sform', help = "enable support for string formatting mini language", action = 'store_true')
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
-        self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .run to generate the loader and the runtime unit. Use -u without parameters to generate a component unit.")
+        self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .auto to autogenerate dynamically loadable native JavaScript modules, one per Python module. Use -u .run to generate the loader and the staticcally loadable runtime unit. Use -u .com to generate a statically loadable component unit.")
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xc', '--xconfimp', help = "confine imported names to directly importing module", action = 'store_true')
@@ -79,8 +79,13 @@ class CommandArgs:
             logAndExit (self.argParser.format_usage () .capitalize ())
         elif self.map and self.unit:
             logAndExit ('{}: -m / --map and -u / --unit'.format (invalidCombi))   
-        elif self.parent and self.unit:
-            logAndExit ('{}: -p / --parent and -u / --unit'.format (invalidCombi)) 
+        elif self.parent and self.unit == '.com':
+            logAndExit ('{}: -p / --parent and -u / --unit .com'.format (invalidCombi))
+        elif self.parent == '.export' and self.esv and int (self.esv) < 6:
+            logAndExit ('{}: -p / --parent .export and -e / --esv < 6'.format (invalidCombi))        
+        elif self.unit == '.auto' and self.esv and int (self.esv) < 6:
+            logAndExit ('{}: -u / --unit .auto and -e / --esv < 6'.format (invalidCombi))
+        
             
         # Set dependent switches
         

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/transcrypt_and_python_results_differ/__javascript__/results.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/transcrypt_and_python_results_differ/results.py"
+	],
+	"sourcesContent": [
+		"'''\nTest to find out if we can determine correctly wether we are in the Transcrypt/JavaScript or the CPython environment\n'''\n\nfrom org.transcrypt.stubs.browser import __envir__, __pragma__\n\nif __envir__.executor_name == __envir__.transpiler_name:\n    document.getElementById ('output') .innerHTML = 'Using Transcrypt'\n    \n__pragma__ ('skip')\nprint ('Using CPython')\n__pragma__ ('noskip')\n"
+	],
+	"mappings": "AAAA;AAAA;AAMA;AACA;AAAA;AAIA;AAAA;AAAA;AAAA;AAAA"
+}

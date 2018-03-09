@@ -1,0 +1,246 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = nameElement
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = document
+						ctx: Load 
+					attr: str = getElementById
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = name
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = greetingElement
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = document
+						ctx: Load 
+					attr: str = getElementById
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = greeting
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ageElement
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = document
+						ctx: Load 
+					attr: str = getElementById
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = age
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = messageElement
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = document
+						ctx: Load 
+					attr: str = getElementById
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = message
+				keywords: list 
+		element: FunctionDef 
+			name: str = greet
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Attribute 
+							value: Name 
+								id: str = greetingElement
+								ctx: Load 
+							attr: str = innerHTML
+							ctx: Store 
+					value: JoinedStr 
+						values: list 
+							element: Str 
+								s: str = Hi 
+							element: FormattedValue 
+								value: Attribute 
+									value: Name 
+										id: str = nameElement
+										ctx: Load 
+									attr: str = value
+									ctx: Load 
+								conversion: int = -1
+								format_spec: NoneType = None
+							element: Str 
+								s: str = , I am your computer
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = tell
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = age
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = float
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = ageElement
+									ctx: Load 
+								attr: str = value
+								ctx: Load 
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = age
+							ctx: Load 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 12
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = messageElement
+										ctx: Load 
+									attr: str = innerHTML
+									ctx: Store 
+							value: JoinedStr 
+								values: list 
+									element: Str 
+										s: str = Sorry, 
+									element: FormattedValue 
+										value: Name 
+											id: str = age
+											ctx: Load 
+										conversion: int = -1
+										format_spec: NoneType = None
+									element: Str 
+										s: str =  is to young to smoke sigars
+					orelse: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = age
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Num 
+										n: int = 16
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = messageElement
+												ctx: Load 
+											attr: str = innerHTML
+											ctx: Store 
+									value: JoinedStr 
+										values: list 
+											element: Str 
+												s: str = If you are 
+											element: FormattedValue 
+												value: Name 
+													id: str = age
+													ctx: Load 
+												conversion: int = -1
+												format_spec: NoneType = None
+											element: Str 
+												s: str =  you do not have a drivers licence yet
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = age
+											ctx: Load 
+										ops: list 
+											element: Lt 
+										comparators: list 
+											element: Num 
+												n: int = 30
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Name 
+														id: str = messageElement
+														ctx: Load 
+													attr: str = innerHTML
+													ctx: Store 
+											value: JoinedStr 
+												values: list 
+													element: Str 
+														s: str = At 
+													element: FormattedValue 
+														value: Name 
+															id: str = age
+															ctx: Load 
+														conversion: int = -1
+														format_spec: NoneType = None
+													element: Str 
+														s: str =  you may already have children
+									orelse: list 
+										element: Assign 
+											targets: list 
+												element: Attribute 
+													value: Name 
+														id: str = messageElement
+														ctx: Load 
+													attr: str = innerHTML
+													ctx: Store 
+											value: JoinedStr 
+												values: list 
+													element: Str 
+														s: str = At 
+													element: FormattedValue 
+														value: Name 
+															id: str = age
+															ctx: Load 
+														conversion: int = -1
+														format_spec: NoneType = None
+													element: Str 
+														s: str =  you will probably already have some working experience
+			decorator_list: list 
+			returns: NoneType = None

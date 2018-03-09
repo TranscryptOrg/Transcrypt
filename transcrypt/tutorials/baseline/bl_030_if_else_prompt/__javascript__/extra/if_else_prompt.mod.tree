@@ -1,0 +1,149 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = name
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = input
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Hi, what is your name? 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Hello
+					element: Name 
+						id: str = name
+						ctx: Load 
+					element: Str 
+						s: str = I am your computer.
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = age
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = float
+					ctx: Load 
+				args: list 
+					element: Call 
+						func: Name 
+							id: str = input
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = How old are you? 
+						keywords: list 
+				keywords: list 
+		element: If 
+			test: Compare 
+				left: Name 
+					id: str = age
+					ctx: Load 
+				ops: list 
+					element: Lt 
+				comparators: list 
+					element: Num 
+						n: int = 12
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = print
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = Sorry
+							element: Name 
+								id: str = age
+								ctx: Load 
+							element: Str 
+								s: str = is to young to smoke sigars
+						keywords: list 
+			orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = age
+							ctx: Load 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 16
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = print
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = If you are
+									element: Name 
+										id: str = age
+										ctx: Load 
+									element: Str 
+										s: str = you do not have a drivers licence yet
+								keywords: list 
+					orelse: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = age
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Num 
+										n: int = 30
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = print
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = At
+											element: Name 
+												id: str = age
+												ctx: Load 
+											element: Str 
+												s: str = you may already have children
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = print
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = At
+											element: Name 
+												id: str = age
+												ctx: Load 
+											element: Str 
+												s: str = you will probably already have some working experience
+										keywords: list 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = print
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = Reload web page to run again...
+				keywords: list 

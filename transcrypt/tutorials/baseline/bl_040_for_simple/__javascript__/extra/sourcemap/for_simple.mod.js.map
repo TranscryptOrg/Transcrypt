@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_040_for_simple/__javascript__/for_simple.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/tutorials/baseline/bl_040_for_simple/for_simple.py"
+	],
+	"sourcesContent": [
+		"tableNr = 3\ntableText = f'<b>Table of {tableNr}:</b><br>'\n\nfor lineNr in range (1, 11):\n    tableText += f'{lineNr} x {tableNr} = {lineNr * tableNr}<br>'\n\ndocument.getElementById ('output') .innerHTML = tableText\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAGA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/labeled_slider/__javascript__/snabbdom.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/cyclejs_demo/component_demos/labeled_slider/snabbdom.py"
+	],
+	"sourcesContent": [
+		"'''\nthis is just to allow `from snabbdom import div, input, ...`\n'''\n\nfor key in 'makeDOMDriver', 'div', 'h', 'input', 'span':\n    __all__[key] = getattr(CycleDOM, key)\n\n\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

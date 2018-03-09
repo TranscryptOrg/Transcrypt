@@ -1,0 +1,97 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tableNr
+					ctx: Store 
+			value: Num 
+				n: int = 3
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tableText
+					ctx: Store 
+			value: JoinedStr 
+				values: list 
+					element: Str 
+						s: str = <b>Table of 
+					element: FormattedValue 
+						value: Name 
+							id: str = tableNr
+							ctx: Load 
+						conversion: int = -1
+						format_spec: NoneType = None
+					element: Str 
+						s: str = :</b><br>
+		element: For 
+			target: Name 
+				id: str = lineNr
+				ctx: Store 
+			iter: Call 
+				func: Name 
+					id: str = range
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 11
+				keywords: list 
+			body: list 
+				element: AugAssign 
+					target: Name 
+						id: str = tableText
+						ctx: Store 
+					op: Add 
+					value: JoinedStr 
+						values: list 
+							element: FormattedValue 
+								value: Name 
+									id: str = lineNr
+									ctx: Load 
+								conversion: int = -1
+								format_spec: NoneType = None
+							element: Str 
+								s: str =  x 
+							element: FormattedValue 
+								value: Name 
+									id: str = tableNr
+									ctx: Load 
+								conversion: int = -1
+								format_spec: NoneType = None
+							element: Str 
+								s: str =  = 
+							element: FormattedValue 
+								value: BinOp 
+									left: Name 
+										id: str = lineNr
+										ctx: Load 
+									op: Mult 
+									right: Name 
+										id: str = tableNr
+										ctx: Load 
+								conversion: int = -1
+								format_spec: NoneType = None
+							element: Str 
+								s: str = <br>
+			orelse: list 
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = document
+								ctx: Load 
+							attr: str = getElementById
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = output
+						keywords: list 
+					attr: str = innerHTML
+					ctx: Store 
+			value: Name 
+				id: str = tableText
+				ctx: Load 

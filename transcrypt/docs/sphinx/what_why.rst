@@ -22,16 +22,23 @@ At the basis of Transcrypt lies the following shopping list:
 
 - Python syntax
 - Small downloads
-- No barriers to the JavaScript / JQuery / DOM world
+- No barriers to the DOM or to any JavaScript library
 - Dynamic typing
-- 'Classic' object orientation including multiple inheritance
+- Multiple inheritance
 - Static transpilation
 - Lambda’s
-- Named parameters
+- Named and default parameters
 - Lists, dicts and sets
-- List comprehensions
+- List and other comprehensions
 - Nested tuple assignment
 - Assignment of bound functions
+- Locally controlled operator overloading
+- Async / await
+- Metaclasses
+- Modules, compilation units and a component loader
+- Optional static typechecking
+- Source maps
+- Built-in minification
 
 At the advent of Transcrypt there were many Python to JavaScript transpiler projects around, some of them quite mature. Neither of them fitted the above shopping list. Either the downloads were too large, or some of must have features were missing. To some, the shopping list may seem weird. Multiple inheritance? The whole Java world is doing without it. Exactly. And that's one of the reasons why a large category of developers shunned Java from the start. To them multiple inheritance has proven a powerful tool ever since it was introduced in C++.
 

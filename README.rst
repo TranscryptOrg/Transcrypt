@@ -22,7 +22,7 @@ Latest stable release: Paris
 ============================
 
 `>>> GET STARTED!_ <http://www.transcrypt.org/#hello>`_
-======================================================
+=======================================================
 
 Thanks to everyone who contributed!
 

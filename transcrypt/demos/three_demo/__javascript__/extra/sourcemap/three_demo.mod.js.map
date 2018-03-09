@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/three_demo/__javascript__/three_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/three_demo/three_demo.py"
+	],
+	"sourcesContent": [
+		"from org.threejs import api\n\nscene = api.Scene ();\ncamera = api.PerspectiveCamera (30, window.innerWidth/window.innerHeight, 0.1, 1000)\n\nrenderer = api.WebGLRenderer ()\nrenderer.setSize (window.innerWidth, window.innerHeight)\ndocument.body.appendChild (renderer.domElement)\n\ngeometry = api.BoxGeometry (1, 1, 1 )\nmaterial = api.MeshLambertMaterial ({'color': 0xffffff})\ncube = api.Mesh (geometry, material)\nscene.add (cube)\n\nambientLight = api.AmbientLight (0x0000ff, 0.5)\nscene.add (ambientLight )\n\ndirectionalLight0 = api.DirectionalLight (0xff0000, 0.5)\nscene.add (directionalLight0);\n\ndirectionalLight1 = api.DirectionalLight (0x00ff00, 0.5)\ndirectionalLight1.position.set (50, 50, 50)\nscene.add (directionalLight1)\n\ncamera.position.z = 5\n\ndef render ():\n    requestAnimationFrame (render)\n    cube.rotation.x += 0.01\n    cube.rotation.y += 0.01\n    renderer.render (scene, camera)\n    \nrender ()\n\n# The above are just examples, all needed constructors can be added to org.threejs.api in this way\n# THREE is just left in the global namespace, as three.js itself seems to need it\n"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AACA;AACA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AACA;AAEA;AAEA;AACA;AAAA;AAAA;AAGA;AAAA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

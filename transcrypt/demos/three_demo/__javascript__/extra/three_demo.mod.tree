@@ -1,0 +1,382 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.threejs
+			names: list 
+				element: alias 
+					name: str = api
+					asname: NoneType = None
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = scene
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = Scene
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = camera
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = PerspectiveCamera
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 30
+					element: BinOp 
+						left: Attribute 
+							value: Name 
+								id: str = window
+								ctx: Load 
+							attr: str = innerWidth
+							ctx: Load 
+						op: Div 
+						right: Attribute 
+							value: Name 
+								id: str = window
+								ctx: Load 
+							attr: str = innerHeight
+							ctx: Load 
+					element: Num 
+						n: float = 0.1
+					element: Num 
+						n: int = 1000
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = renderer
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = WebGLRenderer
+					ctx: Load 
+				args: list 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = renderer
+						ctx: Load 
+					attr: str = setSize
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = window
+							ctx: Load 
+						attr: str = innerWidth
+						ctx: Load 
+					element: Attribute 
+						value: Name 
+							id: str = window
+							ctx: Load 
+						attr: str = innerHeight
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Attribute 
+						value: Name 
+							id: str = document
+							ctx: Load 
+						attr: str = body
+						ctx: Load 
+					attr: str = appendChild
+					ctx: Load 
+				args: list 
+					element: Attribute 
+						value: Name 
+							id: str = renderer
+							ctx: Load 
+						attr: str = domElement
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = geometry
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = BoxGeometry
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 1
+					element: Num 
+						n: int = 1
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = material
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = MeshLambertMaterial
+					ctx: Load 
+				args: list 
+					element: Dict 
+						keys: list 
+							element: Str 
+								s: str = color
+						values: list 
+							element: Num 
+								n: int = 16777215
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cube
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = Mesh
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = geometry
+						ctx: Load 
+					element: Name 
+						id: str = material
+						ctx: Load 
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = scene
+						ctx: Load 
+					attr: str = add
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = cube
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ambientLight
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = AmbientLight
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 255
+					element: Num 
+						n: float = 0.5
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = scene
+						ctx: Load 
+					attr: str = add
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = ambientLight
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = directionalLight0
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = DirectionalLight
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 16711680
+					element: Num 
+						n: float = 0.5
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = scene
+						ctx: Load 
+					attr: str = add
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = directionalLight0
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = directionalLight1
+					ctx: Store 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = api
+						ctx: Load 
+					attr: str = DirectionalLight
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 65280
+					element: Num 
+						n: float = 0.5
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Attribute 
+						value: Name 
+							id: str = directionalLight1
+							ctx: Load 
+						attr: str = position
+						ctx: Load 
+					attr: str = set
+					ctx: Load 
+				args: list 
+					element: Num 
+						n: int = 50
+					element: Num 
+						n: int = 50
+					element: Num 
+						n: int = 50
+				keywords: list 
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = scene
+						ctx: Load 
+					attr: str = add
+					ctx: Load 
+				args: list 
+					element: Name 
+						id: str = directionalLight1
+						ctx: Load 
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Attribute 
+						value: Name 
+							id: str = camera
+							ctx: Load 
+						attr: str = position
+						ctx: Load 
+					attr: str = z
+					ctx: Store 
+			value: Num 
+				n: int = 5
+		element: FunctionDef 
+			name: str = render
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = requestAnimationFrame
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = render
+								ctx: Load 
+						keywords: list 
+				element: AugAssign 
+					target: Attribute 
+						value: Attribute 
+							value: Name 
+								id: str = cube
+								ctx: Load 
+							attr: str = rotation
+							ctx: Load 
+						attr: str = x
+						ctx: Store 
+					op: Add 
+					value: Num 
+						n: float = 0.01
+				element: AugAssign 
+					target: Attribute 
+						value: Attribute 
+							value: Name 
+								id: str = cube
+								ctx: Load 
+							attr: str = rotation
+							ctx: Load 
+						attr: str = y
+						ctx: Store 
+					op: Add 
+					value: Num 
+						n: float = 0.01
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = renderer
+								ctx: Load 
+							attr: str = render
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = scene
+								ctx: Load 
+							element: Name 
+								id: str = camera
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = render
+					ctx: Load 
+				args: list 
+				keywords: list 
