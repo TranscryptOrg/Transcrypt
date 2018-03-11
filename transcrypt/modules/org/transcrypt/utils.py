@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 import inspect
+import tokenize
 
 defaultJavaScriptVersion = 5
 
@@ -175,3 +176,48 @@ def enhanceException (exception, **kwargs):
 
     raise result
     
+def stripJavascript (code, symbols, allowStripComments):
+    stripComments = False
+
+    def stripSingleLineComments (line):
+        pos = line.find ('//')
+        return (line if pos < 0 else line [ : pos]) .rstrip ()
+
+    passStack = []
+
+    def passable (targetLine):
+        def __pragma__ (name, *args):
+            if name == 'stripcomments':
+                nonlocal stripComments
+                stripComments = allowStripComments
+            if name == 'ifdef':
+                passStack.append (args [0] in symbols)
+            elif name == 'ifndef':
+                passStack.append (not args [0] in symbols)
+            elif name == 'else':
+                passStack [-1] = not passStack [-1]
+            elif name == 'endif':
+                passStack.pop ()
+
+        strippedLine = targetLine.lstrip ()
+        if stripComments and strippedLine.startswith ('/*'):
+            passStack.append (False)
+            return all (passStack)  # So skip this line
+        elif stripComments and strippedLine.endswith ('*/'):
+            passStack.pop ()        # Possibly pass next line
+        elif strippedLine.startswith ('__pragma__') and (
+            'ifdef' in strippedLine or
+            'ifndef' in strippedLine or
+            'else' in strippedLine or
+            'endif' in strippedLine
+        ):
+            exec (strippedLine)
+            return False            # Skip line anyhow, independent of passStack
+        else:
+            return all (passStack)  # Skip line only if not in passing state according to passStack
+    
+    if stripComments:
+        passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if passable (line)] if commentlessLine]
+    else:
+        passableLines = [line for line in code.split ('\n') if passable (line)]
+    return '\n'.join (passableLines) + '\n'

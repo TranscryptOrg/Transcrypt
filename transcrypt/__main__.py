@@ -20,9 +20,32 @@ import traceback
 import site
 import atexit
 import webbrowser
+import tokenize
 
 transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')   # Set of Transcrypt itself
 modulesDir = '{}/modules'.format (transpilerDir)                                    # Set dir of Transcrypt-only modules
+
+# Get environment from runtime and correct executor to be interpreter
+with tokenize.open (modulesDir + '/org/transcrypt/__runtime__.py') as runtimeFile:
+    runtimeLines = runtimeFile.read () .split ('\n')
+    print (9999, runtimeLines)
+environmentLines = []
+passing = False
+for runtimeLine in runtimeLines:
+    if runtimeLine.startswith ('__pragma__ (\'run\')'):
+        passing = True
+    elif runtimeLine.startswith ('__pragma__ (\'norun\')'):
+        break;  # Currently only one janus section allowed, to avoid having to parse the whole runtime file.
+    else:
+        if passing:
+            environmentLines.append (runtimeLine)
+exec ('\n'.join (environmentLines))
+
+print (7777777)
+'\n'.join (environmentLines)
+print (8888888)
+
+__envir__.executor_name = __envir__.interpreter_name
 
 # Both CPython and Transcrypt will use dirs in sys.path as search roots for modules
 # CPython will also search relatively from each module, Transcrypt only from the main module
@@ -44,11 +67,10 @@ sys.modules.pop ('org', None)
 # Transcrypt needs to find modulesDir before CPython modules, so it will favor Transcrypt modules
 transpilationDirs = [modulesDir] + sys.path
 
-# The following imports are need by Transcryp itself, not by transpiled or executed user code
+# The following imports are need by Transcrypt itself, not by transpiled or executed user code
 # The following imports will either reload the previously unloaded org or load org from different location
 # CPython needs to find modulesDir after CPython modules, so it will favor CPython modules
-sys.path.append (modulesDir)        
-from org.transcrypt import __base__                 
+sys.path.append (modulesDir)      
 from org.transcrypt import utils
 from org.transcrypt import compiler
 
@@ -80,7 +102,7 @@ def main ():
             utils.log (True, 'Error: missing license reference file\n')
             return setExitCode (exitNoLicense)
             
-        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __base__.__envir__.transpiler_name.capitalize (), __base__.__envir__.transpiler_version)
+        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __envir__.transpiler_name.capitalize (), __envir__.transpiler_version)
         utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
         
         utils.commandArgs.parse ()
@@ -116,14 +138,6 @@ def main ():
         transpilationDirs [0 : 0] = projectDirs 
                        
         __symbols__ = utils.commandArgs.symbols.split ('$') if utils.commandArgs.symbols else []
-        
-        if utils.commandArgs.unit:
-            if '.auto' in utils.commandArgs.unit:
-                __symbols__.append ('__aunit__')
-            elif '.run' in utils.commandArgs.unit:
-                __symbols__.append ('__runit__')
-            elif '.com' in utils.commandArgs.unit:
-                __symbols__.append ('__cunit__')
             
         if utils.commandArgs.complex:
             __symbols__.append ('__complex__')
@@ -158,7 +172,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (transpilationDirs, modulesDir, __symbols__)
+                compiler.Program (transpilationDirs, modulesDir, __symbols__, __envir__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)

@@ -27,14 +27,30 @@ import io
 import subprocess
 import shlex
 
-from org.transcrypt import __base__, utils, sourcemaps, minify, static_check, type_check
+from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
+
+'''
+All files required in running and deployable are placed in a deployment container.
+A deployable consists of an arbitrary number of modules.
+Each module has it's own directory.
+The directory hierarchy is equal to the (dotted) module hierarchy.
+Each module has one .js file and maximally one .py file.
+They are in the same directory.
+A JS only module doesn't have a .py file.
+
+The only thing that has to be done is compiling all modules and put the parts of the deployable in the right places.
+The runtime module is just another Python module with a a lot of JS code inside __pragma__ ('js', ...) fragments.
+Even the core is inside a __pragma__ ('js', ...) fragment.
+There's also a __pragma__ ('include', ...).
+A file with included files is deployed (for sourcemaps) as one file.
+'''
 
 class ModuleMetadata:
     def __init__ (self, program, name):
         self.program = program
         self.name = name
         searchedModulePaths = []
-        
+                
         for searchDir in self.program.moduleSearchDirs:
             relPrepath = self.name.replace ('.', '/')
             prepath = '{}/{}'.format (searchDir, relPrepath)
@@ -46,7 +62,7 @@ class ModuleMetadata:
             else:
                 self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
 
-            self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)
+            self.targetDir = '{}/{}'.format (self.sourceDir, self.program.envir.target_subdir)
             self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
             
             self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
@@ -105,12 +121,13 @@ class ModuleMetadata:
             print (traceback.format_exc ())
 
 class Program:
-    def __init__ (self, moduleSearchDirs, modulesDir, symbols):
+    def __init__ (self, moduleSearchDirs, modulesDir, symbols, envir):
         utils.setProgram (self)
     
         self.moduleSearchDirs = moduleSearchDirs
         self.modulesDir = modulesDir
         self.symbols = symbols
+        self.envir = envir
         
         self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
 
@@ -129,33 +146,17 @@ class Program:
         self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
         self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
         self.sourceFileName = self.sourcePath.split ('/') [-1]
-        self.targetDir = '{}/{}'.format (self.sourceDir, __base__.__envir__.target_subdir)      
+        self.targetDir = '{}/{}'.format (self.sourceDir, envir.target_subdir)      
         
         # Define names early, since they are cross-used in module compilation
-        prefix = 'org.{}'.format (__base__.__envir__.transpiler_name)
-        self.coreModuleName = '{}.{}'.format (prefix, '__core__')
-        self.baseModuleName = '{}.{}'.format (prefix, '__base__')
-        self.standardModuleName = '{}.{}'.format (prefix, '__standard__')
-        self.builtinModuleName = '{}.{}'.format (prefix, '__builtin__')
+        prefix = 'org.{}'.format (self.envir.transpiler_name)
+        self.runtimeModuleName = '{}.{}'.format (prefix, '__runtime__')
         self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
         
-        # Set loader paths
-        self.loaderTemplatePath = '{}/org/{}/{}/__loader_template__.js'.format (
-            self.modulesDir, __base__.__envir__.transpiler_name, __base__.__envir__.target_subdir 
-        )
-        self.loaderName = '{}_loader'.format (self.mainModuleName)
-        self.loaderTargetPath = '{}/{}.js'.format (self.targetDir, self.loaderName)
-        self.loaderMiniTargetPath = '{}/{}.min.js'.format (self.targetDir, self.loaderName)
-
-        # Compile inline modules
-        if not ('__cunit__' in self.symbols):
-            Module (self, ModuleMetadata (self, self.coreModuleName), True)
-            Module (self, ModuleMetadata (self, self.baseModuleName))
-            Module (self, ModuleMetadata (self, self.standardModuleName))
-            Module (self, ModuleMetadata (self, self.builtinModuleName), True)
+        # Compile runtime module
+        Module (self, ModuleMetadata (self, self.runtimeModuleName))
         
         # Optionally perfom static typing validation
-
         if utils.commandArgs.dstat:
             try:
                 type_check.run (self.sourcePath)
@@ -198,33 +199,26 @@ class Program:
                     self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
                 )
 
-        if not '__cunit__' in self.symbols: # So it's a monolith or a runtime unit, components don't need these parts
-         
-            # Produce header           
-            header = '"use strict";\n// {}\'ed from Python, {}\n'.format (
-                __base__.__envir__.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-            )
-
-            # Produce runtime modules           
-            runtimeModules = [
-                self.moduleDict [self.coreModuleName],
-                self.moduleDict [self.baseModuleName],
-                self.moduleDict [self.standardModuleName],
-                self.moduleDict [self.builtinModuleName]
-            ]
-            
-            # Produce initializer
-            if utils.commandArgs.parent == '.none':
-                initializer = '{0} ();\n' .format (self.mainModuleName)
-            elif utils.commandArgs.parent == '.user':
-                initializer = ''
+        # Produce runtime modules           
+        runtimeModules = [
+            self.moduleDict [self.coreModuleName],
+            self.moduleDict [self.baseModuleName],
+            self.moduleDict [self.standardModuleName],
+            self.moduleDict [self.builtinModuleName]
+        ]
+        
+        # Produce initializer
+        if utils.commandArgs.parent == '.none':
+            initializer = '{0} ();\n' .format (self.mainModuleName)
+        elif utils.commandArgs.parent == '.user':
+            initializer = ''
+        else:
+            if utils.commandArgs.parent == None:
+                parent = 'window'
             else:
-                if utils.commandArgs.parent == None:
-                    parent = 'window'
-                else:
-                    parent = utils.commandArgs.parent
+                parent = utils.commandArgs.parent
 
-                initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
+            initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
         
         # Produce imported modules, needed for monolith or any type of unit
         importedModules = [
@@ -236,92 +230,6 @@ class Program:
         # Produce main module, needed for monolith or any type of unit
         mainModule = self.moduleDict [self.mainModuleName]
         
-        # Assemble target code
-        def getJoinedModules (modules):
-            return ''.join ([module.getModuleCaption () + module.targetCode for module in modules])
-                
-        if '__cunit__' in self.symbols:
-            targetCode = getJoinedModules (importedModules + [mainModule])      # So no header, runtime modules and initializer
-        else:
-            targetCode = (
-                # BEGIN default prologue, be sure to adapt sourcemaps.nrOfPadLines if the nr of prologue lines is changed!
-                header +
-                'function {} () {{\n'.format (self.mainModuleName) +
-                '    var __symbols__ = {};\n'.format (self.symbols) +
-                # END default prologue
-                getJoinedModules (runtimeModules + importedModules + [mainModule]) +
-                '    return __all__;\n' +
-                '}\n' +
-                initializer
-            )
-            
-            if '__runit__' in self.symbols:
-                # Generate loader from template
-                loaderTemplate = tokenize.open (self.loaderTemplatePath) .read ()
-                loader = (loaderTemplate
-                ) .replace ('__pragma__ (\'<loader_name>\')', self.loaderName
-                ) .replace ('__pragma__ (\'<runit_name>\')', self.mainModuleName    # The main unit name is the name of its main module
-                )
-                
-                # Write loader
-                utils.log (True, 'Saving loader in: {}\n', self.loaderTargetPath)
-                with utils.create (self.loaderTargetPath) as aFile:
-                    aFile.write (loader)
-                    
-                # Minify loader
-                if not utils.commandArgs.nomin:
-                    utils.log (True, 'Saving minified loader in: {}\n', self.loaderMiniTargetPath)        
-                    minify.run (
-                        self.loaderTargetPath,
-                        self.loaderMiniTargetPath,
-                        None,
-                        unitsUsed = True
-                    )
-
-        # Write target code
-        utils.log (True, 'Saving target code in: {}\n', self.targetPath)
-        with utils.create (self.targetPath) as aFile:
-            aFile.write (targetCode)
-
-            if utils.commandArgs.map:
-                aFile.write (self.prettyMap.mapRef)
-
-        # Join and save source maps
-        
-        if utils.commandArgs.map:
-            self.allModules = (
-                [
-                    self.moduleDict [self.coreModuleName],
-                    self.moduleDict [self.baseModuleName],
-                    self.moduleDict [self.standardModuleName],
-                    self.moduleDict [self.builtinModuleName]
-                ] +
-                importedModules +
-                [self.moduleDict [self.mainModuleName]]
-            )        
-        
-            utils.log (False, 'Saving single-level sourcemap in: {}\n', self.prettyMap.mapPath)
-            self.prettyMap.concatenate ([module.modMap for module in self.allModules], self.moduleCaptionSkip)
-            self.prettyMap.save ()
-
-        # Minify target code
-        if not utils.commandArgs.nomin:
-            utils.log (True, 'Saving minified target code in: {}\n', self.miniTargetPath)
-            minify.run (
-                self.targetPath,
-                self.miniTargetPath,
-                self.shrinkMap.mapPath if utils.commandArgs.map else None,
-                unitsUsed = '__runit__' in self.symbols or '__cunit__'  in self.symbols
-            )
-            if utils.commandArgs.map:
-                utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.miniMap.mapPath)
-                self.shrinkMap.load ()
-                self.prettyMap.cascade (self.shrinkMap, self.miniMap)
-                self.miniMap.save ()
-
-                with open (self.miniTargetPath, 'a') as miniFile:
-                    miniFile.write (self.miniMap.mapRef)
-
     def provide (self, moduleName):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
     
@@ -336,10 +244,9 @@ class Program:
             return Module (self, moduleMetadata)
 
 class Module:
-    def __init__ (self, program, moduleMetadata, stripCommentsIfAllowed = False):
+    def __init__ (self, program, moduleMetadata):
         self.program = program
         self.metadata = moduleMetadata
-        self.stripComments = stripCommentsIfAllowed and not utils.commandArgs.dnostrip
         self.program.moduleDict [self.metadata.name] = self
 
         # Names of module being under compilation and line nrs of current import
@@ -457,51 +364,9 @@ class Module:
             treeFile.write (self.textTree)
 
     def loadJavascript (self):
-        def strip (code, symbols):
-            def stripSingleLineComments (line):
-                pos = line.find ('//')
-                return (line if pos < 0 else line [ : pos]) .rstrip ()
+        with tokenize.open (self.metadata.targetPath) as targetFile:       
+            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, self.program.allowStripComments)
         
-            loadStack = []
-
-            def loadable (targetLine):
-                def __pragma__ (name, *args):
-
-                    if name == 'ifdef':
-                        loadStack.append (args [0] in symbols)
-                    elif name == 'ifndef':
-                        loadStack.append (not args [0] in symbols)
-                    elif name == 'else':
-                        loadStack [-1] = not loadStack [-1]
-                    elif name == 'endif':
-                        loadStack.pop ()
-
-                strippedLine = targetLine.lstrip ()
-                if self.stripComments and strippedLine.startswith ('/*'):
-                    loadStack.append (False)
-                    return all (loadStack)  # So skip this line
-                elif self.stripComments and strippedLine.endswith ('*/'):
-                    loadStack.pop ()        # Possibly load next line
-                elif strippedLine.startswith ('__pragma__') and (
-                    'ifdef' in strippedLine or
-                    'ifndef' in strippedLine or
-                    'else' in strippedLine or
-                    'endif' in strippedLine
-                ):
-                    exec (strippedLine)
-                    return False            # Skip line anyhow, independent of loadStack
-                else:
-                    return all (loadStack)  # Skip line only if not in loading state according to loadStack
-            
-            if self.stripComments:
-                loadableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if loadable (line)] if commentlessLine]
-            else:
-                loadableLines = [line for line in code.split ('\n') if loadable (line)]
-            return '\n'.join (loadableLines) + '\n'
-
-        with open (self.metadata.targetPath) as targetFile:
-            self.targetCode = strip (targetFile.read (), self.program.symbols)
-
     def generateJavascriptAndMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 
@@ -542,8 +407,11 @@ class Module:
         else:                                                           # No maps needed, so this 'no stripping' shortcut for speed
             targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']
 
-        # Join and save module code
-        self.targetCode = '\n'.join (targetLines)
+        # Join and save module code         
+        header = '// {}\'ed from Python, {}\n"use strict";\n'.format (
+            self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+        )
+        self.targetCode = header + '\n'.join (targetLines)
         with utils.create (self.metadata.targetPath) as aFile:
             aFile.write (self.targetCode)
 
@@ -650,7 +518,7 @@ class Generator (ast.NodeVisitor):
 
         self.tempIndices = {}
         self.skippedTemps = set ()
-        self.stubsName = 'org.{}.stubs.'.format (__base__.__envir__.transpiler_name)
+        self.stubsName = 'org.{}.stubs.'.format (self.module.program.envir.transpiler_name)
 
         self.nameConsts = {
             None: 'null',
@@ -721,6 +589,7 @@ class Generator (ast.NodeVisitor):
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
         self.allowJavaScriptMod = utils.commandArgs.jsmod
         self.allowMemoizeCalls = utils.commandArgs.fcall
+        self.allowStripComments = not utils.commandArgs.dnostrip
 
         self.noskipCodeGeneration = True
         self.conditionalCodeGeneration = True
@@ -1068,7 +937,7 @@ class Generator (ast.NodeVisitor):
                         'eval'
                     ),
                     {},
-                    {'__envir__': __base__.__envir__}
+                    {'__envir__': self.module.program.envir}
                 ) in self.module.program.symbols
 
                 if pragma [0] .s == 'ifdef':
@@ -1252,8 +1121,9 @@ class Generator (ast.NodeVisitor):
                         elif target.id in self.getScope () .nonlocals:
                             pass
                         else:
+                            if type (self.getScope () .node) == ast.Module:
+                                self.emit ('export ')                        
                             self.emit ('var ')
-
                     self.visit (target)
                     self.emit (' = ')
                     self.visit (value)
@@ -1544,20 +1414,26 @@ class Generator (ast.NodeVisitor):
             self.emit (')')
             
         def include (fileName):
-            searchedIncludePaths = []
-            for searchDir in self.module.program.moduleSearchDirs:
-                filePath = '{}/{}'.format (searchDir, fileName)
-                if os.path.isfile (filePath):
-                    return tokenize.open (filePath) .read ()
+            try:
+                searchedIncludePaths = []
+                for searchDir in self.module.program.moduleSearchDirs:
+                    filePath = '{}/{}'.format (searchDir, fileName)
+                    if os.path.isfile (filePath):
+                        includedCode = tokenize.open (filePath) .read ()
+                        if filename.endswith ('.part.js'):
+                            includedCode = utils.stripJavascript (includedCode, self.module.program.symbols, self.module.program.allowStripComments)
+                        return includedCode
+                    else:
+                        searchedIncludePaths.append (filePath)
                 else:
-                    searchedIncludePaths.append (filePath)
-            else:
-                raise utils.Error (
-                    lineNr = self.lineNr,
-                    message = '\n\tAttempt to include file: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
-                        node.args [0], '\n\t\t'. join (searchedIncludePaths)
+                    raise utils.Error (
+                        lineNr = self.lineNr,
+                        message = '\n\tAttempt to include file: {}\n\tCan\'t find any of:\n\t\t{}\n'.format (
+                            node.args [0], '\n\t\t'. join (searchedIncludePaths)
+                        )
                     )
-                )
+            except:
+                traceback.format_exc ()
                 
         if type (node.func) == ast.Name:
             if node.func.id == 'type':
@@ -1642,22 +1518,32 @@ class Generator (ast.NodeVisitor):
                     self.allowConversionToTruthValue = True
                 elif node.args [0] .s == 'notconv':     # Automatic conversion to truth value not supported
                     self.allowConversionToTruthValue = False
+                    
+                elif node.args [0] .s == 'run':
+                    pass
+                elif node.args [0] .s == 'norun':
+                    pass
 
                 elif node.args [0] .s == 'js':          # Include JavaScript code literally in the output
-                    code = node.args [1] .s.format (* [
-                        eval (
-                            compile (
-                                ast.Expression (arg),   # Code to compile (can be AST or source)
-                                '<string>',             # Not read from a file
-                                'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
-                            ),
-                            {},
-                            {'__include__': include}
-                        )
-                        for arg in node.args [2:]
-                    ])
-                    for line in code.split ('\n'):
-                        self.emit ('{}\n', line)                 
+                    try:
+                        code = node.args [1] .s.format (* [
+                            eval (
+                                compile (
+                                    ast.Expression (arg),   # Code to compile (can be AST or source)
+                                    '<string>',             # Not read from a file
+                                    'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
+                                ),
+                                {},
+                                {'__include__': include}
+                            )
+                            for arg in node.args [2:]
+                        ])
+                        for line in code.split ('\n'):
+                            self.emit ('{}\n', line)
+                    except:
+                        print (77777777777777, node.args [0] .s, node.args [1] .s)
+                        print (traceback.format_exc ())
+               
                 elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
                     try:
                         sourceCode = node.args [2] .s.format (* [
@@ -1922,9 +1808,8 @@ class Generator (ast.NodeVisitor):
         self.adaptLineNrString (node)
 
         if type (self.getScope () .node) == ast.Module:
-            self.all.add (node.name)
-
-        if type (self.getScope () .node) == ast.ClassDef:
+            self.emit (self.filterId ('\nexport var {} = '.format (node.name)))
+        elif type (self.getScope () .node) == ast.ClassDef:
             self.emit (self.filterId ('\n{}:'.format (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
@@ -2315,12 +2200,14 @@ class Generator (ast.NodeVisitor):
                                             # Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
                                             # The rest of its use is only at compile time
 
-            isGlobal = type (self.getScope () .node) in (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef)  # Global or function scope, so it's no method
+            isGlobal = type (self.getScope () .node) == ast.Module
 
-            if isGlobal and type (self.getScope () .node) == ast.Module:
+            isMethod = not (isGlobal or type (self.getScope () .node) in (ast.FunctionDef, ast.AsyncFunctionDef))  # Global or function scope, so it's no method
+            
+            if isGlobal:
                 self.all.add (node.name)
 
-            if not isGlobal:
+            if isMethod:
                 self.emit ('\n')
             self.adaptLineNrString (node)
 
@@ -2373,9 +2260,7 @@ class Generator (ast.NodeVisitor):
 
             decoratorsUsed = 0
             if decorate:
-                if isGlobal:
-                    self.emit ('var {} = ', self.filterId (nodeName))
-                else:
+                if isMethod:
                     if jsCall:
                         # Decorators are not supported until we resolve, how to pass self or cls
                         raise utils.Error (
@@ -2386,6 +2271,10 @@ class Generator (ast.NodeVisitor):
                         self.emit ('{}: ', self.filterId (nodeName))
                     else:
                         self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
+                elif isGlobal:
+                    self.emit ('export var {} = ', self.filterId (nodeName))
+                else:
+                    self.emit ('var {} = ', self.filterId (nodeName))
 
                 if self.allowOperatorOverloading:
                     self.emit ('__call__ (')
@@ -2405,9 +2294,7 @@ class Generator (ast.NodeVisitor):
                 self.emit ('{}function', 'async ' if async else '')
 
             else:
-                if isGlobal:
-                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
-                else:
+                if isMethod:
                     if jsCall:
                         self.emit ('{}: function', self.filterId (nodeName), 'async ' if async else '')
                     else:
@@ -2415,12 +2302,16 @@ class Generator (ast.NodeVisitor):
                             self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
                         else:
                             self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if async else '')
+                elif isGlobal:
+                    self.emit ('export var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
+                else:
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
 
             yieldStarIndex = len (self.targetFragments)
 
             self.emit (' ')
 
-            skipFirstArg = jsCall and not (isGlobal or isStaticMethod or isProperty)
+            skipFirstArg = jsCall and not (not isMethod or isStaticMethod or isProperty)
             
             if skipFirstArg:
                 # Remove first argument from methods when jscall enabled
@@ -2451,7 +2342,7 @@ class Generator (ast.NodeVisitor):
             if decorate:
                 self.emit (')' * decoratorsUsed)
 
-            if not isGlobal:
+            if isMethod:
                 if not jsCall:
                     if isStaticMethod:
                         self.emit (';}}')
@@ -2721,31 +2612,12 @@ class Generator (ast.NodeVisitor):
 
     def visit_Module (self, node):
         self.adaptLineNrString (node)
-
         self.inscope (node)
-        self.indent ()
-        if self.module.metadata.name == self.module.program.mainModuleName:
-            if not '__cunit__' in self.module.program.symbols:
-                self.emit ('(function () {{\n')
-            self.indent ()
-        else:
-            self.emit ('__nest__ (\n')
-            self.indent ()
-            self.emit ('__all__,\n')
-            self.emit ('\'{}\', {{\n', self.filterId (self.module.metadata.name))
-            self.indent ()
-            self.emit ('__all__: {{\n')
-            self.indent ()
-            self.emit ('__inited__: false,\n')
-            self.emit ('__init__: function (__all__) {{\n')
-            self.indent ()
 
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
         
-        if not '__cunit__'  in self.module.program.symbols:
-            self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
-            self.all.add ('__name__')
+        self.emit ('export var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
 
         for stmt in node.body:
             if self.isDocString (stmt):
@@ -2757,47 +2629,10 @@ class Generator (ast.NodeVisitor):
 
             # As soon as doc attribs are allowed, emit only once the first one ever seen, to match CPython behaviour
             if not self.docStringEmitted and self.allowDocAttribs and self.docString:
-                self.emit ('var __doc__ = ')
+                self.emit ('export var __doc__ = ')
                 self.visit (self.docString)
                 self.emit (';\n')
-                self.all.add ('__doc__')
                 self.docStringEmitted = True
-
-        if self.use:
-            self.use = sorted (self.use)
-            self.emit ('__pragma__ (\'<use>\' +\n') # Only the last occurence of <use> and </use> are special.
-            self.indent ()
-            for name in self.use:
-                self.emit ('\'{}\' +\n', name)
-            self.dedent ()
-            self.emit ('\'</use>\')\n')
-
-        if self.all:
-            self.all = sorted (self.all)
-            self.emit ('__pragma__ (\'<all>\')\n')  # Only the last occurence of <all> and </all> are special.
-            self.indent ()
-            for name in self.all:
-                self.emit ('__all__.{0} = {0};\n', self.filterId (name))
-            self.dedent ()
-            self.emit ('__pragma__ (\'</all>\')\n')
-            
-        if self.module.metadata.name == self.module.program.mainModuleName and '__runit__' in self.module.program.symbols:
-            self.emit ('\n__pragma__("<components>")\n')  # Make the pragma a string literal to prevent distortion by Closure, like replacing ' by "
-
-        self.dedent ()
-
-        if self.module.metadata.name == self.module.program.mainModuleName:
-            if not '__cunit__' in self.module.program.symbols:
-                self.emit ('}}) ();\n')
-        else:
-            self.emit ('}}\n')
-            self.dedent ()
-            self.emit ('}}\n')
-            self.dedent ()
-            self.emit ('}}\n')
-            self.dedent ()
-            self.emit (');\n')
-            self.dedent ()
 
         self.targetFragments.insert (importHeadsIndex, ''.join ([
             '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
@@ -2824,10 +2659,6 @@ class Generator (ast.NodeVisitor):
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
             return
-
-        elif type (node.ctx) == ast.Store:
-            if type (self.getScope () .node) == ast.Module:
-                self.all.add (node.id)
 
         self.emit (self.filterId (node.id))
 
