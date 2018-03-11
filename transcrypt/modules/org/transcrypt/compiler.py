@@ -201,10 +201,7 @@ class Program:
 
         # Produce runtime modules           
         runtimeModules = [
-            self.moduleDict [self.coreModuleName],
-            self.moduleDict [self.baseModuleName],
-            self.moduleDict [self.standardModuleName],
-            self.moduleDict [self.builtinModuleName]
+            self.moduleDict [self.runtimeModuleName],
         ]
         
         # Produce initializer
@@ -224,7 +221,7 @@ class Program:
         importedModules = [
             self.moduleDict [moduleName]
             for moduleName in sorted (self.moduleDict)
-            if not moduleName in (self.coreModuleName, self.baseModuleName, self.standardModuleName, self.builtinModuleName, self.mainModuleName)
+            if not moduleName in (self.runtimeModuleName, self.mainModuleName)
         ]
         
         # Produce main module, needed for monolith or any type of unit
@@ -365,7 +362,7 @@ class Module:
 
     def loadJavascript (self):
         with tokenize.open (self.metadata.targetPath) as targetFile:       
-            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, self.program.allowStripComments)
+            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
         
     def generateJavascriptAndMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
@@ -1420,8 +1417,10 @@ class Generator (ast.NodeVisitor):
                     filePath = '{}/{}'.format (searchDir, fileName)
                     if os.path.isfile (filePath):
                         includedCode = tokenize.open (filePath) .read ()
-                        if filename.endswith ('.part.js'):
-                            includedCode = utils.stripJavascript (includedCode, self.module.program.symbols, self.module.program.allowStripComments)
+                        if fileName.endswith ('.part.js'):
+                            print (7777)
+                            includedCode = utils.stripJavascript (includedCode, self.module.program.symbols, True) # !!!self.allowStripComments)
+                            print (8888)
                         return includedCode
                     else:
                         searchedIncludePaths.append (filePath)
@@ -1433,7 +1432,7 @@ class Generator (ast.NodeVisitor):
                         )
                     )
             except:
-                traceback.format_exc ()
+                print (traceback.format_exc ())
                 
         if type (node.func) == ast.Name:
             if node.func.id == 'type':

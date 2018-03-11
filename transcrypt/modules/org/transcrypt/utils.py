@@ -177,8 +177,8 @@ def enhanceException (exception, **kwargs):
     raise result
     
 def stripJavascript (code, symbols, allowStripComments):
-    stripComments = False
-
+#    stripComments = False !!!
+    stripComments = True
     def stripSingleLineComments (line):
         pos = line.find ('//')
         return (line if pos < 0 else line [ : pos]) .rstrip ()

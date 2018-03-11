@@ -28,7 +28,6 @@ modulesDir = '{}/modules'.format (transpilerDir)                                
 # Get environment from runtime and correct executor to be interpreter
 with tokenize.open (modulesDir + '/org/transcrypt/__runtime__.py') as runtimeFile:
     runtimeLines = runtimeFile.read () .split ('\n')
-    print (9999, runtimeLines)
 environmentLines = []
 passing = False
 for runtimeLine in runtimeLines:
@@ -40,10 +39,6 @@ for runtimeLine in runtimeLines:
         if passing:
             environmentLines.append (runtimeLine)
 exec ('\n'.join (environmentLines))
-
-print (7777777)
-'\n'.join (environmentLines)
-print (8888888)
 
 __envir__.executor_name = __envir__.interpreter_name
 
