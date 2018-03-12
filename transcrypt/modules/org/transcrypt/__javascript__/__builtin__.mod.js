@@ -2515,7 +2515,7 @@ __pragma__ ('ifndef', '__xtiny__')
     
 __pragma__ ('endif')
 
-__pragma__ ('ifndef', '__xtiny__')
+__pragma__ ('ifdef', '__fopov__')
 
     // support for fast operator overload on numeric types
 
