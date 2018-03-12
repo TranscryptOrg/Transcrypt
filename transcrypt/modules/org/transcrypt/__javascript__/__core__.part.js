@@ -215,7 +215,6 @@ __pragma__ ('endif');
     }
 };
 py_metatype.__metaclass__ = py_metatype;
-__all__.py_metatype = py_metatype;
 
 // Mother of all classes
 export var object = {

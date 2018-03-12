@@ -288,5 +288,8 @@ class __Terminal__:
     __pragma__ ('nokwargs')
     
 __terminal__ = __Terminal__ ()
+
+print = __terminal__.print
+
 # ====== END of builtin section
 

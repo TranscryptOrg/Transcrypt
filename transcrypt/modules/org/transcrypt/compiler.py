@@ -38,6 +38,14 @@ Each module has one .js file and maximally one .py file.
 They are in the same directory.
 A JS only module doesn't have a .py file.
 
+Each module has an unambiguous dotted path, always from one of the module roots, never relative.
+For now importing from outside an application is not supported.
+For now, dotted paths are translated to segmented filenames.
+Everything is put into __javascript__.
+If that works an attempt to oversee something more flexible can be made.
+
+So once the code of an imported module is generated, it is written to the right "dotted path" segment.
+
 The only thing that has to be done is compiling all modules and put the parts of the deployable in the right places.
 The runtime module is just another Python module with a a lot of JS code inside __pragma__ ('js', ...) fragments.
 Even the core is inside a __pragma__ ('js', ...) fragment.
@@ -62,8 +70,8 @@ class ModuleMetadata:
             else:
                 self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
 
-            self.targetDir = '{}/{}'.format (self.sourceDir, self.program.envir.target_subdir)
-            self.targetPath = '{}/{}.mod.js'.format (self.targetDir, self.filePrename)
+            self.targetDir = '{}/{}'.format (self.program.sourceDir, self.program.envir.target_subdir)
+            self.targetPath = '{}/{}.mod.js'.format (self.program.targetDir, self.name)
             
             self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
             searchedModulePaths += [self.sourcePath, self.targetPath]
@@ -72,7 +80,7 @@ class ModuleMetadata:
                 self.sourcePath = self.targetPath   # For a Javascript-only module, source and target are the same and a source map can be faked
 
             self.extraSubdir = 'extra'
-            self.treePath = '{}/{}/{}.mod.tree'.format (self.targetDir, self.extraSubdir, self.filePrename)
+            self.treePath = '{}/{}/{}.mod.tree'.format (self.program.targetDir, self.extraSubdir, self.filePrename)
             
             if (os.path.isfile (self.sourcePath)):
                 break
@@ -409,6 +417,10 @@ class Module:
             self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
         )
         self.targetCode = header + '\n'.join (targetLines)
+        
+        print (3333333, self.metadata.name)
+        self.metadata.exports = utils.extractExports (self.targetCode)
+        
         with utils.create (self.metadata.targetPath) as aFile:
             aFile.write (self.targetCode)
 
@@ -2616,7 +2628,13 @@ class Generator (ast.NodeVisitor):
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
         
-        self.emit ('export var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
+        try:
+            print (11111111, self.module.metadata.name)
+            self.emit ('import {{{}}} from \'./{}.mod.js\';\n', ', '.join (self.module.program.moduleDict [self.module.program.runtimeModuleName] .metadata.exports), self.module.program.runtimeModuleName)
+            print (2222222)
+        except:
+            print (traceback.format_exc ())
+        self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
 
         for stmt in node.body:
             if self.isDocString (stmt):

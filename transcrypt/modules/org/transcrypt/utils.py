@@ -220,4 +220,16 @@ def stripJavascript (code, symbols, allowStripComments):
         passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if passable (line)] if commentlessLine]
     else:
         passableLines = [line for line in code.split ('\n') if passable (line)]
+
+        
     return '\n'.join (passableLines) + '\n'
+    
+def extractExports (code):
+    exports = []
+    for line in code.split ('\n'):
+        lineWords = line.split (' ')
+        if lineWords [0] == 'export':
+            exports.append (lineWords [2])
+    print (exports)
+    return exports
+    

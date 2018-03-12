@@ -1,7 +1,7 @@
 __pragma__ ('stripcomments')
 
 // Needed for __base__ and __standard__ if global 'opov' switch is on
-export function __call__ = function (/* <callee>, <this>, <params>* */) {
+export function __call__ (/* <callee>, <this>, <params>* */) {
     var args = [] .slice.apply (arguments);
     if (typeof args [0] == 'object' && '__call__' in args [0]) {        // Overloaded
         return args [0] .__call__ .apply (args [1], args.slice (2));
@@ -59,7 +59,7 @@ __pragma__ ('endif')
 // Python property installer function, no member since that would bloat classes
 export function property (getter, setter) {  // Returns a property descriptor rather than a property
     if (!setter) {  // ??? Make setter optional instead of dummy?
-        setter () {};
+        setter = function () {};
     }
     return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
 }
@@ -758,7 +758,7 @@ function py_iter (iterable) {                   // Alias for Python's iter funct
     else {
         throw IterableError (new Error ()); // No iterator at all
     }
-    result [Symbol.iterator] () {return result;};
+    result [Symbol.iterator] = function () {return result;};
     return result;
 }
 
@@ -788,7 +788,7 @@ function __PyIterator__ (iterable) {
     this.index = 0;
 }
 
-__PyIterator__.prototype.__next__ () {
+__PyIterator__.prototype.__next__ = function() {
     if (this.index < this.iterable.length) {
         return this.iterable [this.index++];
     }
@@ -802,7 +802,7 @@ function __JsIterator__ (iterable) {
     this.index = 0;
 }
 
-__JsIterator__.prototype.next () {
+__JsIterator__.prototype.next = function () {
     if (this.index < this.iterable.py_keys.length) {
         return {value: this.index++, done: false};
     }
@@ -972,9 +972,9 @@ Array.prototype.__class__ = list;   // All arrays are lists (not only if constru
 list.__name__ = 'list';
 list.__bases__ = [object];
 
-Array.prototype.__iter__ () {return new __PyIterator__ (this);};
+Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
-Array.prototype.__getslice__ (start, stop, step) {
+Array.prototype.__getslice__ = function (start, stop, step) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -997,7 +997,7 @@ Array.prototype.__getslice__ (start, stop, step) {
     return result;
 };
 
-Array.prototype.__setslice__ (start, stop, step, source) {
+Array.prototype.__setslice__ = function (start, stop, step, source) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -1020,7 +1020,7 @@ Array.prototype.__setslice__ (start, stop, step, source) {
     }
 };
 
-Array.prototype.__repr__ () {
+Array.prototype.__repr__ = function () {
     if (this.__class__ == set && !this.length) {
         return 'set()';
     }
@@ -1044,23 +1044,23 @@ Array.prototype.__repr__ () {
 
 Array.prototype.__str__ = Array.prototype.__repr__;
 
-Array.prototype.append (element) {
+Array.prototype.append = function (element) {
     this.push (element);
 };
 
-Array.prototype.py_clear () {
+Array.prototype.py_clear = function () {
     this.length = 0;
 };
 
-Array.prototype.extend (aList) {
+Array.prototype.extend = function (aList) {
     this.push.apply (this, aList);
 };
 
-Array.prototype.insert (index, element) {
+Array.prototype.insert = function (index, element) {
     this.splice (index, 0, element);
 };
 
-Array.prototype.remove (element) {
+Array.prototype.remove = function (element) {
     var index = this.indexOf (element);
     if (index == -1) {
         throw ValueError ("list.remove(x): x not in list", new Error ());
@@ -1068,11 +1068,11 @@ Array.prototype.remove (element) {
     this.splice (index, 1);
 };
 
-Array.prototype.index (element) {
+Array.prototype.index = function (element) {
     return this.indexOf (element);
 };
 
-Array.prototype.py_pop (index) {
+Array.prototype.py_pop = function (index) {
     if (index == undefined) {
         return this.pop ();  // Remove last element
     }
@@ -1081,18 +1081,18 @@ Array.prototype.py_pop (index) {
     }
 };
 
-Array.prototype.py_sort () {
+Array.prototype.py_sort = function () {
     __sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));    // Can't work directly with arguments
     // Python params: (iterable, key = None, reverse = False)
     // py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
     // __sort__ is def'ed with the Transcrypt kwargs mechanism
 };
 
-Array.prototype.__add__ (aList) {
+Array.prototype.__add__ = function (aList) {
     return list (this.concat (aList));
 };
 
-Array.prototype.__mul__ (scalar) {
+Array.prototype.__mul__ = function (scalar) {
     var result = this;
     for (var i = 1; i < scalar; i++) {
         result = result.concat (this);
@@ -1128,7 +1128,7 @@ function set (iterable) {
 set.__name__ = 'set';
 set.__bases__ = [object];
 
-Array.prototype.__bindexOf__ (element) { // Used to turn O (n^2) into O (n log n)
+Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
 // Since sorting is lex, compare has to be lex. This also allows for mixed lists
 
     element += '';
@@ -1154,20 +1154,20 @@ Array.prototype.__bindexOf__ (element) { // Used to turn O (n^2) into O (n log n
     return -1;
 };
 
-Array.prototype.add (element) {
+Array.prototype.add = function (element) {
     if (this.indexOf (element) == -1) { // Avoid duplicates in set
         this.push (element);
     }
 };
 
-Array.prototype.discard (element) {
+Array.prototype.discard = function (element) {
     var index = this.indexOf (element);
     if (index != -1) {
         this.splice (index, 1);
     }
 };
 
-Array.prototype.isdisjoint (other) {
+Array.prototype.isdisjoint = function (other) {
     this.sort ();
     for (var i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) != -1) {
@@ -1177,7 +1177,7 @@ Array.prototype.isdisjoint (other) {
     return true;
 };
 
-Array.prototype.issuperset (other) {
+Array.prototype.issuperset = function (other) {
     this.sort ();
     for (var i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) == -1) {
@@ -1187,11 +1187,11 @@ Array.prototype.issuperset (other) {
     return true;
 };
 
-Array.prototype.issubset (other) {
+Array.prototype.issubset = function (other) {
     return set (other.slice ()) .issuperset (this); // Sort copy of 'other', not 'other' itself, since it may be an ordered sequence
 };
 
-Array.prototype.union (other) {
+Array.prototype.union = function (other) {
     var result = set (this.slice () .sort ());
     for (var i = 0; i < other.length; i++) {
         if (result.__bindexOf__ (other [i]) == -1) {
@@ -1201,7 +1201,7 @@ Array.prototype.union (other) {
     return result;
 };
 
-Array.prototype.intersection (other) {
+Array.prototype.intersection = function (other) {
     this.sort ();
     var result = set ();
     for (var i = 0; i < other.length; i++) {
@@ -1212,7 +1212,7 @@ Array.prototype.intersection (other) {
     return result;
 };
 
-Array.prototype.difference (other) {
+Array.prototype.difference = function (other) {
     var sother = set (other.slice () .sort ());
     var result = set ();
     for (var i = 0; i < this.length; i++) {
@@ -1223,11 +1223,11 @@ Array.prototype.difference (other) {
     return result;
 };
 
-Array.prototype.symmetric_difference (other) {
+Array.prototype.symmetric_difference = function (other) {
     return this.union (other) .difference (this.intersection (other));
 };
 
-Array.prototype.py_update () {   // O (n)
+Array.prototype.py_update = function () {   // O (n)
     var updated = [] .concat.apply (this.slice (), arguments) .sort ();
     this.py_clear ();
     for (var i = 0; i < updated.length; i++) {
@@ -1237,7 +1237,7 @@ Array.prototype.py_update () {   // O (n)
     }
 };
 
-Array.prototype.__eq__ (other) { // Also used for list
+Array.prototype.__eq__ = function (other) { // Also used for list
     if (this.length != other.length) {
         return false;
     }
@@ -1253,23 +1253,23 @@ Array.prototype.__eq__ (other) { // Also used for list
     return true;
 };
 
-Array.prototype.__ne__ (other) { // Also used for list
+Array.prototype.__ne__ = function (other) { // Also used for list
     return !this.__eq__ (other);
 };
 
-Array.prototype.__le__ (other) {
+Array.prototype.__le__ = function (other) {
     return this.issubset (other);
 };
 
-Array.prototype.__ge__ (other) {
+Array.prototype.__ge__ = function (other) {
     return this.issuperset (other);
 };
 
-Array.prototype.__lt__ (other) {
+Array.prototype.__lt__ = function (other) {
     return this.issubset (other) && !this.issuperset (other);
 };
 
-Array.prototype.__gt__ (other) {
+Array.prototype.__gt__ = function (other) {
     return this.issuperset (other) && !this.issubset (other);
 };
 
@@ -1303,14 +1303,14 @@ function bytearray (bytable, encoding) {
 var bytes = bytearray;
 
 
-Uint8Array.prototype.__add__ (aBytes) {
+Uint8Array.prototype.__add__ = function (aBytes) {
     var result = new Uint8Array (this.length + aBytes.length);
     result.set (this);
     result.set (aBytes, this.length);
     return result;
 };
 
-Uint8Array.prototype.__mul__ (scalar) {
+Uint8Array.prototype.__mul__ = function (scalar) {
     var result = new Uint8Array (scalar * this.length);
     for (var i = 0; i < scalar; i++) {
         result.set (this, i * this.length);
@@ -1344,21 +1344,21 @@ String.prototype.__class__ = str;   // All strings are str
 str.__name__ = 'str';
 str.__bases__ = [object];
 
-String.prototype.__iter__ () {new __PyIterator__ (this);};
+String.prototype.__iter__ = function () {new __PyIterator__ (this);};
 
-String.prototype.__repr__ () {
+String.prototype.__repr__ = function () {
     return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .py_replace ('\t', '\\t') .py_replace ('\n', '\\n');
 };
 
-String.prototype.__str__ () {
+String.prototype.__str__ = function () {
     return this;
 };
 
-String.prototype.capitalize () {
+String.prototype.capitalize = function () {
     return this.charAt (0).toUpperCase () + this.slice (1);
 };
 
-String.prototype.endswith (suffix) {
+String.prototype.endswith = function (suffix) {
     if (suffix instanceof Array) {
         for (var i=0;i<suffix.length;i++) {
             if (this.slice (-suffix[i].length) == suffix[i])
@@ -1369,11 +1369,11 @@ String.prototype.endswith (suffix) {
     return false;
 };
 
-String.prototype.find  (sub, start) {
+String.prototype.find = function (sub, start) {
     return this.indexOf (sub, start);
 };
 
-String.prototype.__getslice__ (start, stop, step) {
+String.prototype.__getslice__ = function (start, stop, step) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -1398,7 +1398,7 @@ String.prototype.__getslice__ (start, stop, step) {
 };
 
 __pragma__ ('ifdef', '__sform__')
-String.prototype.__format__ (fmt_spec) {
+String.prototype.__format__ = function (fmt_spec) {
     if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
         return this.valueOf ();
     }
@@ -1549,62 +1549,62 @@ __pragma__ ('endif')
     enumerable: true
 });
 
-String.prototype.isalnum () {
+String.prototype.isalnum = function () {
     return /^[0-9a-zA-Z]{1,}$/.test(this)
 }
 
-String.prototype.isalpha () {
+String.prototype.isalpha = function () {
     return /^[a-zA-Z]{1,}$/.test(this)
 }
 
-String.prototype.isdecimal () {
+String.prototype.isdecimal = function () {
     return /^[0-9]{1,}$/.test(this)
 }
 
-String.prototype.isdigit () {
+String.prototype.isdigit = function () {
     return this.isdecimal()
 }
 
-String.prototype.islower () {
+String.prototype.islower = function () {
     return /^[a-z]{1,}$/.test(this)
 }
 
-String.prototype.isupper () {
+String.prototype.isupper = function () {
     return /^[A-Z]{1,}$/.test(this)
 }
 
-String.prototype.isspace () {
+String.prototype.isspace = function () {
     return /^[\s]{1,}$/.test(this)
 }
 
-String.prototype.isnumeric () {
+String.prototype.isnumeric = function () {
     return !isNaN (parseFloat (this)) && isFinite (this);
 };
 
-String.prototype.join (strings) {
+String.prototype.join = function (strings) {
 __pragma__ ('ifdef', '__esv6__')
     strings = Array.from (strings); // Much faster than iterating through strings char by char
 __pragma__ ('endif')
     return strings.join (this);
 };
 
-String.prototype.lower () {
+String.prototype.lower = function () {
     return this.toLowerCase ();
 };
 
-String.prototype.py_replace (old, aNew, maxreplace) {
+String.prototype.py_replace = function (old, aNew, maxreplace) {
     return this.split (old, maxreplace) .join (aNew);
 };
 
-String.prototype.lstrip () {
+String.prototype.lstrip = function () {
     return this.replace (/^\s*/g, '');
 };
 
-String.prototype.rfind (sub, start) {
+String.prototype.rfind = function (sub, start) {
     return this.lastIndexOf (sub, start);
 };
 
-String.prototype.rsplit (sep, maxsplit) {    // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+String.prototype.rsplit = function (sep, maxsplit) {    // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
     if (sep == undefined || sep == null) {
         sep = /\s+/;
         var stripped = this.strip ();
@@ -1628,11 +1628,11 @@ String.prototype.rsplit (sep, maxsplit) {    // Combination of general whitespac
     }
 };
 
-String.prototype.rstrip () {
+String.prototype.rstrip = function () {
     return this.replace (/\s*$/g, '');
 };
 
-String.prototype.py_split (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+String.prototype.py_split = function (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
     if (sep == undefined || sep == null) {
         sep = /\s+/;
         var stripped = this.strip ();
@@ -1655,7 +1655,7 @@ String.prototype.py_split (sep, maxsplit) {  // Combination of general whitespac
     }
 };
 
-String.prototype.startswith (prefix) {
+String.prototype.startswith = function (prefix) {
     if (prefix instanceof Array) {
         for (var i=0;i<prefix.length;i++) {
             if (this.indexOf (prefix [i]) == 0)
@@ -1666,15 +1666,15 @@ String.prototype.startswith (prefix) {
     return false;
 };
 
-String.prototype.strip () {
+String.prototype.strip = function () {
     return this.trim ();
 };
 
-String.prototype.upper () {
+String.prototype.upper = function () {
     return this.toUpperCase ();
 };
 
-String.prototype.__mul__ (scalar) {
+String.prototype.__mul__ = function (scalar) {
     var result = '';
     for (var i = 0; i < scalar; i++) {
         result = result + this;
