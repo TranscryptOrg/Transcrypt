@@ -1753,12 +1753,17 @@ class Generator (ast.NodeVisitor):
                     self.allowKeywordArgs = False
 
                 elif node.args [0] .s == 'opov':        # Overloading of a small sane subset of operators allowed
-                    if len(node.args) == 2 and node.args[1]:
-                        self.allowFastOverloading = True
+                    self.allowFastOverloading = node.args [-1] .s == 'fast'
                     self.allowOperatorOverloading = True
                 elif node.args [0] .s == 'noopov':      # Operloading of a small sane subset of operators disallowed
                     self.allowOperatorOverloading = False
                     self.allowFastOverloading = False
+                elif node.args [0] .s == 'fopov':
+                    self.allowFastOverloading = True
+                    self.allowOperatorOverloading = True
+                elif node.args [0] .s == 'nofopov':
+                    self.allowFastOverloading = False
+                    self.allowOperatorOverloading = False
                 elif node.args [0] .s == 'redirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'{}\'', node.args [2])
