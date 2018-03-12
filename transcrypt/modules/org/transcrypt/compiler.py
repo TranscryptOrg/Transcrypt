@@ -129,18 +129,8 @@ class Overloads:
         return type(op) in cls.AST_OVERLOADS
 
     @classmethod
-    def unary(cls, op):
+    def get(cls, op):
         nodename = cls.AST_OVERLOADS.get(type(op))
-        if not nodename:
-            print ("Unsupported node type", op)
-        return "__i{}__".format(nodename)
-
-
-    @classmethod
-    def binary(cls, op):
-        nodename = cls.AST_OVERLOADS.get(type(op))
-        if not nodename:
-            print ("Unsupported node type", op)
         return "__{}__".format(nodename)
 
 
@@ -1379,9 +1369,12 @@ class Generator (ast.NodeVisitor):
         # fast overloading merely substitutes the python overload methods
         # and bypasses __call__
         if self.allowFastOverloading and Overloads.supported(node.op):
+            self.emit("var ")
+            self.visit(node.target)
+            self.emit(" = ")
             self.visit(node.target)
             self.emit(".")
-            self.emit(Overloads.unary(node.op))
+            self.emit(Overloads.get(node.op))
             self.emit("(")
             self.visit(node.value)
             self.emit(")")
@@ -1499,7 +1492,7 @@ class Generator (ast.NodeVisitor):
         elif self.allowFastOverloading and Overloads.supported(node.op):
             self.visit(node.left)
             self.emit(".")
-            self.emit(Overloads.binary(node.op))
+            self.emit(Overloads.get(node.op))
             self.emit("(")
             self.visit(node.right)
             self.emit(")")
