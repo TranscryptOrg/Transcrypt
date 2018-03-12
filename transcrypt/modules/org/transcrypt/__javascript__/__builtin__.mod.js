@@ -2458,7 +2458,7 @@ __pragma__ ('ifndef', '__xtiny__')
         }
     };
     __all__.__iand__ = __iand__;
-    
+
     // Indices and slices
 
     var __getitem__ = function (container, key) {                           // Slice c.q. index, direct generated call to runtime switch
@@ -2513,4 +2513,21 @@ __pragma__ ('ifndef', '__xtiny__')
     };
     __all__.__setslice__ = __setslice__;
     
+__pragma__ ('endif')
+
+__pragma__ ('ifdef', '__fopov__')
+
+    // support for fast operator overload on numeric types
+
+    Number.prototype.__add__ = function(b) { return this.valueOf() + b; };
+    Number.prototype.__sub__ = function(b) { return this.valueOf() - b; };
+    Number.prototype.__mult__ = function(b) { return this.valueOf() * b; };
+    Number.prototype.__div__ = function(b) { return this.valueOf() / b;  };
+    Number.prototype.__lshift__= function(b){ return this.valueOf() << b; };
+    Number.prototype.__rshift__= function(b ){ return this.valueOf() >> b; };
+    Number.prototype.__or__ = function(b) { return this.valueOf() | b; };
+    Number.prototype.__xor__ = function(b) { return this.valueOf() ^ b; };
+    Number.prototype.__and__ = function(b) { return this.valueOf() & b; };
+    Number.prototype.__pow__ = function(b) { return this.valueOf() ** b; };
+
 __pragma__ ('endif')
