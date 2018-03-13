@@ -137,7 +137,7 @@ class Error (Exception):
     def __init__ (self, lineNr = 0, message = ''):
         self.lineNr = lineNr - nrOfExtraLines
         self.message = message  
-
+        
     # First one encountered counts, for all fields, because it's closest to the error
     # One error at a time, just like Python, clear and simple
     
@@ -152,7 +152,7 @@ class Error (Exception):
         result = 'Error while compiling (offending file last):'
         for importRecord in program.importStack [ : -1]:
             result += '\n\tFile \'{}\', line {}, at import of:'.format (importRecord [0] .sourcePath, importRecord [1])
-        result += '\n\tFile \'{}\', line {}, namely:'.format (program.importStack [-1][0] .sourcePath, self.lineNr)
+        # result += '\n\tFile \'{}\', line {}, namely:'.format (program.importStack [-1][0] .sourcePath, self.lineNr) !!!
         result += '\n\t{}'.format (self.message)
         return result
         
@@ -175,6 +175,19 @@ def enhanceException (exception, **kwargs):
     '''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
 
     raise result
+    
+def dirty (sourcePath, targetPath, build):
+    # Find youngest of .py and .js files and use that as "original"
+    youngestTime = 0
+    youngestPath = None
+    for path in targetPath, sourcePath:                   # Order matters
+        if os.path.isfile (path):
+            pathTime = os.path.getmtime (path)
+            if build or pathTime > youngestTime:  # Builds correctly also if some source files are missing
+                youngestTime = pathTime
+                youngestPath = path
+
+    return youngestPath == sourcePath
     
 def stripJavascript (code, symbols, allowStripComments):
 #    stripComments = False !!!
@@ -230,6 +243,6 @@ def extractExports (code):
         lineWords = line.split (' ')
         if lineWords [0] == 'export':
             exports.append (lineWords [2])
-    print (exports)
+    # print (exports)
     return exports
     

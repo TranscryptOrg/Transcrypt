@@ -26,6 +26,7 @@ import traceback
 import io
 import subprocess
 import shlex
+import shutil # !!!
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -53,37 +54,93 @@ There's also a __pragma__ ('include', ...).
 A file with included files is deployed (for sourcemaps) as one file.
 '''
 
-class ModuleMetadata:
-    def __init__ (self, program, name):
+class Program:
+    def __init__ (
+        self,
+        moduleSearchDirs,   # All possible roots of the module path, the latter uniquely denoted by the dotted module name
+        symbols,            # Set of symbols either passed on the command line, deduced from command line switches etc.
+        envir               # Data about run / compilation environment
+    ):
+        utils.setProgram (self)
+    
+        self.moduleSearchDirs = moduleSearchDirs
+        self.symbols = symbols
+        self.envir = envir
+
+        if utils.commandArgs.esv == None:
+            self.javaScriptVersion = utils.defaultJavaScriptVersion
+        else:
+            self.javaScriptVersion = int (utils.commandArgs.esv)
+
+        self.moduleDict = {}    # Administration of all modules that play a role in this program
+        self.importStack = []   # Pending imports, enables showing load sequence in case a module cannot be loaded
+
+        # Set paths 
+        self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
+        self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
+        self.sourceFileName = self.sourcePath.split ('/') [-1]
+        self.targetDir = f'{self.sourceDir}/__javascript__'     
+
+        try:
+            # Provide runtime module since it's always needed but never imported explicitly
+            self.runtimeModuleName = 'org.transcrypt.__runtime__'
+            self.provide (runtimeModuleName)
+            
+            # Provide main module and, with that, all other modules recursively
+            self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
+            self.provide (mainModuleName, '__main__')
+        except Exception as exception:
+            utils.enhanceException (
+                exception,
+                message = f'\n\t{exception}'
+            )
+        
+    def provide (self, moduleName, __name__):
+        # moduleName may contain dots if it's imported, but it'll have the same name in every import
+    
+        if moduleName == '__main__':
+            moduleName = self.mainModuleName
+        
+        if moduleName in self.moduleDict:  # Find out if module is already provided
+            return self.moduleDict [moduleName]
+        else:                                       # If not, provide by loading or compiling
+            return Module (self, moduleName)
+
+class Module:
+    def __init__ (self, program, name, __name__):
         self.program = program
         self.name = name
+        self.__name__ = __name__ if __name__ else self.name
+                
+    def findPaths (self):
         searchedModulePaths = []
                 
         for searchDir in self.program.moduleSearchDirs:
+            # Find source path (path of .py file)
             relPrepath = self.name.replace ('.', '/')
-            prepath = '{}/{}'.format (searchDir, relPrepath)
+            prepath = f'{searchDir}/{relPrepath}'
             self.isDir = os.path.isdir (prepath)
-
             if self.isDir:
                 self.sourceDir = prepath
                 self.filePrename = '__init__'
             else:
                 self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
-
-            self.targetDir = '{}/{}'.format (self.program.sourceDir, self.program.envir.target_subdir)
-            self.targetPath = '{}/{}.mod.js'.format (self.program.targetDir, self.name)
+            self.sourcePath = self.program.sourcePath if self.__name__ == '__main__' else '{self.sourceDir}/{self.filePrename}.py'
+                
+            # Find target path (path of .js file)
+            self.targetDir = f'{self.program.sourceDir}/__javascript__'
+            self.targetPath = f'{self.targetDir}/{self.name}'
             
-            self.sourcePath = '{}/{}{}' .format (self.sourceDir, self.filePrename, '' if self.name == self.program.mainModuleName and not self.program.sourceFileName.endswith ('.py') else '.py')
-            searchedModulePaths += [self.sourcePath, self.targetPath]
-
-            if not os.path.isfile (self.sourcePath):
-                self.sourcePath = self.targetPath   # For a Javascript-only module, source and target are the same and a source map can be faked
-
-            self.extraSubdir = 'extra'
-            self.treePath = '{}/{}/{}.mod.tree'.format (self.program.targetDir, self.extraSubdir, self.filePrename)
-            
-            if (os.path.isfile (self.sourcePath)):
+            # If module exists
+            if os.path.isfile (self.sourcePath) or os.path.isfile (self.targetPath)
+                # Check if it's a JavaScript-only module
+                self.isJavascriptOnly == os.path.isfile (self.targetPath) and not os.path.isfile (self.sourcePath)
+                # Set more paths (tree, sourcemap, ...)
+                # (To do)
                 break
+            
+            # Remember all fruitless paths to give a decent error report if module isn't found
+            searchedModulePaths.append (self.targetPath if self.javascriptOnly else self.sourcePath)
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             raise utils.Error (
@@ -92,32 +149,24 @@ class ModuleMetadata:
                     '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
                 )
             )
+        
+        # Register that module is found
+        self.program.moduleDict [self.name] = self
 
-    def sourceExists (self):
-        return os.path.isfile (self.sourcePath)
-
-    def targetExists (self):
-        return os.path.isfile (self.targetPath)
-
-    def exists (self):
-        return self.sourceExists () or self.targetExists ()
-
-    def dirty (self):
-        # Javascript-only modules are never dirty (so don't try to parse and compile Javascript)
-        if self.targetPath == self.sourcePath:
-            return False
-
-        # Find youngest of .py and .js files and use that as "original"
-        youngestTime = 0
-        youngestPath = None
-        for path in self.targetPath, self.sourcePath:                   # Order matters
-            if os.path.isfile (path):
-                pathTime = os.path.getmtime (path)
-                if utils.commandArgs.build or pathTime > youngestTime:  # Builds correctly also if some source files are missing
-                    youngestTime = pathTime
-                    youngestPath = path
-
-        return youngestPath == self.sourcePath
+        # Remember names of module being under compilation and line nrs of current import
+        # Used for error reports
+        # Note that JavaScript-only modules will leave lineNr None if they import something
+        # This is since there's no explicit import location in such modules
+        self.program.importStack.append ([self.metadata, None])
+         
+        if not self.isJavascriptOnly and os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
+            self.generateJavascriptAndMap ()
+            self.extractPropertiesFromJavascript ()
+        else:
+            self.loadJavascript ()
+            self.extractPropertiesFromJavascript ()
+                
+        self.program.importStack.pop ()
         
     def getStandardName (self):
         try:
@@ -127,168 +176,6 @@ class ModuleMetadata:
                 return self.name
         except:
             print (traceback.format_exc ())
-
-class Program:
-    def __init__ (self, moduleSearchDirs, modulesDir, symbols, envir):
-        utils.setProgram (self)
-    
-        self.moduleSearchDirs = moduleSearchDirs
-        self.modulesDir = modulesDir
-        self.symbols = symbols
-        self.envir = envir
-        
-        self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
-
-        if utils.commandArgs.esv == None:
-            self.javaScriptVersion = utils.defaultJavaScriptVersion
-        else:
-            self.javaScriptVersion = int (utils.commandArgs.esv)
-
-        self.rawModuleCaption = '\n\n// ============ Source: {} ============\n\n' if utils.commandArgs.anno else ''
-        self.moduleCaptionSkip = self.rawModuleCaption.count ('\n')
-
-        self.moduleDict = {}
-        self.importStack = []   # Enables showing load sequence in case a module cannot be loaded
-
-        # Set paths that don't require the module dict
-        self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
-        self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
-        self.sourceFileName = self.sourcePath.split ('/') [-1]
-        self.targetDir = '{}/{}'.format (self.sourceDir, envir.target_subdir)      
-        
-        # Define names early, since they are cross-used in module compilation
-        prefix = 'org.{}'.format (self.envir.transpiler_name)
-        self.runtimeModuleName = '{}.{}'.format (prefix, '__runtime__')
-        self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
-        
-        # Compile runtime module
-        Module (self, ModuleMetadata (self, self.runtimeModuleName))
-        
-        # Optionally perfom static typing validation
-        if utils.commandArgs.dstat:
-            try:
-                type_check.run (self.sourcePath)
-            except Exception as exception:
-                utils.log (True, 'Validating: {} and dependencies\n\tInternal error in static typing validator\n', self.sourcePath)
-
-        # Compile imported modules
-        try:
-            moduleMetadata = ModuleMetadata (self, self.mainModuleName)
-            Module (self, moduleMetadata)   # Compile of main module, will trigger recursive compilation
-        except Exception as exception:
-            utils.enhanceException (
-                exception,
-                message = '\n\t{}'.format (str (exception))
-            )
-
-        # Set paths that require the module dict
-        self.targetPath = '{}/{}.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-        self.miniTargetPath = '{}/{}.min.js'.format (self.moduleDict [self.mainModuleName] .metadata.targetDir, self.mainModuleName)
-
-        # Set sourcemaps
-        if utils.commandArgs.map:
-            self.prettyMap = sourcemaps.SourceMap (
-                self.moduleDict [self.mainModuleName] .metadata.targetDir,
-                '{}.js'.format (self.mainModuleName),
-                self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
-
-            )
-
-            if not utils.commandArgs.nomin:
-                self.shrinkMap = sourcemaps.SourceMap (
-                    self.moduleDict [self.mainModuleName] .metadata.targetDir,
-                    '{}.shrink.js'.format (self.mainModuleName),
-                    self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
-                )
-
-                self.miniMap = sourcemaps.SourceMap (
-                    self.moduleDict [self.mainModuleName] .metadata.targetDir,
-                    '{}.min.js'.format (self.mainModuleName),
-                    self.moduleDict [self.mainModuleName] .metadata.extraSubdir,
-                )
-
-        # Produce runtime modules           
-        runtimeModules = [
-            self.moduleDict [self.runtimeModuleName],
-        ]
-        
-        # Produce initializer
-        if utils.commandArgs.parent == '.none':
-            initializer = '{0} ();\n' .format (self.mainModuleName)
-        elif utils.commandArgs.parent == '.user':
-            initializer = ''
-        else:
-            if utils.commandArgs.parent == None:
-                parent = 'window'
-            else:
-                parent = utils.commandArgs.parent
-
-            initializer =  '{0} [\'{1}\'] = {1} ();\n' .format (parent, self.mainModuleName)
-        
-        # Produce imported modules, needed for monolith or any type of unit
-        importedModules = [
-            self.moduleDict [moduleName]
-            for moduleName in sorted (self.moduleDict)
-            if not moduleName in (self.runtimeModuleName, self.mainModuleName)
-        ]
-        
-        # Produce main module, needed for monolith or any type of unit
-        mainModule = self.moduleDict [self.mainModuleName]
-        
-    def provide (self, moduleName):
-        # moduleName may contain dots if it's imported, but it'll have the same name in every import
-    
-        if moduleName == '__main__':
-            moduleName = self.mainModuleName
-
-        moduleMetadata = ModuleMetadata (self, moduleName)
-
-        if moduleMetadata.name in self.moduleDict:  # Find out if module is already provided
-            return self.moduleDict [moduleMetadata.name]
-        else:                                       # If not, provide by loading or compiling
-            return Module (self, moduleMetadata)
-
-class Module:
-    def __init__ (self, program, moduleMetadata):
-        self.program = program
-        self.metadata = moduleMetadata
-        self.program.moduleDict [self.metadata.name] = self
-
-        # Names of module being under compilation and line nrs of current import
-        # Used for error reports
-        # Note that JavaScript-only modules will leave lineNr None if they import something
-        # This is since there's no explicit import location in such modules
-        self.program.importStack.append ([self.metadata, None])
-                
-        # Set sourcemap
-        if utils.commandArgs.map:
-            self.modMap = sourcemaps.SourceMap (
-                self.metadata.targetDir,
-                '{}.mod.js'.format (self.metadata.name),
-                self.metadata.extraSubdir
-            )
-
-        if self.metadata.dirty ():
-            self.parse ()
-            if utils.commandArgs.dcheck:
-                try:
-                    static_check.run (self.metadata.sourcePath, self.parseTree)
-                except Exception as exception:
-                    utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.metadata.sourcePath)
-
-            if utils.commandArgs.dtree:
-                self.dumpTree ()
-
-            self.generateJavascriptAndMap ()
-            self.extractPropertiesFromJavascript ()
-        else:
-            self.loadJavascript ()
-            self.extractPropertiesFromJavascript ()
-
-            if utils.commandArgs.map:
-                self.modMap.loadOrFake (self.metadata.sourcePath, self.nrOfTargetLines)
-                
-        self.program.importStack.pop ()
 
     def getModuleCaption (self):
         return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''
@@ -369,8 +256,13 @@ class Module:
             treeFile.write (self.textTree)
 
     def loadJavascript (self):
-        with tokenize.open (self.metadata.targetPath) as targetFile:       
+        self.targetCode = ""
+        print (1000, self.metadata.name)
+        print (2000, self.metadata.sourcePath)
+        with tokenize.open (self.metadata.sourcePath) as targetFile:       
             self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
+        shutil.copyfile (self.metadata.sourcePath, self.metadata.targetPath)
+        
         
     def generateJavascriptAndMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
@@ -418,7 +310,6 @@ class Module:
         )
         self.targetCode = header + '\n'.join (targetLines)
         
-        print (3333333, self.metadata.name)
         self.metadata.exports = utils.extractExports (self.targetCode)
         
         with utils.create (self.metadata.targetPath) as aFile:
@@ -848,7 +739,9 @@ class Generator (ast.NodeVisitor):
     def useModule (self, name):
         if not self.allowExtern:
             self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
+            print (11111111111111111111, name)
             result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
+            print (22222222222222222222)
             self.use.add (name)                                     # Must not be done if the healthy exception occurs
             return result
 
@@ -1430,9 +1323,7 @@ class Generator (ast.NodeVisitor):
                     if os.path.isfile (filePath):
                         includedCode = tokenize.open (filePath) .read ()
                         if fileName.endswith ('.part.js'):
-                            print (7777)
                             includedCode = utils.stripJavascript (includedCode, self.module.program.symbols, True) # !!!self.allowStripComments)
-                            print (8888)
                         return includedCode
                     else:
                         searchedIncludePaths.append (filePath)
@@ -1552,7 +1443,6 @@ class Generator (ast.NodeVisitor):
                         for line in code.split ('\n'):
                             self.emit ('{}\n', line)
                     except:
-                        print (77777777777777, node.args [0] .s, node.args [1] .s)
                         print (traceback.format_exc ())
                
                 elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
@@ -1662,7 +1552,7 @@ class Generator (ast.NodeVisitor):
                 )
                 return
             except:
-                print (7777, traceback.format_exc ())
+                print (traceback.format_exc ())
             
         elif (
             type (node.func) == ast.Attribute and 
@@ -2501,6 +2391,7 @@ class Generator (ast.NodeVisitor):
                         else:
                             self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))
                     except:                                                     # If it doesn't it denotes an entity inside a module
+                        print (444, node.module)
                         self.useModule (node.module)
 
                         if alias.asname:
@@ -2519,6 +2410,8 @@ class Generator (ast.NodeVisitor):
                     if index < len (node.names) - 1:
                         self.emit (';\n')
         except Exception as exception:
+            print (traceback.format_exc ())
+        
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr,
@@ -2629,13 +2522,14 @@ class Generator (ast.NodeVisitor):
         importHeadsLevel = self.indentLevel
         
         try:
-            print (11111111, self.module.metadata.name)
+            print (777, self.module.metadata.name)
             self.emit ('import {{{}}} from \'./{}.mod.js\';\n', ', '.join (self.module.program.moduleDict [self.module.program.runtimeModuleName] .metadata.exports), self.module.program.runtimeModuleName)
-            print (2222222)
         except:
             print (traceback.format_exc ())
         self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
 
+        
+        
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')

@@ -167,7 +167,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (transpilationDirs, modulesDir, __symbols__, __envir__)
+                compiler.Program (transpilationDirs, __symbols__, __envir__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)
