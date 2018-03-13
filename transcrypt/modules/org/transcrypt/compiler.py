@@ -134,7 +134,6 @@ class Overloads:
         return "__{}__".format(nodename)
 
 
-
 class Program:
 
 
@@ -1369,7 +1368,9 @@ class Generator (ast.NodeVisitor):
         # fast overloading merely substitutes the python overload methods
         # and bypasses __call__
         if self.allowFastOverloading and Overloads.supported(node.op):
-            self.emit("var ")
+
+            if type(node.target) == ast.Name and not node.target.id in self.getScope().nonlocals:
+                self.emit("var ")
             self.visit(node.target)
             self.emit(" = ")
             self.visit(node.target)
