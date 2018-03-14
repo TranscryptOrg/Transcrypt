@@ -68,18 +68,18 @@ class Program:
         self.envir = envir
 
         if utils.commandArgs.esv == None:
-            self.javaScriptVersion = utils.defaultJavaScriptVersion
+            self.javascriptVersion = utils.defaultJavascriptVersion
         else:
-            self.javaScriptVersion = int (utils.commandArgs.esv)
+            self.javascriptVersion = int (utils.commandArgs.esv)
 
         self.moduleDict = {}    # Administration of all modules that play a role in this program
         self.importStack = []   # Pending imports, enables showing load sequence in case a module cannot be loaded
 
         # Set paths 
-        self.sourcePath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
+        self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
         self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
-        self.sourceFileName = self.sourcePath.split ('/') [-1]
-        self.targetDir = f'{self.sourceDir}/__javascript__'     
+        self.mainModuleName = self.sourcePath.split ('/') [-1]
+        self.targetDir = f'{self.sourceDir}/__target__'     
 
         try:
             # Provide runtime module since it's always needed but never imported explicitly
@@ -87,7 +87,6 @@ class Program:
             self.provide (runtimeModuleName)
             
             # Provide main module and, with that, all other modules recursively
-            self.mainModuleName = self.sourceFileName [ : -3] if self.sourceFileName.endswith ('.py') else self.sourceFileName
             self.provide (mainModuleName, '__main__')
         except Exception as exception:
             utils.enhanceException (
@@ -95,15 +94,12 @@ class Program:
                 message = f'\n\t{exception}'
             )
         
-    def provide (self, moduleName, __name__):
+    def provide (self, moduleName):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
-    
-        if moduleName == '__main__':
-            moduleName = self.mainModuleName
         
         if moduleName in self.moduleDict:  # Find out if module is already provided
             return self.moduleDict [moduleName]
-        else:                                       # If not, provide by loading or compiling
+        else:                              # If not, provide by loading or compiling
             return Module (self, moduleName)
 
 class Module:
@@ -115,32 +111,30 @@ class Module:
     def findPaths (self):
         searchedModulePaths = []
                 
+        relSourceSlug = self.name.replace ('.', '/')
         for searchDir in self.program.moduleSearchDirs:
-            # Find source path (path of .py file)
-            relPrepath = self.name.replace ('.', '/')
-            prepath = f'{searchDir}/{relPrepath}'
-            self.isDir = os.path.isdir (prepath)
-            if self.isDir:
-                self.sourceDir = prepath
-                self.filePrename = '__init__'
+            # Find source slugs
+            sourceSlug = f'{searchDir}/{relSourceSlug}'
+            if os.path.isdir (sourceSlug):
+                self.sourceDir = sourceSlug
+                self.sourcePrename = '__init__'
             else:
-                self.sourceDir, self.filePrename = prepath.rsplit ('/', 1)
-            self.sourcePath = self.program.sourcePath if self.__name__ == '__main__' else '{self.sourceDir}/{self.filePrename}.py'
-                
-            # Find target path (path of .js file)
-            self.targetDir = f'{self.program.sourceDir}/__javascript__'
-            self.targetPath = f'{self.targetDir}/{self.name}'
+                self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1) 
+            self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
+            
+            # Find target slugs
+            self.targetPath = f'{self.program.targetDir}/{self.name}.mod.js'
             
             # If module exists
-            if os.path.isfile (self.sourcePath) or os.path.isfile (self.targetPath)
+            if os.path.isfile ('{self.sourcePrepath}.py') or os.path.isfile ('{self.sourcePrepath}.mod.js'):
                 # Check if it's a JavaScript-only module
-                self.isJavascriptOnly == os.path.isfile (self.targetPath) and not os.path.isfile (self.sourcePath)
+                self.isJavascriptOnly == os.path.isfile ('{self.sourcePrepath}.mod.js') and not os.path.isfile ('{self.sourcePrepath}.py')
                 # Set more paths (tree, sourcemap, ...)
                 # (To do)
                 break
             
             # Remember all fruitless paths to give a decent error report if module isn't found
-            searchedModulePaths.append (self.targetPath if self.javascriptOnly else self.sourcePath)
+            searchedModulePaths.extend (['{self.sourcePrepath}.mod.js', '{self.sourcePrepath}.py'])
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             raise utils.Error (
@@ -157,7 +151,7 @@ class Module:
         # Used for error reports
         # Note that JavaScript-only modules will leave lineNr None if they import something
         # This is since there's no explicit import location in such modules
-        self.program.importStack.append ([self.metadata, None])
+        self.program.importStack.append ([self, None])
          
         if not self.isJavascriptOnly and os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
             self.generateJavascriptAndMap ()
@@ -254,15 +248,6 @@ class Module:
 
         with utils.create (self.metadata.treePath) as treeFile:
             treeFile.write (self.textTree)
-
-    def loadJavascript (self):
-        self.targetCode = ""
-        print (1000, self.metadata.name)
-        print (2000, self.metadata.sourcePath)
-        with tokenize.open (self.metadata.sourcePath) as targetFile:       
-            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
-        shutil.copyfile (self.metadata.sourcePath, self.metadata.targetPath)
-        
         
     def generateJavascriptAndMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
@@ -315,42 +300,19 @@ class Module:
         with utils.create (self.metadata.targetPath) as aFile:
             aFile.write (self.targetCode)
 
-    def extractPropertiesFromJavascript (self):
-        def removeLineNrs (clause):
-            if utils.commandArgs.anno:
-                return re.sub ('/\* {} \*/'.format (sourcemaps.lineNrLength * '\d'), '', clause)
-            else:
-                return clause
-
-        utils.log (False, 'Extracting module properties from: {}\n', self.metadata.targetPath)
-
-        useClause = removeLineNrs (self.targetCode [self.targetCode.rfind ('<use>') : self.targetCode.rfind ('</use>')])
-        self.use = sorted (set ([
-            word
-            for word in useClause.replace ('__pragma__', ' ') .replace ('(', ' ') .replace (')', ' ') .replace ('\'', ' ') .replace ('+', ' ') .split ()
-            if not word.startswith ('<')
-        ]))
-        for moduleName in self.use:
-            self.program.provide (moduleName)
-
-        allClause = removeLineNrs (self.targetCode [self.targetCode.rfind ('<all>') : self.targetCode.rfind ('</all>')])
-        self.all = sorted (set ([
-            word [1 : ]
-            for word in allClause.replace ('__all__', ' ') .replace ('=', ' ') .split ()
-            if word.startswith ('.')
-        ]))
-
-        if utils.commandArgs.map:
-            self.nrOfTargetLines = self.targetCode.count ('\n') + 1
-
-class Scope:
-    def __init__ (self, node):
-        self.node = node
-        self.nonlocals = set ()
-        self.containsYield = False
-
+    def loadJavascript (self):
+        with tokenize.open (self.source$$$Path) as targetFile:       
+            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
+        shutil.copyfile (self.metadata.sourcePath, self.metadata.targetPath)
+        
 class Generator (ast.NodeVisitor):
 # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
+
+    class Scope:
+        def __init__ (self, node):
+            self.node = node
+            self.nonlocals = set ()
+            self.containsYield = False
 
     def __init__ (self, module):
         self.module = module

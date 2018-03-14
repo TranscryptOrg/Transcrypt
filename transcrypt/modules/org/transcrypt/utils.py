@@ -176,20 +176,14 @@ def enhanceException (exception, **kwargs):
 
     raise result
     
-def dirty (sourcePath, targetPath, build):
-    # Find youngest of .py and .js files and use that as "original"
-    youngestTime = 0
-    youngestPath = None
-    for path in targetPath, sourcePath:                   # Order matters
-        if os.path.isfile (path):
-            pathTime = os.path.getmtime (path)
-            if build or pathTime > youngestTime:  # Builds correctly also if some source files are missing
-                youngestTime = pathTime
-                youngestPath = path
-
-    return youngestPath == sourcePath
     
-def stripJavascript (code, symbols, allowStripComments):
+def digestJavascript (code, symbols, allowStripComments):
+'''
+- Honor ifdefs
+- Strip comments if allowed by commend line switch AND indicated by pragma
+- Harvest import and export info
+'''
+
 #    stripComments = False !!!
     stripComments = True
     def stripSingleLineComments (line):
@@ -233,16 +227,24 @@ def stripJavascript (code, symbols, allowStripComments):
         passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if passable (line)] if commentlessLine]
     else:
         passableLines = [line for line in code.split ('\n') if passable (line)]
-
         
-    return '\n'.join (passableLines) + '\n'
+    result = object ()
+    result.digestedCode = '\n'.join (passableLines)
+    result.nrOfLines = len (passableLines)
     
-def extractExports (code):
-    exports = []
-    for line in code.split ('\n'):
-        lineWords = line.split (' ')
-        if lineWords [0] == 'export':
-            exports.append (lineWords [2])
-    # print (exports)
-    return exports
+    result.exportedNames = []
+    result.importedModules = []
+    
+    for line in passableLines:
+        words = line.split (' ')
+        if words [0] == 'export':               # The export prefix, rather than an export list is used
+            result.exportedNames.append (words [2])
+            
+        if words [0] == 'import:'               # There may be several import statements, each from a different module
+            match = search (r'({\.*}).*(\'.*\')')
+            result.importedModules.append (object ())
+            result.importedModules [-1] .names = eval (match.group (1))
+            result.importedModules [-1] .path = eval (match.group (2))
+                
+    return result
     
