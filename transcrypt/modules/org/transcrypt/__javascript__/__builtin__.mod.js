@@ -2518,7 +2518,7 @@ __pragma__ ('endif')
 __pragma__ ('ifndef', '__xtiny__')
 
     // support for fast operator overload on numeric types
-
+    var _inject_operators = function ()  {
     Number.prototype.__add__ = function(b) { return this.valueOf() + b; };
     Number.prototype.__sub__ = function(b) { return this.valueOf() - b; };
     Number.prototype.__mult__ = function(b) { return this.valueOf() * b; };
@@ -2529,5 +2529,7 @@ __pragma__ ('ifndef', '__xtiny__')
     Number.prototype.__xor__ = function(b) { return this.valueOf() ^ b; };
     Number.prototype.__and__ = function(b) { return this.valueOf() & b; };
     Number.prototype.__pow__ = function(b) { return this.valueOf() ** b; };
+    };
+    _inject_operators()
 
 __pragma__ ('endif')
