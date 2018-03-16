@@ -1678,7 +1678,9 @@ class Generator (ast.NodeVisitor):
                             if keyword.arg == 'cwd':
                                 workDir = keyword.value.s
                         process = subprocess.Popen (
-                            shlex.split(node.args [1] .s),
+                            # Do not use shlex.split under Windows
+                            node.args [1] .s if sys.platform == 'win32' else \
+                                shlex.split(node.args [1] .s),
                             stdin = subprocess.PIPE,
                             stdout = subprocess.PIPE,
                             cwd = workDir
