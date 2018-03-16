@@ -67,8 +67,8 @@ class Program:
         self.symbols = symbols
         self.envir = envir
 
-        if utils.commandArgs.esv == None:
-            self.javascriptVersion = utils.defaultJavascriptVersion
+        if not utils.commandArgs.esv:
+            self.javascriptVersion = 6
         else:
             self.javascriptVersion = int (utils.commandArgs.esv)
 
@@ -77,36 +77,79 @@ class Program:
 
         # Set paths 
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
-        self.sourceDir = '/'.join (self.sourcePath.split ('/') [ : -1])
-        self.mainModuleName = self.sourcePath.split ('/') [-1]
+        self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
+        self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         self.targetDir = f'{self.sourceDir}/__target__'     
 
         try:
             # Provide runtime module since it's always needed but never imported explicitly
             self.runtimeModuleName = 'org.transcrypt.__runtime__'
-            self.provide (runtimeModuleName)
+            self.provide (self.runtimeModuleName)
             
             # Provide main module and, with that, all other modules recursively
-            self.provide (mainModuleName, '__main__')
+            self.provide (self.mainModuleName, '__main__')
         except Exception as exception:
             utils.enhanceException (
                 exception,
                 message = f'\n\t{exception}'
             )
         
-    def provide (self, moduleName):
+    def provide (self, moduleName, __moduleName__ = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         
         if moduleName in self.moduleDict:  # Find out if module is already provided
             return self.moduleDict [moduleName]
         else:                              # If not, provide by loading or compiling
-            return Module (self, moduleName)
+            return Module (self, moduleName, __moduleName__)
 
 class Module:
-    def __init__ (self, program, name, __name__):
+    def __init__ (self, program, name, __name__ = None):
         self.program = program
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
+        
+        # Remember names of module being under compilation and line nrs of current import
+        # Used for error reports
+        # Note that JavaScript-only modules will leave lineNr None if they import something
+        # This is since there's no explicit import location in such modules
+        self.program.importStack.append ([self, None])
+        
+        # Try to find module, exception if fails
+        self.findPaths ()
+        
+        # Register that module is found
+        self.program.moduleDict [self.name] = self
+
+        # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
+        if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
+            # Generate parse tree
+            if self.isJavascriptOnly:
+                # Digest source javascript and copy to target location
+                self.loadJavascript ()
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
+                self.targetCode = javascriptDigest.digestedCode
+                self.exports = javascriptDigest.exportedNames
+            else:
+                # Compile from Python, start with constructing parse tree
+                self.parse ()
+                if utils.commandArgs.dtree:
+                    self.dumpTree ()
+
+                # Perform lightweight command check on parse tree
+                if utils.commandArgs.dcheck:
+                    try:
+                        static_check.run (self.metadata.sourcePath, self.parseTree)
+                    except Exception as exception:
+                        utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.metadata.sourcePath)
+                        
+                # Generate JavaScript code and sourcemap from parse tree
+                self.generateJavascriptAndMap ()
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
+                self.targetCode = javascriptDigest.digestedCode
+                self.exports = javascriptDigest.exportedNames
+        
+        # Module not under compilation anymore, so pop it
+        self.program.importStack.pop ()
                 
     def findPaths (self):
         searchedModulePaths = []
@@ -121,58 +164,96 @@ class Module:
             else:
                 self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1) 
             self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
+            pythonSourcePath = f'{self.sourcePrepath}.py'
+            javascriptSourcePath = f'{self.sourcePrepath}.mod.js'
+            
             
             # Find target slugs
             self.targetPath = f'{self.program.targetDir}/{self.name}.mod.js'
             
             # If module exists
-            if os.path.isfile ('{self.sourcePrepath}.py') or os.path.isfile ('{self.sourcePrepath}.mod.js'):
+            if os.path.isfile (pythonSourcePath) or os.path.isfile (javascriptSourcePath):
                 # Check if it's a JavaScript-only module
-                self.isJavascriptOnly == os.path.isfile ('{self.sourcePrepath}.mod.js') and not os.path.isfile ('{self.sourcePrepath}.py')
+                self.isJavascriptOnly = os.path.isfile (javascriptSourcePath) and not os.path.isfile (pythonSourcePath)
                 # Set more paths (tree, sourcemap, ...)
                 # (To do)
+                self.sourcePath = javascriptSourcePath if self.isJavascriptOnly else pythonSourcePath
                 break
             
             # Remember all fruitless paths to give a decent error report if module isn't found
-            searchedModulePaths.extend (['{self.sourcePrepath}.mod.js', '{self.sourcePrepath}.py'])
+            searchedModulePaths.extend ([pythonSourcePath, javascriptSourcePath])
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
+            print ('\n'.join (searchedModulePaths))
             raise utils.Error (
                 message = (
-                    '\n\tAttempt to import module: {}'.format (self.name) +
+                    f'\n\tAttempt to import module: {self.name}' +
                     '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
                 )
             )
-        
-        # Register that module is found
-        self.program.moduleDict [self.name] = self
+            
+    def generateJavascriptAndMap (self):
+        utils.log (False, 'Generating code for module: {}\n', self.targetPath)
 
-        # Remember names of module being under compilation and line nrs of current import
-        # Used for error reports
-        # Note that JavaScript-only modules will leave lineNr None if they import something
-        # This is since there's no explicit import location in such modules
-        self.program.importStack.append ([self, None])
-         
-        if not self.isJavascriptOnly and os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
-            self.generateJavascriptAndMap ()
-            self.extractPropertiesFromJavascript ()
-        else:
-            self.loadJavascript ()
-            self.extractPropertiesFromJavascript ()
+        # Generate target fragments
+        generator = Generator (self)
+
+        # Fabricate target lines from target fragments
+        if utils.commandArgs.map or utils.commandArgs.anno:
+            # In both cases the generator will have instrumented the target fragments by appending line numbers
+            # N.B. __pragma__ ('noanno') will be too late to prevent instrumenting of the main module's first line
+            # In that case if no source maps are required either, the appended line numbers simply won't be used
+            
+            # Split joined fragments into (instrumented) lines
+            instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')
+
+            # Only remember source line nrs if a map is to be generated (so not if only annotated JavaScript is needed)
+            if utils.commandArgs.map:
+                self.sourceLineNrs = []
+
+            # Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
+            targetLines = []
+            for targetLine in instrumentedTargetLines:
+                # The actual splitting
+                sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]                           # Take the appended line number, e.g. the string '000014'
+                sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule  # Turn it into an integer, e.g. 14
+                targetLine = targetLine [ : -sourcemaps.lineNrLength]                                   # Obtain non-instrumented line by removing the appended line number
+
+                # Only append non-emptpy statements and their number info
+                if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
+                    if generator.allowDebugMap:                                                         # If annotations comments have to be prepended
+                        targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
+                    targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation commend
+                    
+                    # Store line nrs for source map
+                    if utils.commandArgs.map:
+                        self.sourceLineNrs.append (sourceLineNr)                                        # Remember its line number to be able to generate a sourcemap
+
+            # Generate per module sourcemap and copy sourcefile
+            if utils.commandArgs.map:
+                utils.log (False, 'Generating source map for module: {}\n', self.metadata.sourcePath)
+                self.modMap.generate (self.metadata.sourcePath, self.sourceLineNrs)
+                self.modMap.save ()
+        else:                                                           
+            # No maps or annotations needed, so this 'no stripping' shortcut for speed
+            targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']
+
+        # Fabricate target code from target lines and header       
+        header = '// {}\'ed from Python, {}\n"use strict";\n'.format (
+            self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+        )
+        self.targetCode = header + '\n'.join (targetLines)
+        
+        # Write target code
+        with utils.create (self.targetPath) as aFile:
+            aFile.write (self.targetCode)    
+        
+    def loadJavascript (self):
+        with tokenize.open (self.sourcePath) as sourceFile:       
+            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
                 
-        self.program.importStack.pop ()
-        
-    def getStandardName (self):
-        try:
-            if self.name == self.program.mainModuleName:
-                return '__main__'
-            else:
-                return self.name
-        except:
-            print (traceback.format_exc ())
-
     def getModuleCaption (self):
-        return self.program.rawModuleCaption.format (self.metadata.sourcePath) if utils.commandArgs.anno else ''
+        return self.program.rawModuleCaption.format (self.sourcePath) if utils.commandArgs.anno else ''
 
     def parse (self):
         def pragmasFromComments (sourceCode):
@@ -208,9 +289,9 @@ class Module:
             return '\n'.join (sourceLines)
             
         try:
-            utils.log (False, 'Parsing module: {}\n', self.metadata.sourcePath)
+            utils.log (False, 'Parsing module: {}\n', self.sourcePath)
 
-            with tokenize.open (self.metadata.sourcePath) as sourceFile:
+            with tokenize.open (self.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
                 
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
@@ -229,7 +310,7 @@ class Module:
             )
 
     def dumpTree (self):
-        utils.log (False, 'Dumping syntax tree for module: {}\n', self.metadata.sourcePath)
+        utils.log (False, 'Dumping syntax tree for module: {}\n', self.sourcePath)
 
         def walk (name, value, tabLevel):
             self.treeFragments .append ('\n{0}{1}: {2} '.format (tabLevel * '\t', name, type (value).__name__ ))
@@ -246,73 +327,17 @@ class Module:
         walk ('file', self.parseTree, 0)
         self.textTree = ''.join (self.treeFragments) [1:]
 
-        with utils.create (self.metadata.treePath) as treeFile:
+        with utils.create (self.treePath) as treeFile:
             treeFile.write (self.textTree)
-        
-    def generateJavascriptAndMap (self):
-        utils.log (False, 'Generating code for module: {}\n', self.metadata.targetPath)
 
-        generator = Generator (self)
+class Scope:
+    def __init__ (self, node):
+        self.node = node
+        self.nonlocals = set ()
+        self.containsYield = False
 
-        if utils.commandArgs.map or utils.commandArgs.anno:             # In both cases the generator will have instrumented the target fragments by appending line numbers
-                                                                        # N.B. __pragma__ ('noanno') will be too late to prevent instrumenting of the main module's first line
-                                                                        # In that case if no source maps are required either, the appended line numbers simply won't be used
-            instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')                 # Split joined fragments into lines
-
-            # Split instrumentedTargetLines in (bare) targetLines and sourceLineNrs, skipping empty statements
-            targetLines = []
-
-            if utils.commandArgs.map:
-                self.sourceLineNrs = []                                                                 # Only needed for source maps, not for annotations
-
-            for targetLine in instrumentedTargetLines:
-                sourceLineNrString = targetLine [-sourcemaps.lineNrLength : ]                           # Take the appended line number, e.g. the string '000014'
-                sourceLineNr = int ('1' + sourceLineNrString) - sourcemaps.maxNrOfSourceLinesPerModule  # Turn it into an integer, e.g. 14
-
-                targetLine = targetLine [ : -sourcemaps.lineNrLength]                                   # Obtain non-instrumented line by removing the appended line number
-
-                # Only append non-emptpy statements and their number info
-                if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
-                    if generator.allowDebugMap:                                                         # If annotations comments have to be prepended
-                        targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
-
-                    targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation commend
-
-                    if utils.commandArgs.map:
-                        self.sourceLineNrs.append (sourceLineNr)                                        # Remember its line number to be able to generate a sourcemap
-
-            # Generate per module sourcemap and copy sourcefile
-            if utils.commandArgs.map:
-                utils.log (False, 'Generating source map for module: {}\n', self.metadata.sourcePath)
-                self.modMap.generate (self.metadata.sourcePath, self.sourceLineNrs)
-                self.modMap.save ()
-        else:                                                           # No maps needed, so this 'no stripping' shortcut for speed
-            targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']
-
-        # Join and save module code         
-        header = '// {}\'ed from Python, {}\n"use strict";\n'.format (
-            self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-        )
-        self.targetCode = header + '\n'.join (targetLines)
-        
-        self.metadata.exports = utils.extractExports (self.targetCode)
-        
-        with utils.create (self.metadata.targetPath) as aFile:
-            aFile.write (self.targetCode)
-
-    def loadJavascript (self):
-        with tokenize.open (self.source$$$Path) as targetFile:       
-            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
-        shutil.copyfile (self.metadata.sourcePath, self.metadata.targetPath)
-        
 class Generator (ast.NodeVisitor):
 # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
-
-    class Scope:
-        def __init__ (self, node):
-            self.node = node
-            self.nonlocals = set ()
-            self.containsYield = False
 
     def __init__ (self, module):
         self.module = module
@@ -443,7 +468,7 @@ class Generator (ast.NodeVisitor):
         self.allowConversionToIterable = utils.commandArgs.iconv
         self.allowConversionToTruthValue = utils.commandArgs.tconv
         self.allowKeyCheck = utils.commandArgs.keycheck
-        self.allowDebugMap = utils.commandArgs.anno and not self.module.metadata.sourcePath.endswith ('.js')
+        self.allowDebugMap = utils.commandArgs.anno and not self.module.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
         self.allowExtern = False
         self.allowJavaScriptIter = False
@@ -701,9 +726,7 @@ class Generator (ast.NodeVisitor):
     def useModule (self, name):
         if not self.allowExtern:
             self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-            print (11111111111111111111, name)
             result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
-            print (22222222222222222222)
             self.use.add (name)                                     # Must not be done if the healthy exception occurs
             return result
 
@@ -1285,7 +1308,7 @@ class Generator (ast.NodeVisitor):
                     if os.path.isfile (filePath):
                         includedCode = tokenize.open (filePath) .read ()
                         if fileName.endswith ('.part.js'):
-                            includedCode = utils.stripJavascript (includedCode, self.module.program.symbols, True) # !!!self.allowStripComments)
+                            includedCode = utils.digestJavascript (includedCode, self.module.program.symbols, True) .digestedCode # !!!self.allowStripComments)
                         return includedCode
                     else:
                         searchedIncludePaths.append (filePath)
@@ -1614,7 +1637,7 @@ class Generator (ast.NodeVisitor):
 
         self.visit (node.func)
 
-        if self.module.program.javaScriptVersion >= 6:
+        if self.module.program.javascriptVersion >= 6:
             self.emit (' (')
 
             for index, expr in enumerate (node.args):
@@ -1922,7 +1945,7 @@ class Generator (ast.NodeVisitor):
             self.indent ()
 
         elif (
-            self.module.program.javaScriptVersion >= 6 and  # Supports for ... of
+            self.module.program.javascriptVersion >= 6 and  # Supports for ... of
             not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
         ):
             self.emit ('for (var ')
@@ -2017,7 +2040,7 @@ class Generator (ast.NodeVisitor):
 
         if not (self.allowJavaScriptIter or optimize):
             if (
-                self.module.program.javaScriptVersion >= 6 and  # Supports for ... of
+                self.module.program.javascriptVersion >= 6 and  # Supports for ... of
                 not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
             ):
                 pass
@@ -2340,7 +2363,7 @@ class Generator (ast.NodeVisitor):
 
                     if type (self.getScope ().node) == ast.Module:
                         # And export everything imported, if we are not importing inside of a function.
-                        if not utils.commandArgs.xconfimp or self.module.metadata.filePrename == '__init__':
+                        if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
                             self.all.update (module.all)
                 else:
                     # Import something
@@ -2353,7 +2376,6 @@ class Generator (ast.NodeVisitor):
                         else:
                             self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))
                     except:                                                     # If it doesn't it denotes an entity inside a module
-                        print (444, node.module)
                         self.useModule (node.module)
 
                         if alias.asname:
@@ -2363,7 +2385,7 @@ class Generator (ast.NodeVisitor):
 
                     if type (self.getScope ().node) == ast.Module:
                         # And export that something imported
-                        if not utils.commandArgs.xconfimp or self.module.metadata.filePrename == '__init__':
+                        if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
                             if alias.asname:
                                 self.all.add (alias.asname)
                             else:
@@ -2484,14 +2506,12 @@ class Generator (ast.NodeVisitor):
         importHeadsLevel = self.indentLevel
         
         try:
-            print (777, self.module.metadata.name)
-            self.emit ('import {{{}}} from \'./{}.mod.js\';\n', ', '.join (self.module.program.moduleDict [self.module.program.runtimeModuleName] .metadata.exports), self.module.program.runtimeModuleName)
+            if self.module.name != self.module.program.runtimeModuleName:
+                self.emit ('import {{{}}} from \'./{}.mod.js\';\n', ', '.join (self.module.program.moduleDict [self.module.program.runtimeModuleName] .exports), self.module.program.runtimeModuleName)
         except:
             print (traceback.format_exc ())
-        self.emit ('var __name__ = \'{}\';\n', self.module.metadata.getStandardName ())
+        self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
 
-        
-        
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
@@ -2515,11 +2535,11 @@ class Generator (ast.NodeVisitor):
 
     def visit_Name (self, node):
         if node.id == '__file__':
-            self.visit (ast.Str (s = self.module.metadata.sourcePath))
+            self.visit (ast.Str (s = self.module.sourcePath))
             return
 
         elif node.id == '__filename__':
-            path = os.path.split (self.module.metadata.sourcePath)
+            path = os.path.split (self.module.sourcePath)
             fileName = path [1]
             
             if fileName.startswith ('__init__'):

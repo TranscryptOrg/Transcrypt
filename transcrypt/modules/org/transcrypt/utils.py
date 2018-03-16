@@ -4,6 +4,9 @@ import argparse
 import inspect
 import tokenize
 
+class Any:
+    pass
+
 defaultJavaScriptVersion = 5
 
 class CommandArgsError (BaseException):
@@ -152,7 +155,8 @@ class Error (Exception):
         result = 'Error while compiling (offending file last):'
         for importRecord in program.importStack [ : -1]:
             result += '\n\tFile \'{}\', line {}, at import of:'.format (importRecord [0] .sourcePath, importRecord [1])
-        # result += '\n\tFile \'{}\', line {}, namely:'.format (program.importStack [-1][0] .sourcePath, self.lineNr) !!!
+            
+        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] ), self.lineNr)
         result += '\n\t{}'.format (self.message)
         return result
         
@@ -175,14 +179,13 @@ def enhanceException (exception, **kwargs):
     '''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
 
     raise result
-    
-    
+        
 def digestJavascript (code, symbols, allowStripComments):
-'''
-- Honor ifdefs
-- Strip comments if allowed by commend line switch AND indicated by pragma
-- Harvest import and export info
-'''
+    '''
+    - Honor ifdefs
+    - Strip comments if allowed by commend line switch AND indicated by pragma
+    - Harvest import and export info
+    '''
 
 #    stripComments = False !!!
     stripComments = True
@@ -228,7 +231,7 @@ def digestJavascript (code, symbols, allowStripComments):
     else:
         passableLines = [line for line in code.split ('\n') if passable (line)]
         
-    result = object ()
+    result = Any ()
     result.digestedCode = '\n'.join (passableLines)
     result.nrOfLines = len (passableLines)
     
@@ -240,9 +243,9 @@ def digestJavascript (code, symbols, allowStripComments):
         if words [0] == 'export':               # The export prefix, rather than an export list is used
             result.exportedNames.append (words [2])
             
-        if words [0] == 'import:'               # There may be several import statements, each from a different module
+        if words [0] == 'import':               # There may be several import statements, each from a different module
             match = search (r'({\.*}).*(\'.*\')')
-            result.importedModules.append (object ())
+            result.importedModules.append (Any ())
             result.importedModules [-1] .names = eval (match.group (1))
             result.importedModules [-1] .path = eval (match.group (2))
                 
