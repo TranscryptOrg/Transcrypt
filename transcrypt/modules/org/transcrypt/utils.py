@@ -3,9 +3,12 @@ import sys
 import argparse
 import inspect
 import tokenize
+import re
 
 class Any:
-    pass
+    def __init__ (self, **attribs):
+        for attrib in attribs:
+            setattr (self, attrib, attribs [attrib])
 
 defaultJavaScriptVersion = 5
 
@@ -231,23 +234,28 @@ def digestJavascript (code, symbols, allowStripComments):
     else:
         passableLines = [line for line in code.split ('\n') if passable (line)]
         
-    result = Any ()
-    result.digestedCode = '\n'.join (passableLines)
-    result.nrOfLines = len (passableLines)
+    result = Any (
+        digestedCode = '\n'.join (passableLines),
+        nrOfLines = len (passableLines),
+        exportedNames = [],
+        importedModules = []
+    )
     
-    result.exportedNames = []
-    result.importedModules = []
-    
+    importPattern = re.compile (r'({.*}).*(\'.*\')')
     for line in passableLines:
         words = line.split (' ')
-        if words [0] == 'export':               # The export prefix, rather than an export list is used
-            result.exportedNames.append (words [2])
+        if words [0] == 'export':               
+            if words [1][0] == '{':             # Export list (e.g. due to transit export)
+                result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+            else:                               # Export prefix before function or variable
+                result.exportedNames.append (words [2])
             
         if words [0] == 'import':               # There may be several import statements, each from a different module
-            match = search (r'({\.*}).*(\'.*\')')
-            result.importedModules.append (Any ())
-            result.importedModules [-1] .names = eval (match.group (1))
-            result.importedModules [-1] .path = eval (match.group (2))
+            match = importPattern.search (line)
+            result.importedModules.append (Any (
+                path = eval (match.group (2)),
+                names = eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1)))
+            ))
                 
     return result
     

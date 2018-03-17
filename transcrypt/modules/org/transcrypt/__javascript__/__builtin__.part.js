@@ -848,7 +848,7 @@ export function zip () {
 };
 
 // Range method, returning an array
-function range (start, stop, step) {
+export function range (start, stop, step) {
     if (stop == undefined) {
         // one param defined
         stop = start;
@@ -870,7 +870,7 @@ function range (start, stop, step) {
 // Any, all and sum
 
 __pragma__ ('ifdef', '__esv6__')
-function any (iterable) {
+export function any (iterable) {
     for (let item of iterable) {
         if (bool (item)) {
             return true;
@@ -878,7 +878,7 @@ function any (iterable) {
     }
     return false;
 }
-function all (iterable) {
+export function all (iterable) {
     for (let item of iterable) {
         if (! bool (item)) {
             return false;
@@ -886,7 +886,7 @@ function all (iterable) {
     }
     return true;
 }
-function sum (iterable) {
+export function sum (iterable) {
     let result = 0;
     for (let item of iterable) {
         result += item;
@@ -894,7 +894,7 @@ function sum (iterable) {
     return result;
 }
 __pragma__ ('else')
-function any (iterable) {
+export function any (iterable) {
     for (var index = 0; index < iterable.length; index++) {
         if (bool (iterable [index])) {
             return true;
@@ -902,7 +902,7 @@ function any (iterable) {
     }
     return false;
 }
-function all (iterable) {
+export function all (iterable) {
     for (var index = 0; index < iterable.length; index++) {
         if (! bool (iterable [index])) {
             return false;
@@ -910,7 +910,7 @@ function all (iterable) {
     }
     return true;
 }
-function sum (iterable) {
+export function sum (iterable) {
     var result = 0;
     for (var index = 0; index < iterable.length; index++) {
         result += iterable [index];
@@ -921,13 +921,13 @@ __pragma__ ('endif')
 
 
 // Enumerate method, returning a zipped list
-function enumerate (iterable) {
+export function enumerate (iterable) {
     return zip (range (len (iterable)), iterable);
 }
 
 // Shallow and deepcopy
 
-function copy (anObject) {
+export function copy (anObject) {
     if (anObject == null || typeof anObject == "object") {
         return anObject;
     }
@@ -942,7 +942,7 @@ function copy (anObject) {
     }
 }
 
-function deepcopy (anObject) {
+export function deepcopy (anObject) {
     if (anObject == null || typeof anObject == "object") {
         return anObject;
     }
@@ -959,7 +959,7 @@ function deepcopy (anObject) {
 
 // List extensions to Array
 
-function list (iterable) {                                      // All such creators should be callable without new
+export function list (iterable) {                                      // All such creators should be callable without new
 __pragma__ ('ifdef', '__esv6__')
     var instance = iterable ? Array.from (iterable) : [];
 __pragma__ ('else')
@@ -1104,7 +1104,7 @@ Array.prototype.__rmul__ = Array.prototype.__mul__;
 
 // Tuple extensions to Array
 
-function tuple (iterable) {
+export function tuple (iterable) {
     var instance = iterable ? [] .slice.apply (iterable) : [];
     instance.__class__ = tuple; // Not all arrays are tuples
     return instance;
@@ -1115,7 +1115,7 @@ tuple.__bases__ = [object];
 // Set extensions to Array
 // N.B. Since sets are unordered, set operations will occasionally alter the 'this' array by sorting it
 
-function set (iterable) {
+export function set (iterable) {
     var instance = [];
     if (iterable) {
         for (var index = 0; index < iterable.length; index++) {
@@ -1275,7 +1275,7 @@ Array.prototype.__gt__ = function (other) {
 
 // Byte array extensions
 
-function bytearray (bytable, encoding) {
+export function bytearray (bytable, encoding) {
     if (bytable == undefined) {
         return new Uint8Array (0);
     }
@@ -1300,7 +1300,7 @@ function bytearray (bytable, encoding) {
     }
 }
 
-var bytes = bytearray;
+export var bytes = bytearray;
 
 
 Uint8Array.prototype.__add__ = function (aBytes) {
@@ -1322,7 +1322,7 @@ Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
 
 // String extensions
 
-function str (stringable) {
+export function str (stringable) {
     if (typeof stringable === 'number')
         return stringable.toString();
     else {
@@ -1787,7 +1787,7 @@ function __dsetitem__ (aKey, aValue) {
     this [aKey] = aValue;
 }
 
-function dict (objectOrPairs) {
+export function dict (objectOrPairs) {
     var instance = {};
     if (!objectOrPairs || objectOrPairs instanceof Array) { // It's undefined or an array of pairs
         if (objectOrPairs) {

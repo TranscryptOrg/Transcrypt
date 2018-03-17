@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-03-13 20:26:51
+// Transcrypt'ed from Python, 2018-03-16 11:29:35
 "use strict";
 var __name__ = 'org.transcrypt.__runtime__';
 __pragma__ ('stripcomments')
@@ -118,7 +118,6 @@ export function __class__ (name, bases, attribs, meta) {
     return meta.__new__ (meta, name, bases, attribs);
 };
 export function __pragma__ () {};
-
 
 export var __Envir__ =  __class__ ('__Envir__', [object], {
 	__module__: __name__,
@@ -1719,7 +1718,6 @@ export function __setslice__ (container, lower, upper, step, value) {
     }
 };
 
-
 export var Exception =  __class__ ('Exception', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
@@ -1935,9 +1933,7 @@ export var sorted = function (iterable, key, reverse) {
 export var map = function (func, iterable) {
 	return (function () {
 		var __accu0__ = [];
-		var __iterable0__ = iterable;
-		for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-			var item = __iterable0__ [__index0__];
+		for (var item of iterable) {
 			__accu0__.append (func (item));
 		}
 		return __accu0__;
@@ -1949,9 +1945,7 @@ export var filter = function (func, iterable) {
 	}
 	return (function () {
 		var __accu0__ = [];
-		var __iterable0__ = iterable;
-		for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-			var item = __iterable0__ [__index0__];
+		for (var item of iterable) {
 			if (func (item)) {
 				__accu0__.append (item);
 			}
@@ -1999,9 +1993,7 @@ export var __Terminal__ =  __class__ ('__Terminal__', [object], {
 		}
 		self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
 			var __accu0__ = [];
-			var __iterable0__ = args;
-			for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-				var arg = __iterable0__ [__index0__];
+			for (var arg of args) {
 				__accu0__.append (str (arg));
 			}
 			return __accu0__;
@@ -2013,9 +2005,7 @@ export var __Terminal__ =  __class__ ('__Terminal__', [object], {
 		else {
 			console.log (sep.join ((function () {
 				var __accu0__ = [];
-				var __iterable0__ = args;
-				for (var __index0__ = 0; __index0__ < len (__iterable0__); __index0__++) {
-					var arg = __iterable0__ [__index0__];
+				for (var arg of args) {
 					__accu0__.append (str (arg));
 				}
 				return __accu0__;

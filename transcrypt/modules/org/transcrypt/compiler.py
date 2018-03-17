@@ -94,16 +94,17 @@ class Program:
                 message = f'\n\t{exception}'
             )
         
-    def provide (self, moduleName, __moduleName__ = None):
+    def provide (self, moduleName, __moduleName__ = None):    
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         
         if moduleName in self.moduleDict:  # Find out if module is already provided
             return self.moduleDict [moduleName]
         else:                              # If not, provide by loading or compiling
+            # This may fail legally if moduleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__)
 
 class Module:
-    def __init__ (self, program, name, __name__ = None):
+    def __init__ (self, program, name, __name__ = None):    
         self.program = program
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
@@ -146,7 +147,11 @@ class Module:
                 self.generateJavascriptAndMap ()
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
                 self.targetCode = javascriptDigest.digestedCode
-                self.exports = javascriptDigest.exportedNames
+                self.exports = javascriptDigest.exportedNames        
+               
+        # Write target code
+        with utils.create (self.targetPath) as aFile:
+            aFile.write (self.targetCode) 
         
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
@@ -170,6 +175,7 @@ class Module:
             
             # Find target slugs
             self.targetPath = f'{self.program.targetDir}/{self.name}.mod.js'
+            self.importRelPath = f'./{self.name}.mod.js'
             
             # If module exists
             if os.path.isfile (pythonSourcePath) or os.path.isfile (javascriptSourcePath):
@@ -184,7 +190,7 @@ class Module:
             searchedModulePaths.extend ([pythonSourcePath, javascriptSourcePath])
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
-            print ('\n'.join (searchedModulePaths))
+            # print ('\n'.join (searchedModulePaths))
             raise utils.Error (
                 message = (
                     f'\n\tAttempt to import module: {self.name}' +
@@ -243,14 +249,10 @@ class Module:
             self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
         )
         self.targetCode = header + '\n'.join (targetLines)
-        
-        # Write target code
-        with utils.create (self.targetPath) as aFile:
-            aFile.write (self.targetCode)    
-        
+           
     def loadJavascript (self):
         with tokenize.open (self.sourcePath) as sourceFile:       
-            self.targetCode = utils.stripJavascript (targetFile.read (), self.program.symbols, True ) # !!!, self.program.allowStripComments)
+            self.targetCode = sourceFile.read ()
                 
     def getModuleCaption (self):
         return self.program.rawModuleCaption.format (self.sourcePath) if utils.commandArgs.anno else ''
@@ -330,14 +332,8 @@ class Module:
         with utils.create (self.treePath) as treeFile:
             treeFile.write (self.textTree)
 
-class Scope:
-    def __init__ (self, node):
-        self.node = node
-        self.nonlocals = set ()
-        self.containsYield = False
-
 class Generator (ast.NodeVisitor):
-# Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
+    # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 
     def __init__ (self, module):
         self.module = module
@@ -470,7 +466,6 @@ class Generator (ast.NodeVisitor):
         self.allowKeyCheck = utils.commandArgs.keycheck
         self.allowDebugMap = utils.commandArgs.anno and not self.module.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
-        self.allowExtern = False
         self.allowJavaScriptIter = False
         self.allowJavaScriptCall = utils.commandArgs.jscall
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
@@ -556,7 +551,11 @@ class Generator (ast.NodeVisitor):
 
     def inscope (self, node):
         # Called at visiting modules, classes and functions
-        self.scopes.append (Scope (node))
+        self.scopes.append (utils.Any (
+            node = node,
+            nonlocals = set (),
+            containsYield = False
+        ))
 
     def descope (self):
         self.scopes.pop ()
@@ -724,11 +723,10 @@ class Generator (ast.NodeVisitor):
             del self.tempIndices [name]
 
     def useModule (self, name):
-        if not self.allowExtern:
-            self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-            result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
-            self.use.add (name)                                     # Must not be done if the healthy exception occurs
-            return result
+        self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
+        result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
+        self.use.add (name)                                     # Must not be done if the healthy exception occurs
+        return result
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -1359,12 +1357,7 @@ class Generator (ast.NodeVisitor):
                 elif node.args [0] .s == 'docat':
                     self.allowDocAttribs = True
                 elif node.args [0] .s == 'nodocat':
-                    self.allowDocAttribs = False
-                    
-                elif node.args [0] .s == 'extern':
-                    self.allowExtern = True
-                elif node.args [0] .s == 'noextern':
-                    self.allowExtern = False                
+                    self.allowDocAttribs = False          
 
                 elif node.args [0] .s == 'iconv':       # Automatic conversion to iterable supported
                     self.allowConversionToIterable = True
@@ -2331,22 +2324,32 @@ class Generator (ast.NodeVisitor):
             if index < len (names) - 1:
                 self.emit (';\n')
 
-    def visit_ImportFrom (self, node):  # From .. import can import modules or entities in modules
+    def visit_ImportFrom (self, node):  # From .. import can import modules or facitities offered by modules
         self.adaptLineNrString (node)
 
         if node.module.startswith (self.stubsName):
             return
-
+            
+        '''
+        Possibilities with modules a, b, c and (non-module) facilities: p, q, r, s:
+        
+        (1) from a.b.c import *                             --> import {p, q, r, s} from 'a.b.c.'               Use facilities, generate afterward
+        
+        (2) from a.b.c import p as P, q, r as R, s          --> import {p as P, q, r as R, s} from 'a.b.c.'     Use facilities, generate afterward
+        
+        (3) from a.b import c0, c1 as C1, c2, c3 as C3      --> import * as c0 from 'a.b.c0'                    Don't use facilities, generate directly
+                                                                import * as C1 from 'a.b.c1'
+                                                                import * as c2 from 'a.b.c2'
+                                                                import * as C3 from 'a.b.C3'
+                                                                
+        (1) can happen only in isolation, (2) and (3) can be combined in one Python import statement
+        '''
+        
         try:
-            # N.B. It's ok to call a modules __init__ multiple times, see __core__.mod.js
+            # Import facilities or modules
+            facilities = []
             for index, alias in enumerate (node.names):
-                if alias.name == '*':                                           # * Never refers to modules, only to entities in modules
-                    if self.allowExtern:
-                        raise utils.Error (
-                            lineNr = node.lineno,
-                            message = '\n\tCan\'t import * from external module \'{}\''.format (node.module)
-                        )
-                    
+                if alias.name == '*':                                           # * Never refers to modules, only to entities in modules                       
                     if len (node.names) > 1:
                         raise utils.Error (
                             lineNr = node.lineno,
@@ -2354,45 +2357,35 @@ class Generator (ast.NodeVisitor):
                         )
                     
                     module = self.useModule (node.module)
-
-                    # Import everything
-                    for index, name in enumerate (module.all):
-                        self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (name), self.filterId (node.module))
-                        if index < len (module.all) - 1:
-                            self.emit (';\n')
-
-                    if type (self.getScope ().node) == ast.Module:
-                        # And export everything imported, if we are not importing inside of a function.
-                        if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
-                            self.all.update (module.all)
+                    for name in module.exports:
+                        facilities.append (Any (name = aName, asName = None))
                 else:
-                    # Import something
-                    # N.B. The emits in the try and except clauses have different placement of brackets
                     try:                                                        # Try if alias.name denotes a module
-                        self.useModule ('{}.{}'.format (node.module, alias.name))
+                        module = self.useModule ('{}.{}'.format (node.module, alias.name))
+                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
 
-                        if alias.asname:
-                            self.emit ('var {} = __init__ (__world__.{}.{})', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
-                        else:
-                            self.emit ('var {0} = __init__ (__world__.{1}.{0})', self.filterId (alias.name), self.filterId (node.module))
                     except:                                                     # If it doesn't it denotes an entity inside a module
-                        self.useModule (node.module)
+                        module = self.useModule (node.module)
+                        facilities.append (utils.Any (name = alias.name, asName = alias.asname))      
+            if facilities:
+                self.emit ('import {{')
+                for index, facility in enumerate (facilities):
+                    self.emitComma (index)
+                    self.emit (facility.name)
+                    if facility.asName:
+                        self.emit (' as {}', facility.asName)
+                self.emit ('}} from \'{}\';\n', module.importRelPath)
 
-                        if alias.asname:
-                            self.emit ('var {} = __init__ (__world__.{}).{}', self.filterId (alias.asname), self.filterId (node.module), self.filterId (alias.name))
-                        else:
-                            self.emit ('var {0} = __init__ (__world__.{1}).{0}', self.filterId (alias.name), self.filterId (node.module))
-
-                    if type (self.getScope ().node) == ast.Module:
-                        # And export that something imported
-                        if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
-                            if alias.asname:
-                                self.all.add (alias.asname)
-                            else:
-                                self.all.add (alias.name)
-
-                    if index < len (node.names) - 1:
-                        self.emit (';\n')
+            # Transit export of imported facilities (but not modules)
+            if type (self.getScope ().node) == ast.Module:
+                if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
+                    self.emit ('export {{')
+                    for index, facility in enumerate (facilities):
+                        self.emitComma (index)
+                        self.emit (facility.name)
+                        if facility.asName:
+                            self.emit (' as {}', facility.asName)
+                    self.emit ('}};\n')
         except Exception as exception:
             print (traceback.format_exc ())
         
@@ -2507,7 +2500,8 @@ class Generator (ast.NodeVisitor):
         
         try:
             if self.module.name != self.module.program.runtimeModuleName:
-                self.emit ('import {{{}}} from \'./{}.mod.js\';\n', ', '.join (self.module.program.moduleDict [self.module.program.runtimeModuleName] .exports), self.module.program.runtimeModuleName)
+                runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
+                self.emit ('import {{{}}} from \'{}\';\n', ', '.join (runtimeModule.exports), runtimeModule.importRelPath)
         except:
             print (traceback.format_exc ())
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)

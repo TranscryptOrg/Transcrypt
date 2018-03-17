@@ -1,3 +1,8 @@
+"use strict";
+import {list, tuple} from './org.transcrypt.__runtime__.mod.js';
+
+var __name__ = 'itertools';
+
 __pragma__ ('ifdef', '__esv6__')
 
 export var count = function* (start, step) {
