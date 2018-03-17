@@ -2530,6 +2530,6 @@ __pragma__ ('ifndef', '__xtiny__')
     Number.prototype.__and__ = function(b) { return this.valueOf() & b; };
     Number.prototype.__pow__ = function(b) { return this.valueOf() ** b; };
     };
-    _inject_operators()
+    _inject_operators();
 
 __pragma__ ('endif')
