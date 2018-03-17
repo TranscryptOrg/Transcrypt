@@ -1779,6 +1779,18 @@ __pragma__ ('endif')
 
     String.prototype.__rmul__ = String.prototype.__mul__;
 
+    // pythoh style magic methods for numbers
+    Number.prototype.__add__ = function(b)  { return this + b; };
+    Number.prototype.__sub__ = function(b)  { return this - b; };
+    Number.prototype.__mult__ = function(b) { return this * b; };
+    Number.prototype.__div__ = function(b)  { return this / b;  };
+    Number.prototype.__lshift__= function(b){ return this << b; };
+    Number.prototype.__rshift__= function(b){ return this >> b; };
+    Number.prototype.__or__ = function(b)   { return this | b; };
+    Number.prototype.__xor__ = function(b)  { return this ^ b; };
+    Number.prototype.__and__ = function(b)  { return this & b; };
+    Number.prototype.__pow__ = function(b)  { return this ** b; };
+
     // Dict extensions to object
     
     function __contains__ (element) {
@@ -1973,7 +1985,7 @@ __pragma__ ('endif')
     __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
 
     // General operator overloading, only the ones that make most sense in matrix and complex operations
-    
+
     var __jsmod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -2013,8 +2025,11 @@ __pragma__ ('endif')
         }
     };
     __all__.pow = __pow__;
-    
-__pragma__ ('ifndef', '__xtiny__')    
+
+
+__pragma__ ('ifndef', '__xtiny__')
+
+
     
     var __neg__ = function (a) {
         if (typeof a == 'object' && '__neg__' in a) {
@@ -2515,21 +2530,3 @@ __pragma__ ('ifndef', '__xtiny__')
     
 __pragma__ ('endif')
 
-__pragma__ ('ifndef', '__xtiny__')
-
-    // support for fast operator overload on numeric types
-    var _inject_operators = function ()  {
-    Number.prototype.__add__ = function(b) { return this.valueOf() + b; };
-    Number.prototype.__sub__ = function(b) { return this.valueOf() - b; };
-    Number.prototype.__mult__ = function(b) { return this.valueOf() * b; };
-    Number.prototype.__div__ = function(b) { return this.valueOf() / b;  };
-    Number.prototype.__lshift__= function(b){ return this.valueOf() << b; };
-    Number.prototype.__rshift__= function(b ){ return this.valueOf() >> b; };
-    Number.prototype.__or__ = function(b) { return this.valueOf() | b; };
-    Number.prototype.__xor__ = function(b) { return this.valueOf() ^ b; };
-    Number.prototype.__and__ = function(b) { return this.valueOf() & b; };
-    Number.prototype.__pow__ = function(b) { return this.valueOf() ** b; };
-    };
-    _inject_operators();
-
-__pragma__ ('endif')
