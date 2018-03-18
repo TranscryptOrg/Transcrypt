@@ -1,4 +1,3 @@
-from animals import *
 import cats_submodule as csm
 
 class Cat (Animal):

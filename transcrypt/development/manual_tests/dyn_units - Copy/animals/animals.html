@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <script type="module">
+            import * as animals from "./__javascript__/animals.mod.js"; window.animals = animals;
+            import * as cats from "./__javascript__/cats.mod.js"; window.cats = cats;
+            import * as dogs from "./__javascript__/dogs.mod.js"; window.dogs = dogs;
+       </script>
+        <style>button {width:200px;}</style>
+    </head>
+    <body>  
+        <div id = "Felix">...</div>
+        <button onclick="cats.Cat ('Felix');">Create cat Felix</button><br/>
+        <button onclick="animals.find ('Felix') .feed ();">Feed cat Felix</button><br/>
+        <button onclick="animals.find ('Felix') .greet ();">Greet cat Felix</button><br/>
+        <br/>
+        
+        <div id = "Tiger">...</div>
+        <button onclick="cats.Cat ('Tiger');">Create cat Tiger</button><br>
+        <button onclick="animals.find ('Tiger') .feed ();">Feed cat Tiger</button><br/>
+        <button onclick="animals.find ('Tiger') .greet ();">Greet cat Tiger</button><br/>
+        <br/>
+        
+        <div id = "Pluto">...</div>
+        <button onclick="dogs.Dog ('Pluto');">Create dog Pluto</button><br>
+        <button onclick="animals.find ('Pluto') .feed ();">Feed dog Pluto</button><br/>
+        <button onclick="animals.find ('Pluto') .greet ();">Greet dog Pluto</button><br/>
+    </body>
+</html>

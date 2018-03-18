@@ -232,7 +232,7 @@ def digestJavascript (code, symbols, allowStripComments):
     if stripComments:
         passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if passable (line)] if commentlessLine]
     else:
-        passableLines = [line for line in code.split ('\n') if passable (line)]
+        passableLines = [line for line in code.spit ('\n') if passable (line)]
         
     result = Any (
         digestedCode = '\n'.join (passableLines),
@@ -241,20 +241,38 @@ def digestJavascript (code, symbols, allowStripComments):
         importedModules = []
     )
     
-    importPattern = re.compile (r'({.*}).*(\'.*\')')
+    namesPattern = re.compile ('({.*})')
+    pathPattern = re.compile ('(\'.*\')')
     for line in passableLines:
         words = line.split (' ')
-        if words [0] == 'export':               
-            if words [1][0] == '{':             # Export list (e.g. due to transit export)
-                result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
-            else:                               # Export prefix before function or variable
-                result.exportedNames.append (words [2])
+        if words [0] == 'export':
+            # Deducing exported names from JavaScript is needed to facilitate * import by other modules
             
-        if words [0] == 'import':               # There may be several import statements, each from a different module
-            match = importPattern.search (line)
+            if words [1][0] == '{':
+                # - Transit export:   "export {p, q, r, s};"  
+                
+                # Find exported names as "{p, q, r, s}"
+                match = namesPattern.search (line)
+                
+                # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
+                result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+            else:
+                # - Export prefix:    "export var ... or export function ..."
+                
+                result.exportedNames.append (words [2])
+                   
+        if words [0] == 'import':
+            # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
+            # They may have an explicit import list for unqualified access or an import * for qualified access
+            # In both cases only the path of the imported module is needed, to be able to provide that module
+            # It can be a path without extension, allowing both .py and .mod.js files as imported module
+            #
+            # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
+            # - Qualified import:     "import * from '<relative module path>'"  
+            
+            match = pathPattern.search (line)
             result.importedModules.append (Any (
-                path = eval (match.group (2)),
-                names = eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1)))
+                path = eval (match.group (1))
             ))
                 
     return result

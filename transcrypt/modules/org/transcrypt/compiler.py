@@ -2300,10 +2300,17 @@ class Generator (ast.NodeVisitor):
 
         if not names:
             return
+            
+            
+        '''
+        Possibilities:
+        
+        (1) import a.b.d, d.e.f as g        --> import 
+        '''
 
         for index, alias in enumerate (names):
             try:
-                self.useModule (alias.name)
+                module = self.useModule (alias.name)
             except Exception as exception:
                 utils.enhanceException (
                     exception,
@@ -2312,14 +2319,15 @@ class Generator (ast.NodeVisitor):
                 )
 
             if alias.asname:
-                self.emit ('var {} =  __init__ (__world__.{})', self.filterId (alias.asname), self.filterId (alias.name))
+                self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
             else:
+                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
                 head = aliasSplit [0]
                 tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
 
                 self.importHeads.add (head)
-                self.emit ('__nest__ ({}, \'{}\', __init__ (__world__.{}))', self.filterId (head), self.filterId (tail), self.filterId (alias.name))
+                self.emit ('__nest__ ({}, \'{}\', __module_{}__)', self.filterId (head), self.filterId (tail), self.filterId (module.name))
 
             if index < len (names) - 1:
                 self.emit (';\n')
@@ -2363,7 +2371,6 @@ class Generator (ast.NodeVisitor):
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
-
                     except:                                                     # If it doesn't it denotes an entity inside a module
                         module = self.useModule (node.module)
                         facilities.append (utils.Any (name = alias.name, asName = alias.asname))      
@@ -2371,24 +2378,22 @@ class Generator (ast.NodeVisitor):
                 self.emit ('import {{')
                 for index, facility in enumerate (facilities):
                     self.emitComma (index)
-                    self.emit (facility.name)
+                    self.emit (self.filterId (facility.name))
                     if facility.asName:
-                        self.emit (' as {}', facility.asName)
+                        self.emit (' as {}', self.filterId (facility.asName))
                 self.emit ('}} from \'{}\';\n', module.importRelPath)
 
-            # Transit export of imported facilities (but not modules)
+            # Transit export of imported facilities (so no facilities that weren't imported and no modules)
             if type (self.getScope ().node) == ast.Module:
                 if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
                     self.emit ('export {{')
                     for index, facility in enumerate (facilities):
                         self.emitComma (index)
-                        self.emit (facility.name)
-                        if facility.asName:
-                            self.emit (' as {}', facility.asName)
+                        self.emit (self.filterId (facility.asName) if facility.asName else self.filterId (facility.name))
                     self.emit ('}};\n')
+                    
         except Exception as exception:
             print (traceback.format_exc ())
-        
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr,
