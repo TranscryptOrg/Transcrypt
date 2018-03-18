@@ -16,7 +16,6 @@
 import os
 import os.path
 import sys
-import tokenize
 import ast
 import re
 import copy
@@ -27,6 +26,7 @@ import io
 import subprocess
 import shlex
 import shutil # !!!
+import tokenize
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -2321,13 +2321,13 @@ class Generator (ast.NodeVisitor):
             if alias.asname:
                 self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
             else:
-                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name), module.importRelPath)
+                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
                 head = aliasSplit [0]
                 tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
 
                 self.importHeads.add (head)
-                self.emit ('__nest__ ({}, \'{}\', __module_{}__)', self.filterId (head), self.filterId (tail), self.filterId (module.name))
+                self.emit ('__nest__ ({}, \'{}\', __module_{}__)', self.filterId (head), self.filterId (tail), self.filterId (module.name .replace ('.', '_')))
 
             if index < len (names) - 1:
                 self.emit (';\n')
@@ -2365,8 +2365,8 @@ class Generator (ast.NodeVisitor):
                         )
                     
                     module = self.useModule (node.module)
-                    for name in module.exports:
-                        facilities.append (Any (name = aName, asName = None))
+                    for aName in module.exports:
+                        facilities.append (utils.Any (name = aName, asName = None))
                 else:
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))

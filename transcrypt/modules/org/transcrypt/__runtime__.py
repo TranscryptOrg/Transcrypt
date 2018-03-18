@@ -1,7 +1,7 @@
 # Transcrypt runtime module
 
 # ====== BEGIN of core section, available only in transpile mode
-__pragma__ ('js', '{}', __include__ ('org/transcrypt/__javascript__/__core__.part.js'))
+__pragma__ ('js', '{}', __include__ ('org/transcrypt/__core__.part.js'))
 # ====== END of core section
 
 # ====== BEGIN of janus section, available in transpile mode and, with self.transpiler_name changed to self.executor_name, in run mode
@@ -18,7 +18,7 @@ __pragma__ ('norun')
 # ====== END of janus section
 
 # ====== BEGIN of builtin section, available only in run mode
-__pragma__ ('js', '{}', __include__ ('org/transcrypt/__javascript__/__builtin__.part.js'))
+__pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.part.js'))
 
 __pragma__ ('skip')
 copy = Math = __typeof__ = __repr__ = document = console = window = 0

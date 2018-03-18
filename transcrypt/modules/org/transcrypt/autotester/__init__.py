@@ -315,7 +315,8 @@ class AutoTester:
 		if __envir__.executor_name == __envir__.transpiler_name:
 			self.compare ()
 		else:
-			fnameBase = __main__.__file__ [ : -3] .replace ('\\', '/') .rsplit ('/', 1) [-1]
+			# fnameBase = __main__.__file__ [ : -3] .replace ('\\', '/') .rsplit ('/', 1) [-1]
+			fnameBase = __main__.__file__ .replace ('\\', '/') .rsplit ('/', 1) [-1]
 			hg = HTMLGenerator(fnameBase)
 			for minified in (False, True):
 				hg.generate_html(self.refDict, minified)

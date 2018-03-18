@@ -25,23 +25,6 @@ import tokenize
 transpilerDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')   # Set of Transcrypt itself
 modulesDir = '{}/modules'.format (transpilerDir)                                    # Set dir of Transcrypt-only modules
 
-# Get environment from runtime and correct executor to be interpreter
-with tokenize.open (modulesDir + '/org/transcrypt/__runtime__.py') as runtimeFile:
-    runtimeLines = runtimeFile.read () .split ('\n')
-environmentLines = []
-passing = False
-for runtimeLine in runtimeLines:
-    if runtimeLine.startswith ('__pragma__ (\'run\')'):
-        passing = True
-    elif runtimeLine.startswith ('__pragma__ (\'norun\')'):
-        break;  # Currently only one janus section allowed, to avoid having to parse the whole runtime file.
-    else:
-        if passing:
-            environmentLines.append (runtimeLine)
-exec ('\n'.join (environmentLines))
-
-__envir__.executor_name = __envir__.interpreter_name
-
 # Both CPython and Transcrypt will use dirs in sys.path as search roots for modules
 # CPython will also search relatively from each module, Transcrypt only from the main module
 # Use / rather than \ pervasively
@@ -68,7 +51,6 @@ transpilationDirs = [modulesDir] + sys.path
 sys.path.append (modulesDir)      
 from org.transcrypt import utils
 from org.transcrypt import compiler
-
 exitCodeNames = ('exitSuccess', 'exitCommandArgsError', 'exitNoLicense', 'exitSourceNotGiven', 'exitCannotRunSource', 'exitSpecificCompileError', 'exitGeneralCompileError')
 
 for exitCode, exitCodeName in enumerate (exitCodeNames):
@@ -97,10 +79,12 @@ def main ():
             utils.log (True, 'Error: missing license reference file\n')
             return setExitCode (exitNoLicense)
             
-        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __envir__.transpiler_name.capitalize (), __envir__.transpiler_version)
-        utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
-        
         utils.commandArgs.parse ()
+        
+        from org.transcrypt.stubs import browser
+
+        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', browser.__envir__.transpiler_name.capitalize (), browser.__envir__.transpiler_version)
+        utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
         
         if utils.commandArgs.license:
             with open (licensePath) as licenseFile:
@@ -158,7 +142,7 @@ def main ():
         
         if utils.commandArgs.run:
             try:
-                with open (utils.commandArgs.source) as sourceFile:
+                with open (utils.commandArgs.source + '.py') as sourceFile:
                     exec (sourceFile.read (), globals (), locals ())
                     return setExitCode (exitSuccess)
             except Exception as exception:
@@ -167,7 +151,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (transpilationDirs, __symbols__, __envir__)
+                compiler.Program (transpilationDirs, __symbols__, browser.__envir__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)

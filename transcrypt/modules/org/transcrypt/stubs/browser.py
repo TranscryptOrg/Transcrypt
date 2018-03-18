@@ -1,13 +1,33 @@
 # This module emulates some browser functionality when running on the desktop using CPython
 
 import builtins
+import tokenize
+import os
 
 from org.transcrypt import utils
+
+# Get environment from runtime and correct executor to be interpreter
+
+pathOfThisFile = os.path.dirname(os.path.abspath(__file__))
+with tokenize.open (f'{pathOfThisFile}/../__runtime__.py') as runtimeFile:
+    runtimeLines = runtimeFile.read () .split ('\n')
+environmentLines = []
+passing = False
+for runtimeLine in runtimeLines:
+    if runtimeLine.startswith ('__pragma__ (\'run\')'):
+        passing = True
+    elif runtimeLine.startswith ('__pragma__ (\'norun\')'):
+        break;  # Currently only one janus section allowed, to avoid having to parse the whole runtime file.
+    else:
+        if passing:
+            environmentLines.append (runtimeLine)
+exec ('\n'.join (environmentLines))
+__envir__.executor_name = __envir__.interpreter_name
 
 # Set main to commandArgs.source rather than transcrypt
 class __main__:
     __file__ = utils.commandArgs.source
-
+    
 # Browser root singleton
 class window:
     class console:

@@ -65,8 +65,8 @@ class HTMLGenerator(object):
 			raise ValueError("Filename Base must be defined to generate")
 		minInfix = '.min' if minified else ''
 		fname = minInfix.join([self._fnameBase, '.html'])
-		jsFileName = minInfix.join([self._fnameBase, '.js'])
-		jsPath = "{}/{}".format(__envir__.target_subdir, jsFileName)
+		jsFileName = minInfix.join([self._fnameBase, '.mod.js'])
+		jsPath = "{}/{}".format('__target__', jsFileName)
 
 		with open( fname, 'w') as f:
 			f.write("<html><head>")
@@ -80,7 +80,7 @@ class HTMLGenerator(object):
 
 			self._writeTableArea(f)
 
-			f.write ('<script src="{}"></script>\n\n'.format (jsPath))
+			f.write ('<script type="module" src="{}"></script>\n\n'.format (jsPath))
 			f.write("</body></html>")
 
 	##########################
