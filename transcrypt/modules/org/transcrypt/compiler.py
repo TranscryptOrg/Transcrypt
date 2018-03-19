@@ -121,7 +121,9 @@ class Overloads:
         ast.RShift: 'rshift',
         ast.BitOr: 'or',
         ast.BitXor: 'xor',
-        ast.BitAnd: 'and'
+        ast.BitAnd: 'and',
+        ast.Eq: 'eq',
+        ast.NotEq: 'neq'
         }
 
     @classmethod
