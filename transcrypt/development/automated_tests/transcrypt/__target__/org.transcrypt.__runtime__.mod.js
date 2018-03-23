@@ -1821,7 +1821,7 @@ export var AttributeError =  __class__ ('AttributeError', [Exception], {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-export var TypeError =  __class__ ('py_TypeError', [Exception], {
+export var py_TypeError =  __class__ ('py_TypeError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));

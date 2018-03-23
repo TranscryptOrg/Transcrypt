@@ -1,5 +1,11 @@
+# __pragma__ ('xglobs')
+
 xxa = 'subXxa'
 xxb = 'subXxb'
+xxp = None
+xxq = None
+xxr = None
+xxs = None
 
 for name in ('xxp', 'xxq'):
     globals () [name] = 'sub{}'.format (name.capitalize ())

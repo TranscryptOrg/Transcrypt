@@ -343,8 +343,7 @@ class Generator (ast.NodeVisitor):
         self.targetFragments = []
         self.indentLevel = 0
         self.scopes = []
-        self.use = set ()
-        self.all = set ()
+        self.all = set ()        
         self.importHeads = set ()
         self.docString = None
         self.docStringEmitted = False
@@ -468,6 +467,7 @@ class Generator (ast.NodeVisitor):
         self.allowKeyCheck = utils.commandArgs.keycheck
         self.allowDebugMap = utils.commandArgs.anno and not self.module.sourcePath.endswith ('.js')
         self.allowDocAttribs = utils.commandArgs.docat
+        self.allowGlobals = utils.commandArgs.xglobs
         self.allowJavaScriptIter = False
         self.allowJavaScriptCall = utils.commandArgs.jscall
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
@@ -726,9 +726,7 @@ class Generator (ast.NodeVisitor):
 
     def useModule (self, name):
         self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-        result = self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
-        self.use.add (name)                                     # Must not be done if the healthy exception occurs
-        return result
+        return self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -1471,6 +1469,11 @@ class Generator (ast.NodeVisitor):
                     except:
                         print (traceback.format_exc ())
 
+                elif node.args [0] .s == 'xglobs':      # Allow use of the 'globals' function for this whole module
+                    self.allowGlobals = True
+                elif node.args [0] .s == 'noxglobs':    # Disallow use of the 'globals' funciton for this whole module
+                    self.allowGlobals = False
+
                 elif node.args [0] .s == 'kwargs':      # Start emitting kwargs code for FunctionDef's
                     self.allowKeywordArgs = True
                 elif node.args [0] .s == 'nokwargs':    # Stop emitting kwargs code for FunctionDef's
@@ -1701,9 +1704,11 @@ class Generator (ast.NodeVisitor):
         self.adaptLineNrString (node)
 
         if type (self.getScope () .node) == ast.Module:
-            self.emit (self.filterId ('\nexport var {} = '.format (node.name)))
+            self.emit ('\nexport var {} = '.format (self.filterId (node.name)))
+            if self.allowGlobals:
+                self.all.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
-            self.emit (self.filterId ('\n{}:'.format (node.name)))
+            self.emit ('\n{}:'.format (self.filterId (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
 
@@ -2098,7 +2103,8 @@ class Generator (ast.NodeVisitor):
             isMethod = not (isGlobal or type (self.getScope () .node) in (ast.FunctionDef, ast.AsyncFunctionDef))  # Global or function scope, so it's no method
             
             if isGlobal:
-                self.all.add (node.name)
+                if self.allowGlobals:
+                    self.all.add (node.name)
 
             if isMethod:
                 self.emit ('\n')
@@ -2402,11 +2408,15 @@ class Generator (ast.NodeVisitor):
 
             # Transit export of imported facilities (so no facilities that weren't imported and no modules)
             if type (self.getScope ().node) == ast.Module:
-                if not utils.commandArgs.xconfimp or self.module.filePrename == '__init__':
+                if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
                     self.emit ('export {{')
                     for index, facility in enumerate (facilities):
                         self.emitComma (index)
                         self.emit (self.filterId (facility.asName) if facility.asName else self.filterId (facility.name))
+                        
+                        if self.allowGlobals:
+                            self.all.add (facility.asName if facility.asName else facility.name)
+                        
                     self.emit ('}};\n')
                     
         except Exception as exception:
@@ -2526,8 +2536,11 @@ class Generator (ast.NodeVisitor):
                 self.emit ('import {{{}}} from \'{}\';\n', ', '.join (runtimeModule.exports), runtimeModule.importRelPath)
         except:
             print (traceback.format_exc ())
+            
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
-
+        if self.allowGlobals:
+            self.all.add ('__name__')
+        
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
@@ -2541,12 +2554,30 @@ class Generator (ast.NodeVisitor):
                 self.emit ('export var __doc__ = ')
                 self.visit (self.docString)
                 self.emit (';\n')
+                if self.allowGlobals:
+                    self.all.add ('__doc__')
                 self.docStringEmitted = True
-
-        self.targetFragments.insert (importHeadsIndex, ''.join ([
-            '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
-            for head in sorted (self.importHeads)
-        ]))
+                        
+        allClause = (
+                (
+                    'export var __all__ = {' +
+                        ', '.join ([
+                            'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.all)
+                        ]) +
+                    '};\n'
+                )
+            if self.allowGlobals else
+                ''
+        )
+                
+        self.targetFragments.insert (
+            importHeadsIndex,
+                ''.join ([
+                    '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
+                    for head in sorted (self.importHeads)
+                ]) +
+                allClause
+            )
         self.descope ()
 
     def visit_Name (self, node):
@@ -2568,6 +2599,11 @@ class Generator (ast.NodeVisitor):
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
             return
+            
+        elif type (node.ctx) == ast.Store:
+            if type (self.getScope () .node) == ast.Module:
+                if self.allowGlobals:
+                    self.all.add (node.id)
 
         self.emit (self.filterId (node.id))
 

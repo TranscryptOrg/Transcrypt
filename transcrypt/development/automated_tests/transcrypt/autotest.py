@@ -28,7 +28,7 @@ if __pragma__ ('defined', '__py3.6__'):
     import fstrings
 
 import general_functions
-# import globals_function
+import globals_function
 import indices_and_slices
 
 if __pragma__ ('defined', '__esv6__'):
@@ -98,7 +98,7 @@ if __pragma__ ('defined', '__py3.6__'):
     autoTester.run (fstrings, 'fstrings')
 
 autoTester.run (general_functions, 'general_functions')
-# autoTester.run (globals_function, 'globals_function')
+autoTester.run (globals_function, 'globals_function')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 
 if __pragma__ ('defined', '__esv6__'):

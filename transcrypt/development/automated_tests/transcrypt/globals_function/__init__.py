@@ -1,7 +1,13 @@
+# __pragma__ ('xglobs')
+
 from globals_function import sub
 
 xxa = 'mainXxa'
 xxb = 'mainXxb'
+xxp = None
+xxq = None
+xxr = None
+xxs = None
 
 for name in ('xxp', 'xxq'):
     globals () [name] = 'main{}'.format (name.capitalize ())    
