@@ -20,11 +20,15 @@ Jul 2016, Gunther Klessinger, Axiros GmbH
 # we don't need those:
 __pragma__ ('nokwargs')
 
+''' !!!
 try:
     __language = window.navigator.language
 except:
     __language = 'en-US'
-    
+'''
+
+__language = 'en-US'
+ 
 def __debugGetLanguage ():
     return __language
     
@@ -43,12 +47,12 @@ __now = __new__(Date())
 # build the locale's weekday names
 __weekdays = []
 __weekdays_long = []
-__d = __new__(Date(1467662339080)) # a monday
+__Xd = __new__(Date(1467662339080)) # a monday !!!
 for i in range(7):
     for l, s in (__weekdays, 'short'), (__weekdays_long, 'long'):
-        l.append(__d.toLocaleString(__language,
+        l.append(__Xd.toLocaleString(__language,
                                         {'weekday': s}).lower())
-    __d.setDate(__d.getDate() + 1)
+    __Xd.setDate(__Xd.getDate() + 1)
 
 
 # build the locale's months names
@@ -221,12 +225,14 @@ def _tzname(t):
 
 # we calc those only once. I mean - we run in the browser in the end.
 
-altzone = __now.getTimezoneOffset()
+altzone = __now.getTimezoneOffset() * 60
+''' !!!
 if not _daylight_in_effect(__now):
     # then we must use the other offset we have in the current year:
     _jj  = __jan_jun_tz(__now)
     altzone = _jj[0] if altzone == _jj[1] else _jj[1]
-altzone = altzone * 60
+'''
+# altzone = altzone * 60
 
 timezone = _timezone(__now) * 60
 

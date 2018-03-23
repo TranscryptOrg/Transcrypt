@@ -54,3 +54,8 @@ isnan = js_isNaN
 
 inf = js_Infinity
 nan = js_NaN
+
+def modf(n):
+    sign = 1 if n >= 0 else -1
+    f, mod = divmod (abs(n), 1)
+    return mod * sign, f * sign

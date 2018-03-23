@@ -3,7 +3,7 @@ import org.transcrypt.autotester
 
 import arguments
 import attribs_by_name
-# import builtin_super
+import builtin_super
 import byte_arrays
 import callable_test
 import classes
@@ -18,10 +18,10 @@ import data_structures
 import decorators
 import dict_comprehensions
 import dictionaries
-# import div_issues
+import div_issues
 import div_pulls
 import docstrings
-# import exceptions
+import exceptions
 import extended_slices
 
 if __pragma__ ('defined', '__py3.6__'):
@@ -45,7 +45,7 @@ import module_cmath
 if __pragma__ ('defined', 'undefined__esv6__'):
     import module_collections
 
-# import module_datetime
+import module_datetime
 
 if __pragma__ ('defined', '__esv6__'):
     import module_itertools
@@ -72,7 +72,7 @@ import tuple_assignment
 autoTester = org.transcrypt.autotester.AutoTester ()
 autoTester.run (arguments, 'arguments')
 autoTester.run (attribs_by_name, 'attribs_by_name')
-# autoTester.run (builtin_super, 'builtin_super')
+autoTester.run (builtin_super, 'builtin_super')
 autoTester.run (byte_arrays, 'byte_arrays')
 autoTester.run (callable_test, 'callable')
 autoTester.run (classes, 'classes')
@@ -87,11 +87,11 @@ autoTester.run (data_structures, 'data_structures')
 autoTester.run (decorators, 'decorators')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')
 autoTester.run (dictionaries, 'dictionaries')
-# autoTester.run (div_issues, 'div_issues')
+autoTester.run (div_issues, 'div_issues')
 autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (docstrings, 'docstrings')
 
-# autoTester.run (exceptions, 'exceptions')
+autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
 
 if __pragma__ ('defined', '__py3.6__'):
@@ -115,7 +115,7 @@ autoTester.run (module_cmath, 'module_cmath')
 if __pragma__ ('defined', 'undefined__esv6__'):
     autoTester.run (module_collections, 'module_collections')
 
-# autoTester.run (module_datetime, 'module_datetime')
+autoTester.run (module_datetime, 'module_datetime')
 
 if __pragma__ ('defined', '__esv6__'):
     autoTester.run (module_itertools, 'module_itertools')

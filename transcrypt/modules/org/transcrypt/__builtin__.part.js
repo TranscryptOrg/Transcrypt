@@ -72,7 +72,7 @@ export function __setProperty__ (anObject, name, descriptor) {
 }
 
 // Assert function, call to it only generated when compiling with --dassert option
-function assert (condition, message) {  // Message may be undefined
+export function assert (condition, message) {  // Message may be undefined
     if (!condition) {
         throw AssertionError (message, new Error ());
     }

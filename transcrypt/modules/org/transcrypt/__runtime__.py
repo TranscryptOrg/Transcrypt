@@ -13,7 +13,10 @@ __pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs inv
 __pragma__ ('nokwargs')
 __pragma__ ('noalias', 'sort')
 
-class Exception:
+class BaseException:
+    pass
+
+class Exception (BaseException):
     __pragma__ ('kwargs')
     def __init__ (self, *args, **kwargs):
         self.__args__ = args
@@ -124,6 +127,9 @@ def filter (func, iterable):
     if func == None:
         func = bool
     return [item for item in iterable if func (item)]
+    
+def divmod (n, d):
+    return n // d, n % d
     
 __pragma__ ('ifdef', '__complex__')
 

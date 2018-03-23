@@ -5,21 +5,7 @@ time zone and DST data sources.
 """
 
 import time as _time
-import math as _math
-from org.transcrypt.stubs.browser import __envir__
-
-
-if __envir__.executor_name == __envir__.transpiler_name:
-    # functions not imlemented in transcrypt
-    def divmod(n, d):
-        return n // d, n % d
-
-    def modf(n):
-        sign = 1 if n >= 0 else -1
-        f, mod = divmod(abs(n), 1)
-        return mod * sign, f * sign
-    _math.modf = modf
-
+import math
 
 def zfill(s, c):
     s = str(s)
@@ -412,8 +398,8 @@ class timedelta:
         # Get rid of all fractions, and normalize s and us.
         # Take a deep breath <wink>.
         if isinstance(days, float):
-            dayfrac, days = _math.modf(days)
-            daysecondsfrac, daysecondswhole = _math.modf(dayfrac * (24. * 3600.))
+            dayfrac, days = math.modf(days)
+            daysecondsfrac, daysecondswhole = math.modf(dayfrac * (24. * 3600.))
             assert daysecondswhole == int(daysecondswhole)  # can't overflow
             s = int(daysecondswhole)
             assert days == int(days)
@@ -428,7 +414,7 @@ class timedelta:
         # days isn't referenced again before redefinition
 
         if isinstance(seconds, float):
-            secondsfrac, seconds = _math.modf(seconds)
+            secondsfrac, seconds = math.modf(seconds)
             assert seconds == int(seconds)
             seconds = int(seconds)
             secondsfrac += daysecondsfrac
@@ -1336,7 +1322,7 @@ class datetime(date):
 
         A timezone info object may be passed in as well.
         """
-        frac, t = _math.modf(t)
+        frac, t = math.modf(t)
         us = round(frac * 1e6)
         if us >= 1000000:
             t += 1

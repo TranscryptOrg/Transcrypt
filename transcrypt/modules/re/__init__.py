@@ -14,7 +14,6 @@
 from org.transcrypt.stubs.browser import __pragma__
 from re.translate import translate
 
-
 # Flags
 
 T = (1<<0)

@@ -1,6 +1,9 @@
-// Transcrypt'ed from Python, 2018-03-16 11:29:35
-"use strict";
 var __name__ = 'org.transcrypt.__runtime__';
+export var __envir__ = {};
+__envir__.interpreter_name = 'python';
+__envir__.transpiler_name = 'transcrypt';
+__envir__.executor_name = __envir__.transpiler_name;
+__envir__.transpiler_version = '3.7.1';
 __pragma__ ('stripcomments')
 export function __nest__ (headObject, tailNames, value) {
     var current = headObject;
@@ -19,8 +22,12 @@ export function __nest__ (headObject, tailNames, value) {
             current = current [tailChain [index]];
         }
     }
-    for (var attrib in value) {
-        current [attrib] = value [attrib];
+    for (let attrib of Object.getOwnPropertyNames (value)) {
+        Object.defineProperty (current, attrib, {
+            get () {return value [attrib];},
+            enumerable: true,
+            configurable: true
+        });
     }
 };
 export function __init__ (module) {
@@ -118,18 +125,6 @@ export function __class__ (name, bases, attribs, meta) {
     return meta.__new__ (meta, name, bases, attribs);
 };
 export function __pragma__ () {};
-
-export var __Envir__ =  __class__ ('__Envir__', [object], {
-	__module__: __name__,
-	get __init__ () {return __get__ (this, function (self) {
-		self.interpreter_name = 'python';
-		self.transpiler_name = 'transcrypt';
-		self.executor_name = self.transpiler_name;
-		self.transpiler_version = '3.6.101';
-		self.target_subdir = '__javascript__';
-	});}
-});
-export var __envir__ = __Envir__ ();
 __pragma__ ('stripcomments')
 export function __call__ (/* <callee>, <this>, <params>* */) {
     var args = [] .slice.apply (arguments);
@@ -257,10 +252,10 @@ export function len (anObject) {
     }
     return length;
 };
-function __i__ (any) {
+export function __i__ (any) {
     return py_typeof (any) == dict ? any.py_keys () : any;
 }
-function __k__ (keyed, key) {
+export function __k__ (keyed, key) {
     var result = keyed [key];
     if (typeof result == 'undefined') {
         if (keyed instanceof Array)
@@ -273,7 +268,7 @@ function __k__ (keyed, key) {
     }
     return result;
 }
-function __t__ (target) {
+export function __t__ (target) {
     return (
         target === undefined || target === null ? false :
         ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
@@ -442,7 +437,14 @@ export function max (nrOrSeq) {
 export function min (nrOrSeq) {
     return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);
 };
-var abs = Math.abs;
+export function abs (x) {
+    try {
+        return Math.abs (x);
+    }
+    catch (exception) {
+        return Math.sqrt (x.real * x.real + x.imag * x.imag);
+    }
+};
 export function round (number, ndigits) {
     if (ndigits) {
         var scale = Math.pow (10, ndigits);
@@ -457,7 +459,7 @@ export function round (number, ndigits) {
     }
     return rounded;
 };
-function __jsUsePyNext__ () {
+export function __jsUsePyNext__ () {
     try {
         var result = this.__next__ ();
         return {value: result, done: false};
@@ -466,7 +468,7 @@ function __jsUsePyNext__ () {
         return {value: undefined, done: true};
     }
 }
-function __pyUseJsNext__ () {
+export function __pyUseJsNext__ () {
     var result = this.next ();
     if (result.done) {
         throw StopIteration (new Error ());
@@ -475,7 +477,7 @@ function __pyUseJsNext__ () {
         return result.value;
     }
 }
-function py_iter (iterable) {
+export function py_iter (iterable) {
     if (typeof iterable == 'string' || '__iter__' in iterable) {
         var result = iterable.__iter__ ();
         result.next = __jsUsePyNext__;
@@ -500,7 +502,7 @@ function py_iter (iterable) {
     result [Symbol.iterator] = function () {return result;};
     return result;
 }
-function py_next (iterator) {
+export function py_next (iterator) {
     try {
         var result = iterator.__next__ ();
     }
@@ -520,7 +522,7 @@ function py_next (iterator) {
         return result;
     }
 }
-function __PyIterator__ (iterable) {
+export function __PyIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }
@@ -532,7 +534,7 @@ __PyIterator__.prototype.__next__ = function() {
         throw StopIteration (new Error ());
     }
 };
-function __JsIterator__ (iterable) {
+export function __JsIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }
@@ -574,7 +576,7 @@ export function zip () {
         }
     );
 };
-function range (start, stop, step) {
+export function range (start, stop, step) {
     if (stop == undefined) {
         stop = start;
         start = 0;
@@ -591,7 +593,7 @@ function range (start, stop, step) {
     }
     return result;
 };
-function any (iterable) {
+export function any (iterable) {
     for (var index = 0; index < iterable.length; index++) {
         if (bool (iterable [index])) {
             return true;
@@ -599,7 +601,7 @@ function any (iterable) {
     }
     return false;
 }
-function all (iterable) {
+export function all (iterable) {
     for (var index = 0; index < iterable.length; index++) {
         if (! bool (iterable [index])) {
             return false;
@@ -607,17 +609,17 @@ function all (iterable) {
     }
     return true;
 }
-function sum (iterable) {
+export function sum (iterable) {
     var result = 0;
     for (var index = 0; index < iterable.length; index++) {
         result += iterable [index];
     }
     return result;
 }
-function enumerate (iterable) {
+export function enumerate (iterable) {
     return zip (range (len (iterable)), iterable);
 }
-function copy (anObject) {
+export function copy (anObject) {
     if (anObject == null || typeof anObject == "object") {
         return anObject;
     }
@@ -631,7 +633,7 @@ function copy (anObject) {
         return result;
     }
 }
-function deepcopy (anObject) {
+export function deepcopy (anObject) {
     if (anObject == null || typeof anObject == "object") {
         return anObject;
     }
@@ -645,7 +647,7 @@ function deepcopy (anObject) {
         return result;
     }
 }
-function list (iterable) {
+export function list (iterable) {
     var instance = iterable ? [] .slice.apply (iterable) : [];
     return instance;
 }
@@ -754,14 +756,14 @@ Array.prototype.__mul__ = function (scalar) {
     return result;
 };
 Array.prototype.__rmul__ = Array.prototype.__mul__;
-function tuple (iterable) {
+export function tuple (iterable) {
     var instance = iterable ? [] .slice.apply (iterable) : [];
     instance.__class__ = tuple;
     return instance;
 }
 tuple.__name__ = 'tuple';
 tuple.__bases__ = [object];
-function set (iterable) {
+export function set (iterable) {
     var instance = [];
     if (iterable) {
         for (var index = 0; index < iterable.length; index++) {
@@ -895,7 +897,7 @@ Array.prototype.__lt__ = function (other) {
 Array.prototype.__gt__ = function (other) {
     return this.issuperset (other) && !this.issubset (other);
 };
-function bytearray (bytable, encoding) {
+export function bytearray (bytable, encoding) {
     if (bytable == undefined) {
         return new Uint8Array (0);
     }
@@ -919,7 +921,7 @@ function bytearray (bytable, encoding) {
         }
     }
 }
-var bytes = bytearray;
+export var bytes = bytearray;
 Uint8Array.prototype.__add__ = function (aBytes) {
     var result = new Uint8Array (this.length + aBytes.length);
     result.set (this);
@@ -934,7 +936,7 @@ Uint8Array.prototype.__mul__ = function (scalar) {
     return result;
 };
 Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
-function str (stringable) {
+export function str (stringable) {
     if (typeof stringable === 'number')
         return stringable.toString();
     else {
@@ -1216,7 +1218,7 @@ function __dgetitem__ (aKey) {
 function __dsetitem__ (aKey, aValue) {
     this [aKey] = aValue;
 }
-function dict (objectOrPairs) {
+export function dict (objectOrPairs) {
     var instance = {};
     if (!objectOrPairs || objectOrPairs instanceof Array) {
         if (objectOrPairs) {
@@ -1717,7 +1719,6 @@ export function __setslice__ (container, lower, upper, step, value) {
         container.__setslice__ (lower, upper, step, value);
     }
 };
-
 export var Exception =  __class__ ('Exception', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
@@ -1767,35 +1768,30 @@ export var Exception =  __class__ ('Exception', [object], {
 		}
 	});}
 });
-
 export var IterableError =  __class__ ('IterableError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, error) {
 		Exception.__init__ (self, "Can't iterate over non-iterable", __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var StopIteration =  __class__ ('StopIteration', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, error) {
 		Exception.__init__ (self, 'Iterator exhausted', __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var ValueError =  __class__ ('ValueError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var KeyError =  __class__ ('KeyError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var AssertionError =  __class__ ('AssertionError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
@@ -1807,47 +1803,39 @@ export var AssertionError =  __class__ ('AssertionError', [Exception], {
 		}
 	});}
 });
-
 export var NotImplementedError =  __class__ ('NotImplementedError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var IndexError =  __class__ ('IndexError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var AttributeError =  __class__ ('AttributeError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
-export var TypeError =  __class__ ('py_TypeError', [Exception], {
+export var py_TypeError =  __class__ ('py_TypeError', [Exception], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, message, error) {
 		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
 	});}
 });
-
 export var Warning =  __class__ ('Warning', [Exception], {
 	__module__: __name__,
 });
-
 export var UserWarning =  __class__ ('UserWarning', [Warning], {
 	__module__: __name__,
 });
-
 export var DeprecationWarning =  __class__ ('DeprecationWarning', [Warning], {
 	__module__: __name__,
 });
-
 export var RuntimeWarning =  __class__ ('RuntimeWarning', [Warning], {
 	__module__: __name__,
 });
@@ -1953,7 +1941,123 @@ export var filter = function (func, iterable) {
 		return __accu0__;
 	}) ();
 };
-
+export var complex =  __class__ ('complex', [object], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, real, imag) {
+		if (typeof imag == 'undefined' || (imag != null && imag .hasOwnProperty ("__kwargtrans__"))) {;
+			var imag = null;
+		};
+		if (imag == null) {
+			if (py_typeof (real) == complex) {
+				self.real = real.real;
+				self.imag = real.imag;
+			}
+			else {
+				self.real = real;
+				self.imag = 0;
+			}
+		}
+		else {
+			self.real = real;
+			self.imag = imag;
+		}
+	});},
+	get __neg__ () {return __get__ (this, function (self) {
+		return complex (-(self.real), -(self.imag));
+	});},
+	get __exp__ () {return __get__ (this, function (self) {
+		var modulus = Math.exp (self.real);
+		return complex (modulus * Math.cos (self.imag), modulus * Math.sin (self.imag));
+	});},
+	get __log__ () {return __get__ (this, function (self) {
+		return complex (Math.log (Math.sqrt (self.real * self.real + self.imag * self.imag)), Math.atan2 (self.imag, self.real));
+	});},
+	get __pow__ () {return __get__ (this, function (self, other) {
+		return self.__log__ ().__mul__ (other).__exp__ ();
+	});},
+	get __rpow__ () {return __get__ (this, function (self, real) {
+		return self.__mul__ (Math.log (real)).__exp__ ();
+	});},
+	get __mul__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return complex (self.real * other, self.imag * other);
+		}
+		else {
+			return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real);
+		}
+	});},
+	get __rmul__ () {return __get__ (this, function (self, real) {
+		return complex (self.real * real, self.imag * real);
+	});},
+	get __div__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return complex (self.real / other, self.imag / other);
+		}
+		else {
+			var denom = other.real * other.real + other.imag * other.imag;
+			return complex ((self.real * other.real + self.imag * other.imag) / denom, (self.imag * other.real - self.real * other.imag) / denom);
+		}
+	});},
+	get __rdiv__ () {return __get__ (this, function (self, real) {
+		var denom = self.real * self.real;
+		return complex ((real * self.real) / denom, (real * self.imag) / denom);
+	});},
+	get __add__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return complex (self.real + other, self.imag);
+		}
+		else {
+			return complex (self.real + other.real, self.imag + other.imag);
+		}
+	});},
+	get __radd__ () {return __get__ (this, function (self, real) {
+		return complex (self.real + real, self.imag);
+	});},
+	get __sub__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return complex (self.real - other, self.imag);
+		}
+		else {
+			return complex (self.real - other.real, self.imag - other.imag);
+		}
+	});},
+	get __rsub__ () {return __get__ (this, function (self, real) {
+		return complex (real - self.real, -(self.imag));
+	});},
+	get __repr__ () {return __get__ (this, function (self) {
+		return '({}{}{}j)'.format (self.real, (self.imag >= 0 ? '+' : ''), self.imag);
+	});},
+	get __str__ () {return __get__ (this, function (self) {
+		return __repr__ (self).__getslice__ (1, -(1), 1);
+	});},
+	get __eq__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return self.real == other;
+		}
+		else {
+			return self.real == other.real && self.imag == other.imag;
+		}
+	});},
+	get __ne__ () {return __get__ (this, function (self, other) {
+		if (typeof other === 'number') {
+			return self.real != other;
+		}
+		else {
+			return self.real != other.real || self.imag != other.imag;
+		}
+	});},
+	get conjugate () {return __get__ (this, function (self) {
+		return complex (self.real, -(self.imag));
+	});}
+});
+export var __conj__ = function (aNumber) {
+	if (isinstance (aNumber, complex)) {
+		return complex (aNumber.real, -(aNumber.imag));
+	}
+	else {
+		return complex (aNumber, 0);
+	}
+};
 export var __Terminal__ =  __class__ ('__Terminal__', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {

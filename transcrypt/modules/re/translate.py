@@ -5,6 +5,7 @@
 # ease of integrating with the Transcrypt project
 #
 
+import re
 
 __pragma__ ('tconv')
 
@@ -302,7 +303,6 @@ def shiftReduce(stack, queue, namedGroups, flags):
 # TODO: Returns way to many values.
 def translate(rgx):
     # can't import as normal because it's a circular dependency
-    import re
     stack = []
     queue = list(rgx)
 

@@ -1,9 +1,10 @@
 from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbols__
 
 from div_issues.issue55 import *        # Names not exported from package's __init__.py, no output, only compilation check
-from div_issues.issue387 import run387       # Support __module__ and __qualname__ for introspection (only __module__ done and
+from div_issues.issue387 import run387  # Support __module__ and __qualname__ for introspection (only __module__ done and
                                         # __name__ set to '__main__ for main module'
-
+import re
+                           
 def run (autoTester):
     autoTester.check ('Issue 24')   # Non keyword switch generates javascript SyntaxError
     switch = False
@@ -89,9 +90,7 @@ def run (autoTester):
             autoTester.check (i)
         
         # Since JavaScript 5 gives no exception for a loop over a non-iterable, following code must only be executed for JavaScript 6
-        # Since Transcrypt doesn't get to see all modules loaded by CPython, __ifdef__ cannot be made to do its thing for all modules in an efficient way for CPython
-        # But a normal 'if' will work
-        if '__esv6__' in __symbols__:
+        if __pragma__ ('defined', '__esv6__'):
             y = 3
             for j in y:
                 autoTester.check (j)
@@ -100,7 +99,7 @@ def run (autoTester):
         pass
         # autoTester.check ('Detected iterating over non-iterable') # Minifier masks this exception, so we'll have to pass
         
-    if '__esv6__' in __symbols__:   # "if" rather than "__pragma__ ('ifdef')" because CPython doesn't understand pragma's
+    if __pragma__ ('defined', '__esv6__'):
         autoTester.check ('Issue 122')  # Problem with yield (or rather with slicing beyond list end)
         
         def chunks (aList, chunkLength):
@@ -341,8 +340,7 @@ def run (autoTester):
     except TypeError as exception:
         autoTester.check (exception)
         
-    #__pragma__ ('ifdef', '__esv6__')   # Needed because Transcrypt imports are compile time
-    if '__esv6__' in __symbols__:      # Needed because CPython doesn't understand pragma's
+    if __pragma__ ('defined', '__esv6__'):
         autoTester.check ('Issue 369')
         
         class Vector:
@@ -364,7 +362,7 @@ def run (autoTester):
         autoTester.check (str (Vector (1,2,3) + Vector (3,4,5)))
 
         #__pragma__ ('noopov')
-    #__pragma__ ('endif')
+
     
     autoTester.check ('Issue 387')
     run387 (autoTester)
@@ -376,8 +374,6 @@ def run (autoTester):
     autoTester.check (int (1 != 2))
     
     autoTester.check ('Issue 392')
-
-    import re
 
     class Example:
 

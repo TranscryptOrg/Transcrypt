@@ -1,9 +1,5 @@
 from org.transcrypt.stubs.browser import __envir__, __new__, __pragma__
 
-if __envir__.executor_name == __envir__.transpiler_name:
-    class BaseException:        # ??? Make part of __builtins__ for CPython compliance?
-        pass
-
 class Ex1 (Exception):
     pass
         

@@ -171,7 +171,7 @@ export function __setProperty__ (anObject, name, descriptor) {
         Object.defineProperty (anObject, name, descriptor);
     }
 }
-function assert (condition, message) {
+export function assert (condition, message) {
     if (!condition) {
         throw AssertionError (message, new Error ());
     }
@@ -1719,7 +1719,10 @@ export function __setslice__ (container, lower, upper, step, value) {
         container.__setslice__ (lower, upper, step, value);
     }
 };
-export var Exception =  __class__ ('Exception', [object], {
+export var BaseException =  __class__ ('BaseException', [object], {
+	__module__: __name__,
+});
+export var Exception =  __class__ ('Exception', [BaseException], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
 		var kwargs = dict ();
@@ -1940,6 +1943,9 @@ export var filter = function (func, iterable) {
 		}
 		return __accu0__;
 	}) ();
+};
+export var divmod = function (n, d) {
+	return tuple ([Math.floor (n / d), __mod__ (n, d)]);
 };
 export var complex =  __class__ ('complex', [object], {
 	__module__: __name__,
