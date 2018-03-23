@@ -73,6 +73,14 @@ def main ():
         return exitCode
     
     try:
+        __envir__ = utils.Any ()
+        with tokenize.open (f'{modulesDir}/org/transcrypt/__envir__.part.js') as envirFile:
+            exec (envirFile.read ());
+        __envir__.executor_name = __envir__.interpreter_name
+
+        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __envir__.transpiler_name.capitalize (), __envir__.transpiler_version)
+        utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
+        
         utils.log (True, '\n')
         licensePath = '{}/{}'.format (transpilerDir, 'license_reference.txt')   
         if not os.path.isfile (licensePath):
@@ -80,11 +88,6 @@ def main ():
             return setExitCode (exitNoLicense)
             
         utils.commandArgs.parse ()
-        
-        from org.transcrypt.stubs import browser
-
-        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', browser.__envir__.transpiler_name.capitalize (), browser.__envir__.transpiler_version)
-        utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
         
         if utils.commandArgs.license:
             with open (licensePath) as licenseFile:
@@ -151,7 +154,7 @@ def main ():
                 return setExitCode (exitCannotRunSource)
         else:
             try:
-                compiler.Program (transpilationDirs, __symbols__, browser.__envir__)
+                compiler.Program (transpilationDirs, __symbols__, __envir__)
                 return setExitCode (exitSuccess)
             except utils.Error as error:
                 utils.log (True, '\n{}\n', error)

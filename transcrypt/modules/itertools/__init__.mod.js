@@ -1,5 +1,4 @@
-"use strict";
-import {list, tuple} from './org.transcrypt.__runtime__.mod.js';
+import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime__.mod.js';
 
 var __name__ = 'itertools';
 
@@ -73,7 +72,7 @@ export var chain = function* () {
         }
     }
 }
-export chain.from_iterable = function* (iterable) {                        
+chain.from_iterable = function* (iterable) {                        
     for (let item of iterable) {
         for (let subItem of item) {
             yield subItem;

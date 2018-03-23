@@ -1,5 +1,9 @@
-"use strict";
 var __name__ = 'org.transcrypt.__runtime__';
+export var __envir__ = {};
+__envir__.interpreter_name = 'python';
+__envir__.transpiler_name = 'transcrypt';
+__envir__.executor_name = __envir__.transpiler_name;
+__envir__.transpiler_version = '3.7.1';
 __pragma__ ('stripcomments')
 export function __nest__ (headObject, tailNames, value) {
     var current = headObject;
@@ -18,8 +22,12 @@ export function __nest__ (headObject, tailNames, value) {
             current = current [tailChain [index]];
         }
     }
-    for (var attrib in value) {
-        current [attrib] = value [attrib];
+    for (let attrib of Object.getOwnPropertyNames (value)) {
+        Object.defineProperty (current, attrib, {
+            get () {return value [attrib];},
+            enumerable: true,
+            configurable: true
+        });
     }
 };
 export function __init__ (module) {
@@ -117,17 +125,6 @@ export function __class__ (name, bases, attribs, meta) {
     return meta.__new__ (meta, name, bases, attribs);
 };
 export function __pragma__ () {};
-export var __Envir__ =  __class__ ('__Envir__', [object], {
-	__module__: __name__,
-	get __init__ () {return __get__ (this, function (self) {
-		self.interpreter_name = 'python';
-		self.transpiler_name = 'transcrypt';
-		self.executor_name = self.transpiler_name;
-		self.transpiler_version = '3.6.101';
-		self.target_subdir = '__javascript__';
-	});}
-});
-export var __envir__ = __Envir__ ();
 __pragma__ ('stripcomments')
 export function __call__ (/* <callee>, <this>, <params>* */) {
     var args = [] .slice.apply (arguments);
@@ -462,7 +459,7 @@ export function round (number, ndigits) {
     }
     return rounded;
 };
-function __jsUsePyNext__ () {
+export function __jsUsePyNext__ () {
     try {
         var result = this.__next__ ();
         return {value: result, done: false};
@@ -471,7 +468,7 @@ function __jsUsePyNext__ () {
         return {value: undefined, done: true};
     }
 }
-function __pyUseJsNext__ () {
+export function __pyUseJsNext__ () {
     var result = this.next ();
     if (result.done) {
         throw StopIteration (new Error ());
@@ -480,7 +477,7 @@ function __pyUseJsNext__ () {
         return result.value;
     }
 }
-function py_iter (iterable) {
+export function py_iter (iterable) {
     if (typeof iterable == 'string' || '__iter__' in iterable) {
         var result = iterable.__iter__ ();
         result.next = __jsUsePyNext__;
@@ -505,7 +502,7 @@ function py_iter (iterable) {
     result [Symbol.iterator] = function () {return result;};
     return result;
 }
-function py_next (iterator) {
+export function py_next (iterator) {
     try {
         var result = iterator.__next__ ();
     }
@@ -525,7 +522,7 @@ function py_next (iterator) {
         return result;
     }
 }
-function __PyIterator__ (iterable) {
+export function __PyIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }
@@ -537,7 +534,7 @@ __PyIterator__.prototype.__next__ = function() {
         throw StopIteration (new Error ());
     }
 };
-function __JsIterator__ (iterable) {
+export function __JsIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }

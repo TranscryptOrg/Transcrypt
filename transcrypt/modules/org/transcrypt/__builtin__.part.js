@@ -716,7 +716,7 @@ __pragma__ ('endif')
 
 // BEGIN unified iterator model
 
-function __jsUsePyNext__ () {       // Add as 'next' method to make Python iterator JavaScript compatible
+export function __jsUsePyNext__ () {       // Add as 'next' method to make Python iterator JavaScript compatible
     try {
         var result = this.__next__ ();
         return {value: result, done: false};
@@ -726,7 +726,7 @@ function __jsUsePyNext__ () {       // Add as 'next' method to make Python itera
     }
 }
 
-function __pyUseJsNext__ () {       // Add as '__next__' method to make JavaScript iterator Python compatible
+export function __pyUseJsNext__ () {       // Add as '__next__' method to make JavaScript iterator Python compatible
     var result = this.next ();
     if (result.done) {
         throw StopIteration (new Error ());
@@ -736,7 +736,7 @@ function __pyUseJsNext__ () {       // Add as '__next__' method to make JavaScri
     }
 }
 
-function py_iter (iterable) {                   // Alias for Python's iter function, produces a universal iterator / iterable, usable in Python and JavaScript
+export function py_iter (iterable) {                   // Alias for Python's iter function, produces a universal iterator / iterable, usable in Python and JavaScript
     if (typeof iterable == 'string' || '__iter__' in iterable) {    // JavaScript Array or string or Python iterable (string has no 'in')
         var result = iterable.__iter__ ();                          // Iterator has a __next__
         result.next = __jsUsePyNext__;                              // Give it a next
@@ -762,7 +762,7 @@ function py_iter (iterable) {                   // Alias for Python's iter funct
     return result;
 }
 
-function py_next (iterator) {               // Called only in a Python context, could receive Python or JavaScript iterator
+export function py_next (iterator) {               // Called only in a Python context, could receive Python or JavaScript iterator
     try {                                   // Primarily assume Python iterator, for max speed
         var result = iterator.__next__ ();
     }
@@ -783,7 +783,7 @@ function py_next (iterator) {               // Called only in a Python context, 
     }
 }
 
-function __PyIterator__ (iterable) {
+export function __PyIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }
@@ -797,7 +797,7 @@ __PyIterator__.prototype.__next__ = function() {
     }
 };
 
-function __JsIterator__ (iterable) {
+export function __JsIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
 }

@@ -1,23 +1,8 @@
 # Transcrypt runtime module
 
-# ====== BEGIN of core section, available only in transpile mode
+__pragma__ ('js', 'export var __envir__ = {{}};\n{}', __include__ ('org/transcrypt/__envir__.part.js'))
+
 __pragma__ ('js', '{}', __include__ ('org/transcrypt/__core__.part.js'))
-# ====== END of core section
-
-# ====== BEGIN of janus section, available in transpile mode and, with self.transpiler_name changed to self.executor_name, in run mode
-__pragma__ ('run')
-class __Envir__:
-    def __init__ (self):
-        self.interpreter_name = 'python'
-        self.transpiler_name = 'transcrypt'
-        self.executor_name = self.transpiler_name
-        self.transpiler_version = '3.6.101'
-        self.target_subdir = '__javascript__'
-__envir__ = __Envir__ ()
-__pragma__ ('norun')
-# ====== END of janus section
-
-# ====== BEGIN of builtin section, available only in run mode
 __pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.part.js'))
 
 __pragma__ ('skip')
@@ -290,6 +275,3 @@ class __Terminal__:
 __terminal__ = __Terminal__ ()
 
 print = __terminal__.print
-
-# ====== END of builtin section
-

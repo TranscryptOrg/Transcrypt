@@ -1,5 +1,9 @@
-"use strict";
 var __name__ = 'org.transcrypt.__runtime__';
+export var __envir__ = {};
+__envir__.interpreter_name = 'python';
+__envir__.transpiler_name = 'transcrypt';
+__envir__.executor_name = __envir__.transpiler_name;
+__envir__.transpiler_version = '3.7.1';
 __pragma__ ('stripcomments')
 export function __nest__ (headObject, tailNames, value) {
     var current = headObject;
@@ -117,17 +121,6 @@ export function __class__ (name, bases, attribs, meta) {
     return meta.__new__ (meta, name, bases, attribs);
 };
 export function __pragma__ () {};
-export var __Envir__ =  __class__ ('__Envir__', [object], {
-	__module__: __name__,
-	get __init__ () {return __get__ (this, function (self) {
-		self.interpreter_name = 'python';
-		self.transpiler_name = 'transcrypt';
-		self.executor_name = self.transpiler_name;
-		self.transpiler_version = '3.6.101';
-		self.target_subdir = '__javascript__';
-	});}
-});
-export var __envir__ = __Envir__ ();
 __pragma__ ('stripcomments')
 export function __call__ (/* <callee>, <this>, <params>* */) {
     var args = [] .slice.apply (arguments);
@@ -255,10 +248,10 @@ export function len (anObject) {
     }
     return length;
 };
-function __i__ (any) {
+export function __i__ (any) {
     return py_typeof (any) == dict ? any.py_keys () : any;
 }
-function __k__ (keyed, key) {
+export function __k__ (keyed, key) {
     var result = keyed [key];
     if (typeof result == 'undefined') {
         if (keyed instanceof Array)
@@ -271,7 +264,7 @@ function __k__ (keyed, key) {
     }
     return result;
 }
-function __t__ (target) {
+export function __t__ (target) {
     return (
         target === undefined || target === null ? false :
         ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :

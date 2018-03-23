@@ -1,0 +1,11 @@
+Problem: We want a "globals" function.
+There used to be a central list of globals: __all__.
+But with modules it wasn't needed anymore.
+We don't keep exports in a central list (but we might).
+
+When working from Python source, a central list is easy to generated.
+But when it includes JS, there may be multiple such lists.
+And JS globals are also globals.
+
+So the first question is: Can we ask a JS module what its globals are?
+It doesn't have to be static, since that's also not the case in Python.

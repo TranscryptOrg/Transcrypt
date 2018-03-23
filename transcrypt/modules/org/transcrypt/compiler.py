@@ -30,6 +30,8 @@ import tokenize
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
+inIf = False
+
 '''
 All files required in running and deployable are placed in a deployment container.
 A deployable consists of an arbitrary number of modules.
@@ -245,7 +247,7 @@ class Module:
             targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']
 
         # Fabricate target code from target lines and header       
-        header = '// {}\'ed from Python, {}\n"use strict";\n'.format (
+        header = '// {}\'ed from Python, {}\n'.format (
             self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
         )
         self.targetCode = header + '\n'.join (targetLines)
@@ -732,12 +734,11 @@ class Generator (ast.NodeVisitor):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
 
     def getPragmaFromExpr (self, node):
-        return (
-            node.value.args
-            if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else
-            None
-        )
+        return node.value.args if type (node) == ast.Expr and self.isCall (node.value, '__pragma__') else None
 
+    def getPragmaFromIf (self, node):
+        return node.test.args if type (node) == ast.If and self.isCall (node.test, '__pragma__') else None
+            
     def pushProperty(self, functionName):
         context = {
             'funcname': functionName,
@@ -800,24 +801,33 @@ class Generator (ast.NodeVisitor):
                         message='\n\tProperty setter declared without getter\n'
                     )
 
-    def visit (self, node):
+    def visit (self, node):  
         try:
             self.lineNr = node.lineno
         except:
             pass
-
-        pragma = self.getPragmaFromExpr (node)
-
-        if pragma:
-            if pragma [0] .s == 'skip':
+  
+        pragmaInIf = self.getPragmaFromIf (node)
+        pragmaInExpr = self.getPragmaFromExpr (node)
+         
+        if pragmaInIf:
+            if pragmaInIf [0] .s == 'defined':
+                for symbol in pragmaInIf [1:]:
+                    if symbol.s in self.module.program.symbols:
+                        definedInIf = True
+                        break;
+                else:
+                    definedInIf = False;          
+        elif pragmaInExpr:       
+            if pragmaInExpr [0] .s == 'skip':
                 self.noskipCodeGeneration = False
-            elif pragma [0] .s == 'noskip':
+            elif pragmaInExpr [0] .s == 'noskip':
                 self.noskipCodeGeneration = True
-
-            if pragma [0] .s in ('ifdef', 'ifndef'):
-                defined = eval (    # Explained with __pragma__ ('js', ...)
+                
+            if pragmaInExpr [0] .s in ('ifdef', 'ifndef'):
+                definedInExpr = eval (    # Explained with __pragma__ ('js', ...)
                     compile (
-                        ast.Expression (pragma [1]),
+                        ast.Expression (pragmaInExpr [1]),
                         '<string>',
                         'eval'
                     ),
@@ -825,17 +835,21 @@ class Generator (ast.NodeVisitor):
                     {'__envir__': self.module.program.envir}
                 ) in self.module.program.symbols
 
-                if pragma [0] .s == 'ifdef':
-                    self.conditionalCodeGeneration = defined
-                else:
-                    self.conditionalCodeGeneration = not defined
-            elif pragma [0] .s == 'else':
+            if pragmaInExpr [0] .s == 'ifdef':
+                self.conditionalCodeGeneration = definedInExpr
+            elif pragmaInExpr [0] .s == 'ifndef':
+                self.conditionalCodeGeneration = not definedInExpr
+            elif pragmaInExpr [0] .s == 'else':
                 self.conditionalCodeGeneration = not self.conditionalCodeGeneration
-            elif pragma [0] .s == 'endif':
+            elif pragmaInExpr [0] .s == 'endif':
                 self.conditionalCodeGeneration = True
 
         if self.noskipCodeGeneration and self.conditionalCodeGeneration:
-            ast.NodeVisitor.visit (self, node)
+            if pragmaInIf:
+                if definedInIf:
+                    self.emitBody (node.body)
+            else:
+                ast.NodeVisitor.visit (self, node)
 
     def visit_arg (self, node):
         self.emit (self.filterId (node.arg))
@@ -1474,7 +1488,7 @@ class Generator (ast.NodeVisitor):
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'__console__\'')
                         
-                elif node.args [0] .s in ('skip', 'noskip', 'ifdef', 'ifndef', 'else', 'endif'):
+                elif node.args [0] .s in ('skip', 'noskip', 'defined', 'ifdef', 'ifndef', 'else', 'endif'):
                     pass                                # Easier dealth with on statement / expression level in self.visit
                     
                 elif node.args [0] .s == 'xpath':
@@ -2258,7 +2272,10 @@ class Generator (ast.NodeVisitor):
 
         self.emit ('if (')
         self.emitBeginTruthy ()
+        global inIf
+        inIf = True
         self.visit (node.test)
+        inIf = False
         self.emitEndTruthy ()
         self.emit (') {{\n')
 

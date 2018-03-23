@@ -87,10 +87,14 @@ export function __nest__ (headObject, tailNames, value) {
         }
     }
     
-    // Insert its new attributes, it may have been created earlier and have other attributes
-    for (var attrib in value) {
-        current [attrib] = value [attrib];          
-    }       
+    // Insert its new properties, it may have been created earlier and have other attributes     
+    for (let attrib of Object.getOwnPropertyNames (value)) {       
+        Object.defineProperty (current, attrib, {
+            get () {return value [attrib];},
+            enumerable: true,
+            configurable: true        
+        });
+    }
 };
 
 // Initialize module if not yet done and return its globals

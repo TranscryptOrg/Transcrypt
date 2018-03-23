@@ -1,4 +1,3 @@
-"use strict";
 import {list, tuple} from './org.transcrypt.__runtime__.mod.js';
 var __name__ = 'itertools';
 export var chain = function () {

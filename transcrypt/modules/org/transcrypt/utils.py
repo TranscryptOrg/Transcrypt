@@ -199,6 +199,8 @@ def digestJavascript (code, symbols, allowStripComments):
     passStack = []
 
     def passable (targetLine):
+        # Has to count, since comments may be inside ifdefs
+    
         def __pragma__ (name, *args):
             if name == 'stripcomments':
                 nonlocal stripComments

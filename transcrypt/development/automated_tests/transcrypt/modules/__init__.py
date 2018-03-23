@@ -18,6 +18,8 @@ from modules.mod3 import *
 
 from modules.mod1.mod11.mod111 import A
 
+from modules import mod4
+
 a = modules.mod1.mod11.mod111.A (12345)
 pi = modules.mod1.pi
 f = modules.mod2.f
@@ -55,6 +57,5 @@ def run (autoTester):
     autoTester.check (mod3GetTwoHundred ())
     autoTester.check (A (123.321) .f ())
 
-    from modules import mod4
-    # From ... import within function, with circular import
+    # Circular import (between mod4 and mod5)
     autoTester.check(mod4.mod4Add2FromMod5(449))
