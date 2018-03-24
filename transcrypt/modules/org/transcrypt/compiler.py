@@ -178,6 +178,7 @@ class Module:
             # Find target slugs
             self.targetPath = f'{self.program.targetDir}/{self.name}.mod.js'
             self.importRelPath = f'./{self.name}.mod.js'
+            self.treePath = f'{self.program.targetDir}/{self.name}.tree'
             
             # If module exists
             if os.path.isfile (pythonSourcePath) or os.path.isfile (javascriptSourcePath):
@@ -299,6 +300,11 @@ class Module:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
                 
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
+            
+            for node in ast.walk (self.parseTree):
+                for childNode in ast.iter_child_nodes (node):
+                    childNode.parentNode = node
+            
         except SyntaxError as syntaxError:
             utils.enhanceException (
                 syntaxError,
@@ -1018,8 +1024,9 @@ class Generator (ast.NodeVisitor):
                         elif target.id in self.getScope () .nonlocals:
                             pass
                         else:
-                            if type (self.getScope () .node) == ast.Module:
-                                self.emit ('export ')                        
+                            if type (self.getScope () .node) == ast.Module: # Redundant but regular
+                                if type (node.parentNode) == ast.Module and not target.id in self.all:
+                                    self.emit ('export ')                        
                             self.emit ('var ')
                     self.visit (target)
                     self.emit (' = ')
@@ -1705,8 +1712,7 @@ class Generator (ast.NodeVisitor):
 
         if type (self.getScope () .node) == ast.Module:
             self.emit ('\nexport var {} = '.format (self.filterId (node.name)))
-            if self.allowGlobals:
-                self.all.add (node.name)
+            self.all.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
             self.emit ('\n{}:'.format (self.filterId (node.name)))
         else:
@@ -2093,8 +2099,10 @@ class Generator (ast.NodeVisitor):
                 self.targetFragments.insert (yieldStarIndex, '*')
 
             self.descope ()
+            
+        nodeName = node.name
 
-        if not node.name == '__pragma__':   # Don't generate code for the dummy pragma definition starting the extraLines in utils
+        if not nodeName == '__pragma__':    # Don't generate code for the dummy pragma definition starting the extraLines in utils
                                             # Pragma should never be defined, except once directly in JavaScript to support __pragma__ ('<all>')
                                             # The rest of its use is only at compile time
 
@@ -2102,15 +2110,10 @@ class Generator (ast.NodeVisitor):
 
             isMethod = not (isGlobal or type (self.getScope () .node) in (ast.FunctionDef, ast.AsyncFunctionDef))  # Global or function scope, so it's no method
             
-            if isGlobal:
-                if self.allowGlobals:
-                    self.all.add (node.name)
-
             if isMethod:
                 self.emit ('\n')
             self.adaptLineNrString (node)
 
-            nodeName = node.name
             decorate = False
             isClassMethod = False
             isStaticMethod = False
@@ -2171,7 +2174,9 @@ class Generator (ast.NodeVisitor):
                     else:
                         self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
                 elif isGlobal:
-                    self.emit ('export var {} = ', self.filterId (nodeName))
+                    if type (node.parentNode) == ast.Module and not nodeName in self.all:
+                        self.emit ('export ')                        
+                    self.emit ('var {} = ', self.filterId (nodeName))
                 else:
                     self.emit ('var {} = ', self.filterId (nodeName))
 
@@ -2202,7 +2207,9 @@ class Generator (ast.NodeVisitor):
                         else:
                             self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if async else '')
                 elif isGlobal:
-                    self.emit ('export var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
+                    if type (node.parentNode) == ast.Module and not nodeName in self.all:
+                        self.emit ('export ')                        
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
                 else:
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
 
@@ -2256,6 +2263,9 @@ class Generator (ast.NodeVisitor):
 
                 if nodeName == '__next__':
                     self.emit (',\nnext: __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound method pointers
+
+            if isGlobal:
+                self.all.add (nodeName)
 
     def visit_GeneratorExp (self, node):
         # Currently generator expressions are just iterators on lists.
@@ -2413,9 +2423,7 @@ class Generator (ast.NodeVisitor):
                     for index, facility in enumerate (facilities):
                         self.emitComma (index)
                         self.emit (self.filterId (facility.asName) if facility.asName else self.filterId (facility.name))
-                        
-                        if self.allowGlobals:
-                            self.all.add (facility.asName if facility.asName else facility.name)
+                        self.all.add (facility.asName if facility.asName else facility.name)
                         
                     self.emit ('}};\n')
                     
@@ -2538,8 +2546,7 @@ class Generator (ast.NodeVisitor):
             print (traceback.format_exc ())
             
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
-        if self.allowGlobals:
-            self.all.add ('__name__')
+        self.all.add ('__name__')
         
         for stmt in node.body:
             if self.isDocString (stmt):
@@ -2554,8 +2561,7 @@ class Generator (ast.NodeVisitor):
                 self.emit ('export var __doc__ = ')
                 self.visit (self.docString)
                 self.emit (';\n')
-                if self.allowGlobals:
-                    self.all.add ('__doc__')
+                self.all.add ('__doc__')
                 self.docStringEmitted = True
                         
         allClause = (
@@ -2602,8 +2608,7 @@ class Generator (ast.NodeVisitor):
             
         elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
-                if self.allowGlobals:
-                    self.all.add (node.id)
+                self.all.add (node.id)
 
         self.emit (self.filterId (node.id))
 

@@ -1,8 +1,8 @@
 var re = {};
-import {__envir__, __nest__, __init__, __get__, __getcm__, __getsm__, py_metatype, object, __class__, __pragma__, __call__, __kwargtrans__, __globals__, __super__, property, __setProperty__, assert, __merge__, dir, setattr, getattr, hasattr, delattr, __in__, __specialattrib__, len, __i__, __k__, __t__, float, int, bool, py_typeof, issubclass, isinstance, callable, repr, chr, ord, max, min, abs, round, __jsUsePyNext__, __pyUseJsNext__, py_iter, py_next, __PyIterator__, __JsIterator__, py_reversed, zip, range, any, all, sum, enumerate, copy, deepcopy, list, tuple, set, bytearray, bytes, str, dict, __jsmod__, __mod__, __pow__, __neg__, __matmul__, __mul__, __truediv__, __floordiv__, __add__, __sub__, __lshift__, __rshift__, __or__, __xor__, __and__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __imatmul__, __ipow__, __ijsmod__, __imod__, __imul__, __idiv__, __iadd__, __isub__, __ilshift__, __irshift__, __ior__, __ixor__, __iand__, __getitem__, __setitem__, __getslice__, __setslice__, BaseException, Exception, IterableError, StopIteration, ValueError, KeyError, AssertionError, NotImplementedError, IndexError, AttributeError, py_TypeError, Warning, UserWarning, DeprecationWarning, RuntimeWarning, __sort__, sorted, map, filter, divmod, complex, __conj__, __Terminal__, __terminal__, print} from './org.transcrypt.__runtime__.mod.js';
+import {__envir__, __nest__, __init__, __proxy__, __get__, __getcm__, __getsm__, py_metatype, object, __class__, __pragma__, __call__, __kwargtrans__, __globals__, __super__, property, __setProperty__, assert, __merge__, dir, setattr, getattr, hasattr, delattr, __in__, __specialattrib__, len, __i__, __k__, __t__, float, int, bool, py_typeof, issubclass, isinstance, callable, repr, chr, ord, max, min, abs, round, __jsUsePyNext__, __pyUseJsNext__, py_iter, py_next, __PyIterator__, __JsIterator__, py_reversed, zip, range, any, all, sum, enumerate, copy, deepcopy, list, tuple, set, bytearray, bytes, str, dict, __jsmod__, __mod__, __pow__, __neg__, __matmul__, __mul__, __truediv__, __floordiv__, __add__, __sub__, __lshift__, __rshift__, __or__, __xor__, __and__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __imatmul__, __ipow__, __ijsmod__, __imod__, __imul__, __idiv__, __iadd__, __isub__, __ilshift__, __irshift__, __ior__, __ixor__, __iand__, __getitem__, __setitem__, __getslice__, __setslice__, BaseException, Exception, IterableError, StopIteration, ValueError, KeyError, AssertionError, NotImplementedError, IndexError, AttributeError, py_TypeError, Warning, UserWarning, DeprecationWarning, RuntimeWarning, __sort__, sorted, map, filter, divmod, complex, __conj__, __Terminal__, __terminal__, print} from './org.transcrypt.__runtime__.mod.js';
 var __name__ = 'div_issues';
-import {f1, r, p, q, anA, aB, y} from './div_issues.issue55.mod.js';
-export {f1, r, p, q, anA, aB, y};
+import {f1, r, q, p, aB, anA, y} from './div_issues.issue55.mod.js';
+export {f1, r, q, p, aB, anA, y};
 import {run387} from './div_issues.issue387.mod.js';
 export {run387};
 import * as __module_re__ from './re.mod.js';
@@ -88,8 +88,27 @@ export var run = function (autoTester) {
 		for (var i of x) {
 			autoTester.check (i);
 		}
+		var y = 3;
+		for (var j of y) {
+			autoTester.check (j);
+		}
 	}
 	catch (__except0__) {
+	}
+	autoTester.check ('Issue 122');
+	var chunks = function* (aList, chunkLength) {
+		for (var index of range (0, len (aList), chunkLength)) {
+			yield aList.__getslice__ (index, index + chunkLength, 1);
+		}
+	};
+	for (var chunk of chunks ((function () {
+		var __accu0__ = [];
+		for (var index = 0; index < 26; index++) {
+			__accu0__.append (chr (index + 97));
+		}
+		return __accu0__;
+	}) (), 10)) {
+		autoTester.check (chunk);
 	}
 	autoTester.check ('Issue 123');
 	autoTester.check (__mod__ (10, 3), __mod__ (10, -(3)), __mod__ (-(10), 3), __mod__ (-(10), -(3)), __mod__ (10, 10), __mod__ (10, -(10)), __mod__ (-(10), 10), __mod__ (-(10), -(10)));
@@ -376,6 +395,33 @@ export var run = function (autoTester) {
 			throw __except0__;
 		}
 	}
+	autoTester.check ('Issue 369');
+	var Vector = __class__ ('Vector', [object], {
+		__module__: __name__,
+		get __init__ () {return __get__ (this, function (self) {
+			var py_values = tuple ([].slice.apply (arguments).slice (1));
+			self.py_values = py_values;
+		});},
+		get __iter__ () {return __get__ (this, function* (self) {
+			for (var item of self.py_values) {
+				yield item;
+			}
+		});},
+		[Symbol.iterator] () {return this.__iter__ ()},
+		get __add__ () {return __get__ (this, function (self, other) {
+			return Vector (...(function () {
+				var __accu0__ = [];
+				for (var [x, y] of zip (self, other)) {
+					__accu0__.append (x + y);
+				}
+				return py_iter (__accu0__);
+			}) ());
+		});},
+		get __str__ () {return __get__ (this, function (self) {
+			return str (list (self.py_values));
+		});}
+	});
+	__call__ (autoTester.check, autoTester, __call__ (str, null, __add__ (__call__ (Vector, null, 1, 2, 3), __call__ (Vector, null, 3, 4, 5))));
 	autoTester.check ('Issue 387');
 	run387 (autoTester);
 	autoTester.check ('Issue 391');

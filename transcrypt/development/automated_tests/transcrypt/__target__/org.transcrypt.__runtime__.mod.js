@@ -37,6 +37,7 @@ export function __init__ (module) {
     }
     return module.__all__;
 };
+export var __proxy__ = false;
 export function __get__ (self, func, quotedFuncName) {
     if (self) {
         if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {
@@ -95,6 +96,10 @@ export var py_metatype = {
                 var descrip = Object.getOwnPropertyDescriptor (base, attrib);
                 Object.defineProperty (cls, attrib, descrip);
             }
+            for (let symbol of Object.getOwnPropertySymbols (base)) {
+                let descrip = Object.getOwnPropertyDescriptor (base, symbol);
+                Object.defineProperty (cls, symbol, descrip);
+            }
         }
         cls.__metaclass__ = meta;
         cls.__name__ = name.startsWith ('py_') ? name.slice (3) : name;
@@ -102,6 +107,10 @@ export var py_metatype = {
         for (var attrib in attribs) {
             var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
             Object.defineProperty (cls, attrib, descrip);
+        }
+        for (let symbol of Object.getOwnPropertySymbols (attribs)) {
+            let descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
+            Object.defineProperty (cls, symbol, descrip);
         }
         return cls;
     }
@@ -114,6 +123,28 @@ export var object = {
     __bases__: [],
     __new__: function (args) {
         var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
+        if ('__getattr__' in this || '__setattr__' in this) {
+            instance = new Proxy (instance, {
+                get: function (target, name) {
+                    let result = target [name];
+                    if (result == undefined) {
+                        return target.__getattr__ (name);
+                    }
+                    else {
+                        return result;
+                    }
+                },
+                set: function (target, name, value) {
+                    try {
+                        target.__setattr__ (name, value);
+                    }
+                    catch (exception) {
+                        target [name] = value;
+                    }
+                    return true;
+                }
+            })
+        }
         this.__init__.apply (null, [instance] .concat (args));
         return instance;
     }
@@ -152,8 +183,7 @@ export function __globals__ (anObject) {
     }
 }
 export function __super__ (aClass, methodName) {
-    for (var index = 0; index < aClass.__bases__.length; index++) {
-        var base = aClass.__bases__ [index];
+    for (let base of aClass.__bases__) {
         if (methodName in base) {
            return base [methodName];
         }
@@ -337,8 +367,7 @@ export function py_typeof (anObject) {
 };
 export function issubclass (aClass, classinfo) {
     if (classinfo instanceof Array) {
-        for (var index = 0; index < classinfo.length; index++) {
-            var aClass2 = classinfo [index];
+        for (let aClass2 of classinfo) {
             if (issubclass (aClass, aClass2)) {
                 return true;
             }
@@ -432,10 +461,10 @@ export function ord (aChar) {
     return aChar.charCodeAt (0);
 };
 export function max (nrOrSeq) {
-    return arguments.length == 1 ? Math.max.apply (null, nrOrSeq) : Math.max.apply (null, arguments);
+    return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);
 };
 export function min (nrOrSeq) {
-    return arguments.length == 1 ? Math.min.apply (null, nrOrSeq) : Math.min.apply (null, arguments);
+    return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);
 };
 export function abs (x) {
     try {
@@ -594,25 +623,25 @@ export function range (start, stop, step) {
     return result;
 };
 export function any (iterable) {
-    for (var index = 0; index < iterable.length; index++) {
-        if (bool (iterable [index])) {
+    for (let item of iterable) {
+        if (bool (item)) {
             return true;
         }
     }
     return false;
 }
 export function all (iterable) {
-    for (var index = 0; index < iterable.length; index++) {
-        if (! bool (iterable [index])) {
+    for (let item of iterable) {
+        if (! bool (item)) {
             return false;
         }
     }
     return true;
 }
 export function sum (iterable) {
-    var result = 0;
-    for (var index = 0; index < iterable.length; index++) {
-        result += iterable [index];
+    let result = 0;
+    for (let item of iterable) {
+        result += item;
     }
     return result;
 }
@@ -648,7 +677,7 @@ export function deepcopy (anObject) {
     }
 }
 export function list (iterable) {
-    var instance = iterable ? [] .slice.apply (iterable) : [];
+    var instance = iterable ? Array.from (iterable) : [];
     return instance;
 }
 Array.prototype.__class__ = list;
@@ -1048,6 +1077,7 @@ String.prototype.isnumeric = function () {
     return !isNaN (parseFloat (this)) && isFinite (this);
 };
 String.prototype.join = function (strings) {
+    strings = Array.from (strings);
     return strings.join (this);
 };
 String.prototype.lower = function () {

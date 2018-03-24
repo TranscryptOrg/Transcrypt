@@ -1,0 +1,23 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = p
+					ctx: Store 
+			value: Str 
+				s: str = p
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = q
+					ctx: Store 
+			value: Str 
+				s: str = q
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = r
+					ctx: Store 
+			value: Str 
+				s: str = r

@@ -1,9 +1,7 @@
-var math = {};
-import {__envir__, __nest__, __init__, __get__, __getcm__, __getsm__, py_metatype, object, __class__, __pragma__, __call__, __kwargtrans__, __globals__, __super__, property, __setProperty__, assert, __merge__, dir, setattr, getattr, hasattr, delattr, __in__, __specialattrib__, len, __i__, __k__, __t__, float, int, bool, py_typeof, issubclass, isinstance, callable, repr, chr, ord, max, min, abs, round, __jsUsePyNext__, __pyUseJsNext__, py_iter, py_next, __PyIterator__, __JsIterator__, py_reversed, zip, range, any, all, sum, enumerate, copy, deepcopy, list, tuple, set, bytearray, bytes, str, dict, __jsmod__, __mod__, __pow__, __neg__, __matmul__, __mul__, __truediv__, __floordiv__, __add__, __sub__, __lshift__, __rshift__, __or__, __xor__, __and__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __imatmul__, __ipow__, __ijsmod__, __imod__, __imul__, __idiv__, __iadd__, __isub__, __ilshift__, __irshift__, __ior__, __ixor__, __iand__, __getitem__, __setitem__, __getslice__, __setslice__, BaseException, Exception, IterableError, StopIteration, ValueError, KeyError, AssertionError, NotImplementedError, IndexError, AttributeError, py_TypeError, Warning, UserWarning, DeprecationWarning, RuntimeWarning, __sort__, sorted, map, filter, divmod, complex, __conj__, __Terminal__, __terminal__, print} from './org.transcrypt.__runtime__.mod.js';
+import {__envir__, __nest__, __init__, __proxy__, __get__, __getcm__, __getsm__, py_metatype, object, __class__, __pragma__, __call__, __kwargtrans__, __globals__, __super__, property, __setProperty__, assert, __merge__, dir, setattr, getattr, hasattr, delattr, __in__, __specialattrib__, len, __i__, __k__, __t__, float, int, bool, py_typeof, issubclass, isinstance, callable, repr, chr, ord, max, min, abs, round, __jsUsePyNext__, __pyUseJsNext__, py_iter, py_next, __PyIterator__, __JsIterator__, py_reversed, zip, range, any, all, sum, enumerate, copy, deepcopy, list, tuple, set, bytearray, bytes, str, dict, __jsmod__, __mod__, __pow__, __neg__, __matmul__, __mul__, __truediv__, __floordiv__, __add__, __sub__, __lshift__, __rshift__, __or__, __xor__, __and__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __imatmul__, __ipow__, __ijsmod__, __imod__, __imul__, __idiv__, __iadd__, __isub__, __ilshift__, __irshift__, __ior__, __ixor__, __iand__, __getitem__, __setitem__, __getslice__, __setslice__, BaseException, Exception, IterableError, StopIteration, ValueError, KeyError, AssertionError, NotImplementedError, IndexError, AttributeError, py_TypeError, Warning, UserWarning, DeprecationWarning, RuntimeWarning, __sort__, sorted, map, filter, divmod, complex, __conj__, __Terminal__, __terminal__, print} from './org.transcrypt.__runtime__.mod.js';
 var __name__ = 'datetime';
 import * as _time from './time.mod.js';
-import * as __module_math__ from './math.mod.js';
-__nest__ (math, '', __module_math__);
+import * as _math from './math.mod.js';
 export var zfill = function (s, c) {
 	var s = str (s);
 	if (len (s) < c) {
@@ -369,10 +367,10 @@ export var timedelta =  __class__ ('timedelta', [object], {
 		seconds += minutes * 60 + hours * 3600;
 		microseconds += milliseconds * 1000;
 		if (isinstance (days, float)) {
-			var __left0__ = math.modf (days);
+			var __left0__ = _math.modf (days);
 			var dayfrac = __left0__ [0];
 			var days = __left0__ [1];
-			var __left0__ = math.modf (dayfrac * (24.0 * 3600.0));
+			var __left0__ = _math.modf (dayfrac * (24.0 * 3600.0));
 			var daysecondsfrac = __left0__ [0];
 			var daysecondswhole = __left0__ [1];
 			assert (daysecondswhole == int (daysecondswhole));
@@ -389,7 +387,7 @@ export var timedelta =  __class__ ('timedelta', [object], {
 		assert (isinstance (d, int));
 		assert (abs (s) <= 24 * 3600);
 		if (isinstance (seconds, float)) {
-			var __left0__ = math.modf (seconds);
+			var __left0__ = _math.modf (seconds);
 			var secondsfrac = __left0__ [0];
 			var seconds = __left0__ [1];
 			assert (seconds == int (seconds));
@@ -1338,7 +1336,7 @@ export var datetime =  __class__ ('datetime', [date], {
 		return self._tzinfo;
 	});},
 	get _fromtimestamp () {return __getcm__ (this, function (cls, t, utc, tz) {
-		var __left0__ = math.modf (t);
+		var __left0__ = _math.modf (t);
 		var frac = __left0__ [0];
 		var t = __left0__ [1];
 		var us = round (frac * 1000000.0);

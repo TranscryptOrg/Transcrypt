@@ -1,0 +1,9 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = e
+					ctx: Store 
+			value: Num 
+				n: float = 2.74

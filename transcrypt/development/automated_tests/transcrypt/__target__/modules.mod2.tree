@@ -1,0 +1,25 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = f
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = p
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Num 
+							n: int = 2
+						op: Mult 
+						right: Name 
+							id: str = p
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None

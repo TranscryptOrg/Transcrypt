@@ -1,0 +1,1671 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: ClassDef 
+					name: str = adecorator
+					bases: list 
+					keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = kwargs
+								keywords: list 
+						element: FunctionDef 
+							name: str = __init__
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+								vararg: arg 
+									arg: str = args
+									annotation: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: arg 
+									arg: str = kwargs
+									annotation: NoneType = None
+								defaults: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = args
+											ctx: Store 
+									value: Name 
+										id: str = args
+										ctx: Load 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = kwargs
+											ctx: Store 
+									value: Name 
+										id: str = kwargs
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = nokwargs
+								keywords: list 
+						element: FunctionDef 
+							name: str = __call__
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+									element: arg 
+										arg: str = func
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = __pragma__
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = kwargs
+										keywords: list 
+								element: FunctionDef 
+									name: str = wrapper
+									args: arguments 
+										args: list 
+										vararg: arg 
+											arg: str = args
+											annotation: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: arg 
+											arg: str = kwargs
+											annotation: NoneType = None
+										defaults: list 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = slf
+													ctx: Store 
+											value: Subscript 
+												value: Name 
+													id: str = args
+													ctx: Load 
+												slice: Index 
+													value: Num 
+														n: int = 0
+												ctx: Load 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = saved
+													ctx: Store 
+											value: Dict 
+												keys: list 
+												values: list 
+										element: For 
+											target: Tuple 
+												elts: list 
+													element: Name 
+														id: str = k
+														ctx: Store 
+													element: Name 
+														id: str = v
+														ctx: Store 
+												ctx: Store 
+											iter: Call 
+												func: Attribute 
+													value: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = kwargs
+														ctx: Load 
+													attr: str = items
+													ctx: Load 
+												args: list 
+												keywords: list 
+											body: list 
+												element: If 
+													test: Call 
+														func: Name 
+															id: str = hasattr
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = slf
+																ctx: Load 
+															element: Name 
+																id: str = k
+																ctx: Load 
+														keywords: list 
+													body: list 
+														element: Assign 
+															targets: list 
+																element: Subscript 
+																	value: Name 
+																		id: str = saved
+																		ctx: Load 
+																	slice: Index 
+																		value: Name 
+																			id: str = k
+																			ctx: Load 
+																	ctx: Store 
+															value: Call 
+																func: Name 
+																	id: str = getattr
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = slf
+																		ctx: Load 
+																	element: Name 
+																		id: str = k
+																		ctx: Load 
+																keywords: list 
+														element: Expr 
+															value: Call 
+																func: Name 
+																	id: str = setattr
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = slf
+																		ctx: Load 
+																	element: Name 
+																		id: str = k
+																		ctx: Load 
+																	element: Name 
+																		id: str = v
+																		ctx: Load 
+																keywords: list 
+													orelse: list 
+											orelse: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = ret
+													ctx: Store 
+											value: Call 
+												func: Name 
+													id: str = func
+													ctx: Load 
+												args: list 
+													element: Starred 
+														value: Name 
+															id: str = args
+															ctx: Load 
+														ctx: Load 
+												keywords: list 
+													element: keyword 
+														arg: NoneType = None
+														value: Name 
+															id: str = kwargs
+															ctx: Load 
+										element: For 
+											target: Tuple 
+												elts: list 
+													element: Name 
+														id: str = k
+														ctx: Store 
+													element: Name 
+														id: str = v
+														ctx: Store 
+												ctx: Store 
+											iter: Call 
+												func: Attribute 
+													value: Name 
+														id: str = saved
+														ctx: Load 
+													attr: str = items
+													ctx: Load 
+												args: list 
+												keywords: list 
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Name 
+															id: str = setattr
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = slf
+																ctx: Load 
+															element: Name 
+																id: str = k
+																ctx: Load 
+															element: Name 
+																id: str = v
+																ctx: Load 
+														keywords: list 
+											orelse: list 
+										element: Return 
+											value: Name 
+												id: str = ret
+												ctx: Load 
+									decorator_list: list 
+									returns: NoneType = None
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = __pragma__
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = nokwargs
+										keywords: list 
+								element: Return 
+									value: Name 
+										id: str = wrapper
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+					decorator_list: list 
+				element: FunctionDef 
+					name: str = method_decorator
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = prefix
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = inner_decorator
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = method
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: FunctionDef 
+									name: str = wrapper
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = self
+												annotation: NoneType = None
+											element: arg 
+												arg: str = name
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = name
+														ctx: Load 
+												keywords: list 
+										element: Return 
+											value: Call 
+												func: Name 
+													id: str = method
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = self
+														ctx: Load 
+													element: BinOp 
+														left: Name 
+															id: str = prefix
+															ctx: Load 
+														op: Add 
+														right: Name 
+															id: str = name
+															ctx: Load 
+												keywords: list 
+									decorator_list: list 
+									returns: NoneType = None
+								element: Return 
+									value: Name 
+										id: str = wrapper
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = inner_decorator
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = method_decorator2
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = prefix
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = inner_decorator
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = method
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: FunctionDef 
+									name: str = wrapper
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = self
+												annotation: NoneType = None
+											element: arg 
+												arg: str = name
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = name
+														ctx: Load 
+												keywords: list 
+										element: Return 
+											value: Call 
+												func: Name 
+													id: str = method
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = self
+														ctx: Load 
+													element: BinOp 
+														left: Name 
+															id: str = prefix
+															ctx: Load 
+														op: Add 
+														right: Name 
+															id: str = name
+															ctx: Load 
+												keywords: list 
+									decorator_list: list 
+									returns: NoneType = None
+								element: Return 
+									value: Name 
+										id: str = wrapper
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = inner_decorator
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = multiplier
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = m
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = inner_decorator
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = method
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: FunctionDef 
+									name: str = wrapper
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = self
+												annotation: NoneType = None
+											element: arg 
+												arg: str = num
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = num
+														ctx: Load 
+												keywords: list 
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = n
+													ctx: Store 
+											value: Call 
+												func: Name 
+													id: str = method
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = self
+														ctx: Load 
+													element: Name 
+														id: str = num
+														ctx: Load 
+												keywords: list 
+										element: Return 
+											value: BinOp 
+												left: Name 
+													id: str = n
+													ctx: Load 
+												op: Mult 
+												right: Name 
+													id: str = m
+													ctx: Load 
+									decorator_list: list 
+									returns: NoneType = None
+								element: Return 
+									value: Name 
+										id: str = wrapper
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = inner_decorator
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = classmethod_decorator
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = method
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = wrapper
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = cls
+										annotation: NoneType = None
+									element: arg 
+										arg: str = a
+										annotation: NoneType = None
+									element: arg 
+										arg: str = b
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = cls
+													ctx: Load 
+												attr: str = __name__
+												ctx: Load 
+											element: Name 
+												id: str = a
+												ctx: Load 
+											element: Name 
+												id: str = b
+												ctx: Load 
+										keywords: list 
+								element: Return 
+									value: Call 
+										func: Name 
+											id: str = method
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = cls
+												ctx: Load 
+											element: Name 
+												id: str = b
+												ctx: Load 
+											element: Name 
+												id: str = a
+												ctx: Load 
+										keywords: list 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = wrapper
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = class_decorator
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = prefix
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = wrapper
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = cls
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: BinOp 
+												left: Name 
+													id: str = prefix
+													ctx: Load 
+												op: Add 
+												right: Attribute 
+													value: Name 
+														id: str = cls
+														ctx: Load 
+													attr: str = __name__
+													ctx: Load 
+										keywords: list 
+								element: Return 
+									value: Name 
+										id: str = cls
+										ctx: Load 
+							decorator_list: list 
+							returns: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = wrapper
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: ClassDef 
+					name: str = MyClass
+					bases: list 
+					keywords: list 
+					body: list 
+						element: ClassDef 
+							name: str = InnerClass
+							bases: list 
+							keywords: list 
+							body: list 
+								element: FunctionDef 
+									name: str = mymethod
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = self
+												annotation: NoneType = None
+											element: arg 
+												arg: str = name
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = name
+														ctx: Load 
+												keywords: list 
+									decorator_list: list 
+										element: Call 
+											func: Name 
+												id: str = method_decorator
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = inner_first_
+											keywords: list 
+										element: Call 
+											func: Name 
+												id: str = method_decorator2
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = inner_second_
+											keywords: list 
+									returns: NoneType = None
+								element: FunctionDef 
+									name: str = myclassmethod
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = cls
+												annotation: NoneType = None
+											element: arg 
+												arg: str = a
+												annotation: NoneType = None
+											element: arg 
+												arg: str = b
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Attribute 
+														value: Name 
+															id: str = cls
+															ctx: Load 
+														attr: str = __name__
+														ctx: Load 
+													element: Name 
+														id: str = a
+														ctx: Load 
+													element: Name 
+														id: str = b
+														ctx: Load 
+												keywords: list 
+										element: Return 
+											value: BinOp 
+												left: Name 
+													id: str = a
+													ctx: Load 
+												op: Add 
+												right: Name 
+													id: str = b
+													ctx: Load 
+									decorator_list: list 
+										element: Name 
+											id: str = classmethod
+											ctx: Load 
+										element: Name 
+											id: str = classmethod_decorator
+											ctx: Load 
+									returns: NoneType = None
+								element: FunctionDef 
+									name: str = mystaticmethod
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = a
+												annotation: NoneType = None
+											element: arg 
+												arg: str = b
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = a
+														ctx: Load 
+													element: Name 
+														id: str = b
+														ctx: Load 
+												keywords: list 
+										element: Return 
+											value: BinOp 
+												left: Name 
+													id: str = a
+													ctx: Load 
+												op: Add 
+												right: Name 
+													id: str = b
+													ctx: Load 
+									decorator_list: list 
+										element: Name 
+											id: str = staticmethod
+											ctx: Load 
+									returns: NoneType = None
+								element: FunctionDef 
+									name: str = inner_property
+									args: arguments 
+										args: list 
+											element: arg 
+												arg: str = self
+												annotation: NoneType = None
+										vararg: NoneType = None
+										kwonlyargs: list 
+										kw_defaults: list 
+										kwarg: NoneType = None
+										defaults: list 
+									body: list 
+										element: Return 
+											value: Str 
+												s: str = I am a property
+									decorator_list: list 
+										element: Name 
+											id: str = property
+											ctx: Load 
+									returns: NoneType = None
+							decorator_list: list 
+								element: Call 
+									func: Name 
+										id: str = class_decorator
+										ctx: Load 
+									args: list 
+										element: Str 
+											s: str = inner_
+									keywords: list 
+						element: FunctionDef 
+							name: str = __init__
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = greetings
+											ctx: Store 
+									value: Str 
+										s: str = Hello
+							decorator_list: list 
+							returns: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = opov
+								keywords: list 
+						element: FunctionDef 
+							name: str = get_greetings
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Return 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = greetings
+										ctx: Load 
+							decorator_list: list 
+								element: Call 
+									func: Name 
+										id: str = adecorator
+										ctx: Load 
+									args: list 
+									keywords: list 
+										element: keyword 
+											arg: str = greetings
+											value: Str 
+												s: str = Goodbye
+							returns: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = noopov
+								keywords: list 
+						element: FunctionDef 
+							name: str = mymethod
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+									element: arg 
+										arg: str = name
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = name
+												ctx: Load 
+										keywords: list 
+							decorator_list: list 
+								element: Call 
+									func: Name 
+										id: str = method_decorator
+										ctx: Load 
+									args: list 
+										element: Str 
+											s: str = first_
+									keywords: list 
+								element: Call 
+									func: Name 
+										id: str = method_decorator2
+										ctx: Load 
+									args: list 
+										element: Str 
+											s: str = second_
+									keywords: list 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = number
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+									element: arg 
+										arg: str = num
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Return 
+									value: Name 
+										id: str = num
+										ctx: Load 
+							decorator_list: list 
+								element: Call 
+									func: Name 
+										id: str = multiplier
+										ctx: Load 
+									args: list 
+										element: Num 
+											n: int = 5
+									keywords: list 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = myclassmethod
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = cls
+										annotation: NoneType = None
+									element: arg 
+										arg: str = a
+										annotation: NoneType = None
+									element: arg 
+										arg: str = b
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = cls
+													ctx: Load 
+												attr: str = __name__
+												ctx: Load 
+											element: Name 
+												id: str = a
+												ctx: Load 
+											element: Name 
+												id: str = b
+												ctx: Load 
+										keywords: list 
+								element: Return 
+									value: BinOp 
+										left: Name 
+											id: str = a
+											ctx: Load 
+										op: Add 
+										right: Name 
+											id: str = b
+											ctx: Load 
+							decorator_list: list 
+								element: Name 
+									id: str = classmethod
+									ctx: Load 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = mystaticmethod
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = a
+										annotation: NoneType = None
+									element: arg 
+										arg: str = b
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: BinOp 
+												left: Name 
+													id: str = a
+													ctx: Load 
+												op: Add 
+												right: Name 
+													id: str = b
+													ctx: Load 
+										keywords: list 
+								element: Return 
+									value: BinOp 
+										left: Name 
+											id: str = a
+											ctx: Load 
+										op: Add 
+										right: Name 
+											id: str = b
+											ctx: Load 
+							decorator_list: list 
+								element: Name 
+									id: str = staticmethod
+									ctx: Load 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = simple_property
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Return 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = greetings
+										ctx: Load 
+							decorator_list: list 
+								element: Name 
+									id: str = property
+									ctx: Load 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = simple_property
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+									element: arg 
+										arg: str = value
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = greetings
+											ctx: Store 
+									value: Name 
+										id: str = value
+										ctx: Load 
+							decorator_list: list 
+								element: Attribute 
+									value: Name 
+										id: str = simple_property
+										ctx: Load 
+									attr: str = setter
+									ctx: Load 
+							returns: NoneType = None
+						element: FunctionDef 
+							name: str = run
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = self
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = inner_obj
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = InnerClass
+											ctx: Load 
+										args: list 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = inner_obj
+												ctx: Load 
+											attr: str = mymethod
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = Dog
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = result1
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = inner_obj
+												ctx: Load 
+											attr: str = myclassmethod
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = param1
+											element: Str 
+												s: str = param2
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = result2
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = InnerClass
+												ctx: Load 
+											attr: str = myclassmethod
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = param1
+											element: Str 
+												s: str = param2
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Compare 
+												left: Name 
+													id: str = result1
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Name 
+														id: str = result2
+														ctx: Load 
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = result1
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = inner_obj
+												ctx: Load 
+											attr: str = mystaticmethod
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = param1
+											element: Str 
+												s: str = param2
+										keywords: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = result2
+											ctx: Store 
+									value: Call 
+										func: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = self
+													ctx: Load 
+												attr: str = InnerClass
+												ctx: Load 
+											attr: str = mystaticmethod
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = param1
+											element: Str 
+												s: str = param2
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Compare 
+												left: Name 
+													id: str = result1
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Name 
+														id: str = result2
+														ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Attribute 
+												value: Name 
+													id: str = inner_obj
+													ctx: Load 
+												attr: str = inner_property
+												ctx: Load 
+										keywords: list 
+							decorator_list: list 
+							returns: NoneType = None
+					decorator_list: list 
+						element: Call 
+							func: Name 
+								id: str = class_decorator
+								ctx: Load 
+							args: list 
+								element: Str 
+									s: str = outer_
+							keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = myobj
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = MyClass
+							ctx: Load 
+						args: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = myobj
+								ctx: Load 
+							attr: str = mymethod
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = Cat
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = myobj
+									ctx: Load 
+								attr: str = greetings
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = myobj
+										ctx: Load 
+									attr: str = get_greetings
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = result1
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = myobj
+								ctx: Load 
+							attr: str = myclassmethod
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = param1
+							element: Str 
+								s: str = param2
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = result2
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = MyClass
+								ctx: Load 
+							attr: str = myclassmethod
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = param1
+							element: Str 
+								s: str = param2
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = result1
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = result2
+										ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = result1
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = myobj
+								ctx: Load 
+							attr: str = mystaticmethod
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = param1
+							element: Str 
+								s: str = param2
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = result2
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = MyClass
+								ctx: Load 
+							attr: str = mystaticmethod
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = param1
+							element: Str 
+								s: str = param2
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = result1
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = result2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = myobj
+										ctx: Load 
+									attr: str = number
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 3
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = myobj
+									ctx: Load 
+								attr: str = simple_property
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Attribute 
+							value: Name 
+								id: str = myobj
+								ctx: Load 
+							attr: str = simple_property
+							ctx: Store 
+					value: Str 
+						s: str = New value
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = myobj
+									ctx: Load 
+								attr: str = simple_property
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = myobj
+										ctx: Load 
+									attr: str = greetings
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = myobj
+											ctx: Load 
+										attr: str = simple_property
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = myobj
+								ctx: Load 
+							attr: str = run
+							ctx: Load 
+						args: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
