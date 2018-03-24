@@ -1677,10 +1677,13 @@ class Generator (ast.NodeVisitor):
                         for keyword in node.keywords:
                             if keyword.arg == 'cwd':
                                 workDir = keyword.value.s
+                        # Use xtrans command switch if given
+                        switch = utils.commandArgs.xtrans
+                        command = switch if switch else node.args [1] .s
                         process = subprocess.Popen (
                             # Do not use shlex.split under Windows
-                            node.args [1] .s if sys.platform == 'win32' else \
-                                shlex.split(node.args [1] .s),
+                            command if sys.platform == 'win32' else \
+                                shlex.split(command),
                             stdin = subprocess.PIPE,
                             stdout = subprocess.PIPE,
                             cwd = workDir
