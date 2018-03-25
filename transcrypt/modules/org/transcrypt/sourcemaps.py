@@ -79,17 +79,19 @@ mapVersion = 3
 iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)    # Line indexes rather than line numbers are stored  
 
 class SourceMap:
-    def __init__ (self, targetDir, targetFileName, extraSubdir):
-        self.targetDir = targetDir
-        self.targetFileName = targetFileName
-        self.targetPath = '{}/{}'.format (targetDir, targetFileName)
-        self.mapSubdir = '{}/sourcemap'.format (extraSubdir)
-        self.mapDir = '{}/{}'.format (self.targetDir, self.mapSubdir) 
-        self.mapPath ='{}/{}.map'.format (self.mapDir, targetFileName)
-        self.mapdumpPath = '{}/{}.mapdump'.format (self.mapDir, targetFileName)
-        self.deltaMapdumpPath = '{}/{}.delta.mapdump'.format (self.mapDir, targetFileName)
-        self.cascadeMapdumpPath = '{}/{}.cascade.mapdump'.format (self.mapDir, targetFileName)
-        self.mapRef = '\n//# sourceMappingURL={}/{}.map\n'.format (self.mapSubdir, self.targetFileName)
+    def __init__ (
+        self,
+        targetPath,
+        mapPath,
+        mapdumpPath,
+        deltaMapdumpPath,
+        cascadeMapdumpPath,
+    ):
+        self.targetPath = targetPath
+        self.mapPath = mapPath
+        self.mapdumpPath = mapdumpPath
+        self.deltaMapdumpPath = deltaMapdumpPath
+        self.cascadeMapdumpPath = cascadeMapdumpPath
         self.clear ()
         
     def clear (self):

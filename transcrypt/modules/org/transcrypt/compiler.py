@@ -33,27 +33,16 @@ from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 inIf = False
 
 '''
-All files required in running and deployable are placed in a deployment container.
-A deployable consists of an arbitrary number of modules.
-Each module has it's own directory.
-The directory hierarchy is equal to the (dotted) module hierarchy.
-Each module has one .js file and maximally one .py file.
-They are in the same directory.
-A JS only module doesn't have a .py file.
-
+All files required for deployment are placed in subdirectory __target__ of the application.
 Each module has an unambiguous dotted path, always from one of the module roots, never relative.
-For now importing from outside an application is not supported.
-For now, dotted paths are translated to segmented filenames.
-Everything is put into __javascript__.
-If that works an attempt to oversee something more flexible can be made.
+Dotted paths are translated to dotted filenames.
+The __runtime__ module is just another Python module with lots of JS code inside __pragma__ ('js', '{}', include...) fragments,
+namely the __core__ and __builtin__ parts.
 
-So once the code of an imported module is generated, it is written to the right "dotted path" segment.
-
-The only thing that has to be done is compiling all modules and put the parts of the deployable in the right places.
-The runtime module is just another Python module with a a lot of JS code inside __pragma__ ('js', ...) fragments.
-Even the core is inside a __pragma__ ('js', ...) fragment.
-There's also a __pragma__ ('include', ...).
-A file with included files is deployed (for sourcemaps) as one file.
+Sourcemaps are generated per module.
+There's no need for a link with other modules.
+Since import paths are static, names of minified JS files end on .mod.js just like non-minified files, so not on .mod.min.js.
+Sourcemaps are named <module name>.mod.map.
 '''
 
 class Program:
@@ -122,6 +111,16 @@ class Module:
         
         # Register that module is found
         self.program.moduleDict [self.name] = self
+        
+        # Set sourcemap
+        if utils.commandArgs.map:
+            self.modMap = sourcemaps.SourceMap (
+                self.targetPath,
+                self.mapPath,
+                self.mapdumpPath,
+                self.deltaMapdumpPath,
+                self.cascadeMapdumpPath
+            )
 
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
@@ -132,6 +131,9 @@ class Module:
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
+                
+                if utils.commandArgs.map:
+                    self.modMap.loadOrFake (self.sourcePath, javascriptDigest.nrOfLines)
             else:
                 # Compile from Python, start with constructing parse tree
                 self.parse ()
@@ -141,9 +143,9 @@ class Module:
                 # Perform lightweight command check on parse tree
                 if utils.commandArgs.dcheck:
                     try:
-                        static_check.run (self.metadata.sourcePath, self.parseTree)
+                        static_check.run (self.sourcePath, self.parseTree)
                     except Exception as exception:
-                        utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.metadata.sourcePath)
+                        utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.sourcePath)
                         
                 # Generate JavaScript code and sourcemap from parse tree
                 self.generateJavascriptAndMap ()
@@ -153,8 +155,18 @@ class Module:
                
         # Write target code
         with utils.create (self.targetPath) as aFile:
-            aFile.write (self.targetCode) 
-        
+            aFile.write (self.targetCode + self.mapRef)
+            
+        # Minify target code       
+        if not utils.commandArgs.nomin:
+            os.rename (self.targetPath, f'{self.targetPath}.__temp__')
+            minify.run (
+                f'{self.targetPath}.__temp__',
+                self.targetPath,
+                self.shrinkMap.mapPath if utils.commandArgs.map else None,
+            )
+            os.remove (f'{self.targetPath}.__temp__')
+            
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
                 
@@ -174,12 +186,18 @@ class Module:
             pythonSourcePath = f'{self.sourcePrepath}.py'
             javascriptSourcePath = f'{self.sourcePrepath}.mod.js'
             
-            
             # Find target slugs
-            self.targetPath = f'{self.program.targetDir}/{self.name}.mod.js'
+            self.targetPrename = f'{self.name}.mod'
+            self.targetPrepath = f'{self.program.targetDir}/{self.targetPrename}'
+            self.targetPath = f'{self.targetPrepath}.js'
             self.importRelPath = f'./{self.name}.mod.js'
-            self.treePath = f'{self.program.targetDir}/{self.name}.tree'
-            
+            self.treePath = f'{self.targetPrepath}.tree'
+            self.mapPath =  f'{self.targetPrepath}.map'
+            self.mapdumpPath = f'{self.targetPrepath}.mapdump'
+            self.deltaMapdumpPath = f'{self.targetPrepath}.delta.mapdump'
+            self.cascadeMapdumpPath = f'{self.targetPrepath}.cascade.mapdump'
+            self.mapRef = f'\n//# sourceMappingURL={self.targetPrename}.map'
+
             # If module exists
             if os.path.isfile (pythonSourcePath) or os.path.isfile (javascriptSourcePath):
                 # Check if it's a JavaScript-only module
@@ -240,8 +258,8 @@ class Module:
 
             # Generate per module sourcemap and copy sourcefile
             if utils.commandArgs.map:
-                utils.log (False, 'Generating source map for module: {}\n', self.metadata.sourcePath)
-                self.modMap.generate (self.metadata.sourcePath, self.sourceLineNrs)
+                utils.log (False, 'Generating source map for module: {}\n', self.sourcePath)
+                self.modMap.generate (self.sourcePath, self.sourceLineNrs)
                 self.modMap.save ()
         else:                                                           
             # No maps or annotations needed, so this 'no stripping' shortcut for speed
