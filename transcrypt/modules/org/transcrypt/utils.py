@@ -191,8 +191,8 @@ def digestJavascript (code, symbols, allowStripComments):
     - Harvest import and export info
     '''
 
-#    stripComments = False !!!
-    stripComments = True
+    stripComments = False
+        
     def stripSingleLineComments (line):
         pos = line.find ('//')
         return (line if pos < 0 else line [ : pos]) .rstrip ()
@@ -201,10 +201,14 @@ def digestJavascript (code, symbols, allowStripComments):
 
     def passable (targetLine):
         # Has to count, since comments may be inside ifdefs
-    
+        
+        nonlocal stripComments
+            
         def __pragma__ (name, *args):
+
+            nonlocal stripComments
+        
             if name == 'stripcomments':
-                nonlocal stripComments
                 stripComments = allowStripComments
             if name == 'ifdef':
                 passStack.append (args [0] in symbols)
@@ -222,6 +226,7 @@ def digestJavascript (code, symbols, allowStripComments):
         elif stripComments and strippedLine.endswith ('*/'):
             passStack.pop ()        # Possibly pass next line
         elif strippedLine.startswith ('__pragma__') and (
+            'stripcomments' in strippedLine or
             'ifdef' in strippedLine or
             'ifndef' in strippedLine or
             'else' in strippedLine or
@@ -232,10 +237,9 @@ def digestJavascript (code, symbols, allowStripComments):
         else:
             return all (passStack)  # Skip line only if not in passing state according to passStack
     
+    passableLines = [line for line in code.split ('\n') if passable (line)]
     if stripComments:
-        passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in code.split ('\n') if passable (line)] if commentlessLine]
-    else:
-        passableLines = [line for line in code.spit ('\n') if passable (line)]
+        passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in passableLines] if commentlessLine]
         
     result = Any (
         digestedCode = '\n'.join (passableLines),
@@ -248,6 +252,8 @@ def digestJavascript (code, symbols, allowStripComments):
     pathPattern = re.compile ('(\'.*\')')
     for line in passableLines:
         words = line.split (' ')
+        if words [0] == '/*':       # If line start with an annotation
+            words = words [3 : ]    # Remove the annotation before looking for export / import keywords
         if words [0] == 'export':
             # Deducing exported names from JavaScript is needed to facilitate * import by other modules
             

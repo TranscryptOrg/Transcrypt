@@ -1,4 +1,4 @@
-import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime__.mod.js';
+import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime__.js';
 
 var __name__ = 'itertools';
 

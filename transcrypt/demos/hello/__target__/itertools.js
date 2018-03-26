@@ -1,5 +1,8 @@
-import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime__.mod.js';
+import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime__.js';
+
 var __name__ = 'itertools';
+
+
 export var count = function* (start, step) {
     if (start == undefined) {
         start = 0;
@@ -12,8 +15,8 @@ export var count = function* (start, step) {
         start += step;
     }
 }
-export var cycle = function* (iterable) {
-    let buffer = Array.from (iterable);
+export var cycle = function* (iterable) {                      
+    let buffer = Array.from (iterable); // Can't reset, Chrome can't obtain iter from gener
     while (true) {
         for (let item of buffer) {
             yield item;
@@ -61,14 +64,14 @@ export var accumulate = function* (iterable, func) {
     }
 }
 export var chain = function* () {
-    let args = [] .slice.apply (arguments);
+    let args = [] .slice.apply (arguments);                         
     for (let arg of args) {
         for (let item of arg) {
             yield item;
         }
     }
 }
-chain.from_iterable = function* (iterable) {
+chain.from_iterable = function* (iterable) {                        
     for (let item of iterable) {
         for (let subItem of item) {
             yield subItem;
@@ -113,34 +116,42 @@ export var filterfalse = function* (pred, seq) {
 export var groupby = function* (iterable, keyfunc) {
     let anIterator = iterable [Symbol.iterator] ();
     let item = anIterator.next ();
+    
     if (item.done) {
         return;
     }
+    
     let groupKey = keyfunc (item.value);
     let more = true;
+    
     function* group () {
         while (true) {
             yield (item.value);
             item = anIterator.next ();
+            
             if (item.done) {
                 more = false;
                 return;
             }
+            
             let key = keyfunc (item.value);
+            
             if (key != groupKey) {
                 groupKey = key;
                 return;
             }
         }
     }
+    
     while (more) {
         yield tuple ([groupKey, group ()]);
     }
 }
 export var islice = function* () {
-    let start;
-    let stop;
-    let step;
+    let start;  // Have to be defined at function level, or Closure compiler will loose them after a yield 
+    let stop;   //
+    let step;   //
+    
     let args = [] .slice.apply (arguments);
     let anIterator = args [0][Symbol.iterator] ();
     if (args.length == 2) {
@@ -181,7 +192,7 @@ export var starmap = function* (func, seq) {
             return;
         }
         else {
-            yield func (...next.value);
+            yield func (...next.value); 
         }
     }
 }
@@ -199,21 +210,23 @@ export var tee = function (iterable, n) {
     if (n == undefined) {
         n = 2;
     }
-    let all = [];
+    let all = [];                               // Don't return iterator since destructuring assignment cannot yet deal with that
     let one = list (iterable);
     for (let i = 0; i < n; i++) {
-        all.append (one [Symbol.iterator] ());
+        all.append (one [Symbol.iterator] ());  // Iterator rather than list, exhaustable for semantic equivalence
     }
     return list (all);
 }
+
 export var product = function () {
     let args = [] .slice.apply (arguments);
     if (args.length && args [args.length - 1] .hasOwnProperty ('__kwargtrans__')) {
-        var repeat = args.pop () ['repeat'];
+        var repeat = args.pop () ['repeat']; 
     }
     else {
         var repeat = 1;
     }
+    
     let oldMolecules = [tuple ([])];
     for (let i = 0; i < repeat; i++) {
         for (let arg of args) {
@@ -226,7 +239,7 @@ export var product = function () {
             oldMolecules = newMolecules;
         }
     }
-    return list (oldMolecules);
+    return list (oldMolecules); // Also works if args is emptpy
 }
 export var permutations = function (iterable, r) {
     if (r == undefined) {
@@ -240,7 +253,7 @@ export var permutations = function (iterable, r) {
     let aProduct = product (iterable, __kwargtrans__ ({repeat: r}));
     let result = [];
     for (let molecule of aProduct) {
-        if (len (set (molecule)) == r) {
+        if (len (set (molecule)) == r) {    // Weed out doubles
             result.append (molecule);
         }
     }
@@ -251,6 +264,7 @@ export var combinations = function (iterable, r) {
     function recurse (tail, molecule, rNext) {
         for (let index = 0; index < len (tail) - rNext; index++) {
             let newMolecule = molecule.concat (tail.slice (index, index + 1));
+
             if (rNext) {
                 recurse (tail.slice (index + 1), newMolecule, rNext - 1);
             }
@@ -268,6 +282,7 @@ export var combinations_with_replacement = function (iterable, r) {
     function recurse (tail, molecule, rNext) {
         for (let index = 0; index < len (tail); index++) {
             let newMolecule = molecule.concat (tail.slice (index, index + 1));
+
             if (rNext) {
                 recurse (tail.slice (index), newMolecule, rNext - 1);
             }
@@ -280,4 +295,5 @@ export var combinations_with_replacement = function (iterable, r) {
     recurse (tail, tail.slice (0, 0), r - 1);
     return list (result);
 }
-//# sourceMappingURL=itertools.mod.map
+
+

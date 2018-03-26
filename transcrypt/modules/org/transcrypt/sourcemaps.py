@@ -8,7 +8,6 @@ from org.transcrypt import utils
 
 # Tools to embed source map info in target code
 
-nrOfPadLines = 5
 lineNrLength = 6
 maxNrOfSourceLinesPerModule = 1000000
 
@@ -118,62 +117,14 @@ class SourceMap:
             self.addMapping ((targetLineIndex, 0, sourcePath, sourceLineNr - 1, 0))
             
         for sourcePath in self.sourcePaths:
+            '''
             with open (sourcePath) as sourceFile:
                 self.sourceCodes.append (sourceFile.read ())
-        
-    def loadOrFake (self, sourcePath, nrOfTargetLines):
-        self.clear ()
-        if (
-            sourcePath.endswith ('.js')                 # JavaScript-only module
-            and (
-                utils.commandArgs.build                 # It's a build, and JavaScript source may have changed
-                or
-                not os.path.isfile (self.mapPath)       # Map doesn't yet exit
-            )
-        ):
-            for index in range (nrOfTargetLines):
-                self.addMapping ((index, 0, sourcePath, index, 0))
-        else:   
-            self.load ()
-        
-    def concatenate (self, modMaps, moduleCaptionSkip):                                 # Result in self
-        self.clear ()
-        baseLineIndex = 0
-        
-        padMap = SourceMap (None, None, None)
-        for padLineIndex in range (nrOfPadLines):
-            padMap.addMapping ([baseLineIndex, 0, '', 0, 0])
-            baseLineIndex += 1
-        
-        for modMap in [padMap] + modMaps:
-            if modMap != padMap:
-                for captionLineIndex in range (moduleCaptionSkip):
-                    self.addMapping ([baseLineIndex, 0, '', 0, 0])
-                    baseLineIndex += 1
-        
-            for mapping in modMap.mappings [ : -1]:
-                lineIndex = baseLineIndex + mapping [iTargetLine]
-                self.addMapping ([
-                    lineIndex,
-                    mapping [iTargetColumn],
-                    modMap.sourcePaths [mapping [iSourceIndex]],
-                    mapping [iSourceLine],
-                    mapping [iTargetColumn]
-                ])
-            baseLineIndex = lineIndex + 1
+            '''
+            self.sourceCodes.append (None)
             
-        for sourcePath in self.sourcePaths:
-            try:
-                with open (sourcePath) as sourceFile:
-                    self.sourceCodes.append (
-                        (utils.extraLines if sourcePath.endswith ('.py') else '') +     # Check causes extra lines
-                        sourceFile.read ()
-                    )
-            except:
-                self.sourceCodes.append ('__pragma__ (\'padding\')')                    # It was the pad map
-        
-        self.mappings.sort ()
-        
+        self.mappings.sort ()   # ??? Needed?
+    
     def getCascadedMapping (self, shrinkMapping):                               # N.B. self.mappings has to be sorted in advance
             prettyMapping = self.mappings [min (shrinkMapping [iSourceLine], len (self.mappings) - 1)]
                         
@@ -203,46 +154,6 @@ class SourceMap:
         miniMap.sourcePaths = self.sourcePaths
         miniMap.sourceCodes = self.sourceCodes
             
-    def load (self):                                                            # Only maps with a single soure file ever get loaded
-        with open (self.mapPath) as mapFile:
-            self.rawMap = json.loads (mapFile.read ())
-            
-        self.version = self.rawMap ['version']
-        self.sourcePaths =  self.rawMap ['sources']
-        
-        try:
-            self.sourceCodes =  self.rawMap ['sourcesContent']
-        except:                                                                 # Shrink map doesn't contain source codes
-            pass
-                
-        self.deltaMappings = [
-            [base64VlqConverter.decode (segment) for segment in group.split (',')]
-            for group in self.rawMap ['mappings'] .split (';')
-        ]
-        
-        self.mappings = []
-        for groupIndex, deltaGroup in enumerate (self.deltaMappings):
-            for segmentIndex, deltaSegment in enumerate (deltaGroup):
-                if deltaSegment:                                                # Shrink map ends with empty group, i.e. 'holding empty segment'
-                    if segmentIndex:
-                        self.mappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])
-                    else:                                                       # Start of group
-                        self.mappings.append ([groupIndex, deltaSegment [0]])   # Absolute target column
-                        
-                    for i in range (1, 4):
-                        if groupIndex or segmentIndex:
-                            self.mappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
-                        else:                                                   # Start of map
-                            try:
-                                self.mappings [-1] .append (deltaSegment [i])   # Absolut file index, source line and source column
-                            except:                                             # Shrink map starts with 'A' rather than 'AAAA'
-                                self.mappings [-1] .append (0)
-                                
-        self.mappings.sort ()
-                                
-        if utils.commandArgs.dmap:
-            self.dump ()
-                                
     def save (self):
         self.rawMappings = []
         targetColumnShift = 0

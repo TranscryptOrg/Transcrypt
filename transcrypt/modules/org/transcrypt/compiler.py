@@ -41,8 +41,8 @@ namely the __core__ and __builtin__ parts.
 
 Sourcemaps are generated per module.
 There's no need for a link with other modules.
-Since import paths are static, names of minified JS files end on .mod.js just like non-minified files, so not on .mod.min.js.
-Sourcemaps are named <module name>.mod.map.
+Since import paths are static, names of minified JS files just end on .js just like non-minified files, so not on .min.js.
+Sourcemaps are named <module name>.map.
 '''
 
 class Program:
@@ -123,17 +123,17 @@ class Module:
             )
 
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
-        if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (sourcePath) < os.path.getmtime (targetPath):
+        if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
             # Generate parse tree
             if self.isJavascriptOnly:
-                # Digest source javascript and copy to target location
+                # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
+                
+                # JavaScript-only, so annotations are pointless, so it's ok to strip
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
+                
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
-                
-                if utils.commandArgs.map:
-                    self.modMap.loadOrFake (self.sourcePath, javascriptDigest.nrOfLines)
             else:
                 # Compile from Python, start with constructing parse tree
                 self.parse ()
@@ -149,23 +149,30 @@ class Module:
                         
                 # Generate JavaScript code and sourcemap from parse tree
                 self.generateJavascriptAndMap ()
-                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
+                
+                # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False)
+                
                 self.targetCode = javascriptDigest.digestedCode
-                self.exports = javascriptDigest.exportedNames        
-               
+                
+                if utils.commandArgs.map:
+                    self.targetCode += self.mapRef
+                
+                self.exports = javascriptDigest.exportedNames
+        
         # Write target code
         with utils.create (self.targetPath) as aFile:
-            aFile.write (self.targetCode + self.mapRef)
+            aFile.write (self.targetCode)
             
         # Minify target code       
         if not utils.commandArgs.nomin:
-            os.rename (self.targetPath, f'{self.targetPath}.__temp__')
+            os.rename (self.targetPath, f'{self.targetPath}.nomin')
             minify.run (
-                f'{self.targetPath}.__temp__',
+                f'{self.targetPath}.nomin',
                 self.targetPath,
                 self.shrinkMap.mapPath if utils.commandArgs.map else None,
             )
-            os.remove (f'{self.targetPath}.__temp__')
+            os.remove (f'{self.targetPath}.nomin')
             
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
@@ -183,32 +190,33 @@ class Module:
             else:
                 self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1) 
             self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
-            pythonSourcePath = f'{self.sourcePrepath}.py'
-            javascriptSourcePath = f'{self.sourcePrepath}.mod.js'
+            self.pythonSourcePath = f'{self.sourcePrepath}.py'
+            self.javascriptSourcePath = f'{self.sourcePrepath}.js'
             
             # Find target slugs
-            self.targetPrename = f'{self.name}.mod'
-            self.targetPrepath = f'{self.program.targetDir}/{self.targetPrename}'
+            self.targetPrepath = f'{self.program.targetDir}/{self.name}'
             self.targetPath = f'{self.targetPrepath}.js'
-            self.importRelPath = f'./{self.name}.mod.js'
+            self.importRelPath = f'./{self.name}.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
+            self.mapSourceName = f'{self.name}.py'
+            self.mapSourcePath = f'{self.targetPrepath}.py'
             self.mapdumpPath = f'{self.targetPrepath}.mapdump'
             self.deltaMapdumpPath = f'{self.targetPrepath}.delta.mapdump'
             self.cascadeMapdumpPath = f'{self.targetPrepath}.cascade.mapdump'
-            self.mapRef = f'\n//# sourceMappingURL={self.targetPrename}.map'
+            self.mapRef = f'\n//# sourceMappingURL={self.name}.map'
 
             # If module exists
-            if os.path.isfile (pythonSourcePath) or os.path.isfile (javascriptSourcePath):
+            if os.path.isfile (self.pythonSourcePath) or os.path.isfile (self.javascriptSourcePath):
                 # Check if it's a JavaScript-only module
-                self.isJavascriptOnly = os.path.isfile (javascriptSourcePath) and not os.path.isfile (pythonSourcePath)
+                self.isJavascriptOnly = os.path.isfile (self.javascriptSourcePath) and not os.path.isfile (self.pythonSourcePath)
                 # Set more paths (tree, sourcemap, ...)
                 # (To do)
-                self.sourcePath = javascriptSourcePath if self.isJavascriptOnly else pythonSourcePath
+                self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
                 break
             
             # Remember all fruitless paths to give a decent error report if module isn't found
-            searchedModulePaths.extend ([pythonSourcePath, javascriptSourcePath])
+            searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             # print ('\n'.join (searchedModulePaths))
@@ -223,7 +231,7 @@ class Module:
         utils.log (False, 'Generating code for module: {}\n', self.targetPath)
 
         # Generate target fragments
-        generator = Generator (self)
+        self.generator = Generator (self)
 
         # Fabricate target lines from target fragments
         if utils.commandArgs.map or utils.commandArgs.anno:
@@ -232,8 +240,8 @@ class Module:
             # In that case if no source maps are required either, the appended line numbers simply won't be used
             
             # Split joined fragments into (instrumented) lines
-            instrumentedTargetLines = ''.join (generator.targetFragments) .split ('\n')
-
+            instrumentedTargetLines = ''.join (self.generator.targetFragments) .split ('\n')
+            
             # Only remember source line nrs if a map is to be generated (so not if only annotated JavaScript is needed)
             if utils.commandArgs.map:
                 self.sourceLineNrs = []
@@ -248,35 +256,29 @@ class Module:
 
                 # Only append non-emptpy statements and their number info
                 if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
-                    if generator.allowDebugMap:                                                         # If annotations comments have to be prepended
+                    if self.generator.allowDebugMap:                                                         # If annotations comments have to be prepended
                         targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
-                    targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation commend
+                    targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation comment
                     
                     # Store line nrs for source map
                     if utils.commandArgs.map:
                         self.sourceLineNrs.append (sourceLineNr)                                        # Remember its line number to be able to generate a sourcemap
 
-            # Generate per module sourcemap and copy sourcefile
+            # Generate per module sourcemap and copy sourcefile to target location
             if utils.commandArgs.map:
                 utils.log (False, 'Generating source map for module: {}\n', self.sourcePath)
-                self.modMap.generate (self.sourcePath, self.sourceLineNrs)
+                self.modMap.generate (self.mapSourceName, self.sourceLineNrs)
                 self.modMap.save ()
+                shutil.copyfile (self.sourcePath, self.mapSourcePath)
         else:                                                           
             # No maps or annotations needed, so this 'no stripping' shortcut for speed
-            targetLines = [line for line in  ''.join (generator.targetFragments) .split ('\n') if line.strip () != ';']
+            targetLines = [line for line in  ''.join (self.generator.targetFragments) .split ('\n') if line.strip () != ';']
 
-        # Fabricate target code from target lines and header       
-        header = '// {}\'ed from Python, {}\n'.format (
-            self.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-        )
-        self.targetCode = header + '\n'.join (targetLines)
+        self.targetCode = '\n'.join (targetLines)
            
     def loadJavascript (self):
         with tokenize.open (self.sourcePath) as sourceFile:       
             self.targetCode = sourceFile.read ()
-                
-    def getModuleCaption (self):
-        return self.program.rawModuleCaption.format (self.sourcePath) if utils.commandArgs.anno else ''
 
     def parse (self):
         def pragmasFromComments (sourceCode):
@@ -497,7 +499,6 @@ class Generator (ast.NodeVisitor):
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
         self.allowJavaScriptMod = utils.commandArgs.jsmod
         self.allowMemoizeCalls = utils.commandArgs.fcall
-        self.allowStripComments = not utils.commandArgs.dnostrip
 
         self.noskipCodeGeneration = True
         self.conditionalCodeGeneration = True
@@ -623,12 +624,15 @@ class Generator (ast.NodeVisitor):
         if self.allowConversionToTruthValue:
             self.emit (')')
 
-    def adaptLineNrString (self, node, offset = 0):
+    def adaptLineNrString (self, node = None, offset = 0):
         if utils.commandArgs.map or utils.commandArgs.anno: # Under these conditions, appended line numbers will be stripped later, so they have to be there
-            if hasattr (node, 'lineno'):
-                lineNr = node.lineno + offset   # Use new line number
+            if node:
+                if hasattr (node, 'lineno'):
+                    lineNr = node.lineno + offset   # Use new line number
+                else:
+                    lineNr = self.lineNr + offset   # Use 'cached' line nubmer
             else:
-                lineNr = self.lineNr + offset   # Use 'cached' line nubmer
+                lineNr = 1 + offset
 
             self.lineNrString = str (sourcemaps.maxNrOfSourceLinesPerModule + lineNr) [1 : ]
         else:                                               # __pragma__ ('noanno') isn't enough to perform this else-clause and to later on take the 'no stripping' shortcut
@@ -1343,7 +1347,8 @@ class Generator (ast.NodeVisitor):
                     if os.path.isfile (filePath):
                         includedCode = tokenize.open (filePath) .read ()
                         if fileName.endswith ('.part.js'):
-                            includedCode = utils.digestJavascript (includedCode, self.module.program.symbols, True) .digestedCode # !!!self.allowStripComments)
+                            # Only leave comments in in case of a dnostrop and not anno, the latter to prevent nested comments
+                            includedCode = utils.digestJavascript (includedCode, self.module.program.symbols, not utils.commandArgs.dnostrip or utils.commandArgs.anno) .digestedCode
                         return includedCode
                     else:
                         searchedIncludePaths.append (filePath)
@@ -2550,6 +2555,12 @@ class Generator (ast.NodeVisitor):
         self.emit ('}}) ()')
 
     def visit_Module (self, node):
+        self.adaptLineNrString ()
+    
+        self.emit ('// {}\'ed from Python, {}\n',
+            self.module.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
+        )    
+    
         self.adaptLineNrString (node)
         self.inscope (node)
 

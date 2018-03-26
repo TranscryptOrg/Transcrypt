@@ -1,7 +1,6 @@
 # Transcrypt runtime module
 
 __pragma__ ('js', 'export var __envir__ = {{}};\n{}', __include__ ('org/transcrypt/__envir__.part.js'))
-
 __pragma__ ('js', '{}', __include__ ('org/transcrypt/__core__.part.js'))
 __pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.part.js'))
 
