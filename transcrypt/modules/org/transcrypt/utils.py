@@ -184,7 +184,7 @@ def enhanceException (exception, **kwargs):
 
     raise result
         
-def digestJavascript (code, symbols, allowStripComments):
+def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
     '''
     - Honor ifdefs
     - Strip comments if allowed by commend line switch AND indicated by pragma
@@ -199,17 +199,17 @@ def digestJavascript (code, symbols, allowStripComments):
 
     passStack = []
 
-    def passable (targetLine):
+    def passable (targetLine):        
         # Has to count, since comments may be inside ifdefs
         
         nonlocal stripComments
-            
+        
         def __pragma__ (name, *args):
 
             nonlocal stripComments
         
             if name == 'stripcomments':
-                stripComments = allowStripComments
+                stripComments = mayStripComments
             if name == 'ifdef':
                 passStack.append (args [0] in symbols)
             elif name == 'ifndef':
@@ -252,8 +252,10 @@ def digestJavascript (code, symbols, allowStripComments):
     pathPattern = re.compile ('(\'.*\')')
     for line in passableLines:
         words = line.split (' ')
-        if words [0] == '/*':       # If line start with an annotation
-            words = words [3 : ]    # Remove the annotation before looking for export / import keywords
+        
+        if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
+            words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
+            
         if words [0] == 'export':
             # Deducing exported names from JavaScript is needed to facilitate * import by other modules
             
@@ -283,6 +285,6 @@ def digestJavascript (code, symbols, allowStripComments):
             result.importedModules.append (Any (
                 path = eval (match.group (1))
             ))
-                
+            
     return result
     

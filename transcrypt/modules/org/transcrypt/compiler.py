@@ -145,7 +145,7 @@ class Module:
                 self.loadJavascript ()
                 
                 # JavaScript-only, so annotations are pointless, so it's ok to strip
-                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip)
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip, self.generator.allowDebugMap)
                 
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
@@ -166,7 +166,7 @@ class Module:
                 self.generateJavascriptAndMap ()
                 
                 # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
-                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False)
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
                 
                 self.targetCode = javascriptDigest.digestedCode
                 
@@ -199,7 +199,7 @@ class Module:
                     self.shrinkMap.load ()
                     self.prettyMap.cascade (self.shrinkMap, self.miniMap)
                     self.miniMap.save ()
-                    #os.remove (self.shrinkMapPath)
+                    os.remove (self.shrinkMapPath)
 
                 with open (self.targetPath, 'a') as miniFile:
                     miniFile.write (self.mapRef)                
@@ -1079,7 +1079,7 @@ class Generator (ast.NodeVisitor):
                             pass
                         else:
                             if type (self.getScope () .node) == ast.Module: # Redundant but regular
-                                if type (node.parentNode) == ast.Module and not target.id in self.all:
+                                if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.all:
                                     self.emit ('export ')                        
                             self.emit ('var ')
                     self.visit (target)
@@ -1378,9 +1378,9 @@ class Generator (ast.NodeVisitor):
                     filePath = '{}/{}'.format (searchDir, fileName)
                     if os.path.isfile (filePath):
                         includedCode = tokenize.open (filePath) .read ()
-                        if fileName.endswith ('.part.js'):
-                            # Only leave comments in in case of a dnostrop and not anno, the latter to prevent nested comments
-                            includedCode = utils.digestJavascript (includedCode, self.module.program.symbols, not utils.commandArgs.dnostrip or utils.commandArgs.anno) .digestedCode
+                        if fileName.endswith ('.js'):
+                            # Only leave comments in in case of a dnostrip and not anno, the latter to prevent nested comments
+                            includedCode = utils.digestJavascript (includedCode, self.module.program.symbols, not utils.commandArgs.dnostrip or utils.commandArgs.anno, self.allowDebugMap) .digestedCode
                         return includedCode
                     else:
                         searchedIncludePaths.append (filePath)

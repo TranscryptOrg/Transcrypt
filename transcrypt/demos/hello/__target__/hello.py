@@ -32,4 +32,103 @@ class SolarSystem:
         )
         self.lineIndex = (self.lineIndex + 1) % 3
         
+    def greet2 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain2 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet3 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain3 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet4 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain4 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet5 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain5 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet6 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain6 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet7 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain7 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet8 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain8 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet9 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain9 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
+    def greet10 (self):
+        self.planet = self.planets [int (Math.random () * len (self.planets))]
+        document.getElementById ('greet') .innerHTML = 'Hello {}'.format (self.planet [0])
+        self.explain ()
+        
+    def explain10 (self):
+        document.getElementById ('explain').innerHTML = (
+            self.lines [self.lineIndex] .format (self.planet [0], self.planet [self.lineIndex + 1])
+        )
+        self.lineIndex = (self.lineIndex + 1) % 3
+        
 solarSystem = SolarSystem ()
