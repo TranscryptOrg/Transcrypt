@@ -31,6 +31,7 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 - The methods console.dir and console.log are also available when programming for the browser, as are in fact all JavaScript facilities, including the complete DOM-manipulation API.
 - Certain identifiers are reserved in JavaScript. In most cases they still can be used in Transcrypt, since they are aliased to other identifiers. Identifiers and directory keys starting with 'py\_' are to be avoided, since many of them have special meaning in Transcrypt. It would have been possible to make clashes even more rare, by using e.g. @ and \_\_ in but this would have made the JavaScript code harder to read. Note that you can define a local alias yourself if you still want to use a reserved identifier.
 - The name *type* cannot be used as an ordinary identifier.
+- Python classes cannot be made callable in Transcrypt using *__call__*.
 - You can use 'require' to load JavaScript modules on the fly and access them just as you would from JavaScript.
 
 Differences due to running Transcrypt applications in the browser, rather than on the desktop

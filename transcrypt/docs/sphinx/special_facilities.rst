@@ -318,6 +318,7 @@ These operators have been chosen since they can enhance the readability of compu
 
 Formula v4 = M \* (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and \* operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of *__mul__*, *__rmul__*, *__div__*, *__rdiv__*, *__add__*, *__radd__*, *__sub__*, *__rsub__*, *__matmul__*, *__rmatmul__*, *__getitem__*, *__setitem__* and *__call__* as described in the CPython documentation. The comparison operators are supported by the functions *__eq__*, *__ne__*, *__lt__*, *__le__*, *__gt__* and *__ge__*.
 
+Note that the pragma needs to be applied where the operators are *used*, not where they are defined.
 .. _skipping_fragments:
 
 Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')
