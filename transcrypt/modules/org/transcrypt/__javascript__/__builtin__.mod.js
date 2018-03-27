@@ -1779,17 +1779,37 @@ __pragma__ ('endif')
 
     String.prototype.__rmul__ = String.prototype.__mul__;
 
-    // pythoh style magic methods for numbers
-    Number.prototype.__add__ = function(b)  { return this + b; };
-    Number.prototype.__sub__ = function(b)  { return this - b; };
-    Number.prototype.__mult__ = function(b) { return this * b; };
-    Number.prototype.__div__ = function(b)  { return this / b;  };
-    Number.prototype.__lshift__= function(b){ return this << b; };
-    Number.prototype.__rshift__= function(b){ return this >> b; };
-    Number.prototype.__or__ = function(b)   { return this | b; };
-    Number.prototype.__xor__ = function(b)  { return this ^ b; };
-    Number.prototype.__and__ = function(b)  { return this & b; };
-    Number.prototype.__pow__ = function(b)  { return this ** b; };
+    // python style magic methods for numbers
+    Number.prototype.__add__ = function (other)  { 
+        return this + other; 
+    };
+    Number.prototype.__sub__ = function (other)  { 
+        return this - other;
+	};
+    Number.prototype.__mul__ = function (other) {
+        return this * other; 
+	};
+    Number.prototype.__div__ = function (other)  { 
+	    return this / other;  
+	};
+    Number.prototype.__lshift__= function (other){ 
+	    return this << other; 
+	};
+    Number.prototype.__rshift__= function (other){ 
+	    return this >> other; 
+	};
+    Number.prototype.__or__ = function (other)   { 
+	    return this | other; 
+	};
+    Number.prototype.__xor__ = function (other)  { 
+	    return this ^ other; 
+	};
+    Number.prototype.__and__ = function (other)  { 
+	    return this & other; 
+	};
+    Number.prototype.__pow__ = function (other)  { 
+	    return this ** other; 
+	};
 
     // Dict extensions to object
     
