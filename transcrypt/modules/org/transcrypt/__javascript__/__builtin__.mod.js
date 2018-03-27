@@ -1818,15 +1818,15 @@ __pragma__ ('endif')
         return other / this;
     };
 
-    Number.prototype.__lshift__= function (other){
+    Number.prototype.__lshift__ = function (other){
         return this << other;
     };
 
-    Number.prototype.__rshift__= function (other){
+    Number.prototype.__rshift__ = function (other){
         return this >> other;
     };
 
-    Number.prototype.__rlshift__= function (other){
+    Number.prototype.__rlshift__ = function (other){
         return other << this;
     };
 
@@ -1866,14 +1866,14 @@ __pragma__ ('endif')
 
 
     Number.prototype.__pow__ = function (other)  {
-        return this ** other;
+        return Math.pow(this, other);
     };
 
     Number.prototype.__rpow__ = function (other)  {
-        return other ** this;
+        return Math.pow(other, this);
     };
 
-
+    */
 
     // Dict extensions to object
     
