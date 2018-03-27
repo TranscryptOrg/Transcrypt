@@ -1824,12 +1824,11 @@ __pragma__ ('endif')
         return this & other;
     };
 
-    /*
+
     Number.prototype.__pow__ = function (other)  {
         return this ** other;
     };
-    */
-
+    
     // Dict extensions to object
     
     function __contains__ (element) {
