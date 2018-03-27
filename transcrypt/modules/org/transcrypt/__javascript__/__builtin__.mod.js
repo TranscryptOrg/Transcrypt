@@ -1796,7 +1796,16 @@ __pragma__ ('endif')
         return this - other;
     };
 
+    Number.prototype.__rsub__ = function (other)  {
+        return other - this;
+    };
+
+
     Number.prototype.__mul__ = function (other) {
+        return this * other;
+    };
+
+    Number.prototype.__rmul__ = function (other) {
         return this * other;
     };
 
@@ -1805,6 +1814,9 @@ __pragma__ ('endif')
         return this / other;
     };
 
+    Number.prototype.__rdiv__ = function (other)  {
+        return other / this;
+    };
 
     Number.prototype.__lshift__= function (other){
         return this << other;
@@ -1814,26 +1826,55 @@ __pragma__ ('endif')
         return this >> other;
     };
 
+    Number.prototype.__rlshift__= function (other){
+        return other << this;
+    };
+
+    Number.prototype.__rrshift__= function (other){
+        return other >> this;
+    };
+
+
 
     Number.prototype.__or__ = function (other)   {
         return this | other;
     };
 
+    Number.prototype.__ror__ = function (other)   {
+        return other | this;
+    };
+
+
     Number.prototype.__xor__ = function (other)  {
         return this ^ other;
     };
+
+
+    Number.prototype.__rxor__ = function (other)  {
+        return other ^ this ;
+    };
+
 
     Number.prototype.__and__ = function (other)  {
         return this & other;
     };
 
+    Number.prototype.__rand__ = function (other)  {
+        return other & this;
+    };
 
-    /*
+
+
     Number.prototype.__pow__ = function (other)  {
         return this ** other;
     };
-    */
-    
+
+    Number.prototype.__rpow__ = function (other)  {
+        return other ** this;
+    };
+
+
+
     // Dict extensions to object
     
     function __contains__ (element) {
