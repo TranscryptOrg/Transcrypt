@@ -1779,41 +1779,50 @@ __pragma__ ('endif')
 
     String.prototype.__rmul__ = String.prototype.__mul__;
 
-    if (0)
-    {
-        // python style magic methods for numbers
-        Number.prototype.__add__ = function (other)  {
-            return this + other;
-        };
-        Number.prototype.__sub__ = function (other)  {
-            return this - other;
-        };
-        Number.prototype.__mul__ = function (other) {
-            return this * other;
-        };
-        Number.prototype.__div__ = function (other)  {
-            return this / other;
-        };
-        Number.prototype.__lshift__= function (other){
-            return this << other;
-        };
-        Number.prototype.__rshift__= function (other){
-            return this >> other;
-        };
-        Number.prototype.__or__ = function (other)   {
-            return this | other;
-        };
-        Number.prototype.__xor__ = function (other)  {
-            return this ^ other;
-        };
-        Number.prototype.__and__ = function (other)  {
-            return this & other;
-        };
-        Number.prototype.__pow__ = function (other)  {
-            return this ** other;
-        };
-	}
 
+    // python style magic methods for numbers
+    Number.prototype.__add__ = function (other)  {
+        return this + other;
+    };
+
+    /*
+    Number.prototype.__sub__ = function (other)  {
+        return this - other;
+    };
+
+    Number.prototype.__mul__ = function (other) {
+        return this * other;
+    };
+
+    Number.prototype.__div__ = function (other)  {
+        return this / other;
+    };
+
+    Number.prototype.__lshift__= function (other){
+        return this << other;
+    };
+
+    Number.prototype.__rshift__= function (other){
+        return this >> other;
+    };
+
+    Number.prototype.__or__ = function (other)   {
+        return this | other;
+    };
+
+    Number.prototype.__xor__ = function (other)  {
+        return this ^ other;
+    };
+
+    Number.prototype.__and__ = function (other)  {
+        return this & other;
+    };
+
+    Number.prototype.__pow__ = function (other)  {
+        return this ** other;
+    };
+    */
+    
     // Dict extensions to object
     
     function __contains__ (element) {
