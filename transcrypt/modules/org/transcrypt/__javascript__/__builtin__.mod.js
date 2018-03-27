@@ -1780,9 +1780,6 @@ __pragma__ ('endif')
     String.prototype.__rmul__ = String.prototype.__mul__;
 
 
-    Number.prototype.__sub__ = function (other)  {
-        return this - other;
-    };
 
     // python style magic methods for numbers
 
@@ -1790,7 +1787,11 @@ __pragma__ ('endif')
     Number.prototype.__add__ = function (other)  {
         return this + other;
     };
+    */
 
+    Number.prototype.__sub__ = function (other)  {
+        return this - other;
+    };
 
     Number.prototype.__mul__ = function (other) {
         return this * other;
@@ -1823,7 +1824,7 @@ __pragma__ ('endif')
     Number.prototype.__pow__ = function (other)  {
         return this ** other;
     };
-    */
+
 
     // Dict extensions to object
     
