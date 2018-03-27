@@ -6,6 +6,35 @@ import shutil
 
 from org.transcrypt import utils
 
+'''
+A non-cascaded mapping is made by calling 'generate', it uses construction parameters
+
+    - targetPath            The path to the target (pretty) file, since that has to be in the sourcemap
+    - mapPath               Where it has to write itself
+    - mapdumpPath           Debug dump
+    - deltaMapdumpPath      Debug dump of deltas
+
+A cascaded mapping is made as follows:
+
+    - First make a non-cascaded mapping
+
+    - After that have the minifier generate a shrink map, and load it by calling 'load', it uses construction parameters
+    
+        - targetPath            The path to target (minified) file, since that has to be in the sourcemap
+        - mapPath               Where it has to write itself
+        - mapdumpPath           Debug dump
+        - deltaMapdumpPath      Debug dump of deltas
+        
+    - After that call the 'cascade' function to make the cascaded map out of the non-cascaded map
+      and the shrink map, it uses construction parameters:
+      
+        - targetPath            The path to target (minified) file, since that has to be in the sourcemap
+        - mapPath               Where it has to write itself
+        - mapdumpPath           Debug dump
+        - deltaMapdumpPath      Debug dump of deltas
+'''
+
+
 # Tools to embed source map info in target code
 
 lineNrLength = 6
@@ -82,9 +111,9 @@ class SourceMap:
         self,
         targetPath,
         mapPath,
-        mapdumpPath,
-        deltaMapdumpPath,
-        cascadeMapdumpPath,
+        mapdumpPath = '',
+        deltaMapdumpPath = '',
+        cascadeMapdumpPath = '',
     ):
         self.targetPath = targetPath
         self.mapPath = mapPath
@@ -99,60 +128,96 @@ class SourceMap:
         self.sourceIndex = 0
         self.mappings = []      # Exactly one mapping per target line?
         
-    def addMapping (self, mapping):
-        if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
-            try:
-                self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
-            except ValueError:
-                self.sourceIndex = len (self.sourcePaths)
-                self.sourcePaths.append (mapping [iSourceIndex])
-                    
-        # At this point we should have a valid self.currentSourceIndex
-        
-        self.mappings.append ([mapping [iTargetLine], mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
-            
     def generate (self, sourcePath, sourceLineNrs):
+        def addMapping (mapping):
+            if self.sourceIndex >= len (self.sourcePaths) or self.sourcePaths [self.sourceIndex] != mapping [iSourceIndex]:
+                try:
+                    self.sourceIndex = self.sourcePaths.index (mapping [iSourceIndex])
+                except ValueError:
+                    self.sourceIndex = len (self.sourcePaths)
+                    self.sourcePaths.append (mapping [iSourceIndex])
+            # At this point we should have a valid self.currentSourceIndex
+            self.mappings.append ([mapping [iTargetLine], mapping [iTargetColumn], self.sourceIndex, mapping [iSourceLine], mapping [iSourceColumn]])
+            
         self.clear ()
         for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs):
-            self.addMapping ((targetLineIndex, 0, sourcePath, sourceLineNr - 1, 0))
+            addMapping ((targetLineIndex, 0, sourcePath, sourceLineNr - 1, 0))
             
         for sourcePath in self.sourcePaths:
-            '''
-            with open (sourcePath) as sourceFile:
-                self.sourceCodes.append (sourceFile.read ())
-            '''
             self.sourceCodes.append (None)
             
         self.mappings.sort ()   # ??? Needed?
     
-    def getCascadedMapping (self, shrinkMapping):                               # N.B. self.mappings has to be sorted in advance
-            prettyMapping = self.mappings [min (shrinkMapping [iSourceLine], len (self.mappings) - 1)]
-                        
+        if utils.commandArgs.dmap and self.mapdumpPath and self.deltaMapdumpPath:
+            self.dump ()
+            
+    def cascade (self, shrinkMap, miniMap):                                     # Result in miniMap
+        def getCascadedMapping (shrinkMapping):                                 # N.B. self.mappings has to be sorted in advance
+            prettyMapping = self.mappings [min (shrinkMapping [iSourceLine], len (self.mappings) - 1)] 
             result =            (
                 shrinkMapping [ : iTargetColumn + 1]                            # Target location from shrink mapping
                 +
                 prettyMapping [iSourceIndex : ]                                 # Source location from self
             )
-    
-            if utils.commandArgs.dmap:
+            if utils.commandArgs.dmap and miniMap.cascadeMapdumpPath:
                 self.cascadeMapdumpFile.write ('{} {} {}'.format (result, shrinkMapping, prettyMapping))
-            
             return result
-                
-    def cascade (self, shrinkMap, miniMap):                                     # Result in miniMap
+
         self.mappings.sort ()
         
-        self.cascadeMapdumpFile = utils.create (miniMap.cascadeMapdumpPath)
+        if utils.commandArgs.dmap and miniMap.cascadeMapdumpPath:
+            self.cascadeMapdumpFile = utils.create (miniMap.cascadeMapdumpPath)
         
         miniMap.mappings = [
-            self.getCascadedMapping (shrinkMapping)
+            getCascadedMapping (shrinkMapping)
             for shrinkMapping in shrinkMap.mappings
         ]
         
-        self.cascadeMapdumpFile.close ()
+        if utils.commandArgs.dmap and miniMap.cascadeMapdumpPath:
+            self.cascadeMapdumpFile.close ()
         
         miniMap.sourcePaths = self.sourcePaths
         miniMap.sourceCodes = self.sourceCodes
+        
+    def load (self):                                                            # Only maps with a single soure file ever get loaded
+        with open (self.mapPath) as mapFile:
+            self.rawMap = json.loads (mapFile.read ())
+            
+        self.version = self.rawMap ['version']
+        self.sourcePaths =  self.rawMap ['sources']
+        
+        try:
+            self.sourceCodes =  self.rawMap ['sourcesContent']
+        except:                                                                 # Shrink map doesn't contain source codes
+            pass
+                
+        self.deltaMappings = [
+            [base64VlqConverter.decode (segment) for segment in group.split (',')]
+            for group in self.rawMap ['mappings'] .split (';')
+        ]
+        
+        self.mappings = []
+        for groupIndex, deltaGroup in enumerate (self.deltaMappings):
+            for segmentIndex, deltaSegment in enumerate (deltaGroup):
+                if deltaSegment:                                                # Shrink map ends with empty group, i.e. 'holding empty segment'
+                    if segmentIndex:
+                        self.mappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])
+                    else:                                                       # Start of group
+                        self.mappings.append ([groupIndex, deltaSegment [0]])   # Absolute target column
+                        
+                    for i in range (1, 4):
+                        if groupIndex or segmentIndex:
+                            self.mappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
+                        else:                                                   # Start of map
+                            try:
+                                self.mappings [-1] .append (deltaSegment [i])   # Absolut file index, source line and source column
+                            except:                                             # Shrink map starts with 'A' rather than 'AAAA'
+                                self.mappings [-1] .append (0)
+                                
+        self.mappings.sort ()
+                                
+        if utils.commandArgs.dmap and self.mapdumpPath and self.deltaMapdumpPath:
+            self.dump ()
             
     def save (self):
         self.rawMappings = []
@@ -210,12 +275,13 @@ class SourceMap:
             mapdumpFile.write ('mappings:\n')
             for mapping in self.mappings:
                 mapdumpFile.write ('\t{}\n'.format (mapping))
-                
-        with utils.create (self.deltaMapdumpPath) as deltaMapdumpFile:
-            for group in self.deltaMappings:
-                deltaMapdumpFile.write ('(New group) ')
-                for segment in group:
-                    deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
+           
+        if hasattr (self, 'deltaMappings'):
+            with utils.create (self.deltaMapdumpPath) as deltaMapdumpFile:
+                for group in self.deltaMappings:
+                    deltaMapdumpFile.write ('(New group) ')
+                    for segment in group:
+                        deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
 
         
                 

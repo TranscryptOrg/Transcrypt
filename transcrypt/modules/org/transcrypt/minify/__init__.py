@@ -6,7 +6,7 @@ from org.transcrypt import utils
 closureCompilerPath = '{}/closure_compiler/compiler.jar'.format (os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/'))
 
 # Minifier has to accept JavaScript 6 input code, it is there in the autotest, even if not executed.
-def run (sourcePath, targetPath, postMapPath):
+def run (sourcePath, targetPath, mapPath):
     params = [
         'java', '-jar',
         closureCompilerPath,
@@ -18,7 +18,7 @@ def run (sourcePath, targetPath, postMapPath):
     
     if utils.commandArgs.map:
         params += [
-            '--create_source_map', postMapPath,
+            '--create_source_map', mapPath,
             '--source_map_format=V3'
         ]
 

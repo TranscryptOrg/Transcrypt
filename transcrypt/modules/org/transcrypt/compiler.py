@@ -114,13 +114,28 @@ class Module:
         
         # Set sourcemap
         if utils.commandArgs.map:
-            self.modMap = sourcemaps.SourceMap (
+            self.prettyMap = sourcemaps.SourceMap (
                 self.targetPath,
                 self.mapPath,
                 self.mapdumpPath,
-                self.deltaMapdumpPath,
-                self.cascadeMapdumpPath
+                self.deltaMapdumpPath
             )
+            
+            if not utils.commandArgs.nomin:
+                self.shrinkMap = sourcemaps.SourceMap (
+                    self.targetPath,
+                    self.shrinkMapPath,
+                    self.mapdumpPath,
+                    self.deltaMapdumpPath,
+                )
+
+                self.miniMap = sourcemaps.SourceMap (
+                    self.targetPath,
+                    self.mapPath,
+                    self.mapdumpPath,
+                    self.deltaMapdumpPath,
+                    self.cascadeMapdumpPath
+                )            
 
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
@@ -161,18 +176,33 @@ class Module:
                 self.exports = javascriptDigest.exportedNames
         
         # Write target code
+        utils.log (True, 'Saving target code in: {}\n', self.targetPath)
         with utils.create (self.targetPath) as aFile:
             aFile.write (self.targetCode)
             
         # Minify target code       
         if not utils.commandArgs.nomin:
-            os.rename (self.targetPath, f'{self.targetPath}.nomin')
+            utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
+            os.rename (self.targetPath, self.prettyTargetPath)
             minify.run (
-                f'{self.targetPath}.nomin',
+                self.prettyTargetPath,
                 self.targetPath,
-                self.shrinkMap.mapPath if utils.commandArgs.map else None,
+                self.shrinkMapPath if utils.commandArgs.map else None,
             )
-            os.remove (f'{self.targetPath}.nomin')
+            os.remove (self.prettyTargetPath)
+            
+            if utils.commandArgs.map:
+                if self.isJavascriptOnly:
+                    os.rename (self.shrinkMapPath, self.mapPath)
+                else:
+                    utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
+                    self.shrinkMap.load ()
+                    self.prettyMap.cascade (self.shrinkMap, self.miniMap)
+                    self.miniMap.save ()
+                    #os.remove (self.shrinkMapPath)
+
+                with open (self.targetPath, 'a') as miniFile:
+                    miniFile.write (self.mapRef)                
             
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
@@ -196,9 +226,11 @@ class Module:
             # Find target slugs
             self.targetPrepath = f'{self.program.targetDir}/{self.name}'
             self.targetPath = f'{self.targetPrepath}.js'
+            self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
             self.importRelPath = f'./{self.name}.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
+            self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
             self.mapSourceName = f'{self.name}.py'
             self.mapSourcePath = f'{self.targetPrepath}.py'
             self.mapdumpPath = f'{self.targetPrepath}.mapdump'
@@ -266,10 +298,10 @@ class Module:
 
             # Generate per module sourcemap and copy sourcefile to target location
             if utils.commandArgs.map:
-                utils.log (False, 'Generating source map for module: {}\n', self.sourcePath)
-                self.modMap.generate (self.mapSourceName, self.sourceLineNrs)
-                self.modMap.save ()
-                shutil.copyfile (self.sourcePath, self.mapSourcePath)
+                utils.log (False, 'Saving source map in: {}\n', self.mapPath)
+                self.prettyMap.generate (self.mapSourceName, self.sourceLineNrs)
+                self.prettyMap.save ()
+                shutil.copyfile (self.sourcePath, self.mapSourcePath)                
         else:                                                           
             # No maps or annotations needed, so this 'no stripping' shortcut for speed
             targetLines = [line for line in  ''.join (self.generator.targetFragments) .split ('\n') if line.strip () != ';']
