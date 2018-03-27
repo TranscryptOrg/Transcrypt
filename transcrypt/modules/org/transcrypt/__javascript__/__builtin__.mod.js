@@ -1783,11 +1783,14 @@ __pragma__ ('endif')
 
     // python style magic methods for numbers
 
-    /*
     Number.prototype.__add__ = function (other)  {
         return this + other;
     };
-    */
+
+    Number.prototype.__radd__ = function (other) {
+        return other + this;
+    };
+
 
     Number.prototype.__sub__ = function (other)  {
         return this - other;
@@ -1825,9 +1828,11 @@ __pragma__ ('endif')
     };
 
 
+    /*
     Number.prototype.__pow__ = function (other)  {
         return this ** other;
     };
+    */
     
     // Dict extensions to object
     
