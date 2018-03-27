@@ -1863,8 +1863,6 @@ __pragma__ ('endif')
         return other & this;
     };
 
-
-
     Number.prototype.__pow__ = function (other)  {
         return Math.pow(this, other);
     };
@@ -1873,7 +1871,7 @@ __pragma__ ('endif')
         return Math.pow(other, this);
     };
 
-    */
+
 
     // Dict extensions to object
     
