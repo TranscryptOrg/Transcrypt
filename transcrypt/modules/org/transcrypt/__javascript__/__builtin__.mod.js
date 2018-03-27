@@ -1811,7 +1811,7 @@ __pragma__ ('endif')
         return this >> other;
     };
 
-    /*
+
     Number.prototype.__or__ = function (other)   {
         return this | other;
     };
@@ -1824,6 +1824,7 @@ __pragma__ ('endif')
         return this & other;
     };
 
+    /*
     Number.prototype.__pow__ = function (other)  {
         return this ** other;
     };
