@@ -1784,7 +1784,6 @@ __pragma__ ('endif')
     // python style magic methods for numbers
 
     Number.prototype.__add__ = function (other)  {
-        console.log("number add");
         return this + other;
     };
 
