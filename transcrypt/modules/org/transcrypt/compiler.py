@@ -1370,7 +1370,8 @@ class Generator (ast.NodeVisitor):
         # fast overloading merely substitutes the python overload methods
         # and bypasses __call__
         if self.allowFastOverloading and Overloads.supported(node.op):
-
+            if (type(node.target) == ast.Num):
+                raise SyntaxError("Can't assign to numeric literal")
             if type(node.target) == ast.Name and not node.target.id in self.getScope().nonlocals:
                 self.emit("var ")
             self.visit(node.target)
@@ -1492,7 +1493,7 @@ class Generator (ast.NodeVisitor):
                 self.emit (')')
         # fast overloading merely substitutes the python overload methods
         # and bypasses __call__
-        elif self.allowFastOverloading and Overloads.supported(node.op):
+        elif self.allowFastOverloading and Overloads.supported(node.op) and type(node.left.target) != ast.Num:
             self.visit(node.left)
             self.emit(".")
             self.emit(Overloads.get(node.op))
