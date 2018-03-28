@@ -1784,6 +1784,7 @@ __pragma__ ('endif')
     // python style magic methods for numbers
 
     Number.prototype.__add__ = function (other)  {
+        console.log("number add");
         return this + other;
     };
 
@@ -1834,6 +1835,25 @@ __pragma__ ('endif')
         return other >> this;
     };
 
+    Number.prototype.__truediv__ = function (other)
+    {
+        return this / other;
+    };
+
+    Number.prototype.__floordiv__ = function (other)
+    {
+        return Math.floor(this / other);
+    };
+
+    Number.prototype.__rtruediv__ = function (other)
+    {
+        return other / this;
+    };
+
+    Number.prototype.__rfloordiv__ = function (other)
+    {
+        return Math.floor(other / this);
+    };
 
 
     Number.prototype.__or__ = function (other)   {

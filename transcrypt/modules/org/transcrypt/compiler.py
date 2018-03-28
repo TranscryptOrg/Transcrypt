@@ -114,7 +114,8 @@ class Overloads:
         ast.MatMult: 'matmul',
         ast.Mod: 'mod',
         ast.Mult: 'mul',
-        ast.Div: 'div',
+        ast.Div: 'truediv',
+        ast.FloorDiv: 'floordiv',
         ast.Add:'add',
         ast.Sub: 'sub',
         ast.LShift: 'lshift',
@@ -1903,6 +1904,7 @@ class Generator (ast.NodeVisitor):
         
         if (
             self.allowOperatorOverloading and       # If operator overloading and
+            not self.allowFastOverloading and
             not (                                   # whe're not already in the __call__ that we generated on the fly,
                 type (node.func) == ast.Name and
                 node.func.id == '__call__'

@@ -260,3 +260,57 @@ def run (autoTester):
     __pragma__('noopov')
     
     autoTester.check (a.b ['c'])
+
+
+    class FastOverload:
+
+        def __init__(self, val):
+            self.val = val
+
+        def __add__(self, other):
+            return FastOverload(self.val + other.val)
+
+        def __radd__(self, other):
+            # testing radd
+            return FastOverload(self.val + other)
+
+        def __sub__(self, other):
+            return FastOverload(self.val - other.val)
+
+        def __mul__(self, other):
+            return FastOverload(self.val * other.val)
+
+        def __truediv__(self, other):
+            return FastOverload(self.val / other.val)
+
+        def __or__ (self, other):
+            return FastOverload(self.val | other.val)
+
+        def result(self):
+            return self.val
+
+    fast1 = FastOverload(99)
+    fast2 = FastOverload(101)
+
+    __pragma__('opov', 'fast')
+    bob = fast1 + fast2
+    autoTester.check(bob.result() == 200)
+
+    bob += FastOverload(100)
+    autoTester.check(bob.result() == 300)
+
+    tom = bob / FastOverload(3.0)
+    autoTester.check(tom.result() == 100)
+
+    tt = FastOverload(True)
+    ff = FastOverload(False)
+    autoTester.check( (tt | ff).result() == 1)
+
+    # TODO: debug the call to __add__ and prototype fail here
+    #fo = FastOverload(9)
+    #num = 1
+    #autoTester.check((num + fo).result() == 10)
+
+
+    __pragma__('noopov')
+
