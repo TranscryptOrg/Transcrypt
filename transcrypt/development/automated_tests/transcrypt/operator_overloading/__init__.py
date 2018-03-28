@@ -306,10 +306,10 @@ def run (autoTester):
     ff = FastOverload(False)
     autoTester.check( (tt | ff).result() == 1)
 
-    # TODO: debug the call to __add__ and prototype fail here
-    #fo = FastOverload(9)
-    #num = 1
-    #autoTester.check((num + fo).result() == 10)
+    # test overloads on numberic vars
+    num = 1
+    othernum = 2
+    autoTester.check((num + othernum) == 3)
 
 
     __pragma__('noopov')
