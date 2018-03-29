@@ -114,28 +114,23 @@ class Module:
         
         # Set sourcemap
         if utils.commandArgs.map:
-            self.prettyMap = sourcemaps.SourceMap (
-                self.targetPath,
-                self.mapPath,
-                self.mapdumpPath,
-                self.deltaMapdumpPath
-            )
-            
-            if not utils.commandArgs.nomin:
-                self.shrinkMap = sourcemaps.SourceMap (
-                    self.targetPath,
-                    self.shrinkMapPath,
-                    self.mapdumpPath,
-                    self.deltaMapdumpPath,
+            if utils.commandArgs.nomin
+                self.sourceMapper = sourcemaps.SourceMapper (
+                    resultPrename = self.targetPrename,
+                    pythonPrename = self.sourcePrename,
+                    prettyPrename = self.prettyPrename,
+                    targetDir = self.targetDir,
+                    minify = not utils.commandArgs.nomin
+                    dump = utils.commandArgs.dmap
                 )
-
-                self.miniMap = sourcemaps.SourceMap (
-                    self.targetPath,
-                    self.mapPath,
-                    self.mapdumpPath,
-                    self.deltaMapdumpPath,
-                    self.cascadeMapdumpPath
-                )            
+            else:
+                self.sourceMapper = sourcemaps.SourceMapper (
+                    resultPrename = self.targetPrename,
+                    pythonPrename = self.sourcePrename,
+                    prettyPrename = self.prettyPrename,
+                    targetDir self.targetDir,
+                    dump = utils.commandArgs.dmap
+                )
 
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):

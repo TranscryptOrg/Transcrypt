@@ -90,18 +90,14 @@ iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)
 class SourceMapper: # There's only one sourcemapper needed to generate all maps of a module
     def __init__ (
         self,
-        resultPrename = '', # Always present
-        pythonPrename = '', # Only present if not a JavaScript-only module   
-        prettyPrename = '', # Only present if minification has to take place
+        moduleName = '',
+        targetDir,
+        minify,
         dump
     ):
-        self.resultPrename = resultPrename
-        self.pythonPrename = pythonPrename
-        self.prettyPrename = prettyPrename
-        
-        self.generatedPrename = self.prettyPrename if self.prettyPrename else self.resultPrename
-        self.shrinkPrename = resultPrename + '.shrink' if self.prettyName else ''
-        
+        self.moduleName = moduleName
+        self.targetDir = targetDir
+        self.minify = minify
         self.dump = dump
         
         self.clear ()
@@ -117,11 +113,13 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             
         self.generatedMappings.sort ()
         
-        self.save (self.generatedMappings, self.pythonPrename + '.py', self.generatedPrename)
+        infix = 'pretty.'  if minify else ''
+        
+        self.save (self.generatedMappings, infix, '.py')
         
         if self.dump:
-            self.dumpMap (self.generatedMappings, self.generatedPrename)
-            self.dumpDeltaMap (self.generatedMappings, self.generatedPrename)
+            self.dumpMap (self.generatedMappings, infix)
+            self.dumpDeltaMap (self.generatedMappings, infix)
             
     def cascade (self):
         def getCascadedMapping (shrinkMapping):                                 # N.B. self.generatedMappings has to be sorted in advance
@@ -137,29 +135,21 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             return result
         
         if dump:
-            self.cascadeMapdumpFile = utils.create (self.resultPrename + '.cascade_map_dump')
+            self.cascadeMapdumpFile = utils.create ('{self.workDir}/{self.prename}.cascade_map_dump')
         
         self.miniMappings = [
             getCascadedMapping (shrinkMapping)
             for shrinkMapping in self.shrinkMappings
         ]
         
-        self.save (self.miniMappings, self.prettyPrename + '.js', self.resultPrename)
+        self.save (self.miniMappings, '', '.js')
         
         if dump:
             self.cascadeMapdumpFile.close ()
         
-    def load (self):                                                            # Only maps with a single soure file ever get loaded, namely shrinkmaps
-        with open (self.shrinkPrename + '.map') as mapFile:
+    def load (self):
+        with open  (f'{self.moduleName}.shrink.map') as mapFile:
             rawMap = json.loads (mapFile.read ())
-           
-        self.version = rawMap ['version']
-        self.sourcePaths =  rawMap ['sources']
-        
-        try:
-            sourceCodes =  rawMap ['sourcesContent']
-        except:                                                                 # Shrink map doesn't contain source codes
-            pass
                 
         deltaMappings = [
             [base64VlqConverter.decode (segment) for segment in group.split (',')]
@@ -187,10 +177,10 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         self.shrinkMappings.sort ()
                                 
         if dump:
-            self.dumpMap (self.shrinkMappings, self.shrinkPrename)
-            self.dumpDeltaMap (deltaMappings, self.shrinkPrename)
+            self.dumpMap (self.shrinkMappings, '.shrink')
+            self.dumpDeltaMap (deltaMappings, '.shrink')
             
-    def save (self, mappings, sourceName, targetPrename):                
+    def save (self, mappings, infix, sourceExtension):                
         mappings.sort ()
         
         deltaMappings = []
@@ -215,8 +205,8 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
                                     
         rawMap = collections.OrderedDict ([
             ('version', mapVersion),
-            ('file', targetPrename + '.js'),
-            ('sources', [sourceName]),
+            ('file', prename + f'{prename.js'), # Target
+            ('sources', [f'{prename}{infix}{sourceExtension}']),
             ('sourcesContent', [null]),
             ('mappings', ';'.join ([
                 ','.join ([
@@ -227,15 +217,15 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             ]))
         ])
                 
-        with utils.create (mapPath) as mapFile:
+        with utils.create () as mapFile:
             mapFile.write (json.dumps (self.rawMap, indent = '\t'))
             
         if self.dump:
-            self.dumpMap (mappings, prename)
-            self.dumpDeltaMap (deltaMappings, prename)
+            self.dumpMap (mappings, infix)
+            self.dumpDeltaMap (deltaMappings, infix)
             
-    def dumpMap (self, mappings, prename):
-        with utils.create (prename + '.map_dump') as mapdumpFile:
+    def dumpMap (self, mappings, infix):
+        with utils.create (f'{self.prename}{infix}.map_dump') as mapdumpFile:
             mapdumpFile.write ('mapVersion: {}\n\n'.format (mapVersion))
             mapdumpFile.write ('targetPath: {}\n\n'.format (self.targetPath))
             mapdumpFile.write ('sourcePaths: {}\n\n'.format (self.sourcePaths))
@@ -243,8 +233,8 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             for mapping in mappings:
                 mapdumpFile.write ('\t{}\n'.format (mapping))
                 
-    def dumpDeltaMap (self, deltaMappings, prename):
-        with utils.create (prename + '.delta_map_dump') as deltaMapdumpFile:
+    def dumpDeltaMap (self, deltaMappings, infix):
+        with utils.create (f'{self.prename}{infix}.delta_map_dump') as deltaMapdumpFile:
             for group in deltaMappings:
                 deltaMapdumpFile.write ('(New group) ')
                 for segment in group:
