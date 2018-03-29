@@ -1682,8 +1682,7 @@ class Generator (ast.NodeVisitor):
                         command = switch if switch else node.args [1] .s
                         process = subprocess.Popen (
                             # Do not use shlex.split under Windows
-                            command if sys.platform == 'win32' else \
-                                shlex.split(command),
+                            command if sys.platform == 'win32' else shlex.split(command),
                             stdin = subprocess.PIPE,
                             stdout = subprocess.PIPE,
                             cwd = workDir
