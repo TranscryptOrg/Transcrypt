@@ -7,14 +7,11 @@ import shutil
 from org.transcrypt import utils
 
 '''
-A non-cascaded mapping is made by calling 'generate', it uses construction parameters
-A cascaded mapping is made as follows:
-    - First make a non-cascaded mapping
-    - After that have the minifier generate a shrink map, and load it by calling 'load', it uses construction parameters
-    - After that call the 'cascade' function to make the cascaded map out of the non-cascaded map
-      and the shrink map, it uses construction parameters:
+A cascaded mini mapping is made as follows:
+    - First generated a non-cascaded pretty map
+    - After that have the minifier generate a shrink map and load that
+    - After that cascade the two to obtain the mini map and save that
 '''
-
 
 # Tools to embed source map info in target code
 
@@ -90,7 +87,7 @@ iTargetLine, iTargetColumn, iSourceIndex, iSourceLine, iSourceColumn = range (5)
 class SourceMapper: # There's only one sourcemapper needed to generate all maps of a module
     def __init__ (
         self,
-        moduleName = '',
+        moduleName,
         targetDir,
         minify,
         dump
@@ -100,55 +97,48 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         self.minify = minify
         self.dump = dump
         
-        self.clear ()
         
-    def clear (self):
-        self.mappings = []
+    def generateAndSavePrettyMap (self, sourceLineNrs):
+        self.prettyMappings = [[targetLineIndex, 0, 0, sourceLineNr - 1, 0] for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs)]
+        self.prettyMappings.sort ()
         
-    def generate (self, sourceLineNrs):
-        self.clear ()
+        infix = '.pretty'  if self.minify else ''
         
-        for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs):
-            self.generatedMappings.append ((targetLineIndex, 0, 0, sourceLineNr - 1, 0))   
-            
-        self.generatedMappings.sort ()
-        
-        infix = 'pretty.'  if minify else ''
-        
-        self.save (self.generatedMappings, infix, '.py')
+        self.save (self.prettyMappings, infix, '.py')
         
         if self.dump:
-            self.dumpMap (self.generatedMappings, infix)
-            self.dumpDeltaMap (self.generatedMappings, infix)
+            self.dumpMap (self.prettyMappings, infix, '.py')
+            self.dumpDeltaMap (self.prettyMappings, infix)
             
-    def cascade (self):
-        def getCascadedMapping (shrinkMapping):                                 # N.B. self.generatedMappings has to be sorted in advance
-            generatedMapping = self.generatedMappings [min (shrinkMapping [iSourceLine], len (self.generatedMappings) - 1)] 
+    def cascadeAndSaveMiniMap (self):
+        def getCascadedMapping (shrinkMapping):                                 # N.B. self.prettyMappings has to be sorted in advance
+            prettyMapping = self.prettyMappings [min (shrinkMapping [iSourceLine], len (self.prettyMappings) - 1)] 
             
             result =            (
                 shrinkMapping [ : iTargetColumn + 1]                            # Target location from shrink mapping
                 +
-                generatedMapping [iSourceIndex : ]                              # Source location from self
+                prettyMapping [iSourceIndex : ]                                 # Source location from self
             )
             if self.dump:
-                self.cascadeMapdumpFile.write ('{} {} {}\n'.format (result, shrinkMapping, generatedMapping))
+                self.cascadeMapdumpFile.write ('{} {} {}\n'.format (result, shrinkMapping, prettyMapping))
             return result
         
-        if dump:
-            self.cascadeMapdumpFile = utils.create ('{self.workDir}/{self.prename}.cascade_map_dump')
+        if self.dump:
+            self.cascadeMapdumpFile = utils.create (f'{self.targetDir}/{self.moduleName}.cascade_map_dump')
         
         self.miniMappings = [
             getCascadedMapping (shrinkMapping)
             for shrinkMapping in self.shrinkMappings
         ]
+        self.miniMappings.sort ()
         
         self.save (self.miniMappings, '', '.js')
         
-        if dump:
+        if self.dump:
             self.cascadeMapdumpFile.close ()
         
     def loadShrinkMap (self):
-        with open  (f'{self.moduleName}.shrink.map') as mapFile:
+        with open  (f'{self.targetDir}/{self.moduleName}.shrink.map') as mapFile:
             rawMap = json.loads (mapFile.read ())
                 
         deltaMappings = [
@@ -161,28 +151,24 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             for segmentIndex, deltaSegment in enumerate (deltaGroup):
                 if deltaSegment:                                                # Shrink map ends with empty group, i.e. 'holding empty segment'
                     if segmentIndex:
-                        self.shrinkMappings.append ([groupIndex, deltaSegment [0] + self.mappings [-1][1]])
+                        self.shrinkMappings.append ([groupIndex, deltaSegment [0] + self.shrinkMappings [-1][1]])
                     else:                                                       # Start of group
-                        self.shrinkMappings.append ([groupIndex, deltaSegment [0]])   # Absolute target column
-                        
+                        self.shrinkMappings.append ([groupIndex, deltaSegment [0]])   # Absolute target column 
                     for i in range (1, 4):
                         if groupIndex or segmentIndex:
-                            self.shrinkMappings [-1] .append (deltaSegment [i] + self.mappings [-2][i + 1])
+                            self.shrinkMappings [-1] .append (deltaSegment [i] + self.shrinkMappings [-2][i + 1])
                         else:                                                   # Start of map
                             try:
-                                self.mappings [-1] .append (deltaSegment [i])   # Absolut file index, source line and source column
+                                self.shrinkMappings [-1] .append (deltaSegment [i])   # Absolut file index, source line and source column
                             except:                                             # Shrink map starts with 'A' rather than 'AAAA'
-                                self.mappings [-1] .append (0)
-                                
+                                self.shrinkMappings [-1] .append (0)                       
         self.shrinkMappings.sort ()
                                 
-        if dump:
-            self.dumpMap (self.shrinkMappings, '.shrink')
+        if self.dump:
+            self.dumpMap (self.shrinkMappings, '.shrink', '.py')
             self.dumpDeltaMap (deltaMappings, '.shrink')
             
-    def save (self, mappings, infix, sourceExtension):                
-        mappings.sort ()
-        
+    def save (self, mappings, infix, sourceExtension):
         deltaMappings = []
         oldMapping = [-1, 0, 0, 0, 0]
         for mapping in mappings:
@@ -199,15 +185,15 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
                 deltaMappings [-1][-1] .append (mapping [iTargetColumn] - oldMapping [iTargetColumn])  # Others are delta's, so cumulative
                     
             for i in [iSourceIndex, iSourceLine, iSourceColumn]:
-                self.deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
+                deltaMappings [-1][-1] .append (mapping [i] - oldMapping [i])
                     
             oldMapping = mapping
                                     
         rawMap = collections.OrderedDict ([
             ('version', mapVersion),
-            ('file', prename + f'{prename.js'), # Target
-            ('sources', [f'{prename}{infix}{sourceExtension}']),
-            ('sourcesContent', [null]),
+            ('file', f'{self.moduleName}.js'), # Target
+            ('sources', [f'{self.moduleName}{infix}{sourceExtension}']),
+            ('sourcesContent', [None]),
             ('mappings', ';'.join ([
                 ','.join ([
                     base64VlqConverter.encode (segment)
@@ -217,24 +203,24 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             ]))
         ])
                 
-        with utils.create () as mapFile:
-            mapFile.write (json.dumps (self.rawMap, indent = '\t'))
+        with utils.create (f'{self.targetDir}/{self.moduleName}{infix}.map') as mapFile:
+            mapFile.write (json.dumps (rawMap, indent = '\t'))
             
         if self.dump:
-            self.dumpMap (mappings, infix)
+            self.dumpMap (mappings, infix, sourceExtension)
             self.dumpDeltaMap (deltaMappings, infix)
             
-    def dumpMap (self, mappings, infix):
-        with utils.create (f'{self.prename}{infix}.map_dump') as mapdumpFile:
-            mapdumpFile.write ('mapVersion: {}\n\n'.format (mapVersion))
-            mapdumpFile.write ('targetPath: {}\n\n'.format (self.targetPath))
-            mapdumpFile.write ('sourcePaths: {}\n\n'.format (self.sourcePaths))
+    def dumpMap (self, mappings, infix, sourceExtension):
+        with utils.create (f'{self.targetDir}/{self.moduleName}{infix}.map_dump') as mapdumpFile:
+            mapdumpFile.write (f'mapVersion: {mapVersion}\n\n')
+            mapdumpFile.write (f'targetPath: {self.moduleName}.js\n\n')
+            mapdumpFile.write (f'sourcePath: {self.moduleName}{infix}{sourceExtension}\n\n')
             mapdumpFile.write ('mappings:\n')
             for mapping in mappings:
                 mapdumpFile.write ('\t{}\n'.format (mapping))
                 
     def dumpDeltaMap (self, deltaMappings, infix):
-        with utils.create (f'{self.prename}{infix}.delta_map_dump') as deltaMapdumpFile:
+        with utils.create (f'{self.targetDir}/{self.moduleName}{infix}.delta_map_dump') as deltaMapdumpFile:
             for group in deltaMappings:
                 deltaMapdumpFile.write ('(New group) ')
                 for segment in group:

@@ -115,8 +115,8 @@ class Module:
         # Create sourcemapper
         if utils.commandArgs.map:
             self.sourceMapper = sourcemaps.SourceMapper (
-                self.moduleName,
-                self.targetDir,
+                self.name,
+                self.program.targetDir,
                 not utils.commandArgs.nomin,
                 utils.commandArgs.dmap
             )
@@ -176,8 +176,7 @@ class Module:
                 else:
                     utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
                     self.sourceMapper.loadShrinkMap ()
-                    self.sourceMapper.cascade ()
-                    
+                    self.sourceMapper.cascadeAndSaveMiniMap ()
 
                 with open (self.targetPath, 'a') as targetFile:
                     targetFile.write (self.mapRef)                
@@ -211,11 +210,7 @@ class Module:
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
             self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
-            self.mapSourceName = f'{self.name}.py'
             self.mapSourcePath = f'{self.targetPrepath}.py'
-            self.mapdumpPath = f'{self.targetPrepath}.mapdump'
-            self.deltaMapdumpPath = f'{self.targetPrepath}.delta.mapdump'
-            self.cascadeMapdumpPath = f'{self.targetPrepath}.cascade.mapdump'
             self.mapRef = f'\n//# sourceMappingURL={self.name}.map'
 
             # If module exists
@@ -279,8 +274,7 @@ class Module:
             # Generate per module sourcemap and copy sourcefile to target location
             if utils.commandArgs.map:
                 utils.log (False, 'Saving source map in: {}\n', self.mapPath)
-                self.prettyMap.generate (self.mapSourceName, self.sourceLineNrs)
-                self.prettyMap.save ()
+                self.sourceMapper.generateAndSavePrettyMap (self.sourceLineNrs)
                 shutil.copyfile (self.sourcePath, self.mapSourcePath)                
         else:                                                           
             # No maps or annotations needed, so this 'no stripping' shortcut for speed

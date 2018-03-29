@@ -1,4 +1,4 @@
-/* 000001 */ // Transcrypt'ed from Python, 2018-03-29 11:29:21
+/* 000001 */ // Transcrypt'ed from Python, 2018-03-29 19:41:10
 /* 000001 */ var __name__ = 'org.transcrypt.__runtime__';
 /* 000003 */ export var __envir__ = {};
 /* 000003 */ __envir__.interpreter_name = 'python';
@@ -2038,4 +2038,3 @@
 /* 000280 */ export var __terminal__ = __Terminal__ ();
 /* 000282 */ export var print = __terminal__.print;
 /* 000282 */ 
-//# sourceMappingURL=org.transcrypt.__runtime__.map
