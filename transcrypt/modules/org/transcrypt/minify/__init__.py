@@ -13,7 +13,8 @@ def run (sourcePath, targetPath, mapPath):
         '--language_out=ECMASCRIPT6_STRICT',
         '--compilation_level', 'WHITESPACE_ONLY',
         '--js', sourcePath,
-        '--js_output_file', targetPath
+        '--js_output_file', targetPath,
+        # '--formatting', 'PRETTY_PRINT'
     ]
     
     if utils.commandArgs.map:
