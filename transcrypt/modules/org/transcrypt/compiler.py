@@ -124,7 +124,8 @@ class Overloads:
         ast.BitXor: 'xor',
         ast.BitAnd: 'and',
         ast.Eq: 'eq',
-        ast.NotEq: 'neq'
+        ast.NotEq: 'ne',
+        ast.MatMult: 'matmul'
         }
 
     @classmethod
@@ -926,7 +927,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (value)
                 emitPathIndices ()
                 self.emit (')')
-            else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
+            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
                                                     # which is called indirectly here
                 self.expectingNonOverloadedLhsIndex = True
                 self.visit (target)
@@ -1369,8 +1370,10 @@ class Generator (ast.NodeVisitor):
 
     def visit_AugAssign (self, node):
         # fast overloading merely substitutes the python overload methods
-        # and bypasses __call__
-        if self.allowFastOverloading and Overloads.supported(node.op) and type(node.target) not in (ast.Num, ast.Str):
+        # and bypasses __call__.  We still use the default overload path
+        # for subscript assignments
+        if self.allowFastOverloading and Overloads.supported(node.op) \
+                and type(node.target) not in (ast.Num, ast.Str, ast.Subscript):
             if type(node.target) == ast.Name and not node.target.id in self.getScope().nonlocals:
                 self.emit("var ")
             self.visit(node.target)
@@ -1477,7 +1480,14 @@ class Generator (ast.NodeVisitor):
             self.visit (node.value)
 
     def visit_BinOp (self, node):
-        if type (node.op) == ast.FloorDiv:
+        if self.allowFastOverloading and Overloads.supported(node.op) and type(node.left) != ast.Num:
+            self.visit(node.left)
+            self.emit(".")
+            self.emit(Overloads.get(node.op))
+            self.emit("(")
+            self.visit(node.right)
+            self.emit(")")
+        elif type (node.op) == ast.FloorDiv:
             if self.allowOperatorOverloading:
                 self.emit ('__floordiv__ (')
                 self.visitSubExpr (node, node.left)
@@ -1492,13 +1502,7 @@ class Generator (ast.NodeVisitor):
                 self.emit (')')
         # fast overloading merely substitutes the python overload methods
         # and bypasses __call__
-        elif self.allowFastOverloading and Overloads.supported(node.op) and type(node.left) != ast.Num:
-            self.visit(node.left)
-            self.emit(".")
-            self.emit(Overloads.get(node.op))
-            self.emit("(")
-            self.visit(node.right)
-            self.emit(")")
+
         elif (
             type (node.op) in (ast.Pow, ast.MatMult) or
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
@@ -2100,11 +2104,11 @@ class Generator (ast.NodeVisitor):
                 ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
             )):
                 self.emit ('{} ('.format (self.filterId (
-                
+
                     # Non-overloaded
                     '__in__' if type (op) == ast.In else
                     '!__in__' if type (op) == ast.NotIn else
-                    
+
                     # Overloaded
                     '__eq__' if type (op) == ast.Eq else
                     '__ne__' if type (op) == ast.NotEq else
@@ -2112,7 +2116,7 @@ class Generator (ast.NodeVisitor):
                     '__le__' if type (op) == ast.LtE else
                     '__gt__' if type (op) == ast.Gt else
                     '__ge__' if type (op) == ast.GtE else
-                    
+
                     'Never here'
                 )))
                 self.visitSubExpr (node, left)
