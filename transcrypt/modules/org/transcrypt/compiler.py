@@ -145,7 +145,7 @@ class Module:
                 self.loadJavascript ()
                 
                 # JavaScript-only, so annotations are pointless, so it's ok to strip
-                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip, self.generator.allowDebugMap)
+                javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip, False)
                 
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
@@ -189,7 +189,9 @@ class Module:
                 self.targetPath,
                 self.shrinkMapPath if utils.commandArgs.map else None,
             )
-            os.remove (self.prettyTargetPath)
+            
+            if not utils.commandArgs.dmap:
+                os.remove (self.prettyTargetPath)
             
             if utils.commandArgs.map:
                 if self.isJavascriptOnly:
@@ -199,7 +201,8 @@ class Module:
                     self.shrinkMap.load ()
                     self.prettyMap.cascade (self.shrinkMap, self.miniMap)
                     self.miniMap.save ()
-                    os.remove (self.shrinkMapPath)
+                    if not utils.commandArgs.dmap:
+                        os.remove (self.shrinkMapPath)
 
                 with open (self.targetPath, 'a') as miniFile:
                     miniFile.write (self.mapRef)                

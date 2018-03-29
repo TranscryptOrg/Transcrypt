@@ -160,7 +160,7 @@ class SourceMap:
                 prettyMapping [iSourceIndex : ]                                 # Source location from self
             )
             if utils.commandArgs.dmap and miniMap.cascadeMapdumpPath:
-                self.cascadeMapdumpFile.write ('{} {} {}'.format (result, shrinkMapping, prettyMapping))
+                self.cascadeMapdumpFile.write ('{} {} {}\n'.format (result, shrinkMapping, prettyMapping))
             return result
 
         self.mappings.sort ()
