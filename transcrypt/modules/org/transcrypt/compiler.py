@@ -112,25 +112,14 @@ class Module:
         # Register that module is found
         self.program.moduleDict [self.name] = self
         
-        # Set sourcemap
+        # Create sourcemapper
         if utils.commandArgs.map:
-            if utils.commandArgs.nomin
-                self.sourceMapper = sourcemaps.SourceMapper (
-                    resultPrename = self.targetPrename,
-                    pythonPrename = self.sourcePrename,
-                    prettyPrename = self.prettyPrename,
-                    targetDir = self.targetDir,
-                    minify = not utils.commandArgs.nomin
-                    dump = utils.commandArgs.dmap
-                )
-            else:
-                self.sourceMapper = sourcemaps.SourceMapper (
-                    resultPrename = self.targetPrename,
-                    pythonPrename = self.sourcePrename,
-                    prettyPrename = self.prettyPrename,
-                    targetDir self.targetDir,
-                    dump = utils.commandArgs.dmap
-                )
+            self.sourceMapper = sourcemaps.SourceMapper (
+                self.moduleName,
+                self.targetDir,
+                not utils.commandArgs.nomin,
+                utils.commandArgs.dmap
+            )
 
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
@@ -144,6 +133,7 @@ class Module:
                 
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
+   
             else:
                 # Compile from Python, start with constructing parse tree
                 self.parse ()
@@ -164,43 +154,35 @@ class Module:
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
                 
                 self.targetCode = javascriptDigest.digestedCode
-                
-                if utils.commandArgs.map:
-                    self.targetCode += self.mapRef
-                
                 self.exports = javascriptDigest.exportedNames
         
         # Write target code
         utils.log (True, 'Saving target code in: {}\n', self.targetPath)
-        with utils.create (self.targetPath) as aFile:
+        with utils.create (self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath) as aFile:
             aFile.write (self.targetCode)
             
         # Minify target code       
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
-            os.rename (self.targetPath, self.prettyTargetPath)
             minify.run (
                 self.prettyTargetPath,
                 self.targetPath,
                 self.shrinkMapPath if utils.commandArgs.map else None,
             )
             
-            if not utils.commandArgs.dmap:
-                os.remove (self.prettyTargetPath)
-            
             if utils.commandArgs.map:
                 if self.isJavascriptOnly:
                     os.rename (self.shrinkMapPath, self.mapPath)
                 else:
                     utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
-                    self.shrinkMap.load ()
-                    self.prettyMap.cascade (self.shrinkMap, self.miniMap)
-                    self.miniMap.save ()
-                    if not utils.commandArgs.dmap:
-                        os.remove (self.shrinkMapPath)
+                    self.sourceMapper.loadShrinkMap ()
+                    self.sourceMapper.cascade ()
+                    
 
-                with open (self.targetPath, 'a') as miniFile:
-                    miniFile.write (self.mapRef)                
+                with open (self.targetPath, 'a') as targetFile:
+                    targetFile.write (self.mapRef)                
+
+        # Remove superfluous files !!!
             
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()

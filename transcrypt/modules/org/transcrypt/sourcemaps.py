@@ -147,7 +147,7 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         if dump:
             self.cascadeMapdumpFile.close ()
         
-    def load (self):
+    def loadShrinkMap (self):
         with open  (f'{self.moduleName}.shrink.map') as mapFile:
             rawMap = json.loads (mapFile.read ())
                 
