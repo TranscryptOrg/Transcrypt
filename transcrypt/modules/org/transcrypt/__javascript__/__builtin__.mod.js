@@ -1780,50 +1780,103 @@ __pragma__ ('endif')
     String.prototype.__rmul__ = String.prototype.__mul__;
 
 
-
-    // python style magic methods for numbers
+    // python style magic methods for numbers.  Prefer `r` versions of magic methods
+    // since these overloads here will be the least general. Overloadable
+    // objects will want to use their own overloads instead
 
     Number.prototype.__add__ = function (other)  {
+       if (typeof other == 'object' && '__radd__' in other) {
+            return other.__radd__(this);
+        }
         return this + other;
-    };
-
-    Number.prototype.__radd__ = function (other) {
-        return other + this;
     };
 
 
     Number.prototype.__sub__ = function (other)  {
+         if (typeof other == 'object' && '__rsub__' in other) {
+            return other.__rsub__(this);
+        }
         return this - other;
+    };
+
+    Number.prototype.__mul__ = function (other) {
+         if (typeof other == 'object' && '__rmul__' in other) {
+            return other.__rmul__(this);
+        }
+        return this * other;
+    };
+
+
+    Number.prototype.__lshift__ = function (other){
+         if (typeof other == 'object' && '__rlshift__' in other) {
+            return other.__rlshift__(this);
+        }
+        return this << other;
+    };
+
+    Number.prototype.__rshift__ = function (other){
+         if (typeof other == 'object' && '__rrshift__' in other) {
+            return other.__rrshift__(this);
+        }
+        return this >> other;
+    };
+
+    Number.prototype.__truediv__ = function (other)
+    {
+         if (typeof other == 'object' && '__rtruediv__' in other) {
+            return other.__rtruediv__(this);
+        }
+        return this / other;
+    };
+
+    Number.prototype.__floordiv__ = function (other)
+    {
+        if (typeof other == 'object' && '__rfloordiv__' in other) {
+            return other.__rfloordiv__(this);
+        }
+        return Math.floor(this / other);
+    };
+
+
+    Number.prototype.__or__ = function (other)   {
+         if (typeof other == 'object' && '__ror__' in other) {
+            return other.__ror__(this);
+        }
+        return this | other;
+    };
+
+    Number.prototype.__xor__ = function (other)  {
+         if (typeof other == 'object' && '__rxor__' in other) {
+            return other.__rxor__(this);
+        }
+        return this ^ other;
+    };
+
+    Number.prototype.__and__ = function (other)  {
+        if (typeof other == 'object' && '__rand__' in other) {
+            return other.__rand__(this);
+        }
+        return this & other;
+    };
+
+    Number.prototype.__pow__ = function (other)  {
+        if (typeof other == 'object' && '__rpow__' in other) {
+            return other.__rpow__(this);
+        }
+        return Math.pow(this, other);
+    };
+
+
+    Number.prototype.__radd__ = function (other) {
+        return other + this;
     };
 
     Number.prototype.__rsub__ = function (other)  {
         return other - this;
     };
 
-
-    Number.prototype.__mul__ = function (other) {
-        return this * other;
-    };
-
     Number.prototype.__rmul__ = function (other) {
         return this * other;
-    };
-
-
-    Number.prototype.__div__ = function (other)  {
-        return this / other;
-    };
-
-    Number.prototype.__rdiv__ = function (other)  {
-        return other / this;
-    };
-
-    Number.prototype.__lshift__ = function (other){
-        return this << other;
-    };
-
-    Number.prototype.__rshift__ = function (other){
-        return this >> other;
     };
 
     Number.prototype.__rlshift__ = function (other){
@@ -1832,16 +1885,6 @@ __pragma__ ('endif')
 
     Number.prototype.__rrshift__= function (other){
         return other >> this;
-    };
-
-    Number.prototype.__truediv__ = function (other)
-    {
-        return this / other;
-    };
-
-    Number.prototype.__floordiv__ = function (other)
-    {
-        return Math.floor(this / other);
     };
 
     Number.prototype.__rtruediv__ = function (other)
@@ -1855,17 +1898,8 @@ __pragma__ ('endif')
     };
 
 
-    Number.prototype.__or__ = function (other)   {
-        return this | other;
-    };
-
     Number.prototype.__ror__ = function (other)   {
         return other | this;
-    };
-
-
-    Number.prototype.__xor__ = function (other)  {
-        return this ^ other;
     };
 
 
@@ -1874,17 +1908,10 @@ __pragma__ ('endif')
     };
 
 
-    Number.prototype.__and__ = function (other)  {
-        return this & other;
-    };
-
     Number.prototype.__rand__ = function (other)  {
         return other & this;
     };
 
-    Number.prototype.__pow__ = function (other)  {
-        return Math.pow(this, other);
-    };
 
     Number.prototype.__rpow__ = function (other)  {
         return Math.pow(other, this);
