@@ -276,6 +276,7 @@ def run (autoTester):
 
         def __radd__(self, other):
             # testing radd
+            print("__radd__ called")
             return FastOverload(self.val + other)
 
         def __sub__(self, other):
@@ -284,12 +285,16 @@ def run (autoTester):
         def __mul__(self, other):
             return FastOverload(self.val * other.val)
 
+        def __rmul__(self, other):
+            # this is silly, but it validates that we're going down the
+            # __rmul__ path
+            return "__rmul__  called"
+
         def __truediv__(self, other):
             return FastOverload(self.val / other.val)
 
         def __floordiv__(self, other):
             return FastOverload(self.val // other.val)
-
 
         def __or__ (self, other):
             return FastOverload(self.val | other.val)
@@ -312,10 +317,10 @@ def run (autoTester):
         def increment(self):
             self.val += 1
 
+    __pragma__('opov', 'fast')
+
     fast1 = FastOverload(99)
     fast2 = FastOverload(101)
-
-    __pragma__('opov', 'fast')
 
     # regular add
     bob = fast1 + fast2
@@ -359,6 +364,18 @@ def run (autoTester):
     # fall back to default operator overload for getitem/setitem
     indexed = FastOverload(999)
     autoTester.check(indexed[0] == 999)
+
+
+    # validate that __radd__ is being preferred to add if the LHS is a number 
+    num = 1
+    rhs = FastOverload(199)
+    autoTester.check((num + rhs).result(),  200)
+
+
+    num = 2
+    rhs = FastOverload(299)
+    autoTester.check(num * rhs)
+
 
     # parity with indexing tests above
     # note I used numbers not strings
