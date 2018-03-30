@@ -287,4 +287,11 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
             ))
             
     return result
+
+def cleanDir (dir, *tails):        
+    for fileName in os.listdir (dir):
+        for tail in tails:
+            if fileName.endswith (tail):
+                print (f'Removing {fileName} from {dir}')
+                os.remove (f'{dir}/{fileName}')
     

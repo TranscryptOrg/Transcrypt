@@ -2,7 +2,7 @@ mapVersion: 3
 
 targetPath: hello.js
 
-sourcePath: hello.js
+sourcePath: hello.py
 
 mappings:
 	[0, 0, 0, 0, 0]

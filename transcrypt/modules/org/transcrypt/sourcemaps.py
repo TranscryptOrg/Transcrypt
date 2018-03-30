@@ -97,14 +97,13 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         self.minify = minify
         self.dump = dump
         
-        
     def generateAndSavePrettyMap (self, sourceLineNrs):
         self.prettyMappings = [[targetLineIndex, 0, 0, sourceLineNr - 1, 0] for targetLineIndex, sourceLineNr in enumerate (sourceLineNrs)]
         self.prettyMappings.sort ()
         
         infix = '.pretty'  if self.minify else ''
         
-        self.save (self.prettyMappings, infix, '.py')
+        self.save (self.prettyMappings, infix)
         
         if self.dump:
             self.dumpMap (self.prettyMappings, infix, '.py')
@@ -132,7 +131,7 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         ]
         self.miniMappings.sort ()
         
-        self.save (self.miniMappings, '', '.js')
+        self.save (self.miniMappings, '')
         
         if self.dump:
             self.cascadeMapdumpFile.close ()
@@ -146,29 +145,49 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             for group in rawMap ['mappings'] .split (';')
         ]
         
+        '''
+        Fields in a delta segment as directly decoded from the output of the minifier:
+          index (target line index implicit, is group index)
+            0: target column index
+            1: source file index        (optional)      (always zero)
+            2: source line index        (optional)
+            3: source column index      (optional)
+            4: name index               (optional)
+            
+        Fields in a shrinkMapping:
+          index
+            0: target line index (is group index, a group represents a target line)
+            1: target column index
+            2: source file index        (always zero)   (i = 1)
+            3: source line index                        (i = 2)
+            4: source column index                      (i = 3)
+            5: source name index        (left out)
+        '''
+        
         self.shrinkMappings = []
         for groupIndex, deltaGroup in enumerate (deltaMappings):
             for segmentIndex, deltaSegment in enumerate (deltaGroup):
-                if deltaSegment:                                                # Shrink map ends with empty group, i.e. 'holding empty segment'
+                if deltaSegment:                                                    # Shrink map ends with empty group, i.e. 'holding empty segment'
                     if segmentIndex:
                         self.shrinkMappings.append ([groupIndex, deltaSegment [0] + self.shrinkMappings [-1][1]])
-                    else:                                                       # Start of group
-                        self.shrinkMappings.append ([groupIndex, deltaSegment [0]])   # Absolute target column 
-                    for i in range (1, 4):
+                    else:                                                           # Start of group
+                        self.shrinkMappings.append ([groupIndex, deltaSegment [0]]) # Absolute target column
+                        
+                    for i in range (1, 4):                                          # So i in [1, 2, 3]
                         if groupIndex or segmentIndex:
                             self.shrinkMappings [-1] .append (deltaSegment [i] + self.shrinkMappings [-2][i + 1])
-                        else:                                                   # Start of map
+                        else:                                                       # Start of map
                             try:
-                                self.shrinkMappings [-1] .append (deltaSegment [i])   # Absolut file index, source line and source column
-                            except:                                             # Shrink map starts with 'A' rather than 'AAAA'
+                                self.shrinkMappings [-1] .append (deltaSegment [i]) # Absolut file index, source line and source column
+                            except:                                                 # Shrink map starts with 'A' rather than 'AAAA'
                                 self.shrinkMappings [-1] .append (0)                       
-        self.shrinkMappings.sort ()
+        self.shrinkMappings.sort () # Sort on target line and inside that on target column
                                 
         if self.dump:
             self.dumpMap (self.shrinkMappings, '.shrink', '.py')
             self.dumpDeltaMap (deltaMappings, '.shrink')
             
-    def save (self, mappings, infix, sourceExtension):
+    def save (self, mappings, infix):
         deltaMappings = []
         oldMapping = [-1, 0, 0, 0, 0]
         for mapping in mappings:
@@ -192,8 +211,8 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
         rawMap = collections.OrderedDict ([
             ('version', mapVersion),
             ('file', f'{self.moduleName}.js'), # Target
-            ('sources', [f'{self.moduleName}{infix}{sourceExtension}']),
-            ('sourcesContent', [None]),
+            ('sources', [f'{self.moduleName}{infix}.py']),
+            # ('sourcesContent', [None]),
             ('mappings', ';'.join ([
                 ','.join ([
                     base64VlqConverter.encode (segment)
@@ -207,7 +226,7 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
             mapFile.write (json.dumps (rawMap, indent = '\t'))
             
         if self.dump:
-            self.dumpMap (mappings, infix, sourceExtension)
+            self.dumpMap (mappings, infix, '.py')
             self.dumpDeltaMap (deltaMappings, infix)
             
     def dumpMap (self, mappings, infix, sourceExtension):
@@ -225,6 +244,12 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
                 deltaMapdumpFile.write ('(New group) ')
                 for segment in group:
                     deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
-
+                    
         
-                
+    def cleanDir (self):
+        utils.cleanDir (
+            self.targetDir,
+            '.map_dump',
+            '.pretty.map',
+            '.shrink.map'
+        )

@@ -1,5 +1,6 @@
 # ====== Legal notices
 #
+#
 # Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -112,15 +113,14 @@ class Module:
         # Register that module is found
         self.program.moduleDict [self.name] = self
         
-        # Create sourcemapper
-        if utils.commandArgs.map:
-            self.sourceMapper = sourcemaps.SourceMapper (
-                self.name,
-                self.program.targetDir,
-                not utils.commandArgs.nomin,
-                utils.commandArgs.dmap
-            )
-
+        # Create sourcemapper, if only for cleaning dir after previous run
+        self.sourceMapper = sourcemaps.SourceMapper (
+            self.name,
+            self.program.targetDir,
+            not utils.commandArgs.nomin,
+            utils.commandArgs.dmap
+        )
+        
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
             # Generate parse tree
@@ -158,30 +158,39 @@ class Module:
         
         # Write target code
         utils.log (True, 'Saving target code in: {}\n', self.targetPath)
-        with utils.create (self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath) as aFile:
+        filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
+        with utils.create (filePath) as aFile:
             aFile.write (self.targetCode)
             
         # Minify target code       
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
             minify.run (
-                self.prettyTargetPath,
-                self.targetPath,
-                self.shrinkMapPath if utils.commandArgs.map else None,
+                self.program.targetDir,
+                self.prettyTargetName,
+                self.targetName,
+                self.shrinkMapName if utils.commandArgs.map else None,
             )
             
             if utils.commandArgs.map:
                 if self.isJavascriptOnly:
+                    if os.path.isfile (self.mapPath):
+                        os.remove (self.mapPath)
                     os.rename (self.shrinkMapPath, self.mapPath)
                 else:
                     utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
                     self.sourceMapper.loadShrinkMap ()
                     self.sourceMapper.cascadeAndSaveMiniMap ()
+                    
+        # Append map reference to target file, which may be minified or not       
+        with open (self.targetPath, 'a') as targetFile:
+            targetFile.write (self.mapRef)            
 
-                with open (self.targetPath, 'a') as targetFile:
-                    targetFile.write (self.mapRef)                
-
-        # Remove superfluous files !!!
+        # Remove superfluous files
+        if not utils.commandArgs.dmap:
+            self.sourceMapper.cleanDir ()   # Also from previous run
+            if not (self.isJavascriptOnly and utils.commandArgs.map and not utils.commandArgs.nomin):
+                utils.cleanDir (self.program.targetDir, f'{self.name}.pretty.js')
             
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
@@ -204,11 +213,14 @@ class Module:
             
             # Find target slugs
             self.targetPrepath = f'{self.program.targetDir}/{self.name}'
+            self.targetName = f'{self.name}.js'
             self.targetPath = f'{self.targetPrepath}.js'
+            self.prettyTargetName = f'{self.name}.pretty.js'
             self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
             self.importRelPath = f'./{self.name}.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
+            self.shrinkMapName = f'{self.name}.shrink.map'
             self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
             self.mapSourcePath = f'{self.targetPrepath}.py'
             self.mapRef = f'\n//# sourceMappingURL={self.name}.map'

@@ -2,7 +2,7 @@ mapVersion: 3
 
 targetPath: org.transcrypt.__runtime__.js
 
-sourcePath: org.transcrypt.__runtime__.js
+sourcePath: org.transcrypt.__runtime__.py
 
 mappings:
 	[0, 0, 0, 0, 0]
