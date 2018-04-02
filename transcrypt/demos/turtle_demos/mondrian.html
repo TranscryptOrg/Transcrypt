@@ -1,7 +1,9 @@
 <html>
 	<head>
-		<script src="__javascript__/mondrian.js" charset="UTF-8"></script>
-		<script>document.addEventListener ("DOMContentLoaded", mondrian)</script>
+        <script type="module">
+            import * as star from "./__target__/mondrian.js";
+            document.addEventListener ("DOMContentLoaded", mondrian);
+        </script>
 		<style>
 			#__turtlegraph__ {
 				width: 100%;

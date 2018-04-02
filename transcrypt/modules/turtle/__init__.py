@@ -4,8 +4,8 @@ __pragma__ ('noskip')
 
 _debug = False
 
-def abs (vec2D):
-    return Math.sqrt (vec2D [0] * vec2D [0] + vec2D [1] * vec2D [1])
+#def abs (vec2D):
+#    return Math.sqrt (vec2D [0] * vec2D [0] + vec2D [1] * vec2D [1])
 
 _ns = 'http://www.w3.org/2000/svg'
 _svg = document.createElementNS (_ns, 'svg')

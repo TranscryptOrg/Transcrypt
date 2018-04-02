@@ -345,7 +345,6 @@ class Game:
         return self.scaleY (orthoHeight - fieldHeight // 2 - y)
                 
     def keydown (self, event):
-        a = b
         self.keyCode = event.keyCode
         
     def keyup (self, event):

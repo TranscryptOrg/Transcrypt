@@ -122,7 +122,7 @@ class Module:
         )
         
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
-        if utils.commandArgs.build or not os.path.isfile (targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
+        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
             # Generate parse tree
             if self.isJavascriptOnly:
                 # Digest source JavaScript and copy to target location

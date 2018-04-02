@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"itertools.js",
+"lineCount":1,
+"mappings":"A,aAAA,MAAA,CAAQA,IAAR,CAAcC,KAAd,CAAqBC,GAArB,CAA0BC,cAA1B,CAA0CC,GAA1C,CAAA,IAAoD,iCAEpD,KAAIC,SAAW,WAGf,OAAO,KAAIC,MAAQA,QAAS,EAAG,CAC3B,IAAIC,KAAO,EAAAC,MAAAC,MAAA,CAAiBC,SAAjB,CACX,KAAIC,OAAS,EACb,KAAK,IAAIC,MAAQ,CAAjB,CAAoBA,KAApB,CAA4BL,IAAAM,OAA5B,CAAyCD,KAAA,EAAzC,CACID,MAAA,CAASA,MAAAG,OAAA,CAAeP,IAAA,CAAMK,KAAN,CAAf,CAEb,OAAOZ,KAAA,CAAMW,MAAN,CANoB;",
+"sources":["itertools.pretty.js"],
+"names":["list","tuple","len","__kwargtrans__","set","__name__","chain","args","slice","apply","arguments","result","index","length","concat"]
+}

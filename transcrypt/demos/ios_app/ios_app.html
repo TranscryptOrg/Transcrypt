@@ -8,6 +8,8 @@
 		<link rel="apple-touch-icon" href="ios_app.png">
 	</head>
 	<body>
-		<script src="__javascript__/ios_app.js"></script>
+        <script type="module">
+            import * as ios_app from "./__target__/ios_app.js"; window.ios_app = ios_app;
+        </script>
 	</body>	
 </html>

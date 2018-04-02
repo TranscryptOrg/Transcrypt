@@ -666,7 +666,7 @@ export function abs (x) {
     }
 };
 __pragma__ ('else')
-var abs = Math.abs;
+export var abs = Math.abs;
 __pragma__ ('endif')
 
 // Bankers rounding

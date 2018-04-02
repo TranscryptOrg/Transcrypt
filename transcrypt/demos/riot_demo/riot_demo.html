@@ -25,8 +25,9 @@
         <sample2 id='s2' label="nr1"></sample2>
         <mp2     id='s3' label="nr2"></mp2>
         <!-- the transpiled tag's js -->
-        <script src="__javascript__/riot_demo.js"></script>
-        <script>
+        <script type="module">
+            import * as riot_demo from "./__target__/riot_demo.js"
+
             // register
             var cls = riot_demo.Sample2
             riot.tag2('sample2', cls.template, cls.style, '', function(opts) {
