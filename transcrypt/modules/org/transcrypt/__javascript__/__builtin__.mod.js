@@ -1779,6 +1779,146 @@ __pragma__ ('endif')
 
     String.prototype.__rmul__ = String.prototype.__mul__;
 
+
+    // python style magic methods for numbers.  Prefer `r` versions of magic methods
+    // since these overloads here will be the least general. Overloadable
+    // objects will want to use their own overloads instead
+
+    Number.prototype.__add__ = function (other)  {
+       if (typeof other == 'object' && '__radd__' in other) {
+            return other.__radd__(this);
+        }
+        return this + other;
+    };
+
+
+    Number.prototype.__sub__ = function (other)  {
+         if (typeof other == 'object' && '__rsub__' in other) {
+            return other.__rsub__(this);
+        }
+        return this - other;
+    };
+
+    Number.prototype.__mul__ = function (other) {
+         if (typeof other == 'object' && '__rmul__' in other) {
+            return other.__rmul__(this);
+        }
+        return this * other;
+    };
+
+
+    Number.prototype.__lshift__ = function (other){
+         if (typeof other == 'object' && '__rlshift__' in other) {
+            return other.__rlshift__(this);
+        }
+        return this << other;
+    };
+
+    Number.prototype.__rshift__ = function (other){
+         if (typeof other == 'object' && '__rrshift__' in other) {
+            return other.__rrshift__(this);
+        }
+        return this >> other;
+    };
+
+    Number.prototype.__truediv__ = function (other)
+    {
+         if (typeof other == 'object' && '__rtruediv__' in other) {
+            return other.__rtruediv__(this);
+        }
+        return this / other;
+    };
+
+    Number.prototype.__floordiv__ = function (other)
+    {
+        if (typeof other == 'object' && '__rfloordiv__' in other) {
+            return other.__rfloordiv__(this);
+        }
+        return Math.floor(this / other);
+    };
+
+
+    Number.prototype.__or__ = function (other)   {
+         if (typeof other == 'object' && '__ror__' in other) {
+            return other.__ror__(this);
+        }
+        return this | other;
+    };
+
+    Number.prototype.__xor__ = function (other)  {
+         if (typeof other == 'object' && '__rxor__' in other) {
+            return other.__rxor__(this);
+        }
+        return this ^ other;
+    };
+
+    Number.prototype.__and__ = function (other)  {
+        if (typeof other == 'object' && '__rand__' in other) {
+            return other.__rand__(this);
+        }
+        return this & other;
+    };
+
+    Number.prototype.__pow__ = function (other)  {
+        if (typeof other == 'object' && '__rpow__' in other) {
+            return other.__rpow__(this);
+        }
+        return Math.pow(this, other);
+    };
+
+
+    Number.prototype.__radd__ = function (other) {
+        return other + this;
+    };
+
+    Number.prototype.__rsub__ = function (other)  {
+        return other - this;
+    };
+
+    Number.prototype.__rmul__ = function (other) {
+        return this * other;
+    };
+
+    Number.prototype.__rlshift__ = function (other){
+        return other << this;
+    };
+
+    Number.prototype.__rrshift__= function (other){
+        return other >> this;
+    };
+
+    Number.prototype.__rtruediv__ = function (other)
+    {
+        return other / this;
+    };
+
+    Number.prototype.__rfloordiv__ = function (other)
+    {
+        return Math.floor(other / this);
+    };
+
+
+    Number.prototype.__ror__ = function (other)   {
+        return other | this;
+    };
+
+
+    Number.prototype.__rxor__ = function (other)  {
+        return other ^ this ;
+    };
+
+
+    Number.prototype.__rand__ = function (other)  {
+        return other & this;
+    };
+
+
+    Number.prototype.__rpow__ = function (other)  {
+        return Math.pow(other, this);
+    };
+
+
+
     // Dict extensions to object
     
     function __contains__ (element) {
@@ -1973,7 +2113,7 @@ __pragma__ ('endif')
     __setProperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
 
     // General operator overloading, only the ones that make most sense in matrix and complex operations
-    
+
     var __jsmod__ = function (a, b) {
         if (typeof a == 'object' && '__mod__' in a) {
             return a.__mod__ (b);
@@ -2013,8 +2153,11 @@ __pragma__ ('endif')
         }
     };
     __all__.pow = __pow__;
-    
-__pragma__ ('ifndef', '__xtiny__')    
+
+
+__pragma__ ('ifndef', '__xtiny__')
+
+
     
     var __neg__ = function (a) {
         if (typeof a == 'object' && '__neg__' in a) {
@@ -2458,7 +2601,7 @@ __pragma__ ('ifndef', '__xtiny__')
         }
     };
     __all__.__iand__ = __iand__;
-    
+
     // Indices and slices
 
     var __getitem__ = function (container, key) {                           // Slice c.q. index, direct generated call to runtime switch
@@ -2514,3 +2657,4 @@ __pragma__ ('ifndef', '__xtiny__')
     __all__.__setslice__ = __setslice__;
     
 __pragma__ ('endif')
+

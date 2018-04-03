@@ -1,4 +1,6 @@
-from org.transcrypt.stubs.browser import __pragma__
+from org.transcrypt.stubs.browser import __pragma__, window
+
+
 
 class Matrix:
     def __init__ (self, nRows, nCols, elements = []):
@@ -115,7 +117,7 @@ def run (autoTester):
         [2, 2,  3],
         [3, 3, -5]
     ])
-        
+
     x = 3
     y = x * 4 * x
     fast = 2 * 3
@@ -132,13 +134,15 @@ def run (autoTester):
 
     m1 += m0
     m2 *= m1
-    
+
+    autoTester.check(m0 / m1)
+    autoTester.check(m0 // m1)
+
+
     m5 @= m4
     m6 = m0 @ m1
-    
-    autoTester.check (m0 / m1)
-    autoTester.check (m0 // m1)
-    
+
+
     __pragma__ ('noopov')
     
     fast2 = 16 * y + 1
@@ -260,3 +264,187 @@ def run (autoTester):
     __pragma__('noopov')
     
     autoTester.check (a.b ['c'])
+
+
+    class FastOverload:
+
+        def __init__(self, val):
+            self.val = val
+
+        def __add__(self, other):
+            return FastOverload(self.val + other.val)
+
+        def __radd__(self, other):
+            # testing radd
+            print("__radd__ called")
+            return FastOverload(self.val + other)
+
+        def __sub__(self, other):
+            return FastOverload(self.val - other.val)
+
+        def __mul__(self, other):
+            return FastOverload(self.val * other.val)
+
+        def __rmul__(self, other):
+            # this is silly, but it validates that we're going down the
+            # __rmul__ path
+            return "__rmul__  called"
+
+        def __truediv__(self, other):
+            return FastOverload(self.val / other.val)
+
+        def __floordiv__(self, other):
+            return FastOverload(self.val // other.val)
+
+        def __or__ (self, other):
+            return FastOverload(self.val | other.val)
+
+        def __getitem__(self, item):
+            return self.val
+
+        def __setitem__(self, key, value):
+            self.val = value
+
+        def __eq__(self, other):
+            return self.val == other.val
+
+        def __ne__(self, other):
+            return self.val != other.val
+
+        def result(self):
+            return self.val
+
+        def increment(self):
+            self.val += 1
+
+    __pragma__('opov', 'fast')
+
+    fast1 = FastOverload(99)
+    fast2 = FastOverload(101)
+
+    # regular add
+    bob = fast1 + fast2
+    autoTester.check(bob.result() == 200)
+
+    # augmented add
+    bob += FastOverload(100)
+    autoTester.check(bob.result() == 300)
+
+    # truediv vs floordiv
+    autoTester.check((bob / FastOverload(3)).result() == 100)
+
+    autoTester.check((bob // FastOverload(7)).result() == 42)
+
+    # conventional methods work inlined
+    inc = FastOverload(0)
+    for i in range(5):
+        inc.increment()
+    autoTester.check(inc.result() == 4)
+
+    # bool ops
+    tt = FastOverload(True)
+    ff = FastOverload(False)
+    autoTester.check( (tt | ff).result() == 1)
+
+    # equality/inequality
+    a = FastOverload(11)
+    b = FastOverload(11)
+    c = FastOverload(111)
+    autoTester.check(a == b)
+    autoTester.check(a != c)
+
+    # test overloads on numeric vars
+    num = 1
+    othernum = 2
+    autoTester.check((num + othernum) == 3)
+
+    # test literal left-hand side works
+    autoTester.check((1 + 2) == 3)
+
+    # fall back to default operator overload for getitem/setitem
+    indexed = FastOverload(999)
+    autoTester.check(indexed[0] == 999)
+
+
+    # validate that __radd__ is being preferred to add if the LHS is a number 
+    num = 1
+    rhs = FastOverload(199)
+    autoTester.check((num + rhs).result(),  200)
+
+
+    num = 2
+    rhs = FastOverload(299)
+    autoTester.check(num * rhs)
+
+
+    # parity with indexing tests above
+    # note I used numbers not strings
+    # because I didn't implement String.prototype.__add__
+    # though that would be simple...
+
+    a = A()
+    a.b['c'] = 123
+
+    a.b['c'] += 4
+    autoTester.check (a.b ['c'] == 127)
+
+
+    # parity with matrix tests above
+    m0 = Matrix(3, 3, [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 10]
+    ])
+
+    m1 = Matrix(3, 3, [
+        [10, 20, 30],
+        [40, 50, 60],
+        [70, 80, 90]
+    ])
+
+    m4 = Matrix(3, 3, [
+        [1, 1, 2],
+        [2, 2, 3],
+        [3, 3, -5]
+    ])
+
+    m5 = Matrix(3, 3, [
+        [1, 1, 2],
+        [2, 2, 3],
+        [3, 3, -5]
+    ])
+
+
+    x = 3
+    y = x * 4 * x
+    fast = 2 * 3
+    fast += 1
+
+    m1[1][2] = m0[1][2]
+    slow = 2 + 3
+    m2 = m0 * m1 + m1 * (m0 + m1)
+    m3 = 2 * (2 * m0 * 3 * m1 + m2 * 4) * 2
+
+    autoTester.check(m0[1][1], m0[1][2], m1[1][1], m1[1][2])
+
+    m1 += m0
+    m2 *= m1
+
+    m5 @= m4
+    m6 = m0 @ m1
+
+    __pragma__('noopov')
+
+    fast2 = 16 * y + 1
+    fast *= 2
+
+    autoTester.check(m0, m1)
+    autoTester.check(x, y)
+    autoTester.check(m2)
+    autoTester.check(m3)
+    autoTester.check(m5)
+    autoTester.check(m6)
+    autoTester.check(fast, slow, fast2)
+
+    __pragma__('noopov')
+

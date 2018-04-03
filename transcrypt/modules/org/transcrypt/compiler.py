@@ -104,7 +104,43 @@ class ModuleMetadata:
         except:
             print (traceback.format_exc ())
 
+
+
+class Overloads:
+    # maps ast node types to their corresponding method strings
+    # for fast substitution
+    AST_OVERLOADS = {
+        ast.Pow: 'pow',
+        ast.MatMult: 'matmul',
+        ast.Mod: 'mod',
+        ast.Mult: 'mul',
+        ast.Div: 'truediv',
+        ast.FloorDiv: 'floordiv',
+        ast.Add:'add',
+        ast.Sub: 'sub',
+        ast.LShift: 'lshift',
+        ast.RShift: 'rshift',
+        ast.BitOr: 'or',
+        ast.BitXor: 'xor',
+        ast.BitAnd: 'and',
+        ast.Eq: 'eq',
+        ast.NotEq: 'ne',
+        ast.MatMult: 'matmul'
+        }
+
+    @classmethod
+    def supported(cls, op):
+        return type(op) in cls.AST_OVERLOADS
+
+    @classmethod
+    def get(cls, op):
+        nodename = cls.AST_OVERLOADS.get(type(op))
+        return "__{}__".format(nodename)
+
+
 class Program:
+
+
     def __init__ (self, moduleSearchDirs, modulesDir, symbols):
         utils.setProgram (self)
     
@@ -710,6 +746,7 @@ class Generator (ast.NodeVisitor):
 
         self.allowKeywordArgs = utils.commandArgs.kwargs
         self.allowOperatorOverloading = utils.commandArgs.opov
+        self.allowFastOverloading = False
         self.allowConversionToIterable = utils.commandArgs.iconv
         self.allowConversionToTruthValue = utils.commandArgs.tconv
         self.allowKeyCheck = utils.commandArgs.keycheck
@@ -721,7 +758,6 @@ class Generator (ast.NodeVisitor):
         self.allowJavaScriptKeys = utils.commandArgs.jskeys
         self.allowJavaScriptMod = utils.commandArgs.jsmod
         self.allowMemoizeCalls = utils.commandArgs.fcall
-
         self.noskipCodeGeneration = True
         self.conditionalCodeGeneration = True
         self.stripTuple = False     # For speed, tuples are translated to bare JavaScript arrays if they're just indices. Will autoreset.
@@ -891,7 +927,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (value)
                 emitPathIndices ()
                 self.emit (')')
-            else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
+            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
                                                     # which is called indirectly here
                 self.expectingNonOverloadedLhsIndex = True
                 self.visit (target)
@@ -1333,7 +1369,22 @@ class Generator (ast.NodeVisitor):
         self.visit (node.value)
 
     def visit_AugAssign (self, node):
-        if self.allowOperatorOverloading:
+        # fast overloading merely substitutes the python overload methods
+        # and bypasses __call__.  We still use the default overload path
+        # for subscript assignments
+        if self.allowFastOverloading and Overloads.supported(node.op) \
+                and type(node.target) not in (ast.Num, ast.Str, ast.Subscript):
+            if type(node.target) == ast.Name and not node.target.id in self.getScope().nonlocals:
+                self.emit("var ")
+            self.visit(node.target)
+            self.emit(" = ")
+            self.visit(node.target)
+            self.emit(".")
+            self.emit(Overloads.get(node.op))
+            self.emit("(")
+            self.visit(node.value)
+            self.emit(")")
+        elif self.allowOperatorOverloading:
             rhsFunctionName = self.filterId (
                 # Non-overloaded
                 '__ipow__' if type (node.op) == ast.Pow else
@@ -1376,7 +1427,7 @@ class Generator (ast.NodeVisitor):
 
                 self.visit (node.target)
                 self.emit (' = ')
-                self.visit (rhsCall)       
+                self.visit (rhsCall)
         elif (
             # Python //, @ and ** have no operator symbol in JavaScript, so <operator>= won't work
             type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)
@@ -1396,7 +1447,7 @@ class Generator (ast.NodeVisitor):
             self.visit (ast.Assign (
                 targets = [node.target],
                 value = ast.BinOp (left = node.target, op = node.op, right = node.value)
-            ))         
+            ))
         else:   # No overloading in this branch
             self.expectingNonOverloadedLhsIndex = True
             self.visit (node.target)        # No need to emit var first, it has to exist already
@@ -1429,7 +1480,14 @@ class Generator (ast.NodeVisitor):
             self.visit (node.value)
 
     def visit_BinOp (self, node):
-        if type (node.op) == ast.FloorDiv:
+        if self.allowFastOverloading and Overloads.supported(node.op) and type(node.left) != ast.Num:
+            self.visit(node.left)
+            self.emit(".")
+            self.emit(Overloads.get(node.op))
+            self.emit("(")
+            self.visit(node.right)
+            self.emit(")")
+        elif type (node.op) == ast.FloorDiv:
             if self.allowOperatorOverloading:
                 self.emit ('__floordiv__ (')
                 self.visitSubExpr (node, node.left)
@@ -1441,7 +1499,10 @@ class Generator (ast.NodeVisitor):
                 self.visitSubExpr (node, node.left)
                 self.emit (' / ')
                 self.visitSubExpr (node, node.right)
-                self.emit (')') 
+                self.emit (')')
+        # fast overloading merely substitutes the python overload methods
+        # and bypasses __call__
+
         elif (
             type (node.op) in (ast.Pow, ast.MatMult) or
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
@@ -1703,10 +1764,17 @@ class Generator (ast.NodeVisitor):
                     self.allowKeywordArgs = False
 
                 elif node.args [0] .s == 'opov':        # Overloading of a small sane subset of operators allowed
+                    self.allowFastOverloading = node.args [-1] .s == 'fast'
                     self.allowOperatorOverloading = True
                 elif node.args [0] .s == 'noopov':      # Operloading of a small sane subset of operators disallowed
                     self.allowOperatorOverloading = False
-                    
+                    self.allowFastOverloading = False
+                elif node.args [0] .s == 'fopov':
+                    self.allowFastOverloading = True
+                    self.allowOperatorOverloading = True
+                elif node.args [0] .s == 'nofopov':
+                    self.allowFastOverloading = False
+                    self.allowOperatorOverloading = False
                 elif node.args [0] .s == 'redirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'{}\'', node.args [2])
@@ -1719,7 +1787,7 @@ class Generator (ast.NodeVisitor):
                     
                 elif node.args [0] .s == 'xpath':
                     self.module.program.moduleSearchDirs [1 : 1] = [elt.s for elt in node.args [1] .elts]
-                    
+
                 else:
                     raise utils.Error (
                         lineNr = self.lineNr,
@@ -1844,6 +1912,7 @@ class Generator (ast.NodeVisitor):
         
         if (
             self.allowOperatorOverloading and       # If operator overloading and
+            not self.allowFastOverloading and
             not (                                   # whe're not already in the __call__ that we generated on the fly,
                 type (node.func) == ast.Name and
                 node.func.id == '__call__'
@@ -2039,11 +2108,11 @@ class Generator (ast.NodeVisitor):
                 ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
             )):
                 self.emit ('{} ('.format (self.filterId (
-                
+
                     # Non-overloaded
                     '__in__' if type (op) == ast.In else
                     '!__in__' if type (op) == ast.NotIn else
-                    
+
                     # Overloaded
                     '__eq__' if type (op) == ast.Eq else
                     '__ne__' if type (op) == ast.NotEq else
@@ -2051,7 +2120,7 @@ class Generator (ast.NodeVisitor):
                     '__le__' if type (op) == ast.LtE else
                     '__gt__' if type (op) == ast.Gt else
                     '__ge__' if type (op) == ast.GtE else
-                    
+
                     'Never here'
                 )))
                 self.visitSubExpr (node, left)
