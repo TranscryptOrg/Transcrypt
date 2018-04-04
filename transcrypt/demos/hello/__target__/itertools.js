@@ -1,3 +1,0 @@
-'use strict';import{list,tuple,len,__kwargtrans__,set}from"./org.transcrypt.__runtime__.js";var __name__="itertools";export var chain=function(){var args=[].slice.apply(arguments);var result=[];for(var index=0;index<args.length;index++)result=result.concat(args[index]);return list(result)};
-
-//# sourceMappingURL=itertools.map

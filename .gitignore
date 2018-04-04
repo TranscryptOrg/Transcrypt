@@ -3,6 +3,7 @@
 *.npp
 *.egg-info/
 **.__pycache__/
+**.__target__/
 dist/
 transcrypt/docs/sphinx/_build/
 transcrypt/development/attic/
@@ -18,5 +19,4 @@ transcrypt/modules/cmath/__javascript__/
 transcrypt/modules/logging/__javascript__/
 transcrypt/modules/warnings/__javascript__/
 transcrypt/modules/org/transcrypt/autotester/__javascript__/
-transcrypt/modules/org/transcrypt/__javascript__/__base__.mod.js
-transcrypt/modules/org/transcrypt/__javascript__/__standard__.mod.js
+
