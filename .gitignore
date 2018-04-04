@@ -3,6 +3,7 @@
 *.npp
 *.egg-info/
 **.__pycache__/
+**.mypy_cache/
 **.__target__/
 dist/
 transcrypt/docs/sphinx/_build/
