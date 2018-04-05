@@ -46,7 +46,7 @@ class CommandArgs:
         self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
         self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
         self.argParser.add_argument ('-ds', '--dstat', help = "debug: validate static typing using annotations", action = 'store_true')
-        self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol __esv<versionnr>__ is added to the global symbol list, e.g. __esv6__.")
+        self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol __esv<versionnr>__ is added to the global symbol list, e.g. __esv7__.")
         self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
         self.argParser.add_argument ('-g', '--gen', help = "enable generators and iterators. Disadvised, since it will result in a function call for each loop iteration. Preferably use __pragma__ ('gen') and __pragma__ ('nogen')", action = 'store_true')
         self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. Disadvised, since it will result in a type check for each for-loop. Preferably use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
@@ -104,8 +104,8 @@ class CommandArgs:
         global extraLines
         extraLines = [
             # Make identifier __pragma__ known to static checker
-            # It was only known in JavaScript from __core__.mod.js, which the checker doesn't see
-            # __pragma__ ('<all>') in JavaScript requires it to remain a function, as it was in the core
+            # It was only known in JavaScript from __core__.js, which the checker doesn't see
+            # __ pragma__ ('<all>') in JavaScript requires it to remain a function, as it was in the core
             # It can't be skipped, since it has to precede __pragma__ ('skip'), to make the checker accept that
             'def __pragma__ (): pass',
         
@@ -157,8 +157,14 @@ class Error (Exception):
             
     def __str__ (self):
         result = 'Error while compiling (offending file last):'
+        
+        try:
+            sourcePath = importRecord [0] .sourcePath
+        except:
+            sourcePath = '<unknown>'
+            
         for importRecord in program.importStack [ : -1]:
-            result += '\n\tFile \'{}\', line {}, at import of:'.format (importRecord [0] .sourcePath, importRecord [1])
+            result += '\n\tFile \'{}\', line {}, at import of:'.format (sourcePath, importRecord [1])
             
         result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] ), self.lineNr)
         result += '\n\t{}'.format (self.message)
@@ -276,7 +282,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
             # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
             # They may have an explicit import list for unqualified access or an import * for qualified access
             # In both cases only the path of the imported module is needed, to be able to provide that module
-            # It can be a path without extension, allowing both .py and .mod.js files as imported module
+            # It can be a path without extension, allowing both .py and .js files as imported module
             #
             # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
             # - Qualified import:     "import * from '<relative module path>'"  

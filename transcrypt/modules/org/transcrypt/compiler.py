@@ -123,7 +123,6 @@ class Module:
         
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
         if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
-            # Generate parse tree
             if self.isJavascriptOnly:
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
@@ -135,12 +134,19 @@ class Module:
                 self.exports = javascriptDigest.exportedNames
    
             else:
-                # Compile from Python, start with constructing parse tree
+                # Perform static typecheck on source code
+                if utils.commandArgs.dstat:
+                    try:
+                        type_check.run (self.sourcePath)
+                    except Exception as exception:
+                        utils.log (True, 'Validating: {} and dependencies\n\tInternal error in static typing validator\n', self.sourcePath)
+
+                # Construct parse tree
                 self.parse ()
                 if utils.commandArgs.dtree:
                     self.dumpTree ()
 
-                # Perform lightweight command check on parse tree
+                # Perform lightweight static check on parse tree
                 if utils.commandArgs.dcheck:
                     try:
                         static_check.run (self.sourcePath, self.parseTree)
@@ -2584,13 +2590,6 @@ class Generator (ast.NodeVisitor):
 
         importHeadsIndex = len (self.targetFragments)
         importHeadsLevel = self.indentLevel
-        
-        try:
-            if self.module.name != self.module.program.runtimeModuleName:
-                runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
-                self.emit ('import {{{}}} from \'{}\';\n', ', '.join (runtimeModule.exports), runtimeModule.importRelPath)
-        except:
-            print (traceback.format_exc ())
             
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
         self.all.add ('__name__')
@@ -2610,27 +2609,38 @@ class Generator (ast.NodeVisitor):
                 self.emit (';\n')
                 self.all.add ('__doc__')
                 self.docStringEmitted = True
-                        
-        allClause = (
-                (
-                    'export var __all__ = {' +
-                        ', '.join ([
-                            'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.all)
-                        ]) +
-                    '};\n'
-                )
-            if self.allowGlobals else
-                ''
-        )
+        
+        self.adaptLineNrString ()   # i.e. set to 1 with trailing zeroes
                 
-        self.targetFragments.insert (
-            importHeadsIndex,
-                ''.join ([
-                    '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
-                    for head in sorted (self.importHeads)
+        if self.module.name != self.module.program.runtimeModuleName:
+            runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
+            importedNames = ', '.join ([export for export in runtimeModule.exports if not export in self.all])  # Avoid double declarations since imports are immutable
+            stdImportClause = f'import {{{importedNames}}} from \'{runtimeModule.importRelPath}\';{self.lineNrString}\n'
+        else:
+            stdImportClause = ''
+        
+        if self.allowGlobals:
+            allClause = (
+                'export var __all__ = {' +
+                ', '.join ([
+                    'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.all)
                 ]) +
-                allClause
+                f'}};{self.lineNrString}\n'            
             )
+        else:
+            allClause = ''
+                
+        importHeadsFragment = (
+            stdImportClause +
+            ''.join ([
+                '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
+                for head in sorted (self.importHeads)
+            ]) +
+            allClause
+        )
+        
+        self.targetFragments.insert (importHeadsIndex, importHeadsFragment)
+         
         self.descope ()
 
     def visit_Name (self, node):

@@ -2,8 +2,6 @@ import {list, tuple, len, __kwargtrans__, set} from './org.transcrypt.__runtime_
 
 var __name__ = 'itertools';
 
-__pragma__ ('ifdef', '__esv6__')
-
 export var count = function* (start, step) {
     if (start == undefined) {
         start = 0;
@@ -296,17 +294,3 @@ export var combinations_with_replacement = function (iterable, r) {
     recurse (tail, tail.slice (0, 0), r - 1);
     return list (result);
 }
-
-__pragma__ ('else')
-
-export var chain = function () {
-    var args = [] .slice.apply (arguments);
-    var result = [];
-    for (var index = 0; index < args.length; index++) {
-        result = result.concat (args [index]);
-    }
-    return list (result);
-}
-                    
-__pragma__ ('endif')
-

@@ -90,7 +90,7 @@ Transcrypt is gradually moving towards constructs that require JavaScript 6 as o
 
 If you want to include Python code that makes full use of generators, iterators and the *yield* statement, the following workflow is advised:
 
-- Initially compile your code using the switches: *-b -m -e 6 -n*.
+- Initially compile your code using the switches: *-b -m -n*.
 - Debug your non-minified code in a JavaScript 6 compatible browser like Google Chrome. Both .js and the .py files will be human readable. The sourcemap will refer from the non-minified JavaScript target code to the Python source code, allowing you to debug both in Python and in JavaScript.
 - If it all works, compile your code using the switches *-b -m* and distribute the minified version. It will run in any JavaScript 5 compatible browser. Python source level debugging is still possible since the sourcemap will refer from the minified JavaScript target code to the Python source code.
 
@@ -157,7 +157,7 @@ Below is an example of code with type hints and deliberate inconsistencies, and 
 	:linenos:
 	:caption: manual_tests/static_types/mod2/__init__.py
 	
-.. literalinclude:: ../../development/manual_tests/static_types/static_types.out
+.. literalinclude:: ../../development/manual_tests/static_types/__target__/static_types.out
 	:tab-width: 4
 	:caption: Results of the static type validation and the lightweight consistency check
     

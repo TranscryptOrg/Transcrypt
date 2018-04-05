@@ -196,15 +196,9 @@ Conditional compilation: __pragma__ ('ifdef', <symbol>), __pragma__ ('ifndef', <
 --------------------------------------------------------------------------------------------------------------------------------------
 A piece of code in between *__pragma__ ('ifdef', <symbol>)* and *__pragma__ ('endif')* will only be compiled if <symbol> occurs in the global list of defined symbols.
 
-This pragma works mainly in combination with the *-s* / *--symbols <names joined by $>* command line option. On top of that, some command line options automatically add symbols, without using the *-s* switch. An example is *-e 6* option, which adds the symbol *e6* to the global list of defined symbols.
+This pragma works mainly in combination with the *-s* / *--symbols <names joined by $>* command line option. On top of that, some command line options automatically add symbols, without using the *-s* switch.
 
-An example of the use of this pragma is found the autotest code below:
-
-.. literalinclude:: ../../development/automated_tests/transcrypt/autotest.py
-	:tab-width: 4
-	:caption: Use of conditional compilation to prevent Transcrypt code that requires JavaScript 6 from being compiled in the JavaScript 5 mode.
-	
-Note that in the example above, the compilation command is *transcrypt -e 6 autotest.py*. The *-e 6* switch forces compilation in JavaScript 6 mode and automatically adds *e6* to the global list of defined symbols. The presence of the *e6* symbol activates compilation of Transcrypt code that needs JavaScript 6 mode, by use of the *__pragma__ ('ifdef', 'e6')* and *__pragma__ ('endif')*.
+TODO: Add example
 
 Code after *__pragma__ ('ifndef', <symbol>)* is compiled if <symbol> is NOT defined. To choose between two alternative source code blocks, precede the second block with *__pragma__ ('else')* and terminate it with *__pragma__ ('endif')*.
 

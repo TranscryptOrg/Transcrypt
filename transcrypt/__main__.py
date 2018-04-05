@@ -74,7 +74,7 @@ def main ():
     
     try:
         __envir__ = utils.Any ()
-        with tokenize.open (f'{modulesDir}/org/transcrypt/__envir__.part.js') as envirFile:
+        with tokenize.open (f'{modulesDir}/org/transcrypt/__envir__.js') as envirFile:
             exec (envirFile.read ());
         __envir__.executor_name = __envir__.interpreter_name
 

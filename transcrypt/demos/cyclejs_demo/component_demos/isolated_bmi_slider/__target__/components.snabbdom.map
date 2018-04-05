@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "components.snabbdom.js",
+	"sources": [
+		"components.snabbdom.py"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAIA;AACA;AAAA;AALA"
+}

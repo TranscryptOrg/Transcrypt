@@ -5,6 +5,7 @@ import datetime
 import webbrowser
 import argparse
 import time
+import traceback
 
 class CommandArgs:
     def __init__ (self):
@@ -26,40 +27,44 @@ appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
-def test (relFilePrepath, run, switches, outputFilePrename = '', nodeJs = False):
-    # If there are relevant console messages of the compilation process, like with the static typechecking tests, write them into a file that can be served for a visual check
-    redirect = ' > {}.out'.format (outputFilePrename) if outputFilePrename else ''
-    
+def test (relProgramPrepath, run, switches, outputPrename = '', nodeJs = False):
     # Compute some slugs
-    filePrename = relFileprepath.split ('/') [-1]
-    filePrepath = getAbsPath (relFilePrepath)
+    programPrepath = getAbsPath (relProgramPrepath)
+    relOutputDir = f'{"/".join (relProgramPrepath.split ("/") [:-1])}/__target__'
+    outputDir = getAbsPath (relOutputDir)
+    relOutputPrepath = f'{relOutputDir}/{outputPrename}'
+    outputPrepath = getAbsPath (relOutputPrepath)
+    
+    # If there are relevant console messages of the compilation process,
+    # like with the static typechecking tests, write them into a file that can be served for a visual check
+    if not os.path.exists (outputDir):
+        os.makedirs (outputDir) # Transcrypt will make outputDir too late, so it has to happen here
+    redirect = f' > {outputPrepath}.out' if outputPrename else ''
     
     # Compile with Transcrypt
-    os.system ('{} -b -m -dm -dt -da -sf {}{}'.format (transpileCommand, switches, filePrepath, redirect))
+    os.system (f'{transpileCommand} -b -m -da -sf -n -de {switches}{programPrepath}{redirect}')
     
     # Run back to back in CPython
     if run:
-        os.system ('{} -sf -r {}'.format (transpileCommand, switches, filePrepath))     
+        os.system (f'{transpileCommand} -sf -r {switches}{programPrepath}') 
     
     openNewTab = 2
     if not commandArgs.blind:
-        if nodejs:
+        if nodeJs:
             '''
             os.system ('start cmd /k node __target__/{}.js'.format (filePrename))
             time.sleep (5)
             webbrowser.open ('http://localhost:8080', new = openNewTab)
-            '''
-        elif redirect:
-            webbrowser.open (f'http://localhost:8080/{getAbsPath (relPath)}//{filePrename}.html', new = openNewTab)            
+            '''           
         else:
-            webbrowser.open (f'http://localhost:8080/{getAbsPath (relPath)}/{filePrename}.html', new = openNewTab)
+            webbrowser.open (f'http://localhost:8080/{relProgramPrepath}.html', new = openNewTab)
         
 # Start a node http server in the Transcryp/transcrypt directory
 if not commandArgs.blind:
-    os.system (f'start cmd /k http-server {appRootDir}')
+    os.system (f'start cmd /k http-server {appRootDir} -c-1')   # -c-1 means 'Clear cache'
 
 # Allow visual check of command line options
-os.system ('{} -h'.format (transpileCommand))
+os.system (f'{transpileCommand} -h')
 
 # Perform all tests
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
@@ -74,7 +79,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/module_random/module_random', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
-    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc -n ', 'static_types')
+    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', 'static_types')
     test ('development/manual_tests/async_await/test', False, switches)
     
     test ('tutorials/baseline/bl_010_hello_world/hello_world', False, switches)
@@ -99,17 +104,21 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/star', False, switches)
     test ('demos/turtle_demos/snowflake', False, switches)
     test ('demos/turtle_demos/mondrian', False, switches)
-    test ('demos/turtle_demos/mandala', False, switches)
-            
+    test ('demos/turtle_demos/mandala', False, switches)    
+          
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
-        
+   
+'''
 # Make docs, the resulting files are untracked
+origDir = os.getcwd ()
 sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
 os.chdir (sphinxDir)
 os.system ('touch *.rst')
 os.system ('make html')
+os.chdir (origDir)
+'''
         
 print ('\nShipment test ready')

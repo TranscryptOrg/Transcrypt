@@ -1,8 +1,8 @@
 import sys
 
-sys.path.append ('../../modules/org/transcrypt')
+sys.path.append ('../../modules')
 
-import __base__
+from org.transcrypt.stubs import browser
 
 # -*- coding: utf-8 -*-
 #
@@ -56,7 +56,7 @@ copyright = u'2016, Jacques de Hooge'
 # built documents.
 #
 # The short X.Y version.
-version = __base__.__envir__.transpiler_version
+version = browser.__envir__.transpiler_version
 # The full version, including alpha/beta/rc tags.
 release = version
 

@@ -1,12 +1,25 @@
 <html>
 	<head>
-		<style>
-			embed {width: 100%; height: 100%;}
-		</style>
 	</head>
 	<body>
-		<pre>
-			<embed type="text/html" src="static_types.out">
+        <pre id="out">
 		</pre>
 	</body>
+    <script>
+        outFileName = '__target__/static_types.out';
+        request = new XMLHttpRequest ();
+        request.open ('GET', outFileName);
+        
+        request.onreadystatechange = function () {
+            document.getElementById ('out') .innerHTML = (
+                (request.readyState == XMLHttpRequest.DONE && request.status == 200)
+                ?
+                request.responseText
+                :
+                'Could not load ' + outFileName + ', readyState = ' + request.readyState + ', status: ' + request.status
+            );
+        };
+        
+        request.send ()
+    </script>
 </html>

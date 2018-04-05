@@ -8,16 +8,17 @@ from org.transcrypt import utils
 
 # Get environment from runtime and correct executor to be interpreter
 
-pathOfThisFile = os.path.dirname(os.path.abspath(__file__)) .replace ('\\', '/')
+pathOfThisFile = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 __envir__ = utils.Any ()
-with tokenize.open (f'{pathOfThisFile}/../__envir__.part.js') as envirFile:
+with tokenize.open (f'{pathOfThisFile}/../__envir__.js') as envirFile:
     exec (envirFile.read ());
 __envir__.executor_name = __envir__.interpreter_name
 
 # Set main to commandArgs.source rather than transcrypt
 class __main__:
-    __file__ = utils.commandArgs.source
-    
+    # Var source is only set if browser module is NOT imported from sphinx conf.py
+    __file__ = utils.commandArgs.source if hasattr (utils.commandArgs, 'source') else 'UNKNOWN'
+        
 # Browser root singleton
 class window:
     class console:

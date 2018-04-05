@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "snowflake.js",
+	"sources": [
+		"snowflake.py"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AACA;AAAA;AAEA;AA5BA"
+}

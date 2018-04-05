@@ -1,0 +1,301 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = re
+					asname: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = skip
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Name 
+						id: str = re
+						ctx: Load 
+					attr: str = J
+					ctx: Store 
+			value: BinOp 
+				left: Num 
+					n: int = 1
+				op: LShift 
+				right: Num 
+					n: int = 19
+		element: Assign 
+			targets: list 
+				element: Attribute 
+					value: Name 
+						id: str = re
+						ctx: Load 
+					attr: str = JSSTRICT
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = re
+					ctx: Load 
+				attr: str = J
+				ctx: Load 
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = noskip
+				keywords: list 
+		element: ImportFrom 
+			module: str = basictests
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = test
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  basic tests of the re engine. The point is to
+    exercise most of the methods to make sure they behave as
+    expected. These tests are expected to provide exhaustive
+    coverage of the regex engine.
+    
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkFlagsExist
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = escapeTests
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkMatchProperties
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkRegexProperties
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkIgnoreCase
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkSearchWithGroups
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkMatchOps
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkMatchWithGroups
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkFullMatchOps
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkFindAllOps
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkSplitOps
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkSubOps
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkSyntaxErrors
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = checkFindIter
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = test
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = re
+									ctx: Load 
+								attr: str = JSSTRICT
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

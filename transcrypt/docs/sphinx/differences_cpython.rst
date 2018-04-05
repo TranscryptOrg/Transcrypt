@@ -18,7 +18,7 @@ Differences due to the 'lean and mean' design goal
 - String formatting is done through the *format* method or through f-strings, as this is considered most flexible. Using % for formatting isn't supported. There's currently no 'string formatting mini language'. All of JavaScript's string formatting facilities are supported.
 - Some methods of container types like list, set and dict, that duplicate functionality of other methods, have been left out of the core libraries. If needed they can be supplied in separate libraries.
 - Metaclasses only support overloading the __new__ method, covering 90% of the use cases.
-- Currently the  \*, /, //, +, -, @, [], (), ==, !=, <, <=, >, >=, **, << and >> operators can be overloaded, both forward and reverse where appropriate, covering almost all usecases.
+- Currently the  \*, /, //, +, -, @, [], (), ==, !=, <, <=, >, >=, \*\*, << and >> operators can be overloaded, both forward and reverse where appropriate, covering almost all usecases.
 - The 'with' statement can currently only be used for file-like objects.
 
 Differences due to interoperability with JavaScript and JavaScript libraries
