@@ -188,10 +188,12 @@ Example: Riot
 |    :caption: riot_demo.py, a derived Transcrypt Riot tag class |    :caption: riot_demo.mod.js, compiled by Transcrypt                     |
 +----------------------------------------------------------------+---------------------------------------------------------------------------+
 
-Example: Using input and print in a DOM __terminal__ element in your browser
-----------------------------------------------------------------------------
+Example: Functions input and  print
+-----------------------------------
 
-Without special measures, Transcrypt's *print* function prints to the debugging console. However if there's an element with id *__terminal__* in your DOM tree, the *print* function prints to this element. Moreover, the *input* function also prints its prompt message to the terminal element. Input is collected using a dialog box and echoed to the terminal element.
+Without special measures, Transcrypt's *print* function prints to the debugging console.
+
+Moreover, the *input* function opens a dialog box with prompt message and a text box to enter user content. It prints both to the debugging console also.
 
 This means that you can write applications with blocking I/O, rather than event driven behaviour, e.g. for simple activities or, since they are intuitively easy to comprehend, for educational purposes.
 
@@ -206,3 +208,22 @@ This means that you can write applications with blocking I/O, rather than event 
 |    :tab-width: 4                                               |
 |    :caption: terminal_demo.py                                  |
 +----------------------------------------------------------------+
+
+Example: Redirect print output to __terminal__ DOM element
+----------------------------------------------------------
+
+If there's an element with id *__terminal__* in your DOM tree, the *print* function prints to this element.
+
+It's necessary to execute the script first after the *__terminal__* element was parsed. This can be done by adding the *defer* attribute to the *<script>* element or by using the :ref:`-p .user <command_line_switches>` command line switch to generate a JavaScript module with explicit initialization.
+
++---------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/terminal_demo/terminal_element.html |
+|    :tab-width: 4                                                    |
+|    :caption: terminal_element.html                                  |
++---------------------------------------------------------------------+
+
++-------------------------------------------------------------------+
+| .. literalinclude:: ../../demos/terminal_demo/terminal_element.py |
+|    :tab-width: 4                                                  |
+|    :caption: terminal_element.py                                  |
++-------------------------------------------------------------------+
