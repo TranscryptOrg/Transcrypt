@@ -28,6 +28,7 @@ import subprocess
 import shlex
 import shutil # !!!
 import tokenize
+import collections
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -383,7 +384,7 @@ class Module:
 
         with utils.create (self.treePath) as treeFile:
             treeFile.write (self.textTree)
-
+            
 class Generator (ast.NodeVisitor):
     # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 
@@ -391,10 +392,11 @@ class Generator (ast.NodeVisitor):
         self.module = module
 
         self.targetFragments = []
+        self.fragmentIndex = 0
         self.indentLevel = 0
         self.scopes = []
-        self.all = set ()        
-        self.importHeads = set ()
+        self.importNodes = []
+        self.all = set ()
         self.docString = None
         self.docStringEmitted = False
         self.expectingNonOverloadedLhsIndex = False
@@ -587,13 +589,15 @@ class Generator (ast.NodeVisitor):
     def emit (self, fragment, *formatter):
         if (    # At the start of a new line
             not self.targetFragments or
-            (self.targetFragments and self.targetFragments [-1] .endswith ('\n'))
+            (self.targetFragments and self.targetFragments [self.fragmentIndex - 1] .endswith ('\n'))
         ):
-            self.targetFragments.append (self.tabs ())
+            self.targetFragments [self.fragmentIndex] .insert (self.tabs ())
 
         fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
-        self.targetFragments.append (fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
+        self.targetFragments.insert (fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'), self.fragmentIndex)
 
+        self.fragmentIndex += 1
+        
     def indent (self):
         self.indentLevel += 1
 
@@ -2373,7 +2377,10 @@ class Generator (ast.NodeVisitor):
         self.visit (node.orelse)
         self.emit (')')
 
-    def visit_Import (self, node):  # Import .. can only import modules
+    def visit_Import (self, node):
+        self.importNodes.append (node)
+        
+    def revisit_Import (self, node):  # Import .. can only import modules
         self.adaptLineNrString (node)
 
         names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
@@ -2412,7 +2419,10 @@ class Generator (ast.NodeVisitor):
             if index < len (names) - 1:
                 self.emit (';\n')
 
-    def visit_ImportFrom (self, node):  # From .. import can import modules or facitities offered by modules
+    def visit_ImportFrom (self, node):
+        self.importNodes.append (node)
+    
+    def revisit_ImportFrom (self, node):  # From .. import can import modules or facitities offered by modules
         self.adaptLineNrString (node)
 
         if node.module.startswith (self.stubsName):
@@ -2588,8 +2598,7 @@ class Generator (ast.NodeVisitor):
         self.adaptLineNrString (node)
         self.inscope (node)
 
-        importHeadsIndex = len (self.targetFragments)
-        importHeadsLevel = self.indentLevel
+        self.hoistFragmentIndex = self.fragmentIndex
             
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
         self.all.add ('__name__')
@@ -2610,37 +2619,34 @@ class Generator (ast.NodeVisitor):
                 self.all.add ('__doc__')
                 self.docStringEmitted = True
         
-        self.adaptLineNrString ()   # i.e. set to 1 with trailing zeroes
-                
+        nonHoistedLineNr = self.lineNr
+        self.fragmentIndex = hoistFragmentIndex     # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+        
         if self.module.name != self.module.program.runtimeModuleName:
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
-            importedNames = ', '.join ([export for export in runtimeModule.exports if not export in self.all])  # Avoid double declarations since imports are immutable
-            stdImportClause = f'import {{{importedNames}}} from \'{runtimeModule.importRelPath}\';{self.lineNrString}\n'
-        else:
-            stdImportClause = ''
+            runtimeNames = ', '.join ([export for export in runtimeModule.exports if not export in self.all])  # Avoid double declarations since imports are immutable
+            self.emit ('import {{{}}} from \'{}\';\n', runtimeNames, runtime.importRelPath)
+            
+        for importNode in self.importNodes:
+            if type (importNode) == ast.Import:
+                self.revisit_Import (importNode)
+            else:
+                self.revisit_ImportFrom (importNode)
+                
+
+        for  head in self.sorted (importHeads):
+            self.emit ('var {} = {{}};\n', self.filterId (head))
+        )
         
         if self.allowGlobals:
-            allClause = (
+            self.emit (
                 'export var __all__ = {' +
                 ', '.join ([
                     'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.all)
                 ]) +
-                f'}};{self.lineNrString}\n'            
+                f'}};\n'            
             )
-        else:
-            allClause = ''
-                
-        importHeadsFragment = (
-            stdImportClause +
-            ''.join ([
-                '{}var {} = {{}};{}\n'.format (self.tabs (importHeadsLevel), self.filterId (head), self.lineNrString)
-                for head in sorted (self.importHeads)
-            ]) +
-            allClause
-        )
-        
-        self.targetFragments.insert (importHeadsIndex, importHeadsFragment)
-         
+                     
         self.descope ()
 
     def visit_Name (self, node):
