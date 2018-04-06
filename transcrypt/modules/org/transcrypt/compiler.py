@@ -395,8 +395,10 @@ class Generator (ast.NodeVisitor):
         self.fragmentIndex = 0
         self.indentLevel = 0
         self.scopes = []
+        self.importHeads = []
         self.importNodes = []
-        self.all = set ()
+        self.allOwnNames = set ()
+        self.allImportedNames = set ()
         self.docString = None
         self.docStringEmitted = False
         self.expectingNonOverloadedLhsIndex = False
@@ -591,10 +593,10 @@ class Generator (ast.NodeVisitor):
             not self.targetFragments or
             (self.targetFragments and self.targetFragments [self.fragmentIndex - 1] .endswith ('\n'))
         ):
-            self.targetFragments [self.fragmentIndex] .insert (self.tabs ())
+            self.targetFragments.insert (self.fragmentIndex, self.tabs ())
 
         fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
-        self.targetFragments.insert (fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'), self.fragmentIndex)
+        self.targetFragments.insert (self.fragmentIndex, fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
 
         self.fragmentIndex += 1
         
@@ -1075,7 +1077,7 @@ class Generator (ast.NodeVisitor):
                             pass
                         else:
                             if type (self.getScope () .node) == ast.Module: # Redundant but regular
-                                if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.all:
+                                if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.allOwnNames:
                                     self.emit ('export ')                        
                             self.emit ('var ')
                     self.visit (target)
@@ -1763,7 +1765,7 @@ class Generator (ast.NodeVisitor):
 
         if type (self.getScope () .node) == ast.Module:
             self.emit ('\nexport var {} = '.format (self.filterId (node.name)))
-            self.all.add (node.name)
+            self.allOwnNames.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
             self.emit ('\n{}:'.format (self.filterId (node.name)))
         else:
@@ -2225,7 +2227,7 @@ class Generator (ast.NodeVisitor):
                     else:
                         self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
                 elif isGlobal:
-                    if type (node.parentNode) == ast.Module and not nodeName in self.all:
+                    if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')                        
                     self.emit ('var {} = ', self.filterId (nodeName))
                 else:
@@ -2258,7 +2260,7 @@ class Generator (ast.NodeVisitor):
                         else:
                             self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if async else '')
                 elif isGlobal:
-                    if type (node.parentNode) == ast.Module and not nodeName in self.all:
+                    if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')                        
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
                 else:
@@ -2316,7 +2318,7 @@ class Generator (ast.NodeVisitor):
                     self.emit (',\nnext: __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound method pointers
 
             if isGlobal:
-                self.all.add (nodeName)
+                self.allOwnNames.add (nodeName)
 
     def visit_GeneratorExp (self, node):
         # Currently generator expressions are just iterators on lists.
@@ -2380,7 +2382,7 @@ class Generator (ast.NodeVisitor):
     def visit_Import (self, node):
         self.importNodes.append (node)
         
-    def revisit_Import (self, node):  # Import .. can only import modules
+    def revisit_Import (self, node):  # Import ... can only import modules
         self.adaptLineNrString (node)
 
         names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
@@ -2405,7 +2407,8 @@ class Generator (ast.NodeVisitor):
                     message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                 )
 
-            if alias.asname:
+            if alias.asname and not alias.asname in (self.allOwnNames | self.allImportedNames):
+                self.importedAll.add (alias.asname)
                 self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
             else:
                 self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
@@ -2422,7 +2425,7 @@ class Generator (ast.NodeVisitor):
     def visit_ImportFrom (self, node):
         self.importNodes.append (node)
     
-    def revisit_ImportFrom (self, node):  # From .. import can import modules or facitities offered by modules
+    def revisit_ImportFrom (self, node):  # From ... import ... can import modules or facitities offered by modules
         self.adaptLineNrString (node)
 
         if node.module.startswith (self.stubsName):
@@ -2444,10 +2447,10 @@ class Generator (ast.NodeVisitor):
         '''
         
         try:
-            # Import facilities or modules
-            facilities = []
+            # Import modules or facilities offered by them
+            namePairs = []
             for index, alias in enumerate (node.names):
-                if alias.name == '*':                                           # * Never refers to modules, only to entities in modules                       
+                if alias.name == '*':                                           # * Never refers to modules, only to facilities in modules
                     if len (node.names) > 1:
                         raise utils.Error (
                             lineNr = node.lineno,
@@ -2461,28 +2464,19 @@ class Generator (ast.NodeVisitor):
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
-                    except:                                                     # If it doesn't it denotes an entity inside a module
+                    except:                                                     # If it doesn't it denotes a facility inside a module
                         module = self.useModule (node.module)
-                        facilities.append (utils.Any (name = alias.name, asName = alias.asname))      
-            if facilities:
+                        namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
+            if namePairs:
+                # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
                 self.emit ('import {{')
-                for index, facility in enumerate (facilities):
-                    self.emitComma (index)
-                    self.emit (self.filterId (facility.name))
-                    if facility.asName:
-                        self.emit (' as {}', self.filterId (facility.asName))
-                self.emit ('}} from \'{}\';\n', module.importRelPath)
-
-            # Transit export of imported facilities (so no facilities that weren't imported and no modules)
-            if type (self.getScope ().node) == ast.Module:
-                if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
-                    self.emit ('export {{')
-                    for index, facility in enumerate (facilities):
+                for index, namePair in enumerate (namePairs):
+                    if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
                         self.emitComma (index)
-                        self.emit (self.filterId (facility.asName) if facility.asName else self.filterId (facility.name))
-                        self.all.add (facility.asName if facility.asName else facility.name)
-                        
-                    self.emit ('}};\n')
+                        self.emit (self.filterId (namePair.name))
+                        if namePair.asName:
+                            self.emit (' as {}', self.filterId (namePair.asName))
+                self.emit ('}} from \'{}\';\n', module.importRelPath)
                     
         except Exception as exception:
             print (traceback.format_exc ())
@@ -2589,20 +2583,28 @@ class Generator (ast.NodeVisitor):
         self.emit ('}}) ()')
 
     def visit_Module (self, node):
+        # Adapt self.lineNrString to whatever self.lineNr happens to be
         self.adaptLineNrString ()
-    
+        
+        # Emit module collophon comment
         self.emit ('// {}\'ed from Python, {}\n',
             self.module.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
         )    
     
+        # Adapt self.lineNrString to the line number that the node stems from
         self.adaptLineNrString (node)
+        
+        # Enter module scope
         self.inscope (node)
 
-        self.hoistFragmentIndex = self.fragmentIndex
-            
-        self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
-        self.all.add ('__name__')
+        # Remember where hoists have to be inserted in the fragments list     
+        self.hoistFragmentIndex = self.fragmentIndex       
         
+        # Let the module know its __name__
+        self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
+        self.allOwnNames.add ('__name__')
+        
+        # Generate code for the module body
         for stmt in node.body:
             if self.isDocString (stmt):
                 if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
@@ -2616,37 +2618,58 @@ class Generator (ast.NodeVisitor):
                 self.emit ('export var __doc__ = ')
                 self.visit (self.docString)
                 self.emit (';\n')
-                self.all.add ('__doc__')
+                self.allOwnNames.add ('__doc__')
                 self.docStringEmitted = True
+                
+        '''
+        Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
         
-        nonHoistedLineNr = self.lineNr
-        self.fragmentIndex = hoistFragmentIndex     # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+        JavaScript 6 module-level variables normally cannot be accessed directly by their name as a string
+        They aren't attributes of any global object, certainly not in strickt mode, which is the default for modules
+        By making getters and setters by the same name members of __all__, we can approach globals () as a dictionary
         
+        Limitations:
+        - We can access (read/write) but not create module-level globals this way
+        - If there are a lot of globals (bad style) this mechanism becomes expensive, so it must be under a pragma
+        
+        It's possible that future versions of JavaScript facilitate better solutions to this minor problem
+        '''
+        if self.allowGlobals:
+            self.emit (
+                'export var __all__ = {' +  # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
+                ', '.join ([
+                    'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.allOwnNames)
+                ]) +
+                f'}};\n'            
+            )
+            
+        # Transit export of imported facilities (so no facilities that weren't imported and no modules)
+        if type (self.getScope ().node) == ast.Module:
+            if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
+                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
+        
+        # Prepair to generate hoisted fragments near start of fragments
+        nonHoistedLineNr = self.lineNr                  # Remember line nr of last fragment
+        self.fragmentIndex = self.hoistFragmentIndex     # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+        
+        # Import main module (generatable only late, but hoisted)
         if self.module.name != self.module.program.runtimeModuleName:
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
-            runtimeNames = ', '.join ([export for export in runtimeModule.exports if not export in self.all])  # Avoid double declarations since imports are immutable
-            self.emit ('import {{{}}} from \'{}\';\n', runtimeNames, runtime.importRelPath)
+            importedNames = ', '.join ([export for export in runtimeModule.exports if not export in self.allOwnNames])  # Avoid double declarations since imports are immutable (hoisted)
+            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
             
+        # Import other modules (generatable only late, but hoisted)
         for importNode in self.importNodes:
             if type (importNode) == ast.Import:
                 self.revisit_Import (importNode)
             else:
                 self.revisit_ImportFrom (importNode)
                 
-
-        for  head in self.sorted (importHeads):
-            self.emit ('var {} = {{}};\n', self.filterId (head))
-        )
-        
-        if self.allowGlobals:
-            self.emit (
-                'export var __all__ = {' +
-                ', '.join ([
-                    'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.all)
-                ]) +
-                f'}};\n'            
-            )
-                     
+        # Emit empty import head objects, each as the leftmost part of the dotted name that can be used to access the imported module
+        for importHead in sorted (self.importHeads):
+            self.emit ('var {} = {{}};\n', self.filterId (importHead))
+           
+        # Exit module scope
         self.descope ()
 
     def visit_Name (self, node):
@@ -2671,7 +2694,7 @@ class Generator (ast.NodeVisitor):
             
         elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
-                self.all.add (node.id)
+                self.allOwnNames.add (node.id)
 
         self.emit (self.filterId (node.id))
 
