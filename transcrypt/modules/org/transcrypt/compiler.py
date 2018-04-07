@@ -72,7 +72,10 @@ class Program:
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        self.targetDir = f'{self.sourceDir}/__target__'     
+        self.targetDir = f'{self.sourceDir}/__target__'
+        
+        if utils.commandArgs.build:
+            shutil.rmtree(self.targetDir, ignore_errors = True)
 
         try:
             # Provide runtime module since it's always needed but never imported explicitly
@@ -395,7 +398,7 @@ class Generator (ast.NodeVisitor):
         self.fragmentIndex = 0
         self.indentLevel = 0
         self.scopes = []
-        self.importHeads = []
+        self.importHeads = set ()
         self.importNodes = []
         self.allOwnNames = set ()
         self.allImportedNames = set ()
@@ -589,15 +592,16 @@ class Generator (ast.NodeVisitor):
         return indentLevel * '\t'
 
     def emit (self, fragment, *formatter):
-        if (    # At the start of a new line
-            not self.targetFragments or
-            (self.targetFragments and self.targetFragments [self.fragmentIndex - 1] .endswith ('\n'))
+        if (                                                                                            # If at the start of a new line
+            not self.targetFragments or                                                                 # It may be the first line
+            (self.targetFragments and self.targetFragments [self.fragmentIndex - 1] .endswith ('\n'))   # It may a new line but not the first line
         ):
             self.targetFragments.insert (self.fragmentIndex, self.tabs ())
+            self.fragmentIndex += 1
 
-        fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]
+        fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]                  # There may be \n's embedded in the fragment
+        
         self.targetFragments.insert (self.fragmentIndex, fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
-
         self.fragmentIndex += 1
         
     def indent (self):
@@ -2266,7 +2270,7 @@ class Generator (ast.NodeVisitor):
                 else:
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
 
-            yieldStarIndex = len (self.targetFragments)
+            yieldStarIndex = self.fragmentIndex
 
             self.emit (' ')
 
@@ -2389,8 +2393,7 @@ class Generator (ast.NodeVisitor):
 
         if not names:
             return
-            
-            
+                  
         '''
         Possibilities:
         
@@ -2408,17 +2411,23 @@ class Generator (ast.NodeVisitor):
                 )
 
             if alias.asname and not alias.asname in (self.allOwnNames | self.allImportedNames):
-                self.importedAll.add (alias.asname)
+                # Import 'as' a non-dotted name, so no need to nest
+                
+                self.allImportedNames.add (alias.asname)
                 self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
             else:
+                # Import dotted name, requires import under constructed unique name and then nesting,
+                # including transfer of imported names from immutable module to mutable object
+                # This mutable module representation object tmay come to hold other mutable module represention objects
+            
                 self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
                 head = aliasSplit [0]
                 tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
-
+                
                 self.importHeads.add (head)
-                self.emit ('__nest__ ({}, \'{}\', __module_{}__)', self.filterId (head), self.filterId (tail), self.filterId (module.name .replace ('.', '_')))
-
+                self.emit ('__nest__ ({}, \'{}\', __module_{}__);\n', self.filterId (head), self.filterId (tail), self.filterId (module.name .replace ('.', '_')))
+                
             if index < len (names) - 1:
                 self.emit (';\n')
 
@@ -2459,7 +2468,7 @@ class Generator (ast.NodeVisitor):
                     
                     module = self.useModule (node.module)
                     for aName in module.exports:
-                        facilities.append (utils.Any (name = aName, asName = None))
+                        namePairs.append (utils.Any (name = aName, asName = None))
                 else:
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
@@ -2474,8 +2483,10 @@ class Generator (ast.NodeVisitor):
                     if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
                         self.emitComma (index)
                         self.emit (self.filterId (namePair.name))
+                        self.allImportedNames.add (namePair.name)
                         if namePair.asName:
                             self.emit (' as {}', self.filterId (namePair.asName))
+                            self.allImportedNames.add (namePair.asName)
                 self.emit ('}} from \'{}\';\n', module.importRelPath)
                     
         except Exception as exception:
@@ -2582,7 +2593,7 @@ class Generator (ast.NodeVisitor):
         self.descope ()
         self.emit ('}}) ()')
 
-    def visit_Module (self, node):
+    def visit_Module (self, node):  
         # Adapt self.lineNrString to whatever self.lineNr happens to be
         self.adaptLineNrString ()
         
@@ -2649,23 +2660,34 @@ class Generator (ast.NodeVisitor):
                 self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
         
         # Prepair to generate hoisted fragments near start of fragments
-        nonHoistedLineNr = self.lineNr                  # Remember line nr of last fragment
-        self.fragmentIndex = self.hoistFragmentIndex     # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+        self.fragmentIndex = self.hoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
         
-        # Import main module (generatable only late, but hoisted)
-        if self.module.name != self.module.program.runtimeModuleName:
-            runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
-            importedNames = ', '.join ([export for export in runtimeModule.exports if not export in self.allOwnNames])  # Avoid double declarations since imports are immutable (hoisted)
-            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
-            
-        # Import other modules (generatable only late, but hoisted)
-        for importNode in self.importNodes:
+        # Import other modules (generatable only late, but hoisted) and nest them into the import heads
+        # The import head definitions are generated later but inserted before the imports
+        self.fragmentIndex = self.hoistFragmentIndex
+        for importNode in reversed (self.importNodes):
             if type (importNode) == ast.Import:
                 self.revisit_Import (importNode)
             else:
                 self.revisit_ImportFrom (importNode)
                 
+        # Import main module (generatable only late, but hoisted)
+        # Place it first, but decimate its imported names last, since they should appear to be overriden by later imports
+        self.fragmentIndex = self.hoistFragmentIndex
+        if self.module.name != self.module.program.runtimeModuleName:
+            runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
+            
+            # Avoid double declarations since imports are immutable (hoisted)
+            print (self.allImportedNames)
+            importedNames = ', '.join (sorted ([export for export in runtimeModule.exports if not export in (self.allOwnNames | self.allImportedNames)]))
+            
+            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
+            
         # Emit empty import head objects, each as the leftmost part of the dotted name that can be used to access the imported module
+        # Note that the required importheads are only known after importing modules, but must be inserted in the target code before that,
+        # since they must be filled by the imports
+        # Place definition of import heads before actual import that includes nesting, even though they are known only after the imports        
+        self.fragmentIndex = self.hoistFragmentIndex
         for importHead in sorted (self.importHeads):
             self.emit ('var {} = {{}};\n', self.filterId (importHead))
            

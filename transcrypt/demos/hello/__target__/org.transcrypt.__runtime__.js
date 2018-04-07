@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-06 20:14:58
+// Transcrypt'ed from Python, 2018-04-07 16:10:06
 var __name__ = 'org.transcrypt.__runtime__';
 export var __envir__ = {};
 __envir__.interpreter_name = 'python';
@@ -341,6 +341,240 @@ export function int (any) {
 };
 int.__name__ = 'int';
 int.__bases__ = [object];
+Number.prototype.__format__ = function (fmt_spec) {
+    if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
+        return this.toString ();
+    }
+    var thousand_sep = false;
+    var g_default = false;
+    var width = 0;
+    var zero = false;
+    var alternate = false;
+    var sign = '-';
+    var align = '>';
+    var fill = ' ';
+    var precision = undefined;
+    var ftype = undefined;
+    var val = this.valueOf ();
+    var is_negative = val < 0;
+    val = Math.abs (val);
+    function pad (s, width, fill, align) {
+        if (fill == undefined) {
+            fill = ' ';
+        }
+        if (align == undefined) {
+            align = '>';
+        }
+        var alt = '';
+        var sign = '';
+        if (s.startswith (['+', '-'])) {
+            sign = s [0];
+            s = s.substr (1);
+        }
+        if (alternate && s.startswith (['0b', '0o', '0x'])) {
+            alt = s.slice (0, 2);
+            s = s.substr (2);
+        }
+        var len = s.length + sign.length + alt.length;
+        var c = width - len;
+        switch (align) {
+            case '=':
+                return sign + alt + __mul__ (fill, c) + s;
+            case '>':
+                return __mul__ (fill, c) + sign + alt + s;
+            case '<':
+                return sign + alt + s + __mul__ (fill, c);
+            case '^':
+                var m = ((c % 2) + 2) % 2;
+                var c = Math.floor (c / 2);
+                return __mul__ (fill, c) + sign + alt + s + __mul__ (fill, c + m);
+            default:
+                throw ValueError ("Invalid align type: '" + align + "'", new Error ());
+        }
+    };
+    function format_float (val) {
+        if (val.indexOf ('e+') == -1 && (ftype == 'g' || ftype == 'G')) {
+            var parts = val.py_split ('.');
+            var d = parts [0];
+            var t = parts [1];
+            while (t [t.length - 1] == '0') {
+                t = t.slice (0, -1);
+            }
+            val = t != '' ? '.'.join ([d, t]) : d;
+        }
+        if (alternate && val.indexOf ('.') == -1) {
+            val = val + '.';
+        }
+        return val;
+    };
+    if (fmt_spec.endswith (['b', 'c', 'd', 'e', 'E', 'f', 'F', 'g', 'G', 'n', 'o', 'x', 'X', '%'])) {
+        ftype = fmt_spec [fmt_spec.length - 1];
+        fmt_spec = fmt_spec.slice (0, -1);
+        if (ftype == 'n') {
+            ftype = Number.isInteger (val) ? 'd' : 'f';
+        }
+    }
+    else {
+        ftype = Number.isInteger (val) ? 'd' : 'g';
+        g_default = true;
+    }
+    var parts = fmt_spec.split ('.');
+    fmt_spec = parts [0];
+    precision = parts [1];
+    if (precision != undefined) {
+        precision = parseInt (precision);
+    }
+    if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == ',') {
+        thousand_sep = true;
+        fmt_spec = fmt_spec.slice (0, -1);
+    }
+    if (fmt_spec.length > 0) {
+        var _width = '';
+        while (fmt_spec && fmt_spec [fmt_spec.length - 1].isnumeric ()) {
+            _width = fmt_spec [fmt_spec.length - 1] + _width;
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (_width.length > 0) {
+            if (_width [0] == '0') {
+                width = parseInt (_width.substr (1));
+                zero = true;
+            }
+            else {
+                width = parseInt (_width);
+            }
+        }
+        if (fmt_spec.length > 0 && fmt_spec [fmt_spec.length - 1] == '#') {
+            alternate = true;
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (fmt_spec.length > 0 && fmt_spec.endswith (['+', '-', ' '])) {
+            sign = fmt_spec [fmt_spec.length - 1];
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (fmt_spec.length > 0 && fmt_spec.endswith (['<', '>', '=', '^'])) {
+            align = fmt_spec [fmt_spec.length - 1];
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (fmt_spec.length > 0) {
+            fill = fmt_spec [0];
+        }
+    }
+    if (isNaN (val)) {
+        val = 'nan';
+    }
+    else if (val == Infinity) {
+        val = 'inf';
+    }
+    else {
+        switch (ftype) {
+            case 'b':
+                val = Math.floor (val).toString (2);
+                if (alternate) {
+                    val = '0b' + val;
+                }
+                break;
+            case 'c':
+                val = String.fromCharCode (Math.floor (val));
+                break;
+            case 'd':
+                val = Math.floor (val).toString ();
+                if (thousand_sep) {
+                    val = val.replace (/\B(?=(\d{3})+(?!\d))/g, ',');
+                }
+                break;
+            case 'o':
+                val = Math.floor (val).toString (8);
+                if (alternate) {
+                    val = '0o' + val;
+                }
+                break;
+            case 'x':
+            case 'X':
+                val = Math.floor (val).toString (16);
+                if (alternate) {
+                    val = '0x' + val;
+                }
+                break;
+            case 'e':
+            case 'E':
+                if (precision == undefined) {
+                    precision = 6;
+                }
+                var num_exp = val.toExponential (precision).split ('e+');
+                var num = num_exp [0];
+                var exp = num_exp [1];
+                val = num.toString () + 'e+' + pad (exp.toString(), 2, '0');
+                val = format_float (val);
+                break;
+            case 'f':
+            case 'F':
+            case '%':
+                if (precision == undefined) {
+                    precision = 6;
+                }
+                if (ftype == '%') {
+                    val *= 100;
+                }
+                val = val.toFixed (precision);
+                val = format_float (val);
+                if (ftype == '%') {
+                    val += '%';
+                }
+                break;
+            case 'g':
+            case 'G':
+                if (precision == undefined) {
+                    precision = g_default ? 1 : 6;
+                }
+                if (precision == 0) {
+                    precision = 1;
+                }
+                var convert_to_exponent = false;
+                if (g_default) {
+                    var parts = val.toString ().split ('.');
+                    var digit_count = parts [0].length + parts [1].length;
+                    if (digit_count >= precision) {
+                        convert_to_exponent = true;
+                    }
+                }
+                var num_exp = val.toExponential (precision - 1).split ('e+');
+                var num = num_exp [0];
+                var exp = num_exp [1];
+                convert_to_exponent |= !((-4 <= exp && exp < precision));
+                if (convert_to_exponent) {
+                    val = num.toString() + 'e+' + pad (exp.toString(), 2, '0');
+                }
+                else {
+                    val = val.toFixed (precision - 1 - exp);
+                }
+                val = format_float (val);
+                break;
+            default:
+                throw ValueError ("Invalid format type: '" + ftype + "'", new Error ());
+        }
+    }
+    if (ftype === ftype.toUpperCase ()) {
+        val = val.toUpperCase ()
+    }
+    if (ftype != 'c') {
+        if (sign == '-') {
+            if (is_negative) {
+                val = '-' + val;
+            }
+        }
+        else {
+            val = is_negative ? '-' + val : sign + val;
+        }
+    }
+    if (zero) {
+        fill = '0';
+        align = '=';
+    }
+    if (width > 0) {
+        val = pad (val, width, fill, align);
+    }
+    return val;
+};
 export function bool (any) {
     return !!__t__ (any);
 };
@@ -481,6 +715,29 @@ export function round (number, ndigits) {
     }
     return rounded;
 };
+export function format (value, fmt_spec) {
+    if (value == undefined) {
+        return 'None';
+    }
+    fmt_spec = fmt_spec || '';
+    var tval = typeof value;
+    switch (tval) {
+        case 'number':
+        case 'string':
+            return value.__format__(fmt_spec);
+        case 'boolean':
+            return fmt_spec ? (value ? 1 : 0).__format__(fmt_spec) : str (value);
+        case 'object':
+            if ('__format__' in value) {
+                return value.__format__ (fmt_spec);
+            }
+            else {
+                return str (value).__format__ (fmt_spec);
+            }
+        default:
+            return str (value).__format__ (fmt_spec);
+    }
+}
 export function __jsUsePyNext__ () {
     try {
         var result = this.__next__ ();
@@ -1022,25 +1279,117 @@ String.prototype.__getslice__ = function (start, stop, step) {
     }
     return result;
 };
+String.prototype.__format__ = function (fmt_spec) {
+    if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
+        return this.valueOf ();
+    }
+    var width = 0;
+    var align = '<';
+    var fill = ' ';
+    var val = this.valueOf ();
+    function pad (s, width, fill, align) {
+        var len = s.length;
+        var c = width - len;
+        switch (align) {
+            case '>':
+                return __mul__ (fill, c) + s;
+            case '<':
+                return s + __mul__ (fill, c);
+            case '^':
+                var m = ((c % 2) + 2) % 2;
+                var c = Math.floor (c / 2);
+                return __mul__ (fill, c) + s + __mul__ (fill, c + m);
+            default:
+                return s;
+        }
+    };
+    if (fmt_spec [fmt_spec.length - 1] == 's') {
+        fmt_spec = fmt_spec.slice (0, -1);
+    }
+    if (fmt_spec.length > 0) {
+        var _width = '';
+        while (fmt_spec && fmt_spec [fmt_spec.length - 1].isnumeric ()) {
+            _width = fmt_spec [fmt_spec.length - 1] + _width;
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (_width.length > 0) {
+            width = parseInt (_width);
+        }
+        if (fmt_spec.length > 0 && fmt_spec.endswith (['<', '>', '^'])) {
+            align = fmt_spec [fmt_spec.length - 1];
+            fmt_spec = fmt_spec.slice (0, -1);
+        }
+        if (fmt_spec.length > 0) {
+            fill = fmt_spec [0];
+        }
+    }
+    if (width > 0) {
+        val = pad (val, width, fill, align);
+    }
+    return val;
+};
 __setProperty__ (String.prototype, 'format', {
     get: function () {return __get__ (this, function (self) {
         var args = tuple ([] .slice.apply (arguments).slice (1));
         var autoIndex = 0;
-        return self.replace (/\{(\w*)\}/g, function (match, key) {
+        return self.replace (/\{([^\{]*)\}/g, function (match, key) {
+            var parts = key.split (':');
+            key = parts [0];
+            var fmt_spec = parts [1];
+            parts = key.split ('!')
+            key = parts [0];
+            var conversion = parts [1];
+            var value = undefined;
             if (key == '') {
                 key = autoIndex++;
             }
-            if (key == +key) {
-                return args [key] == undefined ? match : str (args [key]);
+            if (key == +key && args [key] != undefined) {
+                value = args [key];
             }
             else {
-                for (var index = 0; index < args.length; index++) {
-                    if (typeof args [index] == 'object' && args [index][key] != undefined) {
-                        return str (args [index][key]);
+                var attr = undefined;
+                var idx = key.indexOf ('.');
+                if (idx != -1) {
+                    attr = key.substring (idx + 1);
+                    key = key.substring (0, idx);
+                }
+                else {
+                    idx = key.indexOf ('[');
+                    if (idx != -1) {
+                        attr = key.substring (idx + 1).slice (0, -1);
+                        key = key.substring (0, idx);
                     }
                 }
+                if ((key == +key) && attr && args [key] != undefined) {
+                    value = args [key][attr];
+                }
+                else {
+                    for (var index = 0; index < args.length; index++) {
+                        if (typeof args [index] == 'object' && args [index][key] != undefined) {
+                            if (attr) {
+                                value = args [index][key][attr];
+                            }
+                            else {
+                                value = args [index][key];
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if (value == undefined) {
                 return match;
             }
+            if (conversion == 'r') {
+                value = repr (value);
+            }
+            else if (conversion == 's') {
+                value = str (value);
+            }
+            else if (conversion == 'a') {
+                throw ValueError ("Conversion to ascii not yet supported: '" + match + "'", new Error ());
+            }
+            return format (value, fmt_spec);
         });
     });},
     enumerable: true
@@ -1749,120 +2098,120 @@ export var BaseException =  __class__ ('BaseException', [object], {
 
 export var Exception =  __class__ ('Exception', [BaseException], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self) {
-var kwargs = dict ();
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
-}
-}
-delete kwargs.__kwargtrans__;
-}
-var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
-}
-else {
-var args = tuple ();
-}
-self.__args__ = args;
-try {
-self.stack = kwargs.error.stack;
-}
-catch (__except0__) {
-self.stack = 'No stack trace available';
-}
-});},
-get __repr__ () {return __get__ (this, function (self) {
-if (len (self.__args__)) {
-return '{}{}'.format (self.__class__.__name__, repr (tuple (self.__args__)));
-}
-else {
-return '{}()'.format (self.__class__.__name__);
-}
-});},
-get __str__ () {return __get__ (this, function (self) {
-if (len (self.__args__) > 1) {
-return str (tuple (self.__args__));
-}
-else if (len (self.__args__)) {
-return str (self.__args__ [0]);
-}
-else {
-return '';
-}
-});}
+	get __init__ () {return __get__ (this, function (self) {
+		var kwargs = dict ();
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						default: kwargs [__attrib0__] = __allkwargs0__ [__attrib0__];
+					}
+				}
+				delete kwargs.__kwargtrans__;
+			}
+			var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
+		}
+		else {
+			var args = tuple ();
+		}
+		self.__args__ = args;
+		try {
+			self.stack = kwargs.error.stack;
+		}
+		catch (__except0__) {
+			self.stack = 'No stack trace available';
+		}
+	});},
+	get __repr__ () {return __get__ (this, function (self) {
+		if (len (self.__args__)) {
+			return '{}{}'.format (self.__class__.__name__, repr (tuple (self.__args__)));
+		}
+		else {
+			return '{}()'.format (self.__class__.__name__);
+		}
+	});},
+	get __str__ () {return __get__ (this, function (self) {
+		if (len (self.__args__) > 1) {
+			return str (tuple (self.__args__));
+		}
+		else if (len (self.__args__)) {
+			return str (self.__args__ [0]);
+		}
+		else {
+			return '';
+		}
+	});}
 });
 
 export var IterableError =  __class__ ('IterableError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, error) {
-Exception.__init__ (self, "Can't iterate over non-iterable", __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, error) {
+		Exception.__init__ (self, "Can't iterate over non-iterable", __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var StopIteration =  __class__ ('StopIteration', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, error) {
-Exception.__init__ (self, 'Iterator exhausted', __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, error) {
+		Exception.__init__ (self, 'Iterator exhausted', __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var ValueError =  __class__ ('ValueError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var KeyError =  __class__ ('KeyError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var AssertionError =  __class__ ('AssertionError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-if (message) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-}
-else {
-Exception.__init__ (self, __kwargtrans__ ({error: error}));
-}
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		if (message) {
+			Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+		}
+		else {
+			Exception.__init__ (self, __kwargtrans__ ({error: error}));
+		}
+	});}
 });
 
 export var NotImplementedError =  __class__ ('NotImplementedError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var IndexError =  __class__ ('IndexError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var AttributeError =  __class__ ('AttributeError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var py_TypeError =  __class__ ('py_TypeError', [Exception], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self, message, error) {
-Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
-});}
+	get __init__ () {return __get__ (this, function (self, message, error) {
+		Exception.__init__ (self, message, __kwargtrans__ ({error: error}));
+	});}
 });
 
 export var Warning =  __class__ ('Warning', [Exception], {
@@ -1881,192 +2230,192 @@ export var RuntimeWarning =  __class__ ('RuntimeWarning', [Warning], {
 	__module__: __name__,
 });
 export var __sort__ = function (iterable, key, reverse) {
-if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
-var key = null;
-};
-if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
-var reverse = false;
-};
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
-case 'key': var key = __allkwargs0__ [__attrib0__]; break;
-case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
-}
-}
-}
-}
-else {
-}
-if (key) {
-iterable.sort ((function __lambda__ (a, b) {
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'a': var a = __allkwargs0__ [__attrib0__]; break;
-case 'b': var b = __allkwargs0__ [__attrib0__]; break;
-}
-}
-}
-}
-else {
-}
-return (key (a) > key (b) ? 1 : -(1));
+	if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
+		var key = null;
+	};
+	if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
+		var reverse = false;
+	};
+	if (arguments.length) {
+		var __ilastarg0__ = arguments.length - 1;
+		if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+			var __allkwargs0__ = arguments [__ilastarg0__--];
+			for (var __attrib0__ in __allkwargs0__) {
+				switch (__attrib0__) {
+					case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+					case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+					case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+				}
+			}
+		}
+	}
+	else {
+	}
+	if (key) {
+		iterable.sort ((function __lambda__ (a, b) {
+			if (arguments.length) {
+				var __ilastarg0__ = arguments.length - 1;
+				if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+					var __allkwargs0__ = arguments [__ilastarg0__--];
+					for (var __attrib0__ in __allkwargs0__) {
+						switch (__attrib0__) {
+							case 'a': var a = __allkwargs0__ [__attrib0__]; break;
+							case 'b': var b = __allkwargs0__ [__attrib0__]; break;
+						}
+					}
+				}
+			}
+			else {
+			}
+			return (key (a) > key (b) ? 1 : -(1));
 		}));
-}
-else {
-iterable.sort ();
-}
-if (reverse) {
-iterable.reverse ();
-}
+	}
+	else {
+		iterable.sort ();
+	}
+	if (reverse) {
+		iterable.reverse ();
+	}
 };
 export var sorted = function (iterable, key, reverse) {
-if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
-var key = null;
-};
-if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
-var reverse = false;
-};
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
-case 'key': var key = __allkwargs0__ [__attrib0__]; break;
-case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
-}
-}
-}
-}
-else {
-}
-if (py_typeof (iterable) == dict) {
-var result = copy (iterable.py_keys ());
-}
-else {
-var result = copy (iterable);
-}
-__sort__ (result, key, reverse);
-return result;
+	if (typeof key == 'undefined' || (key != null && key .hasOwnProperty ("__kwargtrans__"))) {;
+		var key = null;
+	};
+	if (typeof reverse == 'undefined' || (reverse != null && reverse .hasOwnProperty ("__kwargtrans__"))) {;
+		var reverse = false;
+	};
+	if (arguments.length) {
+		var __ilastarg0__ = arguments.length - 1;
+		if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+			var __allkwargs0__ = arguments [__ilastarg0__--];
+			for (var __attrib0__ in __allkwargs0__) {
+				switch (__attrib0__) {
+					case 'iterable': var iterable = __allkwargs0__ [__attrib0__]; break;
+					case 'key': var key = __allkwargs0__ [__attrib0__]; break;
+					case 'reverse': var reverse = __allkwargs0__ [__attrib0__]; break;
+				}
+			}
+		}
+	}
+	else {
+	}
+	if (py_typeof (iterable) == dict) {
+		var result = copy (iterable.py_keys ());
+	}
+	else {
+		var result = copy (iterable);
+	}
+	__sort__ (result, key, reverse);
+	return result;
 };
 export var map = function (func, iterable) {
-return (function () {
-var __accu0__ = [];
-for (var item of iterable) {
-__accu0__.append (func (item));
-}
-return __accu0__;
-}) ();
+	return (function () {
+		var __accu0__ = [];
+		for (var item of iterable) {
+			__accu0__.append (func (item));
+		}
+		return __accu0__;
+	}) ();
 };
 export var filter = function (func, iterable) {
-if (func == null) {
-var func = bool;
-}
-return (function () {
-var __accu0__ = [];
-for (var item of iterable) {
-if (func (item)) {
-__accu0__.append (item);
-}
-}
-return __accu0__;
-}) ();
+	if (func == null) {
+		var func = bool;
+	}
+	return (function () {
+		var __accu0__ = [];
+		for (var item of iterable) {
+			if (func (item)) {
+				__accu0__.append (item);
+			}
+		}
+		return __accu0__;
+	}) ();
 };
 export var divmod = function (n, d) {
-return tuple ([Math.floor (n / d), __mod__ (n, d)]);
+	return tuple ([Math.floor (n / d), __mod__ (n, d)]);
 };
 
 export var __Terminal__ =  __class__ ('__Terminal__', [object], {
 	__module__: __name__,
-get __init__ () {return __get__ (this, function (self) {
-self.buffer = '';
-try {
-self.element = document.getElementById ('__terminal__');
-}
-catch (__except0__) {
-self.element = null;
-}
-if (self.element) {
-self.element.style.overflowX = 'auto';
-self.element.style.boxSizing = 'border-box';
-self.element.style.padding = '5px';
-self.element.innerHTML = '_';
-}
-});},
-get print () {return __get__ (this, function (self) {
-var sep = ' ';
-var end = '\n';
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-case 'sep': var sep = __allkwargs0__ [__attrib0__]; break;
-case 'end': var end = __allkwargs0__ [__attrib0__]; break;
-}
-}
-}
-var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
-}
-else {
-var args = tuple ();
-}
-self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
-var __accu0__ = [];
-for (var arg of args) {
-__accu0__.append (str (arg));
-}
-return __accu0__;
-}) ()), end).__getslice__ (-(4096), null, 1);
-if (self.element) {
-self.element.innerHTML = self.buffer.py_replace ('\n', '<br>').py_replace (' ', '&nbsp');
-self.element.scrollTop = self.element.scrollHeight;
-}
-else {
-console.log (sep.join ((function () {
-var __accu0__ = [];
-for (var arg of args) {
-__accu0__.append (str (arg));
-}
-return __accu0__;
-}) ()));
-}
-});},
-get input () {return __get__ (this, function (self, question) {
-if (arguments.length) {
-var __ilastarg0__ = arguments.length - 1;
-if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-var __allkwargs0__ = arguments [__ilastarg0__--];
-for (var __attrib0__ in __allkwargs0__) {
-switch (__attrib0__) {
-case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-case 'question': var question = __allkwargs0__ [__attrib0__]; break;
-}
-}
-}
-}
-else {
-}
-self.print ('{}'.format (question), __kwargtrans__ ({end: ''}));
-var answer = window.prompt ('\n'.join (self.buffer.py_split ('\n').__getslice__ (-(16), null, 1)));
-self.print (answer);
-return answer;
-});}
+	get __init__ () {return __get__ (this, function (self) {
+		self.buffer = '';
+		try {
+			self.element = document.getElementById ('__terminal__');
+		}
+		catch (__except0__) {
+			self.element = null;
+		}
+		if (self.element) {
+			self.element.style.overflowX = 'auto';
+			self.element.style.boxSizing = 'border-box';
+			self.element.style.padding = '5px';
+			self.element.innerHTML = '_';
+		}
+	});},
+	get print () {return __get__ (this, function (self) {
+		var sep = ' ';
+		var end = '\n';
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'sep': var sep = __allkwargs0__ [__attrib0__]; break;
+						case 'end': var end = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+			var args = tuple ([].slice.apply (arguments).slice (1, __ilastarg0__ + 1));
+		}
+		else {
+			var args = tuple ();
+		}
+		self.buffer = '{}{}{}'.format (self.buffer, sep.join ((function () {
+			var __accu0__ = [];
+			for (var arg of args) {
+				__accu0__.append (str (arg));
+			}
+			return __accu0__;
+		}) ()), end).__getslice__ (-(4096), null, 1);
+		if (self.element) {
+			self.element.innerHTML = self.buffer.py_replace ('\n', '<br>').py_replace (' ', '&nbsp');
+			self.element.scrollTop = self.element.scrollHeight;
+		}
+		else {
+			console.log (sep.join ((function () {
+				var __accu0__ = [];
+				for (var arg of args) {
+					__accu0__.append (str (arg));
+				}
+				return __accu0__;
+			}) ()));
+		}
+	});},
+	get input () {return __get__ (this, function (self, question) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'question': var question = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		self.print ('{}'.format (question), __kwargtrans__ ({end: ''}));
+		var answer = window.prompt ('\n'.join (self.buffer.py_split ('\n').__getslice__ (-(16), null, 1)));
+		self.print (answer);
+		return answer;
+	});}
 });
 export var __terminal__ = __Terminal__ ();
 export var print = __terminal__.print;
 export var input = __terminal__.input;
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		
+
 //# sourceMappingURL=org.transcrypt.__runtime__.map

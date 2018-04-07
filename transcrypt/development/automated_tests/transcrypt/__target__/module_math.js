@@ -1,8 +1,7 @@
-// Transcrypt'ed from Python, 2018-04-05 23:19:52
+// Transcrypt'ed from Python, 2018-04-07 16:09:28
 import {__envir__, __nest__, __init__, __proxy__, __get__, __getcm__, __getsm__, py_metatype, object, __class__, __pragma__, __call__, __kwargtrans__, __globals__, __super__, property, __setProperty__, assert, __merge__, dir, setattr, getattr, hasattr, delattr, __in__, __specialattrib__, len, __i__, __k__, __t__, float, int, bool, py_typeof, issubclass, isinstance, callable, repr, chr, ord, max, min, abs, round, format, __jsUsePyNext__, __pyUseJsNext__, py_iter, py_next, __PyIterator__, __JsIterator__, py_reversed, zip, range, any, all, sum, enumerate, copy, deepcopy, list, tuple, set, bytearray, bytes, str, dict, __jsmod__, __mod__, __pow__, __neg__, __matmul__, __mul__, __truediv__, __floordiv__, __add__, __sub__, __lshift__, __rshift__, __or__, __xor__, __and__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __imatmul__, __ipow__, __ijsmod__, __imod__, __imul__, __idiv__, __iadd__, __isub__, __ilshift__, __irshift__, __ior__, __ixor__, __iand__, __getitem__, __setitem__, __getslice__, __setslice__, BaseException, Exception, IterableError, StopIteration, ValueError, KeyError, AssertionError, NotImplementedError, IndexError, AttributeError, py_TypeError, Warning, UserWarning, DeprecationWarning, RuntimeWarning, __sort__, sorted, map, filter, divmod, complex, __conj__, __Terminal__, __terminal__, print, input} from './org.transcrypt.__runtime__.js';
-var __name__ = 'module_math';
 import {pi, e, exp, expm1, log, log1p, log2, log10, pow, sqrt, sin, cos, tan, asin, acos, atan, atan2, hypot, degrees, radians, sinh, cosh, tanh, asinh, acosh, atanh, floor, ceil, trunc, isnan, inf, nan, modf} from './math.js';
-export {pi, e, exp, expm1, log, log1p, log2, log10, pow, sqrt, sin, cos, tan, asin, acos, atan, atan2, hypot, degrees, radians, sinh, cosh, tanh, asinh, acosh, atanh, floor, ceil, trunc, isnan, inf, nan, modf};
+var __name__ = 'module_math';
 export var _check = function (nr, autoTester) {
 	if (isinstance (nr, float)) {
 		var nr = str (nr).__getslice__ (0, 15, 1);
@@ -46,5 +45,6 @@ export var run = function (autoTester) {
 	check (isnan (3));
 	check (isnan (nan));
 };
+export {};
 
 //# sourceMappingURL=module_math.map

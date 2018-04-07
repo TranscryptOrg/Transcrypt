@@ -1,7 +1,7 @@
 
-D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\shipment>python D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -da -sf -n -de -ds -dc D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types 
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\shipment>python D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -da -sf -n -ds -dc D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types 
 
-D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\shipment>call D:\python36_anaconda\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -da -sf -n -de -ds -dc D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types 
+D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\shipment>call D:\python36_anaconda\python.exe D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\__main__.py -b -m -da -sf -n -ds -dc D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types 
 Transcrypt (TM) Python to JavaScript Small Sane Subset Transpiler Version 3.7.1
 Copyright (C) Geatec Engineering. License: Apache 2.0
 
@@ -43,9 +43,12 @@ The following inconsistencies were found:
 
 Checking: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types.py
 	Internal error in lightweight consistency checker, remainder of module skipped
-Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/typing/__init__.py
+Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/mod2/__init__.py
+The following inconsistencies were found:
+	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\static_types\mod2\__init__.py:2: error: Incompatible return value type (got "int", expected "str")
+	
 
-Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/typing.js
+Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/mod2.js
 Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/mod1.py
 The following inconsistencies were found:
 	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\static_types\mod1.py:3: error: Incompatible types in assignment (expression has type "float", variable has type "int")
@@ -56,12 +59,9 @@ Performing lightweight consistency check on module: D:/activ_tosh/geatec/transcr
 	Line 3: local variable 'a' is assigned to but never used
 
 Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/mod1.js
-Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/mod2/__init__.py
-The following inconsistencies were found:
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\development\manual_tests\static_types\mod2\__init__.py:2: error: Incompatible return value type (got "int", expected "str")
-	
+Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/typing/__init__.py
 
-Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/mod2.js
+Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/typing.js
 Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/static_types.js
 
 Ready

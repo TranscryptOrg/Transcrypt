@@ -11,10 +11,12 @@ class CommandArgs:
     def __init__ (self):
         self.argParser = argparse.ArgumentParser ()
     
+        self.argParser.add_argument ('-de', '--dextex', help = "show extended exception reports", action = 'store_true')
         self.argParser.add_argument ('-f', '--fcall', help = 'test fast calls', action = 'store_true')
+        
         self.argParser.add_argument ('-i', '--inst', help = 'installed version rather than new one', action = 'store_true')
         self.argParser.add_argument ('-b', '--blind', help = 'don\'t start browser', action = 'store_true')
-        
+
         self.__dict__.update (self.argParser.parse_args () .__dict__)
 
 commandArgs = CommandArgs ()
@@ -27,7 +29,7 @@ appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
-def test (relProgramPrepath, run, switches, outputPrename = '', nodeJs = False):
+def test (relProgramPrepath, run, extraSwitches, outputPrename = '', nodeJs = False):
     # Compute some slugs
     programPrepath = getAbsPath (relProgramPrepath)
     relOutputDir = f'{"/".join (relProgramPrepath.split ("/") [:-1])}/__target__'
@@ -41,8 +43,13 @@ def test (relProgramPrepath, run, switches, outputPrename = '', nodeJs = False):
         os.makedirs (outputDir) # Transcrypt will make outputDir too late, so it has to happen here
     redirect = f' > {outputPrepath}.out' if outputPrename else ''
     
+    # Transit switches
+    transitSwitches = ''
+    if commandArgs.dextex:
+        transitSwitches += '-de '
+    
     # Compile with Transcrypt
-    os.system (f'{transpileCommand} -b -m -da -sf -n -de {switches}{programPrepath}{redirect}')
+    os.system (f'{transpileCommand} -b -m -da -sf -n {transitSwitches}{extraSwitches}{programPrepath}{redirect}')
     
     # Run back to back in CPython
     if run:
@@ -58,6 +65,8 @@ def test (relProgramPrepath, run, switches, outputPrename = '', nodeJs = False):
             '''           
         else:
             webbrowser.open (f'http://localhost:8080/{relProgramPrepath}.html', new = openNewTab)
+            
+os.system ('cls' if os.name == 'nt' else 'clear')
         
 # Start a node http server in the Transcryp/transcrypt directory
 if not commandArgs.blind:
@@ -71,6 +80,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     # test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
     # test ('demos/terminal_demo', 'terminal_demo', False, switches)
     
+    '''
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c ')  
     test ('development/automated_tests/time/autotest', True, switches)    
@@ -105,10 +115,11 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/snowflake', False, switches)
     test ('demos/turtle_demos/mondrian', False, switches)
     test ('demos/turtle_demos/mandala', False, switches)    
-          
+  
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
+    '''
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
    
 '''
