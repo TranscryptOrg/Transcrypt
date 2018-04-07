@@ -1,5 +1,5 @@
 # This is the second 'http' example, demoing the interplay of 'drivers'
-from snabbdom import makeDOMDriver, span, input, div
+# from snabbdom import makeDOMDriver, span, input, div
 d = dict
 
 def log(f):

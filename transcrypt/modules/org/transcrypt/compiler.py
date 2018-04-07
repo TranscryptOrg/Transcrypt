@@ -2678,7 +2678,6 @@ class Generator (ast.NodeVisitor):
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
             
             # Avoid double declarations since imports are immutable (hoisted)
-            print (self.allImportedNames)
             importedNames = ', '.join (sorted ([export for export in runtimeModule.exports if not export in (self.allOwnNames | self.allImportedNames)]))
             
             self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
