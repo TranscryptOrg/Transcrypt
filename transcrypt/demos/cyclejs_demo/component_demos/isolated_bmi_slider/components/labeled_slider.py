@@ -1,6 +1,5 @@
 from components.snabbdom import span, input, div
 
-
 def LabeledSlider(sources):
     'A cycle js component'
     dom_source = sources.DOM

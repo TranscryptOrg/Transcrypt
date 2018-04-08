@@ -7,27 +7,6 @@ Copyright (C) Geatec Engineering. License: Apache 2.0
 
 
 Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/org/transcrypt/__runtime__.py
-The following inconsistencies were found:
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:3: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:3: error: Name '__include__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:4: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:4: error: Name '__include__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:5: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:5: error: Name '__include__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:7: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:9: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:11: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:12: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:13: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:19: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:26: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:99: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:119: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:133: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:235: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:261: error: Name '__pragma__' is not defined
-	D:\activ_tosh\geatec\transcrypt\qquick\Transcrypt\transcrypt\modules\org\transcrypt\__runtime__.py:278: error: Name '__pragma__' is not defined
-	
 
 Saving target code in: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/__target__/org.transcrypt.__runtime__.js
 Performing static type validation on application: D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/static_types/static_types.py

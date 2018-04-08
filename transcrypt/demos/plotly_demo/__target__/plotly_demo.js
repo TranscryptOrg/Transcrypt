@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-07 19:09:33
+// Transcrypt'ed from Python, 2018-04-08 11:00:37
 var itertools = {};
 var math = {};
 var random = {};

@@ -1,5 +1,11 @@
 # This is the second 'http' example, demoing the interplay of 'drivers'
-# from snabbdom import makeDOMDriver, span, input, div
+
+from snabbdom import span, input, div
+'''
+!!! If not explicitly imported, a name like 'input' will be overridden by the Python runtime.
+This used to be different before ES6 modules were introduced.
+'''
+
 d = dict
 
 def log(f):

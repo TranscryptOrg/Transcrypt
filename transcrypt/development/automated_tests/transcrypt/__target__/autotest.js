@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-07 19:08:54
+// Transcrypt'ed from Python, 2018-04-08 10:59:58
 var py_arguments = {};
 var attribs_by_name = {};
 var builtin_super = {};

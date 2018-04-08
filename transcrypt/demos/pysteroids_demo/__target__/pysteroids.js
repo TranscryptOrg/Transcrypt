@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-07 19:09:36
+// Transcrypt'ed from Python, 2018-04-08 11:00:40
 var audio = {};
 var logging = {};
 var math = {};
