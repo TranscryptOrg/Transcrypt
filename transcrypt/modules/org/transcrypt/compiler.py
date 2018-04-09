@@ -26,7 +26,7 @@ import traceback
 import io
 import subprocess
 import shlex
-import shutil # !!!
+import shutil
 import tokenize
 import collections
 
@@ -2477,17 +2477,20 @@ class Generator (ast.NodeVisitor):
                         module = self.useModule (node.module)
                         namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
             if namePairs:
-                # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
-                self.emit ('import {{')
-                for index, namePair in enumerate (namePairs):
-                    if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
-                        self.emitComma (index)
-                        self.emit (self.filterId (namePair.name))
-                        self.allImportedNames.add (namePair.name)
-                        if namePair.asName:
-                            self.emit (' as {}', self.filterId (namePair.asName))
-                            self.allImportedNames.add (namePair.asName)
-                self.emit ('}} from \'{}\';\n', module.importRelPath)
+                try:
+                    # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
+                    self.emit ('import {{')
+                    for index, namePair in enumerate (sorted (namePairs, key = lambda namePair: namePair.asName if namePair.asName else namePair.name)):
+                        if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
+                            self.emitComma (index)
+                            self.emit (self.filterId (namePair.name))
+                            self.allImportedNames.add (namePair.name)
+                            if namePair.asName:
+                                self.emit (' as {}', self.filterId (namePair.asName))
+                                self.allImportedNames.add (namePair.asName)
+                    self.emit ('}} from \'{}\';\n', module.importRelPath)
+                except:
+                    print (traceback.format_exc ())
                     
         except Exception as exception:
             print (traceback.format_exc ())
