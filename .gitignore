@@ -8,7 +8,7 @@
 # ======= Directories anywhere
 __target__/
 __pycache__/
-mypy_cache/
+.mypy_cache/
 dist/
 
 # ======== Directories at specific locations

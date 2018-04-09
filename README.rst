@@ -1,6 +1,8 @@
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
     :alt: Logo
     :target: http://www.transcrypt.org
+    
+**THIS IS AN EXPERMIMENTAL RELEASE TO GAIN EXPERIENCE**
         
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
@@ -121,6 +123,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Everything written in __target__ subdir rather than installation dir
+- Python modules now implemented as ES6 modules pervasively
 - Simple minification added for units (only remove whitespace, names have to stay compatible).
 - Unit example expanded to show combination of units and modules, docs adapted accordingly
 - Python 3.5 incompatibility bug fixed

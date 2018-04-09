@@ -29,7 +29,7 @@ appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
-def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False):
+def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, build = True):
     # Compute some slugs
     sourcePrepath = getAbsPath (relSourcePrepath)
     sourcePrepathSplit = relSourcePrepath.split ("/")
@@ -53,9 +53,11 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     transitSwitches = ''
     if commandArgs.dextex:
         transitSwitches += '-de '
+        
+    buildSwitch = '-b ' if build else ''
     
     # Compile with Transcrypt
-    os.system (f'{transpileCommand} -b -m -da -sf -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    os.system (f'{transpileCommand} -m {buildSwitch}-da -sf -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
     
     # Run back to back in CPython
     if run:
@@ -110,9 +112,9 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/pysteroids_demo/pysteroids', False, switches)
     
     test ('demos/turtle_demos/star', False, switches)
-    test ('demos/turtle_demos/snowflake', False, switches)
-    test ('demos/turtle_demos/mondrian', False, switches)
-    test ('demos/turtle_demos/mandala', False, switches)
+    test ('demos/turtle_demos/snowflake', False, switches, build = False)
+    test ('demos/turtle_demos/mondrian', False, switches, build = False)
+    test ('demos/turtle_demos/mandala', False, switches, build = False)
     
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)

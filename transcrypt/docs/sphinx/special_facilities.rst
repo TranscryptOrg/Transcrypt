@@ -231,7 +231,7 @@ Example:
 	:tab-width: 4
 	:caption: Simple external translator change_case.cpp, changing the case to upper or lower, depending on -l switch
     
-.. literalinclude:: ../../development/manual_tests/xtrans/__target__/test.js
+.. literalinclude:: ../../development/manual_tests/xtrans/test_for_docs.js
 	:tab-width: 4
 	:caption: The resulting translated file test.js
 
