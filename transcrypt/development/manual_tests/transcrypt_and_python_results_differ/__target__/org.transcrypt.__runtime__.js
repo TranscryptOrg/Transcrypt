@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-08 11:00:22
+// Transcrypt'ed from Python, 2018-04-09 10:24:04
 var __name__ = 'org.transcrypt.__runtime__';
 export var __envir__ = {};
 __envir__.interpreter_name = 'python';
@@ -2409,7 +2409,7 @@ export var __Terminal__ =  __class__ ('__Terminal__', [object], {
 		else {
 		}
 		self.print ('{}'.format (question), __kwargtrans__ ({end: ''}));
-		var answer = window.prompt ('\n'.join (self.buffer.py_split ('\n').__getslice__ (-(16), null, 1)));
+		var answer = window.prompt ('\n'.join (self.buffer.py_split ('\n').__getslice__ (-(8), null, 1)));
 		self.print (answer);
 		return answer;
 	});}

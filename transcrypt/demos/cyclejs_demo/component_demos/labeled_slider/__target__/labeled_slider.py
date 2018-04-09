@@ -2,8 +2,9 @@
 
 from snabbdom import span, input, div
 '''
-!!! If not explicitly imported, a name like 'input' will be overridden by the Python runtime.
-This used to be different before ES6 modules were introduced.
+!!! If not explicitly imported, the (slider) 'input' will be overridden by the (dialog box) 'input' from the Python runtime.
+This should somehow be avoidable without introducing lots of aliases, e.g. by a kind of dummy import.
+??? Why was this different before ES6 modules were introduced?
 '''
 
 d = dict

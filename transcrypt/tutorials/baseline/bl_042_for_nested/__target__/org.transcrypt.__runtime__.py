@@ -1,29 +1,29 @@
 # Transcrypt runtime module
 
-__pragma__ ('js', 'export var __envir__ = {{}};\n{}', __include__ ('org/transcrypt/__envir__.js'))
-__pragma__ ('js', '{}', __include__ ('org/transcrypt/__core__.js'))
-__pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.js'))
+#__pragma__ ('js', 'export var __envir__ = {{}};\n{}', __include__ ('org/transcrypt/__envir__.js'))
+#__pragma__ ('js', '{}', __include__ ('org/transcrypt/__core__.js'))
+#__pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.js'))
 
-__pragma__ ('skip')
+#__pragma__ ('skip')
 copy = Math = __typeof__ = __repr__ = document = console = window = 0
-__pragma__ ('noskip')
+#__pragma__ ('noskip')
 
-__pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs investigation
-__pragma__ ('nokwargs')
-__pragma__ ('noalias', 'sort')
+#__pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs investigation
+#__pragma__ ('nokwargs')
+#__pragma__ ('noalias', 'sort')
 
 class BaseException:
     pass
 
 class Exception (BaseException):
-    __pragma__ ('kwargs')
+    #__pragma__ ('kwargs')
     def __init__ (self, *args, **kwargs):
         self.__args__ = args
         try:
             self.stack = kwargs.error.stack # Integrate with JavaScript Error object
         except:
             self.stack = 'No stack trace available'
-    __pragma__ ('nokwargs')
+    #__pragma__ ('nokwargs')
         
     def __repr__ (self):
         if len (self.__args__):
@@ -96,7 +96,7 @@ class DeprecationWarning (Warning):
 class RuntimeWarning (Warning):
     pass
     
-__pragma__ ('kwargs')
+#__pragma__ ('kwargs')
 
 def __sort__ (iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
     if key:
@@ -116,7 +116,7 @@ def sorted (iterable, key = None, reverse = False):
     __sort__ (result, key, reverse)
     return result
 
-__pragma__ ('nokwargs')
+#__pragma__ ('nokwargs')
 
 def map (func, iterable):
     return [func (item) for item in iterable]
@@ -130,7 +130,7 @@ def filter (func, iterable):
 def divmod (n, d):
     return n // d, n % d
     
-__pragma__ ('ifdef', '__complex__')
+#__pragma__ ('ifdef', '__complex__')
 
 class complex:
     def __init__ (self, real, imag = None):
@@ -232,7 +232,7 @@ def __conj__ (aNumber):
     else:
         return complex (aNumber, 0)
         
-__pragma__ ('endif')
+#__pragma__ ('endif')
 
 class __Terminal__:
     '''
@@ -258,7 +258,7 @@ class __Terminal__:
             self.element.style.padding = '5px'
             self.element.innerHTML = '_'
         
-    __pragma__ ('kwargs')
+    #__pragma__ ('kwargs')
         
     def print (self, *args, sep = ' ', end = '\n'):
         self.buffer = '{}{}{}'.format (self.buffer, sep.join ([str (arg) for arg in args]), end) [-4096 : ] 
@@ -271,11 +271,11 @@ class __Terminal__:
         
     def input (self, question):
         self.print ('{}'.format (question), end = '')
-        answer = window.prompt ('\n'.join (self.buffer.split ('\n') [-16:]))
+        answer = window.prompt ('\n'.join (self.buffer.split ('\n') [-8:]))
         self.print (answer)
         return answer
         
-    __pragma__ ('nokwargs')
+    #__pragma__ ('nokwargs')
     
 __terminal__ = __Terminal__ ()
 

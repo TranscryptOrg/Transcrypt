@@ -271,7 +271,7 @@ class __Terminal__:
         
     def input (self, question):
         self.print ('{}'.format (question), end = '')
-        answer = window.prompt ('\n'.join (self.buffer.split ('\n') [-16:]))
+        answer = window.prompt ('\n'.join (self.buffer.split ('\n') [-8:]))
         self.print (answer)
         return answer
         

@@ -29,19 +29,25 @@ appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
-def test (relProgramPrepath, run, extraSwitches, outputPrename = '', nodeJs = False):
+def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False):
     # Compute some slugs
-    programPrepath = getAbsPath (relProgramPrepath)
-    relOutputDir = f'{"/".join (relProgramPrepath.split ("/") [:-1])}/__target__'
-    outputDir = getAbsPath (relOutputDir)
-    relOutputPrepath = f'{relOutputDir}/{outputPrename}'
-    outputPrepath = getAbsPath (relOutputPrepath)
+    sourcePrepath = getAbsPath (relSourcePrepath)
+    sourcePrepathSplit = relSourcePrepath.split ("/")
+    
+    relTargetDir = f'{"/".join (sourcePrepathSplit [:-1])}/__target__'
+    targetDir = getAbsPath (relTargetDir)
+    
+    moduleName = sourcePrepathSplit [-1]
+    targetPrepath = f'{targetDir}/{moduleName}'
+    
+    relMessagePrepath = f'{relTargetDir}/{messagePrename}'
+    messagePrepath = getAbsPath (relMessagePrepath)
     
     # If there are relevant console messages of the compilation process,
     # like with the static typechecking tests, write them into a file that can be served for a visual check
-    if not os.path.exists (outputDir):
-        os.makedirs (outputDir) # Transcrypt will make outputDir too late, so it has to happen here
-    redirect = f' > {outputPrepath}.out' if outputPrename else ''
+    if not os.path.exists (targetDir):
+        os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen here
+    redirect = f' > {messagePrepath}.out' if messagePrename else ''
     
     # Transit switches
     transitSwitches = ''
@@ -49,35 +55,36 @@ def test (relProgramPrepath, run, extraSwitches, outputPrename = '', nodeJs = Fa
         transitSwitches += '-de '
     
     # Compile with Transcrypt
-    os.system (f'{transpileCommand} -b -m -da -sf -n {transitSwitches}{extraSwitches}{programPrepath}{redirect}')
+    os.system (f'{transpileCommand} -b -m -da -sf -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
     
     # Run back to back in CPython
     if run:
-        os.system (f'{transpileCommand} -sf -r {switches}{programPrepath}') 
+        os.system (f'{transpileCommand} -sf -r {switches}{sourcePrepath}')
+        
+    # Apply rollup to obtain monolith, since node doesn't support named imports and exports
+    if nodeJs:
+        os.system (f'rollup {targetPrepath}.js --o {targetPrepath}.bundle.js --f cjs')
     
     openNewTab = 2
     if not commandArgs.blind:
         if nodeJs:
-            '''
-            os.system ('start cmd /k node __target__/{}.js'.format (filePrename))
+            os.system (f'start cmd /k node {targetPrepath}.bundle.js'.format (moduleName))
             time.sleep (5)
-            webbrowser.open ('http://localhost:8080', new = openNewTab)
-            '''           
+            webbrowser.open ('http://localhost:8090', new = openNewTab)           
         else:
-            webbrowser.open (f'http://localhost:8080/{relProgramPrepath}.html', new = openNewTab)
+            webbrowser.open (f'http://localhost:8080/{relSourcePrepath}.html', new = openNewTab)
             
 os.system ('cls' if os.name == 'nt' else 'clear')
         
 # Start a node http server in the Transcryp/transcrypt directory
 if not commandArgs.blind:
-    os.system (f'start cmd /k http-server {appRootDir} -c-1')   # -c-1 means 'Clear cache'
+    os.system (f'start cmd /k http-server {appRootDir} -p8080 -c-1')   # -c-1 means 'Clear cache'
 
 # Allow visual check of command line options
 os.system (f'{transpileCommand} -h')
 
 # Perform all tests
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
-    '''
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c ')  
     test ('development/automated_tests/time/autotest', True, switches)    
@@ -86,13 +93,11 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/module_random/module_random', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
-    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', 'static_types')
+    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
     test ('development/manual_tests/async_await/test', False, switches)
-    '''
     
-    # test ('demos/nodejs_demo', 'nodejs_demo', False, True, switches + '-p .none ')
-    # test ('demos/terminal_demo', 'terminal_demo', False, switches)  
-    '''
+    test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
+    test ('demos/terminal_demo/terminal_demo', False, switches)  
     test ('demos/hello/hello', False, switches)
     test ('demos/jquery_demo/jquery_demo', False, switches)
     test ('demos/d3js_demo/d3js_demo', False, switches)
@@ -112,10 +117,8 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
-    '''
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
     
-    '''
     test ('tutorials/baseline/bl_010_hello_world/hello_world', False, switches)
     test ('tutorials/baseline/bl_020_assign/assign', False, switches)
     test ('tutorials/baseline/bl_030_if_else_prompt/if_else_prompt', False, switches)
@@ -123,9 +126,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_040_for_simple/for_simple', False, switches)
     test ('tutorials/baseline/bl_042_for_nested/for_nested', False, switches)
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches)
-    '''
     
-'''
 # Make docs, the resulting files are untracked
 origDir = os.getcwd ()
 sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
@@ -133,6 +134,5 @@ os.chdir (sphinxDir)
 os.system ('touch *.rst')
 os.system ('make html')
 os.chdir (origDir)
-'''
         
 print ('\nShipment test ready')

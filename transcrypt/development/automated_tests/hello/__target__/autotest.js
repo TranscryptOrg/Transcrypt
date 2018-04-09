@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2018-04-08 10:59:56
+// Transcrypt'ed from Python, 2018-04-09 10:23:37
 var org = {};
 var testlet0 = {};
 var testlet1 = {};
