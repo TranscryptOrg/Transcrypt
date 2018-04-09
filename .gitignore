@@ -3,6 +3,7 @@
 *.pyc
 *.npp
 *.egg-info/
+*.min.html/
 
 # ======= Directories anywhere
 __target__/
