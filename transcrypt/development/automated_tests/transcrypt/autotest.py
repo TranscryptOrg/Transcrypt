@@ -14,6 +14,7 @@ import control_structures
 if __pragma__ ('defined', '__py3.7__'):
     import dashed_numbers
 
+import data_classes
 import data_structures
 import decorators
 import dict_comprehensions
@@ -74,6 +75,7 @@ autoTester.run (control_structures, 'control_structures')
 if __pragma__ ('defined', '__py3.7__'):
     autoTester.run (dashed_numbers, 'dashed_numbers')
 
+autoTester.run (data_classes, 'data_classes')
 autoTester.run (data_structures, 'data_structures')
 autoTester.run (decorators, 'decorators')
 autoTester.run (dict_comprehensions, 'dict_comprehensions')

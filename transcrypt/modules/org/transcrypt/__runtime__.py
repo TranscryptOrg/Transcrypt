@@ -26,8 +26,10 @@ class Exception (BaseException):
     #__pragma__ ('nokwargs')
         
     def __repr__ (self):
-        if len (self.__args__):
+        if len (self.__args__) > 1:
             return '{}{}'.format (self.__class__.__name__, repr (tuple (self.__args__)))
+        elif len (self.__args__):
+            return '{}({})'.format (self.__class__.__name__, repr (self.__args__ [0]))        
         else:
             return '{}()'.format (self.__class__.__name__)
             

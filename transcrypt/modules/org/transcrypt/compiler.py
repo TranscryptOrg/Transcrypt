@@ -1693,7 +1693,7 @@ class Generator (ast.NodeVisitor):
             self.visit (ast.Call (                  # generate __call__ node on the fly and visit it
                 func = ast.Name (
                     id = '__call__',
-                    ctx = ast.Load  # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too the overloading mechanism
+                    ctx = ast.Load  # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
                 ),
                 args = (
                         [node.func, node.func.value] + node.args
@@ -1774,17 +1774,26 @@ class Generator (ast.NodeVisitor):
             self.emit ('\n{}:'.format (self.filterId (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
-
+            
+        # If it's a dataclass (must currently be last decorator)
+        # Remember this fact, to later insert def __init__ into parse tree
+        # Pop dataclass decorator from decorator list
+        isDataClass = False
+        if node.decorator_list:
+            if type (node.decorator_list [-1]) == ast.Name and node.decorator_list [-1] .id == 'dataclass':
+                isDataClass = True
+                node.decorator_list.pop ()
+            
         decoratorsUsed = 0
         if node.decorator_list:
             self.emit (' ')
             if self.allowOperatorOverloading:
-                self.emit ('__call__ (')
+                self.emit ('__call__ (')    # The decorator is called, it may be a ast.Name (paramless) of a function or the result of an ast.Call (with params)
 
             for decorator in node.decorator_list:
                 if decoratorsUsed > 0:
                     self.emit (' (')
-                self.visit (decorator)
+                self.visit (decorator)      # This can either be a ast.Name (paramless dec) or and ast.Call (dec with params)
                 decoratorsUsed += 1
 
             if self.allowOperatorOverloading:
@@ -1811,8 +1820,13 @@ class Generator (ast.NodeVisitor):
 
         self.indent ()
         self.emit ('\n__module__: __name__,')
-        classVarAssigns = []
+        specialClassVarAssigns = []
         index = 0
+        
+        if isDataClass:
+            initHoistFragmentIndex = self.fragmentIndex
+            initHoistIndentLevel = self.indentLevel
+        
         for stmt in node.body:
             if self.isDocString (stmt):
                 pass
@@ -1822,20 +1836,40 @@ class Generator (ast.NodeVisitor):
                 index += 1
             elif type (stmt) == ast.Assign:
                 if (
-                    len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name and
-                    not (type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property')
+                    not isDataClass and len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name and
+                    not (
+                        type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property'
+                    )
                 ):
+                    # No dataclass param, no destructuring assignment, no property, LHS is simple name
                     self.emitComma (index, False)
-                    self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id), stmt.targets)
+                    self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id))
                     self.visit (stmt.value)
                     self.adaptLineNrString (stmt)
                     index += 1
                 else:
+                    # Data class param or destructuring assignment or property or LHS isn't a simple name
                     # Limitation: Can't properly deal with line number in this case
-                    classVarAssigns.append (stmt)   # Has to be done after the class because tuple assignment requires the use of an algorithm.
-                                                    # May also be a property assign
+                    specialClassVarAssigns.append (stmt)    # Has to be done after the class because tuple assignment
+                                                            # requires the use of an algorithm.
+                                                            # May also be a property assignment
+            elif type (stmt) == ast.AnnAssign: 
+                # An annotated assignment is never a destructuring assignment
+                # Its LHS is always a simple name
+                # Also, currently, it's never a property assignment
+                if isDataClass and type (stmt.annotation) == ast.Name and not stmt.annotation.id == 'ClassVar':
+                    # Data class param
+                    specialClassVarAssigns.append (stmt)
+                elif type (stmt.target) == ast.Name:
+                    # LHS is simple name
+                    self.emitComma (index, False)
+                    self.emit ('\n{}: ', self.filterId (stmt.target.id))
+                    self.visit (stmt.value)
+                    self.adaptLineNrString (stmt)
+                    index += 1
+                
             elif self.getPragmaFromExpr (stmt):
-                self.visit (stmt)               # If it's a pragma, just visit it
+                self.visit (stmt)                           # If it's a pragma, just visit it
         self.dedent ()
 
         self.emit ('\n}}')
@@ -1858,9 +1892,73 @@ class Generator (ast.NodeVisitor):
         if self.allowDocAttribs and self.isDocString (node.body [0]):
             self.emitSetDoc (node.body [0])
 
-        for index, classVarAssign in enumerate (classVarAssigns):
-            self.emit (';\n')
-            self.visit (classVarAssign)
+        # Deal with special class var assigns
+        if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
+            nrOfFragmentsToJump = self.fragmentIndex - initHoistFragmentIndex
+            self.fragmentIndex = initHoistFragmentIndex
+            
+            originalIndentLevel = self.indentLevel
+            self.indentLevel = initHoistIndentLevel
+            
+            initArgs = [(
+                (
+                        specialClassVarAssign.targets [0]
+                    if type (specialClassVarAssign) == ast.Assign else
+                        specialClassVarAssign.target
+                ) .id,
+                specialClassVarAssign.value
+            ) for specialClassVarAssign in specialClassVarAssigns]
+            
+            originalAllowKeywordArgs = self.allowKeywordArgs
+            self.allowKeywordArgs = True
+            self.visit (ast.FunctionDef (
+                name = '__init__',
+                args = ast.arguments (
+                    args = (
+                        [ast.arg (arg = 'self', annotation = None)] +
+                        [ast.arg (arg = initArg [0], annotation = None) for initArg in initArgs]
+                    ),
+                    vararg = None,
+                    kwonlyargs = [],
+                    kw_defaults = [],
+                    kwarg = None,
+                    defaults = [initArg [1] for initArg in initArgs]
+                ),
+                body = [
+                    ast.Assign (
+                        targets = [
+                            ast.Attribute (
+                                value = ast.Name (
+                                    id = 'self',
+                                    ctx = ast.Load
+                                ),
+                                attr = initArg [0],
+                                ctx = ast.Store
+                            )
+                        ],
+                        value = ast.Name ( 
+                            id = initArg [0],
+                            ctx = ast.Load
+                        )
+                    )
+                    for initArg in initArgs
+                ],
+                decorator_list = [],
+                returns = None
+            ))
+            self.allowKeywordArgs = originalAllowKeywordArgs
+            self.emit (',')
+            
+            # After inserting at init hoist location, jump forward as much as we jumped back
+            # Simply going back to the original fragment index won't work, since fragments were prepended
+            self.fragmentIndex += nrOfFragmentsToJump
+            
+            # And restore indent level to where we were
+            self.indentLevel = originalIndentLevel
+        else:   # Destructuring class var assignments have to be generated
+            for specialClassVarAssign in specialClassVarAssigns:
+                self.emit (';\n')
+                self.visit (specialClassVarAssign)
 
         self.descope () # No earlier, class vars need it
 
@@ -2142,16 +2240,16 @@ class Generator (ast.NodeVisitor):
         self.visit (node.value)
         
     def visit_AsyncFunctionDef (self, node):
-        self.visit_FunctionDef (node, async = True)
+        self.visit_FunctionDef (node, anAsync = True)
     
-    def visit_FunctionDef (self, node, async = False):
+    def visit_FunctionDef (self, node, anAsync = False):
         def emitScopedBody ():
             self.inscope (node)
 
             self.emitBody (node.body)
             self.dedent ()
 
-            if self.getScope (ast.AsyncFunctionDef if async else ast.FunctionDef) .containsYield:
+            if self.getScope (ast.AsyncFunctionDef if anAsync else ast.FunctionDef) .containsYield:
                 # !!! Check: yield forbidden in AsyncFunctionDef
                 self.targetFragments.insert (yieldStarIndex, '*')
 
@@ -2252,23 +2350,23 @@ class Generator (ast.NodeVisitor):
                 else:
                     self.emit (' (')
 
-                self.emit ('{}function', 'async ' if async else '')
+                self.emit ('{}function', 'async ' if anAsync else '')
 
             else:
                 if isMethod:
                     if jsCall:
-                        self.emit ('{}: function', self.filterId (nodeName), 'async ' if async else '')
+                        self.emit ('{}: function', self.filterId (nodeName), 'async ' if anAsync else '')
                     else:
                         if isStaticMethod:
-                            self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if async else '')
+                            self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if anAsync else '')
                         else:
-                            self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if async else '')
+                            self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')                        
-                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if anAsync else '')
                 else:
-                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if async else '')
+                    self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if anAsync else '')
 
             yieldStarIndex = self.fragmentIndex
 
@@ -2612,7 +2710,7 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         # Remember where hoists have to be inserted in the fragments list     
-        self.hoistFragmentIndex = self.fragmentIndex       
+        self.importHoistFragmentIndex = self.fragmentIndex       
         
         # Let the module know its __name__
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
@@ -2663,11 +2761,11 @@ class Generator (ast.NodeVisitor):
                 self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
         
         # Prepair to generate hoisted fragments near start of fragments
-        self.fragmentIndex = self.hoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+        self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
         
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
-        self.fragmentIndex = self.hoistFragmentIndex
+        self.fragmentIndex = self.importHoistFragmentIndex
         for importNode in reversed (self.importNodes):
             if type (importNode) == ast.Import:
                 self.revisit_Import (importNode)
@@ -2676,7 +2774,7 @@ class Generator (ast.NodeVisitor):
                 
         # Import main module (generatable only late, but hoisted)
         # Place it first, but decimate its imported names last, since they should appear to be overriden by later imports
-        self.fragmentIndex = self.hoistFragmentIndex
+        self.fragmentIndex = self.importHoistFragmentIndex
         if self.module.name != self.module.program.runtimeModuleName:
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
             
@@ -2689,7 +2787,7 @@ class Generator (ast.NodeVisitor):
         # Note that the required importheads are only known after importing modules, but must be inserted in the target code before that,
         # since they must be filled by the imports
         # Place definition of import heads before actual import that includes nesting, even though they are known only after the imports        
-        self.fragmentIndex = self.hoistFragmentIndex
+        self.fragmentIndex = self.importHoistFragmentIndex
         for importHead in sorted (self.importHeads):
             self.emit ('var {} = {{}};\n', self.filterId (importHead))
            
