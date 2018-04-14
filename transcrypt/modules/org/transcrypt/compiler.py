@@ -402,8 +402,6 @@ class Generator (ast.NodeVisitor):
         self.importNodes = []
         self.allOwnNames = set ()
         self.allImportedNames = set ()
-        self.docString = None
-        self.docStringEmitted = False
         self.expectingNonOverloadedLhsIndex = False
         self.lineNr = 1
         self.propList = []
@@ -674,17 +672,12 @@ class Generator (ast.NodeVisitor):
                                                             # So in that case each line is instrumented and instrumentation will be stripped later on
             self.lineNrString = ''
 
-    def isDocString (self, stmt):
+    def isCommentString (self, stmt):
         return isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str)
 
-    def emitSetDoc (self, stmt):
-        self.emit (' .__setdoc__ (')
-        self.visit (stmt)
-        self.emit (')')
-
-    def emitBody (self, body):  # First docstring already removed
+    def emitBody (self, body):
         for stmt in body:
-            if self.isDocString (stmt): # Further docstrings ignored
+            if self.isCommentString (stmt):
                 pass
             else:
                 self.visit (stmt)
@@ -1828,7 +1821,7 @@ class Generator (ast.NodeVisitor):
             initHoistIndentLevel = self.indentLevel
         
         for stmt in node.body:
-            if self.isDocString (stmt):
+            if self.isCommentString (stmt):
                 pass
             elif type (stmt) in (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef):
                 self.emitComma (index, False)
@@ -1889,8 +1882,10 @@ class Generator (ast.NodeVisitor):
         if decoratorsUsed:
             self.emit (')' * decoratorsUsed)
 
-        if self.allowDocAttribs and self.isDocString (node.body [0]):
-            self.emitSetDoc (node.body [0])
+        if self.allowDocAttribs:
+            docString = ast.get_docstring (node)
+            if docString:
+               self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
 
         # Deal with special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
@@ -2397,8 +2392,11 @@ class Generator (ast.NodeVisitor):
             emitScopedBody ()
             self.emit ('}}')
 
-            if self.allowDocAttribs and self.isDocString (node.body [0]):
-                self.emitSetDoc (node.body [0])
+            if self.allowDocAttribs:
+                docString = ast.get_docstring (node)
+                if docString:
+                    self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
+
 
             if decorate:
                 self.emit (')' * decoratorsUsed)
@@ -2718,20 +2716,18 @@ class Generator (ast.NodeVisitor):
         
         # Generate code for the module body
         for stmt in node.body:
-            if self.isDocString (stmt):
-                if not self.docString:  # Remember first docstring seen (may not be first statement, because of a.o. __pragma__ ('docat')
-                    self.docString = stmt
+            if self.isCommentString (stmt):
+                pass
             else:
                 self.visit (stmt)
                 self.emit (';\n')
 
-            # As soon as doc attribs are allowed, emit only once the first one ever seen, to match CPython behaviour
-            if not self.docStringEmitted and self.allowDocAttribs and self.docString:
-                self.emit ('export var __doc__ = ')
-                self.visit (self.docString)
-                self.emit (';\n')
-                self.allOwnNames.add ('__doc__')
-                self.docStringEmitted = True
+        # Store docstring if allowed, can only be done 'late'
+        # since __pragma__ ('docat') or __pragma__ ('nodocat') should precede it
+        if self.allowDocAttribs:
+            docString = ast.get_docstring (node)
+            if docString:
+                self.allOwnNames.add ('__doc__')    # Should be done before generation of exports
                 
         '''
         Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
@@ -2762,7 +2758,11 @@ class Generator (ast.NodeVisitor):
         
         # Prepair to generate hoisted fragments near start of fragments
         self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
-        
+
+        # Insert docstring at hoist location, further hoists are PRE(!)pended
+        if self.allowDocAttribs and docString:
+            self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n'))
+           
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
         self.fragmentIndex = self.importHoistFragmentIndex
@@ -2790,7 +2790,7 @@ class Generator (ast.NodeVisitor):
         self.fragmentIndex = self.importHoistFragmentIndex
         for importHead in sorted (self.importHeads):
             self.emit ('var {} = {{}};\n', self.filterId (importHead))
-           
+            
         # Exit module scope
         self.descope ()
 
