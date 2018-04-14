@@ -476,15 +476,15 @@ class timedelta:
 
     def __repr__(self):
         if self._microseconds:
-            return "datetime.timedelta({}, {}, {})".format(
+            return "datetime.timedelta(days={}, seconds={}, microseconds={})".format(
                                           self._days,
                                           self._seconds,
                                           self._microseconds)
         if self._seconds:
-            return "datetime.timedelta({}, {})".format(
+            return "datetime.timedelta(days={}, seconds={})".format(
                                       self._days,
                                       self._seconds)
-        return "datetime.timedelta({})".format(self._days)
+        return "datetime.timedelta(days={})".format(self._days)
 
     def __str__(self):
         mm, ss = divmod(self._seconds, 60)

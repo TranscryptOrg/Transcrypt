@@ -7,7 +7,7 @@
 
 
 from org.transcrypt.stubs.browser import __main__, __envir__, __pragma__
-from org.transcrypt.autotester.html import HTMLGenerator, DataConverter, JSTesterUI
+from org.transcrypt.autotester.html import HTMLGenerator, DataConverter, JSTesterUI, itemsAreEqual
 
 # Don't import __envir__ from __base__ since it will overwrite __buildin__.__envir__ in the browser
 # Import from stubs will be skipped in the browser
@@ -215,7 +215,7 @@ class AutoTester:
         for i,(refPos, refItem) in enumerate(refData):
             try:
                 testPos,testItem = testData[i]
-                if ( testItem != refItem ):
+                if not itemsAreEqual (testItem, refItem):
                     errCount+=1
             except:
                 errCount+=1

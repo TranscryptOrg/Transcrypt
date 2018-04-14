@@ -36,6 +36,10 @@ excHeaderClass = "exc-header"
 forceCollapseId = "force-collapse"
 forceExpandId = "force-expand"
 
+def itemsAreEqual (item0, item1):
+    # Don't be picky on whitespace, since that would hinder comparing docstrings
+    return ' '.join (item0.split ()) == ' '.join (item1.split ())
+
 class HTMLGenerator(object):
     """ This class generates the HTML template for the autotester results.
     This code is primarily run during the Python execution cycle but
@@ -251,7 +255,7 @@ class JSTesterUI(object):
         # Insert at the end
         row = table.insertRow(-1);
         row.classList.add(clsName)
-        if ( testItem != refItem ):
+        if not itemsAreEqual (testItem, refItem) :
             row.classList.add(faultRowClass)
             refPos = "!!!" + refPos
         else:
