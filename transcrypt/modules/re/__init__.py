@@ -712,19 +712,13 @@ class PyRegExp(Regex):
         @pattern Python Regex String
         @pattern flags bit flags passed by the user.
         """
-        jsTokens, inlineFlags, namedGroups, nCapGroups, n_splits = translate(pyPattern)
-        flags |= inlineFlags
-
-        jsPattern = ''.join(jsTokens)
+        jsPattern, flags, groupindex, nCapGroups = translate(pyPattern, flags)
         Regex.__init__(self, jsPattern, flags)
         self._pypattern = pyPattern
-
-        self._nsplits = n_splits
-        self._jsTokens = jsTokens
         # nCapGroups = the same as self.groups defined in the
         #   base class.
         self._capgroups = nCapGroups
-        self._groupindex = namedGroups
+        self._groupindex = groupindex
 
 def compile(pattern, flags = 0):
     """ Compile a regex object and return
