@@ -182,7 +182,8 @@ def checkMatchWithNamedGroups(test, flags = 0):
 
     if ( r is not None ):
         test.check(r.groups)
-        test.check(r.pattern)
+        # XXX: Need to escape here because of a bug in autotester.
+        test.check(r.pattern.replace("<", "&lt;").replace(">", "&gt;"))
         d = r.groupindex
         __pragma__('skip')
         d = convertMappingDict(d)
@@ -213,7 +214,8 @@ def checkMatchWithNamedGroups(test, flags = 0):
 
     if ( r is not None ):
         test.check(r.groups)
-        test.check(r.pattern)
+        # XXX: Need to escape here because of a bug in autotester.
+        test.check(r.pattern.replace("<", "&lt;").replace(">", "&gt;"))
         d = r.groupindex
         __pragma__('skip')
         d = convertMappingDict(d)
