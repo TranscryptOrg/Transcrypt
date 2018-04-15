@@ -793,7 +793,7 @@ def escape(string):
     __pragma__(
         'js', '{}',
         '''
-        var r = /[^A-Za-z\d]/g;
+        var r = /[^A-Za-z:;\d]/g;
         ret = string.replace(r, replfunc);
         ''')
     if ( ret is not None ):

@@ -89,8 +89,8 @@ os.system (f'{transpileCommand} -h')
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c ')  
-    test ('development/automated_tests/time/autotest', True, switches)    
-    test ('development/automated_tests/re/autotest', True, switches)  
+    test ('development/automated_tests/time/autotest', True, switches)
+    test ('development/automated_tests/re/autotest', True, switches)
     
     test ('development/manual_tests/module_random/module_random', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
@@ -117,7 +117,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/mandala', False, switches, build = False)
     
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
-    test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
+    test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches, build = False)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
     
