@@ -14,7 +14,7 @@ class C:
         self.a = p
         self.b = 2000
         autoTester.check (self.x, self.y, self.a)
-        return f'a: {self.a}, b: {self.b}'
+        return f'something(a: {self.a}, b: {self.b})'
 
 def run (autoTester):
     c = C (y = 200, zz = 330)

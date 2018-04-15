@@ -1955,18 +1955,21 @@ class Generator (ast.NodeVisitor):
                 ],
                 [
                     ast.FormattedValue (
-                        value = ast.Name (
-                            id = 'self',
+                        value = ast.Attribute (
+                            value = ast.Name (
+                                id = 'self',
+                                ctx = ast.Load
+                            ),
+                            attr = initArg [0],
                             ctx = ast.Load
-                        ), $$$
-                        attr = initArg [0],
+                        ),
                         conversion = -1,
                         format_spec = None
                     )
                     for initArg in initArgs
                 ]
             ))
-            values = [value for aTuple in tuples for value in aTuple]   # Flatten list of tuples that results from zip        
+            values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
             self.visit (ast.FunctionDef (
                 name = '__repr__',
                 args = ast.arguments (
