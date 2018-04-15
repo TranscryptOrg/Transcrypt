@@ -12,6 +12,12 @@ def run (test):
     exercise most of the methods to make sure they behave as
     expected. These tests are expected to provide exhaustive
     coverage of the regex engine.
+
+    Note that we can only test the features
+    supported by the browsers regex engine. Advanced features
+    like named capture groups are only available when not using
+    the JSSTRICT flag (which indicates that the browser engine
+    should be used).
     """
     checkFlagsExist(test)
     escapeTests(test)
@@ -23,15 +29,9 @@ def run (test):
     checkSearchWithGroups(test, re.JSSTRICT)
     checkMatchOps(test, re.JSSTRICT)
     checkMatchWithGroups(test, re.JSSTRICT)
-    #checkMatchWithNamedGroups(test, re.JSSTRICT)
-
     checkFullMatchOps(test, re.JSSTRICT)
     checkFindAllOps(test, re.JSSTRICT)
     checkSplitOps(test, re.JSSTRICT)
     checkSubOps(test, re.JSSTRICT)
     checkSyntaxErrors(test, re.JSSTRICT)
-    #checkConditionalGroups(test, re.JSSTRICT)
-    #checkCommentGroup(test, re.JSSTRICT)
-    #checkWithFlags(test, re.JSSTRICT)
-
     checkFindIter(test, re.JSSTRICT)

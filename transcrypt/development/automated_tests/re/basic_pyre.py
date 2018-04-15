@@ -25,13 +25,13 @@ def run (test):
     checkSearchWithGroups(test)
     checkMatchOps(test)
     checkMatchWithGroups(test)
-    # checkMatchWithNamedGroups(test)           # !!! @JdeH temporarily disabled this
+    checkMatchWithNamedGroups(test)
     checkFullMatchOps(test)
     checkFindAllOps(test)
     checkSplitOps(test)
     checkSubOps(test)
     checkSyntaxErrors(test)
-    checkConditionalGroups(test)
+    # checkConditionalGroups(test)
     checkCommentGroup(test)
     checkWithFlags(test)
 
