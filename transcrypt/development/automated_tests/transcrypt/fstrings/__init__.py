@@ -10,7 +10,7 @@ def run (autoTester):
     autoTester.check (aDict)
     autoTester.check (str (aDict))
     autoTester.check (repr (aDict))
-    autoTester.check ('aDictionary: ({}, {})' .format ('aDict', 'aDict ["one"]'))
+    autoTester.check ('aDictionary: ({}, {})' .format (aDict, aDict ["one"]))
     autoTester.check (f'aDictionary: ({aDict}, {aDict ["one"]})')
     autoTester.check (f'aSet: ({aSet}, {"rose" in aSet})')
     autoTester.check (f'anArray ({anArray}, {anArray [1:4]}, {anArray [5]})')

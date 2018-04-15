@@ -209,7 +209,7 @@ class AutoTester:
 
     def _getTotalErrorCnt(self, testData, refData):
         """ This method determines the total number of non-matching
-            values in the test and reference data for a particular module.
+        values in the test and reference data for a particular module.
         """
         errCount = 0
         for i,(refPos, refItem) in enumerate(refData):

@@ -24,10 +24,7 @@ import div_pulls
 import docstrings
 import exceptions
 import extended_slices
-
-if __pragma__ ('defined', '__py3.6__'):
-    import fstrings
-
+import fstrings
 import general_functions
 # import globals_function
 import indices_and_slices
@@ -71,10 +68,7 @@ autoTester.run (classes, 'classes')
 autoTester.run (complex_numbers, 'complex_numbers')
 autoTester.run (conditional_expressions, 'conditional_expressions')
 autoTester.run (control_structures, 'control_structures')
-
-if __pragma__ ('defined', '__py3.7__'):
-    autoTester.run (dashed_numbers, 'dashed_numbers')
-
+autoTester.run (dashed_numbers, 'dashed_numbers')
 autoTester.run (data_classes, 'data_classes')
 autoTester.run (data_structures, 'data_structures')
 autoTester.run (decorators, 'decorators')
@@ -83,13 +77,9 @@ autoTester.run (dictionaries, 'dictionaries')
 autoTester.run (div_issues, 'div_issues')
 autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (docstrings, 'docstrings')
-
 autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
-
-if __pragma__ ('defined', '__py3.6__'):
-    autoTester.run (fstrings, 'fstrings')
-
+autoTester.run (fstrings, 'fstrings')
 autoTester.run (general_functions, 'general_functions')
 # autoTester.run (globals_function, 'globals_function')
 autoTester.run (indices_and_slices, 'indices_and_slices')

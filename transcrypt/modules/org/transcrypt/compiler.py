@@ -1904,8 +1904,9 @@ class Generator (ast.NodeVisitor):
                 specialClassVarAssign.value
             ) for specialClassVarAssign in specialClassVarAssigns]
             
+            # Generate __init__
             originalAllowKeywordArgs = self.allowKeywordArgs
-            self.allowKeywordArgs = True
+            self.allowKeywordArgs = True            
             self.visit (ast.FunctionDef (
                 name = '__init__',
                 args = ast.arguments (
@@ -1941,8 +1942,65 @@ class Generator (ast.NodeVisitor):
                 decorator_list = [],
                 returns = None
             ))
-            self.allowKeywordArgs = originalAllowKeywordArgs
             self.emit (',')
+            self.allowKeywordArgs = originalAllowKeywordArgs
+            
+            # Generate __repr__
+            tuples = list (zip (
+                [
+                    ast.Str (
+                        s = f'{", " if index else f"{node.name}("}{initArg [0]}='
+                    )
+                    for index, initArg in enumerate (initArgs)
+                ],
+                [
+                    ast.FormattedValue (
+                        value = ast.Name (
+                            id = 'self',
+                            ctx = ast.Load
+                        ), $$$
+                        attr = initArg [0],
+                        conversion = -1,
+                        format_spec = None
+                    )
+                    for initArg in initArgs
+                ]
+            ))
+            values = [value for aTuple in tuples for value in aTuple]   # Flatten list of tuples that results from zip        
+            self.visit (ast.FunctionDef (
+                name = '__repr__',
+                args = ast.arguments (
+                    args = (
+                        [ast.arg (arg = 'self', annotation = None)]
+                    ),
+                    vararg = None,
+                    kwonlyargs = [],
+                    kw_defaults = [],
+                    kwarg = None,
+                    defaults = []
+                ),
+                body = [
+                    ast.Return (
+                        ast.JoinedStr (
+                            values = values
+                        )
+                    )
+                ],
+                decorator_list = []
+            ))
+            self.emit (',')
+            
+            # Generate __eq__
+            
+            # Generate __ne__
+            
+            # Generate __lt__
+            
+            # Generate __le__
+            
+            # Generate __gt__
+            
+            # Generate __ge__
             
             # After inserting at init hoist location, jump forward as much as we jumped back
             # Simply going back to the original fragment index won't work, since fragments were prepended
