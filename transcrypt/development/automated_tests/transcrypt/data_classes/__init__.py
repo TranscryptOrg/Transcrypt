@@ -25,4 +25,6 @@ def run (autoTester):
     cc.t = 4000
     for obj in c, cc:
         autoTester.check (obj.x, obj.y, obj.yy, obj.z, obj.zz, obj.t, obj.a, obj.b)
+    autoTester.check (c.__repr__ ())
+    autoTester.check (cc.__repr__ ())
     

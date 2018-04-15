@@ -1813,6 +1813,7 @@ class Generator (ast.NodeVisitor):
 
         self.indent ()
         self.emit ('\n__module__: __name__,')
+        classVarAssigns = []
         specialClassVarAssigns = []
         index = 0
         
@@ -1828,6 +1829,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (stmt)
                 index += 1
             elif type (stmt) == ast.Assign:
+                classVarAssigns.append (stmt)
                 if (
                     not isDataClass and len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name and
                     not (
@@ -1850,6 +1852,7 @@ class Generator (ast.NodeVisitor):
                 # An annotated assignment is never a destructuring assignment
                 # Its LHS is always a simple name
                 # Also, currently, it's never a property assignment
+                classVarAssigns.append (stmt)
                 if isDataClass and type (stmt.annotation) == ast.Name and not stmt.annotation.id == 'ClassVar':
                     # Data class param
                     specialClassVarAssigns.append (stmt)
@@ -1895,14 +1898,25 @@ class Generator (ast.NodeVisitor):
             originalIndentLevel = self.indentLevel
             self.indentLevel = initHoistIndentLevel
             
-            initArgs = [(
+            initArgs = [
                 (
-                        specialClassVarAssign.targets [0]
-                    if type (specialClassVarAssign) == ast.Assign else
-                        specialClassVarAssign.target
-                ) .id,
-                specialClassVarAssign.value
-            ) for specialClassVarAssign in specialClassVarAssigns]
+                    (
+                            specialClassVarAssign.targets [0]
+                        if type (specialClassVarAssign) == ast.Assign else
+                            specialClassVarAssign.target
+                    ) .id,
+                    specialClassVarAssign.value
+                ) for specialClassVarAssign in specialClassVarAssigns
+            ]
+            
+            classVarNames = [
+                (
+                        classVarAssign.targets [0]
+                    if type (classVarAssign) == ast.Assign else
+                        classVarAssign.target
+                ) .id
+                for classVarAssign in classVarAssigns
+            ]
             
             # Generate __init__
             originalAllowKeywordArgs = self.allowKeywordArgs
@@ -1949,9 +1963,9 @@ class Generator (ast.NodeVisitor):
             tuples = list (zip (
                 [
                     ast.Str (
-                        s = f'{", " if index else f"{node.name}("}{initArg [0]}='
+                        s = f'{", " if index else f"{node.name}("}{classVarName}='
                     )
-                    for index, initArg in enumerate (initArgs)
+                    for index, classVarName in enumerate (classVarNames)
                 ],
                 [
                     ast.FormattedValue (
@@ -1960,13 +1974,13 @@ class Generator (ast.NodeVisitor):
                                 id = 'self',
                                 ctx = ast.Load
                             ),
-                            attr = initArg [0],
+                            attr = classVarName,
                             ctx = ast.Load
                         ),
                         conversion = -1,
                         format_spec = None
                     )
-                    for initArg in initArgs
+                    for classVarName in classVarNames
                 ]
             ))
             values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
