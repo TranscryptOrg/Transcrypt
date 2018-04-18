@@ -914,7 +914,7 @@ export function deepcopy (anObject) {
 // List extensions to Array
 
 export function list (iterable) {                                      // All such creators should be callable without new
-    var instance = iterable ? Array.from (iterable) : [];
+    let instance = iterable ? Array.from (iterable) : [];
     // Sort is the normal JavaScript sort, Python sort is a non-member function
     return instance;
 }
@@ -939,8 +939,8 @@ Array.prototype.__getslice__ = function (start, stop, step) {
         stop = this.length;
     }
 
-    var result = list ([]);
-    for (var index = start; index < stop; index += step) {
+    let result = list ([]);
+    for (let index = start; index < stop; index += step) {
         result.push (this [index]);
     }
 
@@ -963,8 +963,8 @@ Array.prototype.__setslice__ = function (start, stop, step, source) {
         Array.prototype.splice.apply (this, [start, stop - start] .concat (source));
     }
     else {              // Assign to extended slice, replace designated items one by one
-        var sourceIndex = 0;
-        for (var targetIndex = start; targetIndex < stop; targetIndex += step) {
+        let sourceIndex = 0;
+        for (let targetIndex = start; targetIndex < stop; targetIndex += step) {
             this [targetIndex] = source [sourceIndex++];
         }
     }
@@ -975,9 +975,9 @@ Array.prototype.__repr__ = function () {
         return 'set()';
     }
 
-    var result = !this.__class__ || this.__class__ == list ? '[' : this.__class__ == tuple ? '(' : '{';
+    let result = !this.__class__ || this.__class__ == list ? '[' : this.__class__ == tuple ? '(' : '{';
 
-    for (var index = 0; index < this.length; index++) {
+    for (let index = 0; index < this.length; index++) {
         if (index) {
             result += ', ';
         }
@@ -1011,7 +1011,7 @@ Array.prototype.insert = function (index, element) {
 };
 
 Array.prototype.remove = function (element) {
-    var index = this.indexOf (element);
+    let index = this.indexOf (element);
     if (index == -1) {
         throw ValueError ("list.remove(x): x not in list", new Error ());
     }
@@ -1043,8 +1043,8 @@ Array.prototype.__add__ = function (aList) {
 };
 
 Array.prototype.__mul__ = function (scalar) {
-    var result = this;
-    for (var i = 1; i < scalar; i++) {
+    let result = this;
+    for (let i = 1; i < scalar; i++) {
         result = result.concat (this);
     }
     return result;
@@ -1055,7 +1055,7 @@ Array.prototype.__rmul__ = Array.prototype.__mul__;
 // Tuple extensions to Array
 
 export function tuple (iterable) {
-    var instance = iterable ? [] .slice.apply (iterable) : [];
+    let instance = iterable ? [] .slice.apply (iterable) : [];
     instance.__class__ = tuple; // Not all arrays are tuples
     return instance;
 }
@@ -1066,9 +1066,9 @@ tuple.__bases__ = [object];
 // N.B. Since sets are unordered, set operations will occasionally alter the 'this' array by sorting it
 
 export function set (iterable) {
-    var instance = [];
+    let instance = [];
     if (iterable) {
-        for (var index = 0; index < iterable.length; index++) {
+        for (let index = 0; index < iterable.length; index++) {
             instance.add (iterable [index]);
         }
     }
@@ -1083,12 +1083,12 @@ Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into
 
     element += '';
 
-    var mindex = 0;
-    var maxdex = this.length - 1;
+    let mindex = 0;
+    let maxdex = this.length - 1;
 
     while (mindex <= maxdex) {
-        var index = (mindex + maxdex) / 2 | 0;
-        var middle = this [index] + '';
+        let index = (mindex + maxdex) / 2 | 0;
+        let middle = this [index] + '';
 
         if (middle < element) {
             mindex = index + 1;
@@ -1119,7 +1119,7 @@ Array.prototype.discard = function (element) {
 
 Array.prototype.isdisjoint = function (other) {
     this.sort ();
-    for (var i = 0; i < other.length; i++) {
+    for (let i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) != -1) {
             return false;
         }
@@ -1129,7 +1129,7 @@ Array.prototype.isdisjoint = function (other) {
 
 Array.prototype.issuperset = function (other) {
     this.sort ();
-    for (var i = 0; i < other.length; i++) {
+    for (let i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) == -1) {
             return false;
         }
@@ -1142,8 +1142,8 @@ Array.prototype.issubset = function (other) {
 };
 
 Array.prototype.union = function (other) {
-    var result = set (this.slice () .sort ());
-    for (var i = 0; i < other.length; i++) {
+    let result = set (this.slice () .sort ());
+    for (let i = 0; i < other.length; i++) {
         if (result.__bindexOf__ (other [i]) == -1) {
             result.push (other [i]);
         }
@@ -1153,8 +1153,8 @@ Array.prototype.union = function (other) {
 
 Array.prototype.intersection = function (other) {
     this.sort ();
-    var result = set ();
-    for (var i = 0; i < other.length; i++) {
+    let result = set ();
+    for (let i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) != -1) {
             result.push (other [i]);
         }
@@ -1163,9 +1163,9 @@ Array.prototype.intersection = function (other) {
 };
 
 Array.prototype.difference = function (other) {
-    var sother = set (other.slice () .sort ());
-    var result = set ();
-    for (var i = 0; i < this.length; i++) {
+    let sother = set (other.slice () .sort ());
+    let result = set ();
+    for (let i = 0; i < this.length; i++) {
         if (sother.__bindexOf__ (this [i]) == -1) {
             result.push (this [i]);
         }
@@ -1178,9 +1178,9 @@ Array.prototype.symmetric_difference = function (other) {
 };
 
 Array.prototype.py_update = function () {   // O (n)
-    var updated = [] .concat.apply (this.slice (), arguments) .sort ();
+    let updated = [] .concat.apply (this.slice (), arguments) .sort ();
     this.py_clear ();
-    for (var i = 0; i < updated.length; i++) {
+    for (let i = 0; i < updated.length; i++) {
         if (updated [i] != updated [i - 1]) {
             this.push (updated [i]);
         }
@@ -1195,7 +1195,7 @@ Array.prototype.__eq__ = function (other) { // Also used for list
         this.sort ();
         other.sort ();
     }
-    for (var i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length; i++) {
         if (this [i] != other [i]) {
             return false;
         }
@@ -1208,19 +1208,53 @@ Array.prototype.__ne__ = function (other) { // Also used for list
 };
 
 Array.prototype.__le__ = function (other) {
-    return this.issubset (other);
+    if (this.__class__ == set) {
+        return this.issubset (other);
+    }
+    else {
+        for (let i = 0; i < this.length; i++) {
+            if (this [i] > other [i]) {
+                return false;
+            }
+            else if (this [i] < other [i]) {
+                return true;
+            }
+        }
+        return true;
+    }
 };
 
 Array.prototype.__ge__ = function (other) {
-    return this.issuperset (other);
+    if (this.__class__ == set) {
+        return this.issuperset (other);
+    }
+    else {
+        for (let i = 0; i < this.length; i++) {
+            if (this [i] < other [i]) {
+                return false;
+            }
+            else if (this [i] > other [i]) {
+                return true;
+            }
+        }
+        return true;
+    }
 };
 
 Array.prototype.__lt__ = function (other) {
-    return this.issubset (other) && !this.issuperset (other);
+    return (
+        this.__class__ == set ?
+        this.issubset (other) && !this.issuperset (other) :
+        !this.__ge__ (other)
+    );
 };
 
 Array.prototype.__gt__ = function (other) {
-    return this.issuperset (other) && !this.issubset (other);
+    return (
+        this.__class__ == set ?
+        this.issuperset (other) && !this.issubset (other) :
+        !this.__le__ (other)
+    );
 };
 
 // Byte array extensions
@@ -1230,13 +1264,13 @@ export function bytearray (bytable, encoding) {
         return new Uint8Array (0);
     }
     else {
-        var aType = py_typeof (bytable);
+        let aType = py_typeof (bytable);
         if (aType == int) {
             return new Uint8Array (bytable);
         }
         else if (aType == str) {
-            var aBytes = new Uint8Array (len (bytable));
-            for (var i = 0; i < len (bytable); i++) {
+            let aBytes = new Uint8Array (len (bytable));
+            for (let i = 0; i < len (bytable); i++) {
                 aBytes [i] = bytable.charCodeAt (i);
             }
             return aBytes;
@@ -1254,15 +1288,15 @@ export var bytes = bytearray;
 
 
 Uint8Array.prototype.__add__ = function (aBytes) {
-    var result = new Uint8Array (this.length + aBytes.length);
+    let result = new Uint8Array (this.length + aBytes.length);
     result.set (this);
     result.set (aBytes, this.length);
     return result;
 };
 
 Uint8Array.prototype.__mul__ = function (scalar) {
-    var result = new Uint8Array (scalar * this.length);
-    for (var i = 0; i < scalar; i++) {
+    let result = new Uint8Array (scalar * this.length);
+    for (let i = 0; i < scalar; i++) {
         result.set (this, i * this.length);
     }
     return result;

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
-@dataclass
+@dataclass (order = True)
 class C:
     x: ClassVar = 10
     y: int = 20
@@ -23,8 +23,27 @@ def run (autoTester):
     c.t = 400
     cc.f (456, autoTester)
     cc.t = 4000
+    
     for obj in c, cc:
         autoTester.check (obj.x, obj.y, obj.yy, obj.z, obj.zz, obj.t, obj.a, obj.b)
+        
     autoTester.check (c.__repr__ ())
-    autoTester.check (cc.__repr__ ())
+    autoTester.check (cc.__repr__ ()) 
+    
+    #__pragma__ ('opov')
+    
+    autoTester.check (c == cc)
+    autoTester.check (c != cc)
+    
+    autoTester.check (c < cc)
+    autoTester.check (c > cc)  #
+    autoTester.check (c <= cc) #
+    autoTester.check (c >= cc)
+    
+    autoTester.check (c == c)
+    autoTester.check (c != c)
+    autoTester.check (c < c)
+    autoTester.check (c > c)
+    autoTester.check (c <= c)
+    autoTester.check (c >= c)
     

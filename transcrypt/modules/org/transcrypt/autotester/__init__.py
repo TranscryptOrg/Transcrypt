@@ -81,7 +81,7 @@ def getFileLocation(ancestor):
             lineno = m[5]
             return( "{}:{}".format(filename, lineno) )
         else:
-            __pragma__('js', '{}', 'console.log("Failed to Match Frame");')
+            __pragma__('js', '{}', 'console.log("Failed to Match Frame", gpFrame);')
             return("UNKNOWN:???")
     #ELSE
     # Needed because Transcrypt imports are compile time

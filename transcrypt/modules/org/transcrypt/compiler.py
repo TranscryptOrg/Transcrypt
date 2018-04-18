@@ -34,6 +34,7 @@ from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
 inIf = False
 
+dataClassDefaultArgTuple = (['init', True], ['repr', True], ['eq', True], ['order', False], ['unsafe_hash', False], ['frozen', False])
 '''
 All files required for deployment are placed in subdirectory __target__ of the application.
 Each module has an unambiguous dotted path, always from one of the module roots, never relative.
@@ -1027,7 +1028,7 @@ class Generator (ast.NodeVisitor):
                 )
 
     def visit_AnnAssign (self, node):
-        if node.value != None:  # Rather than a node.value is a NameConstant with value None
+        if node.value != None:  # Rather than node.value is a NameConstant with value None
             self.visit (
                 ast.Assign (
                     [node.target],
@@ -1325,7 +1326,7 @@ class Generator (ast.NodeVisitor):
     def visit_Bytes (self, node):
         self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
 
-    def visit_Call (self, node):
+    def visit_Call (self, node, dataClassArgDict = None):
         self.adaptLineNrString (node)
 
         def emitKwargTrans ():
@@ -1389,21 +1390,31 @@ class Generator (ast.NodeVisitor):
             except:
                 print (traceback.format_exc ())
                 
+        # For a start, some special cases of calls to follow
         if type (node.func) == ast.Name:
+
+            
+            # type () function
             if node.func.id == 'type':
                 self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
                 self.visit (node.args [0])
                 self.emit (')')
                 return
+
+            
+            #property () factory function
             elif node.func.id == 'property':
                 self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, self.filterId (node.args [0].id)))
                 if len (node.args) > 1:
                     self.emit (', {}.{}'.format (self.getScope (ast.ClassDef) .node.name, node.args [1].id))
                 self.emit (')')
                 return
+
+            # globals () function
             elif node.func.id == 'globals':
                 self.emit ('__globals__ (__all__)')
                 return
+            # __pragma__'s in many varieties, syntactically calls, but semantically compile time directives
             elif node.func.id == '__pragma__':
                 if node.args [0] .s == 'alias':
                     self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
@@ -1562,31 +1573,40 @@ class Generator (ast.NodeVisitor):
                         )
                     )
                 return
+            # __new__ () 'call' to generate JavaScript's new operator
             elif node.func.id == '__new__':
                 self.emit ('new ')
                 self.visit (node.args [0])
                 return
+            # __typeof__ () 'call' will generate JavaScript's typeof operator
             elif node.func.id == '__typeof__':
                 self.emit ('typeof ')
                 self.visit (node.args [0])
                 return
+
+            # __preinc__ () will emit ++<operand>, for speed, e.g. in NumScrypt
             elif node.func.id == '__preinc__':
                 self.emit ('++')
                 self.visit (node.args [0])
                 return
+
+            # __postinc__ () will emit <operand>++,
             elif node.func.id == '__postinc__':
                 self.visit (node.args [0])
                 self.emit ('++')
                 return
+            # __predec__ () will emit --<operand>
             elif node.func.id == '__predec__':
                 self.emit ('--')
                 self.visit (node.args [0])
                 return
+            # __postdec__ () will emit <operand>
             elif node.func.id == '__postdec__':
                 self.visit (node.args [0])
                 self.emit ('--')
                 return
                 
+        # conjugate () call, for complex numbers, will generate __conj__ () call to runtime
         elif (
             type (node.func) == ast.Attribute and
             node.func.attr == 'conjugate'
@@ -1605,7 +1625,7 @@ class Generator (ast.NodeVisitor):
                 return
             except:
                 print (traceback.format_exc ())
-            
+        # send () call    
         elif (
             type (node.func) == ast.Attribute and 
             self.replaceSend and
@@ -1631,12 +1651,15 @@ class Generator (ast.NodeVisitor):
             self.emit ('}}) ()')
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
             
+
+        # super () call
         elif (
             type (node.func) == ast.Attribute and
             type (node.func.value) == ast.Call and
             type (node.func.value.func) == ast.Name and
             node.func.value.func.id == 'super'
         ):
+
             if node.func.value.args or node.func.value.keywords:
                 raise utils.Error (
                     lineNr = self.lineNr,
@@ -1676,6 +1699,9 @@ class Generator (ast.NodeVisitor):
                 )
                 return
         
+
+
+        # Generate call to __call__ rather than direct call, to facilitate operator overloading, if that is allowed
         if (
             self.allowOperatorOverloading and       # If operator overloading and
             not (                                   # whe're not already in the __call__ that we generated on the fly,
@@ -1683,6 +1709,7 @@ class Generator (ast.NodeVisitor):
                 node.func.id == '__call__'
             )
         ):
+
             self.visit (ast.Call (                  # generate __call__ node on the fly and visit it
                 func = ast.Name (
                     id = '__call__',
@@ -1701,61 +1728,47 @@ class Generator (ast.NodeVisitor):
                 keywords = node.keywords
             ))
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
+        # We're in a parametrized dataclass decorator, switch some data class code generation options   
+        if dataClassArgDict != None:
+            # Start out with the defaults
+            dataClassArgTuple = copy.deepcopy (dataClassDefaultArgTuple)
+            
+            # Adapt positional args)
+            for index, expr in enumerate (node.args):
+                value = None
+                if expr == ast.NameConstant:
+                    value = True if expr.value == 'True' else False if expr.value == 'False' else None
+                if value != None:
+                    dataClassArgTuple [index][1] = value
+                else:
+                    raise utils.Error (message = 'Arguments to @dataclass can only be constants True or False')
+            
+            # Adapt keyword args
+            dataClassArgDict.update (dict (dataClassArgTuple))
+            
+            for keyword in node.keywords:
+                dataClassArgDict [keyword.arg] = keyword.value
+            return
 
+        # If we end up here, finally we're in an ordinary function call
         self.visit (node.func)
+        self.emit (' (')
 
-        if self.module.program.javascriptVersion >= 6:
-            self.emit (' (')
+        # Emit positional args
+        for index, expr in enumerate (node.args):
+            self.emitComma (index)
 
-            for index, expr in enumerate (node.args):
-                self.emitComma (index)
+            if type (expr) == ast.Starred:
+                self.emit ('...')
 
-                if type (expr) == ast.Starred:
-                    self.emit ('...')
+            self.visit (expr)
 
-                self.visit (expr)
+        # Emit keyword args
+        if node.keywords:
+            self.emitComma (len (node.args))
+            emitKwargTrans ()
 
-            if node.keywords:
-                self.emitComma (len (node.args))
-                emitKwargTrans ()
-
-            self.emit (')')
-        else:
-            for index, expr in enumerate (node.args):
-                if type (expr) == ast.Starred:
-                    self.emit ('.apply (null, ')    # Note that in generated a.b.f (), a.b.f is a bound function already
-
-                    for index, expr in enumerate (node.args):
-                        if index:
-                            self.emit ('.concat (')
-                        if type (expr) == ast.Starred:
-                            self.visit (expr)
-                        else:
-                            self.emit ('[')
-                            self.visit (expr)
-                            self.emit (']')
-                        if index:
-                            self.emit (')')
-
-                    if node.keywords:
-                        self.emit ('.concat ([')    # At least *args was present before this point
-                        emitKwargTrans ()
-                        self.emit ('])')
-
-                    self.emit (')')
-                    break;
-            else:
-                self.emit (' (')
-
-                for index, expr in enumerate (node.args):
-                    self.emitComma (index)
-                    self.visit (expr)
-
-                if node.keywords:
-                    self.emitComma (len (node.args))
-                    emitKwargTrans ()
-
-                self.emit (')')
+        self.emit (')')
 
     def visit_ClassDef (self, node):
         self.adaptLineNrString (node)
@@ -1775,8 +1788,13 @@ class Generator (ast.NodeVisitor):
         if node.decorator_list:
             if type (node.decorator_list [-1]) == ast.Name and node.decorator_list [-1] .id == 'dataclass':
                 isDataClass = True
+                dataClassArgDict = dict (dataClassDefaultArgTuple)                      # Use default decorator args (or rather there are no args)
                 node.decorator_list.pop ()
-            
+            elif type (node.decorator_list [-1]) == ast.Call and node.decorator_list [-1] .func.id == 'dataclass':
+                isDataClass = True
+                dataClassArgDict = {}
+                self.visit_Call (node.decorator_list.pop (), dataClassArgDict)   # Adapt dataClassArgDict to decorator args
+                
         decoratorsUsed = 0
         if node.decorator_list:
             self.emit (' ')
@@ -1890,8 +1908,9 @@ class Generator (ast.NodeVisitor):
             if docString:
                self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
 
-        # Deal with special class var assigns
+        # Deal with data class var assigns, a flavor of special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
+
             nrOfFragmentsToJump = self.fragmentIndex - initHoistFragmentIndex
             self.fragmentIndex = initHoistFragmentIndex
             
@@ -1919,6 +1938,7 @@ class Generator (ast.NodeVisitor):
             ]
             
             # Generate __init__
+
             originalAllowKeywordArgs = self.allowKeywordArgs
             self.allowKeywordArgs = True            
             self.visit (ast.FunctionDef (
@@ -1959,7 +1979,7 @@ class Generator (ast.NodeVisitor):
             self.emit (',')
             self.allowKeywordArgs = originalAllowKeywordArgs
             
-            # Generate __repr__
+            # Prepare to generate __repr__ and comparison functions
             tuples = list (zip (
                 [
                     ast.Str (
@@ -1984,40 +2004,96 @@ class Generator (ast.NodeVisitor):
                 ]
             ))
             values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
-            self.visit (ast.FunctionDef (
-                name = '__repr__',
-                args = ast.arguments (
-                    args = (
-                        [ast.arg (arg = 'self', annotation = None)]
+
+            if dataClassArgDict ['repr']:
+                # Generate __repr__
+                self.visit (ast.FunctionDef (
+                    name = '__repr__',
+                    args = ast.arguments (
+                        args = (
+                            [ast.arg (arg = 'self', annotation = None)]
+                        ),
+                        vararg = None,
+                        kwonlyargs = [],
+                        kw_defaults = [],
+                        kwarg = None,
+                        defaults = []
                     ),
-                    vararg = None,
-                    kwonlyargs = [],
-                    kw_defaults = [],
-                    kwarg = None,
-                    defaults = []
-                ),
-                body = [
-                    ast.Return (
-                        ast.JoinedStr (
-                            values = values
+                    body = [
+                        ast.Return (
+                            ast.JoinedStr (
+                                values = values
+                            )
                         )
-                    )
-                ],
-                decorator_list = []
-            ))
-            self.emit (',')
-            
-            # Generate __eq__
-            
-            # Generate __ne__
-            
-            # Generate __lt__
-            
-            # Generate __le__
-            
-            # Generate __gt__
-            
-            # Generate __ge__
+                    ],
+                    decorator_list = []
+                ))
+                self.emit (',')
+
+             # Generate comparators   !!! TODO: Add check that self and other are of same class
+            comparatorNames = []
+            if 'eq' in dataClassArgDict:
+                comparatorNames += ['__eq__', '__ne__']
+            if 'order' in dataClassArgDict:
+                comparatorNames += ['__lt__', '__le__', '__gt__', '__ge__']
+            for comparatorName in comparatorNames:
+                self.visit (ast.FunctionDef (
+                    name = comparatorName,
+                    args = ast.arguments (
+                        args = [
+                            ast.arg (arg = 'self', annotation = None),
+                            ast.arg (arg = 'other', annotation = None)
+                        ],
+                        vararg = None,
+                        kwonlyargs = [],
+                        kw_defaults = [],
+                        kwarg = None,
+                        defaults = []
+                    ),
+                    body = [
+                        ast.Return (                   
+                            value = ast.Call ( 
+                                func = ast.Attribute (
+                                    value = ast.List ( 
+                                        elts = [
+                                            ast.Attribute (
+                                                value = ast.Name (
+                                                    id = 'self',
+                                                    ctx = ast.Load
+                                                ),
+                                                attr = classVarName,
+                                                ctx = ast.Load
+                                            )
+                                            for classVarName in classVarNames
+                                        ],
+                                        ctx = ast.Load
+                                    ),
+                                    attr = comparatorName,
+                                    ctx = ast.Load
+                                ),
+                                args = [ 
+                                    ast.List ( 
+                                        elts = [
+                                            ast.Attribute (
+                                                value = ast.Name (
+                                                    id = 'other',
+                                                    ctx = ast.Load
+                                                ),
+                                                attr = classVarName,
+                                                ctx = ast.Load
+                                            )
+                                            for classVarName in classVarNames
+                                        ],
+                                        ctx = ast.Load
+                                    )
+                                ],
+                                keywords = []  
+                            )
+                        )
+                    ],
+                    decorator_list = []
+                ))
+                self.emit (',')
             
             # After inserting at init hoist location, jump forward as much as we jumped back
             # Simply going back to the original fragment index won't work, since fragments were prepended
@@ -2025,7 +2101,9 @@ class Generator (ast.NodeVisitor):
             
             # And restore indent level to where we were
             self.indentLevel = originalIndentLevel
-        else:   # Destructuring class var assignments have to be generated
+
+        # Deal with destructuring class var assigns, a flavor of special class var assigns
+        else:
             for specialClassVarAssign in specialClassVarAssigns:
                 self.emit (';\n')
                 self.visit (specialClassVarAssign)
@@ -2034,7 +2112,7 @@ class Generator (ast.NodeVisitor):
 
         if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if there is outer class
             self.emitProperties ()
-
+            
     def visit_Compare (self, node):
         if len (node.comparators) > 1:
             self.emit ('(')
