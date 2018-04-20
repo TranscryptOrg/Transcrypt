@@ -57,7 +57,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     buildSwitch = '-b ' if build else ''
     
     # Compile with Transcrypt
-    os.system (f'{transpileCommand} -m {buildSwitch}-da -sf {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    os.system (f'{transpileCommand} -m {buildSwitch}-da -sf -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
     
     # Run back to back in CPython
     if run:

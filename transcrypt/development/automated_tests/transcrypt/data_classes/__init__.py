@@ -36,8 +36,8 @@ def run (autoTester):
     autoTester.check (c != cc)
     
     autoTester.check (c < cc)
-    autoTester.check (c > cc)  #
-    autoTester.check (c <= cc) #
+    autoTester.check (c > cc)
+    autoTester.check (c <= cc)
     autoTester.check (c >= cc)
     
     autoTester.check (c == c)
