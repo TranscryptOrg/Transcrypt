@@ -7,6 +7,7 @@
 
 # ======= Directories anywhere
 __target__/
+__javascript__/
 __pycache__/
 .mypy_cache/
 dist/

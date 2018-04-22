@@ -1834,11 +1834,18 @@ class Generator (ast.NodeVisitor):
         
         # LHS plays a role in a.o. __repr__ in a dataclass
         inlineClassVarAssigns = []      # LHS is simple name, generate initialisation of field in object literal
-        propertyConstructorAssigns = [] # LHS is simple name, RHS is property constructor call
-        dataClassVarAssigns = []        # Dataclass instance var assignment
+        propertyVarAssigns = []         # LHS is simple name, RHS is property constructor call
+        dataClassVarAssigns = []        # Dataclass instance var assignment, these are also the params to the generated __init__
 
         # LHS plays no role in a.o. __repr__ in a dataclass
         delayedClassVarAssigns = []     # LHS is array element, attribute or compound destructuring target
+        
+        # Assignments whose LHS name is used in __repr__, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
+        representationVarAssigns = []
+        
+        # Assignments whose LHS names is used in comparisons, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
+        # Class vars shouln't be included, as only objects of the same class can be compared
+        comparisonVarAssigns = []            
         
         index = 0
         
@@ -1857,12 +1864,17 @@ class Generator (ast.NodeVisitor):
             elif type (stmt) == ast.Assign:
                 if len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name:
                     # LHS is simply a name
-                    if type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property'
+                    if type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property':
                         # Property construction, should be generated after the class
-                        propertyConstructorAssigns.append (stmt)
+                        propertyVarAssigns.append (stmt)
+                        if isDataClass:
+                            representationVarAssigns.append (stmt)
+                            comparisonVarAssigns.append (stmt)
                     else:
-                        # Simple assignment, can be generated in-line as initialisation field of an object literal
+                        # Simple class var assignment, can be generated in-line as initialisation field of a JavaScript object literal
                         inlineClassVarAssigns.append (stmt)
+                        if isDataClass:
+                            representationVarAssigns.append (stmt)
                         self.emitComma (index, False)
                         self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id))
                         self.visit (stmt.value)
@@ -1879,16 +1891,20 @@ class Generator (ast.NodeVisitor):
                 if isDataClass and type (stmt.annotation) == ast.Name and not stmt.annotation.id == 'ClassVar':
                     # Data class assignment
                     dataClassVarAsigns.append (stmt)
+                    representationVarAssigns.append (stmt)
+                    comparisonVarAssigns.append (stmt)                   
                 elif type (stmt.target) == ast.Name:
-                    # Simple assignment
+                    # Simple class var assignment
                     inLineClassVarAssigns.append (stmt)
+                    if isDataClass:
+                        representationVarAssigns.append (stmt)                        
                     self.emitComma (index, False)
                     self.emit ('\n{}: ', self.filterId (stmt.target.id))
                     self.visit (stmt.value)
                     self.adaptLineNrString (stmt)
                     index += 1
                 else:
-                    # LHS is attribute or array element
+                    # LHS is attribute or array element, we can't use it for representation or comparison
                     delayedClassVarAssigns.append (stmt)
                 
             elif self.getPragmaFromExpr (stmt):
