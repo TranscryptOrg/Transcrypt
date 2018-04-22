@@ -1831,8 +1831,15 @@ class Generator (ast.NodeVisitor):
 
         self.indent ()
         self.emit ('\n__module__: __name__,')
-        classVarAssigns = []
-        specialClassVarAssigns = []
+        
+        # LHS plays a role in a.o. __repr__ in a dataclass
+        inlineClassVarAssigns = []      # LHS is simple name, generate initialisation of field in object literal
+        propertyConstructorAssigns = [] # LHS is simple name, RHS is property constructor call
+        dataClassVarAssigns = []        # Dataclass instance var assignment
+
+        # LHS plays no role in a.o. __repr__ in a dataclass
+        delayedClassVarAssigns = []     # LHS is array element, attribute or compound destructuring target
+        
         index = 0
         
         if isDataClass:
@@ -1846,44 +1853,47 @@ class Generator (ast.NodeVisitor):
                 self.emitComma (index, False)
                 self.visit (stmt)
                 index += 1
+                
             elif type (stmt) == ast.Assign:
-                classVarAssigns.append (stmt)
-                if (
-                    not isDataClass and len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name and
-                    not (
-                        type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property'
-                    )
-                ):
-                    # No dataclass param, no destructuring assignment, no property, LHS is simple name
-                    self.emitComma (index, False)
-                    self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id))
-                    self.visit (stmt.value)
-                    self.adaptLineNrString (stmt)
-                    index += 1
+                if len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name:
+                    # LHS is simply a name
+                    if type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property'
+                        # Property construction, should be generated after the class
+                        propertyConstructorAssigns.append (stmt)
+                    else:
+                        # Simple assignment, can be generated in-line as initialisation field of an object literal
+                        inlineClassVarAssigns.append (stmt)
+                        self.emitComma (index, False)
+                        self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id))
+                        self.visit (stmt.value)
+                        self.adaptLineNrString (stmt)
+                        index += 1
                 else:
-                    # Data class param or destructuring assignment or property or LHS isn't a simple name
+                    # LHS is attribute, array element or compound destructuring target
+                    # Has to be generated after the class because it requires the use of an algorithm and can't be initialisation of field of an object literal
                     # Limitation: Can't properly deal with line number in this case
-                    specialClassVarAssigns.append (stmt)    # Has to be done after the class because tuple assignment
-                                                            # requires the use of an algorithm.
-                                                            # May also be a property assignment
+                    delayedClassVarAsigns.append (stmt)
+                    
             elif type (stmt) == ast.AnnAssign: 
                 # An annotated assignment is never a destructuring assignment
-                # Its LHS is always a simple name
-                # Also, currently, it's never a property assignment
-                classVarAssigns.append (stmt)
                 if isDataClass and type (stmt.annotation) == ast.Name and not stmt.annotation.id == 'ClassVar':
-                    # Data class param
-                    specialClassVarAssigns.append (stmt)
+                    # Data class assignment
+                    dataClassVarAsigns.append (stmt)
                 elif type (stmt.target) == ast.Name:
-                    # LHS is simple name
+                    # Simple assignment
+                    inLineClassVarAssigns.append (stmt)
                     self.emitComma (index, False)
                     self.emit ('\n{}: ', self.filterId (stmt.target.id))
                     self.visit (stmt.value)
                     self.adaptLineNrString (stmt)
                     index += 1
+                else:
+                    # LHS is attribute or array element
+                    delayedClassVarAssigns.append (stmt)
                 
             elif self.getPragmaFromExpr (stmt):
-                self.visit (stmt)                           # If it's a pragma, just visit it
+                # It's a pragma
+                self.visit (stmt)
         self.dedent ()
 
         self.emit ('\n}}')
@@ -1920,21 +1930,23 @@ class Generator (ast.NodeVisitor):
             initArgs = [
                 (
                     (
-                            specialClassVarAssign.targets [0]
-                        if type (specialClassVarAssign) == ast.Assign else
-                            specialClassVarAssign.target
+                            classVarAssign.targets [0]
+                        if type (classVarAsign) == ast.Assign else
+                            classVarAsign.target
                     ) .id,
-                    specialClassVarAssign.value
-                ) for specialClassVarAssign in specialClassVarAssigns
+                    classVarAsign.value
+                ) for classVarAsign in dataClassVarAsigns
             ]
             
-            classVarNames = [
+            # $$$ Something with __annotations__ but only in a dataclass
+            
+            keyVarNames = [
                 (
                         classVarAssign.targets [0]
                     if type (classVarAssign) == ast.Assign else
                         classVarAssign.target
                 ) .id
-                for classVarAssign in classVarAssigns
+                for classVarAssign in allClassVarAssigns
             ]
             
             # Generate __init__
@@ -2104,13 +2116,13 @@ class Generator (ast.NodeVisitor):
 
         # Deal with destructuring class var assigns, a flavor of special class var assigns
         else:
-            for specialClassVarAssign in specialClassVarAssigns:
+            for delayedClassVarAsign in delayedClassVarAsigns:
                 self.emit (';\n')
-                self.visit (specialClassVarAssign)
+                self.visit (delayedClassVarAsign)
 
         self.descope () # No earlier, class vars need it
 
-        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if there is outer class
+        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to anotor class
             self.emitProperties ()
             
     def visit_Compare (self, node):
