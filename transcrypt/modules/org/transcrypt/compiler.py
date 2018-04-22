@@ -196,7 +196,7 @@ class Program:
                             self.file_aliases[af] = alias_dict
                             found = True
                 if not found:
-                    raise FileNotFoundError("alias file '{0}' not found, check project and module paths in {1}".format(af, self.moduleSearchDirs))
+                    raise FileNotFoundError("Alias file '{0}' not found, check project and module paths in:\n{1}".format(af, self.moduleSearchDirs))
 
         # Compile inline modules
         if not ('__cunit__' in self.symbols):
@@ -1653,31 +1653,30 @@ class Generator (ast.NodeVisitor):
             elif node.func.id == '__pragma__':
                 if node.args [0] .s == 'alias':
                     if len(node.args) == 2:
-                        # single argument us a key to into the global aliases loaded from file
-
+                        # single argument means 'load a collection of aliases from disk'
                         alias_dict = self.module.program.file_aliases.get(node.args [1] .s)
-                        
                         if not alias_dict:
                             raise utils.Error (
                                 lineNr = self.lineNr,
-                                message = "unknown alias file: '{0}'.  Alias files must be provided on the command line".format(node.args [1] .s)
+                                message = "Unknown alias file: '{0}'.  Alias files must be provided on the command line".format(node.args [1] .s)
                                 )
-                        else:
+                        else: 
                             for py_id, js_id in alias_dict.items():
                                 self.aliasers.insert (0, self.getAliaser (py_id, js_id))
-                    else:
+                    else:  #otherwise, specify an indifidual alias.  For sanity sake, don't allow a file name alias to collide with an identifier
                         if node.args [1] .s in self.module.program.file_aliases:
                             raise utils.Error (
                                 lineNr = self.lineNr,
-                                message = "alias identifier conflicts with alias file name: {0}".format(node.args [1] .s)
+                                message = "Alias identifier conflicts with alias file name: {0}".format(node.args [1] .s)
                                 )
                         self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
                 elif node.args [0] .s == 'noalias':
                     if len (node.args) == 1:
                         self.aliasers = []
                     else:
+                        # handle single item or file alias collection interchangeably
                         # note: if there's a collision between a single-item alias and a file alias,
-                        # the file alias will win -- hence the compile error above
+                        # the file alias will win -- hence the compile time error above
                         alias_dict = self.module.program.file_aliases.get(node.args [1] .s,  {node.args [1] . s})
                         for index in reversed (range (len (self.aliasers))):
                             if self.aliasers [index][0] in alias_dict:
