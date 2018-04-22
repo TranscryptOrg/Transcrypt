@@ -673,15 +673,15 @@ class Generator (ast.NodeVisitor):
                                                             # So in that case each line is instrumented and instrumentation will be stripped later on
             self.lineNrString = ''
 
-    def isCommentString (self, stmt):
-        return isinstance (stmt, ast.Expr) and isinstance (stmt.value, ast.Str)
+    def isCommentString (self, statement):
+        return isinstance (statement, ast.Expr) and isinstance (statement.value, ast.Str)
 
     def emitBody (self, body):
-        for stmt in body:
-            if self.isCommentString (stmt):
+        for statement in body:
+            if self.isCommentString (statement):
                 pass
             else:
-                self.visit (stmt)
+                self.visit (statement)
                 self.emit (';\n')
                 
     def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None): 
@@ -801,8 +801,7 @@ class Generator (ast.NodeVisitor):
         self.propList.append (context)
 
     def emitProperties(self):
-
-        def emmitProperty(className, propertyName, getterFunction, setterFunction=None):
+        def emitProperty (className, propertyName, getterFunction, setterFunction=None):
             self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propertyName))
             if setterFunction:
                 self.emit ('property.call ({0}, {0}.{1}, {0}.{2})'.format (className, getterFunction, setterFunction))
@@ -841,15 +840,15 @@ class Generator (ast.NodeVisitor):
                     # remove pair
                     self.propList.remove (context2)
                     if isGetter:
-                        emmitProperty (className, propName, funcName, funcName2)
+                        emitProperty (className, propName, funcName, funcName2)
                     else:
-                        emmitProperty (className, propName, funcName2, funcName)
+                        emitProperty (className, propName, funcName2, funcName)
                     pairFound = True
                     break
 
             if not pairFound:
                 if isGetter:
-                    emmitProperty (className, propName, funcName)
+                    emitProperty (className, propName, funcName)
                 else:
                     raise utils.Error(
                         message='\n\tProperty setter declared without getter\n'
@@ -1833,19 +1832,19 @@ class Generator (ast.NodeVisitor):
         self.emit ('\n__module__: __name__,')
         
         # LHS plays a role in a.o. __repr__ in a dataclass
-        inlineClassVarAssigns = []      # LHS is simple name, generate initialisation of field in object literal
-        propertyVarAssigns = []         # LHS is simple name, RHS is property constructor call
-        dataClassVarAssigns = []        # Dataclass instance var assignment, these are also the params to the generated __init__
+        inlineAssigns = []      # LHS is simple name, class var assignment generates initialisation of field in object literal
+        propertyAssigns = []    # LHS is simple name, RHS is property constructor call
+        initAssigns = []        # Dataclass instance var assignment, these are also the params to the generated __init__
 
         # LHS plays no role in a.o. __repr__ in a dataclass
-        delayedClassVarAssigns = []     # LHS is array element, attribute or compound destructuring target
+        delayedAssigns = []     # LHS is array element, attribute or compound destructuring target, class var assignement generates statement after class object literal
         
         # Assignments whose LHS name is used in __repr__, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
-        representationVarAssigns = []
+        reprAssigns = []       # Representation consists of instance vars, class vars and properties, in the order encountered
         
         # Assignments whose LHS names is used in comparisons, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
         # Class vars shouln't be included, as only objects of the same class can be compared
-        comparisonVarAssigns = []            
+        compareAssigns = []     # Comparing is done by instance vars and properties, in the order encountered
         
         index = 0
         
@@ -1853,63 +1852,65 @@ class Generator (ast.NodeVisitor):
             initHoistFragmentIndex = self.fragmentIndex
             initHoistIndentLevel = self.indentLevel
         
-        for stmt in node.body:
-            if self.isCommentString (stmt):
+        for statement in node.body:
+            if self.isCommentString (statement):
                 pass
-            elif type (stmt) in (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef):
+            elif type (statement) in (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef):
                 self.emitComma (index, False)
-                self.visit (stmt)
+                self.visit (statement)
                 index += 1
                 
-            elif type (stmt) == ast.Assign:
-                if len (stmt.targets) == 1 and type (stmt.targets [0]) == ast.Name:
+            elif type (statement) == ast.Assign:
+                if len (statement.targets) == 1 and type (statement.targets [0]) == ast.Name:
                     # LHS is simply a name
-                    if type (stmt.value) == ast.Call and type (stmt.value.func) == ast.Name and stmt.value.func.id == 'property':
+                    if type (statement.value) == ast.Call and type (statement.value.func) == ast.Name and statement.value.func.id == 'property':
                         # Property construction, should be generated after the class
-                        propertyVarAssigns.append (stmt)
-                        if isDataClass:
-                            representationVarAssigns.append (stmt)
-                            comparisonVarAssigns.append (stmt)
+                        propertyAssigns.append (statement)
                     else:
                         # Simple class var assignment, can be generated in-line as initialisation field of a JavaScript object literal
-                        inlineClassVarAssigns.append (stmt)
-                        if isDataClass:
-                            representationVarAssigns.append (stmt)
+                        inlineAssigns.append (statement)
                         self.emitComma (index, False)
-                        self.emit ('\n{}: ', self.filterId (stmt.targets [0] .id))
-                        self.visit (stmt.value)
-                        self.adaptLineNrString (stmt)
+                        self.emit ('\n{}: ', self.filterId (statement.targets [0] .id))
+                        self.visit (statement.value)
+                        self.adaptLineNrString (statement)
                         index += 1
                 else:
                     # LHS is attribute, array element or compound destructuring target
                     # Has to be generated after the class because it requires the use of an algorithm and can't be initialisation of field of an object literal
                     # Limitation: Can't properly deal with line number in this case
-                    delayedClassVarAsigns.append (stmt)
+                    delayedAsigns.append (statement)
                     
-            elif type (stmt) == ast.AnnAssign: 
+            elif type (statement) == ast.AnnAssign: 
                 # An annotated assignment is never a destructuring assignment
-                if isDataClass and type (stmt.annotation) == ast.Name and not stmt.annotation.id == 'ClassVar':
-                    # Data class assignment
-                    dataClassVarAsigns.append (stmt)
-                    representationVarAssigns.append (stmt)
-                    comparisonVarAssigns.append (stmt)                   
-                elif type (stmt.target) == ast.Name:
-                    # Simple class var assignment
-                    inLineClassVarAssigns.append (stmt)
+                if type (statement.value) == ast.Call and type (statement.value.func) == ast.Name and statement.value.func.id == 'property':
+                    # Property construction, should be generated after the class
+                    propertyAssigns.append (statement)
                     if isDataClass:
-                        representationVarAssigns.append (stmt)                        
+                        reprAssigns.append (statement)
+                        compareAssigns.append (statement)
+                elif isDataClass and type (statement.annotation) == ast.Name and not statement.annotation.id == 'ClassVar':
+                    # Possible data class assignment
+                    if isDataClass:
+                        initAssigns.append (statement)
+                        reprAssigns.append (statement)
+                        compareAssigns.append (statement)                   
+                elif type (statement.target) == ast.Name:
+                    # Simple class var assignment
+                    inlineAssigns.append (statement)
+                    if isDataClass:
+                        reprAssigns.append (statement)                        
                     self.emitComma (index, False)
-                    self.emit ('\n{}: ', self.filterId (stmt.target.id))
-                    self.visit (stmt.value)
-                    self.adaptLineNrString (stmt)
+                    self.emit ('\n{}: ', self.filterId (statement.target.id))
+                    self.visit (statement.value)
+                    self.adaptLineNrString (statement)
                     index += 1
                 else:
                     # LHS is attribute or array element, we can't use it for representation or comparison
-                    delayedClassVarAssigns.append (stmt)
+                    delayedAssigns.append (statement)
                 
-            elif self.getPragmaFromExpr (stmt):
+            elif self.getPragmaFromExpr (statement):
                 # It's a pragma
-                self.visit (stmt)
+                self.visit (statement)
         self.dedent ()
 
         self.emit ('\n}}')
@@ -1943,98 +1944,99 @@ class Generator (ast.NodeVisitor):
             originalIndentLevel = self.indentLevel
             self.indentLevel = initHoistIndentLevel
             
-            initArgs = [
+            initArgs = [(
                 (
-                    (
-                            classVarAssign.targets [0]
-                        if type (classVarAsign) == ast.Assign else
-                            classVarAsign.target
-                    ) .id,
-                    classVarAsign.value
-                ) for classVarAsign in dataClassVarAsigns
-            ]
+                        initAssign.targets [0]
+                    if type (initAssign) == ast.Assign else
+                        initAssign.target
+                ) .id,
+                initAssign.value
+             ) for initAssign in initAssigns]
             
-            # $$$ Something with __annotations__ but only in a dataclass
+            reprNames = [
+            (
+                reprAssign.targets [0]
+            if type (reprAssign) == ast.Assign else
+                reprAssign.target
+            ) .id
+            for reprAssign in reprAssigns]
             
-            keyVarNames = [
-                (
-                        classVarAssign.targets [0]
-                    if type (classVarAssign) == ast.Assign else
-                        classVarAssign.target
-                ) .id
-                for classVarAssign in allClassVarAssigns
-            ]
+            compareNames = [
+            (
+                    compareAssign.targets [0]
+                if type (compareAssign) == ast.Assign else
+                    compareAssign.target
+            ) .id
+            for compareAssign in compareAssigns]
             
             # Generate __init__
-
-            originalAllowKeywordArgs = self.allowKeywordArgs
-            self.allowKeywordArgs = True            
-            self.visit (ast.FunctionDef (
-                name = '__init__',
-                args = ast.arguments (
-                    args = (
-                        [ast.arg (arg = 'self', annotation = None)] +
-                        [ast.arg (arg = initArg [0], annotation = None) for initArg in initArgs]
+            if dataClassArgDict ['repr']:
+                originalAllowKeywordArgs = self.allowKeywordArgs
+                self.allowKeywordArgs = True            
+                self.visit (ast.FunctionDef (
+                    name = '__init__',
+                    args = ast.arguments (
+                        args = (
+                            [ast.arg (arg = 'self', annotation = None)] +
+                            [ast.arg (arg = initArg [0], annotation = None) for initArg in initArgs]
+                        ),
+                        vararg = None,
+                        kwonlyargs = [],
+                        kw_defaults = [],
+                        kwarg = None,
+                        defaults = [initArg [1] for initArg in initArgs]
                     ),
-                    vararg = None,
-                    kwonlyargs = [],
-                    kw_defaults = [],
-                    kwarg = None,
-                    defaults = [initArg [1] for initArg in initArgs]
-                ),
-                body = [
-                    ast.Assign (
-                        targets = [
-                            ast.Attribute (
+                    body = [
+                        ast.Assign (
+                            targets = [
+                                ast.Attribute (
+                                    value = ast.Name (
+                                        id = 'self',
+                                        ctx = ast.Load
+                                    ),
+                                    attr = initArg [0],
+                                    ctx = ast.Store
+                                )
+                            ],
+                            value = ast.Name ( 
+                                id = initArg [0],
+                                ctx = ast.Load
+                            )
+                        )
+                        for initArg in initArgs
+                    ],
+                    decorator_list = [],
+                    returns = None
+                ))
+                self.emit (',')
+                self.allowKeywordArgs = originalAllowKeywordArgs
+            
+            # Generate __repr__
+            if dataClassArgDict ['repr']:
+                tuples = list (zip (
+                    [
+                        ast.Str (
+                            s = f'{", " if index else f"{node.name}("}{reprName}='
+                        )
+                        for index, reprName in enumerate (reprNames)
+                    ],
+                    [
+                        ast.FormattedValue (
+                            value = ast.Attribute (
                                 value = ast.Name (
                                     id = 'self',
                                     ctx = ast.Load
                                 ),
-                                attr = initArg [0],
-                                ctx = ast.Store
-                            )
-                        ],
-                        value = ast.Name ( 
-                            id = initArg [0],
-                            ctx = ast.Load
-                        )
-                    )
-                    for initArg in initArgs
-                ],
-                decorator_list = [],
-                returns = None
-            ))
-            self.emit (',')
-            self.allowKeywordArgs = originalAllowKeywordArgs
-            
-            # Prepare to generate __repr__ and comparison functions
-            tuples = list (zip (
-                [
-                    ast.Str (
-                        s = f'{", " if index else f"{node.name}("}{classVarName}='
-                    )
-                    for index, classVarName in enumerate (classVarNames)
-                ],
-                [
-                    ast.FormattedValue (
-                        value = ast.Attribute (
-                            value = ast.Name (
-                                id = 'self',
+                                attr = reprName,
                                 ctx = ast.Load
                             ),
-                            attr = classVarName,
-                            ctx = ast.Load
-                        ),
-                        conversion = -1,
-                        format_spec = None
-                    )
-                    for classVarName in classVarNames
-                ]
-            ))
-            values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
-
-            if dataClassArgDict ['repr']:
-                # Generate __repr__
+                            conversion = -1,
+                            format_spec = None
+                        )
+                        for reprName in reprNames
+                    ]
+                ))
+                values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
                 self.visit (ast.FunctionDef (
                     name = '__repr__',
                     args = ast.arguments (
@@ -2089,10 +2091,10 @@ class Generator (ast.NodeVisitor):
                                                     id = 'self',
                                                     ctx = ast.Load
                                                 ),
-                                                attr = classVarName,
+                                                attr = compareName,
                                                 ctx = ast.Load
                                             )
-                                            for classVarName in classVarNames
+                                            for compareName in compareNames
                                         ],
                                         ctx = ast.Load
                                     ),
@@ -2107,10 +2109,10 @@ class Generator (ast.NodeVisitor):
                                                     id = 'other',
                                                     ctx = ast.Load
                                                 ),
-                                                attr = classVarName,
+                                                attr = compareName,
                                                 ctx = ast.Load
                                             )
-                                            for classVarName in classVarNames
+                                            for compareName in compareNames
                                         ],
                                         ctx = ast.Load
                                     )
@@ -2130,15 +2132,16 @@ class Generator (ast.NodeVisitor):
             # And restore indent level to where we were
             self.indentLevel = originalIndentLevel
 
-        # Deal with destructuring class var assigns, a flavor of special class var assigns
-        else:
-            for delayedClassVarAsign in delayedClassVarAsigns:
-                self.emit (';\n')
-                self.visit (delayedClassVarAsign)
+        # Deal with delayed assigns and property assigns
+        # Property assigns will be pushed onto a stack
+        # They will eventually be dealt with if this class isn't directly local to another class
+        for assign in delayedAssigns + propertyAssigns:
+            self.emit (';\n')
+            self.visit (assign)
 
         self.descope () # No earlier, class vars need it
 
-        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to anotor class
+        if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to another class
             self.emitProperties ()
             
     def visit_Compare (self, node):
@@ -2896,11 +2899,11 @@ class Generator (ast.NodeVisitor):
         self.allOwnNames.add ('__name__')
         
         # Generate code for the module body
-        for stmt in node.body:
-            if self.isCommentString (stmt):
+        for statement in node.body:
+            if self.isCommentString (statement):
                 pass
             else:
-                self.visit (stmt)
+                self.visit (statement)
                 self.emit (';\n')
 
         # Store docstring if allowed, can only be done 'late'
