@@ -29,6 +29,8 @@ class CommandArgs:
         
         self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
         self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
+        self.argParser.add_argument('-af', '--aliasfile', nargs = "?", help = "include predefined aliases for the alias pragma", action="append" )
+
         self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
         self.argParser.add_argument ('-c', '--complex', help = "enable complex number support, locally requires operator overloading", action = 'store_true')
         self.argParser.add_argument ('-d', '--docat', help = "enable __doc__ attributes. Apply sparsely, since it will make docstrings part of the generated code", action = 'store_true')
@@ -65,6 +67,7 @@ class CommandArgs:
         self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases", action = 'store_true')
         self.argParser.add_argument ('-xtr', '--xtrans', nargs = '?', help = "Define the shell command to be used for external translation, rather than defining it in the xtrans pragma each time.")
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
+
         
         self.__dict__.update (self.argParser.parse_args () .__dict__)
         
@@ -171,3 +174,14 @@ def enhanceException (exception, **kwargs):
 
     raise result
     
+
+def read_alias_file(filename):
+    """parses a tab or space separated file of aliases"""
+    with open(filename, 'rt') as filehandle:
+        alias_dict = {}
+        for line in filehandle:
+            if not line.startswith("#"):
+                tokens = line.split()
+                if len(tokens) == 2:
+                    alias_dict[tokens[0]] = tokens[1]
+    return alias_dict
