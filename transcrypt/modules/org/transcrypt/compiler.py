@@ -1994,127 +1994,32 @@ class Generator (ast.NodeVisitor):
                         defaults = []
                     ),
                     body = [
-                        ast.For (
-                            target = ast.Tuple (
-                                elts = [
-                                    ast.Name (
-                                        id = 'index',
-                                        ctx = ast.Store
+                        ast.Expr ( 
+							value = ast.Call ( 
+								func = ast.Name (
+									id = '__pragma__',
+									ctx = ast.Load
+                                ),
+								args = [ 
+									ast.Str (
+                                        s = 'js'
                                     ),
-                                    ast.Name (
-                                        id = 'arg',
-                                        ctx = ast.Store
+									ast.Str (
+										s = '{}'
+                                    ),
+									ast.Str (
+										s = '''
+let values = self.__initfields__.values ();
+for (let arg of args) {
+    self [values.next () .value] = arg;
+}
+for (let key of kwargs.py_keys ()) {
+    self [key] = kwargs [key];
+}                                       '''
                                     )
                                 ],
-                                ctx = ast.Store
-                            ),
-                            iter = ast.Call (
-                                func = ast.Name (
-                                    id = 'enumerate',
-                                    ctx = ast.Load
-                                ),
-                                args = [
-                                    ast.Name (
-                                        id = 'args',
-                                        ctx = ast.Load
-                                    )
-                                ],
-                                keywords = []
-                            ),
-                            body = [
-                                ast.Expr (
-                                    ast.Call (
-                                        func = ast.Name (
-                                            id = 'setattr',
-                                            ctx = ast.Load
-                                        ),
-                                        args = [
-                                            ast.Name (
-                                                id = 'self',
-                                                ctx = ast.Load
-                                            ),
-                                            ast.Subscript (
-                                                value = ast.Call (
-                                                    func = ast.Attribute (
-                                                        value = ast.Name (
-                                                            id = '__initfields__',
-                                                            ctx = ast.Load
-                                                        ),
-                                                        attr = 'entries',
-                                                        ctx = ast.Load
-                                                    ),
-                                                    args = [],
-                                                    keywords = []
-                                                ),
-                                                slice = ast.Index (
-                                                    value = ast.Name (
-                                                        id = 'index',
-                                                        ctx = ast.Load
-                                                    )
-                                                ),
-                                                ctx = ast.Load
-                                            ),
-                                            ast.Name (
-                                                id = 'arg',
-                                                ctx = ast.Load
-                                            )
-                                        ],
-                                        keywords = []
-                                    )
-                                )
-                            ],
-                            orelse = []
-                        ),
-                        ast.For (
-                            target = ast.Name (
-                                id = 'key',
-                                ctx = ast.Store
-                            ),
-                            iter = ast.Call (
-                                func = ast.Attribute (
-                                    value = ast.Name (
-                                        id = 'kwargs',
-                                        ctx = ast.Load
-                                    ),
-                                    attr = 'keys',
-                                    ctx = ast.Load
-                                ),
-                                args = [],
-                                keywords = []
-                            ),
-                            body = [
-                                ast.Call (
-                                    func = ast.Name (
-                                        id = 'setattr',
-                                        ctx = ast.Load
-                                    ),
-                                    args = [
-                                        ast.Name (
-                                            id = 'self',
-                                            ctx = ast.Load
-                                        ),
-                                        ast.Name (
-                                            id = 'key',
-                                            ctx = ast.Load
-                                        ),
-                                        ast.Subscript (
-                                            value = ast.Name (
-                                                id = 'kwargs',
-                                                ctx = ast.Load
-                                            ),
-                                            slice = ast.Index (
-                                                value = ast.Name (
-                                                    id = 'key',
-                                                    ctx = ast.Load
-                                                )
-                                            ),
-                                            ctx = ast.Load
-                                        )
-                                    ],
-                                    keywords = []
-                                )
-                            ],
-                            orelse = []
+								keywords = []
+                            )
                         )
                     ],
                     decorator_list = [],
