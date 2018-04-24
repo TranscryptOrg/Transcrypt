@@ -1351,7 +1351,7 @@ class Generator (ast.NodeVisitor):
 
             if hasSeparateKeyArgs:
                 if hasKwargs:
-                    self.emit ('__mergekwargtrans__ (')
+                    self.emit ('__merge__ (')
                 self.emit ('{{')    # Allways if hasSeparateKeyArgs
 
             for keywordIndex, keyword in enumerate (node.keywords):
@@ -1801,7 +1801,7 @@ class Generator (ast.NodeVisitor):
             elif type (node.decorator_list [-1]) == ast.Call and node.decorator_list [-1] .func.id == 'dataclass':
                 isDataClass = True
                 dataClassArgDict = {}
-                self.visit_Call (node.decorator_list.pop (), dataClassArgDict)   # Adapt dataClassArgDict to decorator args            
+                self.visit_Call (node.decorator_list.pop (), dataClassArgDict)   # Adapt dataClassArgDict to decorator args
                 
         decoratorsUsed = 0
         if node.decorator_list:
@@ -1838,7 +1838,7 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
-        self.emit ('\n__module__: __name__,')        
+        self.emit ('\n__module__: __name__,')
         
         # LHS plays a role in a.o. __repr__ in a dataclass
         inlineAssigns = []      # LHS is simple name, class var assignment generates initialisation of field in object literal
@@ -1936,31 +1936,14 @@ class Generator (ast.NodeVisitor):
 
         self.emit (')')
 
-        # Close brackets of decorator param lists
         if decoratorsUsed:
             self.emit (')' * decoratorsUsed)
 
-        # Emit docstring attribute assignment
         if self.allowDocAttribs:
             docString = ast.get_docstring (node)
             if docString:
                self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
-               
-        # Merge dataclass fields for any class, since parents or descendants may be dataclasses
-        self.emit ('for (aClass of {}.__bases__) {\n', self.filterId (node.name))
-        self.indent ()
-        self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (node.name))
-        self.dedent ()
-        self.emit ('}\n')
-        
-        # Merge dataclass fields for current class
-        if isDataClass:
-            self.emit ('__mergefields__ ({}, {{', self.filterId (node.name))
-            self.emit ('__reprfields: Set [{}], ', ', '.join (reprAssign.target.id for reprAssign in reprAssigns))
-            self.emit ('__comparefields: Set [{}], ', ', '.join (compareAssign.target.id for compareAssign in compareAssigns))
-            self.emit ('__initfields: Set [{}]', ', '.join (initAssign.target.id for initAssign in initAssigns))
-            self.imit ('}});\n')
-           
+
         # Deal with data class var assigns, a flavor of special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
 
