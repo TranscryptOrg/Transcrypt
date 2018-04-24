@@ -1074,7 +1074,7 @@ class Generator (ast.NodeVisitor):
                     self.emit ('Object.defineProperty ({}, \'{}\', '.format (self.getScope () .node.name, target.id))
                     self.visit (value)
                     emitPathIndices ()
-                    self.emit (');')
+                    self.emit (')')
                 else:
                     if type (target) == ast.Name:
                         if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
@@ -1782,7 +1782,7 @@ class Generator (ast.NodeVisitor):
         self.adaptLineNrString (node)
 
         if type (self.getScope () .node) == ast.Module:
-            self.emit ('\nexport var {} = '.format (self.filterId (node.name)))
+            self.emit ('export var {} = '.format (self.filterId (node.name)))
             self.allOwnNames.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
             self.emit ('\n{}:'.format (self.filterId (node.name)))
@@ -1946,24 +1946,8 @@ class Generator (ast.NodeVisitor):
             if docString:
                self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
                
-        # Merge dataclass fields for any class, since parents or descendants may be dataclasses
-        self.emit ('for (aClass of {}.__bases__) {\n', self.filterId (node.name))
-        self.indent ()
-        self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (node.name))
-        self.dedent ()
-        self.emit ('}\n')
-        
-        # Merge dataclass fields for current class
-        if isDataClass:
-            self.emit ('__mergefields__ ({}, {{', self.filterId (node.name))
-            self.emit ('__reprfields: Set [{}], ', ', '.join (reprAssign.target.id for reprAssign in reprAssigns))
-            self.emit ('__comparefields: Set [{}], ', ', '.join (compareAssign.target.id for compareAssign in compareAssigns))
-            self.emit ('__initfields: Set [{}]', ', '.join (initAssign.target.id for initAssign in initAssigns))
-            self.imit ('}});\n')
-           
         # Deal with data class var assigns, a flavor of special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
-
             nrOfFragmentsToJump = self.fragmentIndex - initHoistFragmentIndex
             self.fragmentIndex = initHoistFragmentIndex
             
@@ -2002,34 +1986,136 @@ class Generator (ast.NodeVisitor):
                 self.visit (ast.FunctionDef (
                     name = '__init__',
                     args = ast.arguments (
-                        args = (
-                            [ast.arg (arg = 'self', annotation = None)] +
-                            [ast.arg (arg = initArg [0], annotation = None) for initArg in initArgs]
-                        ),
-                        vararg = None,
+                        args = [ast.arg (arg = 'self', annotation = None)],
+                        vararg = ast.arg (arg = 'args', annotation = None),
                         kwonlyargs = [],
                         kw_defaults = [],
-                        kwarg = None,
-                        defaults = [initArg [1] for initArg in initArgs]
+                        kwarg = ast.arg (arg = 'kwargs', annotation = None),
+                        defaults = []
                     ),
                     body = [
-                        ast.Assign (
-                            targets = [
-                                ast.Attribute (
-                                    value = ast.Name (
-                                        id = 'self',
-                                        ctx = ast.Load
+                        ast.For (
+                            target = ast.Tuple (
+                                elts = [
+                                    ast.Name (
+                                        id = 'index',
+                                        ctx = ast.Store
                                     ),
-                                    attr = initArg [0],
-                                    ctx = ast.Store
+                                    ast.Name (
+                                        id = 'arg',
+                                        ctx = ast.Store
+                                    )
+                                ],
+                                ctx = ast.Store
+                            ),
+                            iter = ast.Call (
+                                func = ast.Name (
+                                    id = 'enumerate',
+                                    ctx = ast.Load
+                                ),
+                                args = [
+                                    ast.Name (
+                                        id = 'args',
+                                        ctx = ast.Load
+                                    )
+                                ],
+                                keywords = []
+                            ),
+                            body = [
+                                ast.Expr (
+                                    ast.Call (
+                                        func = ast.Name (
+                                            id = 'setattr',
+                                            ctx = ast.Load
+                                        ),
+                                        args = [
+                                            ast.Name (
+                                                id = 'self',
+                                                ctx = ast.Load
+                                            ),
+                                            ast.Subscript (
+                                                value = ast.Call (
+                                                    func = ast.Attribute (
+                                                        value = ast.Name (
+                                                            id = '__initfields__',
+                                                            ctx = ast.Load
+                                                        ),
+                                                        attr = 'entries',
+                                                        ctx = ast.Load
+                                                    ),
+                                                    args = [],
+                                                    keywords = []
+                                                ),
+                                                slice = ast.Index (
+                                                    value = ast.Name (
+                                                        id = 'index',
+                                                        ctx = ast.Load
+                                                    )
+                                                ),
+                                                ctx = ast.Load
+                                            ),
+                                            ast.Name (
+                                                id = 'arg',
+                                                ctx = ast.Load
+                                            )
+                                        ],
+                                        keywords = []
+                                    )
                                 )
                             ],
-                            value = ast.Name ( 
-                                id = initArg [0],
-                                ctx = ast.Load
-                            )
+                            orelse = []
+                        ),
+                        ast.For (
+                            target = ast.Name (
+                                id = 'key',
+                                ctx = ast.Store
+                            ),
+                            iter = ast.Call (
+                                func = ast.Attribute (
+                                    value = ast.Name (
+                                        id = 'kwargs',
+                                        ctx = ast.Load
+                                    ),
+                                    attr = 'keys',
+                                    ctx = ast.Load
+                                ),
+                                args = [],
+                                keywords = []
+                            ),
+                            body = [
+                                ast.Call (
+                                    func = ast.Name (
+                                        id = 'setattr',
+                                        ctx = ast.Load
+                                    ),
+                                    args = [
+                                        ast.Name (
+                                            id = 'self',
+                                            ctx = ast.Load
+                                        ),
+                                        ast.Name (
+                                            id = 'key',
+                                            ctx = ast.Load
+                                        ),
+                                        ast.Subscript (
+                                            value = ast.Name (
+                                                id = 'kwargs',
+                                                ctx = ast.Load
+                                            ),
+                                            slice = ast.Index (
+                                                value = ast.Name (
+                                                    id = 'key',
+                                                    ctx = ast.Load
+                                                )
+                                            ),
+                                            ctx = ast.Load
+                                        )
+                                    ],
+                                    keywords = []
+                                )
+                            ],
+                            orelse = []
                         )
-                        for initArg in initArgs
                     ],
                     decorator_list = [],
                     returns = None
@@ -2165,6 +2251,23 @@ class Generator (ast.NodeVisitor):
             self.emit (';\n')
             self.visit (assign)
 
+        #!!! Adapt for nested classes, just like emitProperties
+            
+        # Merge dataclass fields for any class, since parents or descendants may be dataclasses
+        self.emit (';\nfor (let aClass of {}.__bases__) {{\n', self.filterId (node.name))
+        self.indent ()
+        self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (node.name))
+        self.dedent ()
+        self.emit ('}}')
+        
+        # Merge dataclass fields for current class
+        if isDataClass:
+            self.emit (';\n__mergefields__ ({}, {{', self.filterId (node.name))
+            self.emit ('__reprfields__: new Set ([{}]), ', ', '.join ('\'{}\''.format (reprAssign.target.id) for reprAssign in reprAssigns))
+            self.emit ('__comparefields__: new Set ([{}]), ', ', '.join ('\'{}\''.format (compareAssign.target.id) for compareAssign in compareAssigns))
+            self.emit ('__initfields__: new Set ([{}])', ', '.join ('\'{}\''.format (initAssign.target.id) for initAssign in initAssigns))
+            self.emit ('}})')
+           
         self.descope () # No earlier, class vars need it
 
         if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to another class
@@ -2283,7 +2386,7 @@ class Generator (ast.NodeVisitor):
         )
 
         if self.allowJavaScriptIter:
-            self.emit ('for (var ')
+            self.emit ('for (let ')
             self.visit (node.target)
             self.emit (' in ')
             self.visit (node.iter)
@@ -2300,7 +2403,7 @@ class Generator (ast.NodeVisitor):
                     -node.iter.args [2] .operand .n
             )
 
-            self.emit ('for (var ')
+            self.emit ('for (let ')
             self.visit (node.target)
             self.emit (' = ')
             self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Num (0))
@@ -2326,7 +2429,7 @@ class Generator (ast.NodeVisitor):
             self.module.program.javascriptVersion >= 6 and  # Supports for ... of
             not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
         ):
-            self.emit ('for (var ')
+            self.emit ('for (let ')
             self.stripTuples = True
             self.visit (node.target)
             self.stripTuples = False

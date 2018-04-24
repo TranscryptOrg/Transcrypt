@@ -258,7 +258,7 @@ export var object = {
 
 // Class creator facade function, calls class creation worker
 export function __class__ (name, bases, attribs, meta) {         // Parameter meta is optional
-    if (meta === undefined) { // ??? @neriusmika: Why === prefered here? Have usually used ==, disadvantages?
+    if (meta === undefined) {
         meta = bases [0] .__metaclass__;
     }
             

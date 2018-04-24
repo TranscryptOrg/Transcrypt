@@ -85,17 +85,17 @@ export function __mergekwargtrans__ (object0, object1) {
 };
 
 // Merge function for dataclass fields
-function __mergefields___ (targetClass, sourceClass) {
-    fieldNames = ['__reprfields__', '__comparefields__', '__initfields__']
+export function __mergefields__ (targetClass, sourceClass) {
+    let fieldNames = ['__reprfields__', '__comparefields__', '__initfields__']
     if (sourceClass [fieldNames [0]]) {
         if (targetClass [fieldNames [0]]) {
-            for (fieldName of fieldNames) {
+            for (let fieldName of fieldNames) {
                 targetClass [fieldName] = new Set ([...sourceClass [fieldName], ...targetClass [fieldName]]);
             }
         }
         else {
-            for (fieldName of fieldNames {
-                targetClass [fieldName] = new Set (sourceClass [fieldname]);
+            for (let fieldName of fieldNames) {
+                targetClass [fieldName] = new Set (sourceClass [fieldName]);
             }
         }
     }
