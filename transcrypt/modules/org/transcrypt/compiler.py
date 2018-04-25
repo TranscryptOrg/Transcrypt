@@ -441,7 +441,7 @@ class Generator (ast.NodeVisitor):
             ('sort', 'py_sort'),                    ('js_sort', 'sort'),
             ('split', 'py_split'),                  ('js_split', 'split'),
             ('switch', 'py_switch'),
-            ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealth with separately in visit_Call
+            ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealt with separately in visit_Call
             ('TypeError', 'py_TypeError'),          ('js_TypeError', 'TypeError'),
             ('update', 'py_update'),                ('js_update', 'update'),
             ('values', 'py_values'),                ('js_values', 'values'),
@@ -695,7 +695,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (value)
                 emitPathIndices ()
                 self.emit (')')
-            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealth with here, is special case
+            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealt with here, is special case
                 self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
                 self.visit (target.value)
                 self.emit (', ')
@@ -704,7 +704,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (value)
                 emitPathIndices ()
                 self.emit (')')
-            else:                                   # Non-overloaded LHS index just dealth with by visit_Subscript
+            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
                                                     # which is called indirectly here
                 self.expectingNonOverloadedLhsIndex = True
                 self.visit (target)
@@ -1507,7 +1507,7 @@ class Generator (ast.NodeVisitor):
                                 )
                                 for arg in node.args [2:]
                             ])
-                        except: # ??? If this is dealth with the regular way, a missing lineno is reported. Why?
+                        except: # ??? If this is dealt with the regular way, a missing lineno is reported. Why?
                             code = node.args [2] .s
                         for line in code.split ('\n'):
                             self.emit ('{}\n', line)
@@ -1571,7 +1571,7 @@ class Generator (ast.NodeVisitor):
                         self.emit ('__stdout__ = \'__console__\'')
                         
                 elif node.args [0] .s in ('skip', 'noskip', 'defined', 'ifdef', 'ifndef', 'else', 'endif'):
-                    pass                                # Easier dealth with on statement / expression level in self.visit
+                    pass                                # Easier dealt with on statement / expression level in self.visit
                     
                 elif node.args [0] .s == 'xpath':
                     self.module.program.moduleSearchDirs [1 : 1] = [elt.s for elt in node.args [1] .elts]
@@ -1900,12 +1900,18 @@ class Generator (ast.NodeVisitor):
                     if isDataClass:
                         reprAssigns.append (statement)
                         compareAssigns.append (statement)
-                elif isDataClass and type (statement.annotation) == ast.Name and not statement.annotation.id == 'ClassVar':
+                elif isDataClass and type (statement.annotation) == ast.Name and statement.annotation.id != 'ClassVar':
                     # Possible data class assignment
-                    if isDataClass:
-                        initAssigns.append (statement)
-                        reprAssigns.append (statement)
-                        compareAssigns.append (statement)                   
+                    print (11111, statement.target.id)
+                    inlineAssigns.append (statement)    # For defaults a class var will do
+                    initAssigns.append (statement)
+                    reprAssigns.append (statement)
+                    compareAssigns.append (statement)                   
+                    self.emitComma (index, False)
+                    self.emit ('\n{}: ', self.filterId (statement.target.id))
+                    self.visit (statement.value)
+                    self.adaptLineNrString (statement)
+                    index += 1
                 elif type (statement.target) == ast.Name:
                     # Simple class var assignment
                     inlineAssigns.append (statement)
@@ -2124,7 +2130,7 @@ for (let name of names) {
     otherFields.push (other [name]);
 }
 return list (selfFields).''' + comparatorName + '''(list (otherFields));                               
-                                        ''').strip ()
+                                        ''').strip ()   # ... Adding is ugly, repair __pragma__
                                     )
                                 ],
 								keywords = []
@@ -3119,7 +3125,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
 
     # Visited for RHS index, non-overloaded LHS index, RHS slice and RHS extended slice
-    # LHS slice and overloaded LHS index are dealth with directy in visit_Assign, since the RHS is needed for them also
+    # LHS slice and overloaded LHS index are dealt with directy in visit_Assign, since the RHS is needed for them also
     def visit_Subscript (self, node):
         if type (node.slice) == ast.Index:
             if type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
