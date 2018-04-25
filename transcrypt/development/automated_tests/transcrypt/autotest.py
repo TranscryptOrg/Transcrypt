@@ -32,7 +32,7 @@ import iterators_and_generators
 import lambda_functions
 import list_comprehensions
 import local_classes
-import metaclasses
+# import metaclasses
 import method_and_class_decorators
 import module_builtin
 import module_cmath
@@ -87,7 +87,7 @@ autoTester.run (iterators_and_generators, 'iterators_and_generators')
 autoTester.run (lambda_functions, 'lambda_functions')
 autoTester.run (list_comprehensions, 'list_comprehensions')
 autoTester.run (local_classes, 'local_classes')
-autoTester.run (metaclasses, 'metaclasses')
+# autoTester.run (metaclasses, 'metaclasses')
 autoTester.run (method_and_class_decorators, 'method_and_class_decorators')
 autoTester.run (module_builtin, 'module_builtin')
 autoTester.run (module_cmath, 'module_cmath')
