@@ -1494,18 +1494,21 @@ class Generator (ast.NodeVisitor):
 
                 elif node.args [0] .s == 'js':          # Include JavaScript code literally in the output
                     try:
-                        code = node.args [1] .s.format (* [
-                            eval (
-                                compile (
-                                    ast.Expression (arg),   # Code to compile (can be AST or source)
-                                    '<string>',             # Not read from a file
-                                    'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
-                                ),
-                                {},
-                                {'__include__': include}
-                            )
-                            for arg in node.args [2:]
-                        ])
+                        try:
+                            code = node.args [1] .s.format (* [
+                                eval (
+                                    compile (
+                                        ast.Expression (arg),   # Code to compile (can be AST or source)
+                                        '<string>',             # Not read from a file
+                                        'eval'                  # Code is an expression, namely __include__  (<fileName>) in most cases
+                                    ),
+                                    {},
+                                    {'__include__': include}
+                                )
+                                for arg in node.args [2:]
+                            ])
+                        except: # ??? If this is dealth with the regular way, a missing lineno is reported. Why?
+                            code = node.args [2] .s
                         for line in code.split ('\n'):
                             self.emit ('{}\n', line)
                     except:
@@ -1796,7 +1799,7 @@ class Generator (ast.NodeVisitor):
         if node.decorator_list:
             if type (node.decorator_list [-1]) == ast.Name and node.decorator_list [-1] .id == 'dataclass':
                 isDataClass = True
-                dataClassArgDict = dict (dataClassDefaultArgTuple)                      # Use default decorator args (or rather there are no args)
+                dataClassArgDict = dict (dataClassDefaultArgTuple)              # Use default decorator args (or rather there are no args)
                 node.decorator_list.pop ()
             elif type (node.decorator_list [-1]) == ast.Call and node.decorator_list [-1] .func.id == 'dataclass':
                 isDataClass = True
@@ -1982,7 +1985,7 @@ class Generator (ast.NodeVisitor):
             # Generate __init__
             if dataClassArgDict ['repr']:
                 originalAllowKeywordArgs = self.allowKeywordArgs
-                self.allowKeywordArgs = True            
+                self.allowKeywordArgs = True
                 self.visit (ast.FunctionDef (
                     name = '__init__',
                     args = ast.arguments (
@@ -2009,13 +2012,14 @@ class Generator (ast.NodeVisitor):
                                     ),
 									ast.Str (
 										s = '''
-let values = self.__initfields__.values ();
+let names = self.__initfields__.values ();
 for (let arg of args) {
-    self [values.next () .value] = arg;
+    self [names.next () .value] = arg;
 }
-for (let key of kwargs.py_keys ()) {
-    self [key] = kwargs [key];
-}                                       '''
+for (let name of kwargs.py_keys ()) {
+    self [name] = kwargs [name];
+}                                        
+                                        '''.strip ()
                                     )
                                 ],
 								keywords = []
@@ -2023,43 +2027,18 @@ for (let key of kwargs.py_keys ()) {
                         )
                     ],
                     decorator_list = [],
-                    returns = None
+                    returns = None,
+                    docstring = None
                 ))
                 self.emit (',')
                 self.allowKeywordArgs = originalAllowKeywordArgs
             
             # Generate __repr__
             if dataClassArgDict ['repr']:
-                tuples = list (zip (
-                    [
-                        ast.Str (
-                            s = f'{", " if index else f"{node.name}("}{reprName}='
-                        )
-                        for index, reprName in enumerate (reprNames)
-                    ],
-                    [
-                        ast.FormattedValue (
-                            value = ast.Attribute (
-                                value = ast.Name (
-                                    id = 'self',
-                                    ctx = ast.Load
-                                ),
-                                attr = reprName,
-                                ctx = ast.Load
-                            ),
-                            conversion = -1,
-                            format_spec = None
-                        )
-                        for reprName in reprNames
-                    ]
-                ))
-                values = [value for aTuple in tuples for value in aTuple] + [ast.Str (s = ')')] # Flatten list of tuples and append ')'
                 self.visit (ast.FunctionDef (
                     name = '__repr__',
                     args = ast.arguments (
-                        args = (
-                            [ast.arg (arg = 'self', annotation = None)]
-                        ),
+                        args = [ast.arg (arg = 'self', annotation = None)],
                         vararg = None,
                         kwonlyargs = [],
                         kw_defaults = [],
@@ -2067,13 +2046,37 @@ for (let key of kwargs.py_keys ()) {
                         defaults = []
                     ),
                     body = [
-                        ast.Return (
-                            ast.JoinedStr (
-                                values = values
+                        ast.Expr ( 
+							value = ast.Call ( 
+								func = ast.Name (
+									id = '__pragma__',
+									ctx = ast.Load
+                                ),
+								args = [ 
+									ast.Str (
+                                        s = 'js'
+                                    ),
+									ast.Str (
+										s = '{}'
+                                    ),
+									ast.Str (
+										s = '''
+let names = self.__reprfields__.values ();
+let fields = [];
+for (let name of names) {{
+    fields.push (name + '=' + repr (self [name]));
+}}
+return  self.__name__ + '(' + ', '.join (fields) + ')'                                  
+                                        '''.strip ()
+                                    )
+                                ],
+								keywords = []
                             )
                         )
                     ],
-                    decorator_list = []
+                    decorator_list = [],
+                    returns = None,
+                    docstring = None
                 ))
                 self.emit (',')
 
@@ -2098,48 +2101,39 @@ for (let key of kwargs.py_keys ()) {
                         defaults = []
                     ),
                     body = [
-                        ast.Return (                   
-                            value = ast.Call ( 
-                                func = ast.Attribute (
-                                    value = ast.List ( 
-                                        elts = [
-                                            ast.Attribute (
-                                                value = ast.Name (
-                                                    id = 'self',
-                                                    ctx = ast.Load
-                                                ),
-                                                attr = compareName,
-                                                ctx = ast.Load
-                                            )
-                                            for compareName in compareNames
-                                        ],
-                                        ctx = ast.Load
-                                    ),
-                                    attr = comparatorName,
-                                    ctx = ast.Load
+                        ast.Expr ( 
+							value = ast.Call ( 
+								func = ast.Name (
+									id = '__pragma__',
+									ctx = ast.Load
                                 ),
-                                args = [ 
-                                    ast.List ( 
-                                        elts = [
-                                            ast.Attribute (
-                                                value = ast.Name (
-                                                    id = 'other',
-                                                    ctx = ast.Load
-                                                ),
-                                                attr = compareName,
-                                                ctx = ast.Load
-                                            )
-                                            for compareName in compareNames
-                                        ],
-                                        ctx = ast.Load
+								args = [ 
+									ast.Str (
+                                        s = 'js'
+                                    ),
+									ast.Str (
+										s = '{}'
+                                    ),
+									ast.Str (
+										s = ('''
+let names = self.__comparefields__.values ();
+let selfFields = [];
+let otherFields = [];
+for (let name of names) {
+    selfFields.push (self [name]);
+    otherFields.push (other [name]);
+}
+return list (selfFields).''' + comparatorName + '''(list (otherFields));                               
+                                        ''').strip ()
                                     )
                                 ],
-                                keywords = []  
+								keywords = []
                             )
                         )
-                    ],
+                     ],
                     decorator_list = []
                 ))
+                returns = None,
                 self.emit (',')
             
             # After inserting at init hoist location, jump forward as much as we jumped back

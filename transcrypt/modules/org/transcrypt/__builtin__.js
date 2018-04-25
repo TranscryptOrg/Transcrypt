@@ -90,7 +90,7 @@ export function __mergefields__ (targetClass, sourceClass) {
     if (sourceClass [fieldNames [0]]) {
         if (targetClass [fieldNames [0]]) {
             for (let fieldName of fieldNames) {
-                targetClass [fieldName] = new Set ([...sourceClass [fieldName], ...targetClass [fieldName]]);
+                targetClass [fieldName] = new Set ([...targetClass [fieldName], ...sourceClass [fieldName]]);
             }
         }
         else {
