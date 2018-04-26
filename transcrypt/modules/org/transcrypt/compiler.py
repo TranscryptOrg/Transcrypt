@@ -405,7 +405,7 @@ class Generator (ast.NodeVisitor):
         self.allImportedNames = set ()
         self.expectingNonOverloadedLhsIndex = False
         self.lineNr = 1
-        self.propList = []
+        self.propertyAccessorList = []
         self.mergeList = []
 
         self.aliasers = [self.getAliaser (*alias) for alias in (
@@ -632,7 +632,7 @@ class Generator (ast.NodeVisitor):
     def getAdjacentClassScopes (self, inMethod = False):
         # Work backward until finding an interruption in the chain
         # Needed to fix destructuring assignment in nested classes and to make super () work
-        # The latter needs inMethod, since suported use of super () is directly or indirectly enclosed in a method body
+        # The latter needs inMethod, since supported use of super () is directly or indirectly enclosed in a method body
         reversedClassScopes = []
         for scope in reversed (self.scopes):
             if inMethod:
@@ -793,67 +793,6 @@ class Generator (ast.NodeVisitor):
 
     def getPragmaFromIf (self, node):
         return node.test.args if type (node) == ast.If and self.isCall (node.test, '__pragma__') else None
-            
-    def pushProperty(self, functionName):
-        context = {
-            'funcname': functionName,
-            'scopes': self.scopes [1:],
-        }
-        self.propList.append (context)
-
-    def emitProperties(self):
-        def emitProperty (className, propertyName, getterFunction, setterFunction=None):
-            self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propertyName))
-            if setterFunction:
-                self.emit ('property.call ({0}, {0}.{1}, {0}.{2})'.format (className, getterFunction, setterFunction))
-            else:
-                self.emit ('property.call ({0}, {0}.{1})'.format (className, getterFunction))
-            self.emit (');')
-
-        if self.propList:
-            self.emit (';')
-        while self.propList:
-            context = self.propList.pop ()
-
-            for scope in context ['scopes']:
-                self.inscope (scope.node)
-            className = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes ()])
-            for _ in range (len (context ['scopes'])):
-                self.descope ()
-
-            propName = context ['funcname'] [5:]
-            funcName = context ['funcname']
-            isGetter = funcName [:5] == '_get_'
-
-            # find a pair
-            pairFound = False
-            for context2 in self.propList:
-                for scope in context ['scopes']:
-                    self.inscope (scope.node)
-                className2 = '.'.join ([_scope.node.name for _scope in self.getAdjacentClassScopes ()])
-                for _ in range(len (context ['scopes'])):
-                    self.descope ()
-
-                propName2 = context2 ['funcname'] [5:]
-                funcName2 = context2 ['funcname']
-                isGetter2 = funcName2 [:5] == '_get_'
-                if className == className2 and propName == propName2 and isGetter != isGetter2:
-                    # remove pair
-                    self.propList.remove (context2)
-                    if isGetter:
-                        emitProperty (className, propName, funcName, funcName2)
-                    else:
-                        emitProperty (className, propName, funcName2, funcName)
-                    pairFound = True
-                    break
-
-            if not pairFound:
-                if isGetter:
-                    emitProperty (className, propName, funcName)
-                else:
-                    raise utils.Error(
-                        message='\n\tProperty setter declared without getter\n'
-                    )
 
     def visit (self, node):  
         try:
@@ -2189,9 +2128,50 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 emitMerge (merge)
                 
             self.mergeList = []
+
+        def emitProperties ():
+            def emitProperty (className, propertyName, getterName, setterName = None):
+                self.emit ('\nObject.defineProperty ({}, \'{}\', '.format (className, propertyName))
+                if setterName:
+                    self.emit ('property.call ({0}, {0}.{1}, {0}.{2})'.format (className, getterName, setterName))
+                else:
+                    self.emit ('property.call ({0}, {0}.{1})'.format (className, getterName))
+                self.emit (');')
+
+            if self.propertyAccessorList:
+                self.emit (';')
+            while self.propertyAccessorList:
+                propertyAccessor = self.propertyAccessorList.pop ()
+                className = propertyAccessor.className
+                functionName = propertyAccessor.functionName
+                propertyName = functionName [5:]
+                isGetter = functionName [:5] == '_get_'
+
+                # Find a pair
+                for propertyAccessor2 in self.propertyAccessorList:
+                    className2 = propertyAccessor2.className
+                    functionName2 = propertyAccessor2.functionName
+                    propertyName2 = functionName2 [5:]
+                    isGetter2 = functionName2 [:5] == '_get_'
+                    
+                    if className == className2 and propertyName == propertyName2 and isGetter != isGetter2:
+                        # Remove pair
+                        self.propertyAccessorList.remove (propertyAccessor2)
+                        if isGetter:
+                            emitProperty (className, propertyName, functionName, functionName2)
+                        else:
+                            emitProperty (className, propertyName, functionName2, functionName)
+                        break
+                else:
+                    if isGetter:
+                        emitProperty (className, propertyName, functionName)
+                    else:
+                        raise utils.Error(
+                            message='\n\tProperty setter declared without getter\n'
+                        )  
         
         if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to another class
-            self.emitProperties ()  # ??? Make local?
+            emitProperties ()
             emitMerges ()
                         
     def visit_Compare (self, node):
@@ -2474,16 +2454,19 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_FunctionDef (self, node, anAsync = False):
         def emitScopedBody ():
             self.inscope (node)
-
             self.emitBody (node.body)
             self.dedent ()
-
             if self.getScope (ast.AsyncFunctionDef if anAsync else ast.FunctionDef) .containsYield:
                 # !!! Check: yield forbidden in AsyncFunctionDef
                 self.targetFragments.insert (yieldStarIndex, '*')
-
-            self.descope ()
+            self.descope ()            
             
+        def pushPropertyAccessor(functionName):
+            self.propertyAccessorList.append (utils.Any (
+                functionName = functionName,
+                className = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()])
+            ))
+                
         nodeName = node.name
 
         if not nodeName == '__pragma__':    # Don't generate code for the dummy pragma definition starting the extraLines in utils
@@ -2528,11 +2511,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     elif nameCheck == 'property':
                         isProperty = True
                         nodeName = '_get_' + node.name
-                        self.pushProperty (nodeName)
+                        pushPropertyAccessor (nodeName)
                     elif re.match ('[a-zA-Z0-9_]+\.setter', nameCheck):
                         isProperty = True
                         nodeName = '_set_' + re.match ('([a-zA-Z0-9_]+)\.setter', nameCheck).group (1)
-                        self.pushProperty (nodeName)
+                        pushPropertyAccessor (nodeName)
                     else:
                         decorate = True
 
