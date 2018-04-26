@@ -1911,15 +1911,18 @@ class Generator (ast.NodeVisitor):
                     self.adaptLineNrString (statement)
                     index += 1
                 elif type (statement.target) == ast.Name:
-                    # Simple class var assignment
-                    inlineAssigns.append (statement)
-                    if isDataClass:
-                        reprAssigns.append (statement)                        
-                    self.emitComma (index, False)
-                    self.emit ('\n{}: ', self.filterId (statement.target.id))
-                    self.visit (statement.value)
-                    self.adaptLineNrString (statement)
-                    index += 1
+                    try:
+                        # Simple class var assignment
+                        inlineAssigns.append (statement)
+                        if isDataClass:
+                            reprAssigns.append (statement)                        
+                        self.emitComma (index, False)
+                        self.emit ('\n{}: ', self.filterId (statement.target.id))
+                        self.visit (statement.value)
+                        self.adaptLineNrString (statement)
+                        index += 1
+                    except:
+                        print (traceback.format_exc ())
                 else:
                     # LHS is attribute or array element, we can't use it for representation or comparison
                     delayedAssigns.append (statement)
@@ -2168,14 +2171,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             def emitMerge (merge): 
                 # Merge dataclass fields for any class, since parents or descendants may be dataclasses
                 # ??? Should __bases__ hold complete dotted classnames in case of local classes?
-                self.emit ('\nfor (let aClass of {}.__bases__) {{\n', self.filterId (merge.className))
-                self.indent ()
-                self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (merge.className))
-                self.dedent ()
-                self.emit ('}}')
-                
-                # Merge dataclass fields for current class
                 if merge.isDataClass:
+                    self.emit ('\nfor (let aClass of {}.__bases__) {{\n', self.filterId (merge.className))
+                    self.indent ()
+                    self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (merge.className))
+                    self.dedent ()
+                    self.emit ('}}')
+                    
+                    # Merge dataclass fields for current class
                     self.emit (';\n__mergefields__ ({}, {{', self.filterId (merge.className))
                     self.emit ('__reprfields__: new Set ([{}]), ', ', '.join ('\'{}\''.format (reprAssign.target.id) for reprAssign in merge.reprAssigns))
                     self.emit ('__comparefields__: new Set ([{}]), ', ', '.join ('\'{}\''.format (compareAssign.target.id) for compareAssign in merge.compareAssigns))
@@ -2304,7 +2307,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         )
 
         if self.allowJavaScriptIter:
-            self.emit ('for (let ')
+            self.emit ('for (var ')
             self.visit (node.target)
             self.emit (' in ')
             self.visit (node.iter)
@@ -2321,7 +2324,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     -node.iter.args [2] .operand .n
             )
 
-            self.emit ('for (let ')
+            self.emit ('for (var ')
             self.visit (node.target)
             self.emit (' = ')
             self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Num (0))
@@ -2347,7 +2350,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.module.program.javascriptVersion >= 6 and  # Supports for ... of
             not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
         ):
-            self.emit ('for (let ')
+            self.emit ('for (var ')
             self.stripTuples = True
             self.visit (node.target)
             self.stripTuples = False
