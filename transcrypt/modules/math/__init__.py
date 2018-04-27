@@ -54,3 +54,6 @@ isnan = js_isNaN
 
 inf = js_Infinity
 nan = js_NaN
+
+def copysign(x, y):
+    return abs(x) * (1 if y >= 0 else -1)
