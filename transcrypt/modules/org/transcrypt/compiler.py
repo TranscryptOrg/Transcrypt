@@ -667,6 +667,7 @@ class Generator (ast.NodeVisitor):
             ('get', 'py_get'),                      ('js_get', 'get'),
                                                     ('js_global', 'global'),
             ('Infinity', 'py_Infinity'),            ('js_Infinity', 'Infinity'),
+            ('is', 'py_is'),                        ('js_is', 'is'),
             ('isNaN', 'py_isNaN'),                  ('js_isNaN', 'isNaN'),
             ('iter', 'py_iter'),                    ('js_iter', 'iter'),
             ('items', 'py_items'),                  ('js_items', 'items'),
@@ -684,7 +685,7 @@ class Generator (ast.NodeVisitor):
             ('sort', 'py_sort'),                    ('js_sort', 'sort'),
             ('split', 'py_split'),                  ('js_split', 'split'),
             ('switch', 'py_switch'),
-            ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealth with separately in visit_Call
+            ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealt with separately in visit_Call
             ('TypeError', 'py_TypeError'),          ('js_TypeError', 'TypeError'),
             ('update', 'py_update'),                ('js_update', 'update'),
             ('values', 'py_values'),                ('js_values', 'values'),
