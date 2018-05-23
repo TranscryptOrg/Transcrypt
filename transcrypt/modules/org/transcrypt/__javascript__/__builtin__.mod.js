@@ -2152,8 +2152,9 @@ __pragma__ ('endif')
             return Math.pow (a, b);
         }
     };
-    __all__.pow = __pow__;
+    __all__.__pow__ =  __pow__;
 
+    var pow = __pow__; // make sure pow is hoisted to the top level for builtin python pow
 
 __pragma__ ('ifndef', '__xtiny__')
 
