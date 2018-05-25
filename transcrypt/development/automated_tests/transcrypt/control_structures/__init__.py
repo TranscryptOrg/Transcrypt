@@ -1,3 +1,18 @@
+
+class ContextManagerExample:
+
+    def __init__(self):
+        self.counter = 0
+
+    def __enter__(self):
+        self.counter += 1
+        return self
+
+    def __exit__(self, *args):
+        self.counter += 99
+
+
+
 def run (autoTester):
     for index in range (10):
         autoTester.check (index)
@@ -69,3 +84,13 @@ def run (autoTester):
                 autoTester.check ('oceania')
             else:
                 autoTester.check ('anywhere')
+
+    with ContextManagerExample() as example:
+        pass
+    autoTester.check(example.counter)
+
+    with ContextManagerExample() as example2:
+        example2.counter += 100
+        
+    autoTester.check(example2.counter)
+

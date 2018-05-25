@@ -138,6 +138,21 @@ class Overloads:
         return "__{}__".format(nodename)
 
 
+class AnonymousNameGenerator:
+
+
+    def __init__(self):
+        self.base = 1000
+        self.pattern = "_anon_{}_"
+
+    def next(self):
+        return self.pattern.format(self.base)
+        self.base += 1
+
+
+Anonymous_IDs = AnonymousNameGenerator() 
+
+
 class Program:
 
 
@@ -147,7 +162,6 @@ class Program:
         self.moduleSearchDirs = moduleSearchDirs
         self.modulesDir = modulesDir
         self.symbols = symbols
-        
         self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
 
         if utils.commandArgs.esv == None:
@@ -3224,17 +3238,45 @@ class Generator (ast.NodeVisitor):
     def visit_With (self, node):
         self.adaptLineNrString (node)
 
-        for withitem in node.items:
-            self.visit (withitem.optional_vars)
-            self.emit (' = ')
-            self.visit (withitem.context_expr)
-            self.emit (';\n')
+        identifiers = {}
 
-        self.emitBody (node.body)
+        try:
+            for withitem in node.items:
+                self.emit ('var ')
 
-        for withitem in node.items:
-            self.visit (withitem.optional_vars)
-            self.emit ('.close ()')
+                identifier = None
+                if (withitem.optional_vars):
+                    self.visit (withitem.optional_vars)  # keep this visit to register with __all__
+                    identifier = withitem.optional_vars.id
+                else:
+                    identifier = Anonymous_IDs.next()
+                    self.emit (identifier)
+                identifiers[withitem] = identifier
+
+                self.emit (' = ')
+                self.visit (withitem.context_expr)
+                self.emit (';\n')
+
+                self.emit("if ({0}.__enter__)".format(identifier))
+                self.emit("{{ \n\t")
+                self.emit("{0}.__enter__ ({0}); \n".format(identifier))
+                self.emit("}};\n")
+
+
+            self.emitBody (node.body)
+
+            for withitem in node.items:
+                identifier = identifiers.get(withitem)
+                self.emit("if ({0}.__exit__)".format(identifier))
+                self.emit("{{ \n\t")
+                self.emit("{0}.__exit__ ({0});\n".format(identifier))
+                self.emit("}} else {{\n\t")
+                self.emit( "{0}.close ();\n".format(identifier))
+                self.emit("}};\n")
+        except Exception as e:
+            print (e)
+
+
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True
