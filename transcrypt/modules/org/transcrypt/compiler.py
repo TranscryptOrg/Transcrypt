@@ -3240,41 +3240,37 @@ class Generator (ast.NodeVisitor):
 
         identifiers = {}
 
-        try:
-            for withitem in node.items:
-                self.emit ('var ')
+        for withitem in node.items:
+            self.emit ('var ')
 
-                identifier = None
-                if (withitem.optional_vars):
-                    self.visit (withitem.optional_vars)  # keep this visit to register with __all__
-                    identifier = withitem.optional_vars.id
-                else:
-                    identifier = Anonymous_IDs.next()
-                    self.emit (identifier)
-                identifiers[withitem] = identifier
+            identifier = None
+            if (withitem.optional_vars):
+                self.visit (withitem.optional_vars)  # keep this visit to register with __all__
+                identifier = withitem.optional_vars.id
+            else:
+                identifier = Anonymous_IDs.next()
+                self.emit (identifier)
+            identifiers[withitem] = identifier
 
-                self.emit (' = ')
-                self.visit (withitem.context_expr)
-                self.emit (';\n')
+            self.emit (' = ')
+            self.visit (withitem.context_expr)
+            self.emit (';\n')
 
-                self.emit("if ({0}.__enter__)".format(identifier))
-                self.emit("{{ \n\t")
-                self.emit("{0}.__enter__ ({0}); \n".format(identifier))
-                self.emit("}};\n")
+            self.emit("if ({0}.__enter__)".format(identifier))
+            self.emit("{{ \n\t")
+            self.emit("{0}.__enter__ ({0}); \n".format(identifier))
+            self.emit("}};\n")
 
+        self.emitBody (node.body)
 
-            self.emitBody (node.body)
-
-            for withitem in node.items:
-                identifier = identifiers.get(withitem)
-                self.emit("if ({0}.__exit__)".format(identifier))
-                self.emit("{{ \n\t")
-                self.emit("{0}.__exit__ ({0});\n".format(identifier))
-                self.emit("}} else {{\n\t")
-                self.emit( "{0}.close ();\n".format(identifier))
-                self.emit("}};\n")
-        except Exception as e:
-            print (e)
+        for withitem in node.items:
+            identifier = identifiers.get(withitem)
+            self.emit("if ({0}.__exit__)".format(identifier))
+            self.emit("{{ \n\t")
+            self.emit("{0}.__exit__ ({0});\n".format(identifier))
+            self.emit("}} else {{\n\t")
+            self.emit( "{0}.close ();\n".format(identifier))
+            self.emit("}};\n")
 
 
 
