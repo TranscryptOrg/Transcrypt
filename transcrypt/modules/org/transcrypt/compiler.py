@@ -3237,9 +3237,9 @@ class Generator (ast.NodeVisitor):
 
     def visit_With (self, node):
         self.adaptLineNrString (node)
-
+        self.emit ("{{\n");    # since this is a somewhat cumbersome translation, make an indented block for readability
+        self.indent()
         identifiers = {}
-
         for withitem in node.items:
             self.emit ('var ')
 
@@ -3248,7 +3248,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (withitem.optional_vars)  # keep this visit to register with __all__
                 identifier = withitem.optional_vars.id
             else:
-                identifier = Anonymous_IDs.next()
+                identifier = Anonymous_IDs.next()  # won't be registered, but is guaranteed not to be referenced
                 self.emit (identifier)
             identifiers[withitem] = identifier
 
@@ -3257,21 +3257,55 @@ class Generator (ast.NodeVisitor):
             self.emit (';\n')
 
             self.emit("if ({0}.__enter__)".format(identifier))
-            self.emit("{{ \n\t")
-            self.emit("{0}.__enter__ ({0}); \n".format(identifier))
-            self.emit("}};\n")
+            self.emit("{{ \n")
+            self.indent()
+            self.emit("{0}.__enter__ (); \n".format(identifier))
+            self.dedent()
+            self.emit("}}\n")
 
+        # wrap the with block in a try-catch
+        # pass a caught exception to the context manager if possible
+        # if the with object does not have an __exit__ or if it returns
+        # anything other than True from a caught exception, re-raise
+
+        self.emit("try {{\n")
+        self.indent()
         self.emitBody (node.body)
 
         for withitem in node.items:
             identifier = identifiers.get(withitem)
-            self.emit("if ({0}.__exit__)".format(identifier))
-            self.emit("{{ \n\t")
-            self.emit("{0}.__exit__ ({0});\n".format(identifier))
-            self.emit("}} else {{\n\t")
-            self.emit( "{0}.close ();\n".format(identifier))
-            self.emit("}};\n")
 
+            self.emit("if ({0}.__exit__)".format(identifier))
+            self.emit("{{ \n")
+            self.indent()
+            self.emit("{0}.__exit__ ();\n".format(identifier))
+            self.dedent()
+            self.emit("}} else {{\n")
+            self.indent()
+            self.emit( "{0}.close ();\n".format(identifier))
+            self.dedent()
+            self.emit("}}\n")
+            self.dedent()
+            self.emit("}}\n")
+            self.emit("catch (_with_blk_exc_) {{\n")   # don't use default transcrypt exception handling, defer to the context object
+            self.indent()
+            self.emit("let was_handled = false;\n")
+            self.emit("if ({0}.__exit__)".format(identifier))
+            self.emit("{{ \n")
+            self.indent()
+            self.emit("was_handled = {0}.__exit__ (_with_blk_exc_);\n".format(identifier))
+            self.dedent()
+            self.emit("}}\n")
+            self.emit("if (was_handled !== true) {{\n")
+            self.indent()
+            self.emit("throw __except0__;\n")
+            self.dedent()
+            self.emit("}}\n")
+            self.dedent()
+
+        self.emit("}}\n")
+        self.dedent()
+        self.emit("}};\n")
 
 
     def visit_Yield (self, node):
