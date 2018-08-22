@@ -26,7 +26,7 @@ import exceptions
 import extended_slices
 import fstrings
 import general_functions
-# import globals_function
+import globals_function
 import indices_and_slices
 import iterators_and_generators
 import lambda_functions
@@ -81,7 +81,7 @@ autoTester.run (exceptions, 'exceptions')
 autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (fstrings, 'fstrings')
 autoTester.run (general_functions, 'general_functions')
-# autoTester.run (globals_function, 'globals_function')
+autoTester.run (globals_function, 'globals_function')
 autoTester.run (indices_and_slices, 'indices_and_slices')
 autoTester.run (iterators_and_generators, 'iterators_and_generators') 
 autoTester.run (lambda_functions, 'lambda_functions')

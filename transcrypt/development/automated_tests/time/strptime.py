@@ -29,7 +29,7 @@ def run (autoTester):
         s = tuple(time.strptime(t, fmt))
         autoTester.check(' '.join([t, '[', fmt, '] = ']), s)
 
-    check('FEb .1.1902'               , '%b .%d.%Y')
+    check('jan .1.1902'               , '%b .%d.%Y')
     check('3112199912:00:00pm'         , '%d%m%Y%H:%M:%S%p')
     check('FEb .1.1902'               , '%b .%d.%Y')
     check('M1.1.1901'                  , 'M%m.%d.%Y')

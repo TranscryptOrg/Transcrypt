@@ -1,4 +1,4 @@
-# __pragma__ ('xglobs')
+#  __pragma__ ('xglobs')
 
 xxa = 'subXxa'
 xxb = 'subXxb'

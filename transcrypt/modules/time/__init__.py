@@ -466,7 +466,7 @@ def strptime(string, format):
     __date.setUTCMonth(t[1] -1 )
     __date.setUTCDate( t[2] )
     __date.setUTCHours(t[3])
-    t[7] = _day_of_year(__date)
+    t[7] = _day_of_year(__date, True)   # JdeH y2018m08d21: Added actual parameter True, needed to match CPython 3.7, somehow not needed with 3.6
     if not have_weekday:
         t[6] = __date.getUTCDay() -1
 

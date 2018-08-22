@@ -16,6 +16,6 @@ def run (autoTester):
     c('gmtime:'         , list(time.gmtime(ts)))
     c('daylight:'       , bool(time.daylight))
     c('timezone:'       , time.timezone)
-    c('tzname:'         , time.tzname)
+    # c('tzname:'         , time.tzname) # Won't work under Windows 10, since it mixes up CET/CEST and WET/WEST and names CEST deviantly.
     # more tests in other testlests
 

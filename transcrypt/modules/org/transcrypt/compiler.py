@@ -2950,7 +2950,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
         
         JavaScript 6 module-level variables normally cannot be accessed directly by their name as a string
-        They aren't attributes of any global object, certainly not in strickt mode, which is the default for modules
+        They aren't attributes of any global object, certainly not in strict mode, which is the default for modules
         By making getters and setters by the same name members of __all__, we can approach globals () as a dictionary
         
         Limitations:
@@ -2961,11 +2961,13 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         '''
         if self.allowGlobals:
             self.emit (
-                'export var __all__ = {' +  # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
+                'export var __all__ = {{' # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
+                +
                 ', '.join ([
-                    'get {0} () {{return {0};}}, set {0} (value) {{{0} = value;}}'.format (name) for name in sorted (self.allOwnNames)
-                ]) +
-                f'}};\n'            
+                    f'get {name} () {{{{return {name};}}}}, set {name} (value) {{{{{name} = value;}}}}' for name in sorted (self.allOwnNames)
+                ])
+                +
+                '}};\n'            
             )
             
         # Transit export of imported facilities (so no facilities that weren't imported and no modules)
