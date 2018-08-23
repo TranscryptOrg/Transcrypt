@@ -27,6 +27,7 @@ export function __kwargtrans__ (anObject) {
     return anObject;
 }
 
+/* ... OBSOLETE, remove on or after y18m10d01
 // 'Oneshot' dict promotor, used to enrich __all__ and help globals () return a true dict
 export function __globals__ (anObject) {
     if (isinstance (anObject, dict)) {  // Don't attempt to promote (enrich) again, since it will make a copy
@@ -36,6 +37,7 @@ export function __globals__ (anObject) {
         return dict (anObject)
     }
 }
+*/
 
 // Partial implementation of super () .<methodName> (<params>)
 export function __super__ (aClass, methodName) {

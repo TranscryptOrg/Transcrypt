@@ -25,4 +25,3 @@ def run (autoTester):
     autoTester.check ('Check main 3', sub.xxa, sub.xxb, sub.xxp, sub.xxq, sub.xxr, sub.xxs)
     autoTester.check ('Check main 4', * sorted ([value for key, value in globals () .items () if key.startswith ('xx')]))
     
-    

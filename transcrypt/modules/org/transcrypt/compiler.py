@@ -1358,7 +1358,8 @@ class Generator (ast.NodeVisitor):
 
             # globals () function
             elif node.func.id == 'globals':
-                self.emit ('__globals__ (__all__)')
+                # self.emit ('__globals__ (__all__)') # ??? Is __globals__ (__all__) needed or does __all___ suffice?
+                self.emit ('__all__') # y18m08d23 Variable __all__ created as a dict itself
                 return
             # __pragma__'s in many varieties, syntactically calls, but semantically compile time directives
             elif node.func.id == '__pragma__':
@@ -2946,6 +2947,18 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if docString:
                 self.allOwnNames.add ('__doc__')    # Should be done before generation of exports
                 
+        # Transit export of imported facilities (so no facilities that weren't imported and no modules)
+        if type (self.getScope ().node) == ast.Module:
+            if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
+                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
+        
+        # Prepair to generate hoisted fragments near start of fragments
+        self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
+
+        # Insert docstring at hoist location, further hoists are PRE(!)pended
+        if self.allowDocAttribs and docString:
+            self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n'))
+            
         '''
         Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
         
@@ -2961,26 +2974,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         '''
         if self.allowGlobals:
             self.emit (
-                'export var __all__ = {{' # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
+                'export var __all__ = dict ({{' # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
                 +
                 ', '.join ([
                     f'get {name} () {{{{return {name};}}}}, set {name} (value) {{{{{name} = value;}}}}' for name in sorted (self.allOwnNames)
                 ])
                 +
-                '}};\n'            
+                '}});\n'            
             )
-            
-        # Transit export of imported facilities (so no facilities that weren't imported and no modules)
-        if type (self.getScope ().node) == ast.Module:
-            if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
-                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
-        
-        # Prepair to generate hoisted fragments near start of fragments
-        self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
-
-        # Insert docstring at hoist location, further hoists are PRE(!)pended
-        if self.allowDocAttribs and docString:
-            self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n'))
            
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
