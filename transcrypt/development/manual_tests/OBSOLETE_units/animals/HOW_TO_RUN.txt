@@ -1,0 +1,1 @@
+To prevent CORS errors, run this example from a node server rather than directly from files: http-server -p8080 -c-1'

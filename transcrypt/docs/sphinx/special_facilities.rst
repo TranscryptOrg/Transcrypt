@@ -22,28 +22,28 @@ Finding the code for a module proceeds as follows:
 Suppose you import a module *all.the.kings.men*. Then the following paths will be searched respectively:
 
 	+ *<directory of your main module>/all/the/kings/men.py*
-	+ *<directory of your main module>/all/the/kings/__target__/men.js*
-	+ *<directory of your main module>/all/the/kings/men/__init__py*
-	+ *<directory of your main module>/all/the/kings/men/__target__/__init__.js*
+	+ *<directory of your main module>/all/the/kings/men.js*
+	+ *<directory of your main module>/all/the/kings/men/__init__.py*
+	+ *<directory of your main module>/all/the/kings/men/__init__.js*
 	
 	- *transcrypt/Transcrypt/modules/all/the/kings/men.py*
-	- *transcrypt/Transcrypt/modules/all/the/kings/__target__/men.js*
+	- *transcrypt/Transcrypt/modules/all/the/kings/men.js*
 	- *transcrypt/Transcrypt/modules/all/the/kings/men/__init__py*
-	- *transcrypt/Transcrypt/modules/all/the/kings/men/__target__/__init__.js*
+	- *transcrypt/Transcrypt/modules/all/the/kings/men/__init__js*
 	
 	+ *<CPython packages directory 1>/all/the/kings/men.py*
-	+ *<CPython packages directory 1>/all/the/kings/__target__/men.js*
-	+ *<CPython packages directory 1>/all/the/kings/men/__init__py*
-	+ *<CPython packages directory 1>/all/the/kings/men/__target__/__init__.js*
+	+ *<CPython packages directory 1>/all/the/kings/men.js*
+	+ *<CPython packages directory 1>/all/the/kings/men/__init__.py*
+	+ *<CPython packages directory 1>/all/the/kings/men/__init__.js*
 	
 	- *<CPython packages directory 2>/all/the/kings/men.py*
-	- *<CPython packages directory 2>/all/the/kings/__target__/men.js*
-	- *<CPython packages directory 2>/all/the/kings/men/__init__py*
-	- *<CPython packages directory 2>/all/the/kings/men/__target__/__init__.js*
+	- *<CPython packages directory 2>/all/the/kings/men.js*
+	- *<CPython packages directory 2>/all/the/kings/men/__init__.py*
+	- *<CPython packages directory 2>/all/the/kings/men/__init__.js*
 
 	+ *More CPython packages directories*
 
-As can be seen from the above list, modules local to your project take precedence of modules available in Transcrypt, which again take precedence over modules available globally in CPython. Note that even if modules are made available globally in CPython, importing them in Transcrypt gives special possibilities and restrictions. They are allowed to be written in native JavaScript, in which case they reside in the __javascript__ subdirectory of the module. They should not depend on C, C++ or features that are outside Python subset supported by Transcrypt.
+As can be seen from the above list, modules local to your project take precedence over modules available in Transcrypt, which again take precedence over modules available globally in CPython. Note that even if modules are made available globally in CPython, importing them in Transcrypt gives special possibilities and restrictions. They are allowed to be written in native JavaScript, in which case they reside in the __javascript__ subdirectory of the module. They should not depend on C, C++ or features that are outside Python subset supported by Transcrypt.
 
 Although under these guidelines it's quite possible to write modules that are importable both by CPyton and Transcrypt, most Transcrypt modules will be come from the JavaScript, rather than from the Python ecosystem. If both a Python and a JavaScript incarnation of a module are present, the Python module is only recompiled if it's younger than the corresponding JavaScript module, unless the -b switch is used.
 
@@ -56,7 +56,7 @@ As a consequence of the above, modules may be distributed as Python *.py* files,
 
 Using browser stubs to test non-GUI code that uses console.log and window.alert
 -------------------------------------------------------------------------------
-To test the non-GUI part of your code in a desktop rather than a browser environment, use *from org.transcrypt.stubs.browser import \**. This will allow you to call the *window.alert* and *console.log* functions in your code when you run it from the command prompt, using the -r command line switch: *transcrypt -r <my main file name>*. This will invoke CPython, searching the appropriate module paths as compilation would have done.
+To test the non-GUI part of your code in a desktop rather than a browser environment, use *from org.transcrypt.stubs.browser import \**. This will allow you to call the *window.alert* and *console.log* functions in your code when you run it from the command prompt, using the -r command line switch: *transcrypt -r <my main module name>*. This will invoke CPython, searching the appropriate module paths as compilation would have done.
 
 Creating JavaScript objects with __new__ (<constructor call>)
 -------------------------------------------------------------

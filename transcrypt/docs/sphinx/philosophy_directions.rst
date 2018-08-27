@@ -22,7 +22,7 @@ When faced with JavaScript in the browser, they experience a frustrating loss of
 For them the news is that they have more viable options:
 
 Is HTML ok? They can use it. Do they find it restrictive? They can manipulate the underlying object model directly in Python.
-Is CSS ok for them? No urge to change then. Do they find it utterly confusing, inconsequent, repetitive and static? They can access the underlying style attributes dynamically in Python.
+Is CSS ok for them? No need to change then. Do they find it utterly confusing, inconsequent, repetitive and static? They can access the underlying style attributes dynamically in Python.
 Is JavaScript ok for them? If it ain't broke, don't fix it. Did they already experience that for larger applications the overall structure tends to become messy? They can switch to Python, keeping full access to any JavaScript library.
 
 Recently legitimate worries have surfaced about the JavaScript world becoming more an more fragmented. Transcrypt is not about fragmentation but about unification. It doesn't introduce a new language. It makes a mainstream server side language available for development of client side code, without sacrificing performance, compactness or compatibility.
@@ -41,7 +41,7 @@ Other developers
 
 In this group will be experienced developers who are familiar with C++, C, C#, Java or any other language. But it also includes students of any kind, being serious about a professional IT carreer, but not yet there.
 
-Programming for the web may be new to them, and rather than following the lowest common denominator, they may just as well enter this new world the proper way, respecting the constitution of software design: modularity, thin interfaces, learning to balance loose coupling against internal cohesion.
+Programming for the web may be new to them, and rather than following the lowest common denominator, they may just as well enter this new world the proper way, respecting the constitution of software design: modularity and thin interfaces, learning to balance loose coupling against internal cohesion.
 
 The fact that it took so long to introduce something simple like a decent module mechanism into JavaScript is a telltale sign of severe underdevelopment in this area. In the vast pool of JavaScript developers there are many that are highly skilled and resourceful, and they have successfully circumvented this restriction by using functions as modules, keeping their local variables and functions alive artificially. But a language having modularisation so low on its priority list, is a less than ideal starting point for acquiring good manners in web application design.
 
@@ -62,7 +62,7 @@ It's completely agreed that having native CPython in the browser would be great.
 But having JavaScript in between, even as asm.js, unfortunately makes it impractical.
 
 It's completely agreed that many Python developers would like all of their familiar libraries to be avaible.
-But the fact that most of them are written in C, makes it equally impractical, since they would run at snail speed.
+But the fact that most of them are written in C, makes it equally impractical, since they would load at snail speed in a browser.
 Apart from that, for viable web development, unimpeded access to JavaScript libraries is far more important.
 
 One alternative is to wait from the browser manufacturers to support descents to pure, true assembler, or at least C or C++.
@@ -82,7 +82,7 @@ Specific design choices made for Transcrypt and their underlying motivation
 Why is Transcrypt written in Python and not in JavaScript
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Transcrypt departs from the Python side of things. It is not JavaScript approaching the Python world, but Python approaching the JavaScript world. What enabled this approach, is that the notion of compiling it on the fly in the browser was rejected from the start. While this would have enabled things like 'exec' and 'eval' and would have made the compilation process fully transparent, compiling a piece of interpreted code on the fly will always stand in the way of performance. And any compromise on that was judged to be lethal for accepting Transcrypt as a serious win-win alternative for JavaScript in a world where download size and page-load speed are crucial factors.
+Transcrypt departs from the Python side of things. It is not JavaScript approaching the Python world, but Python approaching the JavaScript world. What enabled this approach, is that the notion of compiling on the fly in the browser was rejected from the start. While this would have enabled things like 'exec' and 'eval' and would have made the compilation process fully transparent, compiling a piece of interpreted code on the fly will always stand in the way of performance. And any compromise with regard to performance was judged to be lethal for accepting Transcrypt as a serious win-win alternative for JavaScript in a world where download size and page-load speed are crucial factors.
 
 Syntactically speaking, Python isn't as simple as it may seem. Using indentation to indicate blocks has a profoundly positive effect upon the readability of the language, but also creates parsing anomalies. The flexibility with regard to formal and actual function parameters makes parsing even more complex. Developing Transcrypt in Python makes available the original, rock-solid Python parser to do the job fast and concise. And since Transcrypt and Python use the same parser, Python can never syntactically develop into a direction that Transcrypt couldn't follow. To JavaScript developers having '__new__ ()' instead of 'new' may well indeed be new, to Python developers it's just another function call. Given the turmoil created by getting rid of Python's 'print' statement in favour of 'print ()' it wouldn't be wise to introduce another unnecessary syntactic anomaly. Even a __pragma__ syntactically (but not semantically) is just another function call. This approach also facilitates reuse of the existing concise documentation on Python's syntax. Transcrypt syntax == Python syntax. Period.
 
@@ -107,7 +107,7 @@ The following benchmark results give an indication of the performance of Transcr
 .. figure:: ../images/benchmark.png
     :alt: Relative performance measured by Pystone benchmark
     
-Note that Transcrypt avoids constructs that cannot be made to perform in the browser. This means that Transcrypt and CPython are playing in different leagues. Transcrypt makes it possible for Python programmers to take a lot of their skills to the browser, but it is in no way a replacement for, or an equivalent to CPython. The two should be regarded as complementary.
+Note that Transcrypt avoids constructs that cannot be made to perform in the browser. This means that Transcrypt and CPython are playing in different leagues. Transcrypt makes it possible for Python programmers to take a lot of their skills to the browser, but it is in no way a replacement for CPython. The two should be regarded as complementary.
 
 Why were the \_\_pragma\_\_'s added
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

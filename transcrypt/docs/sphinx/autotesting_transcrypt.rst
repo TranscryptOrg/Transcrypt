@@ -4,7 +4,7 @@ Autotesting Transcrypt code
 Why it's needed
 ---------------
 
-A simple autotest feature was added to Transcrypt right from the start for the following reasons:
+A powerful autotest facility was added to Transcrypt right from the start for the following reasons:
 
 1. Any programming language compiler has to be reliable, since a large investment in code may come to depend upon it. Languages and libraries should be able to evolve without regression bugs being introduced. In a rich language many constructs are possible which all should be tested with each new release. This can only be done if testing is automated.
 
@@ -17,8 +17,8 @@ When code is being tested, a reference is needed of what is considered to be cor
 
 1. Along with developing production code, a growing set of *testlets* is developed. A testlet is a small module testing a certain feature or group of features. It repeatedly calls method *org.transcrypt.autotester.AutoTester.check (self, \*args)* to build a well defined sequence of output data.
 2. A series of testlets are imported into an application called an *autotest*.
-3. The autotest is first run from the command line: *python transcrypt -r autotest.py*. This will generate file *autotest.html* in the working directory, containing the *reference data sequence* produced by CPython, in an HTML DIV.
-4. After that, the autotest is compiled to JavaScript: *python transcrypt -b autotest.py*. This will generate file *autotest.js* in the corresponding target directory. Note that you may need extra command line switches to activate options needed for your testcode, e.g. -c if you use complex numbers or -da if you use assertions.
+3. The autotest is first run from the command line: *python transcrypt -r autotest*. This will generate file *autotest.html* in the working directory, containing the *reference data sequence* produced by CPython, in an HTML DIV.
+4. After that, the autotest is compiled to JavaScript: *python transcrypt -b autotest*. This will generate file *autotest.js* in the corresponding target directory. Note that you may need extra command line switches to activate options needed for your testcode, e.g. -c if you use complex numbers or -da if you use assertions.
 5. Click on *autotest.html* to load the autotest into the browser and run *autotest.js*. This will generate the *test data sequence*, now using the Transcrypt runtime.
 6. After this, the test data sequence is automatically compared to the reference data sequence that was part of the html, and an error report is shown in the browser.
 
@@ -30,15 +30,21 @@ An example of two testlets combined into the 'hello' autotest, that is part of t
 |        :caption: autotest.py                                               |         :caption: testlet0.py                                              |        :caption: testlet1.py                                               |
 +----------------------------------------------------------------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
-Steps to run the tests (assuming you are inside a virtual environment with an installed Transcrypt):
+Steps to run the tests:
 
 .. code-block:: shell
 
-   transcrypt -b autotest.py
-   PYTHONPATH=".:$PYTHONPATH" transcrypt -r autotest.py
+   transcrypt -r autotest
+   transcrypt -b autotest
 
-The second line temporarily modifies your `PYTHONPATH` so that Transcrypt can find and import the testlets. At this point, if you open `autotest.html`, you will see that all tests passed. That is to be expected because Transcrypt has no problem transpiling and comparing a simple string to itself. In order to trigger an error, open `autotest.html`, search for `goodbye` and replace it with `badbye` to get the result below:
+At this point, if you open *autotest.html* in your browser, you will see that all tests passed. In order to trigger an error, open *testlet1.py*, search for *goodbye* and replace it with *badbye*. After that, recompile with:
 
+.. code-block:: shell
+
+   transcrypt -b autotest
+   
+Once again open *autotest.html* in your browser, it will show:
+   
 .. figure:: ../images/autotest_hello.png
             :alt: Output of 'hello autotest'
             

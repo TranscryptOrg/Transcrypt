@@ -1,1 +1,14 @@
-To prefent CORS errors, run this example from a server rather than directly from files: python -m http.server
+This example consists of two Transcrypt applications, 'cats' and 'dogs', running on the same page.
+They share one instance of the runtime library and of the 'animals' module.
+
+Compile this example by the following commands:
+
+transcrypt cats
+transcrypt dogs
+
+
+Then start a local web server, e.g. the server that comes with node.js:
+
+http-server D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/development/manual_tests/dyn_units/animals -p8080 -c-1
+
+Open a browser and go to localhost:8080/animals.html to play with the result.

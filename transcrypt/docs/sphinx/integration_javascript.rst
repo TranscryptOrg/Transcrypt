@@ -82,12 +82,12 @@ In using the fabric.js JavaScript library this example, the only thing differing
 |    :caption: pong.py                         |    :caption: pong.js                                    |
 +----------------------------------------------+---------------------------------------------------------+
 
-Joined minification
+Minification
 -------------------
 
-Minification is currently performed by the Google closure compiler, that's also part of the distribution. Rather than separately minifying libraries, the application is minified as a whole. In principle this enables a smaller total download size. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working *strict* code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.
+Minification is currently performed by the Google closure compiler, that's also part of the distribution. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working *strict* code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.
 
-As can be seen from the listings, *pong.js* without libraries is only slightly longer than *pong.py* without libraries. The difference mainly comes from the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified version is about half this size. The Transcrypt runtime itself in minified form is about 9kB. So the bulk of the total size of the minified file, 148kB comes from *fabric.js*. From this example it becomes clear that Transcrypt is extremely lightweight.
+As can be seen from the listings, even the non-minified *pong.js* module is only slightly larger than *pong.py*. This is despite the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified but not treeshaked Transcrypt runtime is slightly above 40 kB. The *fabric.js* library on the other hand occupies 180 kB. From this example it becomes clear that Transcrypt is extremely lightweight.
 
 Example: jQuery
 ---------------

@@ -1,1 +1,0 @@
-To prefent CORS errors, run this example from a server rather than directly from files: python -m http.server
