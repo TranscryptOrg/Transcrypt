@@ -1,5 +1,5 @@
-Logging AJAX Handler Manuall Test
-=================================
+Logging AJAX Handler Manual Test
+================================
 
 This directory contains the following:
 

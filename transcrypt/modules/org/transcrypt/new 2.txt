@@ -1,7 +1,0 @@
-let values = self.__initfields__.values ();
-for (let arg of args) {
-    self [values.next () .value] = arg;
-}
-for (let key of kwargs.py_keys ()) {
-    self [key] = kwargs [key];
-}                                       '''

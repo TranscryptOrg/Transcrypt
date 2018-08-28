@@ -37,7 +37,7 @@ Steps to run the tests:
    transcrypt -r autotest
    transcrypt -b autotest
 
-At this point, if you open *autotest.html* in your browser, you will see that all tests passed. In order to trigger an error, open *testlet1.py*, search for *goodbye* and replace it with *badbye*. After that, recompile with:
+At this point, if you start a webserver and load *autotest.html* in your browser from localhost, you will see that all tests passed. In order to trigger an error, open *testlet1.py*, search for *goodbye* and replace it with *badbye*. After that, recompile with:
 
 .. code-block:: shell
 
