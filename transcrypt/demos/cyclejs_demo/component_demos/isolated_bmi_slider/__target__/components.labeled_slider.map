@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "components.labeled_slider.js",
+	"sources": [
+		"components.labeled_slider.py"
+	],
+	"mappings": "AAAA;AAAA;AAAA;AAAA;AAEA;AAEA;AACA;AAEA;AAAA;AAAA;AAKA;AACA;AAAA;AAAA;AAAA;AAaA;AAKA;AAAA;AAKA;AAAA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAvCA"
+}

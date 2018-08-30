@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "lambda_functions.js",
+	"sources": [
+		"lambda_functions.py"
+	],
+	"mappings": "AAAA;AAWA;AAXA;AAAA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "globals_function.sub.js",
+	"sources": [
+		"globals_function.sub.py"
+	],
+	"mappings": "AAAA;AAoBA;AAAA;AApBA;AAEA;AACA;AACA;AACA;AACA;AACA;AAEA;AACA;AAAA;AAEA;AACA;AACA;AAAA;AAAA;AAEA;AACA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

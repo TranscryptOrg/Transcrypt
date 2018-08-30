@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "indices_and_slices.js",
+	"sources": [
+		"indices_and_slices.py"
+	],
+	"mappings": "AAAA;AAsBA;AAtBA;AAAA;AAEA;AACA;AAEA;AACA;AAGA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AACA;AAEA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AAAA;AAAA"
+}

@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "static_types.js",
+	"sources": [
+		"static_types.py"
+	],
+	"mappings": "AAAA;AAMA;AAAA;AAAA;AAGA;AAAA;AADA;AAAA;AAFA;AANA;AAWA;AAEA;AACA;AAAA;AAAA;AACA;AAEA;AAAA;AAAA;AAAA;AAEA;AAAA;AAEA;AACA;AAAA;AAEA;AAAA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAvBA"
+}
