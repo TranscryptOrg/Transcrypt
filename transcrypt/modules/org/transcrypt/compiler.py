@@ -1853,9 +1853,7 @@ class Generator (ast.NodeVisitor):
                 elif type (statement.target) == ast.Name:
                     try:
                         # Simple class var assignment
-                        inlineAssigns.append (statement)
-                        if isDataClass:
-                            reprAssigns.append (statement)                        
+                        inlineAssigns.append (statement)                       
                         self.emitComma (index, False)
                         self.emit ('\n{}: ', self.filterId (statement.target.id))
                         self.visit (statement.value)
