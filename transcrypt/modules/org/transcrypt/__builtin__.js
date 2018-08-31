@@ -103,6 +103,28 @@ export function __mergefields__ (targetClass, sourceClass) {
     }
 }
 
+// Context manager support
+
+export function __withblock__ (manager, statements) {
+    if (hasattr (manager, '__enter__')) {
+        try {
+            manager.__enter__ ();
+            statements ();
+            manager.__exit__ ();
+        }
+        catch (exception) {
+            // Same signature as CPython : type, value, traceback
+            if (! (manager.__exit__ (exception.name, exception, exception.stack))) {
+                throw exception;
+            }
+        }
+    }
+    else {
+        statements ();
+        manager.close ();
+    }
+};  
+
 // Manipulating attributes by name
 
 export function dir (obj) {
@@ -1915,6 +1937,8 @@ export function __pow__ (a, b) {
         return Math.pow (a, b);
     }
 };
+
+export var pow = __pow__;   // Make available as builin under usual name
 
 __pragma__ ('ifndef', '__xtiny__')    
 

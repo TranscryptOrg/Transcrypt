@@ -425,6 +425,7 @@ class Generator (ast.NodeVisitor):
             ('get', 'py_get'),                      ('js_get', 'get'),
                                                     ('js_global', 'global'),
             ('Infinity', 'py_Infinity'),            ('js_Infinity', 'Infinity'),
+            ('is', 'py_is'),                        ('js_is', 'is'),
             ('isNaN', 'py_isNaN'),                  ('js_isNaN', 'isNaN'),
             ('iter', 'py_iter'),                    ('js_iter', 'iter'),
             ('items', 'py_items'),                  ('js_items', 'items'),
@@ -3218,25 +3219,25 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
             self.indent ()
 
-            for index, excepthandler in enumerate (node.handlers):
+            for index, exceptionHandler in enumerate (node.handlers):
                 if index:
                     self.emit ('else ')             # Never here after a catch all
 
-                if excepthandler.type:
+                if exceptionHandler.type:
                     self.emit ('if (isinstance ({}, ', self.getTemp ('except'))
-                    self.visit (excepthandler.type)
+                    self.visit (exceptionHandler.type)
                     self.emit (')) {{\n')
                     self.indent ()
 
-                    if excepthandler.name:
-                        self.emit ('var {} = {};\n', excepthandler.name, self.getTemp ('except'))
+                    if exceptionHandler.name:
+                        self.emit ('var {} = {};\n', exceptionHandler.name, self.getTemp ('except'))
 
-                    self.emitBody (excepthandler.body)
+                    self.emitBody (exceptionHandler.body)
 
                     self.dedent ()
                     self.emit ('}}\n')
                 else:                               # Catch all, swallowing no problem
-                    self.emitBody (excepthandler.body)
+                    self.emitBody (exceptionHandler.body)
                     break
             else:                                   # No catch all, avoid swallowing exception
                 self.emit ('else {{\n')
@@ -3320,18 +3321,45 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_With (self, node):
         self.adaptLineNrString (node)
+        
+        self.emit ('{{\n')
+        self.indent ()
+        
+        for item in node.items:
+            if (item.optional_vars):
+                self.emit ('var ')
+                self.visit (item.optional_vars)     # Keep this visit to register with __all__
+                withId = item.optional_vars.id
+            else:
+                self.emit ('let ')
+                withId = self.nextTemp ('withid')   # Won't be registered, but is guaranteed not to be referenced
+                self.emit (withId)
 
-        for withitem in node.items:
-            self.visit (withitem.optional_vars)
             self.emit (' = ')
-            self.visit (withitem.context_expr)
+            self.visit (item.context_expr)
             self.emit (';\n')
 
-        self.emitBody (node.body)
+            self.emit('let ')
+            self.emit (self.nextTemp ('withfunc'))
+            self.emit (' = function() {{\n')
+            self.indent()
+            self.emitBody (node.body)
+            self.dedent ()
+            self.emit('}};\n')
 
-        for withitem in node.items:
-            self.visit (withitem.optional_vars)
-            self.emit ('.close ()')
+            self.emit ('__withblock__(')
+            self.emit (withId)
+            self.emit (' , ')
+            self.emit (self.getTemp ('withfunc'))
+            self.emit (');\n')
+            
+            self.prevTemp ('withfunc')
+            
+            if withId == self.getTemp ('withid'):
+                self.prevTemp ('withid')
+            
+        self.dedent()
+        self.emit('}}')
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True

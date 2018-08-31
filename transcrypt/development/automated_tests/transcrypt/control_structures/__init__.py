@@ -1,3 +1,14 @@
+class ContextManagerExample:
+    def __init__ (self):
+        self.counter = 0
+        
+    def __enter__ (self):
+        self.counter += 1
+        return self
+        
+    def __exit__ (self, *args):
+        self.counter += 99
+
 def run (autoTester):
     for index in range (10):
         autoTester.check (index)
@@ -68,4 +79,16 @@ def run (autoTester):
             elif vehicle == 'boat':
                 autoTester.check ('oceania')
             else:
-                autoTester.check ('anywhere')
+                autoTester.check ('anywhere') 
+
+    with ContextManagerExample () as contextManagerExample:
+        pass
+        
+    autoTester.check (contextManagerExample.counter)
+
+    with ContextManagerExample () as contextManagerExample2:
+        contextManagerExample2.counter += 100
+        
+    autoTester.check (contextManagerExample2.counter)
+                
+                

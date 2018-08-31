@@ -76,6 +76,13 @@ Control structures: for...else, while...else, if...elif...else, break, continue
 	:tab-width: 4
 	:caption: Testlet: control_structures
 
+Data classes: Avoiding boilerplate code
+---------------------------------------
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/data_classes/__init__.py
+	:tab-width: 4
+	:caption: Testlet: data_classes
+
 Data structures: tuple, list, dict, set
 ---------------------------------------
 
