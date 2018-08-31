@@ -138,6 +138,20 @@ class Overloads:
         return "__{}__".format(nodename)
 
 
+class AnonymousNameGenerator:
+
+
+    def __init__(self):
+        self.base = 999
+
+    def next(self):
+        self.base += 1
+        return "_anon{}_".format(self.base)
+        
+
+Anonymous_IDs = AnonymousNameGenerator() 
+
+
 class Program:
 
 
@@ -147,7 +161,6 @@ class Program:
         self.moduleSearchDirs = moduleSearchDirs
         self.modulesDir = modulesDir
         self.symbols = symbols
-        
         self.pythonVersion = sys.version_info [0] + 0.1 * sys.version_info [1]
 
         if utils.commandArgs.esv == None:
@@ -3224,18 +3237,44 @@ class Generator (ast.NodeVisitor):
 
     def visit_With (self, node):
         self.adaptLineNrString (node)
+        identifiers = {}
 
+        self.emit("{{\n")
+        self.indent()
         for withitem in node.items:
-            self.visit (withitem.optional_vars)
+
+            identifier = None
+            if (withitem.optional_vars):
+                self.emit ('var ')
+                self.visit (withitem.optional_vars)  # keep this visit to register with __all__
+                identifier = withitem.optional_vars.id
+            else:
+                self.emit('let ')
+                identifier = Anonymous_IDs.next()  # won't be registered, but is guaranteed not to be referenced
+                self.emit (identifier)
+            identifiers[withitem] = identifier
+
             self.emit (' = ')
             self.visit (withitem.context_expr)
             self.emit (';\n')
 
-        self.emitBody (node.body)
+            inner_fn = Anonymous_IDs.next()
 
-        for withitem in node.items:
-            self.visit (withitem.optional_vars)
-            self.emit ('.close ()')
+            self.emit('let ')
+            self.emit(inner_fn)
+            self.emit(' = function() {{\n')
+            self.indent()
+            self.emitBody(node.body)
+            self.dedent()
+            self.emit('}};\n')
+
+            self.emit('__withblock__(')
+            self.emit(identifier)
+            self.emit(' , ')
+            self.emit(inner_fn)
+            self.emit(');\n')
+        self.dedent()
+        self.emit('}}')
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True

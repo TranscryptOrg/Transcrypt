@@ -2152,8 +2152,31 @@ __pragma__ ('endif')
             return Math.pow (a, b);
         }
     };
-    __all__.pow = __pow__;
+    __all__.__pow__ =  __pow__;
 
+    var pow = __pow__; // make sure pow is hoisted to the top level for builtin python pow
+
+    // handles context manager functionality
+    var __withblock__ = function (manager, statements) {
+            if (hasattr (manager, '__enter__')) {
+                try {
+                    manager.__enter__ ();
+                    statements ();
+                    manager.__exit__ ();
+                }
+                catch (__except0__) {
+                    // same signature as cpython : type, value, traceback
+                    if (!(manager.__exit__ (__except0__.name, __except0__, __except0__.stack))) {
+                        throw __except0__;
+                    }
+                }
+            }
+            else {
+                statements ();
+                manager.close ();
+            }
+        };  
+    __all__.__withblock__ = __withblock__
 
 __pragma__ ('ifndef', '__xtiny__')
 
