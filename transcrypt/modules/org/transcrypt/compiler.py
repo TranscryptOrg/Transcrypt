@@ -3335,8 +3335,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.visit (item.context_expr)
             self.emit (';\n')
 
-            self.emit ('if (hasattr ({}, \'__enter__\')) {{\n', withId)
-            self.indent ()
             self.emit ('try {{\n')
             self.indent ()
             self.emit ('{}.__enter__ ();\n', withId)
@@ -3354,12 +3352,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.dedent ()
             self.emit ('}}\n')
             self.prevTemp ('except')
-            self.dedent ()
-            self.emit ('}}\n')
-            self.emit ('else {{\n')
-            self.indent ()
-            self.dedent ()
-            self.emit ('}}\n')
             
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
