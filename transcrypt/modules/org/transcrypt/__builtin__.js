@@ -119,7 +119,7 @@ export function __withblock__ (manager, statements) {
             }
         }
     }
-    else {
+    else {  // Close an open file object, even if it doesn't support context management
         statements ();
         manager.close ();
     }

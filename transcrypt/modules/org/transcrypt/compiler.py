@@ -3322,44 +3322,47 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_With (self, node):
         self.adaptLineNrString (node)
         
-        self.emit ('{{\n')
-        self.indent ()
-        
         for item in node.items:
+            self.emit ('var ')                      # Should be in surrounding scope but may be overwritten, so use var rather than let
             if (item.optional_vars):
-                self.emit ('var ')
-                self.visit (item.optional_vars)     # Keep this visit to register with __all__
+                self.visit (item.optional_vars)
                 withId = item.optional_vars.id
             else:
-                self.emit ('let ')
-                withId = self.nextTemp ('withid')   # Won't be registered, but is guaranteed not to be referenced
+                withId = self.nextTemp ('withid')
                 self.emit (withId)
 
             self.emit (' = ')
             self.visit (item.context_expr)
             self.emit (';\n')
 
-            self.emit('let ')
-            self.emit (self.nextTemp ('withfunc'))
-            self.emit (' = function() {{\n')
-            self.indent()
+            self.emit ('if (hasattr ({}, \'__enter__\')) {{\n', withId)
+            self.indent ()
+            self.emit ('try {{\n')
+            self.indent ()
+            self.emit ('{}.__enter__ ();\n', withId)
             self.emitBody (node.body)
+            self.emit ('{}.__exit__ ();\n', withId)
             self.dedent ()
-            self.emit('}};\n')
-
-            self.emit ('__withblock__(')
-            self.emit (withId)
-            self.emit (' , ')
-            self.emit (self.getTemp ('withfunc'))
-            self.emit (');\n')
-            
-            self.prevTemp ('withfunc')
+            self.emit ('}}\n')
+            self.emit ('catch ({}) {{\n', self.nextTemp ('except'))
+            self.indent ()
+            self.emit ('if (! ({0}.__exit__ ({1}.name, {1}, {1}.stack))) {{\n', withId, self.getTemp ('except'))
+            self.indent ()
+            self.emit ('throw {};\n', self.getTemp ('except'))
+            self.dedent ()
+            self.emit ('}}\n')
+            self.dedent ()
+            self.emit ('}}\n')
+            self.prevTemp ('except')
+            self.dedent ()
+            self.emit ('}}\n')
+            self.emit ('else {{\n')
+            self.indent ()
+            self.dedent ()
+            self.emit ('}}\n')
             
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
-            
-        self.dedent()
-        self.emit('}}')
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True

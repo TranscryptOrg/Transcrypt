@@ -10,6 +10,9 @@ class ContextManagerExample:
         self.counter += 99
 
 def run (autoTester):
+
+    # General control structure tests
+
     for index in range (10):
         autoTester.check (index)
         
@@ -80,15 +83,45 @@ def run (autoTester):
                 autoTester.check ('oceania')
             else:
                 autoTester.check ('anywhere') 
+                
+    # Context manager tests
 
-    with ContextManagerExample () as contextManagerExample:
-        pass
-        
-    autoTester.check (contextManagerExample.counter)
-
+    externalCounter1 = 0
+    with ContextManagerExample () as contextManagerExample1:
+        externalCounter1 += 1
+    autoTester.check ('ctx1', contextManagerExample1.counter, externalCounter1)
+    
+    externalCounter2 = 0
     with ContextManagerExample () as contextManagerExample2:
+        externalCounter2 += 1
         contextManagerExample2.counter += 100
-        
-    autoTester.check (contextManagerExample2.counter)
-                
-                
+        externalCounter3 = 0
+        with ContextManagerExample () as contextManagerExample3:
+            externalCounter3 += 1
+            contextManagerExample2.counter += 100     
+            externalCounter3 += 2
+            contextManagerExample3.counter += 200
+        autoTester.check ('ctx3', contextManagerExample3.counter, externalCounter3)
+        externalCounter2 += 2
+        contextManagerExample2.counter += 200
+    autoTester.check ('ctx2', contextManagerExample2.counter, externalCounter2)
+
+    try:
+        externalCounter4 = 0
+        with ContextManagerExample () as contextManagerExample4:
+            externalCounter4 += 1
+            contextManagerExample4.counter += 100
+            externalCounter5 = 0
+            with ContextManagerExample () as contextManagerExample5:
+                externalCounter5 += 1
+                contextManagerExample5.counter += 100
+                raise Exception ()    
+                externalCounter5 += 2
+                contextManagerExample5.counter += 200  
+            externalCounter4 += 2
+            contextManagerExample4.counter += 200
+    except Exception as exception:
+        autoTester.check ('ctx6', exception)
+    finally:
+        autoTester.check ('ctx5', contextManagerExample5.counter, externalCounter5)
+        autoTester.check ('ctx4', contextManagerExample4.counter, externalCounter4) 
