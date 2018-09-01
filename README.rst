@@ -1,8 +1,6 @@
 .. figure:: http://www.transcrypt.org/illustrations/ruler_banner2.png
     :alt: Logo
     :target: http://www.transcrypt.org
-    
-**THIS IS AN EXPERMIMENTAL RELEASE TO GAIN EXPERIENCE**
         
 Python in the browser, precompiled for speed: http://www.transcrypt.org
 =======================================================================
@@ -10,17 +8,17 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, async/await, properties, decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
-- Pure Python 3.6 syntax, using Python's native parser
+- Pure Python 3.7 syntax, using Python's native parser
 - Debug directly from Python sourcecode, through integrated sourcemaps
 - Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers
-- Lightning fast JavaScript 5 and 6 code: call caching, for-loop optimization, in-line JavaScript etc.
+- Lightning fast JavaScript 6 code: call caching, for-loop optimization, in-line JavaScript etc.
 - Integrated static typechecking and minification at the tip of a command line switch
 - Also runs on top of node.js
 - Extensive documentation with many code examples
 - Apache 2.0 license
 - Pip-install and go!
 
-Latest stable release: Paris
+Latest stable release: London
 ============================
 
 `>>> GET STARTED!_ <http://www.transcrypt.org/#hello>`_
@@ -49,7 +47,7 @@ Main differences with CPython
 License
 =======
 
-Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
+Copyright 2014 - 2018 Jacques de Hooge, GEATEC engineering, www.geatec.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -123,12 +121,11 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Builtin pow function added
+- Context managers added + testcases
+- Python 3.7 dataclasses added + testcases
 - Everything written in __target__ subdir rather than installation dir
-- Python modules now implemented as ES6 modules pervasively
-- Simple minification added for units (only remove whitespace, names have to stay compatible).
-- Unit example expanded to show combination of units and modules, docs adapted accordingly
-- Python 3.5 incompatibility bug fixed
-- Units, making it possible to create compact native JavaScript component frameworks with Transcrypt
+- Python modules now implemented as ES6 modules pervasively, multiple apps per page, runtime and libs only once
 - String formatting mini language added as an option (-sf / --sform switch) + autotest
 - Div internal improvements and fixes
 - Time module made suitable for use in combination with Node.js
