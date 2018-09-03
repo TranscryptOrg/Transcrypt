@@ -11,11 +11,7 @@ def read (*paths):
 
 setup (
 	name = 'Transcrypt',
-<<<<<<< HEAD
 	version = '3.7.4',
-=======
-	version = '3.7.2',
->>>>>>> 6020c86... Fix for ClassVar bug
 	description = 'Python to JavaScript transpiler, supporting multiple inheritance and generating lean, highly readable code',
 	long_description = (
 		read ('README.rst')
