@@ -43,7 +43,7 @@ if __pragma__ ('defined', 'undefined'):
 import module_datetime
 import module_itertools
 import module_math
-# import module_unicodedata
+import module_unicodedata
 import modules
 import nonlocals
 import operator_overloading
@@ -99,7 +99,7 @@ if __pragma__ ('defined', 'undefined'):
 autoTester.run (module_datetime, 'module_datetime')
 autoTester.run (module_itertools, 'module_itertools')
 autoTester.run (module_math, 'module_math')
-# autoTester.run (module_unicodedata, 'module_unicodedata')
+autoTester.run (module_unicodedata, 'module_unicodedata')
 autoTester.run (modules, 'modules')
 autoTester.run (nonlocals, 'nonlocals')
 autoTester.run (operator_overloading, 'operator_overloading')

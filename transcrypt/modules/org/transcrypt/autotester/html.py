@@ -73,8 +73,8 @@ class HTMLGenerator(object):
         
         jsPath = f'__target__/{self._fnameBase.split ("/")[-1]}.js'
 
-        with open( fname, 'w', encoding='UTF-8') as f:
-            f.write("<html><head><meta charset='UTF-8'>")
+        with open( fname, 'w', encoding = 'UTF-8') as f:
+            f.write("<html><head><meta charset = 'UTF-8'>")
             self._writeCSS(f)
             f.write("</head><body>")
 
