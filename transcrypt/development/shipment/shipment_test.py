@@ -128,6 +128,8 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_040_for_simple/for_simple', False, switches)
     test ('tutorials/baseline/bl_042_for_nested/for_nested', False, switches)
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches)
+
+    test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
     
 # Make docs, the resulting files are untracked
 origDir = os.getcwd ()

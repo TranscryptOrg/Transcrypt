@@ -1,6 +1,6 @@
-boy_name = 'John'
-girl_name = 'Mary'
-both = boy_name + ' and ' + girl_name
+boyName = 'John'
+girlName = 'Mary'
+both = boyName + ' and ' + girlName
 print (both)
 
 print ('one', 'two', 'three')

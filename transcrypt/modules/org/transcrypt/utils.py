@@ -39,11 +39,12 @@ class CommandArgs:
         self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
         self.argParser.add_argument ('-c', '--complex', help = "enable complex number support, locally requires operator overloading", action = 'store_true')
         self.argParser.add_argument ('-d', '--docat', help = "enable __doc__ attributes. Apply sparsely, since it will make docstrings part of the generated code", action = 'store_true')
-        self.argParser.add_argument ('-dc', '--dcheck', help = "debug: perform lightweight consistency check", action = 'store_true')
         self.argParser.add_argument ('-da', '--dassert', help = "debug: activate assertions", action = 'store_true')
+        self.argParser.add_argument ('-dc', '--dcheck', help = "debug: perform lightweight consistency check", action = 'store_true')
         self.argParser.add_argument ('-de', '--dextex', help = "debug: show extended exception reports", action = 'store_true')
-        self.argParser.add_argument ('-dn', '--dnostrip', help = "debug: no comment stripping of __core__ and __builtin__ in-line modules", action = 'store_true')
+        self.argParser.add_argument ('-dl', '--dlog', help = "debug: log compiler messages to disk", action = 'store_true')
         self.argParser.add_argument ('-dm', '--dmap', help = "debug: dump human readable source map", action = 'store_true')
+        self.argParser.add_argument ('-dn', '--dnostrip', help = "debug: no comment stripping of __core__ and __builtin__ in-line modules", action = 'store_true')
         self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
         self.argParser.add_argument ('-ds', '--dstat', help = "debug: validate static typing using annotations", action = 'store_true')
         self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 5. The symbol __esv<versionnr>__ is added to the global symbol list, e.g. __esv7__.")
@@ -130,11 +131,25 @@ def formatted (*args):  # args [0] is string, args [1 : ] are format params
         return str (args [0]) .format (*args [1 : ])
     except IndexError:  # Tuple index out of range in format tuple
         return ' '.join (args)
-                
+   
+logFileName = 'transcrypt.log'  # ... Use envir.transpiler_name
+   
+try:
+    os.remove (logFileName)
+except: # Assume logfile doesn't yet exist
+    pass
+   
 def log (always, *args):
     if always or commandArgs.verbose:
         print (formatted (*args), end = '')
+        try:
+            if commandArgs.dlog:
+                with open (logFileName, 'a') as logFile:
+                    logFile.write (formatted (*args))
          
+        except: # Assume too early, commandArgs not yet set
+            pass
+            
 program = None
 def setProgram (aProgram):
     global program

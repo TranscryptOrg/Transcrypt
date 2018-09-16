@@ -121,6 +121,8 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- -dl / -dlog "Log compiler messages to file" switch added
+- Static typing tutorial repaired
 - Builtin pow function added
 - Context managers added + testcases
 - Python 3.7 dataclasses added + testcases
