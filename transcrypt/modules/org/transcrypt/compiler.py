@@ -127,7 +127,7 @@ class Module:
         )
         
         # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
-        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
+        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath):
             if self.isJavascriptOnly:
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
@@ -166,14 +166,20 @@ class Module:
                 
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
-        
-        # Write target code
-        utils.log (True, 'Saving target code in: {}\n', self.targetPath)
-        filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
-        with utils.create (filePath) as aFile:
-            aFile.write (self.targetCode)
-            
-        # Minify target code       
+
+            # Write target code
+            utils.log (True, 'Saving target code in: {}\n', self.targetPath)
+            filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
+            with utils.create (filePath) as aFile:
+                aFile.write (self.targetCode)
+
+        else:
+            # When the file exists or is not built, load it and run through digestJavascript for obtaining symbols
+            self.targetCode = open(self.targetPath, "r").read()
+            javascriptDigest = utils.digestJavascript(self.targetCode, self.program.symbols, True, False)
+            self.exports = javascriptDigest.exportedNames
+
+        # Minify target code
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
             minify.run (
@@ -182,7 +188,7 @@ class Module:
                 self.targetName,
                 self.shrinkMapName if utils.commandArgs.map else None,
             )
-            
+
             if utils.commandArgs.map:
                 if self.isJavascriptOnly:
                     if os.path.isfile (self.mapPath):
@@ -192,17 +198,17 @@ class Module:
                     utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
                     self.sourceMapper.loadShrinkMap ()
                     self.sourceMapper.cascadeAndSaveMiniMap ()
-                    
-        # Append map reference to target file, which may be minified or not       
+
+        # Append map reference to target file, which may be minified or not
         with open (self.targetPath, 'a') as targetFile:
-            targetFile.write (self.mapRef)            
+            targetFile.write (self.mapRef)
 
         # Remove superfluous files
         if not utils.commandArgs.dmap:
             self.sourceMapper.cleanDir ()   # Also from previous run
             if not (self.isJavascriptOnly and utils.commandArgs.map and not utils.commandArgs.nomin):
                 utils.cleanDir (self.program.targetDir, f'{self.name}.pretty.js')
-            
+
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
                 
