@@ -1,7 +1,7 @@
 # ====== Legal notices
 #
 #
-# Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
+# Copyright 2014 - 2018 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -2697,6 +2697,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.emit (')')
 
     def visit_Import (self, node):
+        # Since clashes with own names have to be avoided, the node is stored to revisit it after the own names are known
         self.importNodes.append (node)
         
     def revisit_Import (self, node):  # Import ... can only import modules
@@ -2725,6 +2726,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             if alias.asname and not alias.asname in (self.allOwnNames | self.allImportedNames):
                 # Import 'as' a non-dotted name, so no need to nest
+                # Clashes with own names or already imported names are avoided
                 
                 self.allImportedNames.add (alias.asname)
                 self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
@@ -2745,6 +2747,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.emit (';\n')
 
     def visit_ImportFrom (self, node):
+        # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
         self.importNodes.append (node)
     
     def revisit_ImportFrom (self, node):  # From ... import ... can import modules or facitities offered by modules
@@ -2797,10 +2800,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
                             self.emitComma (index)
                             self.emit (self.filterId (namePair.name))
-                            self.allImportedNames.add (namePair.name)
                             if namePair.asName:
                                 self.emit (' as {}', self.filterId (namePair.asName))
                                 self.allImportedNames.add (namePair.asName)
+                            else:
+                                self.allImportedNames.add (namePair.name)
                     self.emit ('}} from \'{}\';\n', module.importRelPath)
                 except:
                     print (traceback.format_exc ())
