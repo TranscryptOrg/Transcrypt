@@ -980,6 +980,10 @@ Array.prototype.__getslice__ = function (start, stop, step) {
         stop = this.length;
     }
 
+    if (step == 1) {
+        return Array.prototype.slice.call(this, start, stop);
+    }
+
     let result = list ([]);
     for (let index = start; index < stop; index += step) {
         result.push (this [index]);
