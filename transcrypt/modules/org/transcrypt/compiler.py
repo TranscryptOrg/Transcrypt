@@ -1661,23 +1661,60 @@ class Generator (ast.NodeVisitor):
             )
         ):
 
-            self.visit (ast.Call (                  # generate __call__ node on the fly and visit it
-                func = ast.Name (
-                    id = '__call__',
-                    ctx = ast.Load  # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
-                ),
-                args = (
-                        [node.func, node.func.value] + node.args
-                    if type (node.func) == ast.Attribute else
-                        [
-                            node.func,
-                            ast.NameConstant (
-                                value = None
-                            )
-                        ] + node.args
-                ),
-                keywords = node.keywords
-            ))
+            if type (node.func) != ast.Attribute:
+                # generate __call__ node on the fly and visit it
+
+                self.visit(ast.Call(
+                        func = ast.Name(
+                            id = '__call__',
+                            ctx = ast.Load
+                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
+                        ),
+                        args=([
+                              node.func,
+                              ast.NameConstant(
+                                  value=None
+                              )
+                          ] + node.args),
+                        keywords = node.keywords))
+
+            else:
+                # in case of an attribute call, save the object/call? value first into an accumulator variable, then call the attribute function on it
+                self.emit('(function () {{\n')
+                self.inscope(ast.FunctionDef())
+                self.indent()
+                self.emit('var {} = ', self.nextTemp('accu'))
+
+                self.visit(node.func.value)
+
+                self.emit(';\n')
+
+                self.emit('return ')
+                self.visit(ast.Call(
+                        func = ast.Name(
+                            id = '__call__',
+                            ctx = ast.Load
+                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
+                        ),
+                        args=([ast.Attribute (
+                                value = ast.Name (
+                                    id = self.getTemp('accu'),
+                                    ctx = ast.Load),
+                                    attr = node.func.attr,
+                                ctx = ast.Load),
+                                  ast.Name(
+                                      id=self.getTemp('accu'),
+                                      ctx=ast.Load)
+                              ]
+                            + node.args),
+                        keywords = node.keywords))
+                self.emit(';\n')
+
+                self.prevTemp('accu')
+                self.dedent()
+                self.descope()
+                self.emit('}}) ()')
+
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
         # We're in a parametrized dataclass decorator, switch some data class code generation options   
         if dataClassArgDict != None:
