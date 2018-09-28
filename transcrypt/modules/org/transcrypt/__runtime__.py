@@ -21,6 +21,8 @@ class Exception (BaseException):
         self.__args__ = args
         if kwargs.error != None:
             self.stack = kwargs.error.stack # Integrate with JavaScript Error object
+        elif Error:
+            self.stack = (__new__(Error())).stack # Create our own stack if we aren't given one
         else:
             self.stack = 'No stack trace available'
     #__pragma__ ('nokwargs')
