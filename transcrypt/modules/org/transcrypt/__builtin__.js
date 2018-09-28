@@ -288,8 +288,21 @@ export function float (any) {
 float.__name__ = 'float';
 float.__bases__ = [object];
 
-export function int (any) {
-    return float (any) | 0
+export function int (any, radix) {
+    if (any === false) {
+        return 0;
+    } else if (any === true) {
+        return 1;
+    } else {
+        var number = parseInt(any, radix);
+        if (isNaN (number)) {
+            if (radix == undefined) {
+                radix = 10;
+            }
+            throw ValueError('invalid literal for int() with base ' + radix + ': ' + any, new Error());
+        }
+        return number;
+    }
 };
 int.__name__ = 'int';
 int.__bases__ = [object];
