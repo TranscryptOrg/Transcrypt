@@ -1,7 +1,7 @@
 # ====== Legal notices
 #
 #
-# Copyright 2014 - 2018 Jacques de Hooge, GEATEC engineering, www.geatec.com
+# Copyright 2014, 2015, 2016, 2017 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1660,9 +1660,25 @@ class Generator (ast.NodeVisitor):
                 node.func.id == '__call__'
             )
         ):
-        
-# $$$ v
-            if type (node.func) == ast.Attribute:            
+
+            if type (node.func) != ast.Attribute:
+                # generate __call__ node on the fly and visit it
+
+                self.visit(ast.Call(
+                        func = ast.Name(
+                            id = '__call__',
+                            ctx = ast.Load
+                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
+                        ),
+                        args=([
+                              node.func,
+                              ast.NameConstant(
+                                  value=None
+                              )
+                          ] + node.args),
+                        keywords = node.keywords))
+
+            else:
                 # in case of an attribute call, save the object/call? value first into an accumulator variable, then call the attribute function on it
                 self.emit('(function () {{\n')
                 self.inscope(ast.FunctionDef())
@@ -1698,28 +1714,9 @@ class Generator (ast.NodeVisitor):
                 self.dedent()
                 self.descope()
                 self.emit('}}) ()')
-            else:
-                # generate __call__ node on the fly and visit it
 
-                self.visit(ast.Call(
-                        func = ast.Name(
-                            id = '__call__',
-                            ctx = ast.Load
-                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
-                        ),
-                        args=([
-                              node.func,
-                              ast.NameConstant(
-                                  value=None
-                              )
-                          ] + node.args),
-                        keywords = node.keywords))
-#$$$ ^                       
-            
-            
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
-        # We're in a parametrized dataclass decorator, switch some data class code generation options       
-        
+        # We're in a parametrized dataclass decorator, switch some data class code generation options   
         if dataClassArgDict != None:
             # Start out with the defaults
             dataClassArgTuple = copy.deepcopy (dataClassDefaultArgTuple)
@@ -2737,7 +2734,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.emit (')')
 
     def visit_Import (self, node):
-        # Since clashes with own names have to be avoided, the node is stored to revisit it after the own names are known
         self.importNodes.append (node)
         
     def revisit_Import (self, node):  # Import ... can only import modules
@@ -2766,14 +2762,13 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             if alias.asname and not alias.asname in (self.allOwnNames | self.allImportedNames):
                 # Import 'as' a non-dotted name, so no need to nest
-                # Clashes with own names or already imported names are avoided
                 
                 self.allImportedNames.add (alias.asname)
                 self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
             else:
                 # Import dotted name, requires import under constructed unique name and then nesting,
                 # including transfer of imported names from immutable module to mutable object
-                # This mutable module representation object may come to hold other mutable module represention objects
+                # This mutable module representation object tmay come to hold other mutable module represention objects
             
                 self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
@@ -2787,7 +2782,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.emit (';\n')
 
     def visit_ImportFrom (self, node):
-        # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
         self.importNodes.append (node)
     
     def revisit_ImportFrom (self, node):  # From ... import ... can import modules or facitities offered by modules
@@ -2840,11 +2834,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
                             self.emitComma (index)
                             self.emit (self.filterId (namePair.name))
+                            self.allImportedNames.add (namePair.name)
                             if namePair.asName:
                                 self.emit (' as {}', self.filterId (namePair.asName))
                                 self.allImportedNames.add (namePair.asName)
-                            else:
-                                self.allImportedNames.add (namePair.name)
                     self.emit ('}} from \'{}\';\n', module.importRelPath)
                 except:
                     print (traceback.format_exc ())
