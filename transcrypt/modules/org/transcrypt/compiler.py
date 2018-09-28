@@ -1664,56 +1664,58 @@ class Generator (ast.NodeVisitor):
 # $$$ v
             if type (node.func) == ast.Attribute:            
                 # in case of an attribute call, save the object/call? value first into an accumulator variable, then call the attribute function on it
-                self.emit('(function () {{\n')
-                self.inscope(ast.FunctionDef())
-                self.indent()
-                self.emit('var {} = ', self.nextTemp('accu'))
-
+                self.emit ('(function () {{\n')
+                self.inscope (ast.FunctionDef ())
+                self.indent ()
+                
+                self.emit ('var {} = ', self.nextTemp ('accu'))
                 self.visit(node.func.value)
+                self.emit (';\n')
 
-                self.emit(';\n')
-
-                self.emit('return ')
-                self.visit(ast.Call(
-                        func = ast.Name(
-                            id = '__call__',
+                self.emit ('return ')  
+                self.visit(ast.Call (
+                    func = ast.Name(
+                        id = '__call__',
+                        ctx = ast.Load
+                        # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too use the overloading mechanism
+                    ),
+                    args = ([
+                        ast.Attribute (
+                            value = ast.Name (
+                                id = self.getTemp ('accu'),
+                                ctx = ast.Load
+                            ),
+                            attr = node.func.attr,
                             ctx = ast.Load
-                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
                         ),
-                        args=([ast.Attribute (
-                                value = ast.Name (
-                                    id = self.getTemp('accu'),
-                                    ctx = ast.Load),
-                                    attr = node.func.attr,
-                                ctx = ast.Load),
-                                  ast.Name(
-                                      id=self.getTemp('accu'),
-                                      ctx=ast.Load)
-                              ]
-                            + node.args),
-                        keywords = node.keywords))
+                        ast.Name(
+                            id = self.getTemp ('accu'),
+                            ctx = ast.Load
+                        )
+                    ] + node.args),
+                    keywords = node.keywords
+                 ))
                 self.emit(';\n')
 
                 self.prevTemp('accu')
+                
                 self.dedent()
                 self.descope()
                 self.emit('}}) ()')
             else:
                 # generate __call__ node on the fly and visit it
-
-                self.visit(ast.Call(
-                        func = ast.Name(
-                            id = '__call__',
-                            ctx = ast.Load
-                            # Don't use node.func.ctx since callable object decorators don't have a ctx, and they too (use) the overloading mechanism
-                        ),
-                        args=([
-                              node.func,
-                              ast.NameConstant(
-                                  value=None
-                              )
-                          ] + node.args),
-                        keywords = node.keywords))
+                self.visit (ast.Call (
+                    func = ast.Name (
+                        id = '__call__',
+                        ctx = ast.Load
+                    ),
+                    args = ([
+                          node.func,
+                          ast.NameConstant (
+                              value = None)
+                    ] + node.args),
+                    keywords = node.keywords
+                ))
 #$$$ ^                       
             
             
