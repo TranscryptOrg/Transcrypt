@@ -125,9 +125,11 @@ class Module:
             not utils.commandArgs.nomin,
             utils.commandArgs.dmap
         )
-        
-        # Generate JavaScript or, if it's a JavaScript-only module, load JavaScript
-        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) < os.path.getmtime (self.targetPath):
+
+        # Generate, copy or load target code and symbols
+        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath):
+            # If it's a build rather than a make, or the target doesn't exist or the target is obsolete
+            
             if self.isJavascriptOnly:
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
@@ -166,12 +168,18 @@ class Module:
                 
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
-        
-        # Write target code
-        utils.log (True, 'Saving target code in: {}\n', self.targetPath)
-        filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
-        with utils.create (filePath) as aFile:
-            aFile.write (self.targetCode)
+
+            # Write target code
+            utils.log (True, 'Saving target code in: {}\n', self.targetPath)
+            filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
+            with utils.create (filePath) as aFile:
+                aFile.write (self.targetCode)
+
+        else:
+            # If it's a make an rather than a build and the target exists, load it and run through digestJavascript for obtaining symbols
+            self.targetCode = open (self.targetPath, "r").read ()
+            javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False)
+            self.exports = javascriptDigest.exportedNames        
             
         # Minify target code       
         if not utils.commandArgs.nomin:
