@@ -29,6 +29,7 @@ import shlex
 import shutil
 import tokenize
 import collections
+import time
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -76,9 +77,12 @@ class Program:
         self.targetDir = f'{self.sourceDir}/__target__'
         
         if utils.commandArgs.build:
+            # A build resets everything
             shutil.rmtree(self.targetDir, ignore_errors = True)
 
         try:
+            test = input ('Effe wachte hiero')
+        
             # Provide runtime module since it's always needed but never imported explicitly
             self.runtimeModuleName = 'org.transcrypt.__runtime__'
             self.provide (self.runtimeModuleName)
@@ -90,6 +94,8 @@ class Program:
                 exception,
                 message = f'\n\t{exception}'
             )
+            
+        test = input ('Nog effe wachte dan')
         
     def provide (self, moduleName, __moduleName__ = None):    
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
@@ -101,7 +107,7 @@ class Program:
             return Module (self, moduleName, __moduleName__)
 
 class Module:
-    def __init__ (self, program, name, __name__ = None):    
+    def __init__ (self, program, name, __name__ = None):      
         self.program = program
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
@@ -127,10 +133,15 @@ class Module:
         )
 
         # Generate, copy or load target code and symbols
+        print ()
+        print (777, self.sourcePath, time.ctime (os.path.getmtime (self.sourcePath)))
+        print (888, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
+        if upToDate (self.targetPath, self.sourcePath):
         if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath):
             # If it's a build rather than a make, or the target doesn't exist or the target is obsolete
             
             if self.isJavascriptOnly:
+                print ('aaa')
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
                 
@@ -141,6 +152,7 @@ class Module:
                 self.exports = javascriptDigest.exportedNames
    
             else:
+                print ('bbb')
                 # Perform static typecheck on source code
                 if utils.commandArgs.dstat:
                     try:
@@ -176,11 +188,17 @@ class Module:
                 aFile.write (self.targetCode)
 
         else:
+            print ('ccc')
             # If it's a make an rather than a build and the target exists, load it and run through digestJavascript for obtaining symbols
+            print (8881, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
             self.targetCode = open (self.targetPath, "r").read ()
             javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False)
             self.exports = javascriptDigest.exportedNames        
-            
+            print (8882, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
+        
+        print (999)
+        print ()
+        
         # Minify target code       
         if not utils.commandArgs.nomin:
             utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
@@ -213,6 +231,9 @@ class Module:
             
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
+        
+    def mustRemake (self, targetPath, sourcePath):
+        return utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath)
                 
     def findPaths (self):
         searchedModulePaths = []
