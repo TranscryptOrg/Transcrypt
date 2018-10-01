@@ -16,6 +16,7 @@
 
 import os
 import os.path
+import posixpath  # urls use unix-style slashes
 import sys
 import ast
 import re
@@ -58,7 +59,7 @@ class Program:
         envir               # Data about run / compilation environment
     ):
         utils.setProgram (self)
-    
+
         self.moduleSearchDirs = moduleSearchDirs
         self.symbols = symbols
         self.envir = envir
@@ -77,7 +78,7 @@ class Program:
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         self.targetDir = f'{self.sourceDir}/__target__'
         self.optionsPath = f'{self.targetDir}/{self.mainModuleName}.options'
-        
+
         # Find out if command line arguments are changed
         try:
             with open (self.optionsPath, 'rb') as optionsFile:
@@ -85,7 +86,7 @@ class Program:
         except:
             oldOptions = None
         self.optionsChanged = utils.commandArgs.picklableOptions != oldOptions
-           
+
         # Reset everything in case of a build or a command args change
         if utils.commandArgs.build or self.optionsChanged:
             shutil.rmtree(self.targetDir, ignore_errors = True)
@@ -93,12 +94,12 @@ class Program:
         # Remember current command line arguments
         with utils.create (self.optionsPath, 'wb') as optionsFile:
             pickle.dump (utils.commandArgs.picklableOptions, optionsFile)
-  
+
         try:
             # Provide runtime module since it's always needed but never imported explicitly
             self.runtimeModuleName = 'org.transcrypt.__runtime__'
             self.provide (self.runtimeModuleName)
-            
+
             # Provide main module and, with that, all other modules recursively
             self.provide (self.mainModuleName, '__main__')
         except Exception as exception:
@@ -106,10 +107,10 @@ class Program:
                 exception,
                 message = f'\n\t{exception}'
             )
-        
-    def provide (self, moduleName, __moduleName__ = None):    
+
+    def provide (self, moduleName, __moduleName__ = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
-        
+
         if moduleName in self.moduleDict:  # Find out if module is already provided
             return self.moduleDict [moduleName]
         else:                              # If not, provide by loading or compiling
@@ -117,23 +118,23 @@ class Program:
             return Module (self, moduleName, __moduleName__)
 
 class Module:
-    def __init__ (self, program, name, __name__ = None):      
+    def __init__ (self, program, name, __name__ = None):
         self.program = program
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
-        
+
         # Remember names of module being under compilation and line nrs of current import
         # Used for error reports
         # Note that JavaScript-only modules will leave lineNr None if they import something
         # This is since there's no explicit import location in such modules
         self.program.importStack.append ([self, None])
-        
+
         # Try to find module, exception if fails
         self.findPaths ()
-        
+
         # Register that module is found
         self.program.moduleDict [self.name] = self
-        
+
         # Create sourcemapper, if only for cleaning dir after previous run
         self.sourceMapper = sourcemaps.SourceMapper (
             self.name,
@@ -142,24 +143,24 @@ class Module:
             utils.commandArgs.dmap
         )
 
-        # Generate, copy or load target code and symbols                               
+        # Generate, copy or load target code and symbols
         if (
-            utils.commandArgs.build or self.program.optionsChanged 
+            utils.commandArgs.build or self.program.optionsChanged
             or
             not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath)
         ):
             # If it's a build rather than a make, or the target doesn't exist or the target is obsolete
-            
+
             if self.isJavascriptOnly:
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
-                
+
                 # JavaScript-only, so annotations are pointless, so it's ok to strip
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip, False)
-                
+
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
-   
+
             else:
                 # Perform static typecheck on source code
                 if utils.commandArgs.dstat:
@@ -179,13 +180,13 @@ class Module:
                         static_check.run (self.sourcePath, self.parseTree)
                     except Exception as exception:
                         utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.sourcePath)
-                        
+
                 # Generate JavaScript code and sourcemap from parse tree
                 self.generateJavascriptAndPrettyMap ()
-                
+
                 # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
-                
+
                 self.targetCode = javascriptDigest.digestedCode
                 self.exports = javascriptDigest.exportedNames
 
@@ -194,8 +195,8 @@ class Module:
             filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
             with utils.create (filePath) as aFile:
                 aFile.write (self.targetCode)
-            
-            # Minify target code       
+
+            # Minify target code
             if not utils.commandArgs.nomin:
                 utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
                 minify.run (
@@ -204,7 +205,7 @@ class Module:
                     self.targetName,
                     self.shrinkMapName if utils.commandArgs.map else None,
                 )
-                
+
                 if utils.commandArgs.map:
                     if self.isJavascriptOnly:
                         if os.path.isfile (self.mapPath):
@@ -212,16 +213,16 @@ class Module:
                         os.rename (self.shrinkMapPath, self.mapPath)
                     else:
                         self.sourceMapper.generateMultilevelMap ()
-                        
-            # Append map reference to target file, which may be minified or not       
+
+            # Append map reference to target file, which may be minified or not
             with open (self.targetPath, 'a') as targetFile:
-                targetFile.write (self.mapRef)            
-                    
+                targetFile.write (self.mapRef)
+
             # Remove intermediate files
             utils.tryRemove (self.prettyTargetPath)
             utils.tryRemove (self.shrinkMapPath)
             utils.tryRemove (self.prettyMapPath)
-                    
+
         else:
             # If it's a make an rather than a build and the target exists, load it and run through digestJavascript for obtaining symbols
             self.targetCode = open (self.targetPath, "r").read ()
@@ -229,13 +230,13 @@ class Module:
             self.exports = javascriptDigest.exportedNames
 
             # $$$
-        
+
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
-                
+
     def findPaths (self):
         searchedModulePaths = []
-                
+
         relSourceSlug = self.name.replace ('.', '/')
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
@@ -244,25 +245,27 @@ class Module:
                 self.sourceDir = sourceSlug
                 self.sourcePrename = '__init__'
             else:
-                self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1) 
+                self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1)
             self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
             self.pythonSourcePath = f'{self.sourcePrepath}.py'
             self.javascriptSourcePath = f'{self.sourcePrepath}.js'
-            
+
             # Find target slugs
-            self.targetPrepath = f'{self.program.targetDir}/{self.name}'
-            self.targetName = f'{self.name}.js'
+            self.targetReldir = posixpath.relpath(self.sourceDir, searchDir)
+            self.targetRelpath = posixpath.join(self.targetReldir, self.sourcePrename)
+            self.targetPrepath = posixpath.join(self.program.targetDir, self.targetRelpath)
+            self.targetName = f'{self.sourcePrename}.js'
             self.targetPath = f'{self.targetPrepath}.js'
-            self.prettyTargetName = f'{self.name}.pretty.js'
+            self.prettyTargetName = f'{self.sourcePrename}.pretty.js'
             self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
-            self.importRelPath = f'./{self.name}.js'
+            #self.importRelPath = f'./{self.targetRelpath}.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
             self.prettyMapPath = f'{self.targetPrepath}.shrink.map'
-            self.shrinkMapName = f'{self.name}.shrink.map'
+            self.shrinkMapName = f'{self.sourcePrename}.shrink.map'
             self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
             self.mapSourcePath = f'{self.targetPrepath}.py'
-            self.mapRef = f'\n//# sourceMappingURL={self.name}.map'
+            self.mapRef = f'\n//# sourceMappingURL={self.sourcePrename}.map'
 
             # If module exists
             if os.path.isfile (self.pythonSourcePath) or os.path.isfile (self.javascriptSourcePath):
@@ -272,7 +275,7 @@ class Module:
                 # (To do)
                 self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
                 break
-            
+
             # Remember all fruitless paths to give a decent error report if module isn't found
             searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
         else:
@@ -284,7 +287,16 @@ class Module:
                     '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
                 )
             )
-            
+
+    def importPath (self, otherMod):
+        # calculate the path for otherMod to import this module
+        reldir = posixpath.relpath(self.targetReldir, otherMod.targetReldir)
+        relpath = posixpath.join(reldir, self.targetName)
+        if not relpath.startswith('../'):
+            relpath = posixpath.join('.', relpath)
+        return relpath
+
+
     def generateJavascriptAndPrettyMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.targetPath)
 
@@ -296,10 +308,10 @@ class Module:
             # In both cases the generator will have instrumented the target fragments by appending line numbers
             # N.B. __pragma__ ('noanno') will be too late to prevent instrumenting of the main module's first line
             # In that case if no source maps are required either, the appended line numbers simply won't be used
-            
+
             # Split joined fragments into (instrumented) lines
             instrumentedTargetLines = ''.join (self.generator.targetFragments) .split ('\n')
-            
+
             # Only remember source line nrs if a map is to be generated (so not if only annotated JavaScript is needed)
             if utils.commandArgs.map:
                 self.sourceLineNrs = []
@@ -317,7 +329,7 @@ class Module:
                     if self.generator.allowDebugMap:                                                         # If annotations comments have to be prepended
                         targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
                     targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation comment
-                    
+
                     # Store line nrs for source map
                     if utils.commandArgs.map:
                         self.sourceLineNrs.append (sourceLineNr)                                        # Remember its line number to be able to generate a sourcemap
@@ -326,21 +338,21 @@ class Module:
             if utils.commandArgs.map:
                 utils.log (False, 'Saving source map in: {}\n', self.mapPath)
                 self.sourceMapper.generateAndSavePrettyMap (self.sourceLineNrs)
-                shutil.copyfile (self.sourcePath, self.mapSourcePath)                
-        else:                                                           
+                shutil.copyfile (self.sourcePath, self.mapSourcePath)
+        else:
             # No maps or annotations needed, so this 'no stripping' shortcut for speed
             targetLines = [line for line in  ''.join (self.generator.targetFragments) .split ('\n') if line.strip () != ';']
 
         self.targetCode = '\n'.join (targetLines)
-           
+
     def loadJavascript (self):
-        with tokenize.open (self.sourcePath) as sourceFile:       
+        with tokenize.open (self.sourcePath) as sourceFile:
             self.targetCode = sourceFile.read ()
 
     def parse (self):
         def pragmasFromComments (sourceCode):
             # This function changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
-        
+
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
             pragmaCommentLineIndices = []
             shortPragmaCommentLineIndices = []
@@ -351,13 +363,13 @@ class Module:
                         pragmaCommentLineIndices.append (startRowColumn [0] - 1)
                     elif strippedComment.replace (' ', '') .replace ('\t', '') .startswith ('__:'):
                         shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
-                        
-                    
+
+
             sourceLines = sourceCode.split ('\n')
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 head, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
                 sourceLines [pragmaCommentLineIndex] = head + tail.lstrip ()
-                
+
             for shortPragmaCommentLineIndex in shortPragmaCommentLineIndices:
                 head, tail = sourceLines [shortPragmaCommentLineIndex] .rsplit ('#', 1)
                 strippedHead = head.lstrip ()
@@ -369,19 +381,19 @@ class Module:
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
 
             return '\n'.join (sourceLines)
-            
+
         try:
             utils.log (False, 'Parsing module: {}\n', self.sourcePath)
 
             with tokenize.open (self.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
-                
+
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
-            
+
             for node in ast.walk (self.parseTree):
                 for childNode in ast.iter_child_nodes (node):
                     childNode.parentNode = node
-            
+
         except SyntaxError as syntaxError:
             utils.enhanceException (
                 syntaxError,
@@ -416,7 +428,7 @@ class Module:
 
         with utils.create (self.treePath) as treeFile:
             treeFile.write (self.textTree)
-            
+
 class Generator (ast.NodeVisitor):
     # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
 
@@ -629,10 +641,10 @@ class Generator (ast.NodeVisitor):
             self.fragmentIndex += 1
 
         fragment = fragment [:-1] .replace ('\n', '\n' + self.tabs ()) + fragment [-1]                  # There may be \n's embedded in the fragment
-        
+
         self.targetFragments.insert (self.fragmentIndex, fragment.format (*formatter) .replace ('\n', self.lineNrString + '\n'))
         self.fragmentIndex += 1
-        
+
     def indent (self):
         self.indentLevel += 1
 
@@ -669,7 +681,7 @@ class Generator (ast.NodeVisitor):
                     continue
                 else:
                     inMethod = False
-                    
+
             if type (scope.node) != ast.ClassDef:
                 break
             reversedClassScopes.append (scope)
@@ -713,8 +725,8 @@ class Generator (ast.NodeVisitor):
             else:
                 self.visit (statement)
                 self.emit (';\n')
-                
-    def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None): 
+
+    def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None):
         if type (target.slice) == ast.Index:        # Always overloaded
             if type (target.slice.value) == ast.Tuple:
                 self.visit (target.value)
@@ -823,15 +835,15 @@ class Generator (ast.NodeVisitor):
     def getPragmaFromIf (self, node):
         return node.test.args if type (node) == ast.If and self.isCall (node.test, '__pragma__') else None
 
-    def visit (self, node):  
+    def visit (self, node):
         try:
             self.lineNr = node.lineno
         except:
             pass
-  
+
         pragmaInIf = self.getPragmaFromIf (node)
         pragmaInExpr = self.getPragmaFromExpr (node)
-         
+
         if pragmaInIf:
             if pragmaInIf [0] .s == 'defined':
                 for symbol in pragmaInIf [1:]:
@@ -839,13 +851,13 @@ class Generator (ast.NodeVisitor):
                         definedInIf = True
                         break
                 else:
-                    definedInIf = False         
-        elif pragmaInExpr:       
+                    definedInIf = False
+        elif pragmaInExpr:
             if pragmaInExpr [0] .s == 'skip':
                 self.noskipCodeGeneration = False
             elif pragmaInExpr [0] .s == 'noskip':
                 self.noskipCodeGeneration = True
-                
+
             if pragmaInExpr [0] .s in ('ifdef', 'ifndef'):
                 definedInExpr = eval (    # Explained with __pragma__ ('js', ...)
                     compile (
@@ -899,7 +911,7 @@ class Generator (ast.NodeVisitor):
         for arg, expr in reversed (list (zip (reversed (node.args), reversed (node.defaults)))):
             if expr:
                 # If a default expr is given for this arg
-            
+
                 # Condition for using that default expr:
                 # - no actual param value has been passed for this formal param in the call
                 # or
@@ -907,7 +919,7 @@ class Generator (ast.NodeVisitor):
                 # The latter is because the __kwargtrans__ object isn't a 'regular' actual param, so shouldn't be assigned to any formal param
                 # Since the formal param "who's turn it was" does not get an actual value, it'll have to be satisfied with its default expr
                 self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0}.hasOwnProperty ("__kwargtrans__"))) {{;\n', self.filterId (arg.arg))
-                
+
                 self.indent ()
                 self.emit ('var {} = ', self.filterId (arg.arg))
                 self.visit (expr)
@@ -1012,7 +1024,7 @@ class Generator (ast.NodeVisitor):
                     node.value
                 )
             )
-                        
+
     def visit_Assert (self, node):
         if utils.commandArgs.dassert:
             self.emit ('assert (')
@@ -1022,7 +1034,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.msg)
             self.emit (');\n')
 
-    def visit_Assign (self, node):       
+    def visit_Assign (self, node):
         self.adaptLineNrString (node)
 
         targetLeafs = (ast.Attribute, ast.Subscript, ast.Name)
@@ -1053,7 +1065,7 @@ class Generator (ast.NodeVisitor):
                         else:
                             if type (self.getScope () .node) == ast.Module: # Redundant but regular
                                 if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.allOwnNames:
-                                    self.emit ('export ')                        
+                                    self.emit ('export ')
                             self.emit ('var ')
                     self.visit (target)
                     self.emit (' = ')
@@ -1099,7 +1111,7 @@ class Generator (ast.NodeVisitor):
         # So we introduce the restriction that an assignment involves no properties at all or only properties
         # Also these properties have to use the 'property' function 'literally'
         # With these restrictions we can recognize property installation at compile time
-        
+
         if len (node.targets) == 1 and type (node.targets [0]) in targetLeafs:
             # Fast shortcut for the most frequent and simple case
             assignTarget (node.targets [0], node.value)
@@ -1128,7 +1140,7 @@ class Generator (ast.NodeVisitor):
             self.emit (')')
 
         self.emit ('.{}', self.filterId (node.attr))
-        
+
     def visit_Await (self, node):
         self.emit ('await ')
         self.visit (node.value)
@@ -1140,23 +1152,23 @@ class Generator (ast.NodeVisitor):
                 '__ipow__' if type (node.op) == ast.Pow else
                 '__imatmul__' if type (node.op) == ast.MatMult else
                 ('__ijsmod__' if self.allowJavaScriptMod else '__imod__') if type (node.op) == ast.Mod else
-                
+
                 # Overloaded arithmetic
                 '__imul__' if type (node.op) == ast.Mult else
                 '__idiv__' if type (node.op) == ast.Div else
                 '__iadd__' if type (node.op) == ast.Add else
                 '__isub__' if type (node.op) == ast.Sub else
-                
+
                 # Overloaded bitwise
                 '__ilshift__' if type (node.op) == ast.LShift else
                 '__irshift__' if type (node.op) == ast.RShift else
                 '__ior__' if type (node.op) == ast.BitOr else
                 '__ixor__' if type (node.op) == ast.BitXor else
                 '__iand__' if type (node.op) == ast.BitAnd else
-                
+
                 'Never here'
             )
-                
+
             rhsCall = ast.Call (
                 func = ast.Name (
                     id = rhsFunctionName,
@@ -1168,7 +1180,7 @@ class Generator (ast.NodeVisitor):
                 ],
                 keywords = []
             )
-        
+
             if type (node.target) == ast.Subscript:              # Only non-overloaded LHS index can be left to visit_Subscript
                 self.emitSubscriptAssign (node.target, rhsCall)
             else:
@@ -1177,7 +1189,7 @@ class Generator (ast.NodeVisitor):
 
                 self.visit (node.target)
                 self.emit (' = ')
-                self.visit (rhsCall)       
+                self.visit (rhsCall)
         elif (
             # Python //, @ and ** have no operator symbol in JavaScript, so <operator>= won't work
             type (node.op) in (ast.FloorDiv, ast.MatMult, ast.Pow)
@@ -1186,7 +1198,7 @@ class Generator (ast.NodeVisitor):
             (type (node.op) == ast.Mod and not self.allowJavaScriptMod)
             or
             # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
-            (                         
+            (
                 type (node.target) == ast.Subscript and (
                     type (node.target.slice) != ast.Index or
                     type (node.target.slice.value) == ast.Tuple
@@ -1197,7 +1209,7 @@ class Generator (ast.NodeVisitor):
             self.visit (ast.Assign (
                 targets = [node.target],
                 value = ast.BinOp (left = node.target, op = node.op, right = node.value)
-            ))         
+            ))
         else:   # No overloading in this branch
             self.expectingNonOverloadedLhsIndex = True
             self.visit (node.target)        # No need to emit var first, it has to exist already
@@ -1242,7 +1254,7 @@ class Generator (ast.NodeVisitor):
                 self.visitSubExpr (node, node.left)
                 self.emit (' / ')
                 self.visitSubExpr (node, node.right)
-                self.emit (')') 
+                self.emit (')')
         elif (
             type (node.op) in (ast.Pow, ast.MatMult) or
             (type (node.op) == ast.Mod and (self.allowOperatorOverloading or not self.allowJavaScriptMod)) or
@@ -1257,20 +1269,20 @@ class Generator (ast.NodeVisitor):
                 ('__pow__' if self.allowOperatorOverloading else 'Math.pow') if type (node.op) == ast.Pow else
                 '__matmul__' if type (node.op) == ast.MatMult else
                 ('__jsmod__' if self.allowJavaScriptMod else '__mod__') if type (node.op) == ast.Mod else
-                
+
                 # Overloaded arithmetic
                 '__mul__' if type (node.op) == ast.Mult else
                 '__truediv__' if type (node.op) == ast.Div else
                 '__add__' if type (node.op) == ast.Add else
                 '__sub__' if type (node.op) == ast.Sub else
-                
+
                 # Overloaded bitwise
                 '__lshift__' if type (node.op) == ast.LShift else
                 '__rshift__' if type (node.op) == ast.RShift else
                 '__or__' if type (node.op) == ast.BitOr else
                 '__xor__' if type (node.op) == ast.BitXor else
                 '__and__' if type (node.op) == ast.BitAnd else
-                
+
                 'Never here'
             )))
             self.visit (node.left)
@@ -1299,7 +1311,7 @@ class Generator (ast.NodeVisitor):
         if not self.skippedTemp ('break'):
             self.emit ('{} = true;\n', self.getTemp ('break'))
         self.emit ('break')
-        
+
     def visit_Bytes (self, node):
         self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
 
@@ -1343,7 +1355,7 @@ class Generator (ast.NodeVisitor):
                     self.emit ('}}')    # Only if not terminated already because hasKwargs
 
             self.emit (')')
-            
+
         def include (fileName):
             try:
                 searchedIncludePaths = []
@@ -1366,17 +1378,17 @@ class Generator (ast.NodeVisitor):
                     )
             except:
                 print (traceback.format_exc ())
-                
+
         # For a start, some special cases of calls to follow
         if type (node.func) == ast.Name:
-        
+
             # type () function
             if node.func.id == 'type':
                 self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
                 self.visit (node.args [0])
                 self.emit (')')
                 return
-            
+
             #property () factory function
             elif node.func.id == 'property':
                 self.emit ('{0}.call ({1}, {1}.{2}'.format (node.func.id, self.getScope (ast.ClassDef) .node.name, self.filterId (node.args [0].id)))
@@ -1413,7 +1425,7 @@ class Generator (ast.NodeVisitor):
                 elif node.args [0] .s == 'docat':
                     self.allowDocAttribs = True
                 elif node.args [0] .s == 'nodocat':
-                    self.allowDocAttribs = False          
+                    self.allowDocAttribs = False
 
                 elif node.args [0] .s == 'iconv':       # Automatic conversion to iterable supported
                     self.allowConversionToIterable = True
@@ -1454,7 +1466,7 @@ class Generator (ast.NodeVisitor):
                     self.allowConversionToTruthValue = True
                 elif node.args [0] .s == 'notconv':     # Automatic conversion to truth value not supported
                     self.allowConversionToTruthValue = False
-                    
+
                 elif node.args [0] .s == 'run':
                     pass
                 elif node.args [0] .s == 'norun':
@@ -1481,7 +1493,7 @@ class Generator (ast.NodeVisitor):
                             self.emit ('{}\n', line)
                     except:
                         print (traceback.format_exc ())
-               
+
                 elif node.args [0] .s == 'xtrans':       # Include code transpiled by external process in the output
                     try:
                         sourceCode = node.args [2] .s.format (* [
@@ -1512,7 +1524,7 @@ class Generator (ast.NodeVisitor):
                             process.poll ()
                         targetCode = process.stdout.read (). decode ('utf8'). replace ('\r\n', '\n')
                         for line in targetCode.split ('\n'):
-                            self.emit ('{}\n', line) 
+                            self.emit ('{}\n', line)
                     except:
                         print (traceback.format_exc ())
 
@@ -1530,20 +1542,20 @@ class Generator (ast.NodeVisitor):
                     self.allowOperatorOverloading = True
                 elif node.args [0] .s == 'noopov':      # Operloading of a small sane subset of operators disallowed
                     self.allowOperatorOverloading = False
-                    
+
                 elif node.args [0] .s == 'redirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'{}\'', node.args [2])
                 elif node.args [0] .s == 'noredirect':
                     if node.args [1] .s == 'stdout':
                         self.emit ('__stdout__ = \'__console__\'')
-                        
+
                 elif node.args [0] .s in ('skip', 'noskip', 'defined', 'ifdef', 'ifndef', 'else', 'endif'):
                     pass                                # Easier dealt with on statement / expression level in self.visit
-                    
+
                 elif node.args [0] .s == 'xpath':
                     self.module.program.moduleSearchDirs [1 : 1] = [elt.s for elt in node.args [1] .elts]
-                    
+
                 else:
                     raise utils.Error (
                         lineNr = self.lineNr,
@@ -1584,7 +1596,7 @@ class Generator (ast.NodeVisitor):
                 self.visit (node.args [0])
                 self.emit ('--')
                 return
-                
+
         # conjugate () call, for complex numbers, will generate __conj__ () call to runtime
         elif (
             type (node.func) == ast.Attribute and
@@ -1604,9 +1616,9 @@ class Generator (ast.NodeVisitor):
                 return
             except:
                 print (traceback.format_exc ())
-        # send () call    
+        # send () call
         elif (
-            type (node.func) == ast.Attribute and 
+            type (node.func) == ast.Attribute and
             self.replaceSend and
             node.func.attr == 'send'                # Construct Attribute instead of bare Call node on the fly and visit it
         ):
@@ -1629,7 +1641,7 @@ class Generator (ast.NodeVisitor):
             ))
             self.emit ('}}) ()')
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
-            
+
 
         # super () call
         elif (
@@ -1644,7 +1656,7 @@ class Generator (ast.NodeVisitor):
                     lineNr = self.lineNr,
                     message = '\n\tBuilt in function \'super\' with arguments not supported'
                 )
-                
+
             else:   # Construct node for __super__ (self, '<methodName>')(self, <params>) and visit it
                 self.visit (
                     ast.Call (
@@ -1677,7 +1689,7 @@ class Generator (ast.NodeVisitor):
                     )
                 )
                 return
-        
+
 
 
         # Generate call to __call__ rather than direct call, to facilitate operator overloading, if that is allowed
@@ -1688,19 +1700,19 @@ class Generator (ast.NodeVisitor):
                 node.func.id == '__call__'
             )
         ):
-        
+
 # $$$ v
-            if type (node.func) == ast.Attribute:            
+            if type (node.func) == ast.Attribute:
                 # in case of an attribute call, save the object/call? value first into an accumulator variable, then call the attribute function on it
                 self.emit ('(function () {{\n')
                 self.inscope (ast.FunctionDef ())
                 self.indent ()
-                
+
                 self.emit ('var {} = ', self.nextTemp ('accu'))
                 self.visit(node.func.value)
                 self.emit (';\n')
 
-                self.emit ('return ')  
+                self.emit ('return ')
                 self.visit(ast.Call (
                     func = ast.Name(
                         id = '__call__',
@@ -1726,7 +1738,7 @@ class Generator (ast.NodeVisitor):
                 self.emit(';\n')
 
                 self.prevTemp('accu')
-                
+
                 self.dedent()
                 self.descope()
                 self.emit('}}) ()')
@@ -1744,16 +1756,16 @@ class Generator (ast.NodeVisitor):
                     ] + node.args),
                     keywords = node.keywords
                 ))
-#$$$ ^                       
-            
-            
+#$$$ ^
+
+
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
-        # We're in a parametrized dataclass decorator, switch some data class code generation options       
-        
+        # We're in a parametrized dataclass decorator, switch some data class code generation options
+
         if dataClassArgDict != None:
             # Start out with the defaults
             dataClassArgTuple = copy.deepcopy (dataClassDefaultArgTuple)
-            
+
             # Adapt positional args)
             for index, expr in enumerate (node.args):
                 value = None
@@ -1763,10 +1775,10 @@ class Generator (ast.NodeVisitor):
                     dataClassArgTuple [index][1] = value
                 else:
                     raise utils.Error (message = 'Arguments to @dataclass can only be constants True or False')
-            
+
             # Adapt keyword args
             dataClassArgDict.update (dict (dataClassArgTuple))
-            
+
             for keyword in node.keywords:
                 dataClassArgDict [keyword.arg] = keyword.value
             return
@@ -1801,7 +1813,7 @@ class Generator (ast.NodeVisitor):
             self.emit ('\n{}:'.format (self.filterId (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
-            
+
         # If it's a dataclass (must currently be last decorator)
         # Remember this fact, to later insert def __init__ into parse tree
         # Pop dataclass decorator from decorator list
@@ -1814,8 +1826,8 @@ class Generator (ast.NodeVisitor):
             elif type (node.decorator_list [-1]) == ast.Call and node.decorator_list [-1] .func.id == 'dataclass':
                 isDataClass = True
                 dataClassArgDict = {}
-                self.visit_Call (node.decorator_list.pop (), dataClassArgDict)   # Adapt dataClassArgDict to decorator args            
-                
+                self.visit_Call (node.decorator_list.pop (), dataClassArgDict)   # Adapt dataClassArgDict to decorator args
+
         decoratorsUsed = 0
         if node.decorator_list:
             self.emit (' ')
@@ -1851,8 +1863,8 @@ class Generator (ast.NodeVisitor):
         self.inscope (node)
 
         self.indent ()
-        self.emit ('\n__module__: __name__,')        
-        
+        self.emit ('\n__module__: __name__,')
+
         # LHS plays a role in a.o. __repr__ in a dataclass
         inlineAssigns = []      # LHS is simple name, class var assignment generates initialisation of field in object literal
         propertyAssigns = []    # LHS is simple name, RHS is property constructor call
@@ -1860,20 +1872,20 @@ class Generator (ast.NodeVisitor):
 
         # LHS plays no role in a.o. __repr__ in a dataclass
         delayedAssigns = []     # LHS is array element, attribute or compound destructuring target, class var assignement generates statement after class object literal
-        
+
         # Assignments whose LHS name is used in __repr__, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
         reprAssigns = []       # Representation consists of instance vars, class vars and properties, in the order encountered
-        
+
         # Assignments whose LHS names is used in comparisons, have to be in ordere encountered, so can't be computed by concatenation of <other>VarAssigns
         # Class vars shouln't be included, as only objects of the same class can be compared
         compareAssigns = []     # Comparing is done by instance vars and properties, in the order encountered
-        
+
         index = 0
-        
+
         if isDataClass:
             initHoistFragmentIndex = self.fragmentIndex
             initHoistIndentLevel = self.indentLevel
-        
+
         for statement in node.body:
             if self.isCommentString (statement):
                 pass
@@ -1881,7 +1893,7 @@ class Generator (ast.NodeVisitor):
                 self.emitComma (index, False)
                 self.visit (statement)
                 index += 1
-                
+
             elif type (statement) == ast.Assign:
                 if len (statement.targets) == 1 and type (statement.targets [0]) == ast.Name:
                     # LHS is simply a name
@@ -1901,8 +1913,8 @@ class Generator (ast.NodeVisitor):
                     # Has to be generated after the class because it requires the use of an algorithm and can't be initialisation of field of an object literal
                     # Limitation: Can't properly deal with line number in this case
                     delayedAssigns.append (statement)
-                    
-            elif type (statement) == ast.AnnAssign: 
+
+            elif type (statement) == ast.AnnAssign:
                 # An annotated assignment is never a destructuring assignment
                 if type (statement.value) == ast.Call and type (statement.value.func) == ast.Name and statement.value.func.id == 'property':
                     # Property construction, should be generated after the class
@@ -1915,7 +1927,7 @@ class Generator (ast.NodeVisitor):
                     inlineAssigns.append (statement)    # For defaults a class var will do
                     initAssigns.append (statement)
                     reprAssigns.append (statement)
-                    compareAssigns.append (statement)                   
+                    compareAssigns.append (statement)
                     self.emitComma (index, False)
                     self.emit ('\n{}: ', self.filterId (statement.target.id))
                     self.visit (statement.value)
@@ -1924,7 +1936,7 @@ class Generator (ast.NodeVisitor):
                 elif type (statement.target) == ast.Name:
                     try:
                         # Simple class var assignment
-                        inlineAssigns.append (statement)                       
+                        inlineAssigns.append (statement)
                         self.emitComma (index, False)
                         self.emit ('\n{}: ', self.filterId (statement.target.id))
                         self.visit (statement.value)
@@ -1935,7 +1947,7 @@ class Generator (ast.NodeVisitor):
                 else:
                     # LHS is attribute or array element, we can't use it for representation or comparison
                     delayedAssigns.append (statement)
-                
+
             elif self.getPragmaFromExpr (statement):
                 # It's a pragma
                 self.visit (statement)
@@ -1964,15 +1976,15 @@ class Generator (ast.NodeVisitor):
             docString = ast.get_docstring (node)
             if docString:
                self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
-               
+
         # Deal with data class var assigns, a flavor of special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
             nrOfFragmentsToJump = self.fragmentIndex - initHoistFragmentIndex
             self.fragmentIndex = initHoistFragmentIndex
-            
+
             originalIndentLevel = self.indentLevel
             self.indentLevel = initHoistIndentLevel
-            
+
             initArgs = [(
                 (
                         initAssign.targets [0]
@@ -1981,7 +1993,7 @@ class Generator (ast.NodeVisitor):
                 ) .id,
                 initAssign.value
              ) for initAssign in initAssigns]
-            
+
             reprNames = [
             (
                 reprAssign.targets [0]
@@ -1989,7 +2001,7 @@ class Generator (ast.NodeVisitor):
                 reprAssign.target
             ) .id
             for reprAssign in reprAssigns]
-            
+
             compareNames = [
             (
                     compareAssign.targets [0]
@@ -1997,7 +2009,7 @@ class Generator (ast.NodeVisitor):
                     compareAssign.target
             ) .id
             for compareAssign in compareAssigns]
-            
+
             # Generate __init__
             if dataClassArgDict ['repr']:
                 originalAllowKeywordArgs = self.allowKeywordArgs
@@ -2013,13 +2025,13 @@ class Generator (ast.NodeVisitor):
                         defaults = []
                     ),
                     body = [
-                        ast.Expr ( 
-							value = ast.Call ( 
+                        ast.Expr (
+							value = ast.Call (
 								func = ast.Name (
 									id = '__pragma__',
 									ctx = ast.Load
                                 ),
-								args = [ 
+								args = [
 									ast.Str (
                                         s = 'js'
                                     ),
@@ -2034,7 +2046,7 @@ for (let arg of args) {
 }
 for (let name of kwargs.py_keys ()) {
     self [name] = kwargs [name];
-}                                        
+}
                                         '''.strip ()
                                     )
                                 ],
@@ -2048,7 +2060,7 @@ for (let name of kwargs.py_keys ()) {
                 ))
                 self.emit (',')
                 self.allowKeywordArgs = originalAllowKeywordArgs
-            
+
             # Generate __repr__
             if dataClassArgDict ['repr']:
                 self.visit (ast.FunctionDef (
@@ -2062,13 +2074,13 @@ for (let name of kwargs.py_keys ()) {
                         defaults = []
                     ),
                     body = [
-                        ast.Expr ( 
-							value = ast.Call ( 
+                        ast.Expr (
+							value = ast.Call (
 								func = ast.Name (
 									id = '__pragma__',
 									ctx = ast.Load
                                 ),
-								args = [ 
+								args = [
 									ast.Str (
                                         s = 'js'
                                     ),
@@ -2082,7 +2094,7 @@ let fields = [];
 for (let name of names) {{
     fields.push (name + '=' + repr (self [name]));
 }}
-return  self.__name__ + '(' + ', '.join (fields) + ')'                                  
+return  self.__name__ + '(' + ', '.join (fields) + ')'
                                         '''.strip ()
                                     )
                                 ],
@@ -2117,13 +2129,13 @@ return  self.__name__ + '(' + ', '.join (fields) + ')'
                         defaults = []
                     ),
                     body = [
-                        ast.Expr ( 
-							value = ast.Call ( 
+                        ast.Expr (
+							value = ast.Call (
 								func = ast.Name (
 									id = '__pragma__',
 									ctx = ast.Load
                                 ),
-								args = [ 
+								args = [
 									ast.Str (
                                         s = 'js'
                                     ),
@@ -2139,7 +2151,7 @@ for (let name of names) {
     selfFields.push (self [name]);
     otherFields.push (other [name]);
 }
-return list (selfFields).''' + comparatorName + '''(list (otherFields));                               
+return list (selfFields).''' + comparatorName + '''(list (otherFields));
                                         ''').strip ()   # ... Adding is ugly, repair __pragma__
                                     )
                                 ],
@@ -2151,11 +2163,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 ))
                 returns = None,
                 self.emit (',')
-            
+
             # After inserting at init hoist location, jump forward as much as we jumped back
             # Simply going back to the original fragment index won't work, since fragments were prepended
             self.fragmentIndex += nrOfFragmentsToJump
-            
+
             # And restore indent level to where we were
             self.indentLevel = originalIndentLevel
 
@@ -2165,7 +2177,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         for assign in delayedAssigns + propertyAssigns:
             self.emit (';\n')
             self.visit (assign)
-            
+
         self.mergeList.append (utils.Any (
             className = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]),
             isDataClass = isDataClass,
@@ -2177,7 +2189,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.descope () # No earlier, class vars need it
 
         def emitMerges ():
-            def emitMerge (merge): 
+            def emitMerge (merge):
                 # Merge dataclass fields for any class, since parents or descendants may be dataclasses
                 # ??? Should __bases__ hold complete dotted classnames in case of local classes?
                 if merge.isDataClass:
@@ -2186,7 +2198,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     self.emit ('__mergefields__ ({}, aClass);\n', self.filterId (merge.className))
                     self.dedent ()
                     self.emit ('}}')
-                    
+
                     # Merge dataclass fields for current class
                     self.emit (';\n__mergefields__ ({}, {{', self.filterId (merge.className))
                     self.emit ('__reprfields__: new Set ([{}]), ', ', '.join ('\'{}\''.format (reprAssign.target.id) for reprAssign in merge.reprAssigns))
@@ -2194,9 +2206,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     self.emit ('__initfields__: new Set ([{}])', ', '.join ('\'{}\''.format (initAssign.target.id) for initAssign in merge.initAssigns))
                     self.emit ('}})')
 
-            for merge in self.mergeList:                
+            for merge in self.mergeList:
                 emitMerge (merge)
-                
+
             self.mergeList = []
 
         def emitProperties ():
@@ -2223,7 +2235,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     functionName2 = propertyAccessor2.functionName
                     propertyName2 = functionName2 [5:]
                     isGetter2 = functionName2 [:5] == '_get_'
-                    
+
                     if className == className2 and propertyName == propertyName2 and isGetter != isGetter2:
                         # Remove pair
                         self.propertyAccessorList.remove (propertyAccessor2)
@@ -2238,12 +2250,12 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     else:
                         raise utils.Error(
                             message='\n\tProperty setter declared without getter\n'
-                        )  
-        
+                        )
+
         if type (self.getScope ().node) != ast.ClassDef:  # Emit properties if this class isn't directly local to another class
             emitProperties ()
             emitMerges ()
-                        
+
     def visit_Compare (self, node):
         if len (node.comparators) > 1:
             self.emit ('(')
@@ -2257,11 +2269,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE
             )):
                 self.emit ('{} ('.format (self.filterId (
-                
+
                     # Non-overloaded
                     '__in__' if type (op) == ast.In else
                     '!__in__' if type (op) == ast.NotIn else
-                    
+
                     # Overloaded
                     '__eq__' if type (op) == ast.Eq else
                     '__ne__' if type (op) == ast.NotEq else
@@ -2269,7 +2281,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     '__le__' if type (op) == ast.LtE else
                     '__gt__' if type (op) == ast.Gt else
                     '__ge__' if type (op) == ast.GtE else
-                    
+
                     'Never here'
                 )))
                 self.visitSubExpr (node, left)
@@ -2517,10 +2529,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_FormattedValue (self, node):
         self.visit (node.value)
-        
+
     def visit_AsyncFunctionDef (self, node):
         self.visit_FunctionDef (node, anAsync = True)
-    
+
     def visit_FunctionDef (self, node, anAsync = False):
         def emitScopedBody ():
             self.inscope (node)
@@ -2529,14 +2541,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if self.getScope (ast.AsyncFunctionDef if anAsync else ast.FunctionDef) .containsYield:
                 # !!! Check: yield forbidden in AsyncFunctionDef
                 self.targetFragments.insert (yieldStarIndex, '*')
-            self.descope ()            
-            
+            self.descope ()
+
         def pushPropertyAccessor(functionName):
             self.propertyAccessorList.append (utils.Any (
                 functionName = functionName,
                 className = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()])
             ))
-                
+
         nodeName = node.name
 
         if not nodeName == '__pragma__':    # Don't generate code for the dummy pragma definition starting the extraLines in utils
@@ -2546,7 +2558,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             isGlobal = type (self.getScope () .node) == ast.Module
 
             isMethod = not (isGlobal or type (self.getScope () .node) in (ast.FunctionDef, ast.AsyncFunctionDef))  # Global or function scope, so it's no method
-            
+
             if isMethod:
                 self.emit ('\n')
             self.adaptLineNrString (node)
@@ -2612,7 +2624,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
-                        self.emit ('export ')                        
+                        self.emit ('export ')
                     self.emit ('var {} = ', self.filterId (nodeName))
                 else:
                     self.emit ('var {} = ', self.filterId (nodeName))
@@ -2645,7 +2657,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                             self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
-                        self.emit ('export ')                        
+                        self.emit ('export ')
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if anAsync else '')
                 else:
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if anAsync else '')
@@ -2655,7 +2667,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit (' ')
 
             skipFirstArg = jsCall and not (not isMethod or isStaticMethod or isProperty)
-            
+
             if skipFirstArg:
                 # Remove first argument from methods when jscall enabled
                 # Exceptions:
@@ -2675,7 +2687,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     self.emit ('var {} = \'__class__\' in this ? this.__class__ : this;\n', firstArg)
                 else:
                     self.emit ('var {} = this;\n', firstArg)
-            
+
             emitScopedBody ()
             self.emit ('}}')
 
@@ -2748,7 +2760,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (node.orelse [0])
             else:
                 self.adaptLineNrString (node.orelse, 1) # One off, since 'else' doesn't have it's own node and line nr
-                
+
                 self.emit ('else {{\n')
                 self.indent ()
                 self.emitBody (node.orelse)
@@ -2769,7 +2781,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_Import (self, node):
         # Since clashes with own names have to be avoided, the node is stored to revisit it after the own names are known
         self.importNodes.append (node)
-        
+
     def revisit_Import (self, node):  # Import ... can only import modules
         self.adaptLineNrString (node)
 
@@ -2777,11 +2789,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         if not names:
             return
-                  
+
         '''
         Possibilities:
-        
-        (1) import a.b.d, d.e.f as g        --> import 
+
+        (1) import a.b.d, d.e.f as g        --> import
         '''
 
         for index, alias in enumerate (names):
@@ -2797,50 +2809,50 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if alias.asname and not alias.asname in (self.allOwnNames | self.allImportedNames):
                 # Import 'as' a non-dotted name, so no need to nest
                 # Clashes with own names or already imported names are avoided
-                
+
                 self.allImportedNames.add (alias.asname)
-                self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importRelPath)
+                self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), module.importPath(self.module))
             else:
                 # Import dotted name, requires import under constructed unique name and then nesting,
                 # including transfer of imported names from immutable module to mutable object
                 # This mutable module representation object may come to hold other mutable module represention objects
-            
-                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
+
+                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importPath(self.module))
                 aliasSplit = alias.name.split ('.', 1)
                 head = aliasSplit [0]
                 tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
-                
+
                 self.importHeads.add (head)
                 self.emit ('__nest__ ({}, \'{}\', __module_{}__);\n', self.filterId (head), self.filterId (tail), self.filterId (module.name .replace ('.', '_')))
-                
+
             if index < len (names) - 1:
                 self.emit (';\n')
 
     def visit_ImportFrom (self, node):
         # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
         self.importNodes.append (node)
-    
+
     def revisit_ImportFrom (self, node):  # From ... import ... can import modules or facitities offered by modules
         self.adaptLineNrString (node)
 
         if node.module.startswith (self.stubsName):
             return
-            
+
         '''
         Possibilities with modules a, b, c and (non-module) facilities: p, q, r, s:
-        
+
         (1) from a.b.c import *                             --> import {p, q, r, s} from 'a.b.c.'               Use facilities, generate afterward
-        
+
         (2) from a.b.c import p as P, q, r as R, s          --> import {p as P, q, r as R, s} from 'a.b.c.'     Use facilities, generate afterward
-        
+
         (3) from a.b import c0, c1 as C1, c2, c3 as C3      --> import * as c0 from 'a.b.c0'                    Don't use facilities, generate directly
                                                                 import * as C1 from 'a.b.c1'
                                                                 import * as c2 from 'a.b.c2'
                                                                 import * as C3 from 'a.b.C3'
-                                                                
+
         (1) can happen only in isolation, (2) and (3) can be combined in one Python import statement
         '''
-        
+
         try:
             # Import modules or facilities offered by them
             namePairs = []
@@ -2851,17 +2863,17 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                             lineNr = node.lineno,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
-                    
+
                     module = self.useModule (node.module)
                     for aName in module.exports:
                         namePairs.append (utils.Any (name = aName, asName = None))
                 else:
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
-                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
+                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importPath(self.module))
                     except:                                                     # If it doesn't it denotes a facility inside a module
                         module = self.useModule (node.module)
-                        namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
+                        namePairs.append (utils.Any (name = alias.name, asName = alias.asname))
             if namePairs:
                 try:
                     # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
@@ -2875,10 +2887,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                                 self.allImportedNames.add (namePair.asName)
                             else:
                                 self.allImportedNames.add (namePair.name)
-                    self.emit ('}} from \'{}\';\n', module.importRelPath)
+                    self.emit ('}} from \'{}\';\n', module.importPath(self.module))
                 except:
                     print (traceback.format_exc ())
-                    
+
         except Exception as exception:
             print (traceback.format_exc ())
             utils.enhanceException (
@@ -2983,28 +2995,28 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.descope ()
         self.emit ('}}) ()')
 
-    def visit_Module (self, node):  
+    def visit_Module (self, node):
         # Adapt self.lineNrString to whatever self.lineNr happens to be
         self.adaptLineNrString ()
-        
+
         # Emit module collophon comment
         self.emit ('// {}\'ed from Python, {}\n',
             self.module.program.envir.transpiler_name.capitalize (), datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S'),
-        )    
-    
+        )
+
         # Adapt self.lineNrString to the line number that the node stems from
         self.adaptLineNrString (node)
-        
+
         # Enter module scope
         self.inscope (node)
 
-        # Remember where hoists have to be inserted in the fragments list     
-        self.importHoistFragmentIndex = self.fragmentIndex       
-        
+        # Remember where hoists have to be inserted in the fragments list
+        self.importHoistFragmentIndex = self.fragmentIndex
+
         # Let the module know its __name__
         self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
         self.allOwnNames.add ('__name__')
-        
+
         # Generate code for the module body
         for statement in node.body:
             if self.isCommentString (statement):
@@ -3019,30 +3031,30 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             docString = ast.get_docstring (node)
             if docString:
                 self.allOwnNames.add ('__doc__')    # Should be done before generation of exports
-                
+
         # Transit export of imported facilities (so no facilities that weren't imported and no modules)
         if type (self.getScope ().node) == ast.Module:
             if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
                 self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
-        
+
         # Prepair to generate hoisted fragments near start of fragments
         self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
 
         # Insert docstring at hoist location, further hoists are PRE(!)pended
         if self.allowDocAttribs and docString:
             self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n'))
-            
+
         '''
         Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
-        
+
         JavaScript 6 module-level variables normally cannot be accessed directly by their name as a string
         They aren't attributes of any global object, certainly not in strict mode, which is the default for modules
         By making getters and setters by the same name members of __all__, we can approach globals () as a dictionary
-        
+
         Limitations:
         - We can access (read/write) but not create module-level globals this way
         - If there are a lot of globals (bad style) this mechanism becomes expensive, so it must be under a pragma
-        
+
         It's possible that future versions of JavaScript facilitate better solutions to this minor problem
         '''
         if self.allowGlobals:
@@ -3053,9 +3065,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     f'get {name} () {{{{return {name};}}}}, set {name} (value) {{{{{name} = value;}}}}' for name in sorted (self.allOwnNames)
                 ])
                 +
-                '}});\n'            
+                '}});\n'
             )
-           
+
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
         self.fragmentIndex = self.importHoistFragmentIndex
@@ -3064,26 +3076,26 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.revisit_Import (importNode)
             else:
                 self.revisit_ImportFrom (importNode)
-                
+
         # Import main module (generatable only late, but hoisted)
         # Place it first, but decimate its imported names last, since they should appear to be overriden by later imports
         self.fragmentIndex = self.importHoistFragmentIndex
         if self.module.name != self.module.program.runtimeModuleName:
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
-            
+
             # Avoid double declarations since imports are immutable (hoisted)
             importedNames = ', '.join (sorted ([export for export in runtimeModule.exports if not export in (self.allOwnNames | self.allImportedNames)]))
-            
-            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
-            
+
+            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importPath(self.module))
+
         # Emit empty import head objects, each as the leftmost part of the dotted name that can be used to access the imported module
         # Note that the required importheads are only known after importing modules, but must be inserted in the target code before that,
         # since they must be filled by the imports
-        # Place definition of import heads before actual import that includes nesting, even though they are known only after the imports        
+        # Place definition of import heads before actual import that includes nesting, even though they are known only after the imports
         self.fragmentIndex = self.importHoistFragmentIndex
         for importHead in sorted (self.importHeads):
             self.emit ('var {} = {{}};\n', self.filterId (importHead))
-            
+
         # Exit module scope
         self.descope ()
 
@@ -3095,18 +3107,18 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         elif node.id == '__filename__':
             path = os.path.split (self.module.sourcePath)
             fileName = path [1]
-            
+
             if fileName.startswith ('__init__'):
                 subDir = os.path.split (path [0])
                 fileName = os.path.join (subDir [1], fileName)
-                
+
             self.visit (ast.Str (s = fileName))
             return
 
         elif node.id == '__line__':
             self.visit (ast.Num (n = self.lineNr))
             return
-            
+
         elif type (node.ctx) == ast.Store:
             if type (self.getScope () .node) == ast.Module:
                 self.allOwnNames.add (node.id)
@@ -3395,7 +3407,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_With (self, node):
         self.adaptLineNrString (node)
-        
+
         for item in node.items:
             self.emit ('var ')                      # Should be in surrounding scope but may be overwritten, so use var rather than let
             if (item.optional_vars):
@@ -3426,7 +3438,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.dedent ()
             self.emit ('}}\n')
             self.prevTemp ('except')
-            
+
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
 
@@ -3436,7 +3448,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         if (node.value != None):
             self.emit (' ')
             self.visit (node.value)
-            
+
     def visit_YieldFrom (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True
         self.emit ('yield* ')
