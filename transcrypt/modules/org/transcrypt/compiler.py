@@ -30,6 +30,7 @@ import shutil
 import tokenize
 import collections
 import time
+import pickle
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -70,19 +71,30 @@ class Program:
         self.moduleDict = {}    # Administration of all modules that play a role in this program
         self.importStack = []   # Pending imports, enables showing load sequence in case a module cannot be loaded
 
-        # Set paths 
+        # Set paths
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         self.targetDir = f'{self.sourceDir}/__target__'
+        self.optionsPath = f'{self.targetDir}/{self.mainModuleName}.options'
         
-        if utils.commandArgs.build:
-            # A build resets everything
+        # Find out if command line arguments are changed
+        try:
+            with open (self.optionsPath, 'rb') as optionsFile:
+                oldOptions = pickle.load (optionsFile)
+        except:
+            oldOptions = None
+        self.optionsChanged = utils.commandArgs.picklableOptions != oldOptions
+           
+        # Reset everything in case of a build or a command args change
+        if utils.commandArgs.build or self.optionsChanged:
             shutil.rmtree(self.targetDir, ignore_errors = True)
 
+        # Remember current command line arguments
+        with utils.create (self.optionsPath, 'wb') as optionsFile:
+            pickle.dump (utils.commandArgs.picklableOptions, optionsFile)
+  
         try:
-            test = input ('Effe wachte hiero')
-        
             # Provide runtime module since it's always needed but never imported explicitly
             self.runtimeModuleName = 'org.transcrypt.__runtime__'
             self.provide (self.runtimeModuleName)
@@ -94,8 +106,6 @@ class Program:
                 exception,
                 message = f'\n\t{exception}'
             )
-            
-        test = input ('Nog effe wachte dan')
         
     def provide (self, moduleName, __moduleName__ = None):    
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
@@ -132,16 +142,15 @@ class Module:
             utils.commandArgs.dmap
         )
 
-        # Generate, copy or load target code and symbols
-        print ()
-        print (777, self.sourcePath, time.ctime (os.path.getmtime (self.sourcePath)))
-        print (888, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
-        if upToDate (self.targetPath, self.sourcePath):
-        if utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath):
+        # Generate, copy or load target code and symbols                               
+        if (
+            utils.commandArgs.build or self.program.optionsChanged 
+            or
+            not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath)
+        ):
             # If it's a build rather than a make, or the target doesn't exist or the target is obsolete
             
             if self.isJavascriptOnly:
-                print ('aaa')
                 # Digest source JavaScript and copy to target location
                 self.loadJavascript ()
                 
@@ -152,7 +161,6 @@ class Module:
                 self.exports = javascriptDigest.exportedNames
    
             else:
-                print ('bbb')
                 # Perform static typecheck on source code
                 if utils.commandArgs.dstat:
                     try:
@@ -173,7 +181,7 @@ class Module:
                         utils.log (True, 'Checking: {}\n\tInternal error in lightweight consistency checker, remainder of module skipped\n', self.sourcePath)
                         
                 # Generate JavaScript code and sourcemap from parse tree
-                self.generateJavascriptAndMap ()
+                self.generateJavascriptAndPrettyMap ()
                 
                 # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
@@ -186,54 +194,44 @@ class Module:
             filePath = self.targetPath if utils.commandArgs.nomin else self.prettyTargetPath
             with utils.create (filePath) as aFile:
                 aFile.write (self.targetCode)
-
+            
+            # Minify target code       
+            if not utils.commandArgs.nomin:
+                utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
+                minify.run (
+                    self.program.targetDir,
+                    self.prettyTargetName,
+                    self.targetName,
+                    self.shrinkMapName if utils.commandArgs.map else None,
+                )
+                
+                if utils.commandArgs.map:
+                    if self.isJavascriptOnly:
+                        if os.path.isfile (self.mapPath):
+                            os.remove (self.mapPath)
+                        os.rename (self.shrinkMapPath, self.mapPath)
+                    else:
+                        self.sourceMapper.generateMultilevelMap ()
+                        
+            # Append map reference to target file, which may be minified or not       
+            with open (self.targetPath, 'a') as targetFile:
+                targetFile.write (self.mapRef)            
+                    
+            # Remove intermediate files
+            utils.tryRemove (self.prettyTargetPath)
+            utils.tryRemove (self.shrinkMapPath)
+            utils.tryRemove (self.prettyMapPath)
+                    
         else:
-            print ('ccc')
             # If it's a make an rather than a build and the target exists, load it and run through digestJavascript for obtaining symbols
-            print (8881, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
             self.targetCode = open (self.targetPath, "r").read ()
             javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False)
-            self.exports = javascriptDigest.exportedNames        
-            print (8882, self.targetPath, time.ctime (os.path.getmtime (self.targetPath)))
-        
-        print (999)
-        print ()
-        
-        # Minify target code       
-        if not utils.commandArgs.nomin:
-            utils.log (True, 'Saving minified target code in: {}\n', self.targetPath)
-            minify.run (
-                self.program.targetDir,
-                self.prettyTargetName,
-                self.targetName,
-                self.shrinkMapName if utils.commandArgs.map else None,
-            )
-            
-            if utils.commandArgs.map:
-                if self.isJavascriptOnly:
-                    if os.path.isfile (self.mapPath):
-                        os.remove (self.mapPath)
-                    os.rename (self.shrinkMapPath, self.mapPath)
-                else:
-                    utils.log (False, 'Saving multi-level sourcemap in: {}\n', self.mapPath)
-                    self.sourceMapper.loadShrinkMap ()
-                    self.sourceMapper.cascadeAndSaveMiniMap ()
-                    
-        # Append map reference to target file, which may be minified or not       
-        with open (self.targetPath, 'a') as targetFile:
-            targetFile.write (self.mapRef)            
+            self.exports = javascriptDigest.exportedNames
 
-        # Remove superfluous files
-        if not utils.commandArgs.dmap:
-            self.sourceMapper.cleanDir ()   # Also from previous run
-            if not (self.isJavascriptOnly and utils.commandArgs.map and not utils.commandArgs.nomin):
-                utils.cleanDir (self.program.targetDir, f'{self.name}.pretty.js')
-            
+            # $$$
+        
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
-        
-    def mustRemake (self, targetPath, sourcePath):
-        return utils.commandArgs.build or not os.path.isfile (self.targetPath) or os.path.getmtime (self.sourcePath) > os.path.getmtime (self.targetPath)
                 
     def findPaths (self):
         searchedModulePaths = []
@@ -260,6 +258,7 @@ class Module:
             self.importRelPath = f'./{self.name}.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
+            self.prettyMapPath = f'{self.targetPrepath}.shrink.map'
             self.shrinkMapName = f'{self.name}.shrink.map'
             self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
             self.mapSourcePath = f'{self.targetPrepath}.py'
@@ -286,7 +285,7 @@ class Module:
                 )
             )
             
-    def generateJavascriptAndMap (self):
+    def generateJavascriptAndPrettyMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.targetPath)
 
         # Generate target fragments

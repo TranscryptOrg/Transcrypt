@@ -74,7 +74,8 @@ class CommandArgs:
         self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
-        self.__dict__.update (self.argParser.parse_args () .__dict__)
+        self.picklableOptions = self.argParser.parse_args () .__dict__
+        self.__dict__.update (self.picklableOptions)
         
         # Signal invalid switches
         
@@ -95,7 +96,6 @@ class CommandArgs:
         elif self.unit == '.auto' and self.esv and int (self.esv) < 6:
             logAndExit ('{}: -u / --unit .auto and -e / --esv < 6'.format (invalidCombi))
         
-            
         # Set dependent switches
         
         # (for future use)
@@ -119,12 +119,33 @@ class CommandArgs:
         global nrOfExtraLines
         nrOfExtraLines = max (len (extraLines) - 1, 0)  # Last line only serves to force linefeed
         extraLines = '\n'.join (extraLines)
-                
-commandArgs = CommandArgs ()  
+        
+commandArgs = CommandArgs ()
    
-def create (path):
-    os.makedirs (os.path.dirname (path), exist_ok = True)
-    return open (path, 'w', encoding = 'utf-8')
+def create (path, binary = False):
+    for i in range (10):
+        try:
+            os.makedirs (os.path.dirname (path), exist_ok = True)
+            
+            if binary:
+                return open (path, 'wb')
+            else:
+                return open (path, 'w', encoding = 'utf-8')
+                
+            if i > 0:
+                log (True, f'Created {path} at attempt {i + 1}')
+                
+        except:
+            time.sleep (0.5)
+    else:
+        raise Error (f'Failed to create {path}')
+        
+
+def tryRemove (filePath):
+    try:
+        os.remove (filePath)
+    except:
+        pass
     
 def formatted (*args):  # args [0] is string, args [1 : ] are format params
     try:
@@ -309,10 +330,4 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
             
     return result
 
-def cleanDir (dir, *tails):        
-    for fileName in os.listdir (dir):
-        for tail in tails:
-            if fileName.endswith (tail):
-                print (f'Removing {fileName} from {dir}')
-                os.remove (f'{dir}/{fileName}')
     

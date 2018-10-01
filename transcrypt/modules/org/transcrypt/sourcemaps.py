@@ -244,12 +244,9 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
                 deltaMapdumpFile.write ('(New group) ')
                 for segment in group:
                     deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
-                    
+                                
+    def generateMultilevelMap (self):
+        utils.log (False, 'Saving multi-level sourcemap in: {}\n', 'self.mapPath******')
+        self.loadShrinkMap ()
+        self.cascadeAndSaveMiniMap ()
         
-    def cleanDir (self):
-        utils.cleanDir (
-            self.targetDir,
-            '.map_dump',
-            '.pretty.map',
-            '.shrink.map'
-        )
