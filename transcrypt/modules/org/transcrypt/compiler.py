@@ -29,7 +29,6 @@ import shlex
 import shutil
 import tokenize
 import collections
-import time
 import pickle
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
@@ -156,9 +155,6 @@ class Module:
                 
                 # JavaScript-only, so annotations are pointless, so it's ok to strip
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, not utils.commandArgs.dnostrip, False)
-                
-                self.targetCode = javascriptDigest.digestedCode
-                self.exports = javascriptDigest.exportedNames
    
             else:
                 # Perform static typecheck on source code
@@ -185,9 +181,6 @@ class Module:
                 
                 # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
-                
-                self.targetCode = javascriptDigest.digestedCode
-                self.exports = javascriptDigest.exportedNames
 
             # Write target code
             utils.log (True, 'Saving target code in: {}\n', self.targetPath)
@@ -202,7 +195,7 @@ class Module:
                     self.program.targetDir,
                     self.prettyTargetName,
                     self.targetName,
-                    self.shrinkMapName if utils.commandArgs.map else None,
+                    mapFileName = self.shrinkMapName if utils.commandArgs.map else None,
                 )
                 
                 if utils.commandArgs.map:
@@ -217,18 +210,32 @@ class Module:
             with open (self.targetPath, 'a') as targetFile:
                 targetFile.write (self.mapRef)            
                     
-            # Remove intermediate files
-            utils.tryRemove (self.prettyTargetPath)
-            utils.tryRemove (self.shrinkMapPath)
-            utils.tryRemove (self.prettyMapPath)
-                    
         else:
-            # If it's a make an rather than a build and the target exists, load it and run through digestJavascript for obtaining symbols
-            self.targetCode = open (self.targetPath, "r").read ()
+            # If it's a make an rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
+            self.targetCode = open (self.targetPath, 'r') .read ()
             javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False)
-            self.exports = javascriptDigest.exportedNames
+            
+            if not javascriptDigest:
+                minify.run (
+                    self.program.targetDir,
+                    self.targetName,
+                    self.prettyTargetName,
+                    prettify = True,
+                )
+                self.prettyTargetCode = open (self.prettyTargetPath, 'r') .read ()                
+                javascriptDigest = utils.digestJavascript (self.prettyTargetCode, self.program.symbols, True, False)
+        
+        self.targetCode = javascriptDigest.digestedCode
+        self.importedModuleNames = javascriptDigest.importedModuleNames
+        self.exportedNames = javascriptDigest.exportedNames
+        
+        for importedModuleName in self.importedModuleNames:
+            self.program.provide (importedModuleName)
 
-            # $$$
+        # Remove eventual intermediate files
+        utils.tryRemove (self.prettyTargetPath)
+        utils.tryRemove (self.shrinkMapPath)
+        utils.tryRemove (self.prettyMapPath)
         
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
@@ -812,7 +819,7 @@ class Generator (ast.NodeVisitor):
 
     def useModule (self, name):
         self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-        return self.module.program.provide (name)             # Must be done first because it can generate a healthy exception
+        return self.module.program.provide (name)               # Must be done first because it can generate a healthy exception
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -2853,7 +2860,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         )
                     
                     module = self.useModule (node.module)
-                    for aName in module.exports:
+                    for aName in module.exportedNames:
                         namePairs.append (utils.Any (name = aName, asName = None))
                 else:
                     try:                                                        # Try if alias.name denotes a module
@@ -3018,7 +3025,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         if self.allowDocAttribs:
             docString = ast.get_docstring (node)
             if docString:
-                self.allOwnNames.add ('__doc__')    # Should be done before generation of exports
+                self.allOwnNames.add ('__doc__')    # Should be done before generation of exported names
                 
         # Transit export of imported facilities (so no facilities that weren't imported and no modules)
         if type (self.getScope ().node) == ast.Module:
@@ -3072,7 +3079,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
             
             # Avoid double declarations since imports are immutable (hoisted)
-            importedNames = ', '.join (sorted ([export for export in runtimeModule.exports if not export in (self.allOwnNames | self.allImportedNames)]))
+            importedNames = ', '.join (sorted ([
+                exportedName
+                for exportedName in runtimeModule.exportedNames
+                if not exportedName in (self.allOwnNames | self.allImportedNames)
+            ]))
             
             self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
             

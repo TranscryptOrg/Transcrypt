@@ -4,6 +4,7 @@ import argparse
 import inspect
 import tokenize
 import re
+import time
 
 class Any:
     def __init__ (self, **attribs):
@@ -226,13 +227,16 @@ def enhanceException (exception, **kwargs):
 
     raise result
         
-def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
+def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, refuseIfAppearsMinified = False):
     '''
     - Honor ifdefs
     - Strip comments if allowed by commend line switch AND indicated by pragma
     - Harvest import and export info
     '''
 
+    if refuseIfAppearsMinified and code [0] != '/':
+        return None
+    
     stripComments = False
         
     def stripSingleLineComments (line):
@@ -280,6 +284,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
             return all (passStack)  # Skip line only if not in passing state according to passStack
     
     passableLines = [line for line in code.split ('\n') if passable (line)]
+    
     if stripComments:
         passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in passableLines] if commentlessLine]
         
@@ -287,47 +292,48 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations):
         digestedCode = '\n'.join (passableLines),
         nrOfLines = len (passableLines),
         exportedNames = [],
-        importedModules = []
+        importedModuleNames = []
     )
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('(\'.*\')')
+    wordPattern = re.compile (r'\w+')
     for line in passableLines:
-        words = line.split (' ')
+        words = wordPattern.findall (line)
         
-        if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
-            words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
-            
-        if words [0] == 'export':
-            # Deducing exported names from JavaScript is needed to facilitate * import by other modules
-            
-            if words [1][0] == '{':
-                # - Transit export:   "export {p, q, r, s};"  
+        if words:
+            if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
+                words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
                 
-                # Find exported names as "{p, q, r, s}"
-                match = namesPattern.search (line)
+            if words [0] == 'export':
+                # Deducing exported names from JavaScript is needed to facilitate * import by other modules
                 
-                # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
-                result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
-            else:
-                # - Export prefix:    "export var ... or export function ..."
+                if words [1][0] == '{':
+                    # Transit export:   "export {p, q, r, s};"  
+                    
+                    # Find exported names as "{p, q, r, s}"
+                    match = namesPattern.search (line)
+                    
+                    # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
+                    result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+                else:
+                    # Export prefix:    "export var ... or export function ..."
+                    
+                    result.exportedNames.append (words [2])
+                      
+                      
+            if words [0] == 'import':
+                # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
+                # They may have an explicit import list for unqualified access or an import * for qualified access
+                # In both cases only the path of the imported module is needed, to be able to provide that module
+                # It can be a path without extension, allowing both .py and .js files as imported modules
+                #
+                # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
+                # - Qualified import:     "import * from '<relative module path>'"  
                 
-                result.exportedNames.append (words [2])
-                   
-        if words [0] == 'import':
-            # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
-            # They may have an explicit import list for unqualified access or an import * for qualified access
-            # In both cases only the path of the imported module is needed, to be able to provide that module
-            # It can be a path without extension, allowing both .py and .js files as imported module
-            #
-            # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
-            # - Qualified import:     "import * from '<relative module path>'"  
-            
-            match = pathPattern.search (line)
-            result.importedModules.append (Any (
-                path = eval (match.group (1))
-            ))
-            
+                match = pathPattern.search (line)
+                result.importedModuleNames.append (eval (match.group (1)) [2:-3])
+                
     return result
 
     
