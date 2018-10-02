@@ -296,7 +296,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     )
     
     namesPattern = re.compile ('({.*})')
-    pathPattern = re.compile ('(\'.*\')')
+    pathPattern = re.compile ('([\'|\"].*[\'|\"])')
     wordPattern = re.compile (r'\w+')
     for line in passableLines:
         words = wordPattern.findall (line)
@@ -315,7 +315,8 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                     match = namesPattern.search (line)
                     
                     # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
-                    result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+                    if match:
+                        result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
                 else:
                     # Export prefix:    "export var ... or export function ..."
                     
@@ -332,7 +333,8 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                 # - Qualified import:     "import * from '<relative module path>'"  
                 
                 match = pathPattern.search (line)
-                result.importedModuleNames.append (eval (match.group (1)) [2:-3])
+                if match:
+                    result.importedModuleNames.append (eval (match.group (1)) [2:-3])
                 
     return result
 

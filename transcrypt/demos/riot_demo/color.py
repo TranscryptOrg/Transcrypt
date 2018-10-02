@@ -2,7 +2,7 @@
 # color funcs
 msgs   = []
 styles = []
- 
+
 debug = 0
 def _recurse(col, g, *s):
     msgs, styles, hsl = g

@@ -213,7 +213,7 @@ class Module:
         else:
             # If it's a make an rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
             self.targetCode = open (self.targetPath, 'r') .read ()
-            javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False)
+            javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False, refuseIfAppearsMinified = True)
             
             if not javascriptDigest:
                 minify.run (
@@ -223,7 +223,7 @@ class Module:
                     prettify = True,
                 )
                 self.prettyTargetCode = open (self.prettyTargetPath, 'r') .read ()                
-                javascriptDigest = utils.digestJavascript (self.prettyTargetCode, self.program.symbols, True, False)
+                javascriptDigest = utils.digestJavascript (self.prettyTargetCode, self.program.symbols, True, False)    # Prettified, so doesn't start with '/'!        
         
         self.targetCode = javascriptDigest.digestedCode
         self.importedModuleNames = javascriptDigest.importedModuleNames
