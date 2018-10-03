@@ -246,7 +246,7 @@ class SourceMapper: # There's only one sourcemapper needed to generate all maps 
                     deltaMapdumpFile.write ('Segment: {}\n'.format (segment))
                                 
     def generateMultilevelMap (self):
-        utils.log (False, 'Saving multi-level sourcemap in: {}\n', 'self.mapPath******')
+        utils.log (False, 'Saving multi-level sourcemap in: {}\n') # !!!     , 'self.mapPath')
         self.loadShrinkMap ()
         self.cascadeAndSaveMiniMap ()
         

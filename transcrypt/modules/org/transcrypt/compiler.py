@@ -1695,8 +1695,6 @@ class Generator (ast.NodeVisitor):
                 node.func.id == '__call__'
             )
         ):
-        
-# $$$ v
             if type (node.func) == ast.Attribute:            
                 # in case of an attribute call, save the object/call? value first into an accumulator variable, then call the attribute function on it
                 self.emit ('(function () {{\n')
@@ -1750,10 +1748,7 @@ class Generator (ast.NodeVisitor):
                               value = None)
                     ] + node.args),
                     keywords = node.keywords
-                ))
-#$$$ ^                       
-            
-            
+                ))            
             return  # The newly created node was visited by a recursive call to visit_Call. This replaces the current visit.
         # We're in a parametrized dataclass decorator, switch some data class code generation options       
         
@@ -3025,12 +3020,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         if self.allowDocAttribs:
             docString = ast.get_docstring (node)
             if docString:
-                self.allOwnNames.add ('__doc__')    # Should be done before generation of exported names
-                
-        # Transit export of imported facilities (so no facilities that weren't imported and no modules)
-        if type (self.getScope ().node) == ast.Module:
-            if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
-                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
+                self.allOwnNames.add ('__doc__')    # Should be done before generation of exported names   
         
         # Prepair to generate hoisted fragments near start of fragments
         self.fragmentIndex = self.importHoistFragmentIndex    # Subsequent emits will also hoist self.lineNr, subsequent revisits will even adapt self.lineNrString
@@ -3054,7 +3044,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         '''
         if self.allowGlobals:
             self.emit (
-                'export var __all__ = dict ({{' # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
+                'var __all__ = dict ({{' # Has nothing to do with emitting an export list, just another importable (so exported) module level variable __all__
                 +
                 ', '.join ([
                     f'get {name} () {{{{return {name};}}}}, set {name} (value) {{{{{name} = value;}}}}' for name in sorted (self.allOwnNames)
@@ -3072,20 +3062,25 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             else:
                 self.revisit_ImportFrom (importNode)
                 
-        # Import main module (generatable only late, but hoisted)
+        # Transit export of imported facilities (so no facilities that weren't imported and no modules)
+        if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
+            if self.allImportedNames:
+                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
+                
+        # Import runtime module (generatable only late, but hoisted)
         # Place it first, but decimate its imported names last, since they should appear to be overriden by later imports
         self.fragmentIndex = self.importHoistFragmentIndex
         if self.module.name != self.module.program.runtimeModuleName:
             runtimeModule = self.module.program.moduleDict [self.module.program.runtimeModuleName]
             
             # Avoid double declarations since imports are immutable (hoisted)
-            importedNames = ', '.join (sorted ([
-                exportedName
-                for exportedName in runtimeModule.exportedNames
-                if not exportedName in (self.allOwnNames | self.allImportedNames)
+            importedNamesFromRuntime = ', '.join (sorted ([
+                exportedNameFromRuntime
+                for exportedNameFromRuntime in runtimeModule.exportedNames
+                if not exportedNameFromRuntime in (self.allOwnNames | self.allImportedNames)
             ]))
             
-            self.emit ('import {{{}}} from \'{}\';\n', importedNames, runtimeModule.importRelPath)
+            self.emit ('import {{{}}} from \'{}\';\n', importedNamesFromRuntime, runtimeModule.importRelPath)
             
         # Emit empty import head objects, each as the leftmost part of the dotted name that can be used to access the imported module
         # Note that the required importheads are only known after importing modules, but must be inserted in the target code before that,
@@ -3094,7 +3089,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.fragmentIndex = self.importHoistFragmentIndex
         for importHead in sorted (self.importHeads):
             self.emit ('var {} = {{}};\n', self.filterId (importHead))
-            
+
         # Exit module scope
         self.descope ()
 

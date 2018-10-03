@@ -321,8 +321,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                     # Export prefix:    "export var ... or export function ..."
                     
                     result.exportedNames.append (words [2])
-                      
-                      
+                     
             if words [0] == 'import':
                 # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
                 # They may have an explicit import list for unqualified access or an import * for qualified access
