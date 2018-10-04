@@ -101,6 +101,10 @@ def main ():
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already
+            
+        if utils.commandArgs.source.endswith ('.py') or utils.commandArgs.source.endswith ('.js'):
+            utils.commandArgs.source = utils.commandArgs.source [:-3]   # Ignore extension
+            # This may be done in a more concise way, but it runs deeper than it may seem, so test any changes extensively
         
         # Prepend paths that are needed by transpiled or executed user code, since they have to be searched first
         # So user code favors Transcrypt modules over CPython modules
