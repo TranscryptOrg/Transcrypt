@@ -121,6 +121,10 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+
+- Import and re-export via __init__.py fixed (issue 559)
+- Extension .py allowed for source file name on command line (issue 569)
+- Minimal recompilation (make versus build) fixed, was broken after introduction of modules (pull request 560)
 - -dl / -dlog "Log compiler messages to file" switch added
 - Static typing tutorial repaired
 - Builtin pow function added
