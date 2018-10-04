@@ -308,7 +308,11 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             if words [0] == 'export':
                 # Deducing exported names from JavaScript is needed to facilitate * import by other modules
                 
-                if words [1][0] == '{':
+                if words [1] in {'var', 'function'}:
+                    # Export prefix:    "export var ... or export function ..."
+                    
+                    result.exportedNames.append (words [2])
+                else:
                     # Transit export:   "export {p, q, r, s};"  
                     
                     # Find exported names as "{p, q, r, s}"
@@ -317,10 +321,6 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                     # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
                     if match:
                         result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
-                else:
-                    # Export prefix:    "export var ... or export function ..."
-                    
-                    result.exportedNames.append (words [2])
                      
             if words [0] == 'import':
                 # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules

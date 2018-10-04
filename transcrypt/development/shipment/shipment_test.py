@@ -57,7 +57,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     buildSwitch = '-b ' if build else ''
     
     # Compile with Transcrypt
-    os.system (f'{transpileCommand} {buildSwitch}-da -sf -m -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    os.system (f'{transpileCommand} {buildSwitch}-da -sf -de -m -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
     
     # Run back to back in CPython
     if run:
@@ -88,7 +88,7 @@ os.system (f'{transpileCommand} -h')
 # Perform all tests
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/hello/autotest', True, switches)
-    test ('development/automated_tests/transcrypt/autotest', True, switches + '-c ')  
+    test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')  
     test ('development/automated_tests/time/autotest', True, switches)
     test ('development/automated_tests/re/autotest', True, switches)
     

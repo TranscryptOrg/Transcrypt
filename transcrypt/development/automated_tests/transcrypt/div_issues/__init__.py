@@ -3,6 +3,8 @@ from org.transcrypt.stubs.browser import __pragma__, __new__, __envir__, __symbo
 from div_issues.issue55 import *        # Names not exported from package's __init__.py, no output, only compilation check
 from div_issues.issue387 import run387  # Support __module__ and __qualname__ for introspection (only __module__ done and
                                         # __name__ set to '__main__ for main module'
+from div_issues.issue559 import run559  # Imported names not reexported form the __init__.py of a module
+
 import re
                            
 def run (autoTester):
@@ -525,6 +527,7 @@ def run (autoTester):
         autoTester.check (c)        #__:noopov
 
     #__pragma__ ('noopov')
-
     
-            
+    autoTester.check ('Issue 559')  # Reexport everything imported, e.g. by the __init__.py of a module
+    run559 (autoTester)
+    
