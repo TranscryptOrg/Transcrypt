@@ -38,6 +38,6 @@ setup (
 		'License :: OSI Approved :: Apache Software License',
 		'Topic :: Software Development :: Libraries :: Python Modules',
 		'Operating System :: OS Independent',
-		'Programming Language :: Python :: 3.5',
+		'Programming Language :: Python :: 3.7',
 	],
 )
