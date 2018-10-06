@@ -297,7 +297,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
-    wordPattern = re.compile (r'\w+')
+    wordPattern = re.compile (r'[a-zA-Z_]\w*')
     for line in passableLines:
         words = wordPattern.findall (line)
         
@@ -308,7 +308,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             if words [0] == 'export':
                 # Deducing exported names from JavaScript is needed to facilitate * import by other modules
                 
-                if words [1] in {'var', 'function'}:
+                if words [1] in ['var', 'function']:
                     # Export prefix:    "export var ... or export function ..."
                     
                     result.exportedNames.append (words [2])
