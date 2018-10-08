@@ -2861,6 +2861,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
+                        self.allImportedNames.add(alias.asname or alias.name)   # add import to allImportedNames of this module
                     except:                                                     # If it doesn't it denotes a facility inside a module
                         module = self.useModule (node.module)
                         namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
