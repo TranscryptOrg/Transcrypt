@@ -2,7 +2,6 @@ from datetime import date, timedelta, datetime, timezone
 
 # __pragma__('opov')
 
-
 def fix_time (dt):
     if dt.hour > 23:
         dt = dt - timedelta (minutes=60)

@@ -6,6 +6,11 @@ import webbrowser
 import argparse
 import time
 import traceback
+import selenium
+import selenium.webdriver.chrome.options
+import pathlib
+
+# ======== Command args singleton
 
 class CommandArgs:
     def __init__ (self):
@@ -16,21 +21,108 @@ class CommandArgs:
         
         self.argParser.add_argument ('-i', '--inst', help = 'installed version rather than new one', action = 'store_true')
         self.argParser.add_argument ('-b', '--blind', help = 'don\'t start browser', action = 'store_true')
+        
+        self.argParser.add_argument ('-u', '--unattended', help = 'unattended mode', action = 'store_true')
 
         self.__dict__.update (self.argParser.parse_args () .__dict__)
-
+        
 commandArgs = CommandArgs ()
         
+# ========  Browser controller singleton
+   
+class BrowserController:
+    def __init__ (self):
+        self.options = selenium.webdriver.chrome.options.Options ()
+        
+        if commandArgs.unattended:
+            self.options.add_argument ('--headless')          # Runs Chrome in headless mode.
+            self.options.add_argument ('--no-sandbox')        # Bypass OS security model
+            self.options.add_argument ('--disable-gpu')       # Applicable to windows OS only
+            self.options.add_argument ('start-maximized') 
+            self.options.add_argument ('disable-infobars')
+            self.options.add_argument ('--disable-extensions')    
+                
+        self.webDriver = selenium.webdriver.Chrome (chrome_options = self.options)
+        self.browserIsRunning = False
+        
+    def open (self, url):
+        print (f'Browser controller is opening URL: {url}')
+    
+        if self.browserIsRunning:
+        
+            if commandArgs.unattended:
+            
+                # ---- Open new tab
+                
+                self.webDriver.execute_script (f'window.location.href = "{url}";') 
+            else:
+            
+                # ---- Open new tab
+                
+                self.webDriver.execute_script (f'window.open ("{url}","_blank");') 
+        else:
+        
+            # ---- Open browser and default tab
+            
+            self.webDriver.get (url)
+            self.browserIsRunning = True  
+
+        try:
+            self.message = self.webDriver.find_element_by_id ('message')
+            print (f'Back to back autotest, result: {self.message.text.upper ()}')
+            if 'succeeded' in self.message.text:
+                return True
+            else:
+                return False
+        except:
+            print ('No back to back autotest')
+            return True
+            
+browserController = BrowserController ()
+
+# ======== Preparations
+
+relSourcePrepathsOfErrors = []
+
+nodeServerUrl = 'http://localhost:8090'
+pythonHttpServerUrl = 'http://localhost:8000'
 transpileCommand = 'transcrypt' if commandArgs.inst else 'run_transcrypt'
                 
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
+print (f'\nApplication root directory: {appRootDir}\n')
+
+
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
-def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, build = True):
-    # Compute some slugs
+os.system ('cls' if os.name == 'nt' else 'clear')
+        
+# ---- Start an http server in the Transcryp/transcrypt directory
+
+if not commandArgs.blind:
+    if commandArgs.unattended:
+        os.system (f'python -m http.server --directory {appRootDir} &')
+    else:
+        os.system (f'start python -m http.server --directory {appRootDir}')
+
+# ---- Allow visual check of all command line options
+
+os.system (f'{transpileCommand} -h')
+   
+# ======== Individual test function
+
+def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, build = True, pause = 0, needsAttention = False):
+    if commandArgs.unattended and needsAttention:
+        return  # This test shouldn't be done, since it can't run unattended
+            
+    print (f'\n\n******** BEGIN TEST {relSourcePrepath} ********\n')
+            
+    time.sleep (pause)
+
+    # ---- Compute some slugs
+    
     sourcePrepath = getAbsPath (relSourcePrepath)
     sourcePrepathSplit = relSourcePrepath.split ("/")
     
@@ -43,53 +135,56 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     relMessagePrepath = f'{relTargetDir}/{messagePrename}'
     messagePrepath = getAbsPath (relMessagePrepath)
     
-    # If there are relevant console messages of the compilation process,
-    # like with the static typechecking tests, write them into a file that can be served for a visual check
+    # ---- If there are relevant console messages of the compilation process,
+    #       like with the static typechecking tests, write them into a file that can be served for a visual check
+    
     if not os.path.exists (targetDir):
         os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen here
     redirect = f' > {messagePrepath}.out' if messagePrename else ''
     
-    # Transit switches
-    transitSwitches = ''
+    # ---- Default switches
+    
+    defaultSwitches = '-da -sf -de -m -n '
     if commandArgs.dextex:
-        transitSwitches += '-de '
-        
-    buildSwitch = '-b ' if build else ''
+        defaultSwitches += '-de '
+    if build:
+        defaultSwitches += '-b '
     
-    # Compile with Transcrypt
-    os.system (f'{transpileCommand} {buildSwitch}-da -sf -de -m -n {transitSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    # ---- Compile with Transcrypt
     
-    # Run back to back in CPython
+    os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    
+    # ---- Run with CPython to generate HTML file with back to back reference info
+    
     if run:
-        os.system (f'{transpileCommand} -sf -r {switches}{sourcePrepath}')
+        os.system (f'{transpileCommand} -r {defaultSwitches}{extraSwitches}{sourcePrepath}')
         
-    # Apply rollup to obtain monolith, since node doesn't support named imports and exports
+    # ---- Apply rollup to obtain monolith, since node doesn't support named imports and exports
+    
     if nodeJs:
         os.system (f'rollup {targetPrepath}.js --o {targetPrepath}.bundle.js --f cjs')
     
-    openNewTab = 2
     if not commandArgs.blind:
         if nodeJs:
             os.system (f'start cmd /k node {targetPrepath}.bundle.js'.format (moduleName))
             time.sleep (5)
-            webbrowser.open ('http://localhost:8090', new = openNewTab)           
+            url = nodeServerUrl
         else:
-            webbrowser.open (f'http://localhost:8080/{relSourcePrepath}.html', new = openNewTab)
+            url = f'{pythonHttpServerUrl}/{relSourcePrepath}.html'
             
-os.system ('cls' if os.name == 'nt' else 'clear')
+        success = browserController.open (url)
         
-# Start a node http server in the Transcryp/transcrypt directory
-if not commandArgs.blind:
-    os.system (f'start cmd /k http-server {appRootDir} -p8080 -c-1')   # -c-1 means 'Clear cache'
+    if commandArgs.unattended and not success:
+        relSourcePrepathsOfErrors.append (relSourcePrepath)
+        
+    print (f'\n******** END TEST {relSourcePrepath} ********\n\n')
+        
+# ======== Perform individual tests
 
-# Allow visual check of command line options
-os.system (f'{transpileCommand} -h')
-
-# Perform all tests
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/hello/autotest', True, switches)
-    test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')  
-    test ('development/automated_tests/time/autotest', True, switches)
+    test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')
+    test ('development/automated_tests/time/autotest', True, switches, needsAttention = True)
     test ('development/automated_tests/re/autotest', True, switches)
     
     test ('development/manual_tests/module_random/module_random', False, switches)
@@ -99,8 +194,8 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/async_await/test', False, switches)
     
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
-    test ('demos/terminal_demo/terminal_demo', False, switches)  
-    test ('demos/hello/hello', False, switches)
+    test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
+    test ('demos/hello/hello', False, switches, needsAttention = False)
     test ('demos/jquery_demo/jquery_demo', False, switches)
     test ('demos/d3js_demo/d3js_demo', False, switches)
     test ('demos/ios_app/ios_app', False, switches)
@@ -111,10 +206,10 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/pong/pong', False, switches)
     test ('demos/pysteroids_demo/pysteroids', False, switches)
     
-    test ('demos/turtle_demos/star', False, switches)
-    test ('demos/turtle_demos/snowflake', False, switches, build = False)
-    test ('demos/turtle_demos/mondrian', False, switches, build = False)
-    test ('demos/turtle_demos/mandala', False, switches, build = False)
+    test ('demos/turtle_demos/star', False, switches, pause = 2)
+    test ('demos/turtle_demos/snowflake', False, switches, pause = 2)
+    test ('demos/turtle_demos/mondrian', False, switches, pause = 2)
+    test ('demos/turtle_demos/mandala', False, switches, pause = 2)
     
     test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches, build = False)
@@ -123,20 +218,36 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     
     test ('tutorials/baseline/bl_010_hello_world/hello_world', False, switches)
     test ('tutorials/baseline/bl_020_assign/assign', False, switches)
-    test ('tutorials/baseline/bl_030_if_else_prompt/if_else_prompt', False, switches)
-    test ('tutorials/baseline/bl_035_if_else_event/if_else_event', False, switches)
+    test ('tutorials/baseline/bl_030_if_else_prompt/if_else_prompt', False, switches, needsAttention = True)
+    test ('tutorials/baseline/bl_035_if_else_event/if_else_event', False, switches, needsAttention = True)
     test ('tutorials/baseline/bl_040_for_simple/for_simple', False, switches)
     test ('tutorials/baseline/bl_042_for_nested/for_nested', False, switches)
-    test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches)
+    test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches, needsAttention = True)
 
     test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
     
-# Make docs, the resulting files are untracked
-origDir = os.getcwd ()
-sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
-os.chdir (sphinxDir)
-os.system ('touch *.rst')
-os.system ('make html')
-os.chdir (origDir)
+    if relSourcePrepathsOfErrors:
+        print ('\n\n!!!!!!!!!!!!!!!!!!!!\n')
+        for relSourcePrepathOfError in relSourcePrepathsOfErrors:
+            print (f'SHIPMENT TEST ERROR: {relSourcePrepathOfError}')
+        print ('\n!!!!!!!!!!!!!!!!!!!!\n\n')
+
+        print ('\nSHIPMENT TEST FAILED\n')
+        sys.exit (1)
         
-print ('\nShipment test ready')
+    else:
+    
+        # ---- Make docs, the resulting files are untracked
+
+        if not commandArgs.unattended:
+            origDir = os.getcwd ()
+            sphinxDir = '/'.join ([appRootDir, 'docs/sphinx'])
+            os.chdir (sphinxDir)
+            os.system ('touch *.rst')
+            os.system ('make html')
+            os.chdir (origDir)
+
+        # ---- Terminate
+                
+        print ('\nSHIPMENT TEST SUCCEEDED\n')
+        sys.exit (0)

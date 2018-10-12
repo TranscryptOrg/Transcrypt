@@ -1,20 +1,18 @@
-dist: trusty
-
-language: python
-python:
-- '3.5'
-- '3.6-dev'
-# - 'nightly'
+dist: xenial
+sudo: yes
 
 addons:
-    firefox: "49.0"
-
-before_install:
-    - sudo apt-get install nodejs
+    chrome: stable
+    apt:
+        packages:
+            - chromium-chromedriver
 
 before_script:
-  - "export DISPLAY=:99.0"
-  - "./transcrypt/development/continuous_integration/run prepare"
-
-script: "./transcrypt/development/continuous_integration/run no_cleanup set1"
-
+  - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
+    
+language: python
+python:
+    - '3.7'
+    
+script:
+    - bash ./transcrypt/development/continuous_integration/run.sh
