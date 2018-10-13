@@ -34,11 +34,12 @@ class BrowserController:
     def __init__ (self):
         self.options = selenium.webdriver.chrome.options.Options ()
         
+        self.options.add_argument ('start-maximized') 
+        
         if commandArgs.unattended:
             self.options.add_argument ('--headless')          # Runs Chrome in headless mode.
             self.options.add_argument ('--no-sandbox')        # Bypass OS security model
             self.options.add_argument ('--disable-gpu')       # Applicable to windows OS only
-            self.options.add_argument ('start-maximized') 
             self.options.add_argument ('disable-infobars')
             self.options.add_argument ('--disable-extensions')    
                 
@@ -52,7 +53,7 @@ class BrowserController:
         
             if commandArgs.unattended:
             
-                # ---- Open new tab
+                # ---- Show in existing tab
                 
                 self.webDriver.execute_script (f'window.location.href = "{url}";') 
             else:
