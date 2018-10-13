@@ -1,3 +1,7 @@
+# Create symlink for chromedriver
+
+ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
+
 # Install Python modules
 
 pip install mypy
