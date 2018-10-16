@@ -3469,6 +3469,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.prevTemp ('break')
 
     def visit_With (self, node):
+        from contextlib import contextmanager, ExitStack
         self.adaptLineNrString (node)
 
         @contextmanager
@@ -3506,9 +3507,36 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
 
+        @contextmanager
+        def pragmaContext (item):
+            expr = item.context_expr
+
+            name = expr.args[0].s
+            if name.startswith('no'):
+                revName = name[2:]
+            else:
+                revName = 'no' + name
+
+            self.visit(expr)
+            yield
+            self.visit(ast.Call (expr.func, [ast.Str (revName)] + expr.args[1:]))
+
+        @contextmanager
+        def skipContext (item):
+            self.noskipCodeGeneration = False
+            yield
+            self.noskipCodeGeneration = True
+
         with ExitStack () as stack:
             for item in node.items:
-                stack.enter_context (itemContext (item))
+                expr = item.context_expr
+                if self.isCall (expr, '__pragma__'):
+                    if expr.args[0].s == 'skip':
+                        stack.enter_context (skipContext (item))
+                    else:
+                        stack.enter_context (pragmaContext (item))
+                else:
+                    stack.enter_context (itemContext (item))
             self.emitBody (node.body)
 
     def visit_Yield (self, node):
