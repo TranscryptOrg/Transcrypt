@@ -96,13 +96,13 @@ The single line activation variety
 <line of code> # __:<single parameter>
 
 It will switch a facility on or off just for the line of code it's part of.
-Single line pragma's can only be used for pragma's with have a single parameter, it's name.
+Single line pragma's can only be used for pragma's which have a single parameter, it's name.
 
 For example the following line:
 
 *vector2 = vector0 + vector1 # __:opov*
 
-will be compiled identially to:
+will be compiled identically to:
 
 *__pragma__ ('opov'); vector2 = vector0 + vector1; __pragma__ ('noopov')*
 
@@ -111,7 +111,7 @@ The single line deactivation variety
 
 *scalar2 = scalar0 + scalar1 # __:noopov*
 
-will be compiled identially to:
+will be compiled identically to:
 
 *__pragma__ ('noopov'); scalar2 = scalar0 + scalar1; __pragma__ ('opov')*
 
@@ -124,7 +124,7 @@ Calling *__pragma__ ('alias', <Python id part>, <JavaScript id part>)* at the st
 Example 1:
 
 +---------------------------------------------------------------------+
-| Used at the start of the module: *__pragma__ ('alias', 'S', $)*     |
+| Used at the start of the module: *__pragma__ ('alias', 'S', '$')*   |
 +------------------------------------------+--------------------------+
 | Original in Python:                      | Alias in JavaScript:     |
 +------------------------------------------+--------------------------+
@@ -149,7 +149,7 @@ Example 2:
 | *jq__body = jq (body)*                  | *$body = $ ('body')*    |
 +-----------------------------------------+-------------------------+
 
-Note that the generated JavaScript only the modified identifiers will be present, not the original ones. So the JavaScript identifiers are only aliases for the Python ones, not for any identifier in the JavaScript code itself.
+Note that in the generated JavaScript only the modified identifiers will be present, not the original ones. So the JavaScript identifiers are only aliases for the Python ones, not for any identifier in the JavaScript code itself.
 
 A number of aliases are predefined in the source code of Transcrypt as follows:
 
