@@ -37,6 +37,7 @@ class CommandArgs:
         
         self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
         self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
+        self.argParser.add_argument ('-am', '--alimod', help = "use aliasing for module paths", action = 'store_true')
         self.argParser.add_argument ('-b', '--build', help = "rebuild all target files from scratch", action = 'store_true')
         self.argParser.add_argument ('-c', '--complex', help = "enable complex number support, locally requires operator overloading", action = 'store_true')
         self.argParser.add_argument ('-d', '--docat', help = "enable __doc__ attributes. Apply sparsely, since it will make docstrings part of the generated code", action = 'store_true')
@@ -297,7 +298,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
-    wordPattern = re.compile (r'\w+')
+    wordPattern = re.compile (r'[\w+$]')
     for line in passableLines:
         words = wordPattern.findall (line)
         
@@ -320,7 +321,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                     
                     # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
                     if match:
-                        result.exportedNames.extend (eval (re.sub (r'\w+', lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+                        result.exportedNames.extend (eval (wordPattern.sub (lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
                      
             if words [0] == 'import':
                 # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules

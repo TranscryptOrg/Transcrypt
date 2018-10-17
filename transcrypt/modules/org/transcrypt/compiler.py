@@ -106,14 +106,14 @@ class Program:
                 message = f'\n\t{exception}'
             )
         
-    def provide (self, moduleName, __moduleName__ = None):    
+    def provide (self, filteredModuleName, __moduleName__ = None):    
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         
-        if moduleName in self.moduleDict:  # Find out if module is already provided
-            return self.moduleDict [moduleName]
+        if filteredModuleName in self.moduleDict:  # Find out if module is already provided
+            return self.moduleDict [filteredModuleName]
         else:                              # If not, provide by loading or compiling
-            # This may fail legally if moduleName ends on a name of something in a module, rather than of the module itself
-            return Module (self, moduleName, __moduleName__)
+            # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
+            return Module (self, filteredModuleName, __moduleName__)
 
 class Module:
     def __init__ (self, program, name, __name__ = None):      
@@ -230,6 +230,8 @@ class Module:
         self.exportedNames = javascriptDigest.exportedNames
         
         for importedModuleName in self.importedModuleNames:
+        
+            # Unfiltered hyphens allowed, since we may be in a JavaScript-only part of the module hierarchy
             self.program.provide (importedModuleName)
 
         # Remove eventual intermediate files
@@ -242,7 +244,7 @@ class Module:
                 
     def findPaths (self):
         searchedModulePaths = []
-                
+                        
         relSourceSlug = self.name.replace ('.', '/')
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
@@ -608,13 +610,13 @@ class Generator (ast.NodeVisitor):
 
     def getAliaser (self, sourceFragment, targetFragment):
         return (sourceFragment, re.compile ('''
-            (^{0}$)|            # Whole word
-            (.+__{0}__.+)|      # Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
-            (^{0}__)|           # Starts with <pyFragment>__
-            (__{0}$)|           # Ends with __<pyFragment>
-            ((?<=\.){0}__)|     # Starts with '.<pyFragment>__'
-            (__{0}(?=\.))       # Ends with '__<pyFragment>.'
-        '''.format (sourceFragment), re.VERBOSE), targetFragment)
+            (^{0}$)|                # Whole word
+            ((.+)(__{0}__)(.+))|    # Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
+            (^{0}__)|               # Starts with <pyFragment>__
+            (__{0}$)|               # Ends with __<pyFragment>
+            ((?<=\.){0}__)|         # Starts with '.<pyFragment>__'
+            (__{0}(?=\.))           # Ends with '__<pyFragment>.'
+        '''.format (sourceFragment), re.VERBOSE), fr'\3{targetFragment}\5')
 
     def filterId (self, qualifiedId):   # Convention: only called at emission time
         if self.idFiltering:
@@ -818,8 +820,14 @@ class Generator (ast.NodeVisitor):
             del self.tempIndices [name]
 
     def useModule (self, name):
-        self.module.program.importStack [-1][1] = self.lineNr   # Remember line nr of import statement for the error report
-        return self.module.program.provide (name)               # Must be done first because it can generate a healthy exception
+        self.module.program.importStack [-1][1] = self.lineNr       # Remember line nr of import statement for the error report
+        
+        # Filter to get hyphen in name if a suitable alias is defined
+        # Filtering has to be done early, since the hyphen has to be used in the filename when loading the module
+        # The filename for this is made by the Program class, that doesn't have pragma's available
+        # So name has to be passed "ready made"
+        
+        return self.module.program.provide (self.filterId (name) if utils.commandArgs.alimod else name)   # Must be done first because it can generate a healthy exception
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -2861,6 +2869,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     try:                                                        # Try if alias.name denotes a module
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
+                        # self.allImportedNames.add(alias.asname or alias.name)   # add import to allImportedNames of this module
                     except:                                                     # If it doesn't it denotes a facility inside a module
                         module = self.useModule (node.module)
                         namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
@@ -3004,7 +3013,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.importHoistFragmentIndex = self.fragmentIndex       
         
         # Let the module know its __name__
-        self.emit ('var __name__ = \'{}\';\n', self.module.__name__)
+        self.emit ('var __name__ = \'{}\';\n', self.module.__name__)    # ??? Needs filterId ?
         self.allOwnNames.add ('__name__')
         
         # Generate code for the module body
@@ -3051,7 +3060,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 ])
                 +
                 '}});\n'            
-            )
+            )   # ??? Needs filterid?
            
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
@@ -3065,7 +3074,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         # Transit export of imported facilities (so no facilities that weren't imported and no modules)
         if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':
             if self.allImportedNames:
-                self.emit ('export {{{}}};\n', ', '.join (self.allImportedNames))     # This does emit an export list
+                self.emit ('export {{{}}};\n', ', '.join ([self.filterId (importedName) for importedName in self.allImportedNames]))     # This emits an export list
                 
         # Import runtime module (generatable only late, but hoisted)
         # Place it first, but decimate its imported names last, since they should appear to be overriden by later imports
