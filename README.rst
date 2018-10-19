@@ -121,7 +121,9 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
-
+- Module name can be reexported (pr 575)
+- Exported vars can contain $ (issue 578)
+- Import now can contain hyphens in filename (issue 576), (-am / -alimod switch)
 - Import and re-export via __init__.py fixed (issue 559)
 - Extension .py allowed for source file name on command line (issue 569)
 - Minimal recompilation (make versus build) fixed, was broken after introduction of modules (pull request 560)
