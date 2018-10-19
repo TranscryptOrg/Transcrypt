@@ -1,3 +1,3 @@
-export function a$Function (aPrint) {
-    aPrint ('A function called<br>');
+export function the$Function (print) {
+    print ('The $ function called');
 };

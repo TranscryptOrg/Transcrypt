@@ -1,3 +1,3 @@
-export function bFunction (aPrint) {
-    aPrint.check ('B function called<br>');
+export function theBFunction (print) {
+    print ('The b function called');
 };

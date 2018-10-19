@@ -1,5 +1,7 @@
 # Also contains small enhancements
 
+import div_pulls.pull575_reexport_modules as pull575
+
 'This is a single line docstring'
 class A:
     '''
@@ -47,4 +49,6 @@ def run (autoTester):
         autoTester.check ('sideeffect')
         return '[' + word + ']'
     autoTester.check (brackets ('anything') .lower ())   #__:opov
+    
+    pull575.run (autoTester)
     

@@ -2866,14 +2866,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     for aName in module.exportedNames:
                         namePairs.append (utils.Any (name = aName, asName = None))
                 else:
-                    try:                                                        # Try if alias.name denotes a module
+                    try:                                                        # Try if alias.name denotes a module, in that case don't do the 'if namepairs' part
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
-                        # self.allImportedNames.add(alias.asname or alias.name)   # add import to allImportedNames of this module
+                        self.allImportedNames.add (alias.asname or alias.name)  # Add import to allImportedNames of this module
                     except:                                                     # If it doesn't it denotes a facility inside a module
                         module = self.useModule (node.module)
                         namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
-            if namePairs:
+            if namePairs:   # This part should only be done for facilities inside modules
                 try:
                     # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
                     self.emit ('import {{')

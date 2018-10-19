@@ -298,7 +298,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
-    wordPattern = re.compile (r'[\w+$]')
+    wordPattern = re.compile (r'[\w$]+')
     for line in passableLines:
         words = wordPattern.findall (line)
         

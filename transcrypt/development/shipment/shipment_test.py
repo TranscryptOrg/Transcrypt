@@ -188,11 +188,12 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/time/autotest', True, switches, needsAttention = True)
     test ('development/automated_tests/re/autotest', True, switches)
     
-    test ('development/manual_tests/module_random/module_random', False, switches)
-    test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
-    test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
-    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
     test ('development/manual_tests/async_await/test', False, switches)
+    test ('development/manual_tests/import_export_aliases/test', False, switches + '-am ')
+    test ('development/manual_tests/module_random/module_random', False, switches)
+    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
+    test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
+    test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
     
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
