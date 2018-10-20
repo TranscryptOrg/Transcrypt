@@ -76,9 +76,9 @@ class Program:
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         if utils.commandArgs.outputdir:
             # Set the output path relatively to the sourceDir
-            self.targetDir = os.path.abspath(os.path.relpath(utils.commandArgs.outputdir, start=self.sourceDir))
+            self.targetDir = os.path.abspath (os.path.relpath (utils.commandArgs.outputdir, start = self.sourceDir)).replace ('\\', '/')
         else:
-            self.targetDir = os.path.join(self.sourceDir, '__target__')
+            self.targetDir = f'{self.sourceDir}/__target__'
         self.optionsPath = f'{self.targetDir}/{self.mainModuleName}.options'
         
         # Find out if command line arguments are changed
