@@ -19,7 +19,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Pip-install and go!
 
 Latest stable release: London
-============================
+=============================
 
 `>>> GET STARTED!_ <http://www.transcrypt.org/#hello>`_
 =======================================================

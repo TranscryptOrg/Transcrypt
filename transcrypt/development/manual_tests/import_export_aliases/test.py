@@ -6,7 +6,6 @@
 from test_modules_a.__specific_module_a import the__S__Function
 from test_modules_b__.__specific_module_b import theBFunction as aBFunction
 
-
 the__S__Variable = 3
 print (the__S__Variable)
 
