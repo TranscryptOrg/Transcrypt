@@ -106,17 +106,17 @@ class Program:
                 message = f'\n\t{exception}'
             )
         
-    def provide (self, filteredModuleName, __moduleName__ = None):    
+    def provide (self, moduleName, __moduleName__ = None, filter = None):    
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         
-        if filteredModuleName in self.moduleDict:  # Find out if module is already provided
-            return self.moduleDict [filteredModuleName]
+        if moduleName in self.moduleDict:  # Find out if module is already provided
+            return self.moduleDict [moduleName]
         else:                              # If not, provide by loading or compiling
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
-            return Module (self, filteredModuleName, __moduleName__)
+            return Module (self, moduleName, __moduleName__, filter)
 
 class Module:
-    def __init__ (self, program, name, __name__ = None):      
+    def __init__ (self, program, name, __name__, filter):      
         self.program = program
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
@@ -128,7 +128,7 @@ class Module:
         self.program.importStack.append ([self, None])
         
         # Try to find module, exception if fails
-        self.findPaths ()
+        self.findPaths (filter)
         
         # Register that module is found
         self.program.moduleDict [self.name] = self
@@ -242,10 +242,23 @@ class Module:
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
                 
-    def findPaths (self):
+    def findPaths (self, filter):
         searchedModulePaths = []
                         
-        relSourceSlug = self.name.replace ('.', '/')
+        # Filter to get hyphens and/or dots in name if a suitable alias is defined
+        # The filter function, and with it the active aliases, are passed by the importing module
+        rawRelSourceSlug = self.name.replace ('.', '/')
+        relSourceSlug = filter (rawRelSourceSlug) if filter and utils.commandArgs.alimod else rawRelSourceSlug
+        
+        '''
+        # BEGIN DEBUGGING CODE
+        print ()
+        print ('Raw slug   :', rawRelSourceSlug)
+        print ('Cooked slug:', relSourceSlug)
+        print ()
+        # END DEBUGGING CODE
+        '''
+        
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
             sourceSlug = f'{searchDir}/{relSourceSlug}'
@@ -445,7 +458,7 @@ class Generator (ast.NodeVisitor):
         self.propertyAccessorList = []
         self.mergeList = []
 
-        self.aliasers = [self.getAliaser (*alias) for alias in (
+        self.aliases = [
 # START predef_aliases
 
             # Format: ('<Python source identifier>', '<JavaScript target identifier>')
@@ -491,8 +504,8 @@ class Generator (ast.NodeVisitor):
             ('undefined', 'py_undefined'),          ('js_undefined', 'undefined'),
 
 # END predef_aliases
-        )]
-
+        ]
+        
         self.idFiltering = True
 
         self.tempIndices = {}
@@ -608,22 +621,20 @@ class Generator (ast.NodeVisitor):
         else:
             self.visit (child)
 
-    def getAliaser (self, sourceFragment, targetFragment):
-        return (sourceFragment, re.compile ('''
-            (^{0}$)|                # Whole word
-            ((.+)(__{0}__)(.+))|    # Truly contains __<pyFragment>__ (Truly, so spare e.g. __name__)
-            (^{0}__)|               # Starts with <pyFragment>__
-            (__{0}$)|               # Ends with __<pyFragment>
-            ((?<=\.){0}__)|         # Starts with '.<pyFragment>__'
-            (__{0}(?=\.))           # Ends with '__<pyFragment>.'
-        '''.format (sourceFragment), re.VERBOSE), fr'\3{targetFragment}\5')
-
-    def filterId (self, qualifiedId):   # Convention: only called at emission time
-        if self.idFiltering:
-            for aliaser in self.aliasers:
-                qualifiedId = re.sub (aliaser [1], aliaser [2], qualifiedId)
-        return qualifiedId
-
+    def filterId (self, qualifiedId):   # Convention: only called at emission time or file name fabrication time
+        if not self.idFiltering or (qualifiedId.startswith ('__') and qualifiedId.endswith ('__')):
+            return qualifiedId
+        else:        
+            qualifiedId = '=' + qualifiedId.replace ('__', '=') + '='
+            for alias in self.aliases:
+                pattern = re.compile (rf'(?<=[=./]){alias [0]}(?=[=./])')
+                
+                # Replace twice to deal with overlap
+                qualifiedId = pattern.sub (alias [1], qualifiedId)
+                qualifiedId = pattern.sub (alias [1], qualifiedId)
+                 
+            return qualifiedId.replace ('=', '')
+            
     def tabs (self, indentLevel = None):
         if indentLevel == None:
             indentLevel = self.indentLevel
@@ -820,14 +831,8 @@ class Generator (ast.NodeVisitor):
             del self.tempIndices [name]
 
     def useModule (self, name):
-        self.module.program.importStack [-1][1] = self.lineNr       # Remember line nr of import statement for the error report
-        
-        # Filter to get hyphen in name if a suitable alias is defined
-        # Filtering has to be done early, since the hyphen has to be used in the filename when loading the module
-        # The filename for this is made by the Program class, that doesn't have pragma's available
-        # So name has to be passed "ready made"
-        
-        return self.module.program.provide (self.filterId (name) if utils.commandArgs.alimod else name)   # Must be done first because it can generate a healthy exception
+        self.module.program.importStack [-1][1] = self.lineNr               # Remember line nr of import statement for the error report
+        return self.module.program.provide (name, filter = self.filterId)   # Must be done first because it can generate a healthy exception  
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
@@ -1408,14 +1413,14 @@ class Generator (ast.NodeVisitor):
             # __pragma__'s in many varieties, syntactically calls, but semantically compile time directives
             elif node.func.id == '__pragma__':
                 if node.args [0] .s == 'alias':
-                    self.aliasers.insert (0, self.getAliaser (node.args [1] .s, node.args [2].s))
+                    self.aliases.insert (0, (node.args [1] .s, node.args [2] .s))
                 elif node.args [0] .s == 'noalias':
                     if len (node.args) == 1:
-                        self.aliasers = []
+                        self.aliases = []
                     else:
-                        for index in reversed (range (len (self.aliasers))):
-                            if self.aliasers [index][0] == node.args [1] .s:
-                                self.aliasers.pop (index)
+                        for index in reversed (range (len (self.aliases))):
+                            if self.aliases [index][0] == node.args [1] .s:
+                                self.aliases.pop (index)
 
                 elif node.args [0] .s == 'noanno':
                     self.allowDebugMap = False
