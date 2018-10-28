@@ -30,6 +30,7 @@ import shutil
 import tokenize
 import collections
 import json
+from contextlib import contextmanager, ExitStack
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -3470,7 +3471,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_With (self, node):
         self.adaptLineNrString (node)
 
-        for item in node.items:
+        @contextmanager
+        def itemContext (item):
             self.emit ('var ')                      # Should be in surrounding scope but may be overwritten, so use var rather than let
             if (item.optional_vars):
                 self.visit (item.optional_vars)
@@ -3486,7 +3488,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('try {{\n')
             self.indent ()
             self.emit ('{}.__enter__ ();\n', withId)
-            self.emitBody (node.body)
+            yield
             self.emit ('{}.__exit__ ();\n', withId)
             self.dedent ()
             self.emit ('}}\n')
@@ -3503,6 +3505,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
+
+        with ExitStack() as stack:
+            for item in node.items:
+                stack.enter_context (itemContext (item))
+            self.emitBody (node.body)
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True
