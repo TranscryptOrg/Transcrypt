@@ -250,14 +250,14 @@ class Module:
         rawRelSourceSlug = self.name.replace ('.', '/')
         relSourceSlug = filter (rawRelSourceSlug) if filter and utils.commandArgs.alimod else rawRelSourceSlug
         
-        '''
+        
         # BEGIN DEBUGGING CODE
         print ()
         print ('Raw slug   :', rawRelSourceSlug)
         print ('Cooked slug:', relSourceSlug)
         print ()
         # END DEBUGGING CODE
-        '''
+        
         
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
@@ -621,17 +621,29 @@ class Generator (ast.NodeVisitor):
         else:
             self.visit (child)
 
-    def filterId (self, qualifiedId):   # Convention: only called at emission time or file name fabrication time
+    def filterId (self, qualifiedId):   # Convention: only called at emission time or file name fabrication time    
         if not self.idFiltering or (qualifiedId.startswith ('__') and qualifiedId.endswith ('__')):
             return qualifiedId
         else:        
-            qualifiedId = '=' + qualifiedId.replace ('__', '=') + '='
-            for alias in self.aliases:
-                pattern = re.compile (rf'(?<=[=./]){alias [0]}(?=[=./])')
-                
+            for alias in self.aliases: 
+            
                 # Replace twice to deal with overlap
-                qualifiedId = pattern.sub (alias [1], qualifiedId)
-                qualifiedId = pattern.sub (alias [1], qualifiedId)
+                                    
+                qualifiedId = re.sub (
+                    fr'(^|(?P<preDunder>__)|(?<=[./])){alias [0]}((?P<postDunder>__)|(?=[./])|$)',
+                    lambda matchObject: (
+                        ('=' if matchObject.group ('preDunder') else '') +
+                        alias [1] +
+                        ('=' if matchObject.group ('postDunder') else '')
+                    ),
+                    qualifiedId
+                )
+                
+                qualifiedId = re.sub (
+                    fr'(^|(?<=[./=])){alias [0]}((?=[./=])|$)',
+                    alias [1],
+                    qualifiedId
+                )                
                  
             return qualifiedId.replace ('=', '')
             
