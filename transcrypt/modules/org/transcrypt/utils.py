@@ -195,13 +195,13 @@ class Error (Exception):
             
     def __str__ (self):
         result = 'Error while compiling (offending file last):'
-        
-        try:
-            sourcePath = importRecord [0] .sourcePath
-        except:
-            sourcePath = '<unknown>'
-            
+
         for importRecord in program.importStack [ : -1]:
+            try:
+                sourcePath = importRecord[0].sourcePath
+            except:
+                sourcePath = '<unknown>'
+
             result += '\n\tFile \'{}\', line {}, at import of:'.format (sourcePath, importRecord [1])
             
         result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] ), self.lineNr)
