@@ -45,7 +45,7 @@ namely the __core__ and __builtin__ parts.
 
 Sourcemaps are generated per module.
 There's no need for a link with other modules.
-Since import paths are static, names of minified JS files just end on .js just like non-minified files, so not on .min.js.
+Since import paths are static, names of minified JS files simply end on .js just like non-minified files, so not on .min.js.
 Sourcemaps are named <module name>.map.
 '''
 
@@ -250,14 +250,14 @@ class Module:
         rawRelSourceSlug = self.name.replace ('.', '/')
         relSourceSlug = filter (rawRelSourceSlug) if filter and utils.commandArgs.alimod else rawRelSourceSlug
         
-        
+        '''
         # BEGIN DEBUGGING CODE
         print ()
         print ('Raw slug   :', rawRelSourceSlug)
         print ('Cooked slug:', relSourceSlug)
         print ()
         # END DEBUGGING CODE
-        
+        '''
         
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
@@ -621,14 +621,16 @@ class Generator (ast.NodeVisitor):
         else:
             self.visit (child)
 
-    def filterId (self, qualifiedId):   # Convention: only called at emission time or file name fabrication time    
+    def filterId (self, qualifiedId):   # Convention: only called at emission time or file name fabrication time  
+    
         if not self.idFiltering or (qualifiedId.startswith ('__') and qualifiedId.endswith ('__')):
+            # Leave system dunder names unchanged
             return qualifiedId
-        else:        
+        else:
+            # Filter the rest, trying all aliases sucessively
             for alias in self.aliases: 
-            
-                # Replace twice to deal with overlap
                                     
+                # Replace non-adjacent and odd adjacent matches, turning __<alias [0]>__ into =<alias [1]>=
                 qualifiedId = re.sub (
                     fr'(^|(?P<preDunder>__)|(?<=[./])){alias [0]}((?P<postDunder>__)|(?=[./])|$)',
                     lambda matchObject: (
@@ -639,12 +641,14 @@ class Generator (ast.NodeVisitor):
                     qualifiedId
                 )
                 
+                # Replace all remaining matches
                 qualifiedId = re.sub (
                     fr'(^|(?<=[./=])){alias [0]}((?=[./=])|$)',
                     alias [1],
                     qualifiedId
-                )                
+                )               
                  
+            # Take out all occurences of temporary =, leave non-matching __ unchanged)
             return qualifiedId.replace ('=', '')
             
     def tabs (self, indentLevel = None):
