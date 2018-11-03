@@ -314,7 +314,7 @@ def translate(rgx):
     while True:
         nloop += 1
         if nloop > MAX_SHIFTREDUCE_LOOPS:
-            raise Exception()
+            raise Exception("Regex translator exceeded maximum iteration to convert Python regex to Javascript regex")
 
         stack, queue, flags, done = shiftReduce(stack, queue, namedGroups, flags)
         if done:
