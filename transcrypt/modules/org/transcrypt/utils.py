@@ -179,13 +179,15 @@ def setProgram (aProgram):
     program = aProgram
          
 class Error (Exception):
+    # First error encountered counts, for all fields, because it's closest to the cause of trouble
+    # One error at a time, just like Python, clear and simple
+    # The error object contains the import trail, the error line number and the error message
+
     def __init__ (self, lineNr = 0, message = ''):
         self.lineNr = lineNr - nrOfExtraLines
-        self.message = message  
+        self.message = message
+        # The name of the module and of its import trail is known from the import stack, so no need to pass it as a parameter
         
-    # First one encountered counts, for all fields, because it's closest to the error
-    # One error at a time, just like Python, clear and simple
-    
     def set (self, lineNr = 0, message = ''):          
         if not self.lineNr:
             self.lineNr = lineNr - nrOfExtraLines
@@ -196,19 +198,25 @@ class Error (Exception):
     def __str__ (self):
         result = 'Error while compiling (offending file last):'
 
+        # Successively report each module in the import trail, "oldest" first, except the one that caused the error
         for importRecord in program.importStack [ : -1]:
             try:
-                sourcePath = importRecord[0].sourcePath
+                sourcePath = importRecord [0] .sourcePath
             except:
                 sourcePath = '<unknown>'
-
             result += '\n\tFile \'{}\', line {}, at import of:'.format (sourcePath, importRecord [1])
-            
-        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] ), self.lineNr)
+        
+        # After that, report the module and line that caused the error
+        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .sourcePath), self.lineNr)
+        
+        # And, lastly, report the error message
         result += '\n\t{}'.format (self.message)
         return result
         
 def enhanceException (exception, **kwargs):
+    # If not all required info, such as a line number, is available at the location where the exception was raised,
+    # it is enhanced later on by adding this missing info at the earliest occasion
+
     if isinstance (exception, Error):
         exception.set (**kwargs)
         result = exception
