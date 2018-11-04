@@ -25,7 +25,7 @@ def set_limits(x: float, y: float):
     YNWRAP = -1 * YWRAP
 
 
-def wrap(obj: th ree.Object3d):
+def wrap(obj: three.Object3d):
     x, y, z = obj.position.x, obj.position.y, obj.position.z
     x = pad_wrap(XNWRAP, XWRAP, x)
     y = pad_wrap(YNWRAP, YWRAP, y)

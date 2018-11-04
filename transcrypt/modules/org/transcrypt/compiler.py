@@ -96,12 +96,14 @@ class Program:
         try:
             # Provide runtime module since it's always needed but never imported explicitly
             self.runtimeModuleName = 'org.transcrypt.__runtime__'
+            self.searchedModulePaths = []   # Report only failure of searching runtime, so clear any history
             self.provide (self.runtimeModuleName)
             
             # Provide main module and, with that, all other modules recursively
+            self.searchedModulePaths = []   # Report only failure of searching for main, so clear any history
             self.provide (self.mainModuleName, '__main__')
         except Exception as exception:
-            utils.enhanceException (
+            utils.enhanceException (    # If it was an Error, don't change it, otherwise make it one (??? Just to be sure?)
                 exception,
                 message = f'\n\t{exception}'
             )
@@ -121,14 +123,15 @@ class Module:
         self.name = name
         self.__name__ = __name__ if __name__ else self.name
         
+        # Try to find module, exception if fails
+        self.findPaths (filter)
+        
         # Remember names of module being under compilation and line nrs of current import
         # Used for error reports
         # Note that JavaScript-only modules will leave lineNr None if they import something
         # This is since there's no explicit import location in such modules
+        # Only add a module to the importStack if it's at least found by findPaths, otherwise it has no sourcePath to report
         self.program.importStack.append ([self, None])
-        
-        # Try to find module, exception if fails
-        self.findPaths (filter)
         
         # Register that module is found
         self.program.moduleDict [self.name] = self
@@ -232,6 +235,9 @@ class Module:
         for importedModuleName in self.importedModuleNames:
         
             # Unfiltered hyphens allowed, since we may be in a JavaScript-only part of the module hierarchy
+            # Also these imports cannot legally fail, since the digested JavaScript code already has unambiguous imports
+            # If the JavaScript module was just generated from a Python module, it will already be in the module dictionary
+            self.program.searchedModulePaths = []
             self.program.provide (importedModuleName)
 
         # Remove eventual intermediate files
@@ -243,8 +249,6 @@ class Module:
         self.program.importStack.pop ()
                 
     def findPaths (self, filter):
-        searchedModulePaths = []
-                        
         # Filter to get hyphens and/or dots in name if a suitable alias is defined
         # The filter function, and with it the active aliases, are passed by the importing module
         rawRelSourceSlug = self.name.replace ('.', '/')
@@ -296,15 +300,16 @@ class Module:
                 break
             
             # Remember all fruitless paths to give a decent error report if module isn't found
-            searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
+            # Note that this aren't all searched paths for a particular module,
+            # since the difference between an module and a facility inside a module isn't always known a priori
+            self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
-            # print ('\n'.join (searchedModulePaths))
+            # However, loading a module is allowed to fail (see self.revisit_ImportFrom)
+            # In that case this error is swallowed, but searchedModulePath is retained,
+            # because searching in the swallowing except branch may also fail and should mention ALL searched paths
             raise utils.Error (
-                message = (
-                    f'\n\tAttempt to import module: {self.name}' +
-                    '\n\tCan\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (searchedModulePaths))
-                )
+                message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
             )
             
     def generateJavascriptAndPrettyMap (self):
@@ -450,7 +455,7 @@ class Generator (ast.NodeVisitor):
         self.indentLevel = 0
         self.scopes = []
         self.importHeads = set ()
-        self.importNodes = []
+        self.importHoistMemos = []
         self.allOwnNames = set ()
         self.allImportedNames = set ()
         self.expectingNonOverloadedLhsIndex = False
@@ -859,8 +864,12 @@ class Generator (ast.NodeVisitor):
     def getPragmaFromIf (self, node):
         return node.test.args if type (node) == ast.If and self.isCall (node.test, '__pragma__') else None
 
-    def visit (self, node):  
+    def visit (self, node):             # Overrides visit () method of parent ast.NodeVisitor
         try:
+            # Adapt self.lineNr to each visited node
+            # The lineNr is used in line number annotations and in error reports
+            # In case of hoisting the line number of the source code will have to be remembered until the hoist is dealt with
+            
             self.lineNr = node.lineno
         except:
             pass
@@ -907,7 +916,7 @@ class Generator (ast.NodeVisitor):
                 if definedInIf:
                     self.emitBody (node.body)
             else:
-                ast.NodeVisitor.visit (self, node)
+                super () .visit (node)
 
     def visit_arg (self, node):
         self.emit (self.filterId (node.arg))
@@ -2799,11 +2808,13 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_Import (self, node):
         # Since clashes with own names have to be avoided, the node is stored to revisit it after the own names are known
-        self.importNodes.append (node)
+        self.importHoistMemos.append (utils.Any (node = node, lineNr = self.lineNr))
         
-    def revisit_Import (self, node):  # Import ... can only import modules
-        self.adaptLineNrString (node)
-
+    def revisit_Import (self, importHoistMemo):     # Import ... can only import modules
+        self.lineNr = importHoistMemo.lineNr        # This is the lineNr from the original visit, which may be obtained from the node at that time or "cached" earlier
+        node = importHoistMemo.node
+        self.adaptLineNrString (node)               # If it isn't (again) obtained from the node, the memoed version will be used 
+        
         names = [alias for alias in node.names if not alias.name.startswith (self.stubsName)]
 
         if not names:
@@ -2849,10 +2860,12 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_ImportFrom (self, node):
         # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
-        self.importNodes.append (node)
+        self.importHoistMemos.append (utils.Any (node = node, lineNr = self.lineNr))
     
-    def revisit_ImportFrom (self, node):  # From ... import ... can import modules or facitities offered by modules
-        self.adaptLineNrString (node)
+    def revisit_ImportFrom (self, importHoistMemo): # From ... import ... can import modules or facitities offered by modules
+        self.lineNr = importHoistMemo.lineNr        # This is the lineNr from the original visit, which may be obtained from the node at that time or "cached" earlier
+        node = importHoistMemo.node
+        self.adaptLineNrString (node)               # If it isn't (again) obtained from the node, the memoed version will be used 
 
         if node.module.startswith (self.stubsName):
             return
@@ -2874,27 +2887,33 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         
         try:
             # Import modules or facilities offered by them
+            self.module.program.searchedModulePaths = []                                    # If none of the possibilities below succeeds, report all searched paths
             namePairs = []
+            facilityImported = False
             for index, alias in enumerate (node.names):
-                if alias.name == '*':                                           # * Never refers to modules, only to facilities in modules
+                if alias.name == '*':                                                       # * Never refers to modules, only to facilities in modules
                     if len (node.names) > 1:
                         raise utils.Error (
-                            lineNr = node.lineno,
+                            lineNr = self.lineNr,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
-                    
                     module = self.useModule (node.module)
                     for aName in module.exportedNames:
                         namePairs.append (utils.Any (name = aName, asName = None))
                 else:
-                    try:                                                        # Try if alias.name denotes a module, in that case don't do the 'if namepairs' part
-                        module = self.useModule ('{}.{}'.format (node.module, alias.name))
-                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath)
-                        self.allImportedNames.add (alias.asname or alias.name)  # Add import to allImportedNames of this module
-                    except:                                                     # If it doesn't it denotes a facility inside a module
-                        module = self.useModule (node.module)
-                        namePairs.append (utils.Any (name = alias.name, asName = alias.asname))      
-            if namePairs:   # This part should only be done for facilities inside modules
+                    try:                                                                    # Try if alias denotes a module, in that case don't do the 'if namepairs' part
+                        module = self.useModule ('{}.{}'.format (node.module, alias.name))  # So, attempt to use alias as a module
+                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath) # Modules too can have asName
+                        self.allImportedNames.add (alias.asname or alias.name)              # Add import to allImportedNames of this module
+                    except:
+                        facilityImported = True
+                        
+            if facilityImported:                                                        # At least one alias denoted a facility rather than a module
+                module = self.useModule (node.module)                                   # Use module that contains it
+                namePairs.append (utils.Any (name = alias.name, asName = alias.asname))
+                    
+            # This part should only be done for facilities inside modules, and indeed they are the only ones adding namePairs                    
+            if namePairs:
                 try:
                     # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
                     self.emit ('import {{')
@@ -2909,10 +2928,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                                 self.allImportedNames.add (namePair.name)
                     self.emit ('}} from \'{}\';\n', module.importRelPath)
                 except:
-                    print (traceback.format_exc ())
+                    print ('Unexpected import error:', traceback.format_exc ())  # Should never be here
                     
         except Exception as exception:
-            print (traceback.format_exc ())
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr,
@@ -3086,11 +3104,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         # Import other modules (generatable only late, but hoisted) and nest them into the import heads
         # The import head definitions are generated later but inserted before the imports
         self.fragmentIndex = self.importHoistFragmentIndex
-        for importNode in reversed (self.importNodes):
-            if type (importNode) == ast.Import:
-                self.revisit_Import (importNode)
+        for importHoistMemo in reversed (self.importHoistMemos):
+            if type (importHoistMemo.node) == ast.Import:
+                self.revisit_Import (importHoistMemo)
             else:
-                self.revisit_ImportFrom (importNode)
+                self.revisit_ImportFrom (importHoistMemo)
                 
         # Transit export of imported facilities (so no facilities that weren't imported and no modules)
         if utils.commandArgs.xreex or self.module.sourcePrename == '__init__':

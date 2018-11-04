@@ -43,7 +43,17 @@ except:
 sys.modules.pop ('org', None)   
 
 # Transcrypt needs to find modulesDir before CPython modules, so it will favor Transcrypt modules
-transpilationDirs = [modulesDir] + sys.path
+candidateTranspilationDirs = [modulesDir] + sys.path
+lowerSkipExtensions = ('.zip', '/dlls', '/lib', '/python37')    # !!! Generalize to all platforms and Python versions
+
+transpilationDirs = []
+for candidateTranspilationDir in candidateTranspilationDirs:
+    # print ('DEBUG', candidateTranspilationDir)
+    for lowerSkipExtension in lowerSkipExtensions:
+        if candidateTranspilationDir.lower () .endswith (lowerSkipExtension):
+            break
+    else:
+        transpilationDirs.append (candidateTranspilationDir)
 
 # The following imports are need by Transcrypt itself, not by transpiled or executed user code
 # The following imports will either reload the previously unloaded org or load org from different location
@@ -61,9 +71,9 @@ def main ():
 
     def exitHandler ():
         if exitCode == exitSuccess:
-            utils.log (True, '\nReady\n')       
+            utils.log (True, '\nReady\n\n')       
         else:
-            utils.log (True, '\nAborted\n')
+            utils.log (True, '\nAborted\n\n')
             
     atexit.register (exitHandler)
     
@@ -78,7 +88,7 @@ def main ():
             exec (envirFile.read ());
         __envir__.executor_name = __envir__.interpreter_name
 
-        utils.log (True, '{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __envir__.transpiler_name.capitalize (), __envir__.transpiler_version)
+        utils.log (True, '\n{} (TM) Python to JavaScript Small Sane Subset Transpiler Version {}\n', __envir__.transpiler_name.capitalize (), __envir__.transpiler_version)
         utils.log (True, 'Copyright (C) Geatec Engineering. License: Apache 2.0\n\n')
         
         utils.log (True, '\n')

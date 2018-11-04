@@ -207,7 +207,8 @@ class Error (Exception):
             result += '\n\tFile \'{}\', line {}, at import of:'.format (sourcePath, importRecord [1])
         
         # After that, report the module and line that caused the error
-        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .sourcePath), self.lineNr)
+#        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .sourcePath), self.lineNr)
+        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .name), self.lineNr)
         
         # And, lastly, report the error message
         result += '\n\t{}'.format (self.message)
@@ -234,7 +235,7 @@ def enhanceException (exception, **kwargs):
         result: {6}
     '''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
 
-    raise result
+    raise result from None
         
 def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, refuseIfAppearsMinified = False):
     '''
