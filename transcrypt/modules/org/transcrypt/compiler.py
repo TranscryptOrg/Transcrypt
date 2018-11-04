@@ -2905,7 +2905,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         module = self.useModule ('{}.{}'.format (node.module, alias.name))  # So, attempt to use alias as a module
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath) # Modules too can have asName
                         self.allImportedNames.add (alias.asname or alias.name)              # Add import to allImportedNames of this module
-                    except:
+                    except:                                                                 # It's a facility rather than a module
+                        module = self.useModule (node.module)
+                        namePairs.append (utils.Any (name = alias.name, asName = alias.asname)) 
                         facilityImported = True
                         
             if facilityImported:                                                        # At least one alias denoted a facility rather than a module
