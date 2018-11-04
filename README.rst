@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Selenium tests tab switching and alert handling fixed
 - Compilation error reports fixed (pr584, issue 586)
 - Module paths can now contain dots (issue 578 revisited)
 - Module name can be reexported (pr 575)
