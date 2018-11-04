@@ -44,39 +44,65 @@ class BrowserController:
             self.options.add_argument ('--disable-extensions')    
                 
         self.webDriver = selenium.webdriver.Chrome (chrome_options = self.options)
-        self.browserIsRunning = False
+        self.nrOfTabs = 0
         
-    def open (self, url):
+    def waitForNewTab (self):
+        while len (self.webDriver.window_handles) <= self.nrOfTabs:
+            time.sleep (0.5)
+        self.nrOfTabs = len (self.webDriver.window_handles)
+                
+        
+    def open (self, url, run):
         print (f'Browser controller is opening URL: {url}')
     
-        if self.browserIsRunning:
-        
-            if commandArgs.unattended:
+        try:
+            if self.nrOfTabs > 0:
             
-                # ---- Show in existing tab
+                if commandArgs.unattended:
                 
-                self.webDriver.execute_script (f'window.location.href = "{url}";') 
+                    # ---- Show in existing tab
+                    
+                    self.webDriver.execute_script (f'window.location.href = "{url}";') 
+                else:
+                
+                    # ---- Open new tab
+                    
+                    self.webDriver.execute_script (f'window.open ("{url}","_blank");')  # !!! Avoid redundant open command
+                    self.waitForNewTab ()
+                    self.webDriver.switch_to.window (self.webDriver.window_handles [-1]) 
             else:
             
-                # ---- Open new tab
+                # ---- Open browser and default tab
                 
-                self.webDriver.execute_script (f'window.open ("{url}","_blank");') 
-        else:
-        
-            # ---- Open browser and default tab
-            
-            self.webDriver.get (url)
-            self.browserIsRunning = True  
+                self.webDriver.get (url)
+                self.waitForNewTab ()
+        except:
+            self.webDriver.switch_to.alert.accept();
 
-        try:
-            self.message = self.webDriver.find_element_by_id ('message')
+        if run:
+            while (True):
+                self.message = self.webDriver.find_element_by_id ('message')
+                if 'failed' in self.message.text or 'succeeded' in self.message.text:
+                    break
+                time.sleep (0.5)
+            
+            print ()
+            print ('=========================================================================')
             print (f'Back to back autotest, result: {self.message.text.upper ()}')
+            print ('=========================================================================')
+            print ()
+            
             if 'succeeded' in self.message.text:
                 return True
             else:
                 return False
-        except:
+        else:
+            print ()
+            print ('=========================================================================')
             print ('No back to back autotest')
+            print ('=========================================================================')
+            print ()
+            
             return True
             
 browserController = BrowserController ()
@@ -173,7 +199,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
         else:
             url = f'{pythonHttpServerUrl}/{relSourcePrepath}.html'
             
-        success = browserController.open (url)
+        success = browserController.open (url, run)
         
     if commandArgs.unattended and not success:
         relSourcePrepathsOfErrors.append (relSourcePrepath)
