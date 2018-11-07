@@ -129,7 +129,11 @@ export function __get__ (self, func, quotedFuncName) {
             }
             return function () {                                    // Return bound function, code dupplication for efficiency if no memoizing
                 var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
-                return func.apply (null, [self] .concat (args));
+                if (self.__proxy__ != undefined){
+                    return func.apply (null, [self.__proxy__] .concat (args));
+                }else{
+                    return func.apply (null, [self] .concat (args));
+                }
             };
         }
         else {                                                      // Class before the dot
@@ -226,7 +230,7 @@ export var object = {
         var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
         
         if ('__getattr__' in this || '__setattr__' in this) {
-            instance = new Proxy (instance, {
+            instance.__proxy__  = new Proxy (instance, {
                 get: function (target, name) {
                     let result = target [name];
                     if (result == undefined) {  // Target doesn't have attribute named name
@@ -246,6 +250,7 @@ export var object = {
                     return true;
                 }
             })
+            instance = instance.__proxy__;
         }
 
         // Call constructor
