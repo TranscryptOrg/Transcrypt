@@ -75,8 +75,8 @@ class Program:
         self.sourcePrepath = posixpath.abspath (utils.commandArgs.source)
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        self.targetDir = f'{self.sourceDir}/__target__'
-        self.optionsPath = f'{self.targetDir}/{self.mainModuleName}.options'
+        self.targetDir = posixpath.join(self.sourceDir, '__target__')
+        self.optionsPath = posixpath.join(self.targetDir, self.mainModuleName) + '.options'
 
         # Find out if command line arguments are changed
         try:
@@ -87,8 +87,8 @@ class Program:
         self.optionsChanged = utils.commandArgs.picklableOptions != oldOptions
 
         # Reset everything in case of a build or a command args change
-        # if utils.commandArgs.build or self.optionsChanged:
-        #     shutil.rmtree(self.targetDir, ignore_errors = True)
+        if utils.commandArgs.build or self.optionsChanged:
+            shutil.rmtree(self.targetDir, ignore_errors = True)
 
         # Remember current command line arguments
         with utils.create (self.optionsPath, 'wb') as optionsFile:
@@ -269,12 +269,12 @@ class Module(object):
 
         for searchDir in self.program.moduleSearchDirs:
             # Find source slugs
-            sourceSlug = f'{searchDir}/{relSourceSlug}'
+            sourceSlug = posixpath.join(searchDir, relSourceSlug)
             if os.path.isdir (sourceSlug):
                 self.sourceDir, self.sourcePrename = sourceSlug, '__init__'
             else:
                 self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1)
-            self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
+            self.sourcePrepath = posixpath.join(self.sourceDir, self.sourcePrename)
             self.pythonSourcePath = f'{self.sourcePrepath}.py'
             self.javascriptSourcePath = f'{self.sourcePrepath}.js'
 
