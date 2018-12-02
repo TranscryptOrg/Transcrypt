@@ -103,7 +103,8 @@ class Program:
             # Provide main module and, with that, all other modules recursively
             self.searchedModulePaths = []   # Report only failure of searching for main, so clear any history
             self.provide (self.mainModuleName, '__main__')
-        except Exception as exception:
+        #except Exception as exception:
+        except MemoryError as exception:
             utils.enhanceException (    # If it was an Error, don't change it, otherwise make it one (??? Just to be sure?)
                 exception,
                 message = f'\n\t{exception}'
@@ -111,17 +112,17 @@ class Program:
 
     def provide (self, moduleName, __moduleName__ = None, filter = None, importingModule = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
-
         if moduleName in self.moduleDict:                                   # Find out if module is already provided
             return self.moduleDict [moduleName]
-        elif importingModule is None or not utils.commandArgs.noimports:      # provide by loading or compiling
+        elif importingModule is not None and utils.commandArgs.npm:         # if npm bundler mode --npm, full compile not needed
+            return ImportedModule(self, moduleName, __moduleName__, filter)
+        else:                                                               # provide by loading or compiling
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__, filter)
-        else:                                                               # provide a stub only
-            return ImportedModule(self, moduleName, __moduleName__, filter)
 
 
 class ImportedModule:
+    '''A minimal representation of a python module that needs file paths but won't be compiled'''
     def __init__ (self, program, name, __name__, filter):
         self.program = program
         self.name = name
@@ -152,8 +153,7 @@ class ImportedModule:
             # Find source slugs
             sourceSlug = f'{searchDir}/{relSourceSlug}'
             if os.path.isdir (sourceSlug):
-                self.sourceDir = sourceSlug
-                self.sourcePrename = '__init__'
+                self.sourceDir, self.sourcePrename = sourceSlug, '__init__'
             else:
                 self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1)
             self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
@@ -161,12 +161,18 @@ class ImportedModule:
             self.javascriptSourcePath = f'{self.sourcePrepath}.js'
 
             # Find target slugs
-            self.targetRelPath = relSourceSlug
-            if searchDir == self.program.moduleSearchDirs[0]:
-                self.targetPrepath = f'{self.program.targetDir}/{self.targetRelPath}'
+            if os.path.isdir (sourceSlug):
+                self.targetPreDir, self.targetPrename = relSourceSlug, '__init__'
+            elif '/' in relSourceSlug:
+                self.targetPreDir, self.targetPrename = relSourceSlug.rsplit ('/', 1)
             else:
+                self.targetPreDir, self.targetPrename = '', relSourceSlug
+            self.targetRelPath = posixpath.join(self.targetPreDir, self.targetPrename)
+            if searchDir == self.program.moduleSearchDirs[0]:                                   # main project files
+                self.targetPrepath = f'{self.program.targetDir}/{self.targetRelPath}'
+            else:                                                                               # external libraries (e.g. transcrypt modules)
                 self.targetPrepath = f'{self.program.targetDir}/__lib__/{self.targetRelPath}'
-            self.targetPreDir, self.targetPrename = self.targetPrepath.rsplit ('/', 1)
+            print('>>>>>>', self.targetPrePath)
             self.targetName = f'{self.targetRelPath}.js'
             self.targetPath = f'{self.targetPrepath}.js'
             self.prettyTargetName = f'{self.targetRelPath}.pretty.js'
@@ -186,13 +192,13 @@ class ImportedModule:
                 # Set more paths (tree, sourcemap, ...)
                 # (To do)
                 self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
-                self.importPath = f'{self.targetPrepath}.js' if (self.isJavascriptOnly or not utils.commandArgs.noimports) else f'{self.targetPrepath}.py'
                 break
 
             # Remember all fruitless paths to give a decent error report if module isn't found
             # Note that this aren't all searched paths for a particular module,
             # since the difference between an module and a facility inside a module isn't always known a priori
             self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
+
         else:
             # If even the target can't be loaded then there's a problem with this module, root or not
             # However, loading a module is allowed to fail (see self.revisit_ImportFrom)
@@ -202,12 +208,29 @@ class ImportedModule:
                 message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
             )
 
-    def relpath (self, other):
-        # returns the relative path from this module to the other module
-        path =posixpath.relpath(other.importPath, self.targetPreDir)
+    def importPath (self, other):
+        '''Returns the relative path to other from this module.'''
+        extension = '.js'
+
+        # import paths need special handling in bundler mode (--npm)
+        if utils.commandArgs.npm:
+            if other.sourcePrepath.startswith(self.program.moduleSearchDirs[1]):        # transcrypt module dir is index [1] in search dirs
+                # reference the npm repository since an official transcrypt module
+                return posixpath.join('transcrypt', '__target__', '__lib__', self.targetRelPath + '.js')
+
+            elif not other.isJavascriptOnly:                                            # regular python file import
+                # keeping the .py extension lets bundlers know to call transcrypt again for the import.
+                extension = '.py'
+
+        # calculate the relative path from self to other
+        path = posixpath.relpath(other.targetPrepath, self.targetPreDir)
         if not (path.startswith('./') or path.startswith('../')):
             path = './' + path
-        return path
+        print('>>>>>>>>>>>>>>>>>>>>>>>')
+        print(other.targetPrepath)
+        print(self.targetPreDir)
+        print(path)
+        return path + extension
 
 
 class Module(ImportedModule):
@@ -2865,13 +2888,13 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 # Clashes with own names or already imported names are avoided
 
                 self.allImportedNames.add (alias.asname)
-                self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), self.module.relpath(module))
+                self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname), self.module.importPath(module))
             else:
                 # Import dotted name, requires import under constructed unique name and then nesting,
                 # including transfer of imported names from immutable module to mutable object
                 # This mutable module representation object may come to hold other mutable module represention objects
 
-                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), self.module.relpath(module))
+                self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), self.module.importPath(module))
                 aliasSplit = alias.name.split ('.', 1)
                 head = aliasSplit [0]
                 tail = aliasSplit [1] if len (aliasSplit) > 1 else ''
@@ -2934,7 +2957,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 else:
                     try:                                                                    # Try if alias denotes a module, in that case don't do the 'if namepairs' part
                         module = self.useModule ('{}.{}'.format (nodeModule, alias.name))  # So, attempt to use alias as a module
-                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), self.module.relpath(module)) # Modules too can have asName
+                        self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), self.module.importPath(module)) # Modules too can have asName
                         self.allImportedNames.add (alias.asname or alias.name)              # Add import to allImportedNames of this module
                     except:                                                                 # It's a facility rather than a module
                         module = self.useModule (nodeModule)
@@ -2959,7 +2982,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                                 self.allImportedNames.add (namePair.asName)
                             else:
                                 self.allImportedNames.add (namePair.name)
-                    self.emit ('}} from \'{}\';\n', self.module.relpath(module))
+                    self.emit ('}} from \'{}\';\n', self.module.importPath(module))
                 except:
                     print ('Unexpected import error:', traceback.format_exc ())  # Should never be here
 
@@ -3161,7 +3184,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 if not exportedNameFromRuntime in (self.allOwnNames | self.allImportedNames)
             ]))
 
-            self.emit ('import {{{}}} from \'{}\';\n', importedNamesFromRuntime, self.module.relpath(runtimeModule))
+            self.emit ('import {{{}}} from \'{}\';\n', importedNamesFromRuntime, self.module.importPath(runtimeModule))
 
         # Emit empty import head objects, each as the leftmost part of the dotted name that can be used to access the imported module
         # Note that the required importheads are only known after importing modules, but must be inserted in the target code before that,

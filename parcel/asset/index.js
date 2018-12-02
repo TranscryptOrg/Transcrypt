@@ -19,7 +19,7 @@ class PythonAsset extends Asset {
             '--build',
             '--nomin',
             '--map',
-            '--noimports',
+//            '--noimports',
             '--npm',
             this.name
         ];
