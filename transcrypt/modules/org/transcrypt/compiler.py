@@ -172,15 +172,15 @@ class ImportedModule:
                 self.targetPrepath = f'{self.program.targetDir}/{self.targetRelPath}'
             else:                                                                               # external libraries (e.g. transcrypt modules)
                 self.targetPrepath = f'{self.program.targetDir}/__lib__/{self.targetRelPath}'
-            print('>>>>>>', self.targetPrePath)
-            self.targetName = f'{self.targetRelPath}.js'
+            print('>>>>>> targetPrePath', self.targetPrePath)
+            self.targetName = f'{self.targetPrename}.js'
             self.targetPath = f'{self.targetPrepath}.js'
-            self.prettyTargetName = f'{self.targetRelPath}.pretty.js'
+            self.prettyTargetName = f'{self.targetPrename}.pretty.js'
             self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
             self.treePath = f'{self.targetPrepath}.tree'
             self.mapPath =  f'{self.targetPrepath}.map'
             self.prettyMapPath = f'{self.targetPrepath}.shrink.map'
-            self.shrinkMapName = f'{self.targetRelPath}.shrink.map'
+            self.shrinkMapName = f'{self.targetPrename}.shrink.map'
             self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
             self.mapSourcePath = f'{self.targetPrepath}.py'
             self.mapRef = f'\n//# sourceMappingURL={self.targetPrename}.map'
