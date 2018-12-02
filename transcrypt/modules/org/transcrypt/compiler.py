@@ -114,7 +114,7 @@ class Program:
 
         if moduleName in self.moduleDict:                                   # Find out if module is already provided
             return self.moduleDict [moduleName]
-        elif importingModule is None or not utils.commandArgs.shallow:      # provide by loading or compiling
+        elif importingModule is None or not utils.commandArgs.noimports:      # provide by loading or compiling
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__, filter)
         else:                                                               # provide a stub only
@@ -186,7 +186,7 @@ class ImportedModule:
                 # Set more paths (tree, sourcemap, ...)
                 # (To do)
                 self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
-                self.importPath = f'{self.targetPrepath}.js' if (self.isJavascriptOnly or not utils.commandArgs.shallow) else f'{self.targetPrepath}.py'
+                self.importPath = f'{self.targetPrepath}.js' if (self.isJavascriptOnly or not utils.commandArgs.noimports) else f'{self.targetPrepath}.py'
                 break
 
             # Remember all fruitless paths to give a decent error report if module isn't found

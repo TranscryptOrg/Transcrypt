@@ -1,0 +1,1 @@
+MY_NAME = 'Homer'

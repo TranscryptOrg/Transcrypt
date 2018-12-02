@@ -1,0 +1,12 @@
+{
+  "name": "parcel-plugin-python",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "parcel-bundler": "^1.10.3"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test node test/index.js"
+  }
+}
