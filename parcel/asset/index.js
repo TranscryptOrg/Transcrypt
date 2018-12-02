@@ -10,37 +10,46 @@ class PythonAsset extends Asset {
         super(name, options);
         this.type = 'js';
         this.fileinfo = path.parse(this.name);
+        this.relativeDir = path.relative(this.options.rootDir, this.fileinfo.dir);
+        if (this.fileinfo.name == '__init__') {
+            this.pyModule = this.relativeDir.split(path.sep).join('.');
+        } else {
+            this.pyModule = path.join(this.relativeDir, this.fileinfo.name).split(path.sep).join('.');
+        }
+        this.absTargetPath = path.join(this.options.rootDir, '__target__', this.relativeDir, this.fileinfo.name)    // w/o extension
     }
 
     load() {
         // run transcrypt
         let cmd_parts = [
             'python3 -m transcrypt',
-            '--build',
             '--nomin',
             '--map',
             '--imports .bundled',
-            this.name
+            this.pyModule
         ];
+        let cmd_options = {
+            // we need to call python from the root project dir so the __target__ location
+            // stays the same for all .py files in the run.
+            'cwd': this.options.rootDir,
+        };
         try {
-            let stdout = child_process.execSync(cmd_parts.join(' ')).toString();
+            let stdout = child_process.execSync(cmd_parts.join(' '), cmd_options).toString();
         } catch (err) {
             throw Error(err.stdout.toString() + '\n' + err.stderr.toString());
         } //try
 
         // read the source and map
         this.content = fs.readFileSync(
-            path.join(this.fileinfo.dir, '__target__', this.fileinfo.name + '.js'),
+            this.absTargetPath + '.js',
             "utf8"
         );
         this.sourceMap = JSON.parse(
             fs.readFileSync(
-                path.join(this.fileinfo.dir, '__target__', this.fileinfo.name + '.map'),
+                this.absTargetPath + '.map',
                 "utf8"
             )
         );
-
-        console.log(this.content)
 
         // cleanup
         // remove_dir_deep(path.join(this.fileinfo.dir, '__target__'))

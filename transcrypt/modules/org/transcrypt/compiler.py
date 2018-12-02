@@ -87,8 +87,8 @@ class Program:
         self.optionsChanged = utils.commandArgs.picklableOptions != oldOptions
 
         # Reset everything in case of a build or a command args change
-        if utils.commandArgs.build or self.optionsChanged:
-            shutil.rmtree(self.targetDir, ignore_errors = True)
+        # if utils.commandArgs.build or self.optionsChanged:
+        #     shutil.rmtree(self.targetDir, ignore_errors = True)
 
         # Remember current command line arguments
         with utils.create (self.optionsPath, 'wb') as optionsFile:
@@ -111,11 +111,12 @@ class Program:
             )
 
     def provide (self, moduleName, __moduleName__ = None, filter = None, importingModule = None):
+        print('>>>> module ', moduleName)
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         if moduleName in self.moduleDict:                                               # module already provided?
             return self.moduleDict [moduleName]
-        elif importingModule is not None and utils.commandArgs.imports != '.compile':   # not compiling imported modules?
-            return ImportedModule(self, moduleName, __moduleName__, filter)
+        # elif importingModule is not None and utils.commandArgs.imports != '.compile':   # not compiling imported modules?
+        #     return ImportedModule(self, moduleName, __moduleName__, filter)
         else:                                                                           # regular import, so full module
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__, filter)
@@ -214,13 +215,17 @@ class ImportedModule:
 
     def importPath (self, other):
         '''Returns the relative path to other from this module.'''
+        print('>>>')
+        print(other.targetPrepath)
+        print(self.targetDir)
+        print(posixpath.relpath(other.targetPrepath, self.targetDir))
         path = posixpath.relpath(other.targetPrepath, self.targetDir)
         if not (path.startswith('./') or path.startswith('../')):
             path = './' + path
 
         extension = '.js'
-        if not other.isJavascriptOnly and utils.commandArgs.imports == '.bundled':
-            extension = '.py'  # keep .py for imported modules when using a bundler
+        # if not other.isJavascriptOnly and utils.commandArgs.imports == '.bundled':
+        #     extension = '.py'  # keep .py for imported modules when using a bundler
 
         return path + extension
 
