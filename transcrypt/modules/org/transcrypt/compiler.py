@@ -111,139 +111,15 @@ class Program:
             )
 
     def provide (self, moduleName, __moduleName__ = None, filter = None, importingModule = None):
-        print('>>>> module ', moduleName)
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         if moduleName in self.moduleDict:                                               # module already provided?
             return self.moduleDict [moduleName]
-        # elif importingModule is not None and utils.commandArgs.imports != '.compile':   # not compiling imported modules?
-        #     return ImportedModule(self, moduleName, __moduleName__, filter)
         else:                                                                           # regular import, so full module
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__, filter)
 
 
-class ImportedModule:
-    '''A minimal representation of a python module that needs file paths but won't be compiled'''
-    def __init__ (self, program, name, __name__, filter):
-        self.program = program
-        self.name = name
-        self.__name__ = __name__ if __name__ else self.name
-
-        # Try to find module, exception if fails
-        self.findPaths (filter)
-
-        # Register that module is found
-        self.program.moduleDict [self.name] = self
-
-    def findPaths (self, filter):
-        # Filter to get hyphens and/or dots in name if a suitable alias is defined
-        # The filter function, and with it the active aliases, are passed by the importing module
-        rawRelSourceSlug = self.name.replace ('.', '/')
-        relSourceSlug = filter (rawRelSourceSlug) if filter and utils.commandArgs.alimod else rawRelSourceSlug
-
-        '''
-        # BEGIN DEBUGGING CODE
-        print ()
-        print ('Raw slug   :', rawRelSourceSlug)
-        print ('Cooked slug:', relSourceSlug)
-        print ()
-        # END DEBUGGING CODE
-        '''
-
-        for searchDir in self.program.moduleSearchDirs:
-            # Find source slugs
-            sourceSlug = f'{searchDir}/{relSourceSlug}'
-            if os.path.isdir (sourceSlug):
-                self.sourceDir, self.sourcePrename = sourceSlug, '__init__'
-            else:
-                self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1)
-            self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
-            self.pythonSourcePath = f'{self.sourcePrepath}.py'
-            self.javascriptSourcePath = f'{self.sourcePrepath}.js'
-
-            # Find target slugs
-            if os.path.isdir (sourceSlug):
-                self.targetRelDir, self.targetPrename = relSourceSlug, '__init__'           # relative/path/to, name
-            elif '/' in relSourceSlug:
-                self.targetRelDir, self.targetPrename = relSourceSlug.rsplit ('/', 1)       # relative/path/to, name
-            else:
-                self.targetRelDir, self.targetPrename = '', relSourceSlug                   # relative/path/to, name
-            self.targetRelPath = posixpath.join (self.targetRelDir, self.targetPrename)     # relative/path/to/name             (relative target file path w/o ext)
-            if searchDir == self.program.moduleSearchDirs[0]:
-                # [0] is main file dir, so asking if this module is local,
-                self.targetDir = posixpath.join (self.program.targetDir, self.targetRelDir) # /absolute/path/to                 (absolute target dir)
-            else:
-                # or an external libraries (e.g. transcrypt module)
-                self.targetDir = posixpath.join (self.program.targetDir, '__lib__', self.targetRelDir)    # /absolute/path/to (absolute target dir)
-            self.targetPrepath = posixpath.join (self.targetDir, self.targetPrename)        # /absolute/path/to/name            (absolute target file path w/o ext)
-            self.targetName = f'{self.targetPrename}.js'                                    # name.js
-            self.targetPath = f'{self.targetPrepath}.js'                                    # /absolute/path/to/name.js
-            self.prettyTargetName = f'{self.targetPrename}.pretty.js'
-            self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
-            self.treePath = f'{self.targetPrepath}.tree'
-            self.mapPath =  f'{self.targetPrepath}.map'
-            self.prettyMapPath = f'{self.targetPrepath}.shrink.map'
-            self.shrinkMapName = f'{self.targetPrename}.shrink.map'
-            self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
-            self.mapSourcePath = f'{self.targetPrepath}.py'
-            self.mapRef = f'\n//# sourceMappingURL={self.targetPrename}.map'
-
-            # If module exists
-            if os.path.isfile (self.pythonSourcePath) or os.path.isfile (self.javascriptSourcePath):
-                # Check if it's a JavaScript-only module
-                self.isJavascriptOnly = os.path.isfile (self.javascriptSourcePath) and not os.path.isfile (self.pythonSourcePath)
-                # Set more paths (tree, sourcemap, ...)
-                # (To do)
-                self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
-                break
-
-            # Remember all fruitless paths to give a decent error report if module isn't found
-            # Note that this aren't all searched paths for a particular module,
-            # since the difference between an module and a facility inside a module isn't always known a priori
-            self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
-
-        else:
-            # If even the target can't be loaded then there's a problem with this module, root or not
-            # However, loading a module is allowed to fail (see self.revisit_ImportFrom)
-            # In that case this error is swallowed, but searchedModulePath is retained,
-            # because searching in the swallowing except branch may also fail and should mention ALL searched paths
-            raise utils.Error (
-                message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
-            )
-
-        # self.debugPrint()
-
-    def importPath (self, other):
-        '''Returns the relative path to other from this module.'''
-        print('>>>')
-        print(other.targetPrepath)
-        print(self.targetDir)
-        print(posixpath.relpath(other.targetPrepath, self.targetDir))
-        path = posixpath.relpath(other.targetPrepath, self.targetDir)
-        if not (path.startswith('./') or path.startswith('../')):
-            path = './' + path
-
-        extension = '.js'
-        # if not other.isJavascriptOnly and utils.commandArgs.imports == '.bundled':
-        #     extension = '.py'  # keep .py for imported modules when using a bundler
-
-        return path + extension
-
-    def debugPrint(self):
-        # for debugging of paths
-        print(f'{self.name} [{self.__name__}]:')
-        for group, obj, names in [
-            [ 'Source', self, ( 'isJavascriptOnly', 'sourceDir', 'sourcePrename', 'sourcePrepath', 'pythonSourcePath', 'javascriptSourcePath', 'sourcePath' )],
-            [ 'Target', self, ( 'targetRelDir', 'targetPrename', 'targetRelPath', 'targetDir', 'targetPrepath', 'targetName', 'targetPath', 'prettyTargetName', 'prettyTargetPath' )],
-            [ 'Debugging', self, ( 'treePath', 'mapPath', 'prettyMapPath', 'shrinkMapName', 'shrinkMapPath', 'mapSourcePath', 'mapRef' )],
-            [ 'Program', self.program, ( 'sourcePrepath', 'mainModuleName', 'targetDir', 'optionsPath' )],
-        ]:
-            print(f'\t{group}:')
-            for name in names:
-                print(f"\t\t{name:<21}{getattr(obj, name, 'AttributeError!')}")
-
-
-class Module(ImportedModule):
+class Module(object):
     def __init__ (self, program, name, __name__, filter):
         # Remember names of module being under compilation and line nrs of current import
         # Used for error reports
@@ -252,9 +128,16 @@ class Module(ImportedModule):
         # Only add a module to the importStack if it's at least found by findPaths, otherwise it has no sourcePath to report
         program.importStack.append ([self, None])
 
-        # Find paths
-        super().__init__ (program, name, __name__, filter)
+        self.program = program
+        self.name = name
+        self.__name__ = __name__ if __name__ else self.name
+
+        # Try to find module, exception if fails
+        self.findPaths (filter)
         os.makedirs (os.path.dirname (self.targetPrepath), exist_ok = True)
+
+        # Register that module is found
+        self.program.moduleDict [self.name] = self
 
         # Create sourcemapper, if only for cleaning dir after previous run
         self.sourceMapper = sourcemaps.SourceMapper (
@@ -368,6 +251,104 @@ class Module(ImportedModule):
 
         # Module not under compilation anymore, so pop it
         self.program.importStack.pop ()
+
+    def findPaths (self, filter):
+        # Filter to get hyphens and/or dots in name if a suitable alias is defined
+        # The filter function, and with it the active aliases, are passed by the importing module
+        rawRelSourceSlug = self.name.replace ('.', '/')
+        relSourceSlug = filter (rawRelSourceSlug) if filter and utils.commandArgs.alimod else rawRelSourceSlug
+
+        '''
+        # BEGIN DEBUGGING CODE
+        print ()
+        print ('Raw slug   :', rawRelSourceSlug)
+        print ('Cooked slug:', relSourceSlug)
+        print ()
+        # END DEBUGGING CODE
+        '''
+
+        for searchDir in self.program.moduleSearchDirs:
+            # Find source slugs
+            sourceSlug = f'{searchDir}/{relSourceSlug}'
+            if os.path.isdir (sourceSlug):
+                self.sourceDir, self.sourcePrename = sourceSlug, '__init__'
+            else:
+                self.sourceDir, self.sourcePrename = sourceSlug.rsplit ('/', 1)
+            self.sourcePrepath = f'{self.sourceDir}/{self.sourcePrename}'
+            self.pythonSourcePath = f'{self.sourcePrepath}.py'
+            self.javascriptSourcePath = f'{self.sourcePrepath}.js'
+
+            # Find target slugs
+            if os.path.isdir (sourceSlug):
+                self.targetRelDir, self.targetPrename = relSourceSlug, '__init__'           # relative/path/to, name
+            elif '/' in relSourceSlug:
+                self.targetRelDir, self.targetPrename = relSourceSlug.rsplit ('/', 1)       # relative/path/to, name
+            else:
+                self.targetRelDir, self.targetPrename = '', relSourceSlug                   # relative/path/to, name
+            self.targetRelPath = posixpath.join (self.targetRelDir, self.targetPrename)     # relative/path/to/name             (relative target file path w/o ext)
+            if searchDir == self.program.moduleSearchDirs[0]:
+                # [0] is main file dir, so asking if this module is local,
+                self.targetDir = posixpath.join (self.program.targetDir, self.targetRelDir) # /absolute/path/to                 (absolute target dir)
+            else:
+                # or an external libraries (e.g. transcrypt module)
+                self.targetDir = posixpath.join (self.program.targetDir, '__lib__', self.targetRelDir)    # /absolute/path/to (absolute target dir)
+            self.targetPrepath = posixpath.join (self.targetDir, self.targetPrename)        # /absolute/path/to/name            (absolute target file path w/o ext)
+            self.targetName = f'{self.targetPrename}.js'                                    # name.js
+            self.targetPath = f'{self.targetPrepath}.js'                                    # /absolute/path/to/name.js
+            self.prettyTargetName = f'{self.targetPrename}.pretty.js'
+            self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
+            self.treePath = f'{self.targetPrepath}.tree'
+            self.mapPath =  f'{self.targetPrepath}.map'
+            self.prettyMapPath = f'{self.targetPrepath}.shrink.map'
+            self.shrinkMapName = f'{self.targetPrename}.shrink.map'
+            self.shrinkMapPath = f'{self.targetPrepath}.shrink.map'
+            self.mapSourcePath = f'{self.targetPrepath}.py'
+            self.mapRef = f'\n//# sourceMappingURL={self.targetPrename}.map'
+
+            # If module exists
+            if os.path.isfile (self.pythonSourcePath) or os.path.isfile (self.javascriptSourcePath):
+                # Check if it's a JavaScript-only module
+                self.isJavascriptOnly = os.path.isfile (self.javascriptSourcePath) and not os.path.isfile (self.pythonSourcePath)
+                # Set more paths (tree, sourcemap, ...)
+                # (To do)
+                self.sourcePath = self.javascriptSourcePath if self.isJavascriptOnly else self.pythonSourcePath
+                break
+
+            # Remember all fruitless paths to give a decent error report if module isn't found
+            # Note that this aren't all searched paths for a particular module,
+            # since the difference between an module and a facility inside a module isn't always known a priori
+            self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
+
+        else:
+            # If even the target can't be loaded then there's a problem with this module, root or not
+            # However, loading a module is allowed to fail (see self.revisit_ImportFrom)
+            # In that case this error is swallowed, but searchedModulePath is retained,
+            # because searching in the swallowing except branch may also fail and should mention ALL searched paths
+            raise utils.Error (
+                message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
+            )
+
+        # self.debugPrint()
+
+    def importPath (self, other):
+        '''Returns the relative path to other from this module.'''
+        path = posixpath.relpath(other.targetPrepath, self.targetDir)
+        if not (path.startswith('./') or path.startswith('../')):
+            path = './' + path
+        return path + '.js'
+
+    def debugPrint(self):
+        # for debugging of paths
+        print(f'{self.name} [{self.__name__}]:')
+        for group, obj, names in [
+            [ 'Source', self, ( 'isJavascriptOnly', 'sourceDir', 'sourcePrename', 'sourcePrepath', 'pythonSourcePath', 'javascriptSourcePath', 'sourcePath' )],
+            [ 'Target', self, ( 'targetRelDir', 'targetPrename', 'targetRelPath', 'targetDir', 'targetPrepath', 'targetName', 'targetPath', 'prettyTargetName', 'prettyTargetPath' )],
+            [ 'Debugging', self, ( 'treePath', 'mapPath', 'prettyMapPath', 'shrinkMapName', 'shrinkMapPath', 'mapSourcePath', 'mapRef' )],
+            [ 'Program', self.program, ( 'sourcePrepath', 'mainModuleName', 'targetDir', 'optionsPath' )],
+        ]:
+            print(f'\t{group}:')
+            for name in names:
+                print(f"\t\t{name:<21}{getattr(obj, name, 'AttributeError!')}")
 
     def generateJavascriptAndPrettyMap (self):
         utils.log (False, 'Generating code for module: {}\n', self.targetPath)

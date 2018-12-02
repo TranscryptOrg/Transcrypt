@@ -60,7 +60,7 @@ class PythonAsset extends Asset {
 
     parse(code) {
         let ast = babelParser.parse(code, {
-            // filename: path.join(this.fileinfo.dir, this.fileinfo.name + '.js'),
+            filename: this.absTargetPath + '.js',
             allowReturnOutsideFunction: true,
             strictMode: false,
             sourceType: 'module',
