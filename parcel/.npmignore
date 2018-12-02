@@ -1,0 +1,8 @@
+# ====== File extensions anywhere
+*.log
+.DS_Store
+
+# ======= Directories anywhere
+__target__
+dist
+node_modules
