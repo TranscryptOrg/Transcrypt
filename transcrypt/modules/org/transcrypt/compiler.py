@@ -162,18 +162,21 @@ class ImportedModule:
 
             # Find target slugs
             if os.path.isdir (sourceSlug):
-                self.targetPreDir, self.targetPrename = relSourceSlug, '__init__'
+                self.targetRelDir, self.targetPrename = relSourceSlug, '__init__'           # relative/path/to, name
             elif '/' in relSourceSlug:
-                self.targetPreDir, self.targetPrename = relSourceSlug.rsplit ('/', 1)
+                self.targetRelDir, self.targetPrename = relSourceSlug.rsplit ('/', 1)       # relative/path/to, name
             else:
-                self.targetPreDir, self.targetPrename = '', relSourceSlug
-            self.targetRelPath = posixpath.join(self.targetPreDir, self.targetPrename)
-            if searchDir == self.program.moduleSearchDirs[0]:                                   # main project files
-                self.targetPrepath = f'{self.program.targetDir}/{self.targetRelPath}'
-            else:                                                                               # external libraries (e.g. transcrypt modules)
-                self.targetPrepath = f'{self.program.targetDir}/__lib__/{self.targetRelPath}'
-            self.targetName = f'{self.targetPrename}.js'
-            self.targetPath = f'{self.targetPrepath}.js'
+                self.targetRelDir, self.targetPrename = '', relSourceSlug                   # relative/path/to, name
+            self.targetRelPath = posixpath.join (self.targetRelDir, self.targetPrename)     # relative/path/to/name             (relative target file path w/o ext)
+            if searchDir == self.program.moduleSearchDirs[0]:
+                # [0] is main file dir, so asking if this module is local,
+                self.targetDir = posixpath.join (self.program.targetDir, self.targetRelDir) # /absolute/path/to                 (absolute target dir)
+            else:
+                # or an external libraries (e.g. transcrypt module)
+                self.targetDir = posixpath.join (self.program.targetDir, '__lib__', self.targetRelDir)    # /absolute/path/to (absolute target dir)
+            self.targetPrepath = posixpath.join (self.targetDir, self.targetPrename)        # /absolute/path/to/name            (absolute target file path w/o ext)
+            self.targetName = f'{self.targetPrename}.js'                                    # name.js
+            self.targetPath = f'{self.targetPrepath}.js'                                    # /absolute/path/to/name.js
             self.prettyTargetName = f'{self.targetPrename}.pretty.js'
             self.prettyTargetPath = f'{self.targetPrepath}.pretty.js'
             self.treePath = f'{self.targetPrepath}.tree'
@@ -207,27 +210,13 @@ class ImportedModule:
                 message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
             )
 
-        print('>>>>>>>>>>>>>>>>>>>>>>>')
-        print(self.debugPrint())
-
-    def debugPrint(self):
-        # for debugging of paths
-        print(f'{self.name} [{self.__name__}]:')
-        for group, names in [
-            [ 'Fields', ( 'isJavascriptOnly', ) ],
-            [ 'Source', ( 'sourceDir', 'sourcePrename', 'sourcePrepath', 'pythonSourcePath', 'javascriptSourcePath', 'sourcePath') ],
-            [ 'Target', ( 'targetPreDir', 'targetPrename', 'targetRelPath', 'targetPrepath', 'targetName', 'targetPath', 'prettyTargetName', 'prettyTargetPath') ],
-            [ 'Debugging', ( 'treePath', 'mapPath', 'prettyMapPath', 'shrinkMapName', 'shrinkMapPath', 'mapSourcePath', 'mapRef') ],
-        ]:
-            print(f'\t{group}:')
-            for name in names:
-                print(f"\t\t{name:<21}{getattr(self, name, 'AttributeError!')}")
+        # self.debugPrint()
 
     def importPath (self, other):
         '''Returns the relative path to other from this module.'''
         extension = '.js'
 
-        # import paths need special handling in bundler mode (--npm)
+        # special handling on --npm since we allow the bundler to handle imports
         if utils.commandArgs.npm:
             if other.sourcePrepath.startswith(self.program.moduleSearchDirs[1]):        # transcrypt module dir is index [1] in search dirs
                 # reference the npm repository since an official transcrypt module
@@ -238,10 +227,23 @@ class ImportedModule:
                 extension = '.py'
 
         # calculate the relative path from self to other
-        path = posixpath.relpath(other.targetPrepath, posixpath.dirname(self.targetPrepath))
+        path = posixpath.relpath(other.targetPrepath, self.targetDir)
         if not (path.startswith('./') or path.startswith('../')):
             path = './' + path
         return path + extension
+
+    def debugPrint(self):
+        # for debugging of paths
+        print(f'{self.name} [{self.__name__}]:')
+        for group, obj, names in [
+            [ 'Source', self, ( 'isJavascriptOnly', 'sourceDir', 'sourcePrename', 'sourcePrepath', 'pythonSourcePath', 'javascriptSourcePath', 'sourcePath' )],
+            [ 'Target', self, ( 'targetRelDir', 'targetPrename', 'targetRelPath', 'targetDir', 'targetPrepath', 'targetName', 'targetPath', 'prettyTargetName', 'prettyTargetPath' )],
+            [ 'Debugging', self, ( 'treePath', 'mapPath', 'prettyMapPath', 'shrinkMapName', 'shrinkMapPath', 'mapSourcePath', 'mapRef' )],
+            [ 'Program', self.program, ( 'sourcePrepath', 'mainModuleName', 'targetDir', 'optionsPath' )],
+        ]:
+            print(f'\t{group}:')
+            for name in names:
+                print(f"\t\t{name:<21}{getattr(obj, name, 'AttributeError!')}")
 
 
 class Module(ImportedModule):
@@ -260,7 +262,7 @@ class Module(ImportedModule):
         # Create sourcemapper, if only for cleaning dir after previous run
         self.sourceMapper = sourcemaps.SourceMapper (
             self.targetPrename,
-            self.targetPreDir,
+            self.targetDir,
             not utils.commandArgs.nomin,
             utils.commandArgs.dmap
         )
