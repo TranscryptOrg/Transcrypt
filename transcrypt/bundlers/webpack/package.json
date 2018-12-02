@@ -1,0 +1,30 @@
+{
+  "version": "1.0.2",
+  "name": "transcrypt-loader",
+  "description": "Code in Python 3. Bundle to Javascript.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "python",
+    "transcrypt",
+    "transpiler",
+    "webpack",
+    "bundler",
+    "loader"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QQuick/Transcrypt"
+  },
+  "main": "__target_es5__/index.js",
+  "scripts": {
+    "build": "python3 -m transcrypt --build --map --nomin index.py && node ./node_modules/.bin/babel __target__/ -d ./__target_es5__/"
+  },
+  "dependencies": {
+    "loader-utils": "^1.2.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3"
+  }
+}
