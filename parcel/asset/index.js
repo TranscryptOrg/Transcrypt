@@ -1,9 +1,10 @@
 const Asset = require('parcel-bundler/src/Asset');
 const babelParser = require('@babel/parser');
 const child_process = require('child_process');
+const DependencyVisitors = require('parcel-bundler/src/visitors/dependencies');
+const walk = require('babylon-walk');
 const path = require('path');
 const fs = require('fs');
-
 
 class PythonAsset extends Asset {
     constructor(name, options) {
@@ -16,7 +17,7 @@ class PythonAsset extends Asset {
         } else {
             this.pyModule = path.join(this.relativeDir, this.fileinfo.name).split(path.sep).join('.');
         }
-        this.absTargetPath = path.join(this.options.rootDir, '__target__', this.relativeDir, this.fileinfo.name)    // w/o extension
+        this.importPath = './' + path.join('__target__', this.relativeDir, this.fileinfo.name) + '.js'
     }
 
     load() {
@@ -25,7 +26,7 @@ class PythonAsset extends Asset {
             'python3 -m transcrypt',
             '--nomin',
             '--map',
-            '--imports .bundled',
+            '--build',
             this.pyModule
         ];
         let cmd_options = {
@@ -39,47 +40,42 @@ class PythonAsset extends Asset {
             throw Error(err.stdout.toString() + '\n' + err.stderr.toString());
         } //try
 
-        // read the source and map
-        this.content = fs.readFileSync(
-            this.absTargetPath + '.js',
-            "utf8"
-        );
-        this.sourceMap = JSON.parse(
-            fs.readFileSync(
-                this.absTargetPath + '.map',
-                "utf8"
-            )
-        );
-
-        // cleanup
-        // remove_dir_deep(path.join(this.fileinfo.dir, '__target__'))
+        // we now have a __target__ directory with our .py -> .js, plus all its
+        // dependencies. instead of reading it in here, we create an intermediary
+        // script to bridge the __target__ files into this location.
+        // this is a hack around the difference in the way parcel and transcrypt
+        // work. when parcel calls this Asset class, it sees all imports as relative
+        // to the source .py file directory, not the __target__ directory. that means
+        // all the dependencies transcrypt sends to __target__ are in the wrong directory.
+        // i tried doing multiple calls to transcrypt, custom JSAsset classes, moving the
+        // files around, and sacrificing copies of windows to the coding gods. after more
+        // hours than I want to admit to, i'm doing this intermediary file because it
+        // leaves everything where each project expects. please do fix it a better
+        // way, but be warned...there be dragons here!   [dragon by Donovan Blake]
+        //     .
+        //     .>   )\;`a__
+        //    (  _ _)/ /-." ~~
+        //     `( )_ )/
+        //      <_  <_
+        this.content = `export * from "${this.importPath}";`;
 
         // return the transpiled result
         return this.content;
-    }
-
-    parse(code) {
-        let ast = babelParser.parse(code, {
-            filename: this.absTargetPath + '.js',
-            allowReturnOutsideFunction: true,
-            strictMode: false,
-            sourceType: 'module',
-            plugins: ['exportDefaultFrom', 'exportNamespaceFrom', 'dynamicImport']
-        });
-        return ast;
     }
 
     generate() {
         return [ {
             type: this.type,
             value: this.contents,
-            sourceMap: this.sourceMap
+            sourceMap: this.sourceMap,
         } ];
     }//generate
 
 } //class
 
 module.exports = PythonAsset;
+
+
 
 
 

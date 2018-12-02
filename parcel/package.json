@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "parcel-bundler": "^1.10.3"
+    "parcel-bundler": "^1.10.3",
+    "walk": "^2.3.14"
   },
   "scripts": {
     "test": "NODE_ENV=test node test/index.js"

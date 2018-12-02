@@ -110,7 +110,7 @@ class Program:
                 message = f'\n\t{exception}'
             )
 
-    def provide (self, moduleName, __moduleName__ = None, filter = None, importingModule = None):
+    def provide (self, moduleName, __moduleName__ = None, filter = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
         if moduleName in self.moduleDict:                                               # module already provided?
             return self.moduleDict [moduleName]
@@ -242,7 +242,7 @@ class Module(object):
         #     # Also these imports cannot legally fail, since the digested JavaScript code already has unambiguous imports
         #     # If the JavaScript module was just generated from a Python module, it will already be in the module dictionary
         #     self.program.searchedModulePaths = []
-        #     self.program.provide (importedModuleName, importingModule = self)
+        #     self.program.provide (importedModuleName)
 
         # Remove eventual intermediate files
         utils.tryRemove (self.prettyTargetPath)
@@ -891,7 +891,7 @@ class Generator (ast.NodeVisitor):
 
     def useModule (self, name):
         self.module.program.importStack [-1][1] = self.lineNr                                               # Remember line nr of import statement for the error report
-        return self.module.program.provide (name, filter = self.filterId, importingModule = self.module)    # Must be done first because it can generate a healthy exception
+        return self.module.program.provide (name, filter = self.filterId)    # Must be done first because it can generate a healthy exception
 
     def isCall (self, node, name):
         return type (node) == ast.Call and type (node.func) == ast.Name and node.func.id == name
