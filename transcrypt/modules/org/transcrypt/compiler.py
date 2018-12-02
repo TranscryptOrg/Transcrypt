@@ -112,11 +112,11 @@ class Program:
 
     def provide (self, moduleName, __moduleName__ = None, filter = None, importingModule = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
-        if moduleName in self.moduleDict:                                   # Find out if module is already provided
+        if moduleName in self.moduleDict:                                               # module already provided?
             return self.moduleDict [moduleName]
-        elif importingModule is not None and utils.commandArgs.npm:         # if npm bundler mode --npm, full compile not needed
+        elif importingModule is not None and utils.commandArgs.imports != '.compile':   # not compiling imported modules?
             return ImportedModule(self, moduleName, __moduleName__, filter)
-        else:                                                               # provide by loading or compiling
+        else:                                                                           # regular import, so full module
             # This may fail legally if filteredModuleName ends on a name of something in a module, rather than of the module itself
             return Module (self, moduleName, __moduleName__, filter)
 
@@ -214,22 +214,14 @@ class ImportedModule:
 
     def importPath (self, other):
         '''Returns the relative path to other from this module.'''
-        extension = '.js'
-
-        # special handling on --npm since we allow the bundler to handle imports
-        if utils.commandArgs.npm:
-            if other.sourcePrepath.startswith(self.program.moduleSearchDirs[1]):        # transcrypt module dir is index [1] in search dirs
-                # reference the npm repository since an official transcrypt module
-                return posixpath.join('transcrypt', '__target__', '__lib__', self.targetRelPath + '.js')
-
-            elif not other.isJavascriptOnly:                                            # regular python file import
-                # keeping the .py extension lets bundlers know to call transcrypt again for the import.
-                extension = '.py'
-
-        # calculate the relative path from self to other
         path = posixpath.relpath(other.targetPrepath, self.targetDir)
         if not (path.startswith('./') or path.startswith('../')):
             path = './' + path
+
+        extension = '.js'
+        if not other.isJavascriptOnly and utils.commandArgs.imports == '.bundled':
+            extension = '.py'  # keep .py for imported modules when using a bundler
+
         return path + extension
 
     def debugPrint(self):

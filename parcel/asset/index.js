@@ -19,8 +19,7 @@ class PythonAsset extends Asset {
             '--build',
             '--nomin',
             '--map',
-//            '--noimports',
-            '--npm',
+            '--imports .bundled',
             this.name
         ];
         try {
