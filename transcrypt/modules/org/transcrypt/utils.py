@@ -141,7 +141,7 @@ def create (path, binary = False):
         except:
             time.sleep (0.5)
     else:
-        raise Error (f'Failed to create {path}')
+        raise Error (message=f'Failed to create {path}')
 
 
 def tryRemove (filePath):

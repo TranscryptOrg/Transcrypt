@@ -172,7 +172,6 @@ class ImportedModule:
                 self.targetPrepath = f'{self.program.targetDir}/{self.targetRelPath}'
             else:                                                                               # external libraries (e.g. transcrypt modules)
                 self.targetPrepath = f'{self.program.targetDir}/__lib__/{self.targetRelPath}'
-            print('>>>>>> targetPrePath', self.targetPrePath)
             self.targetName = f'{self.targetPrename}.js'
             self.targetPath = f'{self.targetPrepath}.js'
             self.prettyTargetName = f'{self.targetPrename}.pretty.js'
@@ -208,6 +207,22 @@ class ImportedModule:
                 message = '\n\tImport error, can\'t find any of:\n\t\t{}\n'.format ('\n\t\t'. join (self.program.searchedModulePaths))
             )
 
+        print('>>>>>>>>>>>>>>>>>>>>>>>')
+        print(self.debugPrint())
+
+    def debugPrint(self):
+        # for debugging of paths
+        print(f'{self.name} [{self.__name__}]:')
+        for group, names in [
+            [ 'Fields', ( 'isJavascriptOnly', ) ],
+            [ 'Source', ( 'sourceDir', 'sourcePrename', 'sourcePrepath', 'pythonSourcePath', 'javascriptSourcePath', 'sourcePath') ],
+            [ 'Target', ( 'targetPreDir', 'targetPrename', 'targetRelPath', 'targetPrepath', 'targetName', 'targetPath', 'prettyTargetName', 'prettyTargetPath') ],
+            [ 'Debugging', ( 'treePath', 'mapPath', 'prettyMapPath', 'shrinkMapName', 'shrinkMapPath', 'mapSourcePath', 'mapRef') ],
+        ]:
+            print(f'\t{group}:')
+            for name in names:
+                print(f"\t\t{name:<21}{getattr(self, name, 'AttributeError!')}")
+
     def importPath (self, other):
         '''Returns the relative path to other from this module.'''
         extension = '.js'
@@ -223,13 +238,9 @@ class ImportedModule:
                 extension = '.py'
 
         # calculate the relative path from self to other
-        path = posixpath.relpath(other.targetPrepath, self.targetPreDir)
+        path = posixpath.relpath(other.targetPrepath, posixpath.dirname(self.targetPrepath))
         if not (path.startswith('./') or path.startswith('../')):
             path = './' + path
-        print('>>>>>>>>>>>>>>>>>>>>>>>')
-        print(other.targetPrepath)
-        print(self.targetPreDir)
-        print(path)
         return path + extension
 
 
