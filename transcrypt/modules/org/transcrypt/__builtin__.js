@@ -1504,7 +1504,7 @@ __pragma__ ('ifdef', '__sform__')
             if (key == '') {
                 key = autoIndex++;
             }
-            if (key == +key && args [key] != undefined) {  // So key is numerical
+            if (key == +key && args [key] !== undefined) {  // So key is numerical
                 value = args [key];
             }
             else {              // Key is a string
@@ -1522,13 +1522,13 @@ __pragma__ ('ifdef', '__sform__')
                     }
                 }
                     
-                if ((key == +key) && attr && args [key] != undefined) {
+                if ((key == +key) && attr && args [key] !== undefined) {
                     value = args [key][attr];
                 }
                 else {
                     for (var index = 0; index < args.length; index++) {
                         // Find first 'dict' that has that key and the right field
-                        if (typeof args [index] == 'object' && args [index][key] != undefined) {
+                        if (typeof args [index] == 'object' && args [index][key] !== undefined) {
                             // Return that field field
                             if (attr) {
                                 value = args [index][key][attr];
@@ -1541,7 +1541,7 @@ __pragma__ ('ifdef', '__sform__')
                     }
                 }
             }
-            if (value == undefined) {
+            if (value === undefined) {
                 return match;
             }
             if (conversion == 'r') {
@@ -1561,12 +1561,12 @@ __pragma__ ('else')
                 key = autoIndex++;
             }
             if (key == +key) {  // So key is numerical
-                return args [key] == undefined ? match : str (args [key]);
+                return args [key] === undefined ? match : str (args [key]);
             }
             else {              // Key is a string
                 for (var index = 0; index < args.length; index++) {
                     // Find first 'dict' that has that key and the right field
-                    if (typeof args [index] == 'object' && args [index][key] != undefined) {
+                    if (typeof args [index] == 'object' && args [index][key] !== undefined) {
                         return str (args [index][key]); // Return that field field
                     }
                 }

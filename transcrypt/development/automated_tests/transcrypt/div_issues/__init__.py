@@ -528,6 +528,28 @@ def run (autoTester):
 
     #__pragma__ ('noopov')
     
+    autoTester.check ('Issue 494')  # {None} in formatted string gets converted to {}
+    
+    # Worked, should still work
+    a = 1
+    autoTester.check (f'a={a}')
+
+    # Failed, should now work
+    a = None
+    autoTester.check (f'a={a}')
+    
+    autoTester.check ('Issue 515')  # Method format() is failing to replace the replacement fields if the value is None
+    
+    autoTester.check('a: {}; b: {}'.format(None, 1))
+    autoTester.check('a: {}; b: {}'.format(1, None))
+    autoTester.check('a: {0}; b: {1}'.format(1, None))
+    autoTester.check('a: {0}; b: {1}'.format(1, []))
+    autoTester.check('a: {}; b: {}'.format(1, []))
+    autoTester.check('a: {0}; b: {1}'.format(1, {}))
+    autoTester.check('a: {}; b: {}'.format(1, {}))
+    autoTester.check('a: {0}; b: {1}'.format(1, 0))
+    autoTester.check('a: {}; b: {}'.format(1, 0))
+    
     autoTester.check ('Issue 559')  # Reexport everything imported, e.g. by the __init__.py of a module
     run559 (autoTester)
     

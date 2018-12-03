@@ -121,6 +121,10 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Correct formatting of None fixed, autotests added (issue 494, issue 515)
+- Invalid link removed from doc (issue 595)
+- Fix for ameclass with 'async' verified (issue 543)
+- Fix for js_is and py_is aliases verified (issue 562)
 - Selenium tests tab switching and alert handling fixed
 - Compilation error reports fixed (pr584, issue 586)
 - Module paths can now contain dots (issue 578 revisited)

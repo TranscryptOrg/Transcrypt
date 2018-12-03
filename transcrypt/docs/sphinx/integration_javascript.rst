@@ -5,8 +5,7 @@ Practical example: a simple, responsive website using no HTML or CSS at all
 ---------------------------------------------------------------------------
 
 To many programmers, using 'static' HTML and CSS feels like being locked up in a closet.
-As an alternative, responsiveness can simply be programmed using Transcrypt, as can be seen on `this site written in Transcrypt <http://www.wiskundeles.com>`_.
-Note that it features sourcemaps.
+As an alternative, responsiveness can simply be programmed using Transcrypt, as can be seen on `the website of Transcrypt itself <http://www.transcrypt.org>`_.
 The site adapts to diverse screen formats, device types and landscape vs. portrait mode.
 
 SVG example: Turtle graphics
