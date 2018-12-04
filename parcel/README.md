@@ -220,7 +220,7 @@ class Counter(object):
 ```
 
 `remove.js`
-```py
+```js
 export function removeButtonClicked() {
     let ol = document.querySelector("#app > ol")
     ol.removeChild(ol.lastChild)

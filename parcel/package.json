@@ -1,5 +1,5 @@
 {
-  "version": "1.0.19",
+  "version": "1.0.20",
   "name": "parcel-plugin-python",
   "description": "Code in Python 3. Bundle to Javascript.",
   "license": "Apache-2.0",
