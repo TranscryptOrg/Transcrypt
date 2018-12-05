@@ -2907,11 +2907,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.emit (';\n}})')
 
     def visit_List (self, node):
-        self.emit ('list ([')
+        self.emit ('[')
         for index, elt in enumerate (node.elts):
             self.emitComma (index)
             self.visit (elt)
-        self.emit ('])')
+        self.emit (']')
 
     def visit_ListComp (self, node, isSet = False, isDict = False, isGenExp = False):
         elts = []
