@@ -61,11 +61,7 @@ class Program:
         self.moduleSearchDirs = moduleSearchDirs
         self.symbols = symbols
         self.envir = envir
-
-        if not utils.commandArgs.esv:
-            self.javascriptVersion = 6
-        else:
-            self.javascriptVersion = int (utils.commandArgs.esv)
+        self.javascriptVersion = int (utils.commandArgs.esv) if utils.commandArgs.esv else 6
 
         self.moduleDict = {}    # Administration of all modules that play a role in this program
         self.importStack = []   # Pending imports, enables showing load sequence in case a module cannot be loaded
@@ -2357,8 +2353,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('dict ({{')                              # Since we didn't return, we want identifier keys to be treated as string literals
         for index, (key, value) in enumerate (zip (node.keys, node.values)):
             self.emitComma (index)
-            self.idFiltering = False                        # The key may be a string or an identifier, the latter normally would be filtered, which we don't want
-            self.visit (key)                                # In a JavaScript object literal, an identifier isn't evaluated but literally taken to be a key.
+            self.idFiltering = False                            # The key may be a string or an identifier, the latter normally would be filtered, which we don't want
+            self.visit (key)                                    # In a JavaScript object literal, an identifier isn't evaluated but literally taken to be a key.
             self.idFiltering = True
             self.emit (': ')
             self.visit (value)
@@ -2436,10 +2432,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit (') {{\n')
             self.indent ()
 
-        elif (
-            self.module.program.javascriptVersion >= 6 and  # Supports for ... of
-            not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
-        ):
+        elif not self.allowOperatorOverloading:     # No overloaded __len__ c.q. __getitem__
             self.emit ('for (var ')
             self.stripTuples = True
             self.visit (node.target)
@@ -2456,45 +2449,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             self.emit (') {{\n')
             self.indent ()
-
-            ''' (1)
-            # In the code below, destructuring assignment is done explicitly rather than left to JavaScript
-            # It is left here as a comment until it becomes more clear that JavaScript destructuring suffices in all cases
-
-            # Produce universal iterator (something with a Python '__next__' and a JavaScript 'next') from iterable by calling py_iter from __builtin__
-            self.emit ('var {} = {} (', self.nextTemp ('iterator'), self.filterId ('iter'))
-            self.visit (node.iter)
-            self.emit (');\n')
-
-            self.emit ('while (true) {{\n')
-            self.indent ()
-
-            # Create and visit Assign node on the fly to benefit from tupple assignment
-            self.emit ('try {{')
-            self.indent ()
-            self.visit (ast.Assign (
-                targets = [node.target],        # As in Python: for <target> in ...
-                value = ast.Call (              # Result of calling 'next' on the just produced universal iterator
-                    func = ast.Name (
-                        id = 'next',
-                        ctx = ast.Load
-                    ),
-                    args = [ast.Name (
-                        id = self.getTemp ('iterator'),
-                        ctx = ast.Load
-                    )],
-                    keywords = []
-                )
-            ))
-            self.emit (';')
-            self.dedent ()
-            self.emit ('}} ')
-            self.emit ('catch (exception) {{')  # Assume 'StopIteration' thrown, iterator exhausted
-            self.indent ()
-            self.emit ('break;')
-            self.dedent ()
-            self.emit ('}}\n')
-            '''
 
         else:
             self.emit ('var {} = ', self.nextTemp ('iterable'))
@@ -2531,13 +2485,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         self.emit ('}}\n')
 
         if not (self.allowJavaScriptIter or optimize):
-            if (
-                self.module.program.javascriptVersion >= 6 and  # Supports for ... of
-                not self.allowOperatorOverloading               # No overloaded __len__ c.q. __getitem__
-            ):
-                pass
-                # self.prevTemp ('iterator')    # Leave in for now, see outcommented fragment (1) above
-            else:
+            if self.allowOperatorOverloading:  # Possibly overloaded __len__ c.q. __getitem__
                 self.prevTemp ('index')
                 self.prevTemp ('iterable')
 
