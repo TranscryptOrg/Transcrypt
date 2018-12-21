@@ -2,8 +2,10 @@
 *.nogit
 *.pyc
 *.npp
+*.log
 *.egg-info/
 *.min.html/
+.DS_Store
 
 # ======= Directories anywhere
 __target__/
@@ -11,6 +13,7 @@ __javascript__/
 __pycache__/
 .mypy_cache/
 dist/
+node_modules/
 
 # ======== Directories at specific locations
 transcrypt/docs/sphinx/_build/
