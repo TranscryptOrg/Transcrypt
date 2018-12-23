@@ -71,17 +71,17 @@ class Program:
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         self.targetDir = f'{self.sourceDir}/__target__'
-        self.runInfoPath = f'{self.targetDir}/{self.mainModuleName}.transcrypt.json'
+        self.memoPath = f'{self.targetDir}/{self.mainModuleName}.memo.json'
 
         # Load the last run info
         try:
-            with open (self.runInfoPath, 'r') as runInfoFile:
-                runInfo = json.load (runInfoFile)
+            with open (self.memoPath, 'r') as memoFile:
+                memo = json.load (memoFile)
         except:
-            runInfo = {}
+            memo = {}
 
         # Reset everything in case of a build or a command args change
-        self.optionsChanged = utils.commandArgs.picklableOptions != runInfo.get('options')
+        self.optionsChanged = utils.commandArgs.memoOptions != memo.get('options')
         if utils.commandArgs.build or self.optionsChanged:
             shutil.rmtree(self.targetDir, ignore_errors = True)
 
@@ -101,12 +101,12 @@ class Program:
             )
 
         # Finally, save the run info
-        runInfo = {
-            'options': utils.commandArgs.picklableOptions,
-            'modules': [ { 'source': mod.sourcePath, 'target': mod.targetPath } for mod in self.moduleDict.values() ],
+        memo = {
+            'options': utils.commandArgs.memoOptions,
+            'modules': [{'source': module.sourcePath, 'target': module.targetPath} for module in self.moduleDict.values ()],
         }
-        with utils.create (self.runInfoPath) as runInfoFile:
-            json.dump (runInfo, runInfoFile)
+        with utils.create (self.memoPath) as memoFile:
+            json.dump (memo, memoFile)
 
     def provide (self, moduleName, __moduleName__ = None, filter = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import

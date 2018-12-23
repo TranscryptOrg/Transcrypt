@@ -76,8 +76,8 @@ class CommandArgs:
         self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
         
-        self.picklableOptions = self.argParser.parse_args () .__dict__
-        self.__dict__.update (self.picklableOptions)
+        self.memoOptions = self.argParser.parse_args () .__dict__
+        self.__dict__.update (self.memoOptions)
         
         # Signal invalid switches
         
