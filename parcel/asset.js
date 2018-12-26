@@ -28,7 +28,6 @@ const DEFAULT_PACKAGE_CONFIG = {
 
 const LOG_PREFIX = '[parcel-plugin-python]'
 
-
 /** Plugin for Parcel Bundler that uses transcript for .py -> .js */
 class PythonAsset extends Asset {
 
@@ -43,8 +42,8 @@ class PythonAsset extends Asset {
         } else {
             this.pyModule = path.join(this.relativeDir, this.fileinfo.name).split(path.sep).join('.');
         }
-        this.importPath = './' + path.join('__target__', this.pyModule) + '.js';
-        this.runInfoPath = path.join(this.options.rootDir, '__target__', this.relativeDir, this.fileinfo.name) + '.transcrypt.json';
+        this.importPath = './' + '__target__' + '/' + this.pyModule + '.js';
+        this.runInfoPath = this.options.rootDir + '/' + '__target__' + '/' + this.relativeDir + '/' + this.fileinfo.name + '.project';
     }
 
     getTranscryptRunInfo() {
