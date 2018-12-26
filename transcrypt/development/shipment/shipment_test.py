@@ -209,7 +209,6 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
 # ======== Perform individual tests
 
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
-    '''
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')
     test ('development/automated_tests/time/autotest', True, switches, needsAttention = True)
@@ -239,14 +238,12 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/snowflake', False, switches, pause = 2)
     test ('demos/turtle_demos/mondrian', False, switches, pause = 2)
     test ('demos/turtle_demos/mandala', False, switches, pause = 2)
-    '''
     
-    test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
-    test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches, build = False)
+    # test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
+    test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
     
-    '''
     test ('tutorials/baseline/bl_010_hello_world/hello_world', False, switches)
     test ('tutorials/baseline/bl_020_assign/assign', False, switches)
     test ('tutorials/baseline/bl_030_if_else_prompt/if_else_prompt', False, switches, needsAttention = True)
@@ -256,7 +253,6 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches, needsAttention = True)
 
     test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
-    '''
     
     if relSourcePrepathsOfErrors:
         print ('\n\n!!!!!!!!!!!!!!!!!!!!\n')
@@ -278,7 +274,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
             os.system ('touch *.rst')
             os.system ('make html')
             os.chdir (origDir)
-
+            
         # ---- Terminate
                 
         print ('\nSHIPMENT TEST SUCCEEDED\n')

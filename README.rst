@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Integration with Parcel bundler incl. auto-reload (issue 596)
 - Correct formatting of None fixed, autotests added (issue 494, issue 515)
 - Invalid link removed from doc (issue 595)
 - Fix for ameclass with 'async' verified (issue 543)

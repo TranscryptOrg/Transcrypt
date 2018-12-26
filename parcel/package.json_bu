@@ -19,10 +19,8 @@
   "scripts": {
     "test": "node test.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "parcel-bundler": "^1.11.0",
-    "parcel-plugin-python": "^1.0.18"
+    "parcel-bundler": "^1.11.0"
   }
 }

@@ -71,19 +71,19 @@ class Program:
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         self.targetDir = f'{self.sourceDir}/__target__'
-        self.memoPath = f'{self.targetDir}/{self.mainModuleName}.memo.json'
+        self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
-        # Load the last run info
+        # Load the most recent project metadata
         try:
-            with open (self.memoPath, 'r') as memoFile:
-                memo = json.load (memoFile)
+            with open (self.projectPath, 'r') as projectFile:
+                project = json.load (projectFile)
         except:
-            memo = {}
+            project = {}
 
         # Reset everything in case of a build or a command args change
-        self.optionsChanged = utils.commandArgs.memoOptions != memo.get('options')
+        self.optionsChanged = utils.commandArgs.projectOptions != project.get ('options')
         if utils.commandArgs.build or self.optionsChanged:
-            shutil.rmtree(self.targetDir, ignore_errors = True)
+            shutil.rmtree (self.targetDir, ignore_errors = True)
 
         try:
             # Provide runtime module since it's always needed but never imported explicitly
@@ -101,12 +101,12 @@ class Program:
             )
 
         # Finally, save the run info
-        memo = {
-            'options': utils.commandArgs.memoOptions,
+        project = {
+            'options': utils.commandArgs.projectOptions,
             'modules': [{'source': module.sourcePath, 'target': module.targetPath} for module in self.moduleDict.values ()],
         }
-        with utils.create (self.memoPath) as memoFile:
-            json.dump (memo, memoFile)
+        with utils.create (self.projectPath) as projectFile:
+            json.dump (project, projectFile)
 
     def provide (self, moduleName, __moduleName__ = None, filter = None):
         # moduleName may contain dots if it's imported, but it'll have the same name in every import
