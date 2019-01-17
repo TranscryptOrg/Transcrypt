@@ -34,6 +34,8 @@ import json
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
 inIf = False
+wcom = True
+nowcom = False
 
 dataClassDefaultArgTuple = (['init', True], ['repr', True], ['eq', True], ['order', False], ['unsafe_hash', False], ['frozen', False])
 '''
@@ -366,36 +368,86 @@ class Module:
 
     def parse (self):
         def pragmasFromComments (sourceCode):
-            # This function changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
+            # This function turns comment-like pragma's into regular ones, both for multi-line and single-line pragma's
+            # It changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
+            # Single line pragma's are always comment-like and will be turned into multi-line function-like pragma's
 
+            # Tokenize the source code, to be able to recognize comments easily
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
+
+            # Store all line indices of comment-like pragma's, multi-line and single-line in separate lists
             pragmaCommentLineIndices = []
             shortPragmaCommentLineIndices = []
             for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in tokens:
                 if tokenType == tokenize.COMMENT:
                     strippedComment = tokenString [1 : ] .lstrip ()
                     if  strippedComment.startswith ('__pragma__'):
+                    
+                       # Remember line index of multi-line pragma, like: # __pragma__ (...
                         pragmaCommentLineIndices.append (startRowColumn [0] - 1)
                     elif strippedComment.replace (' ', '') .replace ('\t', '') .startswith ('__:'):
+                    
+                        # Remember line index of single-line pragma, like: <some code> # __: ...
                         shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
 
 
+            # Convert original, non-tokenized sourcecode to a list of lines
             sourceLines = sourceCode.split ('\n')
+            
+            allowWeakComments = utils.commandArgs.wcom
+            weakSwitchSeen = False
+            
+            # Use line indices of multi-line pragma's to transform these into function-like pragma singles (which often turn out te be part of a matching pair)
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
-                head, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
-                sourceLines [pragmaCommentLineIndex] = head + tail.lstrip ()
+                indentation, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
+                pragma, separator, comment = tail.partition ('#')
+                pragma = pragma.replace (' ', '') .replace ('\t', '')
+                
+                if "('wcom')" in pragma or '("wcom")' in pragma:
+                    allowWeakComments = True
+                    sourceLines [pragmaCommentLineIndex] = wcom
+                elif "('nowcom')" in pragma or '("nowcom")' in pragma:
+                    allowWeakComments = False
+                    sourceLines [pragmaCommentLineIndex] = nowcom
+                else:
+                    sourceLines [pragmaCommentLineIndex] = indentation + tail.lstrip ()
 
+
+            # Use line indices of single-line pragma's to transform these into function-like pragma pairs
             for shortPragmaCommentLineIndex in shortPragmaCommentLineIndices:
                 head, tail = sourceLines [shortPragmaCommentLineIndex] .rsplit ('#', 1)
                 strippedHead = head.lstrip ()
                 indent = head [ : len (head) - len (strippedHead)]
                 pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
-                if pragmaName.startswith ('no'):
-                    sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])
+                
+                if pragmaName == 'wcom':
+                    sourceLines [pragmaCommentLineIndex] = wcom             
+                elif pragmaName == 'nowcom':
+                    sourceLines [pragmaCommentLineIndex] = nowcom                
+                elif pragmaName.startswith ('no'):
+                    sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])    # Correct!
                 else:
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
-
-            return '\n'.join (sourceLines)
+                    
+            # Switch uncommenting on c.q. off and turn uncommentable lines into normal code lines for Transcrypt (as opposed to CPython)
+            uncommentedSourceLines = []
+            for sourceLine in sourceLines:
+                if sourceLine == wcom:
+                    allowWeakComments = True
+                elif sourceLine == nowcom:
+                    allowWeakComments = False
+                elif allowWeakComments:
+                    if not sourceLine [:4] in {"''':", ":'''", '""":', ':"""'}:
+                        uncommentedSourceLines.append (
+                                (sourceLine [3:] if sourceLine [2] == ' ' else sourceLine [2:])
+                            if sourceLine.startswith ('#:') else
+                                sourceLine
+                        )
+                else:
+                    uncommentedSourceLines.append (sourceLine)
+                    
+            # Return joined lines, to be used for parsing
+            return '\n'.join (uncommentedSourceLines)
 
         try:
             utils.log (False, 'Parsing module: {}\n', self.sourcePath)

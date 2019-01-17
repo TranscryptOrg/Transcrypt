@@ -69,6 +69,7 @@ class CommandArgs:
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
         self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .auto to autogenerate dynamically loadable native JavaScript modules, one per Python module. Use -u .run to generate the loader and the staticcally loadable runtime unit. Use -u .com to generate a statically loadable component unit.")
         self.argParser.add_argument ('-v', '--verbose', help = "show all messages", action = 'store_true')
+        self.argParser.add_argument ('-w', '--wcom', help = "weak comments, seen as comments by CPython but as normal statements by Transcrypt", action = 'store_true')
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xr', '--xreex', help = "re-export all imported names", action = 'store_true')
         self.argParser.add_argument ('-xg', '--xglobs', help = "allow use of the 'globals' function", action = 'store_true')
