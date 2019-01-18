@@ -31,7 +31,7 @@ def run (autoTester):
         autoTester.check (i)
     ?'''
 
-    # --- Executed by  none ---
+    # --- Executed by none ---
     #?autoTester.check (200)
 
     __pragma__ ('ecom') # ===================================================================

@@ -173,15 +173,15 @@ Skipping Transcrypt code fragments when running with CPython: __pragma__ ('ecom'
 -------------------------------------------------------------------------------------------------------------
 Executable comments are specially formatted comments, that are turned into executable statements by Transcrypt but, by nature, skipped by CPython.
 There are two types of executable comments: single-line and multi-line. Single-line executable comments start with #? at the current indentation level.
-Multi-line executable comments start with '''? or """? and end with ?''' or ?""", again at the current indentation level. There's also a *-ecom* command line switch, that can be annihilated locally by __pragma__ ('noecom') or it's single line equivalent.
+Multi-line executable comments start with *'''?* or *"""?* and end with *?'''* or *?"""*, again at the current indentation level. There's also a *-ecom* command line switch, that can be annihilated locally by *__pragma__ ('noecom')* or its single line equivalent.
 
-If you want the opposite, skipping code in Transcrypt but executing it with CPython, use the the  :ref:`*__pragma__ ('skip') ... __pragma__ ('noskip')* <skipping_fragments>` pair or its single-line variety.
+If you want the opposite, skipping code in Transcrypt but executing it with CPython, use the the  :ref:`__pragma__ ('skip') ... __pragma__ ('noskip') <skipping_fragments>` pair or its single-line variety.
 
 An example of skipping code on either platform is the testlet below:
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/executable_comments/__init__.py
 	:tab-width: 4
-	:caption: The of executable comments and, for the opposite effect, __pragma__ ('skip') ... __pragma__ ('noskip')
+	:caption: The use of executable comments and, for the opposite effect, __pragma__ ('skip') and __pragma__ ('noskip')
 
 Surpassing the speed of native JavaScript: __pragma__ ('fcall') and __pragma ('nofcall')
 ----------------------------------------------------------------------------------------
