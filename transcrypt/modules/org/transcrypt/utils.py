@@ -50,7 +50,7 @@ class CommandArgs:
         self.argParser.add_argument ('-ds', '--dstat', help = "debug: validate static typing using annotations", action = 'store_true')
         self.argParser.add_argument ('-dt', '--dtree', help = "debug: dump syntax tree", action = 'store_true')
         self.argParser.add_argument ('-e', '--esv', nargs='?', help = "ecma script version of generated code, default = 6. The symbol __esv<versionnr>__ is added to the global symbol list, e.g. __esv7__.")
-        self.argParser.add_argument ('-ec', '--ecom', help = "executable comments, seen as comments by CPython but as normal statements by Transcrypt", action = 'store_true')
+        self.argParser.add_argument ('-ec', '--ecom', help = "enable executable comments, seen as comments by CPython but as executable statements by Transcrypt", action = 'store_true')
         self.argParser.add_argument ('-f', '--fcall', help = "enable fastcall mechanism by default. You can also use __pragma__ ('fcal') and __pragma__ (\'nofcall\')", action = 'store_true')
         self.argParser.add_argument ('-g', '--gen', help = "enable generators and iterators. Disadvised, since it will result in a function call for each loop iteration. Preferably use __pragma__ ('gen') and __pragma__ ('nogen')", action = 'store_true')
         self.argParser.add_argument ('-i', '--iconv', help = "enable automatic conversion to iterable by default. Disadvised, since it will result in a type check for each for-loop. Preferably use __pragma__ ('iconv') and __pragma__ (\'noiconv\') to enable automatic conversion locally", action = 'store_true')
