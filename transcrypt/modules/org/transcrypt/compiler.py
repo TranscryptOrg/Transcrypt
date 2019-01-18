@@ -34,8 +34,8 @@ import json
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
 inIf = False
-wcom = True
-nowcom = False
+ecom = True
+noecom = False
 
 dataClassDefaultArgTuple = (['init', True], ['repr', True], ['eq', True], ['order', False], ['unsafe_hash', False], ['frozen', False])
 '''
@@ -371,6 +371,7 @@ class Module:
             # This function turns comment-like pragma's into regular ones, both for multi-line and single-line pragma's
             # It changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
             # Single line pragma's are always comment-like and will be turned into multi-line function-like pragma's
+            # Also in this function executable comments are converted to normal code 
 
             # Tokenize the source code, to be able to recognize comments easily
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
@@ -378,7 +379,10 @@ class Module:
             # Store all line indices of comment-like pragma's, multi-line and single-line in separate lists
             pragmaCommentLineIndices = []
             shortPragmaCommentLineIndices = []
-            for tokenType, tokenString, startRowColumn, endRowColumn, logicalLine in tokens:
+            ecomPragmaLineIndices = []
+            noecomPragmaLineIndices = []
+            pragmaIndex = -1000
+            for tokenIndex, (tokenType, tokenString, startRowColumn, endRowColumn, logicalLine) in enumerate (tokens):
                 if tokenType == tokenize.COMMENT:
                     strippedComment = tokenString [1 : ] .lstrip ()
                     if  strippedComment.startswith ('__pragma__'):
@@ -389,60 +393,69 @@ class Module:
                     
                         # Remember line index of single-line pragma, like: <some code> # __: ...
                         shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
-
+                if tokenType == tokenize.NAME and tokenString == '__pragma__':
+                    pragmaIndex = tokenIndex
+                    
+                if tokenIndex - pragmaIndex == 2:
+                    pragmaKind = tokenString [1:-1]
+                    if pragmaKind == 'ecom':
+                        ecomPragmaLineIndices.append (startRowColumn [0] - 1)
+                    elif pragmaKind == 'noecom':
+                        noecomPragmaLineIndices.append (startRowColumn [0] - 1)
 
             # Convert original, non-tokenized sourcecode to a list of lines
             sourceLines = sourceCode.split ('\n')
             
-            allowWeakComments = utils.commandArgs.wcom
-            weakSwitchSeen = False
-            
-            # Use line indices of multi-line pragma's to transform these into function-like pragma singles (which often turn out te be part of a matching pair)
+            # Use line indices of multi-line function-like ecom / noecom pragma's to transform these lines into executable comment switches
+            for ecomPragmaLineIndex in ecomPragmaLineIndices:
+                sourceLines [ecomPragmaLineIndex] = ecom
+            for noecomPragmaLineIndex in noecomPragmaLineIndices:
+                sourceLines [noecomPragmaLineIndex] = noecom
+                        
+            # Use line indices of multi-line comment-like pragma singles to transform these into function-like pragma singles (which often turn out te be part of a matching pair)
+            allowExecutableComments = utils.commandArgs.ecom
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 indentation, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
                 pragma, separator, comment = tail.partition ('#')
                 pragma = pragma.replace (' ', '') .replace ('\t', '')
                 
-                if "('wcom')" in pragma or '("wcom")' in pragma:
-                    allowWeakComments = True
-                    sourceLines [pragmaCommentLineIndex] = wcom
-                elif "('nowcom')" in pragma or '("nowcom")' in pragma:
-                    allowWeakComments = False
-                    sourceLines [pragmaCommentLineIndex] = nowcom
+                # Turn appropriate lines into executable comment switches
+                if "('ecom')" in pragma or '("ecom")' in pragma:
+                    allowExecutableComments = True
+                    sourceLines [pragmaCommentLineIndex] = ecom
+                elif "('noecom')" in pragma or '("noecom")' in pragma:
+                    allowExecutableComments = False
+                    sourceLines [pragmaCommentLineIndex] = noecom
                 else:
                     sourceLines [pragmaCommentLineIndex] = indentation + tail.lstrip ()
 
-
-            # Use line indices of single-line pragma's to transform these into function-like pragma pairs
+            # Use line indices of single-line comment-like pragma's to transform these into function-like pragma pairs
             for shortPragmaCommentLineIndex in shortPragmaCommentLineIndices:
                 head, tail = sourceLines [shortPragmaCommentLineIndex] .rsplit ('#', 1)
                 strippedHead = head.lstrip ()
                 indent = head [ : len (head) - len (strippedHead)]
                 pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
                 
-                if pragmaName == 'wcom':
-                    sourceLines [pragmaCommentLineIndex] = wcom             
-                elif pragmaName == 'nowcom':
-                    sourceLines [pragmaCommentLineIndex] = nowcom                
+                # Turn appropriate lines into executable comment switches
+                if pragmaName == 'ecom':
+                    sourceLines [pragmaCommentLineIndex] = ecom             
+                elif pragmaName == 'noecom':
+                    sourceLines [pragmaCommentLineIndex] = noecom                
                 elif pragmaName.startswith ('no'):
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])    # Correct!
                 else:
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
                     
-            # Switch uncommenting on c.q. off and turn uncommentable lines into normal code lines for Transcrypt (as opposed to CPython)
+            # Switch executable comments on c.q. off and turn executable comments into normal code lines for Transcrypt (as opposed to CPython)
             uncommentedSourceLines = []
             for sourceLine in sourceLines:
-                if sourceLine == wcom:
-                    allowWeakComments = True
-                elif sourceLine == nowcom:
-                    allowWeakComments = False
-                elif allowWeakComments:
-                    if not sourceLine [:4] in {"''':", ":'''", '""":', ':"""'}:
-                        uncommentedSourceLines.append (
-                                (sourceLine [3:] if sourceLine [2] == ' ' else sourceLine [2:])
-                            if sourceLine.startswith ('#:') else
-                                sourceLine
-                        )
+                if sourceLine == ecom:
+                    allowExecutableComments = True
+                elif sourceLine == noecom:
+                    allowExecutableComments = False
+                elif allowExecutableComments:
+                    if not sourceLine [:4] in {"'''?", "?'''", '"""?', '?"""'}:
+                        uncommentedSourceLines.append (sourceLine [2:] if sourceLine.startswith ('#?') else sourceLine)
                 else:
                     uncommentedSourceLines.append (sourceLine)
                     
@@ -454,7 +467,7 @@ class Module:
 
             with tokenize.open (self.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
-
+                
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
 
             for node in ast.walk (self.parseTree):
