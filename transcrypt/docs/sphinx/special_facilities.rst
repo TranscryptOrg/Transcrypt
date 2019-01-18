@@ -90,7 +90,7 @@ is acceptable both to Transcrypt and CPython. In CPython it does nothing.
 
 N.B. Both varieties above have to be properly indented, matching indentation of their context.
 
-The single line activation variety
+The single-line activation variety
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 <line of code> # __:<single parameter>
@@ -106,7 +106,7 @@ will be compiled identically to:
 
 *__pragma__ ('opov'); vector2 = vector0 + vector1; __pragma__ ('noopov')*
 
-The single line deactivation variety
+The single-line deactivation variety
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *scalar2 = scalar0 + scalar1 # __:noopov*
@@ -118,7 +118,7 @@ will be compiled identically to:
 .. _pragma_alias:
 
 Identifier aliasing: __pragma__ ('alias', ...) and __pragma__ ('noalias', ...)
---------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Calling *__pragma__ ('alias', <Python id part>, <JavaScript id part>)* at the start of a module will replace identifiers or parts thereof like in the following examples:
 
 Example 1:
@@ -169,6 +169,20 @@ Generating __doc__ attributes from docstrings: __pragma__ ('docat') and __pragma
 ----------------------------------------------------------------------------------------------
 Even though docstrings may be present in your code, by default *__doc__* attributes are not generated, to keep the generated JavaScript code lean. You can switch on and off generation of *__doc__* attributes for modules, classes, methods and functions with *__pragma__ ('docat')* and *__pragma__ ('nodocat')* respectively. There's also a *-d* / *--docat* command line switch, which can be overruled per module by *__pragma__ ('nodocat')*. Advice: Though these pragma's are flexible, its advisable to use them only at the spot indicated in the :ref:`docstrings testlet <autotest_docstrings>`, to retain CPython compatibility. Note that *__pragma__ ('docat')* follows rather than precedes the module docstring, since CPython dictates the module docstring to be the first statement in a module.
 
+Skipping Transcrypt code fragments when running with CPython: __pragma__ ('ecom') and __pragma__ ('noecom')
+-------------------------------------------------------------------------------------------------------------
+Executable comments are specially formatted comments, that are turned into executable statements by Transcrypt but, by nature, skipped by CPython.
+There are two types of executable comments: single-line and multi-line. Single-line executable comments start with #? at the current indentation level.
+Multi-line executable comments start with '''? or """? and end with ?''' or ?""", again at the current indentation level. There's also a *-ecom* command line switch, that can be annihilated locally by __pragma__ ('noecom') or it's single line equivalent.
+
+If you want the opposite, skipping code in Transcrypt but executing it with CPython, use the the  :ref:`*__pragma__ ('skip') ... __pragma__ ('noskip')* <skipping_fragments>` pair or its single-line variety.
+
+An example of skipping code on either platform is the testlet below:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/executable_comments/__init__.py
+	:tab-width: 4
+	:caption: The of executable comments and, for the opposite effect, __pragma__ ('skip') ... __pragma__ ('noskip')
+
 Surpassing the speed of native JavaScript: __pragma__ ('fcall') and __pragma ('nofcall')
 ----------------------------------------------------------------------------------------
 Fast calls or fcalls are method calls where the method isn't an attribute of an object's prototype, but of the object itself, even if this method is inherited over multiple levels. This means that only for the first call the prototype chain is searched and the method is bound to the object. All subsequent calls invoke the bound method directly on the object. You can use the -f command line switch to generate fcall's pervasively, making your objects slightly larger since they will contain references to their methods. If you don't want that, just place the definition of the method(s) or class(es) you wish to optimize between   *__pragma__ ('fcall')* and *__pragma__ ('nofcall')*. You can also do the opposite, using the -f switch and exempting some method(s) or class(es) by embedding them between *__pragma__ ('nofcall')* and *__pragma__ ('fcall')*.
@@ -184,7 +198,7 @@ These pragmas enable respectively disable use of Pythons *send* syntax for gener
 	:start-after: BEGIN 1st example with 'send'
 	:end-before: END 1st example with 'send'
 	:tab-width: 4
-	:caption: Use of __pragma ('gsend') to enable Pythons *send* syntax fo generators 
+	:caption: Use of __pragma__ ('gsend') to enable Pythons *send* syntax fo generators 
 
 Automatic conversion to iterable: __pragma__ ('iconv') and __pragma__ ('noiconv')
 ---------------------------------------------------------------------------------
@@ -213,6 +227,57 @@ During compilation the *__pragma__ ('js', code, <format parameters>)* is replace
 An example of its use is to encapsulate a JavaScript library as a Python module, as is :ref:`shown  for the fabric.js library <code_encaps_fabric>`. In that case there's usually one format parameter, namely a call to *__include__ (<relative module path>)*. The module path is either relative to the directory holding the main module of your project, or to the root of the modules directory, and searched in that order. So modules local to your project prevail over generally available modules.
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
+
+__pragma__ ('jskeys') and __pragma__ ('nojskeys')
+-------------------------------------------------
+Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
+Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
+-----------------------------------------------------------------------
+When *__pragma__ ('jsmod')* is active, *%* has JavaScript rather than Python semantics. While the -jm command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
+
+__pragma__ ('keycheck') and __pragma__ ('nokeycheck')
+-----------------------------------------------------
+When *__pragma__ ('keycheck')* is active, an attempt to retrieve an element from a dictionary via a non-existing key results in a KeyError being raised, unless it happens at the lefthand side of an augmented assignment. The run time support for this is expensive, as it requires passing the result of every such retrieval to a function that checks the definedness of the result. While the -kc command line switch switches key checking on globally, the preferred way is to switch on and off this facility locally to prevent code bloat.
+
+Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
+-------------------------------------------------------------------------
+While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.
+
+Preventing target annotation: __pragma__ ('noanno')
+---------------------------------------------------
+The -a command line switch will comment target code compiled from Python with source file names and source line numbers. Since this interferes with literal inclusion of JavaScript code with multi-line comments, it can be switched off by including *__pragma__ ('noanno')* at the beginning of a module. An example of this can be seen in the :ref:`encapsulation code for the fabric.js library <code_encaps_fabric>`.
+
+Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')
+-------------------------------------------------------------------
+Transcrypt currently supports overloading of the following operators: \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >=.
+
+These operators have been chosen since they can enhance the readability of computations involving matrices and vectors, enable the use of callable objects (functors) or are used to compare tuples, lists and sets. Using the -o command line switch will activate operator overloading globally. *This is strongly disadvised*, since even 1 + 2 will result in two function calls in that case. It's better to use *__pragma__ ('opov')* to switch it on locally and *__pragma__ ('noopov')* to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.
+
+Formula v4 = M \* (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and \* operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of *__mul__*, *__rmul__*, *__div__*, *__rdiv__*, *__add__*, *__radd__*, *__sub__*, *__rsub__*, *__matmul__*, *__rmatmul__*, *__getitem__*, *__setitem__* and *__call__* as described in the CPython documentation. The comparison operators are supported by the functions *__eq__*, *__ne__*, *__lt__*, *__le__*, *__gt__* and *__ge__*.
+
+.. _skipping_fragments:
+
+Skipping fragments while generating code: __pragma__ ('skip') and __pragma__ ('noskip')
+---------------------------------------------------------------------------------------
+On some occasions it's handy to be able to skip code generation for fragments of Python source. The most important use case is when you perform a static check using the :ref:`-c or --check <command_line_switches>` command line switch. If you use global JavaScript names without importing them from some encapsulation module, you'll have to tell the static checker that these names are not to be flagged as undefined. Insert a line containing dummy definitions of the unknown names for the static checker, surrounded by *__pragma__ ('skip') and __pragma__ ('noskip')*, to make code generator skip these definitions. The beginning of the source code of the Pong demo, shown below, demonstates how this is done.
+
+.. literalinclude:: ../../demos/pong/pong.py
+	:end-before: class Attribute:
+	:tab-width: 4
+	:caption: Preventing complaints of the static checker about unknown global JavaScript names in pong.py
+
+Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')
+------------------------------------------------------------------------------------
+
+When automatic conversion to truth value is activated, an empty array, dict or set has truth value False just as in CPyton, rather than True, as would be the case natively in JavaScript. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. To switch on automatic conversion to truth values locally, *__pragma__ ('tconv')* and *__pragma__ ('notconv')* can be used. The alternative is to switch on automatic conversion globally using the -t command line switch. Use of this switch is disadvised if a lot of boolean expressions are computed in inner loops, since it would result in many extra typechecks. When designing performance sensitive libraries, it's advisable to use *__pragma__ ('notconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -t switch, performance of won't suffer.
+
+Adding directories to the module search path: __pragma__ ('xpath', <directory list>)
+------------------------------------------------------------------------------------
+
+In addition to the :ref:`regular module mechanism <module_mechanism>` you can use *# __pragma__ ('xpath', <directory list>)* to add directories to the module search path. Note that resolving search paths happens compile time, so dynamic manipulation of the module search path doesn't apply. If you want to alter the search path in code that is used both by Transcrypt and CPython, you can additionally manipulate *sys.path* in a *try* clause or under an *if* with condition *__envir__.executor_name == __envir__.interpreter_name*.
+
+The *-xp / --xpath* :ref:`command line switch <command_line_switches>` has the same effect.
 
 Using an external transpiler: __pragma__ ('xtrans', <translator>, ..., cwd = <workingdirectory>)
 ------------------------------------------------------------------------------------------------
@@ -246,54 +311,3 @@ An example of the use of this pragma is the following:
 	:end-before: class Uppercaser (metaclass = UppercaserMeta):
 	:tab-width: 4
 	:caption: Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass
-
-__pragma__ ('jskeys') and __pragma__ ('nojskeys')
--------------------------------------------------
-Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
-
-__pragma__ ('keycheck') and __pragma__ ('nokeycheck')
------------------------------------------------------
-When *__pragma__ ('keycheck')* is active, an attempt to retrieve an element from a dictionary via a non-existing key results in a KeyError being raised, unless it happens at the lefthand side of an augmented assignment. The run time support for this is expensive, as it requires passing the result of every such retrieval to a function that checks the definedness of the result. While the -kc command line switch switches key checking on globally, the preferred way is to switch on and off this facility locally to prevent code bloat.
-
-Keeping your code lean: __pragma__ ('jsmod') and __pragma__ ('nojsmod')
------------------------------------------------------------------------
-When *__pragma__ ('jsmod')* is active, *%* has JavaScript rather than Python semantics. While the -jm command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
-
-Keeping your code lean: __pragma__ ('kwargs') and __pragma__ ('nokwargs')
--------------------------------------------------------------------------
-While it's possible to compile with the -k command line switch, allowing keyword arguments in all flavors supported by Python 3.5 in all places, this disadvised, as it leads to bloated code. It is better to use the 'kwargs' and 'nokwargs' pragmas, to enable this feature only at definition (as opposed to calling) of functions that require it. You'll find an example of how to use these pragma's in the :ref:`arguments autotest <autotest_arguments>`. You can use them on whole modules or any part thereof. Note that at due to the dynamic nature of Python, use of keyword arguments at call time cannot be predicted at definition time. When running with CPython from the command prompt using the browser stubs, these pragma's are ignored.
-
-Preventing target annotation: __pragma__ ('noanno')
----------------------------------------------------
-The -a command line switch will comment target code compiled from Python with source file names and source line numbers. Since this interferes with literal inclusion of JavaScript code with multi-line comments, it can be switched off by including *__pragma__ ('noanno')* at the beginning of a module. An example of this can be seen in the :ref:`encapsulation code for the fabric.js library <code_encaps_fabric>`.
-
-Operator overloading: __pragma__ ('opov') and __pragma__ ('noopov')
--------------------------------------------------------------------
-Transcrypt currently supports overloading of the following operators: \*, /, +, -, @, [], (), ==, !=, <, <=, >, and >=.
-
-These operators have been chosen since they can enhance the readability of computations involving matrices and vectors, enable the use of callable objects (functors) or are used to compare tuples, lists and sets. Using the -o command line switch will activate operator overloading globally. *This is strongly disadvised*, since even 1 + 2 will result in two function calls in that case. It's better to use *__pragma__ ('opov')* to switch it on locally and *__pragma__ ('noopov')* to switch it off again, activating operator overloading only for lines of code involving extensive matrix / vector computations or functor calls (as opposed to definitions), in which case the overhead is negligeable in most cases.
-
-Formula v4 = M \* (v1 + v2) + v3 is probably preferred over v4 = add (mul (M, add (v1, v2), v3)), which by the way closely resembles the JavaScript that will be generated for the expression that uses overloaded + and \* operators. In order to support operator overloading your matrix and vector classes have to support the appropriate selection of functions out of *__mul__*, *__rmul__*, *__div__*, *__rdiv__*, *__add__*, *__radd__*, *__sub__*, *__rsub__*, *__matmul__*, *__rmatmul__*, *__getitem__*, *__setitem__* and *__call__* as described in the CPython documentation. The comparison operators are supported by the functions *__eq__*, *__ne__*, *__lt__*, *__le__*, *__gt__* and *__ge__*.
-
-.. _skipping_fragments:
-
-Skipping fragments while generating code : __pragma__ ('skip') and __pragma__ ('noskip')
-----------------------------------------------------------------------------------------
-On some occasions it's handy to be able to skip code generation for fragments of Python source. The most important use case is when you perform a static check using the :ref:`-c or --check <command_line_switches>` command line switch. If you use global JavaScript names without importing them from some encapsulation module, you'll have to tell the static checker that these names are not to be flagged as undefined. Insert a line containing dummy definitions of the unknown names for the static checker, surrounded by *__pragma__ ('skip') and __pragma__ ('noskip')*, to make code generator skip these definitions. The beginning of the source code of the Pong demo, shown below, demonstates how this is done.
-
-.. literalinclude:: ../../demos/pong/pong.py
-	:end-before: class Attribute:
-	:tab-width: 4
-	:caption: Preventing complaints of the static checker about unknown global JavaScript names in pong.py
-
-Automatic conversion to truth value: __pragma__ ('tconv') and __pragma__ ('notconv')
-------------------------------------------------------------------------------------
-
-When automatic conversion to truth value is activated, an empty array, dict or set has truth value False just as in CPyton, rather than True, as would be the case natively in JavaScript. This comes at the expense of a runtime typecheck and is by default avoided in Transcrypt for that reason. To switch on automatic conversion to truth values locally, *__pragma__ ('tconv')* and *__pragma__ ('notconv')* can be used. The alternative is to switch on automatic conversion globally using the -t command line switch. Use of this switch is disadvised if a lot of boolean expressions are computed in inner loops, since it would result in many extra typechecks. When designing performance sensitive libraries, it's advisable to use *__pragma__ ('notconv')* explicitly at the start of each performance-sensitive module. The result will be that even when an application developer chooses to use the -t switch, performance of won't suffer.
-
-Adding directories to the module search path: __pragma__ ('xpath', <directory list>)
-------------------------------------------------------------------------------------
-
-In addition to the :ref:`regular module mechanism <module_mechanism>` you can use *# __pragma__ ('xpath', <directory list>)* to add directories to the module search path. Note that resolving search paths happens compile time, so dynamic manipulation of the module search path doesn't apply. If you want to alter the search path in code that is used both by Transcrypt and CPython, you can additionally manipulate *sys.path* in a *try* clause or under an *if* with condition *__envir__.executor_name == __envir__.interpreter_name*.
-
-The *-xp / --xpath* :ref:`command line switch <command_line_switches>` has the same effect.
