@@ -454,8 +454,9 @@ class Module:
                 elif sourceLine == noecom:
                     allowExecutableComments = False
                 elif allowExecutableComments:
-                    if not sourceLine [:4] in {"'''?", "?'''", '"""?', '?"""'}:
-                        uncommentedSourceLines.append (sourceLine [2:] if sourceLine.startswith ('#?') else sourceLine)
+                    lStrippedSourceLine = sourceLine.lstrip ()
+                    if not lStrippedSourceLine [:4] in {"'''?", "?'''", '"""?', '?"""'}:
+                        uncommentedSourceLines.append (sourceLine.replace ('#?', '', 1) if lStrippedSourceLine.startswith ('#?') else sourceLine)
                 else:
                     uncommentedSourceLines.append (sourceLine)
                     

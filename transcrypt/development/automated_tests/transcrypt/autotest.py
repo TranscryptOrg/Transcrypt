@@ -23,6 +23,7 @@ import div_issues
 import div_pulls
 import docstrings
 import exceptions
+import executable_comments
 import extended_slices
 import fstrings
 import general_functions
@@ -79,6 +80,7 @@ autoTester.run (div_issues, 'div_issues')
 autoTester.run (div_pulls, 'div_pulls')
 autoTester.run (docstrings, 'docstrings')
 autoTester.run (exceptions, 'exceptions')
+autoTester.run (executable_comments, 'executable_comments')
 autoTester.run (extended_slices, 'extended_slices')
 autoTester.run (fstrings, 'fstrings')
 autoTester.run (general_functions, 'general_functions')
