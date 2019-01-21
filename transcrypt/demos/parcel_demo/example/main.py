@@ -75,24 +75,6 @@ def main():
         from mymod.child import child_func as alias_child_func
         test.result = alias_child_func(test.random_num)
 
-    # mymod.childjs (subdir JS file)
-    # with Test('import mymod.childjs') as test:
-    #     import mymod.childjs
-    #     test.result = mymod.childjs.childjs_func(test.random_num)
-
-    # with Test('import mymod.childjs as alias_childjs') as test:
-    #     import mymod.childjs as alias_childjs
-    #     test.result = alias_childjs.childjs_func(test.random_num)
-
-    # with Test('from mymod.childjs import childjs_func') as test:
-    #     from mymod.childjs import childjs_func
-    #     test.result = childjs_func(test.random_num)
-
-    # with Test('from mymod.childjs import childjs_func as alias_childjs_func') as test:
-    #     from mymod.childjs import childjs_func as alias_childjs_func
-    #     test.result = alias_childjs_func(test.random_num)
-
-    # mymod.grandchildmod (subdir/subdir module)
     with Test('import mymod.grandchildmod') as test:
         import mymod.grandchildmod
         test.result = mymod.grandchildmod.grandchildmod_func(test.random_num)

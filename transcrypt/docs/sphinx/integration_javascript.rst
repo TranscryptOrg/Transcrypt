@@ -47,31 +47,10 @@ Remark: In a later stage animation may be added. As a further step, for complica
 Mixed examples
 ==============
 
-Three ways of integration with JavaScript libraries
----------------------------------------------------
-
-There are three ways to integrate Transcrypt applications with existing JavaScript libraries.
-
-1. The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.
-
-2. Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distibution this is done for the *fabric* module, that encapsulates *fabric.js*. In this way the global namespace stays clean.
-
-3. The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
-
-In the Pong example below, approach 2 is choosen to encapsulate the fabric.js graphics library. In most cases this approach strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
-
-.. _code_encaps_fabric:
-
-.. literalinclude:: ../../modules/com/fabricjs/__init__.py
-	:tab-width: 4
-	:caption: The encapsulation layer for fabric.js
-	
-Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the *fabric.js* by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.
-
 Example: Pong
 -------------
 
-In using the fabric.js JavaScript library this example, the only thing differing from plain JavaScipt is that *new <constructor>* is replaced by *__new__ (<constructor>)*.
+In using the fabric.js JavaScript library this for example, the only thing differing from plain JavaScipt is that *new <constructor>* is replaced by *__new__ (<constructor>)*.
 
 .. _code_pong:
 
@@ -81,12 +60,34 @@ In using the fabric.js JavaScript library this example, the only thing differing
 |    :caption: pong.py                         |    :caption: pong.js                                    |
 +----------------------------------------------+---------------------------------------------------------+
 
+
+Three ways of integration with JavaScript libraries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are three ways to integrate Transcrypt applications with existing JavaScript libraries.
+
+1. The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.
+
+2. Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distibution this is done for the *fabric* module, that encapsulates *fabric.js* and is imported in the Pong example. In this way the global namespace stays clean.
+
+3. The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
+
+In most cases this approach 2 strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
+
+.. _code_encaps_fabric:
+
+.. literalinclude:: ../../modules/com/fabricjs/__init__.py
+	:tab-width: 4
+	:caption: The encapsulation layer for fabric.js
+	
+Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the *fabric.js* by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.
+
 Minification
--------------------
+~~~~~~~~~~~~
 
 Minification is currently performed by the Google closure compiler, that's also part of the distribution. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working *strict* code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.
 
-As can be seen from the listings, even the non-minified *pong.js* module is only slightly larger than *pong.py*. This is despite the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified but not treeshaked Transcrypt runtime is slightly above 40 kB. The *fabric.js* library on the other hand occupies 180 kB. From this example it becomes clear that Transcrypt is extremely lightweight.
+As can be seen from the listings of the Pong example, even the non-minified *pong.js* module is only slightly larger than *pong.py*. This is despite the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified but not treeshaked Transcrypt runtime is slightly above 40 kB. The *fabric.js* library on the other hand occupies 180 kB. From this example it becomes clear that Transcrypt is extremely lightweight.
 
 Example: jQuery
 ---------------
@@ -205,3 +206,42 @@ This means that you can write applications with blocking I/O, rather than event 
 |    :tab-width: 4                                               |
 |    :caption: terminal_demo.py                                  |
 +----------------------------------------------------------------+
+
+Example: Using the Parcel.js bundler to package a set of modules written in diverse programming languages
+---------------------------------------------------------------------------------------------------------
+
+Bundlers are increasingly popular in the world of web development.
+With the Parcel bundler, it is possible to integrate Transcrypt modules with modules written in other languages.
+Whenever the source code of any module changes, automatic recompilation and repackaging takes place.
+Sourcemaps are generated for all non-JavaScript modules, enabling source level debugging in the browser.
+
+In the example, the top level file of the module hierarchy is the html file below: 
+
++----------------------------------------------------------------+
+| .. literalinclude:: ../../demos/parcel_demo/example/index.html |
+|    :tab-width: 4                                               |
+|    :caption: index.html                                        |
++----------------------------------------------------------------+
+
+The html file above refers to the JavaScript file below:
+
++--------------------------------------------------------------+
+| .. literalinclude:: ../../demos/parcel_demo/example/index.js |
+|    :tab-width: 4                                             |
+|    :caption: index.js                                        |
++--------------------------------------------------------------+
+
+This top level JavaScript file in turn refers to a Python file,
+that makes use of many modules, some written in Python, some in JavaScript:
+
++-------------------------------------------------------------+
+| .. literalinclude:: ../../demos/parcel_demo/example/main.py |
+|    :tab-width: 4                                            |
+|    :caption: main.py                                        |
++-------------------------------------------------------------+
+
+Whenever a source file of this mixed bag of modules is changed,
+the whole module hierarchy is rebuilt and repackaged.
+The bundler gets its information from the *.project* file in the *__target__* directory.
+Consequently Transcrypt can be fully integrated in an automated build process for a project featuring an arbitrary mix of source languages.
+With this feature, Python has truly become a first class citizen in the browser world.
