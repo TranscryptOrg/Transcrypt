@@ -1,7 +1,7 @@
 {
   "name": "transcrypt",
-  "version": "3.6.82",
-  "description": "Python 3.6 in the browser, precompiled for fast, small code. Source level debugging. Works seamlessly with any JavaScript library.",
+  "version": "3.7.15",
+  "description": "Python 3.7 in the browser, precompiled for fast, small code. Source level debugging. Works seamlessly with any JavaScript library.",
   "license": "Apache-2.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

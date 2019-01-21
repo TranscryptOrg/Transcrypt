@@ -1,0 +1,12 @@
+{
+  "name": "parcel_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".\\example\\index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "parcel-bundler": "^1.11.0",
+    "parcel-plugin-transcrypt": "^1.0.20"
+  }
+}

@@ -1,5 +1,4 @@
 # Compile with p. command line switch (see docs).
-# The example will be served at URL: http://localhost:8080 in your browser
 
 import time
 
@@ -38,4 +37,4 @@ class Demo:
             self.texts [self.newIndex], time.localtime ()
         ))
 
-demo = Demo (8090)
+demo = Demo (process.argv [2])  #This is where node puts its command line params

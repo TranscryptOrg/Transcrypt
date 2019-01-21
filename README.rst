@@ -121,6 +121,7 @@ Each release, on the other hand, is preceded by at least the following tests:
 What's new in the latest commits
 ================================
 
+- Parcel bundler demo simplified and added to demo directory, included in shipment test
 - Executable comments: skip code either in CPython or, with the skip pragma, in Transcrypt (issue 602)
 - Integration with Parcel bundler incl. auto-reload (issue 596)
 - Correct formatting of None fixed, autotests added (issue 494, issue 515)

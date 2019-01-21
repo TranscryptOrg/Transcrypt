@@ -111,8 +111,16 @@ browserController = BrowserController ()
 
 relSourcePrepathsOfErrors = []
 
-nodeServerUrl = 'http://localhost:8090'
-pythonHttpServerUrl = 'http://localhost:8000'
+host = 'http://localhost:'
+
+pythonServerPort = '8000'
+parcelServerPort = '8001'
+nodeServerPort = '8002'
+
+pythonServerUrl = host + pythonServerPort
+parcelServerUrl = host + parcelServerPort
+nodeServerUrl = host + nodeServerPort
+
 transpileCommand = 'transcrypt' if commandArgs.inst else 'run_transcrypt'
                 
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
@@ -140,7 +148,7 @@ os.system (f'{transpileCommand} -h')
    
 # ======== Individual test function
 
-def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, build = True, pause = 0, needsAttention = False):
+def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, parcelJs = False, build = True, pause = 0, needsAttention = False):
     if commandArgs.unattended and needsAttention:
         return  # This test shouldn't be done, since it can't run unattended
             
@@ -151,16 +159,12 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     # ---- Compute some slugs
     
     sourcePrepath = getAbsPath (relSourcePrepath)
-    sourcePrepathSplit = relSourcePrepath.split ("/")
-    
-    relTargetDir = f'{"/".join (sourcePrepathSplit [:-1])}/__target__'
-    targetDir = getAbsPath (relTargetDir)
-    
+    sourcePrepathSplit = sourcePrepath.split ("/")
+    sourceDir = '/'.join (sourcePrepathSplit [:-1])  
     moduleName = sourcePrepathSplit [-1]
+    targetDir = f'{sourceDir}/__target__'
     targetPrepath = f'{targetDir}/{moduleName}'
-    
-    relMessagePrepath = f'{relTargetDir}/{messagePrename}'
-    messagePrepath = getAbsPath (relMessagePrepath)
+    messagePrepath = f'{targetDir}/{messagePrename}'
     
     # ---- If there are relevant console messages of the compilation process,
     #       like with the static typechecking tests, write them into a file that can be served for a visual check
@@ -177,27 +181,38 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     if build:
         defaultSwitches += '-b '
     
-    # ---- Compile with Transcrypt
-    
-    os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
-    
     # ---- Run with CPython to generate HTML file with back to back reference info
     
     if run:
         os.system (f'{transpileCommand} -r {defaultSwitches}{extraSwitches}{sourcePrepath}')
         
-    # ---- Apply rollup to obtain monolith, since node doesn't support named imports and exports
+    # ---- Compile with Transcrypt
+    
+    if parcelJs:
+        origDir = os.getcwd ()
+        os.chdir (sourceDir)
+        os.system (f'start cmd /k node test {parcelServerPort}')
+        os.chdir (origDir)
+    else:
+        os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+    
+    # ---- If it has to run on node, apply rollup to obtain monolith, since node doesn't support named imports and exports
     
     if nodeJs:
         os.system (f'rollup {targetPrepath}.js --o {targetPrepath}.bundle.js --f cjs')
     
+    # --- Compute appropriate URL and wait a while if needed
+    
     if not commandArgs.blind:
-        if nodeJs:
-            os.system (f'start cmd /k node {targetPrepath}.bundle.js'.format (moduleName))
+        if parcelJs:
+            time.sleep (20)
+            url = parcelServerUrl
+        elif nodeJs:
+            os.system (f'start cmd /k node {targetPrepath}.bundle.js {nodeServerPort}')
             time.sleep (5)
             url = nodeServerUrl
         else:
-            url = f'{pythonHttpServerUrl}/{relSourcePrepath}.html'
+            url = f'{pythonServerUrl}/{relSourcePrepath}.html'
             
         success = browserController.open (url, run)
         
@@ -222,6 +237,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
     
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
+    test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
     test ('demos/hello/hello', False, switches, needsAttention = False)
     test ('demos/jquery_demo/jquery_demo', False, switches)
