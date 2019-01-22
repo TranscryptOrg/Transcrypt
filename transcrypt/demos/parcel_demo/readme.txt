@@ -2,11 +2,12 @@ To simplify integration of Transcrypt modules and native JavaScript modules, a p
 You can try out the Parcel bundler support as follows:
 
 
-    1. Install NPM
-    2. From this directory, type: npm run test
-    3. Browse to localhost:8000
-    4. Open the browser's Console pane to view the test results
-    5. Open the browser's Sources pane and open the folder tree nodes to debug from the Python source using sourcemaps
+    1. Install Node.js including npm (node package manager) from https://nodejs.org
+    2. The Parcel.js bundler and its Transcrypt plugin have been preinstalled locally in ./node_modules
+    3. From the directory containing this readme file, type: node test.js 8000
+    4. Browse to localhost:8000
+    5. Open the browser's Console pane to view the test results
+    6. Open the browser's Sources pane and open the folder tree nodes to debug from the Python source using sourcemaps
 
 
 Note that automatic recompilation and deployment takes place whenever a Transcrypt source file is modified.
@@ -35,5 +36,5 @@ to make things work on Windows.
 
 Some more information on parcel-plugin-transcrypt is given in the .md files in:
 
-        ...node_modules/parcel-plugin-transcrypt
+        ./node_modules/parcel-plugin-transcrypt
                
