@@ -3,6 +3,7 @@ from random import *
 result = ''
 
 def output (any):
+    global result
     result += any + '<br>\n'
 
 for fixedSeed in (False, True):
