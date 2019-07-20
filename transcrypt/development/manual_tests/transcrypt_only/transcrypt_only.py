@@ -3,6 +3,7 @@ from random import *
 result = ''
 
 def output (*any):
+    global result
     for item in any:
         result += str (item)
         result += ' '
