@@ -4,13 +4,16 @@ ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
 
 # Install Python modules
 
-pip install mypy
-pip install selenium
+pip install flake8 mypy selenium
 
 # Show where we are and what's there
 
 pwd
 ls -a -l
+
+# Look for Python syntax errors and undefined names
+
+flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
 # Make everything executable and the rest
 
