@@ -13,7 +13,7 @@ ls -a -l
 
 # Look for Python syntax errors and undefined names
 
-flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+flake8 . --count --select=E9,F63,F7,F823 --show-source --statistics
 
 # Make everything executable and the rest
 
