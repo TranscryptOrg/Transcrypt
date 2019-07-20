@@ -1,1 +1,1 @@
-= nonsense =
+= nonsense =  # noqa
