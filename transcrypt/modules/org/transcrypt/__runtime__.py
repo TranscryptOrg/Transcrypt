@@ -164,7 +164,7 @@ class complex:
         return self.__mul__ (Math.log (real)) .__exp__ ()
         
     def __mul__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return complex (self.real * other, self.imag * other)
         else:
             return complex (self.real * other.real - self.imag * other.imag, self.real * other.imag + self.imag * other.real)
@@ -173,7 +173,7 @@ class complex:
         return complex (self.real * real, self.imag * real)
         
     def __div__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return complex (self.real / other, self.imag / other)
         else:
             denom = other.real * other.real + other.imag * other.imag
@@ -190,7 +190,7 @@ class complex:
         )
         
     def __add__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return complex (self.real + other, self.imag)
         else:   # Assume other is complex
             return complex (self.real + other.real, self.imag + other.imag)
@@ -199,7 +199,7 @@ class complex:
         return complex (self.real + real, self.imag)
         
     def __sub__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return complex (self.real - other, self.imag)
         else:
             return complex (self.real - other.real, self.imag - other.imag)
@@ -214,13 +214,13 @@ class complex:
         return __repr__ (self) [1 : -1]
         
     def __eq__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return self.real == other
         else:
             return self.real == other.real and self.imag == other.imag
         
     def __ne__ (self, other):
-        if __typeof__ (other) is 'number':
+        if __typeof__ (other) == 'number':
             return self.real != other
         else:
             return self.real != other.real or self.imag != other.imag
