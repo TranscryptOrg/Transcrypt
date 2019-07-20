@@ -2,10 +2,10 @@ pi = Math.PI
 e = Math.E
 
 def phase (x):
-    return 0 if __typeof__ (x) is 'number' else Math.atan2 (x.imag, x.real)
+    return 0 if __typeof__ (x) == 'number' else Math.atan2 (x.imag, x.real)
     
 def polar (x):
-    return (Math.abs (x), 0) if __typeof__ (x) is 'number' else (abs (x), phase (x))
+    return (Math.abs (x), 0) if __typeof__ (x) == 'number' else (abs (x), phase (x))
     
 def rect (r, phi):
     __pragma__ ('opov')
@@ -13,11 +13,11 @@ def rect (r, phi):
     __pragma__ ('noopov')
     
 def exp (x):
-    return complex (x, 0) .__exp__ () if __typeof__ (x) is 'number' else x.__exp__ ()
+    return complex (x, 0) .__exp__ () if __typeof__ (x) == 'number' else x.__exp__ ()
         
 def log (x, base):
     return (
-        complex (x, 0) .__log__ () if __typeof__ (x) is 'number' else x.__log__ ()
+        complex (x, 0) .__log__ () if __typeof__ (x) == 'number' else x.__log__ ()
     ) if base is js_undefined else (
         __truediv__ (log (x), log (base))   # Recursive
     )
