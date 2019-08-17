@@ -1,5 +1,4 @@
 dist: xenial
-sudo: yes
 
 addons:
     chrome: stable
