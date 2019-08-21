@@ -181,6 +181,9 @@ export var py_metatype = {
             var base = bases [index];
             for (var attrib in base) {
                 var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+                if (descrip == null) {  // Another library modified Function.prototype
+                    continue;
+                }
                 Object.defineProperty (cls, attrib, descrip);
             }           
             for (let symbol of Object.getOwnPropertySymbols (base)) {
