@@ -3506,7 +3506,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
 
-        with ExitStack() as stack:
+        with ExitStack () as stack:
             for item in node.items:
                 stack.enter_context (itemContext (item))
             self.emitBody (node.body)
