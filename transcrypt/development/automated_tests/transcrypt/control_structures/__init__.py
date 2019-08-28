@@ -125,3 +125,15 @@ def run (autoTester):
     finally:
         autoTester.check ('ctx5', contextManagerExample5.counter, externalCounter5)
         autoTester.check ('ctx4', contextManagerExample4.counter, externalCounter4) 
+
+    # multiple context managers in one clause
+    iterationCount = 0
+    with ContextManagerExample (), ContextManagerExample ():
+        iterationCount += 1
+    autoTester.check('ctx7', iterationCount)
+
+    iterationCount = 0
+    with ContextManagerExample (), ContextManagerExample (), ContextManagerExample (), \
+         ContextManagerExample(), ContextManagerExample ():
+        iterationCount += 1
+    autoTester.check('ctx8', iterationCount)
