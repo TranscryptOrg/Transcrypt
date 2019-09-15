@@ -3474,6 +3474,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         @contextmanager
         def itemContext (item):
+            if not self.noskipCodeGeneration:
+                yield
+                return
+
             self.emit ('var ')                      # Should be in surrounding scope but may be overwritten, so use var rather than let
             if (item.optional_vars):
                 self.visit (item.optional_vars)
