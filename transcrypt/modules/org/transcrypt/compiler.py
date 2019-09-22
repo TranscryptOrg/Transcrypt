@@ -185,7 +185,7 @@ class Module:
                 # Generate JavaScript code and sourcemap from parse tree
                 self.generateJavascriptAndPrettyMap ()
 
-                # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
+                # Generated code, may have annotations so don't strip comments, and there are no non-annotation comments to strip anyhow, neither are there any strip pragma's
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
 
             # Write target code
@@ -217,7 +217,7 @@ class Module:
                 targetFile.write (self.mapRef)
 
         else:
-            # If it's a make an rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
+            # If it's a make rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
             self.targetCode = open (self.targetPath, 'r') .read ()
             javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False, refuseIfAppearsMinified = True)
 
@@ -344,7 +344,7 @@ class Module:
 
                 # Only append non-emptpy statements and their number info
                 if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
-                    if self.generator.allowDebugMap:                                                         # If annotations comments have to be prepended
+                    if self.generator.allowDebugMap:                                                    # If annotations comments have to be prepended
                         targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
                     targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation comment
 
