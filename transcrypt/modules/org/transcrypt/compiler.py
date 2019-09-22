@@ -2881,7 +2881,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
         self.importHoistMemos.append (utils.Any (node = node, lineNr = self.lineNr))
 
-    def revisit_ImportFrom (self, importHoistMemo): # From ... import ... can import modules or facitities offered by modules
+    def revisit_ImportFrom (self, importHoistMemo): # From ... import ... can import modules or facilities offered by modules
         self.lineNr = importHoistMemo.lineNr        # This is the lineNr from the original visit, which may be obtained from the node at that time or "cached" earlier
         node = importHoistMemo.node
         self.adaptLineNrString (node)               # If it isn't (again) obtained from the node, the memoed version will be used

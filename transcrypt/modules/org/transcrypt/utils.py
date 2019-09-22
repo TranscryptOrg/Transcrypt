@@ -310,7 +310,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
-    wordPattern = re.compile (r'[\S$]+')
+    wordPattern = re.compile (r'[\w/*$]+')  # /S matches too much, e.g. { and }  ??? Is this OK in all cases? Scrutinize code below...
     for line in passableLines:
         words = wordPattern.findall (line)
         
@@ -318,7 +318,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
                 words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
                 
-            if words:
+            if words:    
                 if words [0] == 'export':
                     # Deducing exported names from JavaScript is needed to facilitate * import by other modules
                     
