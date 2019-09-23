@@ -71,9 +71,18 @@ class Program:
 
         # Set paths
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
+        
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        self.targetDir = f'{self.sourceDir}/__target__'
+        
+        if utils.commandArgs.outDir:
+            if os.path.isabs (utils.commandArgs.outDir):
+                self.targetDir = utils.commandArgs.outDir.replace ('\\', '/')
+            else:
+                self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outDir}'.replace ('\\', '/')
+        else:
+            self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
+        
         self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
         # Load the most recent project metadata
