@@ -110,14 +110,14 @@ export function __init__ (module) {
 // So __get__ should be called by a property rather then a function
 // Factory __get__ creates one of three curried functions for func
 // Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
-export function __get__ (aThis, func, quotedFuncName) {// Param aThis is thing before the dot, if it's there
+export function __get__ (aThis, func, quotedFuncName) {	// Param aThis is thing before the dot, if it's there
     if (aThis) {
         if (aThis.hasOwnProperty ('__class__') || typeof aThis == 'string' || aThis instanceof String) {           // Object before the dot
             if (quotedFuncName) {                                   // Memoize call since fcall is on, by installing bound function in instance
-                Object.defineProperty (aThis, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
+                Object.defineProperty (aThis, quotedFuncName, {     // Will override the non-own property, next time it will be called directly
                     value: function () {                            // So next time just call curry function that calls function
                         var args = [] .slice.apply (arguments);
-                        return func.apply (null, [aThis.__proxy__ ? aThis.__proxy__ : aThis] .concat (args));
+                        return func.apply (null, [aThis] .concat (args));
                     },              
                     writable: true,
                     enumerable: true,
@@ -126,7 +126,11 @@ export function __get__ (aThis, func, quotedFuncName) {// Param aThis is thing b
             }
             return function () {                                    // Return bound function, code duplication for efficiency if no memoizing
                 var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
-                return func.apply (null, [aThis] .concat (args));
+				
+				// Note that if aThis has a proxy, self of func should be the proxy, since another __getattr__ or __setattr__ may be done on self
+				return func.apply (null, [aThis.__proxy__ ? aThis.__proxy__ : aThis] .concat (args));	// Prepend aThis or its proxy before other actual params
+																									
+																									
             };
         }
         else {                                                      // Class before the dot
@@ -233,7 +237,7 @@ export var object = {
                         return target.__getattr__ (name);
                     }
                     else {
-                        return result;	// Will be bound to the target.__proxy__ to allow call chaining (as in issue #587)
+                        return result;			// Will be bound to the target.__proxy__ to allow call chaining (as in issue #587)
                     }
                 },
                 set: function (target, name, value) {
@@ -246,7 +250,7 @@ export var object = {
                     return true;
                 }
             })
-			instance = instance.__proxy__
+			instance == instance.__proxy__;
         }
 
         // Call constructor
