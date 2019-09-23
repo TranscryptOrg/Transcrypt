@@ -117,7 +117,7 @@ export function __get__ (aThis, func, quotedFuncName) {// Param aThis is thing b
                 Object.defineProperty (aThis, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
                     value: function () {                            // So next time just call curry function that calls function
                         var args = [] .slice.apply (arguments);
-                        return func.apply (null, [aThis.__proxy__ ? aThis.__proxy__ : aThis] .concat (args));
+                        return func.apply (null, [aThis] .concat (args));
                     },              
                     writable: true,
                     enumerable: true,
@@ -126,7 +126,7 @@ export function __get__ (aThis, func, quotedFuncName) {// Param aThis is thing b
             }
             return function () {                                    // Return bound function, code duplication for efficiency if no memoizing
                 var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
-                return func.apply (null, [aThis] .concat (args));
+                return func.apply (null, [aThis.__proxy__ ? aThis.__proxy__ : aThis] .concat (args));
             };
         }
         else {                                                      // Class before the dot
