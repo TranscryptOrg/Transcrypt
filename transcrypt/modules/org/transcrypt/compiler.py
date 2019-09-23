@@ -75,11 +75,11 @@ class Program:
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         
-        if utils.commandArgs.outDir:
-            if os.path.isabs (utils.commandArgs.outDir):
-                self.targetDir = utils.commandArgs.outDir.replace ('\\', '/')
+        if utils.commandArgs.outdir:
+            if os.path.isabs (utils.commandArgs.outdir):
+                self.targetDir = utils.commandArgs.outdir.replace ('\\', '/')
             else:
-                self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outDir}'.replace ('\\', '/')
+                self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outdir}'.replace ('\\', '/')
         else:
             self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
         
