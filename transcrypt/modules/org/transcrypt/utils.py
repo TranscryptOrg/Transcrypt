@@ -65,6 +65,7 @@ class CommandArgs:
         self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
         self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
         self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is disadvised, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
+        self.argParser.add_argument ('-od', '--outdir', help = 'override output directory (default = __target__)')
         self.argParser.add_argument ('-p', '--parent', nargs = '?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js")
         self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
         self.argParser.add_argument ('-s', '--symbols', nargs ='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
