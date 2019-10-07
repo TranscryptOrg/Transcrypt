@@ -75,13 +75,8 @@ class Program:
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
         
-        if utils.commandArgs.outdir:
-            if os.path.isabs (utils.commandArgs.outdir):
-                self.targetDir = utils.commandArgs.outdir.replace ('\\', '/')
-            else:
-                self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outdir}'.replace ('\\', '/')
-        else:
-            self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
+
+        self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
         
         self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
@@ -312,7 +307,7 @@ class Module:
                 break
 
             # Remember all fruitless paths to give a decent error report if module isn't found
-            # Note that this aren't all searched paths for a particular module,
+            # Note that these aren't all searched paths for a particular module,
             # since the difference between an module and a facility inside a module isn't always known a priori
             self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
         else:
