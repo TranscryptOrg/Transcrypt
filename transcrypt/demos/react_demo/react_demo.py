@@ -1,18 +1,16 @@
+from org.reactjs import createElement, useState, useEffect, useRef
+from org.reactjs.dom import render as react_render
+
+
 # Helper functions
 
-
 def h(elm_type, props='', *args):
-    return React.createElement(elm_type, props, *args)
+    return createElement(elm_type, props, *args)
 
 
 def render(react_element, destination_id, callback=lambda: None):
     container = document.getElementById(destination_id)
-    ReactDOM.render(react_element, container, callback)
-
-
-useState = React.useState
-useEffect = React.useEffect
-useRef = React.useRef
+    react_render(react_element, container, callback)
 
 
 def useInterval(func, delay=None):
@@ -25,11 +23,11 @@ def useInterval(func, delay=None):
     ref = useRef(func)
     ref.current = func
 
+    @useEffect.withDeps(delay)
     def setup():
         id = setInterval(lambda: ref.current(), delay)
         return lambda: clearInterval(id)
 
-    useEffect(setup, [delay])
     return func
 
 
