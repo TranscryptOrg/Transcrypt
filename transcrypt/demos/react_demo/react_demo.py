@@ -15,15 +15,22 @@ useEffect = React.useEffect
 useRef = React.useRef
 
 
-def useInterval(func, delay):
+def useInterval(func, delay=None):
+    # can be used as `useInterval(func, delay)`
+    # or as `@useInterval(delay)`
+    if delay is None:
+        delay = func
+        return lambda fn: useInterval(fn, delay)
+
     ref = useRef(func)
     ref.current = func
 
     def setup():
         id = setInterval(lambda: ref.current(), delay)
-        return lambda: cleanInterval(id)
+        return lambda: clearInterval(id)
 
     useEffect(setup, [delay])
+    return func
 
 
 # Create a component
@@ -31,10 +38,9 @@ def useInterval(func, delay):
 def Hello(props):
     count, setCount = useState(0)
 
+    @useInterval(1000)
     def updateCounter():
         setCount(count+1)
-
-    useInterval(updateCounter, 1000)
 
     return h(
         'div',
