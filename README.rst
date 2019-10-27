@@ -240,7 +240,7 @@ What's new in the latest commits
 Known bugs in latest commits
 ============================
 
-None
+None.
 
 Other packages you might like
 =============================
