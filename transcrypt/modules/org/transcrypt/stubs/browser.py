@@ -46,6 +46,15 @@ __symbols__ = []
 def __set_stubsymbols__ (symbols):
     global __symbols__
     __symbols__ = symbols
+
+
+class PragmaCtx:
+    def __enter__ (self):
+        pass
+
+    def __exit__ (self, a, b, c):
+        pass
+
     
 def __pragma__ (*args):
     if args [0] == 'defined':
@@ -53,4 +62,6 @@ def __pragma__ (*args):
             if arg in __symbols__:
                 return True
         return False
+    else:
+        return PragmaCtx()
     

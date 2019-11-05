@@ -260,3 +260,14 @@ def run (autoTester):
     __pragma__('noopov')
     
     autoTester.check (a.b ['c'])
+
+    # nested __pragma__ context managers
+
+    with __pragma__ ('opov'):
+        autoTester.check ((2, 1, 3) == (1, 2, 3))
+        autoTester.check ([2, 1, 3] == [1, 2, 3])
+        with __pragma__ ('opov'):
+            autoTester.check ((1, 2, 3) != (1, 2, 3))
+            autoTester.check ([1, 2, 3] != [1, 2, 3])
+        autoTester.check ((1, 2, 3) == (1, 2, 3))
+        autoTester.check ([1, 2, 3] == [1, 2, 3])
