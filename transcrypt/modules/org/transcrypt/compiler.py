@@ -520,8 +520,32 @@ class Module:
         with utils.create (self.treePath) as treeFile:
             treeFile.write (self.textTree)
 
+class PragmaFlag:
+    def __get__ (self, obj, owner=None):
+        return obj.pragmaFlagsStack[self.name]
+
+    def __set__ (self, obj, value):
+        obj.pragmaFlagsStack[self.name] = value
+
+    def __set_name__ (self, owner, name):
+        self.name = name
+
 class Generator (ast.NodeVisitor):
     # Terms like parent, child, ancestor and descendant refer to the parse tree here, not to inheritance
+
+    allowKeywordArgs = PragmaFlag ()
+    allowOperatorOverloading = PragmaFlag ()
+    allowConversionToIterable = PragmaFlag ()
+    allowConversionToTruthValue = PragmaFlag ()
+    allowKeyCheck = PragmaFlag ()
+    allowDebugMap = PragmaFlag ()
+    allowDocAttribs = PragmaFlag ()
+    allowGlobals = PragmaFlag ()
+    allowJavaScriptIter = PragmaFlag ()
+    allowJavaScriptCall = PragmaFlag ()
+    allowJavaScriptKeys = PragmaFlag ()
+    allowJavaScriptMod = PragmaFlag ()
+    allowMemoizeCalls = PragmaFlag ()
 
     def __init__ (self, module):
         self.module = module
@@ -649,6 +673,8 @@ class Generator (ast.NodeVisitor):
             # Lowest precedence
         }
 
+        self.pragmaFlagsStack = collections.ChainMap({})
+
         self.allowKeywordArgs = utils.commandArgs.kwargs
         self.allowOperatorOverloading = utils.commandArgs.opov
         self.allowConversionToIterable = utils.commandArgs.iconv
@@ -683,6 +709,13 @@ class Generator (ast.NodeVisitor):
             raise utils.Error (
                 message = '\n\tTemporary variables leak in code generator: {}'.format (self.tempIndices)
             )
+
+    def pushPragmas(self):
+        self.pragmaFlagsStack.maps.insert(0, {})
+
+    def popPragmas(self):
+        if len(self.pragmaFlagsStack.maps) > 0:
+            self.pragmaFlagsStack.maps.pop(0)
 
     def visitSubExpr (self, node, child):
         def getPriority (exprNode):
@@ -1513,7 +1546,11 @@ class Generator (ast.NodeVisitor):
                 return
             # __pragma__'s in many varieties, syntactically calls, but semantically compile time directives
             elif node.func.id == '__pragma__':
-                if node.args [0] .s == 'alias':
+                if node.args[0].s == 'push':
+                    self.pushPragmas ()
+                elif node.args[0].s == 'pop':
+                    self.popPragmas ()
+                elif node.args [0] .s == 'alias':
                     self.aliases.insert (0, (node.args [1] .s, node.args [2] .s))
                 elif node.args [0] .s == 'noalias':
                     if len (node.args) == 1:
@@ -3522,17 +3559,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         @contextmanager
         def pragmaContext (item):
-            expr = item.context_expr
-
-            name = expr.args[0].s
-            if name.startswith('no'):
-                revName = name[2:]
-            else:
-                revName = 'no' + name
-
-            self.visit(expr)
+            self.pushPragmas ()
+            self.visit (item.context_expr)
             yield
-            self.visit(ast.Call (expr.func, [ast.Str (revName)] + expr.args[1:]))
+            self.popPragmas ()
 
         @contextmanager
         def skipContext (item):
