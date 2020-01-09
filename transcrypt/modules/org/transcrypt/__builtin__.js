@@ -966,8 +966,14 @@ list.__bases__ = [object];
 Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
 Array.prototype.__getslice__ = function (start, stop, step) {
-    if (start < 0) {
+    if (start == null) {
+        start = 0;
+    }
+    else if (start < 0) {
         start = this.length + start;
+    }
+    else if (start > this.length) {
+        start = this.length;
     }
 
     if (stop == null) {
@@ -985,8 +991,15 @@ Array.prototype.__getslice__ = function (start, stop, step) {
     }
 
     let result = list ([]);
-    for (let index = start; index < stop; index += step) {
-        result.push (this [index]);
+    if (step > 0) {
+        for (let index = start; index < stop; index += step) {
+            result.push (this [index]);
+        }
+    } else {
+        [ start, stop ] = [ stop - 1, start -1 ]
+        for (let index = start; index > stop; index += step) {
+            result.push (this [index]);
+        }
     }
 
     return result;
