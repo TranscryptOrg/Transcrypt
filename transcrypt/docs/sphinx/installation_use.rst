@@ -4,7 +4,7 @@ Getting started
 Installation
 ------------
 
-Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.7 has to be installed. After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introduction <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, *activate* the environment as also described there, and then type:
+Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.7 has to be installed (Transcrypt will not work with any earlier versions, including the whole Python 3.6 series). After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introduction <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, *activate* the environment as also described there, and then type:
 
 *pip install transcrypt*
 
