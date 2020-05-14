@@ -140,8 +140,28 @@ export function setattr (obj, name, value) {
     obj [name] = value; // Will not work in combination with static retrieval of aliased attributes, too expensive
 };
 
-export function getattr (obj, name) {
-    return name in obj ? obj [name] : obj ['py_' + name];
+export var getattr = function (obj, name, failsafe) {
+    if (obj[name] !== undefined) {
+        return obj [name];
+    } else if (obj['py_' + name] !== undefined) {
+        return obj ['py_' + name];
+    } else if (failsafe !== undefined) {
+        return failsafe;
+    } else {
+        let message = "has no attribute '{}'";
+        if (obj.__class__ !== undefined) {
+            message = ("'{}' object " + message).format(obj.__class__.__name__, name);
+        } else if (obj.__name__ !== undefined) {
+            message = ("type object '{}' " + message).format(obj.__name__, name);
+        } else if (obj.prototype !== undefined) {
+            message = ("type object '{}' " + message).format(obj.name || py_typeof(obj), name);
+        } else {
+            message = ("'{}' object " + message).format(obj.name || py_typeof(obj), name);
+        }
+        var __except0__ = AttributeError (message, new Error());
+        __except0__.__cause__ = null;
+        throw __except0__;
+    }
 };
 
 export function hasattr (obj, name) {
