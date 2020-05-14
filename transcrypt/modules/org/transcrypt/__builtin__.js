@@ -57,7 +57,10 @@ export function property (getter, setter) {  // Returns a property descriptor ra
     if (!setter) {  // ??? Make setter optional instead of dummy?
         setter = function () {};
     }
-    return {get: function () {return getter (this)}, set: function (value) {setter (this, value)}, enumerable: true};
+    return {
+        get: function () {return getter (this)}, set: function (value) {setter (this, value)},
+        enumerable: true, configurable: true,
+    };
 }
 
 // Conditional JavaScript property installer function, prevents redefinition of properties if multiple Transcrypt apps are on one page
