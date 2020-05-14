@@ -2689,7 +2689,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     self.emit ('__call__ (')
 
                 for decorator in node.decorator_list:
-                    if not (type (decorator) == ast.Name and decorator.id in ('classmethod', 'staticmethod')):
+                    if not (type (decorator) == ast.Name and decorator.id in ('classmethod', 'staticmethod', 'property')):
                         if decoratorsUsed > 0:
                             self.emit (' (')
                         self.visit (decorator)
