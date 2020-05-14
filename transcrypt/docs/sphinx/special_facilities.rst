@@ -146,7 +146,7 @@ Example 2:
 +-------------------------------------------------------------------+
 | Used at the start of the module *__pragma__ ('alias', 'jq', '$')* |
 +-----------------------------------------+-------------------------+
-| *jq__body = jq (body)*                  | *$body = $ ('body')*    |
+| *jq__body = jq ('body')*                | *$body = $ ('body')*    |
 +-----------------------------------------+-------------------------+
 
 Note that in the generated JavaScript only the modified identifiers will be present, not the original ones. So the JavaScript identifiers are only aliases for the Python ones, not for any identifier in the JavaScript code itself.
