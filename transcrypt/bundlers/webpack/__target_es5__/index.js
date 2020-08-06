@@ -7,7 +7,7 @@ exports.main = exports.DEFAULT_PACKAGE_CONFIG = exports.loader_utils = exports.c
 
 var _orgTranscrypt__runtime__ = require("./org.transcrypt.__runtime__.js");
 
-// Transcrypt'ed from Python, 2018-12-31 09:55:46
+// Transcrypt'ed from Python, 2020-08-06 18:14:42
 var __name__ = '__main__';
 
 var path = require('path');
@@ -21,10 +21,7 @@ exports.child_process = child_process;
 var loader_utils = require('loader-utils');
 
 exports.loader_utils = loader_utils;
-var DEFAULT_PACKAGE_CONFIG = (0, _orgTranscrypt__runtime__.dict)({
-  'command': 'python3 -m transcrypt',
-  'arguments': (0, _orgTranscrypt__runtime__.list)(['--nomin', '--map', '--verbose'])
-});
+var DEFAULT_PACKAGE_CONFIG = (0, _orgTranscrypt__runtime__.dict)([['command', 'python3 -m transcrypt'], ['arguments', ['--nomin', '--map', '--verbose']]]);
 exports.DEFAULT_PACKAGE_CONFIG = DEFAULT_PACKAGE_CONFIG;
 
 var main = function main(src) {
@@ -42,15 +39,17 @@ var main = function main(src) {
 
   var target_path = path.join(this.rootContext, '__target__', py_module) + '.js';
   var import_path = './' + path.relative(fileinfo.dir, target_path);
+
+  if (path.sep == '\\') {
+    var import_path = import_path.py_replace('\\', '/');
+  }
+
   var runinfo_path = path.join(this.rootContext, '__target__', relative_dir, fileinfo.name) + '.transcrypt.json';
-  var cmd = (0, _orgTranscrypt__runtime__.list)([]);
+  var cmd = [];
   cmd.append(config['command']);
   cmd.extend(config['arguments']);
   cmd.append('"{}"'.format(py_module.py_replace('"', '\\"')));
-  var cmd_options = (0, _orgTranscrypt__runtime__.dict)({
-    'cwd': this.rootContext,
-    'encoding': 'utf8'
-  });
+  var cmd_options = (0, _orgTranscrypt__runtime__.dict)([['cwd', this.rootContext], ['encoding', 'utf8']]);
 
   try {
     var stdout = (0, _orgTranscrypt__runtime__.str)(child_process.execSync(' '.join(cmd), cmd_options));

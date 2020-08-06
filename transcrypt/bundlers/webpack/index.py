@@ -40,6 +40,8 @@ def main(src):
         py_module = path.join(relative_dir, fileinfo.js_name).split(path.sep).join('.')
     target_path = path.join(this.rootContext, '__target__', py_module) + '.js'
     import_path = './' + path.relative(fileinfo.dir, target_path)
+    if path.sep == '\\':  # Windows OS
+        import_path = import_path.replace('\\', '/')
     runinfo_path = path.join(this.rootContext, '__target__', relative_dir, fileinfo.js_name) + '.transcrypt.json'
 
     # run transcrypt
