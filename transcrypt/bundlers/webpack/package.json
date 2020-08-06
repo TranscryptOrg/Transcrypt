@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/QQuick/Transcrypt"
+    "url": "https://github.com/QQuick/Transcrypt/tree/parcel-bundler2"
   },
   "main": "__target_es5__/index.js",
   "scripts": {
