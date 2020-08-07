@@ -114,14 +114,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-// Transcrypt'ed from Python, 2018-12-31 09:55:46
+// Transcrypt'ed from Python, 2020-08-06 18:14:42
 var __name__ = 'org.transcrypt.__runtime__';
 var __envir__ = {};
 exports.__envir__ = __envir__;
 __envir__.interpreter_name = 'python';
 __envir__.transpiler_name = 'transcrypt';
 __envir__.executor_name = __envir__.transpiler_name;
-__envir__.transpiler_version = '3.7.11';
+__envir__.transpiler_version = '3.7.16';
 
 function __nest__(headObject, tailNames, value) {
   var current = headObject;
@@ -1634,10 +1634,10 @@ __setproperty__(String.prototype, 'format', {
         }
 
         if (key == +key) {
-          return args[key] == undefined ? match : str(args[key]);
+          return args[key] === undefined ? match : str(args[key]);
         } else {
           for (var index = 0; index < args.length; index++) {
-            if (_typeof(args[index]) == 'object' && args[index][key] != undefined) {
+            if (_typeof(args[index]) == 'object' && args[index][key] !== undefined) {
               return str(args[index][key]);
             }
           }
