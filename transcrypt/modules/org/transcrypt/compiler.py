@@ -1421,9 +1421,6 @@ class Generator (ast.NodeVisitor):
             self.emit ('{} = true;\n', self.getTemp ('break'))
         self.emit ('break')
 
-    def visit_Bytes (self, node):
-        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
-
     def visit_Call (self, node, dataClassArgDict = None):
         self.adaptLineNrString (node)
 
@@ -2401,6 +2398,34 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         if len (node.comparators) > 1:
             self.emit(')')
+            
+    def visit_Constant (self, Node):
+        if type (node.value) == str:
+            self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
+        elif type (node.value) == bytes:
+            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))            
+        elif type (node.value) == complex:
+            self.emit ('complex (0, {})'.format (node.n.imag))           
+        elif type (node.value) in {float, int}:
+            self.emit ('{}'.format (node.n))
+        else:
+            self.emit (self.nameConsts [node.value])
+        
+    '''
+    !!! Deprecated
+    
+    def visit_NameConstant (self, node):
+        self.emit (self.nameConsts [node.value])
+        
+    def visit_Str (self, node):
+        self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
+        
+    def visit_Num (self, node):
+        self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
+
+    def visit_Bytes (self, node):
+        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
+    '''
 
     def visit_Continue (self, node):
         self.emit ('continue')
@@ -3197,14 +3222,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         self.emit (self.filterId (node.id))
 
-    def visit_NameConstant (self, node):
-        self.emit (self.nameConsts [node.value])
-
     def visit_Nonlocal (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .nonlocals.update (node.names)
-
-    def visit_Num (self, node):
-        self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
 
     def visit_Pass (self, node):
         self.adaptLineNrString (node)
@@ -3279,9 +3298,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.visit (node.step)
 
         self.emit ('])')
-
-    def visit_Str (self, node):
-        self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
 
     # Visited for RHS index, non-overloaded LHS index, RHS slice and RHS extended slice
     # LHS slice and overloaded LHS index are dealt with directy in visit_Assign, since the RHS is needed for them also
