@@ -138,9 +138,9 @@ os.system ('cls' if os.name == 'nt' else 'clear')
 
 if not commandArgs.blind:
     if commandArgs.unattended:
-        os.system (f'python -m http.server --directory {appRootDir} &')
+        os.system (f'py37 -m http.server --directory {appRootDir} &')
     else:
-        os.system (f'start python -m http.server --directory {appRootDir}')
+        os.system (f'py37 -m http.server --directory {appRootDir} &')
 
 # ---- Allow visual check of all command line options
 

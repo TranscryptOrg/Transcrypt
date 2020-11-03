@@ -1,0 +1,3 @@
+py37 -m transcrypt -r -xr -n -b -da -xg -c -sf autotest
+py37 -m transcrypt -xr -n -b -da -xg -c -sf autotest
+py37 -m http.server
