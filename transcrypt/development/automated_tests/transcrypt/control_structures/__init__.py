@@ -128,6 +128,10 @@ def run (autoTester):
 
     # Multiple context managers in one clause
     
+    # $$$ The new parsers seems to treat them more like separate context managers.
+    # $$$ Or maybe it's a command line switch.
+    
+    
     iterationCount = 0
     with ContextManagerExample () as contextManagerExample5, ContextManagerExample () as contextManagerExample6:
         iterationCount += 1
