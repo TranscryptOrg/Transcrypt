@@ -180,11 +180,11 @@ export var py_metatype = {
         for (var index = bases.length - 1; index >= 0; index--) {   // Reversed order, since class vars of first base should win
             var base = bases [index];
             for (var attrib in base) {
-                var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+                var descrip = Object.getOwnPropertyDescriptor (base, attrib) || {};
                 Object.defineProperty (cls, attrib, descrip);
             }           
             for (let symbol of Object.getOwnPropertySymbols (base)) {
-                let descrip = Object.getOwnPropertyDescriptor (base, symbol);
+                let descrip = Object.getOwnPropertyDescriptor (base, symbol) || {};
                 Object.defineProperty (cls, symbol, descrip);
             }
         }
@@ -196,11 +196,11 @@ export var py_metatype = {
         
         // Add own methods, properties and own static attributes to the created cls object
         for (var attrib in attribs) {
-            var descrip = Object.getOwnPropertyDescriptor (attribs, attrib);
+            var descrip = Object.getOwnPropertyDescriptor (attribs, attrib) || {}; // As the descriptor can be undefined
             Object.defineProperty (cls, attrib, descrip);
         }
         for (let symbol of Object.getOwnPropertySymbols (attribs)) {
-            let descrip = Object.getOwnPropertyDescriptor (attribs, symbol);
+            let descrip = Object.getOwnPropertyDescriptor (attribs, symbol) || {};
             Object.defineProperty (cls, symbol, descrip);
         }
 
