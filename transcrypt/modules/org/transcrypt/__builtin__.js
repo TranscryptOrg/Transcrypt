@@ -2104,7 +2104,7 @@ export function __and__ (a, b) {
 // Overloaded binary compare
 
 export function __eq__ (a, b) {
-    if (typeof a == 'object' && '__eq__' in a) {
+    if (b != null && typeof a == 'object' && '__eq__' in a) {
         return a.__eq__ (b);
     }
     else {
@@ -2113,7 +2113,7 @@ export function __eq__ (a, b) {
 };
 
 export function __ne__ (a, b) {
-    if (typeof a == 'object' && '__ne__' in a) {
+    if (b != null && typeof a == 'object' && '__ne__' in a) {
         return a.__ne__ (b);
     }
     else {
