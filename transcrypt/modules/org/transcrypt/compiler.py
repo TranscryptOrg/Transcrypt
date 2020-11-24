@@ -674,6 +674,8 @@ class Generator (ast.NodeVisitor):
             self.targetFragments.append (self.lineNrString) # Last target fragment doesn't have a '\n' to replace in the emit method
 
         except Exception as exception:
+            # print (traceback.format_exc ()) # Keep at hand for debugging purposes
+
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr
@@ -2399,7 +2401,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         if len (node.comparators) > 1:
             self.emit(')')
             
-    def visit_Constant (self, Node):
+    def visit_Constant (self, node):
         if type (node.value) == str:
             self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
         elif type (node.value) == bytes:
@@ -3310,7 +3312,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (node.slice.value)
                 self.emit (')')
             elif self.allowOperatorOverloading:         # It must be an RHS index
-                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
+                self.emit ('xxx__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native) $$$
                 self.visit (node.value)
                 self.emit (', ')
                 self.visit (node.slice.value)
