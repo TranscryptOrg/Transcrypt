@@ -2,3 +2,5 @@
 - There are some $$$ in the control_structures testlet.
 - Some (dirty?) hacks in __runtime__.py and/or __builtin__.js, marked by ???. Look for better solutions?
 - Autotest breaks on div_issues/__init__.py, line 135
+- visit_Const causes __getitem__ to be emittend in ''
+
