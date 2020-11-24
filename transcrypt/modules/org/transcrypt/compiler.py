@@ -3312,10 +3312,10 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (node.slice.value)
                 self.emit (')')
             elif self.allowOperatorOverloading:         # It must be an RHS index
-                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native) $$$
+                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
                 self.visit (node.value)
                 self.emit (', ')
-                self.visit (node.slice.value)
+                self.visit (node.slice.value)           # !!! Bug. This leads to visit_Const and emitting '' around __index0__
                 self.emit (')')
             else:                                       # It may be an LHS or RHS index
                 try:
