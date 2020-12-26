@@ -2863,7 +2863,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             else:
                 # Import dotted name, requires import under constructed unique name and then nesting,
                 # including transfer of imported names from immutable module to mutable object
-                # This mutable module representation object may come to hold other mutable module represention objects
+                # This mutable module representation object may come to hold other mutable module representation objects
 
                 self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
