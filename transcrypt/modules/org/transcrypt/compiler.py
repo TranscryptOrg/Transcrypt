@@ -3342,6 +3342,12 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (dim)
             self.emit (']')
             self.emit (')')
+        else:
+            # simple indexing with a constant or value
+            self.visit (node.value)
+            self.emit ('[')
+            self.visit (node.slice)
+            self.emit (']')
 
     def visit_Try (self, node):
         self.adaptLineNrString (node)
