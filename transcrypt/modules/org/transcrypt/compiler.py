@@ -2937,9 +2937,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 try:
                     # Still, when here, the 'decimated' import list become empty in rare cases, but JavaScript should swallow that
                     self.emit ('import {{')
-                    for index, namePair in enumerate (sorted (namePairs, key = lambda namePair: namePair.asName if namePair.asName else namePair.name)):
+                    hasEmittedComma = False
+                    for namePair in sorted (namePairs, key = lambda namePair: namePair.asName if namePair.asName else namePair.name):
                         if not (namePair.asName if namePair.asName else namePair.name) in (self.allOwnNames | self.allImportedNames):
-                            self.emitComma (index)
+                            self.emitComma (hasEmittedComma)
+                            hasEmittedComma = True
                             self.emit (self.filterId (namePair.name))
                             if namePair.asName:
                                 self.emit (' as {}', self.filterId (namePair.asName))
