@@ -12,7 +12,7 @@ Python in the browser, precompiled for speed: http://www.transcrypt.org
 - Debug directly from Python sourcecode, through integrated sourcemaps
 - Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers
 - Lightning fast JavaScript 6 code: call caching, for-loop optimization, in-line JavaScript etc.
-- Integrated static typechecking and minification at the tip of a command line switch
+- Integrated static type checking and minification at the tip of a command line switch
 - Also runs on top of node.js
 - Extensive documentation with many code examples
 - Apache 2.0 license
