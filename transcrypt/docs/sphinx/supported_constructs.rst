@@ -166,12 +166,12 @@ The *globals ()* function does the same as its counterpart in CPython, with some
 
 In the same module:
 
-- *globals ()* can retrieve all module-level variables, wether created via *globals ()* or in the normal way
+- *globals ()* can retrieve all module-level variables, whether created via *globals ()* or in the normal way
 - module-level variables created via *globals ()* can only be retrieved by *globals ()*, not as a normal variable
 
 From a different module:
 
-- *globals ()* can retrieve all module-level variables, wether created by *globals ()* or in the normal way
+- *globals ()* can retrieve all module-level variables, whether created by *globals ()* or in the normal way
 - module-level variables created by *globals ()* can be retrieved by *globals ()*, but also as a normal variable
 
 Since imports are done (statically) at compile time, *from ... import \** will not include the variables created (dynamically) via *globals ()*.
@@ -248,8 +248,8 @@ Module builtin: a small part of it demo'ed
 	:tab-width: 4
 	:caption: Testlet: module_builtin
 
-Module cmath: allmost all of Python's cmath module
---------------------------------------------------
+Module cmath: almost all of Python's cmath module
+-------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/module_cmath/__init__.py
 	:tab-width: 4
@@ -262,15 +262,15 @@ Module datetime: transcryption of Python's datetime module
 	:tab-width: 4
 	:caption: Testlet: module_datetime
 
-Module itertools: allmost all of Python's itertools module
-----------------------------------------------------------
+Module itertools: almost all of Python's itertools module
+---------------------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/module_itertools/__init__.py
 	:tab-width: 4
 	:caption: Testlet: module_itertools
 
-Module math: allmost all of Python's math module
-------------------------------------------------
+Module math: almost all of Python's math module
+-----------------------------------------------
 
 .. literalinclude:: ../../development/automated_tests/transcrypt/module_math/__init__.py
 	:tab-width: 4

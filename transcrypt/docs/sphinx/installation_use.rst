@@ -4,7 +4,7 @@ Getting started
 Installation
 ------------
 
-Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.7 has to be installed. After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introduction <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Trancrypt into that environment, *activate* the environment as also described there, and then type:
+Transcrypt is currently tested under Windows, Linux and OSX, with Chrome, Internet Explorer and Firefox. To be able to use it, Python 3.7 has to be installed. After that, install *virtualenv* as explained in `Jamie Matthews very clear and brief introduction <https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/>`_. Be sure to install virtualenv for the right Python version, by using the right *pip*. For each Transcrypt project (or group of projects using the same Transcrypt version) create an environment as described in the referenced introduction. To install Transcrypt into that environment, *activate* the environment as also described there, and then type:
 
 *pip install transcrypt*
 
@@ -17,7 +17,7 @@ Alternatively, for manual installation under Windows or Linux, follow the steps 
 
 To enable minification, additionally the Java Runtime Environment 6 or later has to be installed.
 
-.. note:: If you install Transcrypt manually, Trancrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to be used side by side selectively.
+.. note:: If you install Transcrypt manually, Transcrypt is started by typing *run_transcrypt* rather than *transcrypt*. This allows a pip installed Transcrypt and a manually installed Transcrypt to be used side by side selectively.
 
 .. note:: If you also use Numscrypt under Linux or OSX, use the MiniConda installer rather than *virtualenv*, as described in the Numscrypt documentation, since it will allow you to obtain the right version of NumPy.
 
@@ -42,7 +42,7 @@ Installation troubleshooting checklist
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Transcrypt was installed using *pip*, but *import transcrypt* fails. Transcrypt isn't a library but a compiler. Install and run it as described in this chapter.
-2. Transcrypt reports an error containing the word 'java'. Transcrypt produces both prettyfied and minified JavaScript output. For the minification it makes use of the Google Closure Compiler, which is included in the distribution and requires Java to run. You can check proper installation of Java by typing the word *java* on the command line. This should give you a list of options: *Usage: java [-options] class []args...]* and so on. If you can't or won't install Java, you can run Transcrypt without minification by using the *-n* command line switch.
+2. Transcrypt reports an error containing the word 'java'. Transcrypt produces both prettified and minified JavaScript output. For the minification it makes use of the Google Closure Compiler, which is included in the distribution and requires Java to run. You can check proper installation of Java by typing the word *java* on the command line. This should give you a list of options: *Usage: java [-options] class []args...]* and so on. If you can't or won't install Java, you can run Transcrypt without minification by using the *-n* command line switch.
 3. The static checker doesn't find all errors it could. The static checks, performed by the PyFlakes package that's part of the distribution, are of a 'light' variety. Style checks and false positives are avoided. The accent is on finding undefined identifiers and unused variables.
 
 Your first Transcrypt program
@@ -52,12 +52,12 @@ Open a command prompt in the *demos/hello* directory and type *transcrypt hello*
 Then start a http server from the command prompt by typing *python -m http.server* or *python3 -m http.server*, dependent on your installation and type *localhost:8000/hello* in the address bar to load the result into your browser.
 
 After clicking on both buttons a few times, take a look at *hello.html*.
-As you can see, eventhandlers are connected to the buttons exactly as you would do with JavaScript.
+As you can see, event handlers are connected to the buttons exactly as you would do with JavaScript.
 
 Then look at *hello.py*.
 Note that JavaScript functions like document.getElementById can be called from Python exactly as you would call them from JavaScript, but with Python data.
 
-The minified JavaScript files *including the Transcrypt runtime* are only around 50kB. With non-trivial programs this overhead becomes negligible. Transcrypt applications in themselves don't need any external files. Of course you can use extensive JavaScript libraries served by content delivery networks as you normally would. But you can also make very compact stand alone applications. The most efficient thing to do is pack all functionality for a page in a single Transcrypt program. Note that the source can consist of many modules if needed and many callback entrypoints can be provided. But it is *one* stateful application, just like it would be on the desktop.
+The minified JavaScript files *including the Transcrypt runtime* are only around 50kB. With non-trivial programs this overhead becomes negligible. Transcrypt applications in themselves don't need any external files. Of course you can use extensive JavaScript libraries served by content delivery networks as you normally would. But you can also make very compact stand alone applications. The most efficient thing to do is pack all functionality for a page in a single Transcrypt program. Note that the source can consist of many modules if needed and many callback entry points can be provided. But it is *one* stateful application, just like it would be on the desktop.
 
 .. literalinclude:: ../../demos/hello/hello.html
 	:tab-width: 4
@@ -132,7 +132,7 @@ Source code annotation only happens for Python sources, not for JavaScript-only 
    
 Static type validation
 ----------------------
-Static type validation is both a powerful method to catch a variety of bugs and a way to add clear, automatically checked documentation to your source code. Transcrypt includes an experimental version of `Jukka Lehtosalo's mypy static type validator <http://mypy-lang.org/>`_ This validator uses :raw-html:`<a href="https://www.python.org/dev/peps/pep-0484/" target="_blank">type hints</a>` to rigorously cross-check correct use of datatypes all through your application. To activate static type validation use the *-ds* switch. You can combine static type validation with lightweight consistency checking using both the *-ds* and *-dc* switches.
+Static type validation is both a powerful method to catch a variety of bugs and a way to add clear, automatically checked documentation to your source code. Transcrypt includes an experimental version of `Jukka Lehtosalo's mypy static type validator <http://mypy-lang.org/>`_ This validator uses :raw-html:`<a href="https://www.python.org/dev/peps/pep-0484/" target="_blank">type hints</a>` to rigorously cross-check correct use of data types all through your application. To activate static type validation use the *-ds* switch. You can combine static type validation with lightweight consistency checking using both the *-ds* and *-dc* switches.
 
 Below is an example of code with type hints and deliberate inconsistencies, and the output of both the static type validator and the lightweight consistency checker. As can be seen, many errors can be caught in this way.
 
