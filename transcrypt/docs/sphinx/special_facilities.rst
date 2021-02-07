@@ -228,6 +228,18 @@ An example of its use is to encapsulate a JavaScript library as a Python module,
 
 Note that since {} is used as placeholder in Python formatting, any normal { and } in your JavaScript in the code parameter have to be doubled. If you just want to include a literal piece of JavaScript without any replacements, you can avoid this doubling by using __pragma__ ('js', '{}', <my_piece_of_JS_code>). 
 
+Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')
+-------------------------------------------------------------------------------------------------------------------------------
+Normally a Python *{...}* literal is compiled to *dict ({...})* to include the special attributes and methods of a Python dict, including e.g. an iterator. When *__pragma__ ('jsiter')* is active, a *Python {...}* literal is compiled to a bare *{...}*, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when *__pragma__ ('jsiter')* is active, a Python *for ... in ...* is literally translated to a JavaScript *for (var ... in ...)*. The main use case for this pragma is conveniently looping through class attributes in the *__new__* method of a metaclass. As a more flexible, but less convenient alternative, *__pragma__ ('js', '{}', '''...''')* can be used.
+
+An example of the use of this pragma is the following:
+
+.. literalinclude:: ../../development/automated_tests/transcrypt/metaclasses/__init__.py
+	:start-after: from org.transcrypt.stubs.browser import __pragma__
+	:end-before: class Uppercaser (metaclass = UppercaserMeta):
+	:tab-width: 4
+	:caption: Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass
+
 __pragma__ ('jskeys') and __pragma__ ('nojskeys')
 -------------------------------------------------
 Normally in Python, dictionary keys without quotes are interpreted as identifiers and dictionary keys with quotes as string literals. This is more flexible than the JavaScript approach, where dictionary keys with or without quotes are always interpreted as string literals. However to better match the documentation and habits with some JavaScript libraries, such as plotly.js, dictionary keys without quotes can be optionally interpreted as string literals. While the -jk command line switch achieves this globally, the preferred way is to switch on and off this facility locally.
@@ -299,15 +311,3 @@ Example:
 .. literalinclude:: ../../development/manual_tests/xtrans/test_for_docs.js
 	:tab-width: 4
 	:caption: The resulting translated file test.js
-
-Create bare JavaScript objects and iterate over their attributes from Python: __pragma__ ('jsiter') and __pragma__ ('nojsiter')
--------------------------------------------------------------------------------------------------------------------------------
-Normally a Python *{...}* literal is compiled to *dict ({...})* to include the special attributes and methods of a Python dict, including e.g. an iterator. When *__pragma__ ('jsiter')* is active, a *Python {...}* literal is compiled to a bare *{...}*, without special attributes or methods. To still be able to iterate over the attributes of such a bare JavaScript object from Python, when *__pragma__ ('jsiter')* is active, a Python *for ... in ...* is literally translated to a JavaScript *for (var ... in ...)*. The main use case for this pragma is conveniently looping through class attributes in the *__new__* method of a metaclass. As a more flexible, but less convenient alternative, *__pragma__ ('js', '{}', '''...''')* can be used.
-
-An example of the use of this pragma is the following:
-
-.. literalinclude:: ../../development/automated_tests/transcrypt/metaclasses/__init__.py
-	:start-after: from org.transcrypt.stubs.browser import __pragma__
-	:end-before: class Uppercaser (metaclass = UppercaserMeta):
-	:tab-width: 4
-	:caption: Use of __pragma__ ('jsiter') and __pragma ('nojsiter') to manipulate class attributes in a metaclass
