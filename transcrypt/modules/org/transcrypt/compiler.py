@@ -2577,8 +2577,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         ctx = ast.Load
                     ),
                     slice = ast.Index (
-                        value = ast.Num (
-                            n = self.getTemp ('index')
+                        value = ast.Name (  # Changed from ast.Num on y21m05d09
+                            id = self.getTemp ('index'),
+                            ctx = ast.Load
                         )
                     ),
                     ctx = ast.Load
@@ -2995,7 +2996,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             )
 
     def visit_JoinedStr (self, node):
-        self.emit (repr (''.join ([value.s if type (value) == ast.Str else '{{}}' for value in node.values])))
+        self.emit (repr (''.join ([value.s if type (value) == ast.Constant else '{{}}' for value in node.values]))) # Changed from ast.Str on y21m05d09
         self.emit ('.format (')
         index = 0
         for value in node.values:
