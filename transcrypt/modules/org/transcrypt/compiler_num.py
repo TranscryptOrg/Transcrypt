@@ -1326,14 +1326,14 @@ class Generator (ast.NodeVisitor):
             self.visit (node.target)        # No need to emit var first, it has to exist already
 
             # Optimize for ++ and --
-            if type (node.value) == ast.Constant and node.value.value == 1:
+            if type (node.value) == ast.Num and node.value.n == 1:
                 if type (node.op) == ast.Add:
                     self.emit ('++')
                     return
                 elif type (node.op) == ast.Sub:
                     self.emit ('--')
                     return
-            elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Constant and node.value.operand.value == 1:
+            elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Num and node.value.operand.n == 1:
                 if type (node.op) == ast.Add:
                     if type (node.value.op) == ast.UAdd:
                         self.emit ('++')
@@ -2442,7 +2442,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_Dict (self, node):
         if not self.allowJavaScriptKeys:                    # If we don't want JavaScript treatment of keys, for literal keys it doesn't make a difference
             for key in node.keys:
-                if not type (key) == ast.Constant:          # But if there's only one non-literal key there's a difference, and all keys are treated the Python way
+                if not type (key) in (ast.Str, ast.Num):    # but if there's only one non-literal key there's a difference, and all keys are treated the Python way
                     self.emit ('dict ([')
                     for index, (key, value) in enumerate (zip (node.keys, node.values)):
                         self.emitComma (index)
@@ -2490,16 +2490,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         optimize = (
             type (node.target) == ast.Name and  # Since 'var' is emitted, target must not yet exist, so e.g. not be element of array
             self.isCall (node.iter, 'range') and
-            type (node.iter.args [0]) != ast.Starred and (
+                type (node.iter.args [0]) != ast.Starred and (
                 len (node.iter.args) < 3 or                         # Constant step of 1
-                (
-                    type (node.iter.args [2]) == ast.Constant and
-                    type (node.iter.args [2] .value) == int
-                ) or
-                (  # Positive constant step
+                type (node.iter.args [2]) == ast.Num or (           # Positive constant step
                     type (node.iter.args [2]) == ast.UnaryOp and    # Negative constant step
-                    type (node.iter.args [2] .operand) == ast.Constant and
-                    type (node.iter.args [2] .operand.value) == int
+                    type (node.iter.args [2] .operand) == ast.Num
                 )
             )
         )
@@ -2515,17 +2510,17 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             step = (
                     1
                 if len (node.iter.args) <= 2 else
-                    node.iter.args [2] .value
-                if type (node.iter.args [2]) == ast.Constant else
-                    node.iter.args [2] .operand .value
+                    node.iter.args [2] .n
+                if type (node.iter.args [2]) == ast.Num else
+                    node.iter.args [2] .operand .n
                 if type (node.iter.args [2] .op) == ast.UAdd else
-                    -node.iter.args [2] .operand .value
+                    -node.iter.args [2] .operand .n
             )
 
             self.emit ('for (var ')
             self.visit (node.target)
             self.emit (' = ')
-            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Constant (0))
+            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Num (0))
             self.emit ('; ')
             self.visit (node.target)
             self.emit (' < ' if step > 0 else ' > ')
@@ -2582,7 +2577,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         ctx = ast.Load
                     ),
                     slice = ast.Index (
-                        value = ast.Name (
+                        value = ast.Name (  # Changed from ast.Num on y21m05d09
                             id = self.getTemp ('index'),
                             ctx = ast.Load
                         )
@@ -3001,7 +2996,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             )
 
     def visit_JoinedStr (self, node):
-        self.emit (repr (''.join ([value.value if type (value) == ast.Constant else '{{}}' for value in node.values])))
+        self.emit (repr (''.join ([value.s if type (value) == ast.Constant else '{{}}' for value in node.values]))) # Changed from ast.Str on y21m05d09
         self.emit ('.format (')
         index = 0
         for value in node.values:
@@ -3221,7 +3216,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             return
 
         elif node.id == '__line__':
-            self.visit (ast.Constant (value = self.lineNr))
+            self.visit (ast.Num (n = self.lineNr))
             return
 
         elif type (node.ctx) == ast.Store:
