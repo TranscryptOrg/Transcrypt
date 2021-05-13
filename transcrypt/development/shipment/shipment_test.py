@@ -41,9 +41,10 @@ class BrowserController:
             self.options.add_argument ('--no-sandbox')        # Bypass OS security model
             self.options.add_argument ('--disable-gpu')       # Applicable to windows OS only
             self.options.add_argument ('disable-infobars')
-            self.options.add_argument ('--disable-extensions')    
+            self.options.add_argument ('--disable-extensions')
+            self.options.add ('--disable-web-security')
                 
-        self.webDriver = selenium.webdriver.Chrome (chrome_options = self.options)
+        self.webDriver = selenium.webdriver.Chrome (options = self.options)
         self.nrOfTabs = 0
         
     def waitForNewTab (self):
@@ -51,7 +52,6 @@ class BrowserController:
             time.sleep (0.5)
         self.nrOfTabs = len (self.webDriver.window_handles)
                 
-        
     def open (self, url, run):
         print (f'Browser controller is opening URL: {url}')
     
@@ -121,13 +121,12 @@ pythonServerUrl = host + pythonServerPort
 parcelServerUrl = host + parcelServerPort
 nodeServerUrl = host + nodeServerPort
 
-transpileCommand = 'transcrypt' if commandArgs.inst else 'run_transcrypt'
-                
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
+transpileCommand = 'transcrypt' if commandArgs.inst else f'/{appRootDir}/run_transcrypt'
+                
 print (f'\nApplication root directory: {appRootDir}\n')
-
 
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
@@ -136,11 +135,21 @@ os.system ('cls' if os.name == 'nt' else 'clear')
         
 # ---- Start an http server in the Transcryp/transcrypt directory
 
+print (appRootDir)
+
 if not commandArgs.blind:
+    command = f'python -m http.server --directory {appRootDir}'
+    
     if commandArgs.unattended:
-        os.system (f'py37 -m http.server --directory {appRootDir} &')
+        os.system (f'{command} &')
     else:
-        os.system (f'py37 -m http.server --directory {appRootDir} &')
+        os.system (f'konsole --new-tab --hold -e "bash -ic \'{command}\'"  &')
+        
+    '''
+    If 'Address already in use' do:
+        ps -fA | grep python
+        kill <process number>
+    '''
 
 # ---- Allow visual check of all command line options
 
@@ -212,6 +221,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
             time.sleep (5)
             url = nodeServerUrl
         else:
+            time.sleep (5)
             url = f'{pythonServerUrl}/{relSourcePrepath}.html'
             
         success = browserController.open (url, run)
@@ -226,6 +236,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')
+
     test ('development/automated_tests/time/autotest', True, switches, needsAttention = True)
     test ('development/automated_tests/re/autotest', True, switches)
     
@@ -269,7 +280,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches, needsAttention = True)
 
     test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
-    
+
     if relSourcePrepathsOfErrors:
         print ('\n\n!!!!!!!!!!!!!!!!!!!!\n')
         for relSourcePrepathOfError in relSourcePrepathsOfErrors:
