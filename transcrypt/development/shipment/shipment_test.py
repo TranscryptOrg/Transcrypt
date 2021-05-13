@@ -295,3 +295,4 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
                 
         print ('\nSHIPMENT TEST SUCCEEDED\n')
         sys.exit (0)
+        

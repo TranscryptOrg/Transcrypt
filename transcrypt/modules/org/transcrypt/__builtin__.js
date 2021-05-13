@@ -1509,13 +1509,13 @@ __pragma__ ('ifdef', '__sform__')
             }
             else {              // Key is a string
                 var attr = undefined;
-                var idx = key.indexOf ('.');
+                var idx = ("" + key) .indexOf ('.');    // ??? Why is conversion to string suddenly needed?
                 if (idx != -1) {
                     attr = key.substring (idx + 1);
                     key = key.substring (0, idx);
                 }
                 else {
-                    idx = key.indexOf ('[');
+                    idx = ("" + key) .indexOf ('[');    // ??? Why is conversion to string suddenly needed?
                     if (idx != -1) {
                         attr = key.substring (idx + 1).slice (0, -1);
                         key = key.substring (0, idx);
@@ -1528,7 +1528,7 @@ __pragma__ ('ifdef', '__sform__')
                 else {
                     for (var index = 0; index < args.length; index++) {
                         // Find first 'dict' that has that key and the right field
-                        if (typeof args [index] == 'object' && args [index][key] !== undefined) {
+                        if (typeof args [index] == 'object' && args [index] != null && args [index][key] !== undefined) {   // Why is check for null suddenly needed?
                             // Return that field field
                             if (attr) {
                                 value = args [index][key][attr];

@@ -6,6 +6,8 @@ import tokenize
 import re
 import time
 
+import traceback
+
 class Any:
     def __init__ (self, **attribs):
         for attrib in attribs:
@@ -63,9 +65,10 @@ class CommandArgs:
         self.argParser.add_argument ('-m', '--map', help = "generate source map", action = 'store_true')
         self.argParser.add_argument ('-n', '--nomin', help = "no minification", action = 'store_true')
         self.argParser.add_argument ('-o', '--opov', help = "enable operator overloading by default. In general this is disadvised, use __pragma__ ('opov') and __pragma__('noopov') locally instead to prevent slow code", action = 'store_true')
-        self.argParser.add_argument ('-p', '--parent', nargs='?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js")
+        self.argParser.add_argument ('-od', '--outdir', help = 'override output directory (default = __target__)')
+        self.argParser.add_argument ('-p', '--parent', nargs = '?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js")
         self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
-        self.argParser.add_argument ('-s', '--symbols', nargs='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
+        self.argParser.add_argument ('-s', '--symbols', nargs ='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
         self.argParser.add_argument ('-sf', '--sform', help = "enable support for string formatting mini language", action = 'store_true')
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
         self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .auto to autogenerate dynamically loadable native JavaScript modules, one per Python module. Use -u .run to generate the loader and the staticcally loadable runtime unit. Use -u .com to generate a statically loadable component unit.")
@@ -241,7 +244,7 @@ def enhanceException (exception, **kwargs):
 def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, refuseIfAppearsMinified = False):
     '''
     - Honor ifdefs
-    - Strip comments if allowed by commend line switch AND indicated by pragma
+    - Strip comments if allowed by command line switch AND indicated by pragma
     - Harvest import and export info
     '''
 
@@ -261,7 +264,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
         
         nonlocal stripComments
         
-        def __pragma__ (name, *args):
+        def __pragma__ (name, *args):   # Will be called below by executing the stripped line of source code
 
             nonlocal stripComments
         
@@ -279,9 +282,9 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
         strippedLine = targetLine.lstrip ()
         if stripComments and strippedLine.startswith ('/*'):
             passStack.append (False)
-            return all (passStack)  # So skip this line
+            return all (passStack)      # So skip this line
         elif stripComments and strippedLine.endswith ('*/'):
-            passStack.pop ()        # Possibly pass next line
+            passStack.pop ()            # Possibly pass next line
         elif strippedLine.startswith ('__pragma__') and (
             'stripcomments' in strippedLine or
             'ifdef' in strippedLine or
@@ -289,10 +292,10 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             'else' in strippedLine or
             'endif' in strippedLine
         ):
-            exec (strippedLine)
-            return False            # Skip line anyhow, independent of passStack
+            exec (strippedLine)         # Executes local function __pragma__ above during compilation
+            return False                # Skip line anyhow, independent of passStack
         else:
-            return all (passStack)  # Skip line only if not in passing state according to passStack
+            return all (passStack)      # Skip line only if not in passing state according to passStack
     
     passableLines = [line for line in code.split ('\n') if passable (line)]
     
@@ -308,7 +311,7 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
     
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
-    wordPattern = re.compile (r'[\w$]+')
+    wordPattern = re.compile (r'[\w/*$]+')  # /S matches too much, e.g. { and }  ??? Is this OK in all cases? Scrutinize code below...
     for line in passableLines:
         words = wordPattern.findall (line)
         
@@ -316,36 +319,37 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
                 words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
                 
-            if words [0] == 'export':
-                # Deducing exported names from JavaScript is needed to facilitate * import by other modules
-                
-                if words [1] in {'var', 'function'}:
-                    # Export prefix:    "export var ... or export function ..."
+            if words:    
+                if words [0] == 'export':
+                    # Deducing exported names from JavaScript is needed to facilitate * import by other modules
                     
-                    result.exportedNames.append (words [2])
-                else:
-                    # Transit export:   "export {p, q, r, s};"  
+                    if words [1] in {'var', 'function'}:
+                        # Export prefix:    "export var ... or export function ..."
+                        
+                        result.exportedNames.append (words [2])
+                    else:
+                        # Transit export:   "export {p, q, r, s};"  
+                        
+                        # Find exported names as "{p, q, r, s}"
+                        match = namesPattern.search (line)
+                        
+                        # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
+                        if match:
+                            result.exportedNames.extend (eval (wordPattern.sub (lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
+                         
+                elif words [0] == 'import':
+                    # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
+                    # They may have an explicit import list for unqualified access or an import * for qualified access
+                    # In both cases only the path of the imported module is needed, to be able to provide that module
+                    # It can be a path without extension, allowing both .py and .js files as imported modules
+                    #
+                    # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
+                    # - Qualified import:     "import * from '<relative module path>'"  
                     
-                    # Find exported names as "{p, q, r, s}"
-                    match = namesPattern.search (line)
-                    
-                    # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
+                    match = pathPattern.search (line)
                     if match:
-                        result.exportedNames.extend (eval (wordPattern.sub (lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
-                     
-            if words [0] == 'import':
-                # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
-                # They may have an explicit import list for unqualified access or an import * for qualified access
-                # In both cases only the path of the imported module is needed, to be able to provide that module
-                # It can be a path without extension, allowing both .py and .js files as imported modules
-                #
-                # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
-                # - Qualified import:     "import * from '<relative module path>'"  
-                
-                match = pathPattern.search (line)
-                if match:
-                    result.importedModuleNames.append (eval (match.group (1)) [2:-3])
-                
+                        result.importedModuleNames.append (eval (match.group (1)) [2:-3])
+                        
     return result
 
     

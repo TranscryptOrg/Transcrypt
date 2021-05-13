@@ -80,4 +80,65 @@ def run (autoTester):
     d.q = 9
     d.r = 10
     d.s = 11
-    autoTester.check (d.p, d.q, d.r, d.s)   
+    autoTester.check (d.p, d.q, d.r, d.s)  
+
+    # Issue 587, code as utilized by pjbonestro
+
+    autoTester.check ("Issue 587")
+
+    class Element():
+        def __init__(self):
+            self.message = "Goodbye"
+
+        def sayBye(self):
+            autoTester.check (self.message)
+
+    class Wrapper():
+        def __init__ (self, element):
+            self.element = element
+
+        def __setattr__ (self, name, value):
+            """ set attribute on element if it already has the attribute """
+            if name != "element" and hasattr(self.element, name):
+                setattr(self.element, name, value)
+            else:
+                self.__dict__[name] = value
+
+        def __getattr__ (self, name):
+            """ get attribute from element if this object doesn't have the attribute """
+            result = getattr(self.element, name)
+            # if result is a function, bind self.element to it
+            if hasattr(result, 'call') and hasattr(result, 'bind'):
+                result = result.bind(self.element)
+            return result
+
+        def sayHello(self):
+            autoTester.check("Hello")
+            return self
+
+
+    e = Element()
+    w = Wrapper(e)
+
+    #
+    # Usage
+    #
+
+    e.sayBye()
+    w.sayBye() # call functions on e, using w
+
+    # and method chaining should work:
+    w.sayHello().sayBye()  
+    
+    w.message = "Bye" # set attributes on e, using w
+    
+    e.sayBye()
+    w.sayBye() # call functions on e, using w
+
+    # and method chaining should work:
+    w.sayHello().sayBye()  
+    
+    autoTester.check ("End issue 587")
+
+    # End of issue 587
+    

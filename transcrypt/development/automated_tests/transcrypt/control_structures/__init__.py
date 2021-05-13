@@ -124,4 +124,21 @@ def run (autoTester):
         autoTester.check ('ctx6', exception)
     finally:
         autoTester.check ('ctx5', contextManagerExample5.counter, externalCounter5)
-        autoTester.check ('ctx4', contextManagerExample4.counter, externalCounter4) 
+        autoTester.check ('ctx4', contextManagerExample4.counter, externalCounter4)
+
+    # Multiple context managers in one clause
+    
+    # $$$ The new parsers seems to treat them more like separate context managers.
+    # $$$ Or maybe it's a command line switch.
+    
+    
+    iterationCount = 0
+    with ContextManagerExample () as contextManagerExample5, ContextManagerExample () as contextManagerExample6:
+        iterationCount += 1
+    autoTester.check ('ctx7', iterationCount, contextManagerExample5.counter, contextManagerExample6.counter)
+
+    iterationCount = 0
+    with ContextManagerExample (), ContextManagerExample (), ContextManagerExample (), \
+         ContextManagerExample (), ContextManagerExample ():
+        iterationCount += 1
+    autoTester.check ('ctx8', iterationCount)

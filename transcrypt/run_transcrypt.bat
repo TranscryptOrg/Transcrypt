@@ -1,1 +1,1 @@
-python37 %~dp0__main__.py %*
+python %~dp0__main__.py %*

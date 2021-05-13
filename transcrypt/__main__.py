@@ -44,7 +44,7 @@ sys.modules.pop ('org', None)
 
 # Transcrypt needs to find modulesDir before CPython modules, so it will favor Transcrypt modules
 candidateTranspilationDirs = [modulesDir] + sys.path
-lowerSkipExtensions = ('.zip', '/dlls', '/lib', '/python37')    # !!! Generalize to all platforms and Python versions
+lowerSkipExtensions = ('.zip', '/dlls', '/lib', '/python37', '/python38')    # !!! Generalize to all platforms and Python versions
 
 transpilationDirs = []
 for candidateTranspilationDir in candidateTranspilationDirs:

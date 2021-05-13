@@ -106,30 +106,27 @@ export function __init__ (module) {
     return module.__all__;
 };
 
-// Proxy switch, controlled by __pragma__ ('proxy') and __pragma ('noproxy')
-export var __proxy__ = false;  // No use assigning it to __all__, only its transient state is important
-
 // Since we want to assign functions, a = b.f should make b.f produce a bound function
 // So __get__ should be called by a property rather then a function
 // Factory __get__ creates one of three curried functions for func
 // Which one is produced depends on what's to the left of the dot of the corresponding JavaScript property
-export function __get__ (self, func, quotedFuncName) {
-    if (self) {
-        if (self.hasOwnProperty ('__class__') || typeof self == 'string' || self instanceof String) {           // Object before the dot
+export function __get__ (aThis, func, quotedFuncName) {// Param aThis is thing before the dot, if it's there
+    if (aThis) {
+        if (aThis.hasOwnProperty ('__class__') || typeof aThis == 'string' || aThis instanceof String) {           // Object before the dot
             if (quotedFuncName) {                                   // Memoize call since fcall is on, by installing bound function in instance
-                Object.defineProperty (self, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
+                Object.defineProperty (aThis, quotedFuncName, {      // Will override the non-own property, next time it will be called directly
                     value: function () {                            // So next time just call curry function that calls function
                         var args = [] .slice.apply (arguments);
-                        return func.apply (null, [self] .concat (args));
+                        return func.apply (null, [aThis] .concat (args));
                     },              
                     writable: true,
                     enumerable: true,
                     configurable: true
                 });
             }
-            return function () {                                    // Return bound function, code dupplication for efficiency if no memoizing
+            return function () {                                    // Return bound function, code duplication for efficiency if no memoizing
                 var args = [] .slice.apply (arguments);             // So multilayer search prototype, apply __get__, call curry func that calls func
-                return func.apply (null, [self] .concat (args));
+                return func.apply (null, [aThis.__proxy__ ? aThis.__proxy__ : aThis] .concat (args));
             };
         }
         else {                                                      // Class before the dot
@@ -141,22 +138,22 @@ export function __get__ (self, func, quotedFuncName) {
     }
 };
 
-export function __getcm__ (self, func, quotedFuncName) {
-    if (self.hasOwnProperty ('__class__')) {
+export function __getcm__ (aThis, func, quotedFuncName) {
+    if (aThis.hasOwnProperty ('__class__')) {
         return function () {
             var args = [] .slice.apply (arguments);
-            return func.apply (null, [self.__class__] .concat (args));
+            return func.apply (null, [aThis.__class__] .concat (args));
         };
     }
     else {
         return function () {
             var args = [] .slice.apply (arguments);
-            return func.apply (null, [self] .concat (args));
+            return func.apply (null, [aThis] .concat (args));
         };
     }
 };
 
-export function __getsm__ (self, func, quotedFuncName) {
+export function __getsm__ (aThis, func, quotedFuncName) {
     return func;
 };
     
@@ -181,6 +178,9 @@ export var py_metatype = {
             var base = bases [index];
             for (var attrib in base) {
                 var descrip = Object.getOwnPropertyDescriptor (base, attrib);
+                if (descrip == null) {  // Another library modified Function.prototype
+                    continue;
+                }
                 Object.defineProperty (cls, attrib, descrip);
             }           
             for (let symbol of Object.getOwnPropertySymbols (base)) {
@@ -226,14 +226,14 @@ export var object = {
         var instance = Object.create (this, {__class__: {value: this, enumerable: true}});
         
         if ('__getattr__' in this || '__setattr__' in this) {
-            instance = new Proxy (instance, {
+            instance.__proxy__ = new Proxy (instance, {
                 get: function (target, name) {
                     let result = target [name];
                     if (result == undefined) {  // Target doesn't have attribute named name
                         return target.__getattr__ (name);
                     }
                     else {
-                        return result;
+                        return result;	// Will be bound to the target.__proxy__ to allow call chaining (as in issue #587)
                     }
                 },
                 set: function (target, name, value) {
@@ -246,6 +246,7 @@ export var object = {
                     return true;
                 }
             })
+			instance = instance.__proxy__
         }
 
         // Call constructor
