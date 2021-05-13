@@ -823,7 +823,7 @@ class Generator (ast.NodeVisitor):
             self.lineNrString = ''
 
     def isCommentString (self, statement):
-        return isinstance (statement, ast.Expr) and isinstance (statement.value, ast.Str)
+        return isinstance (statement, ast.Expr) and isinstance (statement.value, ast.Constant) and type (statement.value.value) == str
 
     def emitBody (self, body):
         for statement in body:
@@ -1128,7 +1128,7 @@ class Generator (ast.NodeVisitor):
                 )
 
     def visit_AnnAssign (self, node):
-        if node.value != None:  # Rather than node.value is a NameConstant with value None
+        if node.value != None:
             self.visit (
                 ast.Assign (
                     [node.target],
@@ -1668,7 +1668,7 @@ class Generator (ast.NodeVisitor):
                     raise utils.Error (
                         lineNr = self.lineNr,
                         message = '\n\tUnknown pragma: {}'.format (
-                            node.args [0] .s if type (node.args [0]) == ast.Str else node.args [0]
+                            node.args [0] .value if type (node.args [0]) == ast.Constant else node.args [0] # ??? and it's a str?
                         )
                     )
                 return
@@ -1778,8 +1778,8 @@ class Generator (ast.NodeVisitor):
                                     id = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes (True)]),
                                     ctx = ast.Load
                                 ),
-                                ast.Str (
-                                    s = node.func.attr  # <methodName>
+                                ast.Constant (
+                                    value = node.func.attr  # <methodName>
                                 )
                             ],
                             keywords = []
@@ -1857,7 +1857,7 @@ class Generator (ast.NodeVisitor):
                     ),
                     args = ([
                           node.func,
-                          ast.NameConstant (
+                          ast.Constant (
                               value = None)
                     ] + node.args),
                     keywords = node.keywords
@@ -1872,7 +1872,7 @@ class Generator (ast.NodeVisitor):
             # Adapt positional args)
             for index, expr in enumerate (node.args):
                 value = None
-                if expr == ast.NameConstant:
+                if expr == ast.Constant:
                     value = True if expr.value == 'True' else False if expr.value == 'False' else None
                 if value != None:
                     dataClassArgTuple [index][1] = value
@@ -2135,14 +2135,14 @@ class Generator (ast.NodeVisitor):
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = '''
+									ast.Constant (
+										value = '''
 let names = self.__initfields__.values ();
 for (let arg of args) {
     self [names.next () .value] = arg;
@@ -2184,14 +2184,14 @@ for (let name of kwargs.py_keys ()) {
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = '''
+									ast.Constant (
+										value = '''
 let names = self.__reprfields__.values ();
 let fields = [];
 for (let name of names) {{
@@ -2239,14 +2239,14 @@ return  self.__name__ + '(' + ', '.join (fields) + ')'
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = ('''
+									ast.Constant (
+										value = ('''
 let names = self.__comparefields__.values ();
 let selfFields = [];
 let otherFields = [];
@@ -2412,22 +2412,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('{}'.format (node.n))
         else:
             self.emit (self.nameConsts [node.value])
-        
-    '''
-    !!! Deprecated
-    
-    def visit_NameConstant (self, node):
-        self.emit (self.nameConsts [node.value])
-        
-    def visit_Str (self, node):
-        self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
-        
-    def visit_Num (self, node):
-        self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
-
-    def visit_Bytes (self, node):
-        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
-    '''
 
     def visit_Continue (self, node):
         self.emit ('continue')
@@ -2525,7 +2509,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('for (var ')
             self.visit (node.target)
             self.emit (' = ')
-            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Constant (0))
+            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Constant (value = 0))
             self.emit ('; ')
             self.visit (node.target)
             self.emit (' < ' if step > 0 else ' > ')
@@ -3206,7 +3190,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_Name (self, node):
         if node.id == '__file__':
-            self.visit (ast.Str (s = self.module.sourcePath))
+            self.visit (ast.Constant (value = self.module.sourcePath))
             return
 
         elif node.id == '__filename__':
@@ -3217,7 +3201,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 subDir = os.path.split (path [0])
                 fileName = os.path.join (subDir [1], fileName)
 
-            self.visit (ast.Str (s = fileName))
+            self.visit (ast.Constant (value = fileName))
             return
 
         elif node.id == '__line__':
@@ -3556,7 +3540,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             self.visit(expr)
             yield
-            self.visit(ast.Call (expr.func, [ast.Str (revName)] + expr.args[1:]))
+            self.visit(ast.Call (expr.func, [ast.Constant (value = revName)] + expr.args[1:]))
 
         @contextmanager
         def skipContext (item):
