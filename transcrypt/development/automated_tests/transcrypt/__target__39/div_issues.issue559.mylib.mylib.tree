@@ -1,0 +1,176 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = mylibHello
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = Hello World Function
+								kind: NoneType = None
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: ClassDef 
+			name: str = mylibClass
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = autoTester
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = autoTester
+									ctx: Store 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							type_comment: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = Hello World Class
+										kind: NoneType = None
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = checkSymbols
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = iconv
+										kind: NoneType = None
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = sorted
+											ctx: Load 
+										args: list 
+											element: ListComp 
+												elt: Name 
+													id: str = x
+													ctx: Load 
+												generators: list 
+													element: comprehension 
+														target: Name 
+															id: str = x
+															ctx: Store 
+														iter: Call 
+															func: Name 
+																id: str = globals
+																ctx: Load 
+															args: list 
+															keywords: list 
+														ifs: list 
+															element: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = x
+																		ctx: Load 
+																	attr: str = startswith
+																	ctx: Load 
+																args: list 
+																	element: Constant 
+																		value: str = my
+																		kind: NoneType = None
+																keywords: list 
+														is_async: int = 0
+										keywords: list 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = noiconv
+										kind: NoneType = None
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+	type_ignores: list 

@@ -1,0 +1,17 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = div_pulls.pull575_reexport_modules.reexporter.html5.html5
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = div_pulls.pull575_reexport_modules.reexporter.html5
+			names: list 
+				element: alias 
+					name: str = ext
+					asname: NoneType = None
+			level: int = 0
+	type_ignores: list 

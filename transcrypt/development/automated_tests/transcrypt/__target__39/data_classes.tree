@@ -1,0 +1,1246 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = dataclasses
+			names: list 
+				element: alias 
+					name: str = dataclass
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = typing
+			names: list 
+				element: alias 
+					name: str = ClassVar
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = getQ
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Constant 
+						value: int = 1002
+						kind: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: ClassDef 
+			name: str = A
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = m
+							ctx: Store 
+					value: Constant 
+						value: int = 101010
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: AnnAssign 
+					target: Name 
+						id: str = n
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 202020
+						kind: NoneType = None
+					simple: int = 1
+			decorator_list: list 
+				element: Name 
+					id: str = dataclass
+					ctx: Load 
+		element: ClassDef 
+			name: str = B
+			bases: list 
+				element: Name 
+					id: str = A
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: AnnAssign 
+					target: Name 
+						id: str = p
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 1001
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = q
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 1002
+						kind: NoneType = None
+					simple: int = 1
+			decorator_list: list 
+				element: Name 
+					id: str = dataclass
+					ctx: Load 
+		element: ClassDef 
+			name: str = C
+			bases: list 
+				element: Name 
+					id: str = B
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: ClassDef 
+					name: str = CC
+					bases: list 
+						element: Name 
+							id: str = B
+							ctx: Load 
+					keywords: list 
+					body: list 
+						element: AnnAssign 
+							target: Name 
+								id: str = k
+								ctx: Store 
+							annotation: Name 
+								id: str = int
+								ctx: Load 
+							value: Constant 
+								value: int = 40
+								kind: NoneType = None
+							simple: int = 1
+						element: AnnAssign 
+							target: Name 
+								id: str = l
+								ctx: Store 
+							annotation: Name 
+								id: str = float
+								ctx: Load 
+							value: Constant 
+								value: float = 55.5
+								kind: NoneType = None
+							simple: int = 1
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = j
+									ctx: Store 
+							value: Constant 
+								value: int = 60
+								kind: NoneType = None
+							type_comment: NoneType = None
+					decorator_list: list 
+						element: Name 
+							id: str = dataclass
+							ctx: Load 
+				element: AnnAssign 
+					target: Name 
+						id: str = x
+						ctx: Store 
+					annotation: Name 
+						id: str = ClassVar
+						ctx: Load 
+					value: Constant 
+						value: int = 10
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = y
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 20
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = yy
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 22
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = z
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 30
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = zz
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 33
+						kind: NoneType = None
+					simple: int = 1
+				element: AnnAssign 
+					target: Name 
+						id: str = t
+						ctx: Store 
+					annotation: Name 
+						id: str = ClassVar
+						ctx: Load 
+					value: Constant 
+						value: int = 40
+						kind: NoneType = None
+					simple: int = 1
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = g
+							ctx: Store 
+					value: Constant 
+						value: int = 100000
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = h
+							ctx: Store 
+					value: Constant 
+						value: int = 100001
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = i
+							ctx: Store 
+					value: Constant 
+						value: int = 100002
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = getV
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: int = 3
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = setV
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = v
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = property
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = getV
+								ctx: Load 
+							element: Name 
+								id: str = setV
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = getW
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: int = 4
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = setW
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: AnnAssign 
+					target: Name 
+						id: str = w
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Call 
+						func: Name 
+							id: str = property
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = getW
+								ctx: Load 
+							element: Name 
+								id: str = setW
+								ctx: Load 
+						keywords: list 
+					simple: int = 1
+				element: FunctionDef 
+					name: str = f
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = p
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = autoTester
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = a
+									ctx: Store 
+							value: Name 
+								id: str = p
+								ctx: Load 
+							type_comment: NoneType = None
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = b
+									ctx: Store 
+							value: Constant 
+								value: int = 2000
+								kind: NoneType = None
+							type_comment: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = x
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = y
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = a
+										ctx: Load 
+								keywords: list 
+						element: Return 
+							value: JoinedStr 
+								values: list 
+									element: Constant 
+										value: str = something(a: 
+										kind: NoneType = None
+									element: FormattedValue 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = a
+											ctx: Load 
+										conversion: int = -1
+										format_spec: NoneType = None
+									element: Constant 
+										value: str = , b: 
+										kind: NoneType = None
+									element: FormattedValue 
+										value: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = b
+											ctx: Load 
+										conversion: int = -1
+										format_spec: NoneType = None
+									element: Constant 
+										value: str = )
+										kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+				element: Call 
+					func: Name 
+						id: str = dataclass
+						ctx: Load 
+					args: list 
+					keywords: list 
+						element: keyword 
+							arg: str = order
+							value: Constant 
+								value: bool = True
+								kind: NoneType = None
+		element: ClassDef 
+			name: str = D
+			bases: list 
+			keywords: list 
+			body: list 
+				element: AnnAssign 
+					target: Name 
+						id: str = _p
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Constant 
+						value: int = 3
+						kind: NoneType = None
+					simple: int = 1
+				element: FunctionDef 
+					name: str = setP
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = value
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Pass 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = getP
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: int = 20
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: AnnAssign 
+					target: Name 
+						id: str = p
+						ctx: Store 
+					annotation: Name 
+						id: str = int
+						ctx: Load 
+					value: Call 
+						func: Name 
+							id: str = property
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = getP
+								ctx: Load 
+							element: Name 
+								id: str = setP
+								ctx: Load 
+						keywords: list 
+					simple: int = 1
+			decorator_list: list 
+				element: Call 
+					func: Name 
+						id: str = dataclass
+						ctx: Load 
+					args: list 
+					keywords: list 
+						element: keyword 
+							arg: str = order
+							value: Constant 
+								value: bool = True
+								kind: NoneType = None
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = c
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = C
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = y
+								value: Constant 
+									value: int = 200
+									kind: NoneType = None
+							element: keyword 
+								arg: str = zz
+								value: Constant 
+									value: int = 330
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = cc
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = C
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = y
+								value: Constant 
+									value: int = 10200
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = c
+								ctx: Load 
+							attr: str = f
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 123
+								kind: NoneType = None
+							element: Name 
+								id: str = autoTester
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Attribute 
+							value: Name 
+								id: str = c
+								ctx: Load 
+							attr: str = t
+							ctx: Store 
+					value: Constant 
+						value: int = 400
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = cc
+								ctx: Load 
+							attr: str = f
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 456
+								kind: NoneType = None
+							element: Name 
+								id: str = autoTester
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Attribute 
+							value: Name 
+								id: str = cc
+								ctx: Load 
+							attr: str = t
+							ctx: Store 
+					value: Constant 
+						value: int = 4000
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = obj
+						ctx: Store 
+					iter: Tuple 
+						elts: list 
+							element: Name 
+								id: str = c
+								ctx: Load 
+							element: Name 
+								id: str = cc
+								ctx: Load 
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = x
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = y
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = yy
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = z
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = zz
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = t
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = a
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = obj
+											ctx: Load 
+										attr: str = b
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = __pragma__
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = opov
+								kind: NoneType = None
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: NotEq 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: LtE 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: GtE 
+								comparators: list 
+									element: Name 
+										id: str = cc
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: NotEq 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: LtE 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = c
+									ctx: Load 
+								ops: list 
+									element: GtE 
+								comparators: list 
+									element: Name 
+										id: str = c
+										ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d3
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = D
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d1
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = D
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d2
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = D
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = d1
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d3
+								ctx: Load 
+							element: Name 
+								id: str = d1
+								ctx: Load 
+							element: Compare 
+								left: Name 
+									id: str = d3
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d1
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d2
+								ctx: Load 
+							element: Name 
+								id: str = d1
+								ctx: Load 
+							element: Compare 
+								left: Name 
+									id: str = d2
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d1
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d3
+								ctx: Load 
+							element: Name 
+								id: str = d2
+								ctx: Load 
+							element: Compare 
+								left: Name 
+									id: str = d3
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = ccc
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = C
+								ctx: Load 
+							attr: str = CC
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = ccc
+									ctx: Load 
+								attr: str = n
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = ccc
+									ctx: Load 
+								attr: str = p
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = ccc
+									ctx: Load 
+								attr: str = q
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = ccc
+									ctx: Load 
+								attr: str = k
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = ccc
+									ctx: Load 
+								attr: str = l
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

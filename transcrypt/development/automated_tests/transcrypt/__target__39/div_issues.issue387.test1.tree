@@ -1,0 +1,50 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = div_issues.issue387.test1.test2
+					asname: NoneType = None
+		element: FunctionDef 
+			name: str = getReport
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Constant 
+								value: str = From test1: {}
+								kind: NoneType = None
+							attr: str = format
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Attribute 
+												value: Name 
+													id: str = div_issues
+													ctx: Load 
+												attr: str = issue387
+												ctx: Load 
+											attr: str = test1
+											ctx: Load 
+										attr: str = test2
+										ctx: Load 
+									attr: str = C
+									ctx: Load 
+								attr: str = __module__
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

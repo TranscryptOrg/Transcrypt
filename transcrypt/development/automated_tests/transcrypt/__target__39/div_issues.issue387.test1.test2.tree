@@ -1,0 +1,68 @@
+file: Module 
+	body: list 
+		element: ClassDef 
+			name: str = C
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = f
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: FunctionDef 
+							name: str = g
+							args: arguments 
+								posonlyargs: list 
+								args: list 
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: list 
+								element: Pass 
+							decorator_list: list 
+							returns: NoneType = None
+							type_comment: NoneType = None
+						element: Return 
+							value: Constant 
+								value: int = 0
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = c
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = C
+					ctx: Load 
+				args: list 
+				keywords: list 
+			type_comment: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Attribute 
+					value: Name 
+						id: str = c
+						ctx: Load 
+					attr: str = f
+					ctx: Load 
+				args: list 
+				keywords: list 
+	type_ignores: list 

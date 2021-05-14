@@ -834,33 +834,7 @@ class Generator (ast.NodeVisitor):
                 self.emit (';\n')
 
     def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None):
-        if type (target.slice) == ast.Index:        # Always overloaded
-            if type (target.slice.value) == ast.Tuple:
-                self.visit (target.value)
-                self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
-                self.stripTuple = True
-                self.visit (target.slice.value)
-                self.emit (', ')
-                self.visit (value)
-                emitPathIndices ()
-                self.emit (')')
-            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealt with here, is special case
-                self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
-                self.visit (target.value)
-                self.emit (', ')
-                self.visit (target.slice.value)
-                self.emit (', ')
-                self.visit (value)
-                emitPathIndices ()
-                self.emit (')')
-            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
-                                                    # which is called indirectly here
-                self.expectingNonOverloadedLhsIndex = True
-                self.visit (target)
-                self.emit (' = ')
-                self.visit (value)
-                emitPathIndices ()
-        elif type (target.slice) == ast.Slice:
+        if type (target.slice) == ast.Slice:
             if self.allowOperatorOverloading:
                 self.emit ('__setslice__ (')        # Free function tries .__setitem__ (overload) and .__setslice__ (native)
                 self.visit (target.value)
@@ -888,19 +862,33 @@ class Generator (ast.NodeVisitor):
             self.emit (', ')
 
             self.visit (value)
-
             self.emit (')')
-        elif type (target.slice) == ast.ExtSlice:   # Always overloaded
-            self.visit (target.value)
-            self.emit ('.__setitem__ (')            # Method, since extended slice access is always overloaded
-            self.emit ('[')
-            for index, dim in enumerate (target.slice.dims):
-                self.emitComma (index)
-                self.visit (dim)
-            self.emit (']')
-            self.emit (', ')
-            self.visit (value)
-            self.emit (')')
+        else:                                       # Always overloaded
+            if type (target.slice) == ast.Tuple:
+                self.visit (target.value)
+                self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
+                self.stripTuple = True
+                self.visit (target.slice)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealt with here, is special case
+                self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
+                self.visit (target.value)
+                self.emit (', ')
+                self.visit (target.slice)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
+                                                    # which is called indirectly here
+                self.expectingNonOverloadedLhsIndex = True
+                self.visit (target)
+                self.emit (' = ')
+                self.visit (value)
+                emitPathIndices ()
 
     def nextTemp (self, name):
         if name in self.tempIndices:
@@ -1309,12 +1297,7 @@ class Generator (ast.NodeVisitor):
             (type (node.op) == ast.Mod and not self.allowJavaScriptMod)
             or
             # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
-            (
-                type (node.target) == ast.Subscript and (
-                    type (node.target.slice) != ast.Index or
-                    type (node.target.slice.value) == ast.Tuple
-                )
-            )
+            (type (node.target) == ast.Subscript and type (node.target.slice) == ast.Tuple)
         ):
             # Just translate to binary operator node
             self.visit (ast.Assign (
@@ -2565,17 +2548,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         id = self.getTemp ('iterable'),
                         ctx = ast.Load
                     ),
-                    slice = ast.Index (
-                        value = ast.Name (
-                            id = self.getTemp ('index'),
-                            ctx = ast.Load
-                        )
+                    slice = ast.Name (
+                        id = self.getTemp ('index'),
+                        ctx = ast.Load
                     ),
                     ctx = ast.Load
                 )
             ))
             self.emit (';\n')
-
 
         self.emitBody (node.body)
         self.dedent ()
@@ -3291,40 +3271,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         self.emit ('])')
 
-    # Visited for RHS index, non-overloaded LHS index, RHS slice and RHS extended slice
-    # LHS slice and overloaded LHS index are dealt with directy in visit_Assign, since the RHS is needed for them also
     def visit_Subscript (self, node):
-        if type (node.slice) == ast.Index:
-            if type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
-                self.visit (node.value)
-                self.emit ('.__getitem__ (')
-                self.stripTuple = True
-                self.visit (node.slice.value)
-                self.emit (')')
-            elif self.allowOperatorOverloading:         # It must be an RHS index
-                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
-                self.visit (node.value)
-                self.emit (', ')
-                self.visit (node.slice.value)           # !!! Bug. This leads to visit_Const and emitting '' around __index0__
-                self.emit (')')
-            else:                                       # It may be an LHS or RHS index
-                try:
-                    isRhsIndex = not self.expectingNonOverloadedLhsIndex
-                    self.expectingNonOverloadedLhsIndex = False
-                    if isRhsIndex and self.allowKeyCheck:
-                        self.emit ('__k__ (')
-                        self.visit (node.value)
-                        self.emit (', ')
-                        self.visit (node.slice.value)
-                        self.emit (')')
-                    else:
-                        self.visit (node.value)
-                        self.emit (' [')
-                        self.visit (node.slice.value)
-                        self.emit (']')
-                except:
-                    print (traceback.format_exc ())
-        elif type (node.slice) == ast.Slice:
+        if type (node.slice) == ast.Slice:
             if self.allowOperatorOverloading:
                 self.emit ('__getslice__ (')            # Free function, tries .__getitem__ (overload) and .__getslice__ (native)
                 self.visit (node.value)
@@ -3351,15 +3299,36 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (node.slice.step)
 
             self.emit (')')
-        elif type (node.slice) == ast.ExtSlice:         # Always overloaded
-            self.visit (node.value)
-            self.emit ('.__getitem__ (')                # Method, since extended slice access is always overloaded
-            self.emit ('[')
-            for index, dim in enumerate (node.slice.dims):
-                self.emitComma (index)
-                self.visit (dim)
-            self.emit (']')
-            self.emit (')')
+        else:
+            if type (node.slice) == ast.Tuple:    # Always overloaded, it must be an RHS index
+                self.visit (node.value)
+                self.emit ('.__getitem__ (')
+                self.stripTuple = True
+                self.visit (node.slice)
+                self.emit (')')
+            elif self.allowOperatorOverloading:         # It must be an RHS index
+                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
+                self.visit (node.value)
+                self.emit (', ')
+                self.visit (node.slice)                 # !!! Bug. This leads to visit_Const and emitting '' around __index0__
+                self.emit (')')
+            else:                                       # It may be an LHS or RHS index
+                try:
+                    isRhsIndex = not self.expectingNonOverloadedLhsIndex
+                    self.expectingNonOverloadedLhsIndex = False
+                    if isRhsIndex and self.allowKeyCheck:
+                        self.emit ('__k__ (')
+                        self.visit (node.value)
+                        self.emit (', ')
+                        self.visit (node.slice)
+                        self.emit (')')
+                    else:
+                        self.visit (node.value)
+                        self.emit (' [')
+                        self.visit (node.slice)
+                        self.emit (']')
+                except:
+                    print (traceback.format_exc ())
 
     def visit_Try (self, node):
         self.adaptLineNrString (node)

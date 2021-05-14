@@ -1,0 +1,1588 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = datetime
+			names: list 
+				element: alias 
+					name: str = date
+					asname: NoneType = None
+				element: alias 
+					name: str = timedelta
+					asname: NoneType = None
+				element: alias 
+					name: str = datetime
+					asname: NoneType = None
+				element: alias 
+					name: str = timezone
+					asname: NoneType = None
+			level: int = 0
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Constant 
+						value: str = opov
+						kind: NoneType = None
+				keywords: list 
+		element: FunctionDef 
+			name: str = fix_time
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = dt
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: Compare 
+						left: Attribute 
+							value: Name 
+								id: str = dt
+								ctx: Load 
+							attr: str = hour
+							ctx: Load 
+						ops: list 
+							element: Gt 
+						comparators: list 
+							element: Constant 
+								value: int = 23
+								kind: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = dt
+									ctx: Store 
+							value: BinOp 
+								left: Name 
+									id: str = dt
+									ctx: Load 
+								op: Sub 
+								right: Call 
+									func: Name 
+										id: str = timedelta
+										ctx: Load 
+									args: list 
+									keywords: list 
+										element: keyword 
+											arg: str = minutes
+											value: Constant 
+												value: int = 60
+												kind: NoneType = None
+							type_comment: NoneType = None
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Attribute 
+							value: Name 
+								id: str = dt
+								ctx: Load 
+							attr: str = minute
+							ctx: Load 
+						ops: list 
+							element: Gt 
+						comparators: list 
+							element: Constant 
+								value: int = 50
+								kind: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = dt
+									ctx: Store 
+							value: BinOp 
+								left: Name 
+									id: str = dt
+									ctx: Load 
+								op: Sub 
+								right: Call 
+									func: Name 
+										id: str = timedelta
+										ctx: Load 
+									args: list 
+									keywords: list 
+										element: keyword 
+											arg: str = minutes
+											value: Constant 
+												value: int = 10
+												kind: NoneType = None
+							type_comment: NoneType = None
+					orelse: list 
+				element: Return 
+					value: Name 
+						id: str = dt
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tz
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = timezone
+							ctx: Load 
+						attr: str = utc
+						ctx: Load 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tz
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tz2
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = timezone
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = timedelta
+									ctx: Load 
+								args: list 
+								keywords: list 
+									element: keyword 
+										arg: str = hours
+										value: UnaryOp 
+											op: USub 
+											operand: Constant 
+												value: int = 5
+												kind: NoneType = None
+							element: Constant 
+								value: str = EST
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = repr
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tz2
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = now
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = fix_time
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = datetime
+										ctx: Load 
+									attr: str = utcnow
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = now2
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = fix_time
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = datetime
+										ctx: Load 
+									attr: str = now
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = timezone
+											ctx: Load 
+										attr: str = utc
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = now
+										ctx: Load 
+									attr: str = day
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = now2
+											ctx: Load 
+										attr: str = day
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Attribute 
+									value: Name 
+										id: str = now
+										ctx: Load 
+									attr: str = hour
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = now2
+											ctx: Load 
+										attr: str = hour
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Call 
+									func: Attribute 
+										value: Call 
+											func: Attribute 
+												value: Name 
+													id: str = now
+													ctx: Load 
+												attr: str = replace
+												ctx: Load 
+											args: list 
+											keywords: list 
+												element: keyword 
+													arg: str = tzinfo
+													value: Attribute 
+														value: Name 
+															id: str = timezone
+															ctx: Load 
+														attr: str = utc
+														ctx: Load 
+										attr: str = astimezone
+										ctx: Load 
+									args: list 
+									keywords: list 
+										element: keyword 
+											arg: str = tz
+											value: Constant 
+												value: NoneType = None
+												kind: NoneType = None
+								attr: str = hour
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = delta
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = timedelta
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = days
+								value: Constant 
+									value: int = 8
+									kind: NoneType = None
+							element: keyword 
+								arg: str = minutes
+								value: Constant 
+									value: int = 15
+									kind: NoneType = None
+							element: keyword 
+								arg: str = microseconds
+								value: Constant 
+									value: int = 685
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = delta2
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = timedelta
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = days
+								value: Constant 
+									value: int = 8
+									kind: NoneType = None
+							element: keyword 
+								arg: str = minutes
+								value: Constant 
+									value: int = 15
+									kind: NoneType = None
+							element: keyword 
+								arg: str = microseconds
+								value: Constant 
+									value: int = 684
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = delta
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = delta2
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = delta
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = delta2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = delta
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = delta2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = delta
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = delta2
+										ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = date
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 2017
+								kind: NoneType = None
+							element: Constant 
+								value: int = 5
+								kind: NoneType = None
+							element: Constant 
+								value: int = 5
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								attr: str = day
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = date
+								ctx: Load 
+							attr: str = today
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								attr: str = day
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = weekday
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = isoweekday
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = isocalendar
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = ctime
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							attr: str = replace
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = day
+								value: Constant 
+									value: int = 28
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = d
+									ctx: Load 
+								attr: str = day
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = strftime
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = %Y.%m.%d
+										kind: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = ctime
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = isoformat
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d2
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = d
+							ctx: Load 
+						op: Add 
+						right: Name 
+							id: str = delta
+							ctx: Load 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d3
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = d2
+							ctx: Load 
+						op: Sub 
+						right: Name 
+							id: str = delta
+							ctx: Load 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d2
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d3
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = now
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = fix_time
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = datetime
+										ctx: Load 
+									attr: str = now
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = now
+									ctx: Load 
+								attr: str = day
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = now
+									ctx: Load 
+								attr: str = hour
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: BinOp 
+									left: Name 
+										id: str = now
+										ctx: Load 
+									op: Add 
+									right: Call 
+										func: Name 
+											id: str = timedelta
+											ctx: Load 
+										args: list 
+										keywords: list 
+											element: keyword 
+												arg: str = days
+												value: Constant 
+													value: int = 2
+													kind: NoneType = None
+								attr: str = day
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = datetime
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 2010
+								kind: NoneType = None
+							element: Constant 
+								value: int = 1
+								kind: NoneType = None
+							element: Constant 
+								value: int = 1
+								kind: NoneType = None
+						keywords: list 
+							element: keyword 
+								arg: str = tzinfo
+								value: Attribute 
+									value: Name 
+										id: str = timezone
+										ctx: Load 
+									attr: str = utc
+									ctx: Load 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = datetime
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 2017
+								kind: NoneType = None
+							element: Constant 
+								value: int = 9
+								kind: NoneType = None
+							element: Constant 
+								value: int = 19
+								kind: NoneType = None
+							element: Constant 
+								value: int = 15
+								kind: NoneType = None
+							element: Constant 
+								value: int = 43
+								kind: NoneType = None
+							element: Constant 
+								value: int = 8
+								kind: NoneType = None
+							element: Constant 
+								value: int = 142
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								op: Sub 
+								right: Call 
+									func: Name 
+										id: str = timedelta
+										ctx: Load 
+									args: list 
+									keywords: list 
+										element: keyword 
+											arg: str = minutes
+											value: Constant 
+												value: int = 150
+												kind: NoneType = None
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = datetime
+								ctx: Load 
+							attr: str = strptime
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = 2017-03-14 15:28:14
+								kind: NoneType = None
+							element: Constant 
+								value: str = %Y-%m-%d %H:%M:%S
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = strftime
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = %Y.%m.%d %H:%M:%S
+										kind: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = d
+							ctx: Load 
+						op: Add 
+						right: Call 
+							func: Name 
+								id: str = timedelta
+								ctx: Load 
+							args: list 
+							keywords: list 
+								element: keyword 
+									arg: str = hours
+									value: Constant 
+										value: int = 5
+										kind: NoneType = None
+								element: keyword 
+									arg: str = minutes
+									value: Constant 
+										value: int = 18
+										kind: NoneType = None
+								element: keyword 
+									arg: str = seconds
+									value: Constant 
+										value: int = 25
+										kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = strftime
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = %Y-%m-%d %H:%M:%S
+										kind: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = d
+								ctx: Load 
+							attr: str = replace
+							ctx: Load 
+						args: list 
+						keywords: list 
+							element: keyword 
+								arg: str = year
+								value: Constant 
+									value: int = 2016
+									kind: NoneType = None
+							element: keyword 
+								arg: str = month
+								value: Constant 
+									value: int = 1
+									kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = ctime
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = isoformat
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = date
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = d
+										ctx: Load 
+									attr: str = time
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = tuple
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = d
+												ctx: Load 
+											attr: str = timetuple
+											ctx: Load 
+										args: list 
+										keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = tuple
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = d
+												ctx: Load 
+											attr: str = utctimetuple
+											ctx: Load 
+										args: list 
+										keywords: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d2
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = d
+							ctx: Load 
+						op: Add 
+						right: Name 
+							id: str = delta
+							ctx: Load 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = d3
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = d2
+							ctx: Load 
+						op: Sub 
+						right: Name 
+							id: str = delta
+							ctx: Load 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d2
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = d3
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = d3
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Gt 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Compare 
+								left: Name 
+									id: str = d
+									ctx: Load 
+								ops: list 
+									element: Lt 
+								comparators: list 
+									element: Name 
+										id: str = d2
+										ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

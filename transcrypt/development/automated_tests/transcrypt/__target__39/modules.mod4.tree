@@ -1,0 +1,65 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = modules.mod5
+			names: list 
+				element: alias 
+					name: str = mod5Add2
+					asname: NoneType = None
+			level: int = 0
+		element: FunctionDef 
+			name: str = mod4Add2FromMod5
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = variable
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = mod5Add2
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = variable
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = mod4Add1
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = variable
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Name 
+							id: str = variable
+							ctx: Load 
+						op: Add 
+						right: Constant 
+							value: int = 1
+							kind: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

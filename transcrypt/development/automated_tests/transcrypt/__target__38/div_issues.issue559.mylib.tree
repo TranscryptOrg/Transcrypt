@@ -1,0 +1,10 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = div_issues.issue559.mylib.mylib
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+	type_ignores: list 

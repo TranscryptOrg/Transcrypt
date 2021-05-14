@@ -1,0 +1,41 @@
+file: Module 
+	body: list 
+		element: Expr 
+			value: Constant 
+				value: str = 
+This sub-testlet only tests for error-free compilation.
+It doesn't produce any output that's back to back checked with CPython output.
+
+				kind: NoneType = None
+		element: ImportFrom 
+			module: str = div_issues.issue55.a
+			names: list 
+				element: alias 
+					name: str = f1
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = div_issues.issue55.sub1
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = div_issues.issue55.sub2
+			names: list 
+				element: alias 
+					name: str = anA
+					asname: NoneType = None
+				element: alias 
+					name: str = aB
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = div_issues.issue55.sub3
+			names: list 
+				element: alias 
+					name: str = x
+					asname: str = y
+			level: int = 0
+	type_ignores: list 

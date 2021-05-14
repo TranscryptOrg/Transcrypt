@@ -1,0 +1,519 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: ClassDef 
+			name: str = UppercaserMeta
+			bases: list 
+				element: Name 
+					id: str = type
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __new__
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = meta
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = name
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = bases
+								annotation: NoneType = None
+								type_comment: NoneType = None
+							element: arg 
+								arg: str = attribs
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = jsiter
+										kind: NoneType = None
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = upperAttribs
+									ctx: Store 
+							value: Dict 
+								keys: list 
+								values: list 
+							type_comment: NoneType = None
+						element: For 
+							target: Name 
+								id: str = attribKey
+								ctx: Store 
+							iter: Name 
+								id: str = attribs
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Subscript 
+											value: Name 
+												id: str = upperAttribs
+												ctx: Load 
+											slice: Index 
+												value: IfExp 
+													test: Call 
+														func: Attribute 
+															value: Name 
+																id: str = attribKey
+																ctx: Load 
+															attr: str = startswith
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = __
+																kind: NoneType = None
+														keywords: list 
+													body: Name 
+														id: str = attribKey
+														ctx: Load 
+													orelse: Call 
+														func: Attribute 
+															value: Name 
+																id: str = attribKey
+																ctx: Load 
+															attr: str = upper
+															ctx: Load 
+														args: list 
+														keywords: list 
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = attribs
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = attribKey
+												ctx: Load 
+										ctx: Load 
+									type_comment: NoneType = None
+							orelse: list 
+							type_comment: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = nojsiter
+										kind: NoneType = None
+								keywords: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = type
+										ctx: Load 
+									attr: str = __new__
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = meta
+										ctx: Load 
+									element: Name 
+										id: str = name
+										ctx: Load 
+									element: Name 
+										id: str = bases
+										ctx: Load 
+									element: Name 
+										id: str = upperAttribs
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = Uppercaser
+			bases: list 
+			keywords: list 
+				element: keyword 
+					arg: str = metaclass
+					value: Name 
+						id: str = UppercaserMeta
+						ctx: Load 
+			body: list 
+				element: Pass 
+			decorator_list: list 
+		element: ClassDef 
+			name: str = Animal
+			bases: list 
+				element: Name 
+					id: str = Uppercaser
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: ClassDef 
+					name: str = Thoughts
+					bases: list 
+					keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = quantity
+									ctx: Store 
+							value: Constant 
+								value: int = 7
+								kind: NoneType = None
+							type_comment: NoneType = None
+					decorator_list: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = color
+							ctx: Store 
+					value: Constant 
+						value: str = Brown
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = state
+							ctx: Store 
+					value: Constant 
+						value: str = Moving
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = move
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: str = Move
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = Plant
+			bases: list 
+				element: Name 
+					id: str = Uppercaser
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: ClassDef 
+					name: str = Thoughts
+					bases: list 
+					keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = quantity
+									ctx: Store 
+							value: Constant 
+								value: int = 6
+								kind: NoneType = None
+							type_comment: NoneType = None
+					decorator_list: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = color
+							ctx: Store 
+					value: Constant 
+						value: str = Green
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = state
+							ctx: Store 
+					value: Constant 
+						value: str = Growing
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = grow
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: str = Grow
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = Stone
+			bases: list 
+			keywords: list 
+			body: list 
+				element: ClassDef 
+					name: str = Thoughts
+					bases: list 
+					keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = quantity
+									ctx: Store 
+							value: Constant 
+								value: int = 5
+								kind: NoneType = None
+							type_comment: NoneType = None
+					decorator_list: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = color
+							ctx: Store 
+					value: Constant 
+						value: str = Gray
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = be
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Constant 
+								value: str = Being
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = animal
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = Animal
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Attribute 
+									value: Name 
+										id: str = animal
+										ctx: Load 
+									attr: str = THOUGHTS
+									ctx: Load 
+								attr: str = quantity
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = Animal
+									ctx: Load 
+								attr: str = COLOR
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = animal
+									ctx: Load 
+								attr: str = COLOR
+								ctx: Load 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = animal
+										ctx: Load 
+									attr: str = MOVE
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = plant
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = Plant
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Attribute 
+									value: Name 
+										id: str = plant
+										ctx: Load 
+									attr: str = THOUGHTS
+									ctx: Load 
+								attr: str = quantity
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = Plant
+									ctx: Load 
+								attr: str = COLOR
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = plant
+									ctx: Load 
+								attr: str = COLOR
+								ctx: Load 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = plant
+										ctx: Load 
+									attr: str = GROW
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = stone
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = Stone
+							ctx: Load 
+						args: list 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Attribute 
+									value: Name 
+										id: str = stone
+										ctx: Load 
+									attr: str = Thoughts
+									ctx: Load 
+								attr: str = quantity
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = Stone
+									ctx: Load 
+								attr: str = color
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = stone
+									ctx: Load 
+								attr: str = color
+								ctx: Load 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = stone
+										ctx: Load 
+									attr: str = be
+									ctx: Load 
+								args: list 
+								keywords: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

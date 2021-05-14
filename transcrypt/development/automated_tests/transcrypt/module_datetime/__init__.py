@@ -42,7 +42,8 @@ def run (autoTester):
     autoTester.check (d.day)
     autoTester.check (d.weekday ())
     autoTester.check (d.isoweekday ())
-    autoTester.check (d.isocalendar ())
+    # !!! autoTester.check (d.isocalendar ()) Format changed in Python 3.9!
+    # Autotest: module_datetime/__init__.py:45	datetime.IsoCalendarDate(year=2021, week=19, weekday=5)	(2021, 19, 5)	module_datetime.js:108
     autoTester.check (d.ctime ())
     d = d.replace (day=28)
     autoTester.check (d.day)

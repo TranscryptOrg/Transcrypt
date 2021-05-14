@@ -1,0 +1,47 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = modules.mod4
+					asname: NoneType = None
+		element: FunctionDef 
+			name: str = mod5Add2
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = variable
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Attribute 
+								value: Name 
+									id: str = modules
+									ctx: Load 
+								attr: str = mod4
+								ctx: Load 
+							attr: str = mod4Add1
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Name 
+									id: str = variable
+									ctx: Load 
+								op: Add 
+								right: Constant 
+									value: int = 1
+									kind: NoneType = None
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 
