@@ -132,6 +132,7 @@ def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
 os.system ('cls' if os.name == 'nt' else 'clear')
+os.system (f'killall node')
         
 # ---- Start an http server in the Transcryp/transcrypt directory
 
@@ -200,7 +201,7 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     if parcelJs:
         origDir = os.getcwd ()
         os.chdir (sourceDir)
-        os.system (f'start cmd /k node test {parcelServerPort}')
+        os.system (f'node test {parcelServerPort} &')
         os.chdir (origDir)
     else:
         os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
@@ -217,7 +218,8 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
             time.sleep (20)
             url = parcelServerUrl
         elif nodeJs:
-            os.system (f'start cmd /k node {targetPrepath}.bundle.js {nodeServerPort}')
+            os.system (f'chmod 777 {targetPrepath}.bundle.js')
+            os.system (f'node {targetPrepath}.bundle.js {nodeServerPort} &')
             time.sleep (5)
             url = nodeServerUrl
         else:
@@ -246,9 +248,10 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
-    
+
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
     test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)
+
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
     test ('demos/hello/hello', False, switches, needsAttention = False)
     test ('demos/jquery_demo/jquery_demo', False, switches)
