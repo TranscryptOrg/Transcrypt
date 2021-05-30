@@ -6,6 +6,14 @@
 
 from test__dot__modules__dot__a.specific_module_a import the__S__S__S__Function
 from test_modules_b.specific_module_b import theBFunction as aBFunction
+
+print ('Correct output:')
+print ('3')
+print ('The $$$ function called')
+print ('The b function called')
+
+print ()
+print ('Actual output:')
 the__S__Variable = 3
 print (the__S__Variable)
 

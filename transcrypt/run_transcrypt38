@@ -1,1 +1,0 @@
-py38 $(dirname $0)/__main__.py $@

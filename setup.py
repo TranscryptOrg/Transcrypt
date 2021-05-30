@@ -1,9 +1,8 @@
 import os
 import sys
+from setuptools import setup
 
 sys.path.append ('transcrypt/modules/org/transcrypt')
-
-from setuptools import setup
 
 def read (*paths):
 	with open (os.path.join (*paths), 'r') as aFile:
@@ -38,6 +37,6 @@ setup (
 		'License :: OSI Approved :: Apache Software License',
 		'Topic :: Software Development :: Libraries :: Python Modules',
 		'Operating System :: OS Independent',
-		'Programming Language :: Python :: 3.7',
+		'Programming Language :: Python :: 3.9',
 	],
 )

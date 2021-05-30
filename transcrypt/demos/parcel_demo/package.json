@@ -10,7 +10,7 @@
     "parcel-plugin-transcrypt": "^1.0.20"
   },
   "parcel-plugin-python": {
-    "command": "/home/jac/aab_symlinks/transcrypt/qquick/Transcrypt/transcrypt/run_transcrypt",
+    "command": "ts",
     "arguments": [
         "--nomin",
         "--map",

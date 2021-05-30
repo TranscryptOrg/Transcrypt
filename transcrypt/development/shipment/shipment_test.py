@@ -9,6 +9,7 @@ import traceback
 import selenium
 import selenium.webdriver.chrome.options
 import pathlib
+import subprocess
 
 # ======== Command args singleton
 
@@ -124,7 +125,7 @@ nodeServerUrl = host + nodeServerPort
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
-transpileCommand = 'transcrypt' if commandArgs.inst else f'/{appRootDir}/run_transcrypt'
+transpileCommand = 'transcrypt' if commandArgs.inst else f'/{appRootDir}/ts'
                 
 print (f'\nApplication root directory: {appRootDir}\n')
 
@@ -158,7 +159,7 @@ os.system (f'{transpileCommand} -h')
    
 # ======== Individual test function
 
-def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, parcelJs = False, build = True, pause = 0, needsAttention = False):
+def test (relSourcePrepath, run, extraSwitches, outputPrename = '', nodeJs = False, parcelJs = False, build = True, pause = 0, needsAttention = False):
     if commandArgs.unattended and needsAttention:
         return  # This test shouldn't be done, since it can't run unattended
             
@@ -174,15 +175,14 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     moduleName = sourcePrepathSplit [-1]
     targetDir = f'{sourceDir}/__target__'
     targetPrepath = f'{targetDir}/{moduleName}'
-    messagePrepath = f'{targetDir}/{messagePrename}'
+    outputPath = f'{targetDir}/{outputPrename}.out'
     
     # ---- If there are relevant console messages of the compilation process,
     #       like with the static typechecking tests, write them into a file that can be served for a visual check
     
     if not os.path.exists (targetDir):
-        os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen here
-    redirect = f' > {messagePrepath}.out' if messagePrename else ''
-    
+        os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen heree
+
     # ---- Default switches
     
     defaultSwitches = '-da -sf -de -m -n '
@@ -204,7 +204,19 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
         os.system (f'node test {parcelServerPort} &')
         os.chdir (origDir)
     else:
-        os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+        command = f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}'
+        if outputPrename:
+            '''
+            Calling subprocess.check_output while outputFile opened in __target__ folder
+            fails without raising an exception, probably a bug in Python.
+            So we use variable 'output' as intermediate storage.
+            '''
+            output = subprocess.check_output (command, universal_newlines = True, shell = True)
+            with open (outputPath, 'w') as outputFile:
+                print (output, file = outputFile)
+        else:
+            subprocess.run (command, shell = True)
+        
     
     # ---- If it has to run on node, apply rollup to obtain monolith, since node doesn't support named imports and exports
     
@@ -245,7 +257,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/async_await/test', False, switches)
     test ('development/manual_tests/import_export_aliases/test', False, switches + '-am ')
     test ('development/manual_tests/module_random/module_random', False, switches)
-    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
+    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', outputPrename = 'static_types')
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
 
@@ -269,7 +281,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/mondrian', False, switches, pause = 2)
     test ('demos/turtle_demos/mandala', False, switches, pause = 2)
     
-    # test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
+    # NOK test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
@@ -282,7 +294,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_042_for_nested/for_nested', False, switches)
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches, needsAttention = True)
 
-    test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
+    test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', outputPrename = 'static_typing')
 
     if relSourcePrepathsOfErrors:
         print ('\n\n!!!!!!!!!!!!!!!!!!!!\n')
