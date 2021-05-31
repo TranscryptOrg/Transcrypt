@@ -125,7 +125,7 @@ nodeServerUrl = host + nodeServerPort
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
-transpileCommand = 'transcrypt' if commandArgs.inst else f'/{appRootDir}/ts'
+transpileCommand = 'ts' if commandArgs.inst else f'/{appRootDir}/ts'
                 
 print (f'\nApplication root directory: {appRootDir}\n')
 
