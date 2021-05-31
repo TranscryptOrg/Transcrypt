@@ -20,10 +20,6 @@ chmod -R 777 .
 
 export PATH=$PATH:./transcrypt
 
-# Create alias for python
-
-alias py39='python'
-
 # Run the shipment test
 
-python ./transcrypt/development/shipment/shipment_test.py --unattended
+python ./transcrypt/development/shipment/shipment_test.py --unattended --transcom python

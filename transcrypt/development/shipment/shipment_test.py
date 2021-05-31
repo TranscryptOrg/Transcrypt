@@ -24,6 +24,7 @@ class CommandArgs:
         self.argParser.add_argument ('-b', '--blind', help = 'don\'t start browser', action = 'store_true')
         
         self.argParser.add_argument ('-u', '--unattended', help = 'unattended mode', action = 'store_true')
+        self.argParser.add_argument ('-t', '--transcom', help = 'transpile command') 
 
         self.__dict__.update (self.argParser.parse_args () .__dict__)
         
@@ -125,7 +126,7 @@ nodeServerUrl = host + nodeServerPort
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
-transpileCommand = 'ts' if commandArgs.inst else f'/{appRootDir}/ts'
+transpileCommand = commandArgs.transcom if commandArgs.transcom else 'ts' if commandArgs.inst else f'/{appRootDir}/ts'
                 
 print (f'\nApplication root directory: {appRootDir}\n')
 
