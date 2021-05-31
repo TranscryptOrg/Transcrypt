@@ -261,8 +261,8 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
 
+    test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)  # ??? Must be before nodejs_demo, why?
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
-    test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)
 
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
     test ('demos/hello/hello', False, switches, needsAttention = False)
@@ -281,7 +281,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/mondrian', False, switches, pause = 2)
     test ('demos/turtle_demos/mandala', False, switches, pause = 2)
     
-    # NOK test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
+    # test ('demos/cyclejs_demo/cyclejs_demo', False, switches)     # Broken
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
