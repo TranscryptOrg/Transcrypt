@@ -1,0 +1,1 @@
+python $(dirname $0)/__main__.py $@

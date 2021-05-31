@@ -126,8 +126,8 @@ nodeServerUrl = host + nodeServerPort
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
-transpileCommand = commandArgs.transcom if commandArgs.transcom else 'ts' if commandArgs.inst else f'/{appRootDir}/ts'
-                
+transpileCommand = commandArgs.transcom if commandArgs.transcom else 'ts' if commandArgs.inst else f'/{appRootDir}/ts'              
+
 print (f'\nApplication root directory: {appRootDir}\n')
 
 def getAbsPath (relPath):
