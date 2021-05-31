@@ -43,7 +43,7 @@ class BrowserController:
             self.options.add_argument ('--disable-gpu')       # Applicable to windows OS only
             self.options.add_argument ('disable-infobars')
             self.options.add_argument ('--disable-extensions')
-            self.options.add ('--disable-web-security')
+            self.options.add_argument ('--disable-web-security')
                 
         self.webDriver = selenium.webdriver.Chrome (options = self.options)
         self.nrOfTabs = 0
