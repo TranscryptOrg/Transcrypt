@@ -6,8 +6,7 @@ addons:
             
 language: python
 python:
-    - '3.7'
-    - '3.8'
+    - '3.9'
     
 script:
     - bash ./transcrypt/development/continuous_integration/run.sh
