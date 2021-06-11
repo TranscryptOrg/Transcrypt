@@ -13,6 +13,7 @@ __javascript__/
 __pycache__/
 .mypy_cache/
 dist/
+build/
 node_modules/
 
 # ======== Directories at specific locations
