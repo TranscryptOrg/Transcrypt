@@ -108,3 +108,13 @@ def run (autoTester):
     autoTester.check("123".isalpha())
     autoTester.check("abc".isalpha())
     autoTester.check("abc123".isalpha())
+
+    autoTester.check(bin(42))
+    autoTester.check(oct(42))
+    autoTester.check(hex(42))
+    autoTester.check(bin(0))
+    autoTester.check(oct(0))
+    autoTester.check(hex(0))
+    autoTester.check(bin(-42))
+    autoTester.check(oct(-42))
+    autoTester.check(hex(-42))
