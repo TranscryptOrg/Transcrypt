@@ -108,3 +108,11 @@ def run (autoTester):
     autoTester.check("123".isalpha())
     autoTester.check("abc".isalpha())
     autoTester.check("abc123".isalpha())
+
+    replace_test = "abcabcabcabc"
+    autoTester.check(replace_test.replace("c", "x"))
+    autoTester.check(replace_test.replace("c", "x", -1))
+    autoTester.check(replace_test.replace("c", "x", 0))
+    autoTester.check(replace_test.replace("c", "x", 1))
+    autoTester.check(replace_test.replace("c", "x", 2))
+    autoTester.check(replace_test.replace("c", "x", 10))
