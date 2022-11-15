@@ -1918,7 +1918,7 @@ class Generator (ast.NodeVisitor):
             self.emit ('export var {} = '.format (self.filterId (node.name)))
             self.allOwnNames.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
-            self.emit ('\nvar {0} = cls.{0} = '.format (self.filterId (node.name)))
+            self.emit ('\nlet {0} = cls.{0} = '.format (self.filterId (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
 
@@ -2013,7 +2013,7 @@ class Generator (ast.NodeVisitor):
                         # Simple class var assignment, can be generated in-line as initialisation field of a JavaScript object literal
                         inlineAssigns.append (statement)
                         self.emitSemiColon (index, False)
-                        self.emit ('\nvar {0} = cls.{0} = ', self.filterId (statement.targets [0] .id))
+                        self.emit ('\nlet {0} = cls.{0} = ', self.filterId (statement.targets [0] .id))
                         self.visit (statement.value)
                         self.adaptLineNrString (statement)
                         index += 1
@@ -2039,9 +2039,9 @@ class Generator (ast.NodeVisitor):
                     compareAssigns.append (statement)
                     self.emitSemiColon (index, False)
                     if statement.value is None:
-                        self.emit('\nvar {0} = cls.{0}', self.filterId(statement.target.id))
+                        self.emit('\nlet {0} = cls.{0}', self.filterId(statement.target.id))
                     else:
-                        self.emit('\nvar {0} = cls.{0} = ', self.filterId(statement.target.id))
+                        self.emit('\nlet {0} = cls.{0} = ', self.filterId(statement.target.id))
                         self.visit(statement.value)
                     self.adaptLineNrString (statement)
                     index += 1
@@ -2051,9 +2051,9 @@ class Generator (ast.NodeVisitor):
                         inlineAssigns.append (statement)
                         self.emitSemiColon (index, False)
                         if statement.value is None:
-                            self.emit('\nvar {0} = cls.{0}', self.filterId(statement.target.id))
+                            self.emit('\nlet {0} = cls.{0}', self.filterId(statement.target.id))
                         else:
-                            self.emit('\nvar {0} = cls.{0} = ', self.filterId(statement.target.id))
+                            self.emit('\nlet {0} = cls.{0} = ', self.filterId(statement.target.id))
                             self.visit(statement.value)
                         self.adaptLineNrString (statement)
                         index += 1
