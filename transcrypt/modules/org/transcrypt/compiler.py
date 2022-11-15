@@ -792,6 +792,10 @@ class Generator (ast.NodeVisitor):
             reversedClassScopes.append (scope)
         return reversed (reversedClassScopes)
 
+    def emitSemiColon (self, index, blank = True):
+        if self.noskipCodeGeneration and self.conditionalCodeGeneration and index:
+            self.emit ('; ' if blank else ';')
+
     def emitComma (self, index, blank = True):
         if self.noskipCodeGeneration and self.conditionalCodeGeneration and index:
             self.emit (', ' if blank else ',')
@@ -1914,7 +1918,7 @@ class Generator (ast.NodeVisitor):
             self.emit ('export var {} = '.format (self.filterId (node.name)))
             self.allOwnNames.add (node.name)
         elif type (self.getScope () .node) == ast.ClassDef:
-            self.emit ('\n{}:'.format (self.filterId (node.name)))
+            self.emit ('\nlet {0} = cls.{0} = '.format (self.filterId (node.name)))
         else:
             self.emit ('var {} ='.format (self.filterId (node.name)))
 
@@ -1963,11 +1967,12 @@ class Generator (ast.NodeVisitor):
                     )
         else:
             self.emit ('object')
-        self.emit ('], {{')
+        self.emit ('], (() => {{')  # class scope start
         self.inscope (node)
 
         self.indent ()
-        self.emit ('\n__module__: __name__,')
+        self.emit('\nlet cls = {{}};')
+        self.emit ('\ncls.__module__ = __name__;')
 
         # LHS plays a role in a.o. __repr__ in a dataclass
         inlineAssigns = []      # LHS is simple name, class var assignment generates initialisation of field in object literal
@@ -1994,7 +1999,7 @@ class Generator (ast.NodeVisitor):
             if self.isCommentString (statement):
                 pass
             elif type (statement) in (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef):
-                self.emitComma (index, False)
+                self.emitSemiColon (index, False)
                 self.visit (statement)
                 index += 1
 
@@ -2007,8 +2012,8 @@ class Generator (ast.NodeVisitor):
                     else:
                         # Simple class var assignment, can be generated in-line as initialisation field of a JavaScript object literal
                         inlineAssigns.append (statement)
-                        self.emitComma (index, False)
-                        self.emit ('\n{}: ', self.filterId (statement.targets [0] .id))
+                        self.emitSemiColon (index, False)
+                        self.emit ('\nlet {0} = cls.{0} = ', self.filterId (statement.targets [0] .id))
                         self.visit (statement.value)
                         self.adaptLineNrString (statement)
                         index += 1
@@ -2032,18 +2037,24 @@ class Generator (ast.NodeVisitor):
                     initAssigns.append (statement)
                     reprAssigns.append (statement)
                     compareAssigns.append (statement)
-                    self.emitComma (index, False)
-                    self.emit ('\n{}: ', self.filterId (statement.target.id))
-                    self.visit (statement.value)
+                    self.emitSemiColon (index, False)
+                    if statement.value is None:
+                        self.emit('\nlet {0} = cls.{0}', self.filterId(statement.target.id))
+                    else:
+                        self.emit('\nlet {0} = cls.{0} = ', self.filterId(statement.target.id))
+                        self.visit(statement.value)
                     self.adaptLineNrString (statement)
                     index += 1
                 elif type (statement.target) == ast.Name:
                     try:
                         # Simple class var assignment
                         inlineAssigns.append (statement)
-                        self.emitComma (index, False)
-                        self.emit ('\n{}: ', self.filterId (statement.target.id))
-                        self.visit (statement.value)
+                        self.emitSemiColon (index, False)
+                        if statement.value is None:
+                            self.emit('\nlet {0} = cls.{0}', self.filterId(statement.target.id))
+                        else:
+                            self.emit('\nlet {0} = cls.{0} = ', self.filterId(statement.target.id))
+                            self.visit(statement.value)
                         self.adaptLineNrString (statement)
                         index += 1
                     except:
@@ -2052,12 +2063,21 @@ class Generator (ast.NodeVisitor):
                     # LHS is attribute or array element, we can't use it for representation or comparison
                     delayedAssigns.append (statement)
 
-            elif self.getPragmaFromExpr (statement):
-                # It's a pragma
-                self.visit (statement)
+            elif type (statement) == ast.Expr:
+                if self.getPragmaFromExpr (statement):
+                    # It's a pragma
+                    self.visit (statement)
+                else:
+                    # It's a class scoped expression
+                    self.emitSemiColon (index, False)
+                    self.emit ('\n')
+                    self.visit (statement)
+
+        self.emitSemiColon(index, False)
+        self.emit('\nreturn cls;')
         self.dedent ()
 
-        self.emit ('\n}}')
+        self.emit ('\n}})()')  # class scope end
 
         if node.keywords:
             if node.keywords [0] .arg == 'metaclass':
@@ -2162,7 +2182,7 @@ for (let name of kwargs.py_keys ()) {
                     returns = None,
                     docstring = None
                 ))
-                self.emit (',')
+                self.emit (';')
                 self.allowKeywordArgs = originalAllowKeywordArgs
 
             # Generate __repr__
@@ -2210,7 +2230,7 @@ return  self.__name__ + '(' + ', '.join (fields) + ')'
                     returns = None,
                     docstring = None
                 ))
-                self.emit (',')
+                self.emit (';')
 
              # Generate comparators   !!! TODO: Add check that self and other are of same class
             comparatorNames = []
@@ -2266,7 +2286,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     decorator_list = []
                 ))
                 returns = None,
-                self.emit (',')
+                self.emit (';')
 
             # After inserting at init hoist location, jump forward as much as we jumped back
             # Simply going back to the original fragment index won't work, since fragments were prepended
@@ -2675,9 +2695,9 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                             message='\n\tdecorators are not supported with jscall\n'
                         )
 
-                        self.emit ('{}: ', self.filterId (nodeName))
+                        self.emit ('{} = ', self.filterId (nodeName))
                     else:
-                        self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
+                        self.emit('__def__(cls, function {}() {{ return {} (this, ', self.filterId (nodeName), getter)
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')
@@ -2705,12 +2725,12 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             else:
                 if isMethod:
                     if jsCall:
-                        self.emit ('{}: function', self.filterId (nodeName), 'async ' if anAsync else '')
+                        self.emit ('{} = function', self.filterId (nodeName), 'async ' if anAsync else '')
                     else:
                         if isStaticMethod:
-                            self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if anAsync else '')
+                            self.emit ('__def__(cls, function {}() {{ return {}function', self.filterId (nodeName), 'async ' if anAsync else '')
                         else:
-                            self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
+                            self.emit ('__def__(cls, function {}() {{ return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')
@@ -2759,18 +2779,19 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if isMethod:
                 if not jsCall:
                     if isStaticMethod:
-                        self.emit (';}}')
+                        self.emit (';}})')
                     else:
                         if self.allowMemoizeCalls:
                             self.emit (', \'{}\'', nodeName)  # Name will be used as attribute name to add bound function to instance
 
-                        self.emit (');}}')
+                        self.emit (');}})')
 
                 if nodeName == '__iter__':
-                    self.emit (',\n[Symbol.iterator] () {{return this.__iter__ ()}}')
+                    self.emit (';\ncls[Symbol.iterator] = () => cls.__iter__()')
 
                 if nodeName == '__next__':
-                    self.emit (',\nnext: __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound method pointers
+                    self.emit (';\ncls.next = __jsUsePyNext__')  # ??? Shouldn't this be a property, to allow bound
+                    # method pointers
 
             if isGlobal:
                 self.allOwnNames.add (nodeName)

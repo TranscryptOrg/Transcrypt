@@ -106,6 +106,15 @@ export function __init__ (module) {
     return module.__all__;
 };
 
+// Binds a function to the target class object
+export var __def__ = function (cls, method, name) {
+    let method_name = (name ? name : method.name);
+    Object.defineProperty (cls, method_name, {
+        get: method, set: (func) => __def__ (this, func, method_name),
+        configurable: true, enumerable: true
+    });
+};
+
 // Since we want to assign functions, a = b.f should make b.f produce a bound function
 // So __get__ should be called by a property rather then a function
 // Factory __get__ creates one of three curried functions for func
