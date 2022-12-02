@@ -16,13 +16,14 @@ setup (
 		read ('README.rst')
 	),
 	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django'],
-	url = 'http://www.transcrypt.org',	
+	url = 'http://www.transcrypt.org',
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',
 	author_email = 'jacques.de.hooge@qquick.org',
 	packages = ['transcrypt'],
 	install_requires = [
-		'mypy'
+		'mypy',
+		'ideas',
 	],
 	entry_points = {
 		'console_scripts': [

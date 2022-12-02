@@ -32,6 +32,8 @@ import collections
 import json
 from contextlib import contextmanager, ExitStack
 
+import ideas.examples.embedded_html
+
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
 inIf = False
@@ -71,10 +73,10 @@ class Program:
 
         # Set paths
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
-        
+
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        
+
         if utils.commandArgs.outdir:
             if os.path.isabs (utils.commandArgs.outdir):
                 self.targetDir = utils.commandArgs.outdir.replace ('\\', '/')
@@ -82,7 +84,7 @@ class Program:
                 self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outdir}'.replace ('\\', '/')
         else:
             self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
-        
+
         self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
         # Load the most recent project metadata
@@ -381,7 +383,7 @@ class Module:
             # This function turns comment-like pragma's into regular ones, both for multi-line and single-line pragma's
             # It changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
             # Single line pragma's are always comment-like and will be turned into multi-line function-like pragma's
-            # Also in this function executable comments are converted to normal code 
+            # Also in this function executable comments are converted to normal code
 
             # Tokenize the source code, to be able to recognize comments easily
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
@@ -396,16 +398,16 @@ class Module:
                 if tokenType == tokenize.COMMENT:
                     strippedComment = tokenString [1 : ] .lstrip ()
                     if  strippedComment.startswith ('__pragma__'):
-                    
+
                        # Remember line index of multi-line pragma, like: # __pragma__ (...
                         pragmaCommentLineIndices.append (startRowColumn [0] - 1)
                     elif strippedComment.replace (' ', '') .replace ('\t', '') .startswith ('__:'):
-                    
+
                         # Remember line index of single-line pragma, like: <some code> # __: ...
                         shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
                 if tokenType == tokenize.NAME and tokenString == '__pragma__':
                     pragmaIndex = tokenIndex
-                    
+
                 if tokenIndex - pragmaIndex == 2:
                     pragmaKind = tokenString [1:-1]
                     if pragmaKind == 'ecom':
@@ -415,20 +417,20 @@ class Module:
 
             # Convert original, non-tokenized sourcecode to a list of lines
             sourceLines = sourceCode.split ('\n')
-            
+
             # Use line indices of multi-line function-like ecom / noecom pragma's to transform these lines into executable comment switches
             for ecomPragmaLineIndex in ecomPragmaLineIndices:
                 sourceLines [ecomPragmaLineIndex] = ecom
             for noecomPragmaLineIndex in noecomPragmaLineIndices:
                 sourceLines [noecomPragmaLineIndex] = noecom
-                        
+
             # Use line indices of multi-line comment-like pragma singles to transform these into function-like pragma singles (which often turn out te be part of a matching pair)
             allowExecutableComments = utils.commandArgs.ecom
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 indentation, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
                 pragma, separator, comment = tail.partition ('#')
                 pragma = pragma.replace (' ', '') .replace ('\t', '')
-                
+
                 # Turn appropriate lines into executable comment switches
                 if "('ecom')" in pragma or '("ecom")' in pragma:
                     allowExecutableComments = True
@@ -445,17 +447,17 @@ class Module:
                 strippedHead = head.lstrip ()
                 indent = head [ : len (head) - len (strippedHead)]
                 pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
-                
+
                 # Turn appropriate lines into executable comment switches
                 if pragmaName == 'ecom':
-                    sourceLines [pragmaCommentLineIndex] = ecom             
+                    sourceLines [pragmaCommentLineIndex] = ecom
                 elif pragmaName == 'noecom':
-                    sourceLines [pragmaCommentLineIndex] = noecom                
+                    sourceLines [pragmaCommentLineIndex] = noecom
                 elif pragmaName.startswith ('no'):
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])    # Correct!
                 else:
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
-                    
+
             # Switch executable comments on c.q. off and turn executable comments into normal code lines for Transcrypt (as opposed to CPython)
             uncommentedSourceLines = []
             for sourceLine in sourceLines:
@@ -469,7 +471,7 @@ class Module:
                         uncommentedSourceLines.append (sourceLine.replace ('#?', '', 1) if lStrippedSourceLine.startswith ('#?') else sourceLine)
                 else:
                     uncommentedSourceLines.append (sourceLine)
-                    
+
             # Return joined lines, to be used for parsing
             return '\n'.join (uncommentedSourceLines)
 
@@ -477,8 +479,8 @@ class Module:
             utils.log (False, 'Parsing module: {}\n', self.sourcePath)
 
             with tokenize.open (self.sourcePath) as sourceFile:
-                self.sourceCode = utils.extraLines + sourceFile.read ()
-                
+                self.sourceCode = utils.extraLines + ideas.examples.embedded_html.transform_source(sourceFile.read ())
+
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
 
             for node in ast.walk (self.parseTree):
@@ -2383,14 +2385,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         if len (node.comparators) > 1:
             self.emit(')')
-            
+
     def visit_Constant (self, node):
         if type (node.value) == str:
             self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
         elif type (node.value) == bytes:
-            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))            
+            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
         elif type (node.value) == complex:
-            self.emit ('complex (0, {})'.format (node.n.imag))           
+            self.emit ('complex (0, {})'.format (node.n.imag))
         elif type (node.value) in {float, int}:
             self.emit ('{}'.format (node.n))
         else:
