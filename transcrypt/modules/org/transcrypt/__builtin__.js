@@ -1620,7 +1620,15 @@ String.prototype.lower = function () {
 };
 
 String.prototype.py_replace = function (old, aNew, maxreplace) {
-    return this.split (old, maxreplace) .join (aNew);
+    if (maxreplace === undefined || maxreplace < 0) {
+        return this.split(old).join(aNew);
+    } else if (maxreplace === 0) {
+        return this;
+    } else {
+        const pre = this.split(old, maxreplace).join(aNew);
+        const rest = this.slice(this.split(old, maxreplace).join(old).length + 1)
+        return pre.concat(rest.length>0 ? aNew : '', rest);
+    }
 };
 
 String.prototype.lstrip = function () {
