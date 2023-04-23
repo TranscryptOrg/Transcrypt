@@ -916,8 +916,12 @@ export function sum (iterable) {
 }
 
 // Enumerate method, returning a zipped list
-export function enumerate (iterable) {
-    return zip (range (len (iterable)), iterable);
+export function enumerate(iterable, start = 0) {
+    if (start.hasOwnProperty("__kwargtrans__")) {
+        // start was likely passed in as kwarg
+        start = start['start'];
+    }
+    return zip(range(start, len(iterable) + start), iterable);
 }
 
 // Shallow and deepcopy
