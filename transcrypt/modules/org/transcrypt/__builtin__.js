@@ -677,6 +677,27 @@ export function min (nrOrSeq) {
     return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);       
 };
 
+// Integer to binary
+export function bin (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const bin_val = Math.abs(parseInt(nbr)).toString(2);
+    return sign.concat('0b', bin_val);
+};
+
+// Integer to octal
+export function oct (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const oct_val = Math.abs(parseInt(nbr)).toString(8);
+    return sign.concat('0o', oct_val);
+};
+
+// Integer to hexadecimal
+export function hex (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const hex_val = Math.abs(parseInt(nbr)).toString(16);
+    return sign.concat('0x', hex_val);
+};
+
 // Absolute value
 __pragma__ ('ifdef', '__complex__')
 export function abs (x) {
