@@ -244,6 +244,17 @@ def time():
     return Date.now() / 1000
 
 
+def monotonic():
+    """monotonic() -> float
+
+    Return the value (in seconds) of a monotonic clock - a clock that
+    cannot go backwards. The reference point of the returned value
+    is undefined, so only the difference between the results of
+    consecutive calls has guaranteed meaning.
+    """
+    return performance.now() / 1000
+
+
 def asctime(t):
     return strftime('%a %b %d %H:%M:%S %Y', t)
 
