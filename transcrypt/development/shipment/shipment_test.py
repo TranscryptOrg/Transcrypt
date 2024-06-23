@@ -11,6 +11,9 @@ import selenium.webdriver.chrome.options
 import pathlib
 import subprocess
 
+from selenium.webdriver.common.by import By
+
+
 # ======== Command args singleton
 
 class CommandArgs:
@@ -83,7 +86,7 @@ class BrowserController:
 
         if run:
             while (True):
-                self.message = self.webDriver.find_element_by_id ('message')
+                self.message = self.webDriver.find_element(By.ID, 'message')
                 if 'failed' in self.message.text or 'succeeded' in self.message.text:
                     break
                 time.sleep (0.5)
@@ -141,13 +144,14 @@ os.system (f'killall node')
 print (appRootDir)
 
 if not commandArgs.blind:
-    command = f'python -m http.server --directory {appRootDir}'
-    
+    # command = f'python -m http.server --directory {appRootDir}'
+    command = f'python3 -m http.server --directory {appRootDir}'
+
     if commandArgs.unattended:
         os.system (f'{command} &')
     else:
         os.system (f'konsole --new-tab --hold -e "bash -ic \'{command}\'"  &')
-        
+
     '''
     If 'Address already in use' do:
         ps -fA | grep python
@@ -262,7 +266,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
 
-    test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)  # ??? Must be before nodejs_demo, why?
+    # test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)  # ??? Must be before nodejs_demo, why?  # BROKEN - needs update to Parcel V2
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
 
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
