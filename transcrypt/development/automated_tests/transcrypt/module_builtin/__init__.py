@@ -109,6 +109,12 @@ def run (autoTester):
     autoTester.check("abc".isalpha())
     autoTester.check("abc123".isalpha())
 
+    enumerate_list = ['a', 'b', 'c', 'd', 'e']
+    # JS does not have tuples so coerce  to list of lists
+    autoTester.check([list(item) for item in enumerate(enumerate_list)])
+    autoTester.check([list(item) for item in enumerate(enumerate_list, 1)])
+    autoTester.check([list(item) for item in enumerate(enumerate_list, start=2)])
+
     replace_test = "abcabcabcabc"
     autoTester.check(replace_test.replace("c", "x"))
     autoTester.check(replace_test.replace("c", "x", -1))
