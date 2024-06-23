@@ -18,7 +18,7 @@ Differences due to the 'lean and mean' design goal
 - String formatting is done through the *format* method or through f-strings, as this is considered most flexible. Using % for formatting isn't supported.
 - Some methods of container types like list, set and dict, that duplicate functionality of other methods, have been left out of the core libraries. If needed they can be supplied in separate libraries.
 - Metaclasses only support overloading the __new__ method, covering 90% of the use cases.
-- Currently the  \*, /, //, +, -, @, [], (), ==, !=, <, <=, >, >=, \*\*, << and >> operators can be overloaded, both forward and reverse where appropriate, covering almost all usecases.
+- Currently the  \*, /, //, +, -, @, [], (), ==, !=, <, <=, >, >=, \*\*, << and >> operators can be overloaded, both forward and reverse where appropriate, covering almost all use cases.
 - The 'with' statement can currently only be used for file-like objects.
 
 Differences due to interoperability with JavaScript and JavaScript libraries
@@ -37,6 +37,6 @@ Differences due to running Transcrypt applications in the browser, rather than o
 ---------------------------------------------------------------------------------------------
 
 - Transcrypt doesn't directly support the use of libraries written in C or C++ since, without special measures like compiling to asm.js, C and C++ don't run in the browser.
-- The browser programming model is event driven, so Transcrypt programs are even driven, as are their JavaScript counterparts.
+- The browser programming model is event driven, so Transcrypt programs are also event driven, as are their JavaScript counterparts.
 - Just like JavaScript, Transcrypt running in the browser cannot write to an ordinary disk file, due to security limitations. However, just like JavaScript, it can store and retrieve data using JSON and Ajax.
 
