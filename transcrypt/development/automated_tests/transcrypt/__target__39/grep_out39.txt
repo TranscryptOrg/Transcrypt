@@ -1,0 +1,4356 @@
+autotest.tree-					name: str = executable_comments
+autotest.tree-					asname: NoneType = None
+autotest.tree-		element: Import 
+autotest.tree-			names: list 
+autotest.tree-				element: alias 
+autotest.tree:					name: str = extended_slices
+autotest.tree-					asname: NoneType = None
+autotest.tree-		element: Import 
+autotest.tree-			names: list 
+autotest.tree-				element: alias 
+autotest.tree-					name: str = fstrings
+--
+autotest.tree-					name: str = globals_function
+autotest.tree-					asname: NoneType = None
+autotest.tree-		element: Import 
+autotest.tree-			names: list 
+autotest.tree-				element: alias 
+autotest.tree:					name: str = indices_and_slices
+autotest.tree-					asname: NoneType = None
+autotest.tree-		element: Import 
+autotest.tree-			names: list 
+autotest.tree-				element: alias 
+autotest.tree-					name: str = iterators_and_generators
+--
+autotest.tree-						ctx: Load 
+autotest.tree-					attr: str = run
+autotest.tree-					ctx: Load 
+autotest.tree-				args: list 
+autotest.tree-					element: Name 
+autotest.tree:						id: str = extended_slices
+autotest.tree-						ctx: Load 
+autotest.tree-					element: Constant 
+autotest.tree:						value: str = extended_slices
+autotest.tree-						kind: NoneType = None
+autotest.tree-				keywords: list 
+autotest.tree-		element: Expr 
+autotest.tree-			value: Call 
+autotest.tree-				func: Attribute 
+--
+autotest.tree-						ctx: Load 
+autotest.tree-					attr: str = run
+autotest.tree-					ctx: Load 
+autotest.tree-				args: list 
+autotest.tree-					element: Name 
+autotest.tree:						id: str = indices_and_slices
+autotest.tree-						ctx: Load 
+autotest.tree-					element: Constant 
+autotest.tree:						value: str = indices_and_slices
+autotest.tree-						kind: NoneType = None
+autotest.tree-				keywords: list 
+autotest.tree-		element: Expr 
+autotest.tree-			value: Call 
+autotest.tree-				func: Attribute 
+--
+control_structures.tree-											element: Compare 
+control_structures.tree-												left: Subscript 
+control_structures.tree-													value: Name 
+control_structures.tree-														id: str = vehicles
+control_structures.tree-														ctx: Load 
+control_structures.tree:													slice: Name 
+control_structures.tree-														id: str = index
+control_structures.tree-														ctx: Load 
+control_structures.tree-													ctx: Load 
+control_structures.tree-												ops: list 
+control_structures.tree-													element: NotEq 
+--
+control_structures.tree-														ctx: Load 
+control_structures.tree-													element: Subscript 
+control_structures.tree-														value: Name 
+control_structures.tree-															id: str = vehicles
+control_structures.tree-															ctx: Load 
+control_structures.tree:														slice: Name 
+control_structures.tree-															id: str = index
+control_structures.tree-															ctx: Load 
+control_structures.tree-														ctx: Load 
+control_structures.tree-												keywords: list 
+control_structures.tree-										element: If 
+--
+control_structures.tree-													element: Compare 
+control_structures.tree-														left: Subscript 
+control_structures.tree-															value: Name 
+control_structures.tree-																id: str = vehicles
+control_structures.tree-																ctx: Load 
+control_structures.tree:															slice: Name 
+control_structures.tree-																id: str = index
+control_structures.tree-																ctx: Load 
+control_structures.tree-															ctx: Load 
+control_structures.tree-														ops: list 
+control_structures.tree-															element: Eq 
+--
+control_structures.tree-													element: Compare 
+control_structures.tree-														left: Subscript 
+control_structures.tree-															value: Name 
+control_structures.tree-																id: str = vehicles
+control_structures.tree-																ctx: Load 
+control_structures.tree:															slice: Name 
+control_structures.tree-																id: str = index
+control_structures.tree-																ctx: Load 
+control_structures.tree-															ctx: Load 
+control_structures.tree-														ops: list 
+control_structures.tree-															element: Eq 
+--
+data_structures.tree-						args: list 
+data_structures.tree-							element: Subscript 
+data_structures.tree-								value: Name 
+data_structures.tree-									id: str = aList
+data_structures.tree-									ctx: Load 
+data_structures.tree:								slice: Slice 
+data_structures.tree-									lower: Constant 
+data_structures.tree-										value: int = 2
+data_structures.tree-										kind: NoneType = None
+data_structures.tree-									upper: Constant 
+data_structures.tree-										value: int = 4
+--
+data_structures.tree-						args: list 
+data_structures.tree-							element: Subscript 
+data_structures.tree-								value: Name 
+data_structures.tree-									id: str = aList
+data_structures.tree-									ctx: Load 
+data_structures.tree:								slice: Slice 
+data_structures.tree-									lower: NoneType = None
+data_structures.tree-									upper: NoneType = None
+data_structures.tree-									step: NoneType = None
+data_structures.tree-								ctx: Load 
+data_structures.tree-						keywords: list 
+--
+data_structures.tree-						args: list 
+data_structures.tree-							element: Subscript 
+data_structures.tree-								value: Name 
+data_structures.tree-									id: str = aList
+data_structures.tree-									ctx: Load 
+data_structures.tree:								slice: Slice 
+data_structures.tree-									lower: Constant 
+data_structures.tree-										value: int = 2
+data_structures.tree-										kind: NoneType = None
+data_structures.tree-									upper: NoneType = None
+data_structures.tree-									step: NoneType = None
+--
+data_structures.tree-						args: list 
+data_structures.tree-							element: Subscript 
+data_structures.tree-								value: Name 
+data_structures.tree-									id: str = aDict
+data_structures.tree-									ctx: Load 
+data_structures.tree:								slice: Constant 
+data_structures.tree-									value: int = 1
+data_structures.tree-									kind: NoneType = None
+data_structures.tree-								ctx: Load 
+data_structures.tree-							element: Subscript 
+data_structures.tree-								value: Name 
+data_structures.tree-									id: str = aDict
+data_structures.tree-									ctx: Load 
+data_structures.tree:								slice: Constant 
+data_structures.tree-									value: str = animal
+data_structures.tree-									kind: NoneType = None
+data_structures.tree-								ctx: Load 
+data_structures.tree-						keywords: list 
+data_structures.tree-				element: FunctionDef 
+--
+datetime.tree-				ctx: Store 
+datetime.tree-			iter: Subscript 
+datetime.tree-				value: Name 
+datetime.tree-					id: str = _DAYS_IN_MONTH
+datetime.tree-					ctx: Load 
+datetime.tree:				slice: Slice 
+datetime.tree-					lower: Constant 
+datetime.tree-						value: int = 1
+datetime.tree-						kind: NoneType = None
+datetime.tree-					upper: NoneType = None
+datetime.tree-					step: NoneType = None
+--
+datetime.tree-				element: Return 
+datetime.tree-					value: Subscript 
+datetime.tree-						value: Name 
+datetime.tree-							id: str = _DAYS_IN_MONTH
+datetime.tree-							ctx: Load 
+datetime.tree:						slice: Name 
+datetime.tree-							id: str = month
+datetime.tree-							ctx: Load 
+datetime.tree-						ctx: Load 
+datetime.tree-			decorator_list: list 
+datetime.tree-			returns: NoneType = None
+--
+datetime.tree-					value: BinOp 
+datetime.tree-						left: Subscript 
+datetime.tree-							value: Name 
+datetime.tree-								id: str = _DAYS_BEFORE_MONTH
+datetime.tree-								ctx: Load 
+datetime.tree:							slice: Name 
+datetime.tree-								id: str = month
+datetime.tree-								ctx: Load 
+datetime.tree-							ctx: Load 
+datetime.tree-						op: Add 
+datetime.tree-						right: BoolOp 
+--
+datetime.tree-					value: BinOp 
+datetime.tree-						left: Subscript 
+datetime.tree-							value: Name 
+datetime.tree-								id: str = _DAYS_BEFORE_MONTH
+datetime.tree-								ctx: Load 
+datetime.tree:							slice: Name 
+datetime.tree-								id: str = month
+datetime.tree-								ctx: Load 
+datetime.tree-							ctx: Load 
+datetime.tree-						op: Add 
+datetime.tree-						right: BoolOp 
+--
+datetime.tree-							value: BinOp 
+datetime.tree-								left: Subscript 
+datetime.tree-									value: Name 
+datetime.tree-										id: str = _DAYS_IN_MONTH
+datetime.tree-										ctx: Load 
+datetime.tree:									slice: Name 
+datetime.tree-										id: str = month
+datetime.tree-										ctx: Load 
+datetime.tree-									ctx: Load 
+datetime.tree-								op: Add 
+datetime.tree-								right: BoolOp 
+--
+datetime.tree-									ctx: Store 
+datetime.tree-							value: Subscript 
+datetime.tree-								value: Name 
+datetime.tree-									id: str = format
+datetime.tree-									ctx: Load 
+datetime.tree:								slice: Name 
+datetime.tree-									id: str = i
+datetime.tree-									ctx: Load 
+datetime.tree-								ctx: Load 
+datetime.tree-							type_comment: NoneType = None
+datetime.tree-						element: AugAssign 
+--
+datetime.tree-													ctx: Store 
+datetime.tree-											value: Subscript 
+datetime.tree-												value: Name 
+datetime.tree-													id: str = format
+datetime.tree-													ctx: Load 
+datetime.tree:												slice: Name 
+datetime.tree-													id: str = i
+datetime.tree-													ctx: Load 
+datetime.tree-												ctx: Load 
+datetime.tree-											type_comment: NoneType = None
+datetime.tree-										element: AugAssign 
+--
+datetime.tree-								args: list 
+datetime.tree-									element: Subscript 
+datetime.tree-										value: Name 
+datetime.tree-											id: str = _DAYNAMES
+datetime.tree-											ctx: Load 
+datetime.tree:										slice: Name 
+datetime.tree-											id: str = weekday
+datetime.tree-											ctx: Load 
+datetime.tree-										ctx: Load 
+datetime.tree-									element: Subscript 
+datetime.tree-										value: Name 
+datetime.tree-											id: str = _MONTHNAMES
+datetime.tree-											ctx: Load 
+datetime.tree:										slice: Attribute 
+datetime.tree-											value: Name 
+datetime.tree-												id: str = self
+datetime.tree-												ctx: Load 
+datetime.tree-											attr: str = _month
+datetime.tree-											ctx: Load 
+--
+datetime.tree-									test: Compare 
+datetime.tree-										left: Subscript 
+datetime.tree-											value: Name 
+datetime.tree-												id: str = s
+datetime.tree-												ctx: Load 
+datetime.tree:											slice: Slice 
+datetime.tree-												lower: UnaryOp 
+datetime.tree-													op: USub 
+datetime.tree-													operand: Constant 
+datetime.tree-														value: int = 1
+datetime.tree-														kind: NoneType = None
+--
+datetime.tree-										left: BinOp 
+datetime.tree-											left: Subscript 
+datetime.tree-												value: Name 
+datetime.tree-													id: str = s
+datetime.tree-													ctx: Load 
+datetime.tree:												slice: Slice 
+datetime.tree-													lower: NoneType = None
+datetime.tree-													upper: BinOp 
+datetime.tree-														left: Call 
+datetime.tree-															func: Name 
+datetime.tree-																id: str = len
+--
+datetime.tree-											element: Starred 
+datetime.tree-												value: Subscript 
+datetime.tree-													value: Name 
+datetime.tree-														id: str = localtm
+datetime.tree-														ctx: Load 
+datetime.tree:													slice: Slice 
+datetime.tree-														lower: NoneType = None
+datetime.tree-														upper: Constant 
+datetime.tree-															value: int = 6
+datetime.tree-															kind: NoneType = None
+datetime.tree-														step: NoneType = None
+--
+datetime.tree-													ctx: Store 
+datetime.tree-											value: Subscript 
+datetime.tree-												value: Name 
+datetime.tree-													id: str = localtm
+datetime.tree-													ctx: Load 
+datetime.tree:												slice: Constant 
+datetime.tree-													value: int = 10
+datetime.tree-													kind: NoneType = None
+datetime.tree-												ctx: Load 
+datetime.tree-											type_comment: NoneType = None
+datetime.tree-										element: Assign 
+--
+datetime.tree-													ctx: Store 
+datetime.tree-											value: Subscript 
+datetime.tree-												value: Name 
+datetime.tree-													id: str = localtm
+datetime.tree-													ctx: Load 
+datetime.tree:												slice: Constant 
+datetime.tree-													value: int = 9
+datetime.tree-													kind: NoneType = None
+datetime.tree-												ctx: Load 
+datetime.tree-											type_comment: NoneType = None
+datetime.tree-										element: Assign 
+--
+datetime.tree-																	args: list 
+datetime.tree-																		element: Name 
+datetime.tree-																			id: str = ts
+datetime.tree-																			ctx: Load 
+datetime.tree-																	keywords: list 
+datetime.tree:																slice: Slice 
+datetime.tree-																	lower: NoneType = None
+datetime.tree-																	upper: Constant 
+datetime.tree-																		value: int = 6
+datetime.tree-																		kind: NoneType = None
+datetime.tree-																	step: NoneType = None
+--
+datetime.tree-													element: Compare 
+datetime.tree-														left: Subscript 
+datetime.tree-															value: Name 
+datetime.tree-																id: str = localtm
+datetime.tree-																ctx: Load 
+datetime.tree:															slice: Constant 
+datetime.tree-																value: int = 8
+datetime.tree-																kind: NoneType = None
+datetime.tree-															ctx: Load 
+datetime.tree-														ops: list 
+datetime.tree-															element: Gt 
+--
+datetime.tree-																	value: Name 
+datetime.tree-																		id: str = _time
+datetime.tree-																		ctx: Load 
+datetime.tree-																	attr: str = tzname
+datetime.tree-																	ctx: Load 
+datetime.tree:																slice: Name 
+datetime.tree-																	id: str = dst
+datetime.tree-																	ctx: Load 
+datetime.tree-																ctx: Load 
+datetime.tree-														keywords: list 
+datetime.tree-													type_comment: NoneType = None
+--
+datetime.tree-								args: list 
+datetime.tree-									element: Subscript 
+datetime.tree-										value: Name 
+datetime.tree-											id: str = _DAYNAMES
+datetime.tree-											ctx: Load 
+datetime.tree:										slice: Name 
+datetime.tree-											id: str = weekday
+datetime.tree-											ctx: Load 
+datetime.tree-										ctx: Load 
+datetime.tree-									element: Subscript 
+datetime.tree-										value: Name 
+datetime.tree-											id: str = _MONTHNAMES
+datetime.tree-											ctx: Load 
+datetime.tree:										slice: Attribute 
+datetime.tree-											value: Name 
+datetime.tree-												id: str = self
+datetime.tree-												ctx: Load 
+datetime.tree-											attr: str = _month
+datetime.tree-											ctx: Load 
+--
+datetime.tree-							test: Compare 
+datetime.tree-								left: Subscript 
+datetime.tree-									value: Name 
+datetime.tree-										id: str = L
+datetime.tree-										ctx: Load 
+datetime.tree:									slice: BinOp 
+datetime.tree-										left: Call 
+datetime.tree-											func: Name 
+datetime.tree-												id: str = len
+datetime.tree-												ctx: Load 
+datetime.tree-											args: list 
+--
+datetime.tree-							test: Compare 
+datetime.tree-								left: Subscript 
+datetime.tree-									value: Name 
+datetime.tree-										id: str = L
+datetime.tree-										ctx: Load 
+datetime.tree:									slice: BinOp 
+datetime.tree-										left: Call 
+datetime.tree-											func: Name 
+datetime.tree-												id: str = len
+datetime.tree-												ctx: Load 
+datetime.tree-											args: list 
+--
+datetime.tree-									test: Compare 
+datetime.tree-										left: Subscript 
+datetime.tree-											value: Name 
+datetime.tree-												id: str = s
+datetime.tree-												ctx: Load 
+datetime.tree:											slice: Slice 
+datetime.tree-												lower: UnaryOp 
+datetime.tree-													op: USub 
+datetime.tree-													operand: Constant 
+datetime.tree-														value: int = 1
+datetime.tree-														kind: NoneType = None
+--
+datetime.tree-										left: BinOp 
+datetime.tree-											left: Subscript 
+datetime.tree-												value: Name 
+datetime.tree-													id: str = s
+datetime.tree-													ctx: Load 
+datetime.tree:												slice: Slice 
+datetime.tree-													lower: NoneType = None
+datetime.tree-													upper: BinOp 
+datetime.tree-														left: Call 
+datetime.tree-															func: Name 
+datetime.tree-																id: str = len
+--
+datetime.tree-														ctx: Load 
+datetime.tree-													element: Name 
+datetime.tree-														id: str = format
+datetime.tree-														ctx: Load 
+datetime.tree-												keywords: list 
+datetime.tree:											slice: Slice 
+datetime.tree-												lower: NoneType = None
+datetime.tree-												upper: Constant 
+datetime.tree-													value: int = 6
+datetime.tree-													kind: NoneType = None
+datetime.tree-												step: NoneType = None
+--
+dict_comprehensions.tree-					value: DictComp 
+dict_comprehensions.tree-						key: Subscript 
+dict_comprehensions.tree-							value: Name 
+dict_comprehensions.tree-								id: str = original
+dict_comprehensions.tree-								ctx: Load 
+dict_comprehensions.tree:							slice: Name 
+dict_comprehensions.tree-								id: str = key
+dict_comprehensions.tree-								ctx: Load 
+dict_comprehensions.tree-							ctx: Load 
+dict_comprehensions.tree-						value: Name 
+dict_comprehensions.tree-							id: str = key
+--
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = tel
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = sape
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Store 
+dictionaries.tree-					value: Constant 
+dictionaries.tree-						value: int = 4139
+--
+dictionaries.tree-						args: list 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = tel
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = jack
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree-						keywords: list 
+dictionaries.tree-				element: Delete 
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = tel
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = sape
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Del 
+dictionaries.tree-				element: Assign 
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = tel
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = irv
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Store 
+dictionaries.tree-					value: Constant 
+dictionaries.tree-						value: int = 4127
+--
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Subscript 
+dictionaries.tree-									value: Name 
+dictionaries.tree-										id: str = d
+dictionaries.tree-										ctx: Load 
+dictionaries.tree:									slice: Constant 
+dictionaries.tree-										value: str = a
+dictionaries.tree-										kind: NoneType = None
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = c
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree-						keywords: list 
+dictionaries.tree-				element: Expr 
+--
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = d
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = a
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = c
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Store 
+dictionaries.tree-					value: Constant 
+dictionaries.tree-						value: int = 3
+--
+dictionaries.tree-						args: list 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = tel
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = linus
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree-						keywords: list 
+dictionaries.tree-				element: Expr 
+--
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = d
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = a
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Store 
+dictionaries.tree-					value: Constant 
+dictionaries.tree-						value: int = 3777
+--
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = d
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Tuple 
+dictionaries.tree-								elts: list 
+dictionaries.tree-									element: Constant 
+dictionaries.tree-										value: int = 1
+dictionaries.tree-										kind: NoneType = None
+dictionaries.tree-									element: Constant 
+--
+dictionaries.tree-						args: list 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = d
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = a
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = d
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Tuple 
+dictionaries.tree-									elts: list 
+dictionaries.tree-										element: Constant 
+dictionaries.tree-											value: int = 1
+dictionaries.tree-											kind: NoneType = None
+dictionaries.tree-										element: Constant 
+--
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = d
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Constant 
+dictionaries.tree-								value: str = a
+dictionaries.tree-								kind: NoneType = None
+dictionaries.tree-							ctx: Store 
+dictionaries.tree-					value: Constant 
+dictionaries.tree-						value: int = 3777
+--
+dictionaries.tree-					targets: list 
+dictionaries.tree-						element: Subscript 
+dictionaries.tree-							value: Name 
+dictionaries.tree-								id: str = d
+dictionaries.tree-								ctx: Load 
+dictionaries.tree:							slice: Tuple 
+dictionaries.tree-								elts: list 
+dictionaries.tree-									element: Constant 
+dictionaries.tree-										value: int = 1
+dictionaries.tree-										kind: NoneType = None
+dictionaries.tree-									element: Constant 
+--
+dictionaries.tree-						args: list 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = d
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Constant 
+dictionaries.tree-									value: str = a
+dictionaries.tree-									kind: NoneType = None
+dictionaries.tree-								ctx: Load 
+dictionaries.tree-							element: Subscript 
+dictionaries.tree-								value: Name 
+dictionaries.tree-									id: str = d
+dictionaries.tree-									ctx: Load 
+dictionaries.tree:								slice: Tuple 
+dictionaries.tree-									elts: list 
+dictionaries.tree-										element: Constant 
+dictionaries.tree-											value: int = 1
+dictionaries.tree-											kind: NoneType = None
+dictionaries.tree-										element: Constant 
+--
+div_issues.tree-							targets: list 
+div_issues.tree-								element: Subscript 
+div_issues.tree-									value: Name 
+div_issues.tree-										id: str = x
+div_issues.tree-										ctx: Load 
+div_issues.tree:									slice: Constant 
+div_issues.tree-										value: int = 0
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-									ctx: Store 
+div_issues.tree-							value: Constant 
+div_issues.tree-								value: int = 3
+--
+div_issues.tree-							targets: list 
+div_issues.tree-								element: Subscript 
+div_issues.tree-									value: Name 
+div_issues.tree-										id: str = x
+div_issues.tree-										ctx: Load 
+div_issues.tree:									slice: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-									ctx: Store 
+div_issues.tree-							value: Constant 
+div_issues.tree-								value: int = 2
+--
+div_issues.tree-									value: Yield 
+div_issues.tree-										value: Subscript 
+div_issues.tree-											value: Name 
+div_issues.tree-												id: str = aList
+div_issues.tree-												ctx: Load 
+div_issues.tree:											slice: Slice 
+div_issues.tree-												lower: Name 
+div_issues.tree-													id: str = index
+div_issues.tree-													ctx: Load 
+div_issues.tree-												upper: BinOp 
+div_issues.tree-													left: Name 
+--
+div_issues.tree-															value: Name 
+div_issues.tree-																id: str = self
+div_issues.tree-																ctx: Load 
+div_issues.tree-															attr: str = alphabet
+div_issues.tree-															ctx: Load 
+div_issues.tree:														slice: BinOp 
+div_issues.tree-															left: Attribute 
+div_issues.tree-																value: Name 
+div_issues.tree-																	id: str = self
+div_issues.tree-																	ctx: Load 
+div_issues.tree-																attr: str = pseudoRandom
+--
+div_issues.tree-																defaults: list 
+div_issues.tree-															body: Subscript 
+div_issues.tree-																value: Name 
+div_issues.tree-																	id: str = row
+div_issues.tree-																	ctx: Load 
+div_issues.tree:																slice: Name 
+div_issues.tree-																	id: str = iCol
+div_issues.tree-																	ctx: Load 
+div_issues.tree-																ctx: Load 
+div_issues.tree-									orelse: list 
+div_issues.tree-									type_comment: NoneType = None
+--
+div_issues.tree-											element: ListComp 
+div_issues.tree-												elt: Subscript 
+div_issues.tree-													value: Name 
+div_issues.tree-														id: str = x
+div_issues.tree-														ctx: Load 
+div_issues.tree:													slice: Constant 
+div_issues.tree-														value: int = 1
+div_issues.tree-														kind: NoneType = None
+div_issues.tree-													ctx: Load 
+div_issues.tree-												generators: list 
+div_issues.tree-													element: comprehension 
+--
+div_issues.tree-																left: BinOp 
+div_issues.tree-																	left: Subscript 
+div_issues.tree-																		value: Name 
+div_issues.tree-																			id: str = x
+div_issues.tree-																			ctx: Load 
+div_issues.tree:																		slice: Constant 
+div_issues.tree-																			value: int = 0
+div_issues.tree-																			kind: NoneType = None
+div_issues.tree-																		ctx: Load 
+div_issues.tree-																	op: BitAnd 
+div_issues.tree-																	right: Name 
+--
+div_issues.tree-											kind: NoneType = None
+div_issues.tree-									values: list 
+div_issues.tree-										element: Constant 
+div_issues.tree-											value: int = 5
+div_issues.tree-											kind: NoneType = None
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: str = a
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							type_comment: NoneType = None
+div_issues.tree-						element: Assign 
+--
+div_issues.tree-											kind: NoneType = None
+div_issues.tree-									values: list 
+div_issues.tree-										element: Constant 
+div_issues.tree-											value: int = 5
+div_issues.tree-											kind: NoneType = None
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: str = b
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							type_comment: NoneType = None
+div_issues.tree-						element: Expr 
+--
+div_issues.tree-								args: list 
+div_issues.tree-									element: Subscript 
+div_issues.tree-										value: Name 
+div_issues.tree-											id: str = foo
+div_issues.tree-											ctx: Load 
+div_issues.tree:										slice: Name 
+div_issues.tree-											id: str = i
+div_issues.tree-											ctx: Load 
+div_issues.tree-										ctx: Load 
+div_issues.tree-								keywords: list 
+div_issues.tree-					orelse: list 
+--
+div_issues.tree-					targets: list 
+div_issues.tree-						element: Subscript 
+div_issues.tree-							value: Name 
+div_issues.tree-								id: str = l460
+div_issues.tree-								ctx: Load 
+div_issues.tree:							slice: Constant 
+div_issues.tree-								value: int = 0
+div_issues.tree-								kind: NoneType = None
+div_issues.tree-							ctx: Store 
+div_issues.tree-					value: Constant 
+div_issues.tree-						value: int = 1
+--
+div_issues.tree-					targets: list 
+div_issues.tree-						element: Subscript 
+div_issues.tree-							value: Name 
+div_issues.tree-								id: str = l460
+div_issues.tree-								ctx: Load 
+div_issues.tree:							slice: UnaryOp 
+div_issues.tree-								op: USub 
+div_issues.tree-								operand: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-							ctx: Store 
+--
+div_issues.tree-					targets: list 
+div_issues.tree-						element: Subscript 
+div_issues.tree-							value: Name 
+div_issues.tree-								id: str = l460
+div_issues.tree-								ctx: Load 
+div_issues.tree:							slice: UnaryOp 
+div_issues.tree-								op: USub 
+div_issues.tree-								operand: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-							ctx: Store 
+--
+div_issues.tree-					targets: list 
+div_issues.tree-						element: Subscript 
+div_issues.tree-							value: Name 
+div_issues.tree-								id: str = d460
+div_issues.tree-								ctx: Load 
+div_issues.tree:							slice: UnaryOp 
+div_issues.tree-								op: USub 
+div_issues.tree-								operand: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-							ctx: Store 
+--
+div_issues.tree-					targets: list 
+div_issues.tree-						element: Subscript 
+div_issues.tree-							value: Name 
+div_issues.tree-								id: str = d460
+div_issues.tree-								ctx: Load 
+div_issues.tree:							slice: Constant 
+div_issues.tree-								value: str = b
+div_issues.tree-								kind: NoneType = None
+div_issues.tree-							ctx: Store 
+div_issues.tree-					value: Constant 
+div_issues.tree-						value: str = bike
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = d460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = d460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: str = b
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-						keywords: list 
+div_issues.tree-				element: Expr 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = s460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = l460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 0
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 1
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: int = 2
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 2
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = t460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 3
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+--
+div_issues.tree-						args: list 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = d460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: UnaryOp 
+div_issues.tree-									op: USub 
+div_issues.tree-									operand: Constant 
+div_issues.tree-										value: int = 1
+div_issues.tree-										kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-							element: Subscript 
+div_issues.tree-								value: Name 
+div_issues.tree-									id: str = d460
+div_issues.tree-									ctx: Load 
+div_issues.tree:								slice: Constant 
+div_issues.tree-									value: str = b
+div_issues.tree-									kind: NoneType = None
+div_issues.tree-								ctx: Load 
+div_issues.tree-						keywords: list 
+div_issues.tree-				element: Expr 
+--
+div_issues.tree-								args: list 
+div_issues.tree-									element: Subscript 
+div_issues.tree-										value: Name 
+div_issues.tree-											id: str = d460
+div_issues.tree-											ctx: Load 
+div_issues.tree:										slice: UnaryOp 
+div_issues.tree-											op: USub 
+div_issues.tree-											operand: Constant 
+div_issues.tree-												value: int = 1
+div_issues.tree-												kind: NoneType = None
+div_issues.tree-										ctx: Load 
+div_issues.tree-									element: Subscript 
+div_issues.tree-										value: Name 
+div_issues.tree-											id: str = d460
+div_issues.tree-											ctx: Load 
+div_issues.tree:										slice: Constant 
+div_issues.tree-											value: str = c
+div_issues.tree-											kind: NoneType = None
+div_issues.tree-										ctx: Load 
+div_issues.tree-								keywords: list 
+div_issues.tree-					handlers: list 
+--
+div_issues.tree-								args: list 
+div_issues.tree-									element: Subscript 
+div_issues.tree-										value: Name 
+div_issues.tree-											id: str = d460
+div_issues.tree-											ctx: Load 
+div_issues.tree:										slice: UnaryOp 
+div_issues.tree-											op: USub 
+div_issues.tree-											operand: Constant 
+div_issues.tree-												value: int = 2
+div_issues.tree-												kind: NoneType = None
+div_issues.tree-										ctx: Load 
+div_issues.tree-									element: Subscript 
+div_issues.tree-										value: Name 
+div_issues.tree-											id: str = d460
+div_issues.tree-											ctx: Load 
+div_issues.tree:										slice: Constant 
+div_issues.tree-											value: str = b
+div_issues.tree-											kind: NoneType = None
+div_issues.tree-										ctx: Load 
+div_issues.tree-								keywords: list 
+div_issues.tree-					handlers: list 
+--
+div_pulls.tree-						args: list 
+div_pulls.tree-							element: Subscript 
+div_pulls.tree-								value: Name 
+div_pulls.tree-									id: str = s
+div_pulls.tree-									ctx: Load 
+div_pulls.tree:								slice: Slice 
+div_pulls.tree-									lower: Constant 
+div_pulls.tree-										value: int = 2
+div_pulls.tree-										kind: NoneType = None
+div_pulls.tree-									upper: Constant 
+div_pulls.tree-										value: int = 3
+--
+div_pulls.tree-						args: list 
+div_pulls.tree-							element: Subscript 
+div_pulls.tree-								value: Name 
+div_pulls.tree-									id: str = s
+div_pulls.tree-									ctx: Load 
+div_pulls.tree:								slice: Slice 
+div_pulls.tree-									lower: NoneType = None
+div_pulls.tree-									upper: Constant 
+div_pulls.tree-										value: int = 3
+div_pulls.tree-										kind: NoneType = None
+div_pulls.tree-									step: NoneType = None
+--
+div_pulls.tree-						args: list 
+div_pulls.tree-							element: Subscript 
+div_pulls.tree-								value: Name 
+div_pulls.tree-									id: str = s
+div_pulls.tree-									ctx: Load 
+div_pulls.tree:								slice: Slice 
+div_pulls.tree-									lower: Constant 
+div_pulls.tree-										value: int = 2
+div_pulls.tree-										kind: NoneType = None
+div_pulls.tree-									upper: NoneType = None
+div_pulls.tree-									step: NoneType = None
+--
+div_pulls.tree-						args: list 
+div_pulls.tree-							element: Subscript 
+div_pulls.tree-								value: Name 
+div_pulls.tree-									id: str = s
+div_pulls.tree-									ctx: Load 
+div_pulls.tree:								slice: Slice 
+div_pulls.tree-									lower: NoneType = None
+div_pulls.tree-									upper: NoneType = None
+div_pulls.tree-									step: Constant 
+div_pulls.tree-										value: int = 2
+div_pulls.tree-										kind: NoneType = None
+--
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = a
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Tuple 
+extended_slices.tree-								elts: list 
+extended_slices.tree-									element: Slice 
+extended_slices.tree-										lower: Constant 
+extended_slices.tree-											value: int = 1
+extended_slices.tree-											kind: NoneType = None
+--
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = b
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Slice 
+extended_slices.tree-							lower: Constant 
+extended_slices.tree-								value: int = 7
+extended_slices.tree-								kind: NoneType = None
+extended_slices.tree-							upper: Constant 
+extended_slices.tree-								value: int = 8
+--
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = c
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Slice 
+extended_slices.tree-								lower: Constant 
+extended_slices.tree-									value: int = 1
+extended_slices.tree-									kind: NoneType = None
+extended_slices.tree-								upper: Constant 
+extended_slices.tree-									value: int = 2
+--
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = d
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Tuple 
+extended_slices.tree-							elts: list 
+extended_slices.tree-								element: Slice 
+extended_slices.tree-									lower: Constant 
+extended_slices.tree-										value: int = 4
+extended_slices.tree-										kind: NoneType = None
+--
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = e
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Tuple 
+extended_slices.tree-								elts: list 
+extended_slices.tree-									element: Constant 
+extended_slices.tree-										value: int = 1
+extended_slices.tree-										kind: NoneType = None
+extended_slices.tree-									element: Slice 
+--
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = f
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Tuple 
+extended_slices.tree-							elts: list 
+extended_slices.tree-								element: Constant 
+extended_slices.tree-									value: int = 4
+extended_slices.tree-									kind: NoneType = None
+extended_slices.tree-								element: Slice 
+--
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = g
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Tuple 
+extended_slices.tree-								elts: list 
+extended_slices.tree-									element: Constant 
+extended_slices.tree-										value: int = 1
+extended_slices.tree-										kind: NoneType = None
+extended_slices.tree-									element: Constant 
+--
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = h
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Tuple 
+extended_slices.tree-							elts: list 
+extended_slices.tree-								element: Constant 
+extended_slices.tree-									value: int = 1
+extended_slices.tree-									kind: NoneType = None
+extended_slices.tree-								element: Constant 
+--
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = i
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Constant 
+extended_slices.tree-								value: int = 1
+extended_slices.tree-								kind: NoneType = None
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = j
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Constant 
+extended_slices.tree-							value: int = 1
+extended_slices.tree-							kind: NoneType = None
+extended_slices.tree-						ctx: Load 
+extended_slices.tree-					type_comment: NoneType = None
+extended_slices.tree-				element: Assign 
+extended_slices.tree-					targets: list 
+extended_slices.tree-						element: Subscript 
+extended_slices.tree-							value: Name 
+extended_slices.tree-								id: str = k
+extended_slices.tree-								ctx: Load 
+extended_slices.tree:							slice: Slice 
+extended_slices.tree-								lower: Constant 
+extended_slices.tree-									value: int = 1
+extended_slices.tree-									kind: NoneType = None
+extended_slices.tree-								upper: Constant 
+extended_slices.tree-									value: int = 2
+--
+extended_slices.tree-							ctx: Store 
+extended_slices.tree-					value: Subscript 
+extended_slices.tree-						value: Name 
+extended_slices.tree-							id: str = l
+extended_slices.tree-							ctx: Load 
+extended_slices.tree:						slice: Slice 
+extended_slices.tree-							lower: Constant 
+extended_slices.tree-								value: int = 1
+extended_slices.tree-								kind: NoneType = None
+extended_slices.tree-							upper: Constant 
+extended_slices.tree-								value: int = 2
+--
+fstrings.tree-										ctx: Load 
+fstrings.tree-									element: Subscript 
+fstrings.tree-										value: Name 
+fstrings.tree-											id: str = aDict
+fstrings.tree-											ctx: Load 
+fstrings.tree:										slice: Constant 
+fstrings.tree-											value: str = one
+fstrings.tree-											kind: NoneType = None
+fstrings.tree-										ctx: Load 
+fstrings.tree-								keywords: list 
+fstrings.tree-						keywords: list 
+--
+fstrings.tree-									element: FormattedValue 
+fstrings.tree-										value: Subscript 
+fstrings.tree-											value: Name 
+fstrings.tree-												id: str = aDict
+fstrings.tree-												ctx: Load 
+fstrings.tree:											slice: Constant 
+fstrings.tree-												value: str = one
+fstrings.tree-												kind: NoneType = None
+fstrings.tree-											ctx: Load 
+fstrings.tree-										conversion: int = -1
+fstrings.tree-										format_spec: NoneType = None
+--
+fstrings.tree-									element: FormattedValue 
+fstrings.tree-										value: Subscript 
+fstrings.tree-											value: Name 
+fstrings.tree-												id: str = anArray
+fstrings.tree-												ctx: Load 
+fstrings.tree:											slice: Slice 
+fstrings.tree-												lower: Constant 
+fstrings.tree-													value: int = 1
+fstrings.tree-													kind: NoneType = None
+fstrings.tree-												upper: Constant 
+fstrings.tree-													value: int = 4
+--
+fstrings.tree-									element: FormattedValue 
+fstrings.tree-										value: Subscript 
+fstrings.tree-											value: Name 
+fstrings.tree-												id: str = anArray
+fstrings.tree-												ctx: Load 
+fstrings.tree:											slice: Constant 
+fstrings.tree-												value: int = 5
+fstrings.tree-												kind: NoneType = None
+fstrings.tree-											ctx: Load 
+fstrings.tree-										conversion: int = -1
+fstrings.tree-										format_spec: NoneType = None
+--
+globals_function.sub.tree-								func: Name 
+globals_function.sub.tree-									id: str = globals
+globals_function.sub.tree-									ctx: Load 
+globals_function.sub.tree-								args: list 
+globals_function.sub.tree-								keywords: list 
+globals_function.sub.tree:							slice: Name 
+globals_function.sub.tree-								id: str = name
+globals_function.sub.tree-								ctx: Load 
+globals_function.sub.tree-							ctx: Store 
+globals_function.sub.tree-					value: Call 
+globals_function.sub.tree-						func: Attribute 
+--
+globals_function.sub.tree-										func: Name 
+globals_function.sub.tree-											id: str = globals
+globals_function.sub.tree-											ctx: Load 
+globals_function.sub.tree-										args: list 
+globals_function.sub.tree-										keywords: list 
+globals_function.sub.tree:									slice: Name 
+globals_function.sub.tree-										id: str = name
+globals_function.sub.tree-										ctx: Load 
+globals_function.sub.tree-									ctx: Store 
+globals_function.sub.tree-							value: Call 
+globals_function.sub.tree-								func: Attribute 
+--
+globals_function.sub.tree-											func: Name 
+globals_function.sub.tree-												id: str = globals
+globals_function.sub.tree-												ctx: Load 
+globals_function.sub.tree-											args: list 
+globals_function.sub.tree-											keywords: list 
+globals_function.sub.tree:										slice: Name 
+globals_function.sub.tree-											id: str = name
+globals_function.sub.tree-											ctx: Load 
+globals_function.sub.tree-										ctx: Load 
+globals_function.sub.tree-									generators: list 
+globals_function.sub.tree-										element: comprehension 
+--
+globals_function.tree-								func: Name 
+globals_function.tree-									id: str = globals
+globals_function.tree-									ctx: Load 
+globals_function.tree-								args: list 
+globals_function.tree-								keywords: list 
+globals_function.tree:							slice: Name 
+globals_function.tree-								id: str = name
+globals_function.tree-								ctx: Load 
+globals_function.tree-							ctx: Store 
+globals_function.tree-					value: Call 
+globals_function.tree-						func: Attribute 
+--
+globals_function.tree-										func: Name 
+globals_function.tree-											id: str = globals
+globals_function.tree-											ctx: Load 
+globals_function.tree-										args: list 
+globals_function.tree-										keywords: list 
+globals_function.tree:									slice: Name 
+globals_function.tree-										id: str = name
+globals_function.tree-										ctx: Load 
+globals_function.tree-									ctx: Store 
+globals_function.tree-							value: Call 
+globals_function.tree-								func: Attribute 
+--
+globals_function.tree-											func: Name 
+globals_function.tree-												id: str = globals
+globals_function.tree-												ctx: Load 
+globals_function.tree-											args: list 
+globals_function.tree-											keywords: list 
+globals_function.tree:										slice: Name 
+globals_function.tree-											id: str = name
+globals_function.tree-											ctx: Load 
+globals_function.tree-										ctx: Load 
+globals_function.tree-									generators: list 
+globals_function.tree-										element: comprehension 
+--
+indices_and_slices.tree-						args: list 
+indices_and_slices.tree-							element: Subscript 
+indices_and_slices.tree-								value: Name 
+indices_and_slices.tree-									id: str = all
+indices_and_slices.tree-									ctx: Load 
+indices_and_slices.tree:								slice: Slice 
+indices_and_slices.tree-									lower: Constant 
+indices_and_slices.tree-										value: int = 8
+indices_and_slices.tree-										kind: NoneType = None
+indices_and_slices.tree-									upper: Constant 
+indices_and_slices.tree-										value: int = 24
+--
+indices_and_slices.tree-						args: list 
+indices_and_slices.tree-							element: Subscript 
+indices_and_slices.tree-								value: Name 
+indices_and_slices.tree-									id: str = all
+indices_and_slices.tree-									ctx: Load 
+indices_and_slices.tree:								slice: Slice 
+indices_and_slices.tree-									lower: Constant 
+indices_and_slices.tree-										value: int = 8
+indices_and_slices.tree-										kind: NoneType = None
+indices_and_slices.tree-									upper: Constant 
+indices_and_slices.tree-										value: int = 24
+--
+indices_and_slices.tree-					targets: list 
+indices_and_slices.tree-						element: Subscript 
+indices_and_slices.tree-							value: Name 
+indices_and_slices.tree-								id: str = aList
+indices_and_slices.tree-								ctx: Load 
+indices_and_slices.tree:							slice: Slice 
+indices_and_slices.tree-								lower: Constant 
+indices_and_slices.tree-									value: int = 4
+indices_and_slices.tree-									kind: NoneType = None
+indices_and_slices.tree-								upper: Constant 
+indices_and_slices.tree-									value: int = 4
+--
+indices_and_slices.tree-					targets: list 
+indices_and_slices.tree-						element: Subscript 
+indices_and_slices.tree-							value: Name 
+indices_and_slices.tree-								id: str = aList
+indices_and_slices.tree-								ctx: Load 
+indices_and_slices.tree:							slice: Slice 
+indices_and_slices.tree-								lower: Constant 
+indices_and_slices.tree-									value: int = 2
+indices_and_slices.tree-									kind: NoneType = None
+indices_and_slices.tree-								upper: Constant 
+indices_and_slices.tree-									value: int = 2
+--
+indices_and_slices.tree-					targets: list 
+indices_and_slices.tree-						element: Subscript 
+indices_and_slices.tree-							value: Name 
+indices_and_slices.tree-								id: str = aList
+indices_and_slices.tree-								ctx: Load 
+indices_and_slices.tree:							slice: Slice 
+indices_and_slices.tree-								lower: Constant 
+indices_and_slices.tree-									value: int = 0
+indices_and_slices.tree-									kind: NoneType = None
+indices_and_slices.tree-								upper: Constant 
+indices_and_slices.tree-									value: int = 0
+--
+indices_and_slices.tree-					targets: list 
+indices_and_slices.tree-						element: Subscript 
+indices_and_slices.tree-							value: Name 
+indices_and_slices.tree-								id: str = aList
+indices_and_slices.tree-								ctx: Load 
+indices_and_slices.tree:							slice: Slice 
+indices_and_slices.tree-								lower: NoneType = None
+indices_and_slices.tree-								upper: NoneType = None
+indices_and_slices.tree-								step: Constant 
+indices_and_slices.tree-									value: int = 2
+indices_and_slices.tree-									kind: NoneType = None
+--
+iterators_and_generators.tree-											ctx: Load 
+iterators_and_generators.tree-										attr: str = iterable
+iterators_and_generators.tree-										ctx: Load 
+iterators_and_generators.tree-									attr: str = aList
+iterators_and_generators.tree-									ctx: Load 
+iterators_and_generators.tree:								slice: Attribute 
+iterators_and_generators.tree-									value: Name 
+iterators_and_generators.tree-										id: str = self
+iterators_and_generators.tree-										ctx: Load 
+iterators_and_generators.tree-									attr: str = index
+iterators_and_generators.tree-									ctx: Load 
+--
+lambda_functions.tree-											left: BinOp 
+lambda_functions.tree-												left: Subscript 
+lambda_functions.tree-													value: Name 
+lambda_functions.tree-														id: str = args
+lambda_functions.tree-														ctx: Load 
+lambda_functions.tree:													slice: Constant 
+lambda_functions.tree-														value: int = 0
+lambda_functions.tree-														kind: NoneType = None
+lambda_functions.tree-													ctx: Load 
+lambda_functions.tree-												op: Mult 
+lambda_functions.tree-												right: Subscript 
+lambda_functions.tree-													value: Name 
+lambda_functions.tree-														id: str = args
+lambda_functions.tree-														ctx: Load 
+lambda_functions.tree:													slice: Constant 
+lambda_functions.tree-														value: int = 1
+lambda_functions.tree-														kind: NoneType = None
+lambda_functions.tree-													ctx: Load 
+lambda_functions.tree-											op: Add 
+lambda_functions.tree-											right: BinOp 
+--
+metaclasses.tree-									targets: list 
+metaclasses.tree-										element: Subscript 
+metaclasses.tree-											value: Name 
+metaclasses.tree-												id: str = upperAttribs
+metaclasses.tree-												ctx: Load 
+metaclasses.tree:											slice: IfExp 
+metaclasses.tree-												test: Call 
+metaclasses.tree-													func: Attribute 
+metaclasses.tree-														value: Name 
+metaclasses.tree-															id: str = attribKey
+metaclasses.tree-															ctx: Load 
+--
+metaclasses.tree-											ctx: Store 
+metaclasses.tree-									value: Subscript 
+metaclasses.tree-										value: Name 
+metaclasses.tree-											id: str = attribs
+metaclasses.tree-											ctx: Load 
+metaclasses.tree:										slice: Name 
+metaclasses.tree-											id: str = attribKey
+metaclasses.tree-											ctx: Load 
+metaclasses.tree-										ctx: Load 
+metaclasses.tree-									type_comment: NoneType = None
+metaclasses.tree-							orelse: list 
+--
+method_and_class_decorators.tree-													ctx: Store 
+method_and_class_decorators.tree-											value: Subscript 
+method_and_class_decorators.tree-												value: Name 
+method_and_class_decorators.tree-													id: str = args
+method_and_class_decorators.tree-													ctx: Load 
+method_and_class_decorators.tree:												slice: Constant 
+method_and_class_decorators.tree-													value: int = 0
+method_and_class_decorators.tree-													kind: NoneType = None
+method_and_class_decorators.tree-												ctx: Load 
+method_and_class_decorators.tree-											type_comment: NoneType = None
+method_and_class_decorators.tree-										element: Assign 
+--
+method_and_class_decorators.tree-															targets: list 
+method_and_class_decorators.tree-																element: Subscript 
+method_and_class_decorators.tree-																	value: Name 
+method_and_class_decorators.tree-																		id: str = saved
+method_and_class_decorators.tree-																		ctx: Load 
+method_and_class_decorators.tree:																	slice: Name 
+method_and_class_decorators.tree-																		id: str = k
+method_and_class_decorators.tree-																		ctx: Load 
+method_and_class_decorators.tree-																	ctx: Store 
+method_and_class_decorators.tree-															value: Call 
+method_and_class_decorators.tree-																func: Name 
+--
+module_builtin.tree-								args: list 
+module_builtin.tree-									element: Subscript 
+module_builtin.tree-										value: Constant 
+module_builtin.tree-											value: str = e´
+module_builtin.tree-											kind: NoneType = None
+module_builtin.tree:										slice: Constant 
+module_builtin.tree-											value: int = 0
+module_builtin.tree-											kind: NoneType = None
+module_builtin.tree-										ctx: Load 
+module_builtin.tree-								keywords: list 
+module_builtin.tree-						keywords: list 
+--
+module_cmath.tree-								args: list 
+module_cmath.tree-									element: Subscript 
+module_cmath.tree-										value: Name 
+module_cmath.tree-											id: str = aPolar
+module_cmath.tree-											ctx: Load 
+module_cmath.tree:										slice: Constant 
+module_cmath.tree-											value: int = 0
+module_cmath.tree-											kind: NoneType = None
+module_cmath.tree-										ctx: Load 
+module_cmath.tree-									element: Name 
+module_cmath.tree-										id: str = nDecs
+--
+module_cmath.tree-								keywords: list 
+module_cmath.tree-							element: Subscript 
+module_cmath.tree-								value: Name 
+module_cmath.tree-									id: str = aPolar
+module_cmath.tree-									ctx: Load 
+module_cmath.tree:								slice: Constant 
+module_cmath.tree-									value: int = 1
+module_cmath.tree-									kind: NoneType = None
+module_cmath.tree-								ctx: Load 
+module_cmath.tree-						keywords: list 
+module_cmath.tree-				element: Assign 
+--
+module_itertools.tree-								ctx: Load 
+module_itertools.tree-							attr: str = check
+module_itertools.tree-							ctx: Load 
+module_itertools.tree-						args: list 
+module_itertools.tree-							element: Constant 
+module_itertools.tree:								value: str = islice count
+module_itertools.tree-								kind: NoneType = None
+module_itertools.tree-							element: Call 
+module_itertools.tree-								func: Name 
+module_itertools.tree-									id: str = list
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-								args: list 
+module_itertools.tree-									element: Call 
+module_itertools.tree-										func: Name 
+module_itertools.tree:											id: str = islice
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: Call 
+module_itertools.tree-												func: Name 
+module_itertools.tree-													id: str = count
+--
+module_itertools.tree-								ctx: Load 
+module_itertools.tree-							attr: str = check
+module_itertools.tree-							ctx: Load 
+module_itertools.tree-						args: list 
+module_itertools.tree-							element: Constant 
+module_itertools.tree:								value: str = islice cycle
+module_itertools.tree-								kind: NoneType = None
+module_itertools.tree-							element: Call 
+module_itertools.tree-								func: Name 
+module_itertools.tree-									id: str = list
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-								args: list 
+module_itertools.tree-									element: Call 
+module_itertools.tree-										func: Name 
+module_itertools.tree:											id: str = islice
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: Call 
+module_itertools.tree-												func: Name 
+module_itertools.tree-													id: str = cycle
+--
+module_itertools.tree-								ctx: Load 
+module_itertools.tree-							attr: str = check
+module_itertools.tree-							ctx: Load 
+module_itertools.tree-						args: list 
+module_itertools.tree-							element: Constant 
+module_itertools.tree:								value: str = islice repeat
+module_itertools.tree-								kind: NoneType = None
+module_itertools.tree-							element: Call 
+module_itertools.tree-								func: Name 
+module_itertools.tree-									id: str = list
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-								args: list 
+module_itertools.tree-									element: Call 
+module_itertools.tree-										func: Name 
+module_itertools.tree:											id: str = islice
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: Call 
+module_itertools.tree-												func: Name 
+module_itertools.tree-													id: str = repeat
+--
+module_itertools.tree-									defaults: list 
+module_itertools.tree-								body: Subscript 
+module_itertools.tree-									value: Name 
+module_itertools.tree-										id: str = x
+module_itertools.tree-										ctx: Load 
+module_itertools.tree:									slice: Constant 
+module_itertools.tree-										value: int = 0
+module_itertools.tree-										kind: NoneType = None
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-						keywords: list 
+module_itertools.tree-					body: list 
+--
+module_itertools.tree-												args: list 
+module_itertools.tree-													element: Subscript 
+module_itertools.tree-														value: Name 
+module_itertools.tree-															id: str = thing
+module_itertools.tree-															ctx: Load 
+module_itertools.tree:														slice: Constant 
+module_itertools.tree-															value: int = 1
+module_itertools.tree-															kind: NoneType = None
+module_itertools.tree-														ctx: Load 
+module_itertools.tree-													element: Name 
+module_itertools.tree-														id: str = key
+--
+module_itertools.tree-								ctx: Load 
+module_itertools.tree-							attr: str = check
+module_itertools.tree-							ctx: Load 
+module_itertools.tree-						args: list 
+module_itertools.tree-							element: Constant 
+module_itertools.tree:								value: str = islice
+module_itertools.tree-								kind: NoneType = None
+module_itertools.tree-							element: Call 
+module_itertools.tree-								func: Name 
+module_itertools.tree-									id: str = list
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-								args: list 
+module_itertools.tree-									element: Call 
+module_itertools.tree-										func: Name 
+module_itertools.tree:											id: str = islice
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: List 
+module_itertools.tree-												elts: list 
+module_itertools.tree-													element: Constant 
+--
+module_itertools.tree-							id: str = tee
+module_itertools.tree-							ctx: Load 
+module_itertools.tree-						args: list 
+module_itertools.tree-							element: Call 
+module_itertools.tree-								func: Name 
+module_itertools.tree:									id: str = islice
+module_itertools.tree-									ctx: Load 
+module_itertools.tree-								args: list 
+module_itertools.tree-									element: Call 
+module_itertools.tree-										func: Name 
+module_itertools.tree-											id: str = count
+--
+module_itertools.tree-											id: str = combinations
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: Call 
+module_itertools.tree-												func: Name 
+module_itertools.tree:													id: str = islice
+module_itertools.tree-													ctx: Load 
+module_itertools.tree-												args: list 
+module_itertools.tree-													element: Call 
+module_itertools.tree-														func: Name 
+module_itertools.tree-															id: str = count
+--
+module_itertools.tree-											id: str = combinations_with_replacement
+module_itertools.tree-											ctx: Load 
+module_itertools.tree-										args: list 
+module_itertools.tree-											element: Call 
+module_itertools.tree-												func: Name 
+module_itertools.tree:													id: str = islice
+module_itertools.tree-													ctx: Load 
+module_itertools.tree-												args: list 
+module_itertools.tree-													element: Call 
+module_itertools.tree-														func: Name 
+module_itertools.tree-															id: str = count
+--
+module_math.tree-									args: list 
+module_math.tree-										element: Name 
+module_math.tree-											id: str = nr
+module_math.tree-											ctx: Load 
+module_math.tree-									keywords: list 
+module_math.tree:								slice: Slice 
+module_math.tree-									lower: NoneType = None
+module_math.tree-									upper: Constant 
+module_math.tree-										value: int = 15
+module_math.tree-										kind: NoneType = None
+module_math.tree-									step: NoneType = None
+--
+operator_overloading.tree-																value: Name 
+operator_overloading.tree-																	id: str = result
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																attr: str = _
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iTargetRow
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iTargetCol
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Store 
+operator_overloading.tree-													op: Add 
+operator_overloading.tree-													value: BinOp 
+--
+operator_overloading.tree-																	value: Name 
+operator_overloading.tree-																		id: str = self
+operator_overloading.tree-																		ctx: Load 
+operator_overloading.tree-																	attr: str = _
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree:																slice: Name 
+operator_overloading.tree-																	id: str = iTargetRow
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iTerm
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														op: Mult 
+operator_overloading.tree-														right: Subscript 
+--
+operator_overloading.tree-																	value: Name 
+operator_overloading.tree-																		id: str = other
+operator_overloading.tree-																		ctx: Load 
+operator_overloading.tree-																	attr: str = _
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree:																slice: Name 
+operator_overloading.tree-																	id: str = iTerm
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iTargetCol
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-											orelse: list 
+operator_overloading.tree-											type_comment: NoneType = None
+--
+operator_overloading.tree-																	value: Name 
+operator_overloading.tree-																		id: str = result
+operator_overloading.tree-																		ctx: Load 
+operator_overloading.tree-																	attr: str = _
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree:																slice: Name 
+operator_overloading.tree-																	id: str = iRow
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iCol
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Store 
+operator_overloading.tree-													value: BinOp 
+operator_overloading.tree-														left: Subscript 
+--
+operator_overloading.tree-																	value: Name 
+operator_overloading.tree-																		id: str = self
+operator_overloading.tree-																		ctx: Load 
+operator_overloading.tree-																	attr: str = _
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree:																slice: Name 
+operator_overloading.tree-																	id: str = iRow
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iCol
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														op: Mult 
+operator_overloading.tree-														right: Subscript 
+--
+operator_overloading.tree-																	value: Name 
+operator_overloading.tree-																		id: str = other
+operator_overloading.tree-																		ctx: Load 
+operator_overloading.tree-																	attr: str = _
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree:																slice: Name 
+operator_overloading.tree-																	id: str = iRow
+operator_overloading.tree-																	ctx: Load 
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree:															slice: Name 
+operator_overloading.tree-																id: str = iCol
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-													type_comment: NoneType = None
+operator_overloading.tree-											orelse: list 
+--
+operator_overloading.tree-															value: Name 
+operator_overloading.tree-																id: str = result
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															attr: str = _
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iRow
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree:													slice: Name 
+operator_overloading.tree-														id: str = iCol
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree-													ctx: Store 
+operator_overloading.tree-											value: BinOp 
+operator_overloading.tree-												left: Name 
+--
+operator_overloading.tree-															value: Name 
+operator_overloading.tree-																id: str = self
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															attr: str = _
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iRow
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree:													slice: Name 
+operator_overloading.tree-														id: str = iCol
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree-													ctx: Load 
+operator_overloading.tree-											type_comment: NoneType = None
+operator_overloading.tree-									orelse: list 
+--
+operator_overloading.tree-															value: Name 
+operator_overloading.tree-																id: str = result
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															attr: str = _
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iRow
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree:													slice: Name 
+operator_overloading.tree-														id: str = iCol
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree-													ctx: Store 
+operator_overloading.tree-											value: BinOp 
+operator_overloading.tree-												left: Subscript 
+--
+operator_overloading.tree-															value: Name 
+operator_overloading.tree-																id: str = self
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															attr: str = _
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iRow
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree:													slice: Name 
+operator_overloading.tree-														id: str = iCol
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree-													ctx: Load 
+operator_overloading.tree-												op: Add 
+operator_overloading.tree-												right: Subscript 
+--
+operator_overloading.tree-															value: Name 
+operator_overloading.tree-																id: str = other
+operator_overloading.tree-																ctx: Load 
+operator_overloading.tree-															attr: str = _
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree:														slice: Name 
+operator_overloading.tree-															id: str = iRow
+operator_overloading.tree-															ctx: Load 
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree:													slice: Name 
+operator_overloading.tree-														id: str = iCol
+operator_overloading.tree-														ctx: Load 
+operator_overloading.tree-													ctx: Load 
+operator_overloading.tree-											type_comment: NoneType = None
+operator_overloading.tree-									orelse: list 
+--
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = self
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree-									attr: str = _
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Name 
+operator_overloading.tree-									id: str = index
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-					decorator_list: list 
+operator_overloading.tree-					returns: NoneType = None
+--
+operator_overloading.tree-										value: Name 
+operator_overloading.tree-											id: str = self
+operator_overloading.tree-											ctx: Load 
+operator_overloading.tree-										attr: str = _
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree:									slice: Name 
+operator_overloading.tree-										id: str = index
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree-									ctx: Store 
+operator_overloading.tree-							value: Name 
+operator_overloading.tree-								id: str = value
+--
+operator_overloading.tree-						element: Subscript 
+operator_overloading.tree-							value: Subscript 
+operator_overloading.tree-								value: Name 
+operator_overloading.tree-									id: str = m1
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: int = 1
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree:							slice: Constant 
+operator_overloading.tree-								value: int = 2
+operator_overloading.tree-								kind: NoneType = None
+operator_overloading.tree-							ctx: Store 
+operator_overloading.tree-					value: Subscript 
+operator_overloading.tree-						value: Subscript 
+operator_overloading.tree-							value: Name 
+operator_overloading.tree-								id: str = m0
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree:							slice: Constant 
+operator_overloading.tree-								value: int = 1
+operator_overloading.tree-								kind: NoneType = None
+operator_overloading.tree-							ctx: Load 
+operator_overloading.tree:						slice: Constant 
+operator_overloading.tree-							value: int = 2
+operator_overloading.tree-							kind: NoneType = None
+operator_overloading.tree-						ctx: Load 
+operator_overloading.tree-					type_comment: NoneType = None
+operator_overloading.tree-				element: Assign 
+--
+operator_overloading.tree-							element: Subscript 
+operator_overloading.tree-								value: Subscript 
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = m0
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree:									slice: Constant 
+operator_overloading.tree-										value: int = 1
+operator_overloading.tree-										kind: NoneType = None
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: int = 1
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-							element: Subscript 
+operator_overloading.tree-								value: Subscript 
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = m0
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree:									slice: Constant 
+operator_overloading.tree-										value: int = 1
+operator_overloading.tree-										kind: NoneType = None
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: int = 2
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-							element: Subscript 
+operator_overloading.tree-								value: Subscript 
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = m1
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree:									slice: Constant 
+operator_overloading.tree-										value: int = 1
+operator_overloading.tree-										kind: NoneType = None
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: int = 1
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-							element: Subscript 
+operator_overloading.tree-								value: Subscript 
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = m1
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree:									slice: Constant 
+operator_overloading.tree-										value: int = 1
+operator_overloading.tree-										kind: NoneType = None
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: int = 2
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-						keywords: list 
+operator_overloading.tree-				element: AugAssign 
+--
+operator_overloading.tree-								value: Name 
+operator_overloading.tree-									id: str = a
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree-								attr: str = b
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree:							slice: Constant 
+operator_overloading.tree-								value: str = c
+operator_overloading.tree-								kind: NoneType = None
+operator_overloading.tree-							ctx: Store 
+operator_overloading.tree-					value: Constant 
+operator_overloading.tree-						value: str = d
+--
+operator_overloading.tree-							value: Name 
+operator_overloading.tree-								id: str = a
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-							attr: str = b
+operator_overloading.tree-							ctx: Load 
+operator_overloading.tree:						slice: Constant 
+operator_overloading.tree-							value: str = c
+operator_overloading.tree-							kind: NoneType = None
+operator_overloading.tree-						ctx: Store 
+operator_overloading.tree-					op: Add 
+operator_overloading.tree-					value: Constant 
+--
+operator_overloading.tree-									value: Name 
+operator_overloading.tree-										id: str = a
+operator_overloading.tree-										ctx: Load 
+operator_overloading.tree-									attr: str = b
+operator_overloading.tree-									ctx: Load 
+operator_overloading.tree:								slice: Constant 
+operator_overloading.tree-									value: str = c
+operator_overloading.tree-									kind: NoneType = None
+operator_overloading.tree-								ctx: Load 
+operator_overloading.tree-						keywords: list 
+operator_overloading.tree-			decorator_list: list 
+--
+org.transcrypt.autotester.html.tree-												args: list 
+org.transcrypt.autotester.html.tree-													element: Constant 
+org.transcrypt.autotester.html.tree-														value: str = /
+org.transcrypt.autotester.html.tree-														kind: NoneType = None
+org.transcrypt.autotester.html.tree-												keywords: list 
+org.transcrypt.autotester.html.tree:											slice: UnaryOp 
+org.transcrypt.autotester.html.tree-												op: USub 
+org.transcrypt.autotester.html.tree-												operand: Constant 
+org.transcrypt.autotester.html.tree-													value: int = 1
+org.transcrypt.autotester.html.tree-													kind: NoneType = None
+org.transcrypt.autotester.html.tree-											ctx: Load 
+--
+org.transcrypt.autotester.html.tree-											element: ListComp 
+org.transcrypt.autotester.html.tree-												elt: Subscript 
+org.transcrypt.autotester.html.tree-													value: Name 
+org.transcrypt.autotester.html.tree-														id: str = x
+org.transcrypt.autotester.html.tree-														ctx: Load 
+org.transcrypt.autotester.html.tree:													slice: Constant 
+org.transcrypt.autotester.html.tree-														value: int = 1
+org.transcrypt.autotester.html.tree-														kind: NoneType = None
+org.transcrypt.autotester.html.tree-													ctx: Load 
+org.transcrypt.autotester.html.tree-												generators: list 
+org.transcrypt.autotester.html.tree-													element: comprehension 
+--
+org.transcrypt.autotester.html.tree-															ctx: Store 
+org.transcrypt.autotester.html.tree-														iter: Subscript 
+org.transcrypt.autotester.html.tree-															value: Name 
+org.transcrypt.autotester.html.tree-																id: str = refDict
+org.transcrypt.autotester.html.tree-																ctx: Load 
+org.transcrypt.autotester.html.tree:															slice: Name 
+org.transcrypt.autotester.html.tree-																id: str = key
+org.transcrypt.autotester.html.tree-																ctx: Load 
+org.transcrypt.autotester.html.tree-															ctx: Load 
+org.transcrypt.autotester.html.tree-														ifs: list 
+org.transcrypt.autotester.html.tree-														is_async: int = 0
+--
+org.transcrypt.autotester.html.tree-											element: ListComp 
+org.transcrypt.autotester.html.tree-												elt: Subscript 
+org.transcrypt.autotester.html.tree-													value: Name 
+org.transcrypt.autotester.html.tree-														id: str = x
+org.transcrypt.autotester.html.tree-														ctx: Load 
+org.transcrypt.autotester.html.tree:													slice: Constant 
+org.transcrypt.autotester.html.tree-														value: int = 0
+org.transcrypt.autotester.html.tree-														kind: NoneType = None
+org.transcrypt.autotester.html.tree-													ctx: Load 
+org.transcrypt.autotester.html.tree-												generators: list 
+org.transcrypt.autotester.html.tree-													element: comprehension 
+--
+org.transcrypt.autotester.html.tree-															ctx: Store 
+org.transcrypt.autotester.html.tree-														iter: Subscript 
+org.transcrypt.autotester.html.tree-															value: Name 
+org.transcrypt.autotester.html.tree-																id: str = refDict
+org.transcrypt.autotester.html.tree-																ctx: Load 
+org.transcrypt.autotester.html.tree:															slice: Name 
+org.transcrypt.autotester.html.tree-																id: str = key
+org.transcrypt.autotester.html.tree-																ctx: Load 
+org.transcrypt.autotester.html.tree-															ctx: Load 
+org.transcrypt.autotester.html.tree-														ifs: list 
+org.transcrypt.autotester.html.tree-														is_async: int = 0
+--
+org.transcrypt.autotester.html.tree-									targets: list 
+org.transcrypt.autotester.html.tree-										element: Subscript 
+org.transcrypt.autotester.html.tree-											value: Name 
+org.transcrypt.autotester.html.tree-												id: str = refDict
+org.transcrypt.autotester.html.tree-												ctx: Load 
+org.transcrypt.autotester.html.tree:											slice: Name 
+org.transcrypt.autotester.html.tree-												id: str = keyName
+org.transcrypt.autotester.html.tree-												ctx: Load 
+org.transcrypt.autotester.html.tree-											ctx: Store 
+org.transcrypt.autotester.html.tree-									value: Call 
+org.transcrypt.autotester.html.tree-										func: Name 
+--
+org.transcrypt.autotester.tree-									ctx: Store 
+org.transcrypt.autotester.tree-							value: Subscript 
+org.transcrypt.autotester.tree-								value: Name 
+org.transcrypt.autotester.tree-									id: str = frames
+org.transcrypt.autotester.tree-									ctx: Load 
+org.transcrypt.autotester.tree:								slice: BinOp 
+org.transcrypt.autotester.tree-									left: BinOp 
+org.transcrypt.autotester.tree-										left: Name 
+org.transcrypt.autotester.tree-											id: str = ancestor
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree-										op: Mult 
+--
+org.transcrypt.autotester.tree-											ctx: Store 
+org.transcrypt.autotester.tree-									value: Subscript 
+org.transcrypt.autotester.tree-										value: Name 
+org.transcrypt.autotester.tree-											id: str = m
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree:										slice: Constant 
+org.transcrypt.autotester.tree-											value: int = 4
+org.transcrypt.autotester.tree-											kind: NoneType = None
+org.transcrypt.autotester.tree-										ctx: Load 
+org.transcrypt.autotester.tree-									type_comment: NoneType = None
+org.transcrypt.autotester.tree-								element: Assign 
+--
+org.transcrypt.autotester.tree-											ctx: Store 
+org.transcrypt.autotester.tree-									value: Subscript 
+org.transcrypt.autotester.tree-										value: Name 
+org.transcrypt.autotester.tree-											id: str = pathParts
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree:										slice: BinOp 
+org.transcrypt.autotester.tree-											left: Call 
+org.transcrypt.autotester.tree-												func: Name 
+org.transcrypt.autotester.tree-													id: str = len
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												args: list 
+--
+org.transcrypt.autotester.tree-											ctx: Store 
+org.transcrypt.autotester.tree-									value: Subscript 
+org.transcrypt.autotester.tree-										value: Name 
+org.transcrypt.autotester.tree-											id: str = m
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree:										slice: Constant 
+org.transcrypt.autotester.tree-											value: int = 5
+org.transcrypt.autotester.tree-											kind: NoneType = None
+org.transcrypt.autotester.tree-										ctx: Load 
+org.transcrypt.autotester.tree-									type_comment: NoneType = None
+org.transcrypt.autotester.tree-								element: Return 
+--
+org.transcrypt.autotester.tree-							element: Subscript 
+org.transcrypt.autotester.tree-								value: Subscript 
+org.transcrypt.autotester.tree-									value: Name 
+org.transcrypt.autotester.tree-										id: str = s
+org.transcrypt.autotester.tree-										ctx: Load 
+org.transcrypt.autotester.tree:									slice: Name 
+org.transcrypt.autotester.tree-										id: str = ancestor
+org.transcrypt.autotester.tree-										ctx: Load 
+org.transcrypt.autotester.tree-									ctx: Load 
+org.transcrypt.autotester.tree:								slice: Constant 
+org.transcrypt.autotester.tree-									value: int = 0
+org.transcrypt.autotester.tree-									kind: NoneType = None
+org.transcrypt.autotester.tree-								ctx: Load 
+org.transcrypt.autotester.tree-						keywords: list 
+org.transcrypt.autotester.tree-					type_comment: NoneType = None
+--
+org.transcrypt.autotester.tree-						args: list 
+org.transcrypt.autotester.tree-							element: Subscript 
+org.transcrypt.autotester.tree-								value: Name 
+org.transcrypt.autotester.tree-									id: str = pathParts
+org.transcrypt.autotester.tree-									ctx: Load 
+org.transcrypt.autotester.tree:								slice: Slice 
+org.transcrypt.autotester.tree-									lower: UnaryOp 
+org.transcrypt.autotester.tree-										op: USub 
+org.transcrypt.autotester.tree-										operand: Constant 
+org.transcrypt.autotester.tree-											value: int = 2
+org.transcrypt.autotester.tree-											kind: NoneType = None
+--
+org.transcrypt.autotester.tree-																	args: list 
+org.transcrypt.autotester.tree-																		element: Subscript 
+org.transcrypt.autotester.tree-																			value: Name 
+org.transcrypt.autotester.tree-																				id: str = any
+org.transcrypt.autotester.tree-																				ctx: Load 
+org.transcrypt.autotester.tree:																			slice: Name 
+org.transcrypt.autotester.tree-																				id: str = key
+org.transcrypt.autotester.tree-																				ctx: Load 
+org.transcrypt.autotester.tree-																			ctx: Load 
+org.transcrypt.autotester.tree-																	keywords: list 
+org.transcrypt.autotester.tree-															keywords: list 
+--
+org.transcrypt.autotester.tree-													value: Name 
+org.transcrypt.autotester.tree-														id: str = self
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													attr: str = testDict
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree:												slice: Attribute 
+org.transcrypt.autotester.tree-													value: Name 
+org.transcrypt.autotester.tree-														id: str = self
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													attr: str = _currTestlet
+org.transcrypt.autotester.tree-													ctx: Load 
+--
+org.transcrypt.autotester.tree-													value: Name 
+org.transcrypt.autotester.tree-														id: str = self
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													attr: str = refDict
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree:												slice: Attribute 
+org.transcrypt.autotester.tree-													value: Name 
+org.transcrypt.autotester.tree-														id: str = self
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													attr: str = _currTestlet
+org.transcrypt.autotester.tree-													ctx: Load 
+--
+org.transcrypt.autotester.tree-													ctx: Store 
+org.transcrypt.autotester.tree-											value: Subscript 
+org.transcrypt.autotester.tree-												value: Name 
+org.transcrypt.autotester.tree-													id: str = testData
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree:												slice: Name 
+org.transcrypt.autotester.tree-													id: str = i
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												ctx: Load 
+org.transcrypt.autotester.tree-											type_comment: NoneType = None
+org.transcrypt.autotester.tree-										element: If 
+--
+org.transcrypt.autotester.tree-											value: Name 
+org.transcrypt.autotester.tree-												id: str = self
+org.transcrypt.autotester.tree-												ctx: Load 
+org.transcrypt.autotester.tree-											attr: str = refDict
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree:										slice: Name 
+org.transcrypt.autotester.tree-											id: str = key
+org.transcrypt.autotester.tree-											ctx: Load 
+org.transcrypt.autotester.tree-										ctx: Load 
+org.transcrypt.autotester.tree-									type_comment: NoneType = None
+org.transcrypt.autotester.tree-								element: Try 
+--
+org.transcrypt.autotester.tree-													value: Name 
+org.transcrypt.autotester.tree-														id: str = self
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													attr: str = testDict
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree:												slice: Name 
+org.transcrypt.autotester.tree-													id: str = key
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												ctx: Load 
+org.transcrypt.autotester.tree-											type_comment: NoneType = None
+org.transcrypt.autotester.tree-										element: If 
+--
+org.transcrypt.autotester.tree-															ctx: Store 
+org.transcrypt.autotester.tree-													value: Subscript 
+org.transcrypt.autotester.tree-														value: Name 
+org.transcrypt.autotester.tree-															id: str = testData
+org.transcrypt.autotester.tree-															ctx: Load 
+org.transcrypt.autotester.tree:														slice: Name 
+org.transcrypt.autotester.tree-															id: str = i
+org.transcrypt.autotester.tree-															ctx: Load 
+org.transcrypt.autotester.tree-														ctx: Load 
+org.transcrypt.autotester.tree-													type_comment: NoneType = None
+org.transcrypt.autotester.tree-											handlers: list 
+--
+org.transcrypt.autotester.tree-												value: Name 
+org.transcrypt.autotester.tree-													id: str = self
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												attr: str = testDict
+org.transcrypt.autotester.tree-												ctx: Load 
+org.transcrypt.autotester.tree:											slice: Attribute 
+org.transcrypt.autotester.tree-												value: Name 
+org.transcrypt.autotester.tree-													id: str = self
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												attr: str = _currTestlet
+org.transcrypt.autotester.tree-												ctx: Load 
+--
+org.transcrypt.autotester.tree-												value: Name 
+org.transcrypt.autotester.tree-													id: str = self
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												attr: str = refDict
+org.transcrypt.autotester.tree-												ctx: Load 
+org.transcrypt.autotester.tree:											slice: Attribute 
+org.transcrypt.autotester.tree-												value: Name 
+org.transcrypt.autotester.tree-													id: str = self
+org.transcrypt.autotester.tree-													ctx: Load 
+org.transcrypt.autotester.tree-												attr: str = _currTestlet
+org.transcrypt.autotester.tree-												ctx: Load 
+--
+org.transcrypt.__runtime__.tree-																	value: Name 
+org.transcrypt.__runtime__.tree-																		id: str = self
+org.transcrypt.__runtime__.tree-																		ctx: Load 
+org.transcrypt.__runtime__.tree-																	attr: str = __args__
+org.transcrypt.__runtime__.tree-																	ctx: Load 
+org.transcrypt.__runtime__.tree:																slice: Constant 
+org.transcrypt.__runtime__.tree-																	value: int = 0
+org.transcrypt.__runtime__.tree-																	kind: NoneType = None
+org.transcrypt.__runtime__.tree-																ctx: Load 
+org.transcrypt.__runtime__.tree-														keywords: list 
+org.transcrypt.__runtime__.tree-												keywords: list 
+--
+org.transcrypt.__runtime__.tree-															value: Name 
+org.transcrypt.__runtime__.tree-																id: str = self
+org.transcrypt.__runtime__.tree-																ctx: Load 
+org.transcrypt.__runtime__.tree-															attr: str = __args__
+org.transcrypt.__runtime__.tree-															ctx: Load 
+org.transcrypt.__runtime__.tree:														slice: Constant 
+org.transcrypt.__runtime__.tree-															value: int = 0
+org.transcrypt.__runtime__.tree-															kind: NoneType = None
+org.transcrypt.__runtime__.tree-														ctx: Load 
+org.transcrypt.__runtime__.tree-												keywords: list 
+org.transcrypt.__runtime__.tree-									orelse: list 
+--
+org.transcrypt.__runtime__.tree-									args: list 
+org.transcrypt.__runtime__.tree-										element: Name 
+org.transcrypt.__runtime__.tree-											id: str = self
+org.transcrypt.__runtime__.tree-											ctx: Load 
+org.transcrypt.__runtime__.tree-									keywords: list 
+org.transcrypt.__runtime__.tree:								slice: Slice 
+org.transcrypt.__runtime__.tree-									lower: Constant 
+org.transcrypt.__runtime__.tree-										value: int = 1
+org.transcrypt.__runtime__.tree-										kind: NoneType = None
+org.transcrypt.__runtime__.tree-									upper: UnaryOp 
+org.transcrypt.__runtime__.tree-										op: USub 
+--
+org.transcrypt.__runtime__.tree-											keywords: list 
+org.transcrypt.__runtime__.tree-										element: Name 
+org.transcrypt.__runtime__.tree-											id: str = end
+org.transcrypt.__runtime__.tree-											ctx: Load 
+org.transcrypt.__runtime__.tree-									keywords: list 
+org.transcrypt.__runtime__.tree:								slice: Slice 
+org.transcrypt.__runtime__.tree-									lower: UnaryOp 
+org.transcrypt.__runtime__.tree-										op: USub 
+org.transcrypt.__runtime__.tree-										operand: Constant 
+org.transcrypt.__runtime__.tree-											value: int = 4096
+org.transcrypt.__runtime__.tree-											kind: NoneType = None
+--
+org.transcrypt.__runtime__.tree-														element: Constant 
+org.transcrypt.__runtime__.tree-															value: str = 
+org.transcrypt.__runtime__.tree-
+org.transcrypt.__runtime__.tree-															kind: NoneType = None
+org.transcrypt.__runtime__.tree-													keywords: list 
+org.transcrypt.__runtime__.tree:												slice: Slice 
+org.transcrypt.__runtime__.tree-													lower: UnaryOp 
+org.transcrypt.__runtime__.tree-														op: USub 
+org.transcrypt.__runtime__.tree-														operand: Constant 
+org.transcrypt.__runtime__.tree-															value: int = 8
+org.transcrypt.__runtime__.tree-															kind: NoneType = None
+--
+proxies.tree-												value: Name 
+proxies.tree-													id: str = self
+proxies.tree-													ctx: Load 
+proxies.tree-												attr: str = __dict__
+proxies.tree-												ctx: Load 
+proxies.tree:											slice: BinOp 
+proxies.tree-												left: Constant 
+proxies.tree-													value: str = _
+proxies.tree-													kind: NoneType = None
+proxies.tree-												op: Add 
+proxies.tree-												right: Name 
+--
+proxies.tree-												value: Name 
+proxies.tree-													id: str = self
+proxies.tree-													ctx: Load 
+proxies.tree-												attr: str = __dict__
+proxies.tree-												ctx: Load 
+proxies.tree:											slice: BinOp 
+proxies.tree-												left: Constant 
+proxies.tree-													value: str = _
+proxies.tree-													kind: NoneType = None
+proxies.tree-												op: Add 
+proxies.tree-												right: Name 
+--
+proxies.tree-											value: Name 
+proxies.tree-												id: str = self
+proxies.tree-												ctx: Load 
+proxies.tree-											attr: str = __dict__
+proxies.tree-											ctx: Load 
+proxies.tree:										slice: BinOp 
+proxies.tree-											left: Constant 
+proxies.tree-												value: str = _
+proxies.tree-												kind: NoneType = None
+proxies.tree-											op: Add 
+proxies.tree-											right: Name 
+--
+proxies.tree-														value: Name 
+proxies.tree-															id: str = self
+proxies.tree-															ctx: Load 
+proxies.tree-														attr: str = __dict__
+proxies.tree-														ctx: Load 
+proxies.tree:													slice: Name 
+proxies.tree-														id: str = name
+proxies.tree-														ctx: Load 
+proxies.tree-													ctx: Store 
+proxies.tree-											value: Name 
+proxies.tree-												id: str = value
+--
+re.translate.tree-											ctx: Store 
+re.translate.tree-									value: Subscript 
+re.translate.tree-										value: Name 
+re.translate.tree-											id: str = namedGroups
+re.translate.tree-											ctx: Load 
+re.translate.tree:										slice: Name 
+re.translate.tree-											id: str = groupRef
+re.translate.tree-											ctx: Load 
+re.translate.tree-										ctx: Load 
+re.translate.tree-									type_comment: NoneType = None
+re.translate.tree-					orelse: list 
+--
+re.translate.tree-											ctx: Store 
+re.translate.tree-									value: Subscript 
+re.translate.tree-										value: Name 
+re.translate.tree-											id: str = tokens
+re.translate.tree-											ctx: Load 
+re.translate.tree:										slice: Slice 
+re.translate.tree-											lower: NoneType = None
+re.translate.tree-											upper: NoneType = None
+re.translate.tree-											step: NoneType = None
+re.translate.tree-										ctx: Load 
+re.translate.tree-									type_comment: NoneType = None
+--
+re.translate.tree-											ctx: Store 
+re.translate.tree-									value: Subscript 
+re.translate.tree-										value: Name 
+re.translate.tree-											id: str = tokens
+re.translate.tree-											ctx: Load 
+re.translate.tree:										slice: Slice 
+re.translate.tree-											lower: NoneType = None
+re.translate.tree-											upper: NoneType = None
+re.translate.tree-											step: NoneType = None
+re.translate.tree-										ctx: Load 
+re.translate.tree-									type_comment: NoneType = None
+--
+re.translate.tree-									value: Attribute 
+re.translate.tree-										value: Subscript 
+re.translate.tree-											value: Name 
+re.translate.tree-												id: str = tokens
+re.translate.tree-												ctx: Load 
+re.translate.tree:											slice: BinOp 
+re.translate.tree-												left: Name 
+re.translate.tree-													id: str = conStart
+re.translate.tree-													ctx: Load 
+re.translate.tree-												op: Add 
+re.translate.tree-												right: Constant 
+--
+re.translate.tree-											ctx: Store 
+re.translate.tree-									value: Subscript 
+re.translate.tree-										value: Name 
+re.translate.tree-											id: str = tokens
+re.translate.tree-											ctx: Load 
+re.translate.tree:										slice: BinOp 
+re.translate.tree-											left: Attribute 
+re.translate.tree-												value: Name 
+re.translate.tree-													id: str = captureGroup
+re.translate.tree-													ctx: Load 
+re.translate.tree-												attr: str = end
+--
+re.translate.tree-													targets: list 
+re.translate.tree-														element: Subscript 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = iff
+re.translate.tree-																ctx: Load 
+re.translate.tree:															slice: BinOp 
+re.translate.tree-																left: Attribute 
+re.translate.tree-																	value: Name 
+re.translate.tree-																		id: str = captureGroup
+re.translate.tree-																		ctx: Load 
+re.translate.tree-																	attr: str = end
+--
+re.translate.tree-															targets: list 
+re.translate.tree-																element: Subscript 
+re.translate.tree-																	value: Name 
+re.translate.tree-																		id: str = iff
+re.translate.tree-																		ctx: Load 
+re.translate.tree:																	slice: BinOp 
+re.translate.tree-																		left: Attribute 
+re.translate.tree-																			value: Name 
+re.translate.tree-																				id: str = captureGroup
+re.translate.tree-																				ctx: Load 
+re.translate.tree-																			attr: str = end
+--
+re.translate.tree-																			value: Attribute 
+re.translate.tree-																				value: Subscript 
+re.translate.tree-																					value: Name 
+re.translate.tree-																						id: str = iff
+re.translate.tree-																						ctx: Load 
+re.translate.tree:																					slice: BinOp 
+re.translate.tree-																						left: Attribute 
+re.translate.tree-																							value: Name 
+re.translate.tree-																								id: str = captureGroup
+re.translate.tree-																								ctx: Load 
+re.translate.tree-																							attr: str = end
+--
+re.translate.tree-																							value: int = 1
+re.translate.tree-																							kind: NoneType = None
+re.translate.tree-																					ctx: Load 
+re.translate.tree-																				attr: str = name
+re.translate.tree-																				ctx: Load 
+re.translate.tree:																			slice: Slice 
+re.translate.tree-																				lower: Constant 
+re.translate.tree-																					value: int = 0
+re.translate.tree-																					kind: NoneType = None
+re.translate.tree-																				upper: Constant 
+re.translate.tree-																					value: int = 3
+--
+re.translate.tree-											targets: list 
+re.translate.tree-												element: Subscript 
+re.translate.tree-													value: Name 
+re.translate.tree-														id: str = els
+re.translate.tree-														ctx: Load 
+re.translate.tree:													slice: BinOp 
+re.translate.tree-														left: Attribute 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = captureGroup
+re.translate.tree-																ctx: Load 
+re.translate.tree-															attr: str = end
+--
+re.translate.tree-														left: Attribute 
+re.translate.tree-															value: Subscript 
+re.translate.tree-																value: Name 
+re.translate.tree-																	id: str = tokens
+re.translate.tree-																	ctx: Load 
+re.translate.tree:																slice: Name 
+re.translate.tree-																	id: str = idx
+re.translate.tree-																	ctx: Load 
+re.translate.tree-																ctx: Load 
+re.translate.tree-															attr: str = name
+re.translate.tree-															ctx: Load 
+--
+re.translate.tree-															targets: list 
+re.translate.tree-																element: Subscript 
+re.translate.tree-																	value: Name 
+re.translate.tree-																		id: str = iff
+re.translate.tree-																		ctx: Load 
+re.translate.tree:																	slice: Slice 
+re.translate.tree-																		lower: Name 
+re.translate.tree-																			id: str = idx
+re.translate.tree-																			ctx: Load 
+re.translate.tree-																		upper: BinOp 
+re.translate.tree-																			left: Name 
+--
+re.translate.tree-															targets: list 
+re.translate.tree-																element: Subscript 
+re.translate.tree-																	value: Name 
+re.translate.tree-																		id: str = els
+re.translate.tree-																		ctx: Load 
+re.translate.tree:																	slice: Slice 
+re.translate.tree-																		lower: Name 
+re.translate.tree-																			id: str = conStart
+re.translate.tree-																			ctx: Load 
+re.translate.tree-																		upper: BinOp 
+re.translate.tree-																			left: Name 
+--
+re.translate.tree-													targets: list 
+re.translate.tree-														element: Subscript 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = els
+re.translate.tree-																ctx: Load 
+re.translate.tree:															slice: Slice 
+re.translate.tree-																lower: Name 
+re.translate.tree-																	id: str = conStart
+re.translate.tree-																	ctx: Load 
+re.translate.tree-																upper: BinOp 
+re.translate.tree-																	left: Name 
+--
+re.translate.tree-											targets: list 
+re.translate.tree-												element: Subscript 
+re.translate.tree-													value: Name 
+re.translate.tree-														id: str = iff
+re.translate.tree-														ctx: Load 
+re.translate.tree:													slice: Slice 
+re.translate.tree-														lower: Name 
+re.translate.tree-															id: str = conStart
+re.translate.tree-															ctx: Load 
+re.translate.tree-														upper: BinOp 
+re.translate.tree-															left: Name 
+--
+re.translate.tree-											targets: list 
+re.translate.tree-												element: Subscript 
+re.translate.tree-													value: Name 
+re.translate.tree-														id: str = els
+re.translate.tree-														ctx: Load 
+re.translate.tree:													slice: Slice 
+re.translate.tree-														lower: Attribute 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = captureGroup
+re.translate.tree-																ctx: Load 
+re.translate.tree-															attr: str = start
+--
+re.translate.tree-														left: Attribute 
+re.translate.tree-															value: Subscript 
+re.translate.tree-																value: Name 
+re.translate.tree-																	id: str = iff
+re.translate.tree-																	ctx: Load 
+re.translate.tree:																slice: Name 
+re.translate.tree-																	id: str = idx
+re.translate.tree-																	ctx: Load 
+re.translate.tree-																ctx: Load 
+re.translate.tree-															attr: str = name
+re.translate.tree-															ctx: Load 
+--
+re.translate.tree-																	ctx: Store 
+re.translate.tree-															value: Subscript 
+re.translate.tree-																value: Name 
+re.translate.tree-																	id: str = tokens
+re.translate.tree-																	ctx: Load 
+re.translate.tree:																slice: Slice 
+re.translate.tree-																	lower: NoneType = None
+re.translate.tree-																	upper: Name 
+re.translate.tree-																		id: str = idx
+re.translate.tree-																		ctx: Load 
+re.translate.tree-																	step: NoneType = None
+--
+re.translate.tree-																args: list 
+re.translate.tree-																	element: Subscript 
+re.translate.tree-																		value: Name 
+re.translate.tree-																			id: str = tokens
+re.translate.tree-																			ctx: Load 
+re.translate.tree:																		slice: Slice 
+re.translate.tree-																			lower: BinOp 
+re.translate.tree-																				left: Name 
+re.translate.tree-																					id: str = conEnd
+re.translate.tree-																					ctx: Load 
+re.translate.tree-																				op: Add 
+--
+re.translate.tree-											targets: list 
+re.translate.tree-												element: Subscript 
+re.translate.tree-													value: Name 
+re.translate.tree-														id: str = iff
+re.translate.tree-														ctx: Load 
+re.translate.tree:													slice: Slice 
+re.translate.tree-														lower: Name 
+re.translate.tree-															id: str = conStart
+re.translate.tree-															ctx: Load 
+re.translate.tree-														upper: BinOp 
+re.translate.tree-															left: Name 
+--
+re.translate.tree-										args: list 
+re.translate.tree-											element: Subscript 
+re.translate.tree-												value: Name 
+re.translate.tree-													id: str = queue
+re.translate.tree-													ctx: Load 
+re.translate.tree:												slice: Constant 
+re.translate.tree-													value: int = 0
+re.translate.tree-													kind: NoneType = None
+re.translate.tree-												ctx: Load 
+re.translate.tree-											element: List 
+re.translate.tree-												elts: list 
+--
+re.translate.tree-									ctx: Store 
+re.translate.tree-							value: Subscript 
+re.translate.tree-								value: Name 
+re.translate.tree-									id: str = queue
+re.translate.tree-									ctx: Load 
+re.translate.tree:								slice: Slice 
+re.translate.tree-									lower: Constant 
+re.translate.tree-										value: int = 1
+re.translate.tree-										kind: NoneType = None
+re.translate.tree-									upper: NoneType = None
+re.translate.tree-									step: NoneType = None
+--
+re.translate.tree-									kind: NoneType = None
+re.translate.tree-						body: Subscript 
+re.translate.tree-							value: Name 
+re.translate.tree-								id: str = stack
+re.translate.tree-								ctx: Load 
+re.translate.tree:							slice: Name 
+re.translate.tree-								id: str = high
+re.translate.tree-								ctx: Load 
+re.translate.tree-							ctx: Load 
+re.translate.tree-						orelse: Call 
+re.translate.tree-							func: Name 
+--
+re.translate.tree-									kind: NoneType = None
+re.translate.tree-						body: Subscript 
+re.translate.tree-							value: Name 
+re.translate.tree-								id: str = stack
+re.translate.tree-								ctx: Load 
+re.translate.tree:							slice: BinOp 
+re.translate.tree-								left: Name 
+re.translate.tree-									id: str = high
+re.translate.tree-									ctx: Load 
+re.translate.tree-								op: Sub 
+re.translate.tree-								right: Constant 
+--
+re.translate.tree-									targets: list 
+re.translate.tree-										element: Subscript 
+re.translate.tree-											value: Name 
+re.translate.tree-												id: str = stack
+re.translate.tree-												ctx: Load 
+re.translate.tree:											slice: Slice 
+re.translate.tree-												lower: UnaryOp 
+re.translate.tree-													op: USub 
+re.translate.tree-													operand: Constant 
+re.translate.tree-														value: int = 2
+re.translate.tree-														kind: NoneType = None
+--
+re.translate.tree-											targets: list 
+re.translate.tree-												element: Subscript 
+re.translate.tree-													value: Name 
+re.translate.tree-														id: str = stack
+re.translate.tree-														ctx: Load 
+re.translate.tree:													slice: Slice 
+re.translate.tree-														lower: UnaryOp 
+re.translate.tree-															op: USub 
+re.translate.tree-															operand: Constant 
+re.translate.tree-																value: int = 2
+re.translate.tree-																kind: NoneType = None
+--
+re.translate.tree-													targets: list 
+re.translate.tree-														element: Subscript 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = stack
+re.translate.tree-																ctx: Load 
+re.translate.tree:															slice: Slice 
+re.translate.tree-																lower: UnaryOp 
+re.translate.tree-																	op: USub 
+re.translate.tree-																	operand: Constant 
+re.translate.tree-																		value: int = 2
+re.translate.tree-																		kind: NoneType = None
+--
+re.translate.tree-													targets: list 
+re.translate.tree-														element: Subscript 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = stack
+re.translate.tree-																ctx: Load 
+re.translate.tree:															slice: Slice 
+re.translate.tree-																lower: UnaryOp 
+re.translate.tree-																	op: USub 
+re.translate.tree-																	operand: Constant 
+re.translate.tree-																		value: int = 2
+re.translate.tree-																		kind: NoneType = None
+--
+re.translate.tree-													ctx: Store 
+re.translate.tree-											value: Subscript 
+re.translate.tree-												value: Name 
+re.translate.tree-													id: str = stack
+re.translate.tree-													ctx: Load 
+re.translate.tree:												slice: Slice 
+re.translate.tree-													lower: NoneType = None
+re.translate.tree-													upper: UnaryOp 
+re.translate.tree-														op: USub 
+re.translate.tree-														operand: Constant 
+re.translate.tree-															value: int = 1
+--
+re.translate.tree-													targets: list 
+re.translate.tree-														element: Subscript 
+re.translate.tree-															value: Name 
+re.translate.tree-																id: str = stack
+re.translate.tree-																ctx: Load 
+re.translate.tree:															slice: Slice 
+re.translate.tree-																lower: UnaryOp 
+re.translate.tree-																	op: USub 
+re.translate.tree-																	operand: Constant 
+re.translate.tree-																		value: int = 2
+re.translate.tree-																		kind: NoneType = None
+--
+re.translate.tree-															targets: list 
+re.translate.tree-																element: Subscript 
+re.translate.tree-																	value: Name 
+re.translate.tree-																		id: str = stack
+re.translate.tree-																		ctx: Load 
+re.translate.tree:																	slice: Slice 
+re.translate.tree-																		lower: UnaryOp 
+re.translate.tree-																			op: USub 
+re.translate.tree-																			operand: Constant 
+re.translate.tree-																				value: int = 2
+re.translate.tree-																				kind: NoneType = None
+--
+re.translate.tree-																	targets: list 
+re.translate.tree-																		element: Subscript 
+re.translate.tree-																			value: Name 
+re.translate.tree-																				id: str = stack
+re.translate.tree-																				ctx: Load 
+re.translate.tree:																			slice: Slice 
+re.translate.tree-																				lower: UnaryOp 
+re.translate.tree-																					op: USub 
+re.translate.tree-																					operand: Constant 
+re.translate.tree-																						value: int = 2
+re.translate.tree-																						kind: NoneType = None
+--
+re.translate.tree-																					ctx: Store 
+re.translate.tree-																			value: Subscript 
+re.translate.tree-																				value: Name 
+re.translate.tree-																					id: str = stack
+re.translate.tree-																					ctx: Load 
+re.translate.tree:																				slice: Slice 
+re.translate.tree-																					lower: NoneType = None
+re.translate.tree-																					upper: UnaryOp 
+re.translate.tree-																						op: USub 
+re.translate.tree-																						operand: Constant 
+re.translate.tree-																							value: int = 2
+--
+re.translate.tree-																							targets: list 
+re.translate.tree-																								element: Subscript 
+re.translate.tree-																									value: Name 
+re.translate.tree-																										id: str = stack
+re.translate.tree-																										ctx: Load 
+re.translate.tree:																									slice: Slice 
+re.translate.tree-																										lower: UnaryOp 
+re.translate.tree-																											op: USub 
+re.translate.tree-																											operand: Constant 
+re.translate.tree-																												value: int = 2
+re.translate.tree-																												kind: NoneType = None
+--
+re.translate.tree-																									targets: list 
+re.translate.tree-																										element: Subscript 
+re.translate.tree-																											value: Name 
+re.translate.tree-																												id: str = stack
+re.translate.tree-																												ctx: Load 
+re.translate.tree:																											slice: Slice 
+re.translate.tree-																												lower: UnaryOp 
+re.translate.tree-																													op: USub 
+re.translate.tree-																													operand: Constant 
+re.translate.tree-																														value: int = 1
+re.translate.tree-																														kind: NoneType = None
+--
+re.translate.tree-																									targets: list 
+re.translate.tree-																										element: Subscript 
+re.translate.tree-																											value: Name 
+re.translate.tree-																												id: str = stack
+re.translate.tree-																												ctx: Load 
+re.translate.tree:																											slice: Slice 
+re.translate.tree-																												lower: UnaryOp 
+re.translate.tree-																													op: USub 
+re.translate.tree-																													operand: Constant 
+re.translate.tree-																														value: int = 2
+re.translate.tree-																														kind: NoneType = None
+--
+re.translate.tree-																													targets: list 
+re.translate.tree-																														element: Subscript 
+re.translate.tree-																															value: Name 
+re.translate.tree-																																id: str = namedGroups
+re.translate.tree-																																ctx: Load 
+re.translate.tree:																															slice: Call 
+re.translate.tree-																																func: Attribute 
+re.translate.tree-																																	value: Constant 
+re.translate.tree-																																		value: str = 
+re.translate.tree-																																		kind: NoneType = None
+re.translate.tree-																																	attr: str = join
+--
+re.translate.tree-																													targets: list 
+re.translate.tree-																														element: Subscript 
+re.translate.tree-																															value: Name 
+re.translate.tree-																																id: str = stack
+re.translate.tree-																																ctx: Load 
+re.translate.tree:																															slice: Slice 
+re.translate.tree-																																lower: UnaryOp 
+re.translate.tree-																																	op: USub 
+re.translate.tree-																																	operand: Constant 
+re.translate.tree-																																		value: int = 2
+re.translate.tree-																																		kind: NoneType = None
+--
+re.translate.tree-																															targets: list 
+re.translate.tree-																																element: Subscript 
+re.translate.tree-																																	value: Name 
+re.translate.tree-																																		id: str = stack
+re.translate.tree-																																		ctx: Load 
+re.translate.tree:																																	slice: Slice 
+re.translate.tree-																																		lower: UnaryOp 
+re.translate.tree-																																			op: USub 
+re.translate.tree-																																			operand: Constant 
+re.translate.tree-																																				value: int = 2
+re.translate.tree-																																				kind: NoneType = None
+--
+re.translate.tree-																																					args: list 
+re.translate.tree-																																						element: Subscript 
+re.translate.tree-																																							value: Name 
+re.translate.tree-																																								id: str = namedGroups
+re.translate.tree-																																								ctx: Load 
+re.translate.tree:																																							slice: Subscript 
+re.translate.tree-																																								value: Attribute 
+re.translate.tree-																																									value: Name 
+re.translate.tree-																																										id: str = s1
+re.translate.tree-																																										ctx: Load 
+re.translate.tree-																																									attr: str = paras
+re.translate.tree-																																									ctx: Load 
+re.translate.tree:																																								slice: Constant 
+re.translate.tree-																																									value: int = 0
+re.translate.tree-																																									kind: NoneType = None
+re.translate.tree-																																								ctx: Load 
+re.translate.tree-																																							ctx: Load 
+re.translate.tree-																																					keywords: list 
+--
+re.translate.tree-																																			value: Name 
+re.translate.tree-																																				id: str = s1
+re.translate.tree-																																				ctx: Load 
+re.translate.tree-																																			attr: str = paras
+re.translate.tree-																																			ctx: Load 
+re.translate.tree:																																		slice: Constant 
+re.translate.tree-																																			value: int = 0
+re.translate.tree-																																			kind: NoneType = None
+re.translate.tree-																																		ctx: Store 
+re.translate.tree-																																	op: Add 
+re.translate.tree-																																	value: Attribute 
+--
+re.translate.tree-																																			ctx: Store 
+re.translate.tree-																																	value: Subscript 
+re.translate.tree-																																		value: Name 
+re.translate.tree-																																			id: str = stack
+re.translate.tree-																																			ctx: Load 
+re.translate.tree:																																		slice: Slice 
+re.translate.tree-																																			lower: NoneType = None
+re.translate.tree-																																			upper: UnaryOp 
+re.translate.tree-																																				op: USub 
+re.translate.tree-																																				operand: Constant 
+re.translate.tree-																																					value: int = 2
+--
+re.translate.tree-																																			ctx: Store 
+re.translate.tree-																																	value: Subscript 
+re.translate.tree-																																		value: Name 
+re.translate.tree-																																			id: str = stack
+re.translate.tree-																																			ctx: Load 
+re.translate.tree:																																		slice: Slice 
+re.translate.tree-																																			lower: NoneType = None
+re.translate.tree-																																			upper: UnaryOp 
+re.translate.tree-																																				op: USub 
+re.translate.tree-																																				operand: Constant 
+re.translate.tree-																																					value: int = 1
+--
+re.translate.tree-								args: list 
+re.translate.tree-									element: Subscript 
+re.translate.tree-										value: Name 
+re.translate.tree-											id: str = variants
+re.translate.tree-											ctx: Load 
+re.translate.tree:										slice: Name 
+re.translate.tree-											id: str = i
+re.translate.tree-											ctx: Load 
+re.translate.tree-										ctx: Load 
+re.translate.tree-								keywords: list 
+re.translate.tree-						element: If 
+--
+re.tree-									targets: list 
+re.tree-										element: Subscript 
+re.tree-											value: Name 
+re.tree-												id: str = mObj
+re.tree-												ctx: Load 
+re.tree:											slice: Name 
+re.tree-												id: str = index
+re.tree-												ctx: Load 
+re.tree-											ctx: Store 
+re.tree-									value: IfExp 
+re.tree-										test: Compare 
+re.tree-											left: Subscript 
+re.tree-												value: Name 
+re.tree-													id: str = mObj
+re.tree-													ctx: Load 
+re.tree:												slice: Name 
+re.tree-													id: str = index
+re.tree-													ctx: Load 
+re.tree-												ctx: Load 
+re.tree-											ops: list 
+re.tree-												element: Eq 
+--
+re.tree-											kind: NoneType = None
+re.tree-										orelse: Subscript 
+re.tree-											value: Name 
+re.tree-												id: str = mObj
+re.tree-												ctx: Load 
+re.tree:											slice: Name 
+re.tree-												id: str = index
+re.tree-												ctx: Load 
+re.tree-											ctx: Load 
+re.tree-									type_comment: NoneType = None
+re.tree-							orelse: list 
+--
+re.tree-											value: Name 
+re.tree-												id: str = self
+re.tree-												ctx: Load 
+re.tree-											attr: str = _namedGroups
+re.tree-											ctx: Load 
+re.tree:										slice: Attribute 
+re.tree-											value: Name 
+re.tree-												id: str = self
+re.tree-												ctx: Load 
+re.tree-											attr: str = _lastindex
+re.tree-											ctx: Load 
+--
+re.tree-														value: Name 
+re.tree-															id: str = self
+re.tree-															ctx: Load 
+re.tree-														attr: str = _obj
+re.tree-														ctx: Load 
+re.tree:													slice: Name 
+re.tree-														id: str = i
+re.tree-														ctx: Load 
+re.tree-													ctx: Load 
+re.tree-												ops: list 
+re.tree-													element: IsNot 
+--
+re.tree-																			value: Name 
+re.tree-																				id: str = self
+re.tree-																				ctx: Load 
+re.tree-																			attr: str = _obj
+re.tree-																			ctx: Load 
+re.tree:																		slice: Subscript 
+re.tree-																			value: Attribute 
+re.tree-																				value: Name 
+re.tree-																					id: str = self
+re.tree-																					ctx: Load 
+re.tree-																				attr: str = _namedGroups
+re.tree-																				ctx: Load 
+re.tree:																			slice: Name 
+re.tree-																				id: str = index
+re.tree-																				ctx: Load 
+re.tree-																			ctx: Load 
+re.tree-																		ctx: Load 
+re.tree-																keywords: list 
+--
+re.tree-																	value: Name 
+re.tree-																		id: str = self
+re.tree-																		ctx: Load 
+re.tree-																	attr: str = _obj
+re.tree-																	ctx: Load 
+re.tree:																slice: Name 
+re.tree-																	id: str = index
+re.tree-																	ctx: Load 
+re.tree-																ctx: Load 
+re.tree-														keywords: list 
+re.tree-									orelse: list 
+--
+re.tree-													value: Name 
+re.tree-														id: str = self
+re.tree-														ctx: Load 
+re.tree-													attr: str = _obj
+re.tree-													ctx: Load 
+re.tree:												slice: Constant 
+re.tree-													value: int = 0
+re.tree-													kind: NoneType = None
+re.tree-												ctx: Load 
+re.tree-										keywords: list 
+re.tree-						element: If 
+--
+re.tree-								element: Return 
+re.tree-									value: Subscript 
+re.tree-										value: Name 
+re.tree-											id: str = ret
+re.tree-											ctx: Load 
+re.tree:										slice: Constant 
+re.tree-											value: int = 0
+re.tree-											kind: NoneType = None
+re.tree-										ctx: Load 
+re.tree-							orelse: list 
+re.tree-								element: Return 
+--
+re.tree-											value: Name 
+re.tree-												id: str = self
+re.tree-												ctx: Load 
+re.tree-											attr: str = _obj
+re.tree-											ctx: Load 
+re.tree:										slice: Slice 
+re.tree-											lower: Constant 
+re.tree-												value: int = 1
+re.tree-												kind: NoneType = None
+re.tree-											upper: NoneType = None
+re.tree-											step: NoneType = None
+--
+re.tree-													value: Name 
+re.tree-														id: str = self
+re.tree-														ctx: Load 
+re.tree-													attr: str = _obj
+re.tree-													ctx: Load 
+re.tree:												slice: Name 
+re.tree-													id: str = gId
+re.tree-													ctx: Load 
+re.tree-												ctx: Load 
+re.tree-											type_comment: NoneType = None
+re.tree-										element: Assign 
+re.tree-											targets: list 
+re.tree-												element: Subscript 
+re.tree-													value: Name 
+re.tree-														id: str = ret
+re.tree-														ctx: Load 
+re.tree:													slice: Name 
+re.tree-														id: str = gName
+re.tree-														ctx: Load 
+re.tree-													ctx: Store 
+re.tree-											value: IfExp 
+re.tree-												test: Compare 
+--
+re.tree-													value: Name 
+re.tree-														id: str = self
+re.tree-														ctx: Load 
+re.tree-													attr: str = _namedGroups
+re.tree-													ctx: Load 
+re.tree:												slice: Name 
+re.tree-													id: str = group
+re.tree-													ctx: Load 
+re.tree-												ctx: Load 
+re.tree-											type_comment: NoneType = None
+re.tree-									orelse: list 
+--
+re.tree-												value: Name 
+re.tree-													id: str = self
+re.tree-													ctx: Load 
+re.tree-												attr: str = _obj
+re.tree-												ctx: Load 
+re.tree:											slice: Name 
+re.tree-												id: str = gId
+re.tree-												ctx: Load 
+re.tree-											ctx: Load 
+re.tree-										ops: list 
+re.tree-											element: IsNot 
+--
+re.tree-																	value: Name 
+re.tree-																		id: str = self
+re.tree-																		ctx: Load 
+re.tree-																	attr: str = _obj
+re.tree-																	ctx: Load 
+re.tree:																slice: Name 
+re.tree-																	id: str = gId
+re.tree-																	ctx: Load 
+re.tree-																ctx: Load 
+re.tree-														keywords: list 
+re.tree-													element: Attribute 
+--
+re.tree-															value: Name 
+re.tree-																id: str = self
+re.tree-																ctx: Load 
+re.tree-															attr: str = _obj
+re.tree-															ctx: Load 
+re.tree:														slice: Constant 
+re.tree-															value: int = 0
+re.tree-															kind: NoneType = None
+re.tree-														ctx: Load 
+re.tree-												keywords: list 
+re.tree-											type_comment: NoneType = None
+--
+re.tree-													value: Name 
+re.tree-														id: str = self
+re.tree-														ctx: Load 
+re.tree-													attr: str = _namedGroups
+re.tree-													ctx: Load 
+re.tree:												slice: Name 
+re.tree-													id: str = group
+re.tree-													ctx: Load 
+re.tree-												ctx: Load 
+re.tree-											type_comment: NoneType = None
+re.tree-									orelse: list 
+--
+re.tree-														value: Name 
+re.tree-															id: str = self
+re.tree-															ctx: Load 
+re.tree-														attr: str = _obj
+re.tree-														ctx: Load 
+re.tree:													slice: Constant 
+re.tree-														value: int = 0
+re.tree-														kind: NoneType = None
+re.tree-													ctx: Load 
+re.tree-											keywords: list 
+re.tree-							orelse: list 
+--
+re.tree-												value: Name 
+re.tree-													id: str = self
+re.tree-													ctx: Load 
+re.tree-												attr: str = _obj
+re.tree-												ctx: Load 
+re.tree:											slice: Name 
+re.tree-												id: str = gId
+re.tree-												ctx: Load 
+re.tree-											ctx: Load 
+re.tree-										ops: list 
+re.tree-											element: IsNot 
+--
+re.tree-																	value: Name 
+re.tree-																		id: str = self
+re.tree-																		ctx: Load 
+re.tree-																	attr: str = _obj
+re.tree-																	ctx: Load 
+re.tree:																slice: Name 
+re.tree-																	id: str = gId
+re.tree-																	ctx: Load 
+re.tree-																ctx: Load 
+re.tree-														keywords: list 
+re.tree-													element: Attribute 
+--
+re.tree-															value: Name 
+re.tree-																id: str = self
+re.tree-																ctx: Load 
+re.tree-															attr: str = _obj
+re.tree-															ctx: Load 
+re.tree:														slice: Constant 
+re.tree-															value: int = 0
+re.tree-															kind: NoneType = None
+re.tree-														ctx: Load 
+re.tree-												keywords: list 
+re.tree-											type_comment: NoneType = None
+--
+re.tree-									element: ListComp 
+re.tree-										elt: Subscript 
+re.tree-											value: Name 
+re.tree-												id: str = x
+re.tree-												ctx: Load 
+re.tree:											slice: Constant 
+re.tree-												value: int = 1
+re.tree-												kind: NoneType = None
+re.tree-											ctx: Load 
+re.tree-										generators: list 
+re.tree-											element: comprehension 
+--
+re.tree-														left: BinOp 
+re.tree-															left: Subscript 
+re.tree-																value: Name 
+re.tree-																	id: str = x
+re.tree-																	ctx: Load 
+re.tree:																slice: Constant 
+re.tree-																	value: int = 0
+re.tree-																	kind: NoneType = None
+re.tree-																ctx: Load 
+re.tree-															op: BitAnd 
+re.tree-															right: Name 
+--
+re.tree-						kwarg: NoneType = None
+re.tree-						defaults: list 
+re.tree-					body: list 
+re.tree-						element: Expr 
+re.tree-							value: Constant 
+re.tree:								value: str =  Given an start and endpos, slice out a target string.
+re.tree-        
+re.tree-								kind: NoneType = None
+re.tree-						element: Assign 
+re.tree-							targets: list 
+re.tree-								element: Name 
+--
+re.tree-									ctx: Store 
+re.tree-							value: Subscript 
+re.tree-								value: Name 
+re.tree-									id: str = string
+re.tree-									ctx: Load 
+re.tree:								slice: Slice 
+re.tree-									lower: Name 
+re.tree-										id: str = pos
+re.tree-										ctx: Load 
+re.tree-									upper: Name 
+re.tree-										id: str = endPtr
+--
+re.tree-											ctx: Store 
+re.tree-									value: Subscript 
+re.tree-										value: Name 
+re.tree-											id: str = target
+re.tree-											ctx: Load 
+re.tree:										slice: Slice 
+re.tree-											lower: NoneType = None
+re.tree-											upper: Name 
+re.tree-												id: str = endpos
+re.tree-												ctx: Load 
+re.tree-											step: NoneType = None
+--
+re.tree-											ctx: Store 
+re.tree-									value: Subscript 
+re.tree-										value: Name 
+re.tree-											id: str = target
+re.tree-											ctx: Load 
+re.tree:										slice: Slice 
+re.tree-											lower: NoneType = None
+re.tree-											upper: Name 
+re.tree-												id: str = endpos
+re.tree-												ctx: Load 
+re.tree-											step: NoneType = None
+--
+re.tree-											args: list 
+re.tree-												element: Subscript 
+re.tree-													value: Name 
+re.tree-														id: str = m
+re.tree-														ctx: Load 
+re.tree:													slice: Constant 
+re.tree-														value: int = 0
+re.tree-														kind: NoneType = None
+re.tree-													ctx: Load 
+re.tree-											keywords: list 
+re.tree-									type_comment: NoneType = None
+--
+re.tree-																	args: list 
+re.tree-																		element: Subscript 
+re.tree-																			value: Name 
+re.tree-																				id: str = lastM
+re.tree-																				ctx: Load 
+re.tree:																			slice: Constant 
+re.tree-																				value: int = 0
+re.tree-																				kind: NoneType = None
+re.tree-																			ctx: Load 
+re.tree-																	keywords: list 
+re.tree-															type_comment: NoneType = None
+--
+re.tree-																	ctx: Store 
+re.tree-															value: Subscript 
+re.tree-																value: Name 
+re.tree-																	id: str = string
+re.tree-																	ctx: Load 
+re.tree:																slice: Slice 
+re.tree-																	lower: Name 
+re.tree-																		id: str = start
+re.tree-																		ctx: Load 
+re.tree-																	upper: Attribute 
+re.tree-																		value: Name 
+--
+re.tree-																		args: list 
+re.tree-																			element: Subscript 
+re.tree-																				value: Name 
+re.tree-																					id: str = m
+re.tree-																					ctx: Load 
+re.tree:																				slice: Slice 
+re.tree-																					lower: Constant 
+re.tree-																						value: int = 1
+re.tree-																						kind: NoneType = None
+re.tree-																					upper: NoneType = None
+re.tree-																					step: NoneType = None
+--
+re.tree-																	ctx: Store 
+re.tree-															value: Subscript 
+re.tree-																value: Name 
+re.tree-																	id: str = string
+re.tree-																	ctx: Load 
+re.tree:																slice: Slice 
+re.tree-																	lower: NoneType = None
+re.tree-																	upper: Attribute 
+re.tree-																		value: Name 
+re.tree-																			id: str = m
+re.tree-																			ctx: Load 
+--
+re.tree-																		args: list 
+re.tree-																			element: Subscript 
+re.tree-																				value: Name 
+re.tree-																					id: str = m
+re.tree-																					ctx: Load 
+re.tree:																				slice: Slice 
+re.tree-																					lower: Constant 
+re.tree-																						value: int = 1
+re.tree-																						kind: NoneType = None
+re.tree-																					upper: NoneType = None
+re.tree-																					step: NoneType = None
+--
+re.tree-													args: list 
+re.tree-														element: Subscript 
+re.tree-															value: Name 
+re.tree-																id: str = lastM
+re.tree-																ctx: Load 
+re.tree:															slice: Constant 
+re.tree-																value: int = 0
+re.tree-																kind: NoneType = None
+re.tree-															ctx: Load 
+re.tree-													keywords: list 
+re.tree-											type_comment: NoneType = None
+--
+re.tree-													ctx: Store 
+re.tree-											value: Subscript 
+re.tree-												value: Name 
+re.tree-													id: str = string
+re.tree-													ctx: Load 
+re.tree:												slice: Slice 
+re.tree-													lower: Name 
+re.tree-														id: str = endPos
+re.tree-														ctx: Load 
+re.tree-													upper: NoneType = None
+re.tree-													step: NoneType = None
+--
+re.tree-												args: list 
+re.tree-													element: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = m
+re.tree-															ctx: Load 
+re.tree:														slice: Slice 
+re.tree-															lower: Constant 
+re.tree-																value: int = 1
+re.tree-																kind: NoneType = None
+re.tree-															upper: NoneType = None
+re.tree-															step: NoneType = None
+--
+re.tree-												element: Return 
+re.tree-													value: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = m
+re.tree-															ctx: Load 
+re.tree:														slice: Constant 
+re.tree-															value: int = 1
+re.tree-															kind: NoneType = None
+re.tree-														ctx: Load 
+re.tree-											orelse: list 
+re.tree-												element: Return 
+re.tree-													value: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = m
+re.tree-															ctx: Load 
+re.tree:														slice: Constant 
+re.tree-															value: int = 0
+re.tree-															kind: NoneType = None
+re.tree-														ctx: Load 
+re.tree-							decorator_list: list 
+re.tree-							returns: NoneType = None
+--
+re.tree-															op: Add 
+re.tree-															value: Subscript 
+re.tree-																value: Name 
+re.tree-																	id: str = string
+re.tree-																	ctx: Load 
+re.tree:																slice: Slice 
+re.tree-																	lower: Name 
+re.tree-																		id: str = lastEnd
+re.tree-																		ctx: Load 
+re.tree-																	upper: Attribute 
+re.tree-																		value: Name 
+--
+re.tree-													op: Add 
+re.tree-													value: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = string
+re.tree-															ctx: Load 
+re.tree:														slice: Slice 
+re.tree-															lower: NoneType = None
+re.tree-															upper: Attribute 
+re.tree-																value: Name 
+re.tree-																	id: str = m
+re.tree-																	ctx: Load 
+--
+re.tree-													op: Add 
+re.tree-													value: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = string
+re.tree-															ctx: Load 
+re.tree:														slice: Slice 
+re.tree-															lower: Name 
+re.tree-																id: str = lastEnd
+re.tree-																ctx: Load 
+re.tree-															upper: Attribute 
+re.tree-																value: Name 
+--
+re.tree-													args: list 
+re.tree-														element: Subscript 
+re.tree-															value: Name 
+re.tree-																id: str = m
+re.tree-																ctx: Load 
+re.tree:															slice: Constant 
+re.tree-																value: int = 0
+re.tree-																kind: NoneType = None
+re.tree-															ctx: Load 
+re.tree-													keywords: list 
+re.tree-											type_comment: NoneType = None
+--
+re.tree-													op: Add 
+re.tree-													value: Subscript 
+re.tree-														value: Name 
+re.tree-															id: str = string
+re.tree-															ctx: Load 
+re.tree:														slice: Slice 
+re.tree-															lower: Name 
+re.tree-																id: str = lastEnd
+re.tree-																ctx: Load 
+re.tree-															upper: NoneType = None
+re.tree-															step: NoneType = None
+--
+re.tree-							test: Compare 
+re.tree-								left: Subscript 
+re.tree-									value: Name 
+re.tree-										id: str = m
+re.tree-										ctx: Load 
+re.tree:									slice: Constant 
+re.tree-										value: int = 0
+re.tree-										kind: NoneType = None
+re.tree-									ctx: Load 
+re.tree-								ops: list 
+re.tree-									element: Eq 
+--
+re.tree-										op: Add 
+re.tree-										right: Subscript 
+re.tree-											value: Name 
+re.tree-												id: str = m
+re.tree-												ctx: Load 
+re.tree:											slice: Constant 
+re.tree-												value: int = 0
+re.tree-												kind: NoneType = None
+re.tree-											ctx: Load 
+re.tree-					decorator_list: list 
+re.tree-					returns: NoneType = None
+--
+simple_and_augmented_assignment.tree-					targets: list 
+simple_and_augmented_assignment.tree-						element: Subscript 
+simple_and_augmented_assignment.tree-							value: Name 
+simple_and_augmented_assignment.tree-								id: str = l
+simple_and_augmented_assignment.tree-								ctx: Load 
+simple_and_augmented_assignment.tree:							slice: Constant 
+simple_and_augmented_assignment.tree-								value: int = 1
+simple_and_augmented_assignment.tree-								kind: NoneType = None
+simple_and_augmented_assignment.tree-							ctx: Store 
+simple_and_augmented_assignment.tree-					value: Subscript 
+simple_and_augmented_assignment.tree-						value: Name 
+simple_and_augmented_assignment.tree-							id: str = l
+simple_and_augmented_assignment.tree-							ctx: Load 
+simple_and_augmented_assignment.tree:						slice: Constant 
+simple_and_augmented_assignment.tree-							value: int = 2
+simple_and_augmented_assignment.tree-							kind: NoneType = None
+simple_and_augmented_assignment.tree-						ctx: Load 
+simple_and_augmented_assignment.tree-					type_comment: NoneType = None
+simple_and_augmented_assignment.tree-				element: Expr 
+--
+simple_and_augmented_assignment.tree-				element: AugAssign 
+simple_and_augmented_assignment.tree-					target: Subscript 
+simple_and_augmented_assignment.tree-						value: Name 
+simple_and_augmented_assignment.tree-							id: str = l
+simple_and_augmented_assignment.tree-							ctx: Load 
+simple_and_augmented_assignment.tree:						slice: Constant 
+simple_and_augmented_assignment.tree-							value: int = 1
+simple_and_augmented_assignment.tree-							kind: NoneType = None
+simple_and_augmented_assignment.tree-						ctx: Store 
+simple_and_augmented_assignment.tree-					op: Add 
+simple_and_augmented_assignment.tree-					value: Subscript 
+simple_and_augmented_assignment.tree-						value: Name 
+simple_and_augmented_assignment.tree-							id: str = l
+simple_and_augmented_assignment.tree-							ctx: Load 
+simple_and_augmented_assignment.tree:						slice: Constant 
+simple_and_augmented_assignment.tree-							value: int = 1
+simple_and_augmented_assignment.tree-							kind: NoneType = None
+simple_and_augmented_assignment.tree-						ctx: Load 
+simple_and_augmented_assignment.tree-				element: Expr 
+simple_and_augmented_assignment.tree-					value: Call 
+--
+time.tree-										value: Name 
+time.tree-											id: str = request
+time.tree-											ctx: Load 
+time.tree-										attr: str = headers
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: str = accept-language
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-								attr: str = split
+time.tree-								ctx: Load 
+time.tree-							args: list 
+time.tree-								element: Constant 
+time.tree-									value: str = ,
+time.tree-									kind: NoneType = None
+time.tree-							keywords: list 
+time.tree:						slice: Constant 
+time.tree-							value: int = 0
+time.tree-							kind: NoneType = None
+time.tree-						ctx: Load 
+time.tree-					type_comment: NoneType = None
+time.tree-			decorator_list: list 
+--
+time.tree-					value: Call 
+time.tree-						func: Attribute 
+time.tree-							value: Name 
+time.tree-								id: str = split
+time.tree-								ctx: Load 
+time.tree:							attr: str = slice
+time.tree-							ctx: Load 
+time.tree-						args: list 
+time.tree-							element: Constant 
+time.tree-								value: int = 0
+time.tree-								kind: NoneType = None
+--
+time.tree-								args: list 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = split
+time.tree-											ctx: Load 
+time.tree:										slice: Slice 
+time.tree-											lower: Name 
+time.tree-												id: str = maxsplit
+time.tree-												ctx: Load 
+time.tree-											upper: NoneType = None
+time.tree-											step: NoneType = None
+--
+time.tree-					test: Compare 
+time.tree-						left: Subscript 
+time.tree-							value: Name 
+time.tree-								id: str = jj
+time.tree-								ctx: Load 
+time.tree:							slice: Constant 
+time.tree-								value: int = 0
+time.tree-								kind: NoneType = None
+time.tree-							ctx: Load 
+time.tree-						ops: list 
+time.tree-							element: NotEq 
+time.tree-						comparators: list 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = jj
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 1
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-					body: list 
+time.tree-						element: Return 
+--
+time.tree-							args: list 
+time.tree-								element: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = jj
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 0
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-								element: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = jj
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 1
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-							keywords: list 
+time.tree-						ops: list 
+--
+time.tree-						args: list 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = jj
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 0
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = jj
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 1
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-						keywords: list 
+time.tree-			decorator_list: list 
+--
+time.tree-												args: list 
+time.tree-													element: Constant 
+time.tree-														value: str = (
+time.tree-														kind: NoneType = None
+time.tree-												keywords: list 
+time.tree:											slice: Constant 
+time.tree-												value: int = 1
+time.tree-												kind: NoneType = None
+time.tree-											ctx: Load 
+time.tree-										attr: str = split
+time.tree-										ctx: Load 
+time.tree-									args: list 
+time.tree-										element: Constant 
+time.tree-											value: str = )
+time.tree-											kind: NoneType = None
+time.tree-									keywords: list 
+time.tree:								slice: Constant 
+time.tree-									value: int = 0
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-					handlers: list 
+time.tree-						element: ExceptHandler 
+--
+time.tree-									targets: list 
+time.tree-										element: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = ret
+time.tree-												ctx: Load 
+time.tree:											slice: Name 
+time.tree-												id: str = ind
+time.tree-												ctx: Load 
+time.tree-											ctx: Store 
+time.tree-									value: Name 
+time.tree-										id: str = i
+--
+time.tree-							comparators: list 
+time.tree-								element: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = _jj
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 1
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-						body: Subscript 
+time.tree-							value: Name 
+time.tree-								id: str = _jj
+time.tree-								ctx: Load 
+time.tree:							slice: Constant 
+time.tree-								value: int = 0
+time.tree-								kind: NoneType = None
+time.tree-							ctx: Load 
+time.tree-						orelse: Subscript 
+time.tree-							value: Name 
+time.tree-								id: str = _jj
+time.tree-								ctx: Load 
+time.tree:							slice: Constant 
+time.tree-								value: int = 1
+time.tree-								kind: NoneType = None
+time.tree-							ctx: Load 
+time.tree-					type_comment: NoneType = None
+time.tree-			orelse: list 
+--
+time.tree-								args: list 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 0
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: BinOp 
+time.tree-										left: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = t
+time.tree-												ctx: Load 
+time.tree:											slice: Constant 
+time.tree-												value: int = 1
+time.tree-												kind: NoneType = None
+time.tree-											ctx: Load 
+time.tree-										op: Sub 
+time.tree-										right: Constant 
+--
+time.tree-											kind: NoneType = None
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 2
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 3
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 4
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 5
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: Constant 
+time.tree-										value: int = 0
+--
+time.tree-				element: Return 
+time.tree-					value: Subscript 
+time.tree-						value: Name 
+time.tree-							id: str = t
+time.tree-							ctx: Load 
+time.tree:						slice: Slice 
+time.tree-							lower: NoneType = None
+time.tree-							upper: Constant 
+time.tree-								value: int = 9
+time.tree-								kind: NoneType = None
+time.tree-							step: NoneType = None
+--
+time.tree-													ctx: Store 
+time.tree-											value: Subscript 
+time.tree-												value: Name 
+time.tree-													id: str = fmt
+time.tree-													ctx: Load 
+time.tree:												slice: Name 
+time.tree-													id: str = i
+time.tree-													ctx: Load 
+time.tree-												ctx: Load 
+time.tree-											type_comment: NoneType = None
+time.tree-										element: If 
+--
+time.tree-												keywords: list 
+time.tree-											element: Subscript 
+time.tree-												value: Name 
+time.tree-													id: str = fmt
+time.tree-													ctx: Load 
+time.tree:												slice: Slice 
+time.tree-													lower: Name 
+time.tree-														id: str = i
+time.tree-														ctx: Load 
+time.tree-													upper: NoneType = None
+time.tree-													step: NoneType = None
+--
+time.tree-									test: Compare 
+time.tree-										left: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = fmt
+time.tree-												ctx: Load 
+time.tree:											slice: Constant 
+time.tree-												value: int = 0
+time.tree-												kind: NoneType = None
+time.tree-											ctx: Load 
+time.tree-										ops: list 
+time.tree-											element: Eq 
+--
+time.tree-													ctx: Store 
+time.tree-											value: Subscript 
+time.tree-												value: Name 
+time.tree-													id: str = fmt
+time.tree-													ctx: Load 
+time.tree:												slice: Constant 
+time.tree-													value: int = 1
+time.tree-													kind: NoneType = None
+time.tree-												ctx: Load 
+time.tree-											type_comment: NoneType = None
+time.tree-										element: Assign 
+--
+time.tree-												args: list 
+time.tree-													element: Subscript 
+time.tree-														value: Name 
+time.tree-															id: str = fmt
+time.tree-															ctx: Load 
+time.tree:														slice: Slice 
+time.tree-															lower: Constant 
+time.tree-																value: int = 2
+time.tree-																kind: NoneType = None
+time.tree-															upper: NoneType = None
+time.tree-															step: NoneType = None
+--
+time.tree-																args: list 
+time.tree-																	element: Subscript 
+time.tree-																		value: Name 
+time.tree-																			id: str = __weekdays
+time.tree-																			ctx: Load 
+time.tree:																		slice: Constant 
+time.tree-																			value: int = 0
+time.tree-																			kind: NoneType = None
+time.tree-																		ctx: Load 
+time.tree-																keywords: list 
+time.tree-															type_comment: NoneType = None
+--
+time.tree-																		args: list 
+time.tree-																			element: Subscript 
+time.tree-																				value: Name 
+time.tree-																					id: str = __weekdays_long
+time.tree-																					ctx: Load 
+time.tree:																				slice: Constant 
+time.tree-																					value: int = 0
+time.tree-																					kind: NoneType = None
+time.tree-																				ctx: Load 
+time.tree-																		keywords: list 
+time.tree-																	type_comment: NoneType = None
+--
+time.tree-																				args: list 
+time.tree-																					element: Subscript 
+time.tree-																						value: Name 
+time.tree-																							id: str = __months
+time.tree-																							ctx: Load 
+time.tree:																						slice: Constant 
+time.tree-																							value: int = 0
+time.tree-																							kind: NoneType = None
+time.tree-																						ctx: Load 
+time.tree-																				keywords: list 
+time.tree-																			type_comment: NoneType = None
+--
+time.tree-														elts: list 
+time.tree-															element: Subscript 
+time.tree-																value: Name 
+time.tree-																	id: str = ts
+time.tree-																	ctx: Load 
+time.tree:																slice: Slice 
+time.tree-																	lower: NoneType = None
+time.tree-																	upper: Name 
+time.tree-																		id: str = l
+time.tree-																		ctx: Load 
+time.tree-																	step: NoneType = None
+time.tree-																ctx: Load 
+time.tree-															element: Subscript 
+time.tree-																value: Name 
+time.tree-																	id: str = ts
+time.tree-																	ctx: Load 
+time.tree:																slice: Slice 
+time.tree-																	lower: Name 
+time.tree-																		id: str = l
+time.tree-																		ctx: Load 
+time.tree-																	upper: NoneType = None
+time.tree-																	step: NoneType = None
+--
+time.tree-											ctx: Store 
+time.tree-									value: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = lv
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 1
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									type_comment: NoneType = None
+time.tree-								element: Continue 
+--
+time.tree-											ctx: Store 
+time.tree-										element: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = dir_val
+time.tree-												ctx: Load 
+time.tree:											slice: Name 
+time.tree-												id: str = d
+time.tree-												ctx: Load 
+time.tree-											ctx: Store 
+time.tree-									ctx: Store 
+time.tree-							value: Tuple 
+time.tree-								elts: list 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = lv
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 1
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = lv
+time.tree-											ctx: Load 
+time.tree:										slice: Constant 
+time.tree-											value: int = 0
+time.tree-											kind: NoneType = None
+time.tree-										ctx: Load 
+time.tree-								ctx: Load 
+time.tree-							type_comment: NoneType = None
+--
+time.tree-									targets: list 
+time.tree-										element: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = t
+time.tree-												ctx: Load 
+time.tree:											slice: Subscript 
+time.tree-												value: Name 
+time.tree-													id: str = __lu
+time.tree-													ctx: Load 
+time.tree:												slice: Name 
+time.tree-													id: str = d
+time.tree-													ctx: Load 
+time.tree-												ctx: Load 
+time.tree-											ctx: Store 
+time.tree-									value: Call 
+--
+time.tree-									targets: list 
+time.tree-										element: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = t
+time.tree-												ctx: Load 
+time.tree:											slice: Constant 
+time.tree-												value: int = 6
+time.tree-												kind: NoneType = None
+time.tree-											ctx: Store 
+time.tree-									value: Call 
+time.tree-										func: Attribute 
+--
+time.tree-											targets: list 
+time.tree-												element: Subscript 
+time.tree-													value: Name 
+time.tree-														id: str = t
+time.tree-														ctx: Load 
+time.tree:													slice: Constant 
+time.tree-														value: int = 6
+time.tree-														kind: NoneType = None
+time.tree-													ctx: Store 
+time.tree-											value: Call 
+time.tree-												func: Attribute 
+--
+time.tree-													targets: list 
+time.tree-														element: Subscript 
+time.tree-															value: Name 
+time.tree-																id: str = t
+time.tree-																ctx: Load 
+time.tree:															slice: Constant 
+time.tree-																value: int = 1
+time.tree-																kind: NoneType = None
+time.tree-															ctx: Store 
+time.tree-													value: BinOp 
+time.tree-														left: Call 
+--
+time.tree-															targets: list 
+time.tree-																element: Subscript 
+time.tree-																	value: Name 
+time.tree-																		id: str = t
+time.tree-																		ctx: Load 
+time.tree:																	slice: Constant 
+time.tree-																		value: int = 1
+time.tree-																		kind: NoneType = None
+time.tree-																	ctx: Store 
+time.tree-															value: BinOp 
+time.tree-																left: Call 
+--
+time.tree-																		values: list 
+time.tree-																			element: Subscript 
+time.tree-																				value: Name 
+time.tree-																					id: str = dir_val
+time.tree-																					ctx: Load 
+time.tree:																				slice: Constant 
+time.tree-																					value: str = p
+time.tree-																					kind: NoneType = None
+time.tree-																				ctx: Load 
+time.tree-																			element: Constant 
+time.tree-																				value: str = am
+--
+time.tree-																	targets: list 
+time.tree-																		element: Subscript 
+time.tree-																			value: Name 
+time.tree-																				id: str = t
+time.tree-																				ctx: Load 
+time.tree:																			slice: Subscript 
+time.tree-																				value: Name 
+time.tree-																					id: str = __lu
+time.tree-																					ctx: Load 
+time.tree:																				slice: Constant 
+time.tree-																					value: str = H
+time.tree-																					kind: NoneType = None
+time.tree-																				ctx: Load 
+time.tree-																			ctx: Store 
+time.tree-																	value: Name 
+--
+time.tree-																			targets: list 
+time.tree-																				element: Subscript 
+time.tree-																					value: Name 
+time.tree-																						id: str = t
+time.tree-																						ctx: Load 
+time.tree:																					slice: Constant 
+time.tree-																						value: int = 0
+time.tree-																						kind: NoneType = None
+time.tree-																					ctx: Store 
+time.tree-																			value: BinOp 
+time.tree-																				left: Constant 
+--
+time.tree-																							targets: list 
+time.tree-																								element: Subscript 
+time.tree-																									value: Name 
+time.tree-																										id: str = t
+time.tree-																										ctx: Load 
+time.tree:																									slice: UnaryOp 
+time.tree-																										op: USub 
+time.tree-																										operand: Constant 
+time.tree-																											value: int = 1
+time.tree-																											kind: NoneType = None
+time.tree-																									ctx: Store 
+--
+time.tree-						args: list 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = t
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 0
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-						keywords: list 
+time.tree-				element: Expr 
+--
+time.tree-							element: BinOp 
+time.tree-								left: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = t
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 1
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-								op: Sub 
+time.tree-								right: Constant 
+--
+time.tree-						args: list 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = t
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 2
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-						keywords: list 
+time.tree-				element: Expr 
+--
+time.tree-						args: list 
+time.tree-							element: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = t
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 3
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-						keywords: list 
+time.tree-				element: Assign 
+time.tree-					targets: list 
+time.tree-						element: Subscript 
+time.tree-							value: Name 
+time.tree-								id: str = t
+time.tree-								ctx: Load 
+time.tree:							slice: Constant 
+time.tree-								value: int = 7
+time.tree-								kind: NoneType = None
+time.tree-							ctx: Store 
+time.tree-					value: Call 
+time.tree-						func: Name 
+--
+time.tree-							targets: list 
+time.tree-								element: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = t
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 6
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Store 
+time.tree-							value: BinOp 
+time.tree-								left: Call 
+--
+time.tree-								args: list 
+time.tree-									element: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = t
+time.tree-											ctx: Load 
+time.tree:										slice: Subscript 
+time.tree-											value: Name 
+time.tree-												id: str = __lu
+time.tree-												ctx: Load 
+time.tree:											slice: Name 
+time.tree-												id: str = d
+time.tree-												ctx: Load 
+time.tree-											ctx: Load 
+time.tree-										ctx: Load 
+time.tree-								keywords: list 
+--
+time.tree-									ctx: Store 
+time.tree-							value: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = t
+time.tree-									ctx: Load 
+time.tree:								slice: Name 
+time.tree-									id: str = pos
+time.tree-									ctx: Load 
+time.tree-								ctx: Load 
+time.tree-							type_comment: NoneType = None
+time.tree-						element: If 
+--
+time.tree-								func: Attribute 
+time.tree-									value: Subscript 
+time.tree-										value: Name 
+time.tree-											id: str = l
+time.tree-											ctx: Load 
+time.tree:										slice: Name 
+time.tree-											id: str = p
+time.tree-											ctx: Load 
+time.tree-										ctx: Load 
+time.tree-									attr: str = capitalize
+time.tree-									ctx: Load 
+--
+time.tree-							test: Compare 
+time.tree-								left: Subscript 
+time.tree-									value: Name 
+time.tree-										id: str = t
+time.tree-										ctx: Load 
+time.tree:									slice: Constant 
+time.tree-										value: int = 3
+time.tree-										kind: NoneType = None
+time.tree-									ctx: Load 
+time.tree-								ops: list 
+time.tree-									element: Gt 
+--
+time.tree-											args: list 
+time.tree-												element: Subscript 
+time.tree-													value: Name 
+time.tree-														id: str = t
+time.tree-														ctx: Load 
+time.tree:													slice: Constant 
+time.tree-														value: int = 0
+time.tree-														kind: NoneType = None
+time.tree-													ctx: Load 
+time.tree-											keywords: list 
+time.tree:										slice: Slice 
+time.tree-											lower: UnaryOp 
+time.tree-												op: USub 
+time.tree-												operand: Constant 
+time.tree-													value: int = 2
+time.tree-													kind: NoneType = None
+--
+time.tree-									ctx: Store 
+time.tree-							value: Subscript 
+time.tree-								value: Name 
+time.tree-									id: str = t
+time.tree-									ctx: Load 
+time.tree:								slice: Constant 
+time.tree-									value: int = 3
+time.tree-									kind: NoneType = None
+time.tree-								ctx: Load 
+time.tree-							type_comment: NoneType = None
+time.tree-						element: If 

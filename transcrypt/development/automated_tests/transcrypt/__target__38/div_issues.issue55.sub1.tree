@@ -1,0 +1,30 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = p
+					ctx: Store 
+			value: Constant 
+				value: str = p
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = q
+					ctx: Store 
+			value: Constant 
+				value: str = q
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = r
+					ctx: Store 
+			value: Constant 
+				value: str = r
+				kind: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

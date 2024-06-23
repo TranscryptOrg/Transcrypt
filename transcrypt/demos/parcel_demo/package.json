@@ -8,5 +8,15 @@
   "dependencies": {
     "parcel-bundler": "^1.11.0",
     "parcel-plugin-transcrypt": "^1.0.20"
-  }
+  },
+  "parcel-plugin-python": {
+    "command": "ts",
+    "arguments": [
+        "--nomin",
+        "--map",
+        "--verbose"
+    ]
 }
+}
+
+

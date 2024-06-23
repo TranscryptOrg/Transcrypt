@@ -1,0 +1,12 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pi
+					ctx: Store 
+			value: Constant 
+				value: float = 3.1415693588
+				kind: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

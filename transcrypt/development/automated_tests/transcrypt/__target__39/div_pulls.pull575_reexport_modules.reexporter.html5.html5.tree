@@ -1,0 +1,30 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = aHtml5
+					ctx: Store 
+			value: Constant 
+				value: int = 0
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = bHtml5
+					ctx: Store 
+			value: Constant 
+				value: int = 1
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cHtml5
+					ctx: Store 
+			value: Constant 
+				value: int = 2
+				kind: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

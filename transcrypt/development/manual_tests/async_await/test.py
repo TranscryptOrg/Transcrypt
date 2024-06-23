@@ -1,5 +1,17 @@
 from org.transcrypt.stubs.browser import __pragma__, __envir__
 
+print ('Correct output:')
+print ('f0')
+print ('g0')
+print ('g0')
+print ('f0')
+print ('f1')
+print ('g1')
+print ('g1')
+print ('f1')
+print ()
+print ('Actual output:')
+
 # Note that CPython will ignore all pragma's
 
 

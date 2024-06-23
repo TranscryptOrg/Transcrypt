@@ -1,0 +1,679 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pi
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = PI
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = e
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = E
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = exp
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = exp
+				ctx: Load 
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = expm1
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Call 
+							func: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = exp
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+							keywords: list 
+						op: Sub 
+						right: Constant 
+							value: int = 1
+							kind: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = log
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+					element: arg 
+						arg: str = base
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: IfExp 
+						test: Compare 
+							left: Name 
+								id: str = base
+								ctx: Load 
+							ops: list 
+								element: Is 
+							comparators: list 
+								element: Name 
+									id: str = js_undefined
+									ctx: Load 
+						body: Call 
+							func: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = log
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+							keywords: list 
+						orelse: BinOp 
+							left: Call 
+								func: Attribute 
+									value: Name 
+										id: str = Math
+										ctx: Load 
+									attr: str = log
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = x
+										ctx: Load 
+								keywords: list 
+							op: Div 
+							right: Call 
+								func: Attribute 
+									value: Name 
+										id: str = Math
+										ctx: Load 
+									attr: str = log
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = base
+										ctx: Load 
+								keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = log1p
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = Math
+								ctx: Load 
+							attr: str = log
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Name 
+									id: str = x
+									ctx: Load 
+								op: Add 
+								right: Constant 
+									value: int = 1
+									kind: NoneType = None
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = log2
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Call 
+							func: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = log
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+							keywords: list 
+						op: Div 
+						right: Attribute 
+							value: Name 
+								id: str = Math
+								ctx: Load 
+							attr: str = LN2
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = log10
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: Call 
+							func: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = log
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+							keywords: list 
+						op: Div 
+						right: Attribute 
+							value: Name 
+								id: str = Math
+								ctx: Load 
+							attr: str = LN10
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = pow
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = pow
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sqrt
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sqrt
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sin
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sin
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cos
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = cos
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tan
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = tan
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = asin
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = asin
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = acos
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = acos
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atan
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atan
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atan2
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atan2
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = hypot
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = hypot
+				ctx: Load 
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = degrees
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Mult 
+							right: Constant 
+								value: int = 180
+								kind: NoneType = None
+						op: Div 
+						right: Attribute 
+							value: Name 
+								id: str = Math
+								ctx: Load 
+							attr: str = PI
+							ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = radians
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = x
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: BinOp 
+						left: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Mult 
+							right: Attribute 
+								value: Name 
+									id: str = Math
+									ctx: Load 
+								attr: str = PI
+								ctx: Load 
+						op: Div 
+						right: Constant 
+							value: int = 180
+							kind: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = sinh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = sinh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cosh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = cosh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = tanh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = tanh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = asinh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = asinh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = acosh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = acosh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = atanh
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = atanh
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = floor
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = floor
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ceil
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = ceil
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = trunc
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Math
+					ctx: Load 
+				attr: str = trunc
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = isnan
+					ctx: Store 
+			value: Name 
+				id: str = js_isNaN
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = inf
+					ctx: Store 
+			value: Name 
+				id: str = js_Infinity
+				ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = nan
+					ctx: Store 
+			value: Name 
+				id: str = js_NaN
+				ctx: Load 
+			type_comment: NoneType = None
+		element: FunctionDef 
+			name: str = modf
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = n
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = sign
+							ctx: Store 
+					value: IfExp 
+						test: Compare 
+							left: Name 
+								id: str = n
+								ctx: Load 
+							ops: list 
+								element: GtE 
+							comparators: list 
+								element: Constant 
+									value: int = 0
+									kind: NoneType = None
+						body: Constant 
+							value: int = 1
+							kind: NoneType = None
+						orelse: UnaryOp 
+							op: USub 
+							operand: Constant 
+								value: int = 1
+								kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = f
+									ctx: Store 
+								element: Name 
+									id: str = mod
+									ctx: Store 
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = divmod
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = abs
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = n
+										ctx: Load 
+								keywords: list 
+							element: Constant 
+								value: int = 1
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Return 
+					value: Tuple 
+						elts: list 
+							element: BinOp 
+								left: Name 
+									id: str = mod
+									ctx: Load 
+								op: Mult 
+								right: Name 
+									id: str = sign
+									ctx: Load 
+							element: BinOp 
+								left: Name 
+									id: str = f
+									ctx: Load 
+								op: Mult 
+								right: Name 
+									id: str = sign
+									ctx: Load 
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

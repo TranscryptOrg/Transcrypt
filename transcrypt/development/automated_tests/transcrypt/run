@@ -1,0 +1,3 @@
+py38 ../../../__main__.py -r -xr -n -b -da -xg -c -sf autotest
+py38 ../../../__main__.py -xt -xr -n -b -da -xg -c -sf autotest
+py38 -m http.server

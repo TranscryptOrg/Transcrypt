@@ -30,6 +30,7 @@ import shutil
 import tokenize
 import collections
 import json
+from contextlib import contextmanager, ExitStack
 
 from org.transcrypt import utils, sourcemaps, minify, static_check, type_check
 
@@ -70,9 +71,18 @@ class Program:
 
         # Set paths
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
+        
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        self.targetDir = f'{self.sourceDir}/__target__'
+        
+        if utils.commandArgs.outdir:
+            if os.path.isabs (utils.commandArgs.outdir):
+                self.targetDir = utils.commandArgs.outdir.replace ('\\', '/')
+            else:
+                self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outdir}'.replace ('\\', '/')
+        else:
+            self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
+        
         self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
         # Load the most recent project metadata
@@ -184,7 +194,7 @@ class Module:
                 # Generate JavaScript code and sourcemap from parse tree
                 self.generateJavascriptAndPrettyMap ()
 
-                # Generated code, so no comments to strip, may have annotations so don't strip. There won't be any strip pragma's anyhow.
+                # Generated code, may have annotations so don't strip comments, and there are no non-annotation comments to strip anyhow, neither are there any strip pragma's
                 javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, False, self.generator.allowDebugMap)
 
             # Write target code
@@ -216,7 +226,7 @@ class Module:
                 targetFile.write (self.mapRef)
 
         else:
-            # If it's a make an rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
+            # If it's a make rather than a build and the target exists, load it, beautify it if needed and run through digestJavascript for obtaining symbols
             self.targetCode = open (self.targetPath, 'r') .read ()
             javascriptDigest = utils.digestJavascript (self.targetCode, self.program.symbols, True, False, refuseIfAppearsMinified = True)
 
@@ -302,7 +312,7 @@ class Module:
                 break
 
             # Remember all fruitless paths to give a decent error report if module isn't found
-            # Note that this aren't all searched paths for a particular module,
+            # Note that these aren't all searched paths for a particular module,
             # since the difference between an module and a facility inside a module isn't always known a priori
             self.program.searchedModulePaths.extend ([self.pythonSourcePath, self.javascriptSourcePath])
         else:
@@ -343,7 +353,7 @@ class Module:
 
                 # Only append non-emptpy statements and their number info
                 if targetLine.strip () != ';':                                                          # If the non-instrumented line isn't empty
-                    if self.generator.allowDebugMap:                                                         # If annotations comments have to be prepended
+                    if self.generator.allowDebugMap:                                                    # If annotations comments have to be prepended
                         targetLine = '/* {} */ {}'.format (sourceLineNrString, targetLine)              # Prepend them
                     targetLines.append (targetLine)                                                     # Add the target line, with or without prepended annotation comment
 
@@ -664,6 +674,8 @@ class Generator (ast.NodeVisitor):
             self.targetFragments.append (self.lineNrString) # Last target fragment doesn't have a '\n' to replace in the emit method
 
         except Exception as exception:
+            # print (traceback.format_exc ()) # Keep at hand for debugging purposes
+
             utils.enhanceException (
                 exception,
                 lineNr = self.lineNr
@@ -811,7 +823,7 @@ class Generator (ast.NodeVisitor):
             self.lineNrString = ''
 
     def isCommentString (self, statement):
-        return isinstance (statement, ast.Expr) and isinstance (statement.value, ast.Str)
+        return isinstance (statement, ast.Expr) and isinstance (statement.value, ast.Constant) and type (statement.value.value) == str
 
     def emitBody (self, body):
         for statement in body:
@@ -822,33 +834,7 @@ class Generator (ast.NodeVisitor):
                 self.emit (';\n')
 
     def emitSubscriptAssign (self, target, value, emitPathIndices = lambda: None):
-        if type (target.slice) == ast.Index:        # Always overloaded
-            if type (target.slice.value) == ast.Tuple:
-                self.visit (target.value)
-                self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
-                self.stripTuple = True
-                self.visit (target.slice.value)
-                self.emit (', ')
-                self.visit (value)
-                emitPathIndices ()
-                self.emit (')')
-            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealt with here, is special case
-                self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
-                self.visit (target.value)
-                self.emit (', ')
-                self.visit (target.slice.value)
-                self.emit (', ')
-                self.visit (value)
-                emitPathIndices ()
-                self.emit (')')
-            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
-                                                    # which is called indirectly here
-                self.expectingNonOverloadedLhsIndex = True
-                self.visit (target)
-                self.emit (' = ')
-                self.visit (value)
-                emitPathIndices ()
-        elif type (target.slice) == ast.Slice:
+        if type (target.slice) == ast.Slice:
             if self.allowOperatorOverloading:
                 self.emit ('__setslice__ (')        # Free function tries .__setitem__ (overload) and .__setslice__ (native)
                 self.visit (target.value)
@@ -876,19 +862,33 @@ class Generator (ast.NodeVisitor):
             self.emit (', ')
 
             self.visit (value)
-
             self.emit (')')
-        elif type (target.slice) == ast.ExtSlice:   # Always overloaded
-            self.visit (target.value)
-            self.emit ('.__setitem__ (')            # Method, since extended slice access is always overloaded
-            self.emit ('[')
-            for index, dim in enumerate (target.slice.dims):
-                self.emitComma (index)
-                self.visit (dim)
-            self.emit (']')
-            self.emit (', ')
-            self.visit (value)
-            self.emit (')')
+        else:                                       # Always overloaded
+            if type (target.slice) == ast.Tuple:
+                self.visit (target.value)
+                self.emit ('.__setitem__ (')        # Free function tries .__setitem__ (overload) and [] (native)
+                self.stripTuple = True
+                self.visit (target.slice)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            elif self.allowOperatorOverloading:     # Possibly overloaded LHS index dealt with here, is special case
+                self.emit ('__setitem__ (')         # Free function tries .__setitem__ (overload) and [] (native)
+                self.visit (target.value)
+                self.emit (', ')
+                self.visit (target.slice)
+                self.emit (', ')
+                self.visit (value)
+                emitPathIndices ()
+                self.emit (')')
+            else:                                   # Non-overloaded LHS index just dealt with by visit_Subscript
+                                                    # which is called indirectly here
+                self.expectingNonOverloadedLhsIndex = True
+                self.visit (target)
+                self.emit (' = ')
+                self.visit (value)
+                emitPathIndices ()
 
     def nextTemp (self, name):
         if name in self.tempIndices:
@@ -1116,7 +1116,7 @@ class Generator (ast.NodeVisitor):
                 )
 
     def visit_AnnAssign (self, node):
-        if node.value != None:  # Rather than node.value is a NameConstant with value None
+        if node.value != None:
             self.visit (
                 ast.Assign (
                     [node.target],
@@ -1297,12 +1297,7 @@ class Generator (ast.NodeVisitor):
             (type (node.op) == ast.Mod and not self.allowJavaScriptMod)
             or
             # LHS is a call to __getitem__ or __getslice__, so <operator>= won't work
-            (
-                type (node.target) == ast.Subscript and (
-                    type (node.target.slice) != ast.Index or
-                    type (node.target.slice.value) == ast.Tuple
-                )
-            )
+            (type (node.target) == ast.Subscript and type (node.target.slice) == ast.Tuple)
         ):
             # Just translate to binary operator node
             self.visit (ast.Assign (
@@ -1314,14 +1309,14 @@ class Generator (ast.NodeVisitor):
             self.visit (node.target)        # No need to emit var first, it has to exist already
 
             # Optimize for ++ and --
-            if type (node.value) == ast.Num and node.value.n == 1:
+            if type (node.value) == ast.Constant and node.value.value == 1:
                 if type (node.op) == ast.Add:
                     self.emit ('++')
                     return
                 elif type (node.op) == ast.Sub:
                     self.emit ('--')
                     return
-            elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Num and node.value.operand.n == 1:
+            elif type (node.value) == ast.UnaryOp and type (node.value.operand) == ast.Constant and node.value.operand.value == 1:
                 if type (node.op) == ast.Add:
                     if type (node.value.op) == ast.UAdd:
                         self.emit ('++')
@@ -1410,9 +1405,6 @@ class Generator (ast.NodeVisitor):
         if not self.skippedTemp ('break'):
             self.emit ('{} = true;\n', self.getTemp ('break'))
         self.emit ('break')
-
-    def visit_Bytes (self, node):
-        self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
 
     def visit_Call (self, node, dataClassArgDict = None):
         self.adaptLineNrString (node)
@@ -1659,7 +1651,7 @@ class Generator (ast.NodeVisitor):
                     raise utils.Error (
                         lineNr = self.lineNr,
                         message = '\n\tUnknown pragma: {}'.format (
-                            node.args [0] .s if type (node.args [0]) == ast.Str else node.args [0]
+                            node.args [0] .value if type (node.args [0]) == ast.Constant else node.args [0] # ??? and it's a str?
                         )
                     )
                 return
@@ -1769,8 +1761,8 @@ class Generator (ast.NodeVisitor):
                                     id = '.'.join ([scope.node.name for scope in self.getAdjacentClassScopes (True)]),
                                     ctx = ast.Load
                                 ),
-                                ast.Str (
-                                    s = node.func.attr  # <methodName>
+                                ast.Constant (
+                                    value = node.func.attr  # <methodName>
                                 )
                             ],
                             keywords = []
@@ -1848,7 +1840,7 @@ class Generator (ast.NodeVisitor):
                     ),
                     args = ([
                           node.func,
-                          ast.NameConstant (
+                          ast.Constant (
                               value = None)
                     ] + node.args),
                     keywords = node.keywords
@@ -1863,7 +1855,7 @@ class Generator (ast.NodeVisitor):
             # Adapt positional args)
             for index, expr in enumerate (node.args):
                 value = None
-                if expr == ast.NameConstant:
+                if expr == ast.Constant:
                     value = True if expr.value == 'True' else False if expr.value == 'False' else None
                 if value != None:
                     dataClassArgTuple [index][1] = value
@@ -2126,14 +2118,14 @@ class Generator (ast.NodeVisitor):
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = '''
+									ast.Constant (
+										value = '''
 let names = self.__initfields__.values ();
 for (let arg of args) {
     self [names.next () .value] = arg;
@@ -2175,14 +2167,14 @@ for (let name of kwargs.py_keys ()) {
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = '''
+									ast.Constant (
+										value = '''
 let names = self.__reprfields__.values ();
 let fields = [];
 for (let name of names) {{
@@ -2230,14 +2222,14 @@ return  self.__name__ + '(' + ', '.join (fields) + ')'
 									ctx = ast.Load
                                 ),
 								args = [
-									ast.Str (
-                                        s = 'js'
+									ast.Constant (
+                                        value = 'js'
                                     ),
-									ast.Str (
-										s = '{}'
+									ast.Constant (
+										value = '{}'
                                     ),
-									ast.Str (
-										s = ('''
+									ast.Constant (
+										value = ('''
 let names = self.__comparefields__.values ();
 let selfFields = [];
 let otherFields = [];
@@ -2391,6 +2383,18 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         if len (node.comparators) > 1:
             self.emit(')')
+            
+    def visit_Constant (self, node):
+        if type (node.value) == str:
+            self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
+        elif type (node.value) == bytes:
+            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))            
+        elif type (node.value) == complex:
+            self.emit ('complex (0, {})'.format (node.n.imag))           
+        elif type (node.value) in {float, int}:
+            self.emit ('{}'.format (node.n))
+        else:
+            self.emit (self.nameConsts [node.value])
 
     def visit_Continue (self, node):
         self.emit ('continue')
@@ -2405,7 +2409,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_Dict (self, node):
         if not self.allowJavaScriptKeys:                    # If we don't want JavaScript treatment of keys, for literal keys it doesn't make a difference
             for key in node.keys:
-                if not type (key) in (ast.Str, ast.Num):    # but if there's only one non-literal key there's a difference, and all keys are treated the Python way
+                if not type (key) == ast.Constant:          # But if there's only one non-literal key there's a difference, and all keys are treated the Python way
                     self.emit ('dict ([')
                     for index, (key, value) in enumerate (zip (node.keys, node.values)):
                         self.emitComma (index)
@@ -2453,11 +2457,16 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         optimize = (
             type (node.target) == ast.Name and  # Since 'var' is emitted, target must not yet exist, so e.g. not be element of array
             self.isCall (node.iter, 'range') and
-                type (node.iter.args [0]) != ast.Starred and (
+            type (node.iter.args [0]) != ast.Starred and (
                 len (node.iter.args) < 3 or                         # Constant step of 1
-                type (node.iter.args [2]) == ast.Num or (           # Positive constant step
+                (
+                    type (node.iter.args [2]) == ast.Constant and
+                    type (node.iter.args [2] .value) == int
+                ) or
+                (  # Positive constant step
                     type (node.iter.args [2]) == ast.UnaryOp and    # Negative constant step
-                    type (node.iter.args [2] .operand) == ast.Num
+                    type (node.iter.args [2] .operand) == ast.Constant and
+                    type (node.iter.args [2] .operand.value) == int
                 )
             )
         )
@@ -2473,17 +2482,17 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             step = (
                     1
                 if len (node.iter.args) <= 2 else
-                    node.iter.args [2] .n
-                if type (node.iter.args [2]) == ast.Num else
-                    node.iter.args [2] .operand .n
+                    node.iter.args [2] .value
+                if type (node.iter.args [2]) == ast.Constant else
+                    node.iter.args [2] .operand .value
                 if type (node.iter.args [2] .op) == ast.UAdd else
-                    -node.iter.args [2] .operand .n
+                    -node.iter.args [2] .operand .value
             )
 
             self.emit ('for (var ')
             self.visit (node.target)
             self.emit (' = ')
-            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Num (0))
+            self.visit (node.iter.args [0] if len (node.iter.args) > 1 else ast.Constant (value = 0))
             self.emit ('; ')
             self.visit (node.target)
             self.emit (' < ' if step > 0 else ' > ')
@@ -2539,16 +2548,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         id = self.getTemp ('iterable'),
                         ctx = ast.Load
                     ),
-                    slice = ast.Index (
-                        value = ast.Num (
-                            n = self.getTemp ('index')
-                        )
+                    slice = ast.Name (
+                        id = self.getTemp ('index'),
+                        ctx = ast.Load
                     ),
                     ctx = ast.Load
                 )
             ))
             self.emit (';\n')
-
 
         self.emitBody (node.body)
         self.dedent ()
@@ -2863,7 +2870,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             else:
                 # Import dotted name, requires import under constructed unique name and then nesting,
                 # including transfer of imported names from immutable module to mutable object
-                # This mutable module representation object may come to hold other mutable module represention objects
+                # This mutable module representation object may come to hold other mutable module representation objects
 
                 self.emit ('import * as __module_{}__ from \'{}\';\n', self.filterId (module.name) .replace ('.', '_'), module.importRelPath)
                 aliasSplit = alias.name.split ('.', 1)
@@ -2880,7 +2887,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         # Just as with visit_Import, postpone imports until own names are known, to prevent clashes
         self.importHoistMemos.append (utils.Any (node = node, lineNr = self.lineNr))
 
-    def revisit_ImportFrom (self, importHoistMemo): # From ... import ... can import modules or facitities offered by modules
+    def revisit_ImportFrom (self, importHoistMemo): # From ... import ... can import modules or facilities offered by modules
         self.lineNr = importHoistMemo.lineNr        # This is the lineNr from the original visit, which may be obtained from the node at that time or "cached" earlier
         node = importHoistMemo.node
         self.adaptLineNrString (node)               # If it isn't (again) obtained from the node, the memoed version will be used
@@ -2958,7 +2965,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             )
 
     def visit_JoinedStr (self, node):
-        self.emit (repr (''.join ([value.s if type (value) == ast.Str else '{{}}' for value in node.values])))
+        self.emit (repr (''.join ([value.value if type (value) == ast.Constant else '{{}}' for value in node.values])))
         self.emit ('.format (')
         index = 0
         for value in node.values:
@@ -3163,7 +3170,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
     def visit_Name (self, node):
         if node.id == '__file__':
-            self.visit (ast.Str (s = self.module.sourcePath))
+            self.visit (ast.Constant (value = self.module.sourcePath))
             return
 
         elif node.id == '__filename__':
@@ -3174,11 +3181,11 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 subDir = os.path.split (path [0])
                 fileName = os.path.join (subDir [1], fileName)
 
-            self.visit (ast.Str (s = fileName))
+            self.visit (ast.Constant (value = fileName))
             return
 
         elif node.id == '__line__':
-            self.visit (ast.Num (n = self.lineNr))
+            self.visit (ast.Constant (value = self.lineNr))
             return
 
         elif type (node.ctx) == ast.Store:
@@ -3187,14 +3194,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         self.emit (self.filterId (node.id))
 
-    def visit_NameConstant (self, node):
-        self.emit (self.nameConsts [node.value])
-
     def visit_Nonlocal (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .nonlocals.update (node.names)
-
-    def visit_Num (self, node):
-        self.emit ('complex (0, {})'.format (node.n.imag) if type (node.n) == complex else '{}'.format (node.n))
 
     def visit_Pass (self, node):
         self.adaptLineNrString (node)
@@ -3270,43 +3271,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         self.emit ('])')
 
-    def visit_Str (self, node):
-        self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
-
-    # Visited for RHS index, non-overloaded LHS index, RHS slice and RHS extended slice
-    # LHS slice and overloaded LHS index are dealt with directy in visit_Assign, since the RHS is needed for them also
     def visit_Subscript (self, node):
-        if type (node.slice) == ast.Index:
-            if type (node.slice.value) == ast.Tuple:    # Always overloaded, it must be an RHS index
-                self.visit (node.value)
-                self.emit ('.__getitem__ (')
-                self.stripTuple = True
-                self.visit (node.slice.value)
-                self.emit (')')
-            elif self.allowOperatorOverloading:         # It must be an RHS index
-                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
-                self.visit (node.value)
-                self.emit (', ')
-                self.visit (node.slice.value)
-                self.emit (')')
-            else:                                       # It may be an LHS or RHS index
-                try:
-                    isRhsIndex = not self.expectingNonOverloadedLhsIndex
-                    self.expectingNonOverloadedLhsIndex = False
-                    if isRhsIndex and self.allowKeyCheck:
-                        self.emit ('__k__ (')
-                        self.visit (node.value)
-                        self.emit (', ')
-                        self.visit (node.slice.value)
-                        self.emit (')')
-                    else:
-                        self.visit (node.value)
-                        self.emit (' [')
-                        self.visit (node.slice.value)
-                        self.emit (']')
-                except:
-                    print (traceback.format_exc ())
-        elif type (node.slice) == ast.Slice:
+        if type (node.slice) == ast.Slice:
             if self.allowOperatorOverloading:
                 self.emit ('__getslice__ (')            # Free function, tries .__getitem__ (overload) and .__getslice__ (native)
                 self.visit (node.value)
@@ -3333,15 +3299,36 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.visit (node.slice.step)
 
             self.emit (')')
-        elif type (node.slice) == ast.ExtSlice:         # Always overloaded
-            self.visit (node.value)
-            self.emit ('.__getitem__ (')                # Method, since extended slice access is always overloaded
-            self.emit ('[')
-            for index, dim in enumerate (node.slice.dims):
-                self.emitComma (index)
-                self.visit (dim)
-            self.emit (']')
-            self.emit (')')
+        else:
+            if type (node.slice) == ast.Tuple:    # Always overloaded, it must be an RHS index
+                self.visit (node.value)
+                self.emit ('.__getitem__ (')
+                self.stripTuple = True
+                self.visit (node.slice)
+                self.emit (')')
+            elif self.allowOperatorOverloading:         # It must be an RHS index
+                self.emit ('__getitem__ (')             # Free function tries .__getitem__ (overload) and [] (native)
+                self.visit (node.value)
+                self.emit (', ')
+                self.visit (node.slice)                 # !!! Bug. This leads to visit_Const and emitting '' around __index0__
+                self.emit (')')
+            else:                                       # It may be an LHS or RHS index
+                try:
+                    isRhsIndex = not self.expectingNonOverloadedLhsIndex
+                    self.expectingNonOverloadedLhsIndex = False
+                    if isRhsIndex and self.allowKeyCheck:
+                        self.emit ('__k__ (')
+                        self.visit (node.value)
+                        self.emit (', ')
+                        self.visit (node.slice)
+                        self.emit (')')
+                    else:
+                        self.visit (node.value)
+                        self.emit (' [')
+                        self.visit (node.slice)
+                        self.emit (']')
+                except:
+                    print (traceback.format_exc ())
 
     def visit_Try (self, node):
         self.adaptLineNrString (node)
@@ -3468,9 +3455,15 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.prevTemp ('break')
 
     def visit_With (self, node):
+        from contextlib import contextmanager, ExitStack
         self.adaptLineNrString (node)
 
-        for item in node.items:
+        @contextmanager
+        def itemContext (item):
+            if not self.noskipCodeGeneration:
+                yield
+                return
+
             self.emit ('var ')                      # Should be in surrounding scope but may be overwritten, so use var rather than let
             if (item.optional_vars):
                 self.visit (item.optional_vars)
@@ -3486,7 +3479,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.emit ('try {{\n')
             self.indent ()
             self.emit ('{}.__enter__ ();\n', withId)
-            self.emitBody (node.body)
+            yield
             self.emit ('{}.__exit__ ();\n', withId)
             self.dedent ()
             self.emit ('}}\n')
@@ -3503,6 +3496,38 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
             if withId == self.getTemp ('withid'):
                 self.prevTemp ('withid')
+
+        @contextmanager
+        def pragmaContext (item):
+            expr = item.context_expr
+
+            name = expr.args[0].s
+            if name.startswith('no'):
+                revName = name[2:]
+            else:
+                revName = 'no' + name
+
+            self.visit(expr)
+            yield
+            self.visit(ast.Call (expr.func, [ast.Constant (value = revName)] + expr.args[1:]))
+
+        @contextmanager
+        def skipContext (item):
+            self.noskipCodeGeneration = False
+            yield
+            self.noskipCodeGeneration = True
+
+        with ExitStack () as stack:
+            for item in node.items:
+                expr = item.context_expr
+                if self.isCall (expr, '__pragma__'):
+                    if expr.args[0].s == 'skip':
+                        stack.enter_context (skipContext (item))
+                    else:
+                        stack.enter_context (pragmaContext (item))
+                else:
+                    stack.enter_context (itemContext (item))
+            self.emitBody (node.body)
 
     def visit_Yield (self, node):
         self.getScope (ast.FunctionDef, ast.AsyncFunctionDef) .containsYield = True

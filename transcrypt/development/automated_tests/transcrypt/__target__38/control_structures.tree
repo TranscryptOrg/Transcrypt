@@ -1,0 +1,1536 @@
+file: Module 
+	body: list 
+		element: ClassDef 
+			name: str = ContextManagerExample
+			bases: list 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = counter
+									ctx: Store 
+							value: Constant 
+								value: int = 0
+								kind: NoneType = None
+							type_comment: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = __enter__
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = counter
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 1
+								kind: NoneType = None
+						element: Return 
+							value: Name 
+								id: str = self
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+				element: FunctionDef 
+					name: str = __exit__
+					args: arguments 
+						posonlyargs: list 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+								type_comment: NoneType = None
+						vararg: arg 
+							arg: str = args
+							annotation: NoneType = None
+							type_comment: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = counter
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 99
+								kind: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+					type_comment: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 10
+								kind: NoneType = None
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 8
+								kind: NoneType = None
+							element: Constant 
+								value: int = 16
+								kind: NoneType = None
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 8
+								kind: NoneType = None
+							element: Constant 
+								value: int = 16
+								kind: NoneType = None
+							element: Constant 
+								value: int = 2
+								kind: NoneType = None
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 10
+								kind: NoneType = None
+							element: Constant 
+								value: int = 0
+								kind: NoneType = None
+							element: UnaryOp 
+								op: USub 
+								operand: Constant 
+									value: int = 1
+									kind: NoneType = None
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = index
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = range
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: int = 16
+								kind: NoneType = None
+							element: Constant 
+								value: int = 8
+								kind: NoneType = None
+							element: UnaryOp 
+								op: USub 
+								operand: Constant 
+									value: int = 2
+									kind: NoneType = None
+						keywords: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = index
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = animal
+						ctx: Store 
+					iter: Tuple 
+						elts: list 
+							element: Constant 
+								value: str = cat
+								kind: NoneType = None
+							element: Constant 
+								value: str = dog
+								kind: NoneType = None
+							element: Constant 
+								value: str = turtle
+								kind: NoneType = None
+							element: Constant 
+								value: str = goldfish
+								kind: NoneType = None
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = animal
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+					type_comment: NoneType = None
+				element: For 
+					target: Tuple 
+						elts: list 
+							element: Name 
+								id: str = index
+								ctx: Store 
+							element: Name 
+								id: str = square
+								ctx: Store 
+						ctx: Store 
+					iter: Call 
+						func: Name 
+							id: str = enumerate
+							ctx: Load 
+						args: list 
+							element: ListComp 
+								elt: BinOp 
+									left: Name 
+										id: str = x
+										ctx: Load 
+									op: Mult 
+									right: Name 
+										id: str = x
+										ctx: Load 
+								generators: list 
+									element: comprehension 
+										target: Name 
+											id: str = x
+											ctx: Store 
+										iter: Call 
+											func: Name 
+												id: str = range
+												ctx: Load 
+											args: list 
+												element: Constant 
+													value: int = 10
+													kind: NoneType = None
+											keywords: list 
+										ifs: list 
+											element: BinOp 
+												left: Name 
+													id: str = x
+													ctx: Load 
+												op: Mod 
+												right: Constant 
+													value: int = 2
+													kind: NoneType = None
+										is_async: int = 0
+						keywords: list 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = y
+								ctx: Store 
+							iter: Tuple 
+								elts: list 
+									element: Constant 
+										value: int = 1
+										kind: NoneType = None
+									element: Constant 
+										value: int = 2
+										kind: NoneType = None
+									element: Constant 
+										value: int = 3
+										kind: NoneType = None
+								ctx: Load 
+							body: list 
+								element: For 
+									target: Name 
+										id: str = z
+										ctx: Store 
+									iter: Tuple 
+										elts: list 
+											element: Constant 
+												value: int = 10
+												kind: NoneType = None
+											element: Constant 
+												value: int = 20
+												kind: NoneType = None
+											element: Constant 
+												value: int = 30
+												kind: NoneType = None
+										ctx: Load 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: BinOp 
+														left: Name 
+															id: str = square
+															ctx: Load 
+														op: Add 
+														right: Name 
+															id: str = y
+															ctx: Load 
+													element: Name 
+														id: str = z
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+									type_comment: NoneType = None
+							orelse: list 
+							type_comment: NoneType = None
+					orelse: list 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = vehicles
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Constant 
+								value: str = bike
+								kind: NoneType = None
+							element: Constant 
+								value: str = train
+								kind: NoneType = None
+							element: Constant 
+								value: str = boat
+								kind: NoneType = None
+							element: Constant 
+								value: str = car
+								kind: NoneType = None
+							element: Constant 
+								value: str = plane
+								kind: NoneType = None
+							element: Constant 
+								value: str = bus
+								kind: NoneType = None
+						ctx: Load 
+					type_comment: NoneType = None
+				element: For 
+					target: Name 
+						id: str = doBreak
+						ctx: Store 
+					iter: Tuple 
+						elts: list 
+							element: Constant 
+								value: bool = False
+								kind: NoneType = None
+							element: Constant 
+								value: bool = True
+								kind: NoneType = None
+						ctx: Load 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = doContinue
+								ctx: Store 
+							iter: Tuple 
+								elts: list 
+									element: Constant 
+										value: bool = False
+										kind: NoneType = None
+									element: Constant 
+										value: bool = True
+										kind: NoneType = None
+								ctx: Load 
+							body: list 
+								element: For 
+									target: Name 
+										id: str = index
+										ctx: Store 
+									iter: Call 
+										func: Name 
+											id: str = range
+											ctx: Load 
+										args: list 
+											element: Constant 
+												value: int = 10
+												kind: NoneType = None
+										keywords: list 
+									body: list 
+										element: For 
+											target: Name 
+												id: str = index2
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Constant 
+														value: int = 0
+														kind: NoneType = None
+													element: Constant 
+														value: int = 100
+														kind: NoneType = None
+													element: Constant 
+														value: int = 10
+														kind: NoneType = None
+												keywords: list 
+											body: list 
+												element: If 
+													test: BoolOp 
+														op: And 
+														values: list 
+															element: Name 
+																id: str = doBreak
+																ctx: Load 
+															element: Compare 
+																left: Name 
+																	id: str = index2
+																	ctx: Load 
+																ops: list 
+																	element: Eq 
+																comparators: list 
+																	element: Constant 
+																		value: int = 50
+																		kind: NoneType = None
+													body: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = autoTester
+																		ctx: Load 
+																	attr: str = check
+																	ctx: Load 
+																args: list 
+																	element: Constant 
+																		value: str = break2
+																		kind: NoneType = None
+																keywords: list 
+														element: Break 
+													orelse: list 
+												element: If 
+													test: BoolOp 
+														op: And 
+														values: list 
+															element: Name 
+																id: str = doContinue
+																ctx: Load 
+															element: Compare 
+																left: Name 
+																	id: str = index2
+																	ctx: Load 
+																ops: list 
+																	element: Eq 
+																comparators: list 
+																	element: Constant 
+																		value: int = 50
+																		kind: NoneType = None
+													body: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = autoTester
+																		ctx: Load 
+																	attr: str = check
+																	ctx: Load 
+																args: list 
+																	element: Constant 
+																		value: str = continue2
+																		kind: NoneType = None
+																keywords: list 
+														element: Continue 
+													orelse: list 
+											orelse: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = noBreak2
+																kind: NoneType = None
+														keywords: list 
+											type_comment: NoneType = None
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Name 
+														id: str = doBreak
+														ctx: Load 
+													element: Compare 
+														left: Name 
+															id: str = index
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Constant 
+																value: int = 5
+																kind: NoneType = None
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = break
+																kind: NoneType = None
+														keywords: list 
+												element: Break 
+											orelse: list 
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Name 
+														id: str = doContinue
+														ctx: Load 
+													element: Compare 
+														left: Name 
+															id: str = index
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Constant 
+																value: int = 5
+																kind: NoneType = None
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = continue
+																kind: NoneType = None
+														keywords: list 
+												element: Continue 
+											orelse: list 
+									orelse: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Constant 
+														value: str = noBreak
+														kind: NoneType = None
+												keywords: list 
+									type_comment: NoneType = None
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = index
+											ctx: Store 
+									value: Constant 
+										value: int = 0
+										kind: NoneType = None
+									type_comment: NoneType = None
+								element: While 
+									test: BoolOp 
+										op: And 
+										values: list 
+											element: Compare 
+												left: Name 
+													id: str = index
+													ctx: Load 
+												ops: list 
+													element: Lt 
+												comparators: list 
+													element: Call 
+														func: Name 
+															id: str = len
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = vehicles
+																ctx: Load 
+														keywords: list 
+											element: Compare 
+												left: Subscript 
+													value: Name 
+														id: str = vehicles
+														ctx: Load 
+													slice: Index 
+														value: Name 
+															id: str = index
+															ctx: Load 
+													ctx: Load 
+												ops: list 
+													element: NotEq 
+												comparators: list 
+													element: Constant 
+														value: str = bus
+														kind: NoneType = None
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = index
+														ctx: Load 
+													element: Subscript 
+														value: Name 
+															id: str = vehicles
+															ctx: Load 
+														slice: Index 
+															value: Name 
+																id: str = index
+																ctx: Load 
+														ctx: Load 
+												keywords: list 
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Name 
+														id: str = doBreak
+														ctx: Load 
+													element: Compare 
+														left: Subscript 
+															value: Name 
+																id: str = vehicles
+																ctx: Load 
+															slice: Index 
+																value: Name 
+																	id: str = index
+																	ctx: Load 
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Constant 
+																value: str = car
+																kind: NoneType = None
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = breakWhile
+																kind: NoneType = None
+														keywords: list 
+												element: Break 
+											orelse: list 
+										element: If 
+											test: BoolOp 
+												op: And 
+												values: list 
+													element: Name 
+														id: str = doContinue
+														ctx: Load 
+													element: Compare 
+														left: Subscript 
+															value: Name 
+																id: str = vehicles
+																ctx: Load 
+															slice: Index 
+																value: Name 
+																	id: str = index
+																	ctx: Load 
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Constant 
+																value: str = car
+																kind: NoneType = None
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = continueWhile
+																kind: NoneType = None
+														keywords: list 
+												element: AugAssign 
+													target: Name 
+														id: str = index
+														ctx: Store 
+													op: Add 
+													value: Constant 
+														value: int = 1
+														kind: NoneType = None
+												element: Continue 
+											orelse: list 
+										element: AugAssign 
+											target: Name 
+												id: str = index
+												ctx: Store 
+											op: Add 
+											value: Constant 
+												value: int = 1
+												kind: NoneType = None
+									orelse: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Constant 
+														value: str = noBreakWhile
+														kind: NoneType = None
+												keywords: list 
+							orelse: list 
+							type_comment: NoneType = None
+						element: For 
+							target: Name 
+								id: str = vehicle
+								ctx: Store 
+							iter: Name 
+								id: str = vehicles
+								ctx: Load 
+							body: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = vehicle
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Constant 
+												value: str = bike
+												kind: NoneType = None
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = autoTester
+														ctx: Load 
+													attr: str = check
+													ctx: Load 
+												args: list 
+													element: Constant 
+														value: str = netherlands
+														kind: NoneType = None
+												keywords: list 
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Name 
+													id: str = vehicle
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Constant 
+														value: str = car
+														kind: NoneType = None
+											body: list 
+												element: Expr 
+													value: Call 
+														func: Attribute 
+															value: Name 
+																id: str = autoTester
+																ctx: Load 
+															attr: str = check
+															ctx: Load 
+														args: list 
+															element: Constant 
+																value: str = america
+																kind: NoneType = None
+														keywords: list 
+											orelse: list 
+												element: If 
+													test: Compare 
+														left: Name 
+															id: str = vehicle
+															ctx: Load 
+														ops: list 
+															element: Eq 
+														comparators: list 
+															element: Constant 
+																value: str = boat
+																kind: NoneType = None
+													body: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = autoTester
+																		ctx: Load 
+																	attr: str = check
+																	ctx: Load 
+																args: list 
+																	element: Constant 
+																		value: str = oceania
+																		kind: NoneType = None
+																keywords: list 
+													orelse: list 
+														element: Expr 
+															value: Call 
+																func: Attribute 
+																	value: Name 
+																		id: str = autoTester
+																		ctx: Load 
+																	attr: str = check
+																	ctx: Load 
+																args: list 
+																	element: Constant 
+																		value: str = anywhere
+																		kind: NoneType = None
+																keywords: list 
+							orelse: list 
+							type_comment: NoneType = None
+					orelse: list 
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = externalCounter1
+							ctx: Store 
+					value: Constant 
+						value: int = 0
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: With 
+					items: list 
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: Name 
+								id: str = contextManagerExample1
+								ctx: Store 
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = externalCounter1
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 1
+								kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = ctx1
+								kind: NoneType = None
+							element: Attribute 
+								value: Name 
+									id: str = contextManagerExample1
+									ctx: Load 
+								attr: str = counter
+								ctx: Load 
+							element: Name 
+								id: str = externalCounter1
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = externalCounter2
+							ctx: Store 
+					value: Constant 
+						value: int = 0
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: With 
+					items: list 
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: Name 
+								id: str = contextManagerExample2
+								ctx: Store 
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = externalCounter2
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 1
+								kind: NoneType = None
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = contextManagerExample2
+									ctx: Load 
+								attr: str = counter
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 100
+								kind: NoneType = None
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = externalCounter3
+									ctx: Store 
+							value: Constant 
+								value: int = 0
+								kind: NoneType = None
+							type_comment: NoneType = None
+						element: With 
+							items: list 
+								element: withitem 
+									context_expr: Call 
+										func: Name 
+											id: str = ContextManagerExample
+											ctx: Load 
+										args: list 
+										keywords: list 
+									optional_vars: Name 
+										id: str = contextManagerExample3
+										ctx: Store 
+							body: list 
+								element: AugAssign 
+									target: Name 
+										id: str = externalCounter3
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 1
+										kind: NoneType = None
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = contextManagerExample2
+											ctx: Load 
+										attr: str = counter
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 100
+										kind: NoneType = None
+								element: AugAssign 
+									target: Name 
+										id: str = externalCounter3
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 2
+										kind: NoneType = None
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = contextManagerExample3
+											ctx: Load 
+										attr: str = counter
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 200
+										kind: NoneType = None
+							type_comment: NoneType = None
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = ctx3
+										kind: NoneType = None
+									element: Attribute 
+										value: Name 
+											id: str = contextManagerExample3
+											ctx: Load 
+										attr: str = counter
+										ctx: Load 
+									element: Name 
+										id: str = externalCounter3
+										ctx: Load 
+								keywords: list 
+						element: AugAssign 
+							target: Name 
+								id: str = externalCounter2
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 2
+								kind: NoneType = None
+						element: AugAssign 
+							target: Attribute 
+								value: Name 
+									id: str = contextManagerExample2
+									ctx: Load 
+								attr: str = counter
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 200
+								kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = ctx2
+								kind: NoneType = None
+							element: Attribute 
+								value: Name 
+									id: str = contextManagerExample2
+									ctx: Load 
+								attr: str = counter
+								ctx: Load 
+							element: Name 
+								id: str = externalCounter2
+								ctx: Load 
+						keywords: list 
+				element: Try 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = externalCounter4
+									ctx: Store 
+							value: Constant 
+								value: int = 0
+								kind: NoneType = None
+							type_comment: NoneType = None
+						element: With 
+							items: list 
+								element: withitem 
+									context_expr: Call 
+										func: Name 
+											id: str = ContextManagerExample
+											ctx: Load 
+										args: list 
+										keywords: list 
+									optional_vars: Name 
+										id: str = contextManagerExample4
+										ctx: Store 
+							body: list 
+								element: AugAssign 
+									target: Name 
+										id: str = externalCounter4
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 1
+										kind: NoneType = None
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = contextManagerExample4
+											ctx: Load 
+										attr: str = counter
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 100
+										kind: NoneType = None
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = externalCounter5
+											ctx: Store 
+									value: Constant 
+										value: int = 0
+										kind: NoneType = None
+									type_comment: NoneType = None
+								element: With 
+									items: list 
+										element: withitem 
+											context_expr: Call 
+												func: Name 
+													id: str = ContextManagerExample
+													ctx: Load 
+												args: list 
+												keywords: list 
+											optional_vars: Name 
+												id: str = contextManagerExample5
+												ctx: Store 
+									body: list 
+										element: AugAssign 
+											target: Name 
+												id: str = externalCounter5
+												ctx: Store 
+											op: Add 
+											value: Constant 
+												value: int = 1
+												kind: NoneType = None
+										element: AugAssign 
+											target: Attribute 
+												value: Name 
+													id: str = contextManagerExample5
+													ctx: Load 
+												attr: str = counter
+												ctx: Store 
+											op: Add 
+											value: Constant 
+												value: int = 100
+												kind: NoneType = None
+										element: Raise 
+											exc: Call 
+												func: Name 
+													id: str = Exception
+													ctx: Load 
+												args: list 
+												keywords: list 
+											cause: NoneType = None
+										element: AugAssign 
+											target: Name 
+												id: str = externalCounter5
+												ctx: Store 
+											op: Add 
+											value: Constant 
+												value: int = 2
+												kind: NoneType = None
+										element: AugAssign 
+											target: Attribute 
+												value: Name 
+													id: str = contextManagerExample5
+													ctx: Load 
+												attr: str = counter
+												ctx: Store 
+											op: Add 
+											value: Constant 
+												value: int = 200
+												kind: NoneType = None
+									type_comment: NoneType = None
+								element: AugAssign 
+									target: Name 
+										id: str = externalCounter4
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 2
+										kind: NoneType = None
+								element: AugAssign 
+									target: Attribute 
+										value: Name 
+											id: str = contextManagerExample4
+											ctx: Load 
+										attr: str = counter
+										ctx: Store 
+									op: Add 
+									value: Constant 
+										value: int = 200
+										kind: NoneType = None
+							type_comment: NoneType = None
+					handlers: list 
+						element: ExceptHandler 
+							type: Name 
+								id: str = Exception
+								ctx: Load 
+							name: str = exception
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = autoTester
+												ctx: Load 
+											attr: str = check
+											ctx: Load 
+										args: list 
+											element: Constant 
+												value: str = ctx6
+												kind: NoneType = None
+											element: Name 
+												id: str = exception
+												ctx: Load 
+										keywords: list 
+					orelse: list 
+					finalbody: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = ctx5
+										kind: NoneType = None
+									element: Attribute 
+										value: Name 
+											id: str = contextManagerExample5
+											ctx: Load 
+										attr: str = counter
+										ctx: Load 
+									element: Name 
+										id: str = externalCounter5
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = autoTester
+										ctx: Load 
+									attr: str = check
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: str = ctx4
+										kind: NoneType = None
+									element: Attribute 
+										value: Name 
+											id: str = contextManagerExample4
+											ctx: Load 
+										attr: str = counter
+										ctx: Load 
+									element: Name 
+										id: str = externalCounter4
+										ctx: Load 
+								keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = iterationCount
+							ctx: Store 
+					value: Constant 
+						value: int = 0
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: With 
+					items: list 
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: Name 
+								id: str = contextManagerExample5
+								ctx: Store 
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: Name 
+								id: str = contextManagerExample6
+								ctx: Store 
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = iterationCount
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 1
+								kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = ctx7
+								kind: NoneType = None
+							element: Name 
+								id: str = iterationCount
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = contextManagerExample5
+									ctx: Load 
+								attr: str = counter
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = contextManagerExample6
+									ctx: Load 
+								attr: str = counter
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = iterationCount
+							ctx: Store 
+					value: Constant 
+						value: int = 0
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: With 
+					items: list 
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: NoneType = None
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: NoneType = None
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: NoneType = None
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: NoneType = None
+						element: withitem 
+							context_expr: Call 
+								func: Name 
+									id: str = ContextManagerExample
+									ctx: Load 
+								args: list 
+								keywords: list 
+							optional_vars: NoneType = None
+					body: list 
+						element: AugAssign 
+							target: Name 
+								id: str = iterationCount
+								ctx: Store 
+							op: Add 
+							value: Constant 
+								value: int = 1
+								kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: str = ctx8
+								kind: NoneType = None
+							element: Name 
+								id: str = iterationCount
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

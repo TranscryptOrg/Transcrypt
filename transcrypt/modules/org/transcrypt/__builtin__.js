@@ -677,6 +677,27 @@ export function min (nrOrSeq) {
     return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);       
 };
 
+// Integer to binary
+export function bin (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const bin_val = Math.abs(parseInt(nbr)).toString(2);
+    return sign.concat('0b', bin_val);
+};
+
+// Integer to octal
+export function oct (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const oct_val = Math.abs(parseInt(nbr)).toString(8);
+    return sign.concat('0o', oct_val);
+};
+
+// Integer to hexadecimal
+export function hex (nbr) {
+    const sign = nbr<0 ? '-' : '';
+    const hex_val = Math.abs(parseInt(nbr)).toString(16);
+    return sign.concat('0x', hex_val);
+};
+
 // Absolute value
 __pragma__ ('ifdef', '__complex__')
 export function abs (x) {
@@ -916,8 +937,12 @@ export function sum (iterable) {
 }
 
 // Enumerate method, returning a zipped list
-export function enumerate (iterable) {
-    return zip (range (len (iterable)), iterable);
+export function enumerate(iterable, start = 0) {
+    if (start.hasOwnProperty("__kwargtrans__")) {
+        // start was likely passed in as kwarg
+        start = start['start'];
+    }
+    return zip(range(start, len(iterable) + start), iterable);
 }
 
 // Shallow and deepcopy
@@ -1387,14 +1412,17 @@ String.prototype.capitalize = function () {
     return this.charAt (0).toUpperCase () + this.slice (1);
 };
 
-String.prototype.endswith = function (suffix) {
+String.prototype.endswith = function (suffix, start=0, end) {
+    if (end === undefined) {end = this.length}
+    const str = this.slice(start, end)
+
     if (suffix instanceof Array) {
         for (var i=0;i<suffix.length;i++) {
-            if (this.slice (-suffix[i].length) == suffix[i])
+            if (str.slice (-suffix[i].length) === suffix[i])
                 return true;
         }
     } else
-        return suffix == '' || this.slice (-suffix.length) == suffix;
+        return suffix === '' || str.slice (-suffix.length) === suffix;
     return false;
 };
 
@@ -1509,13 +1537,13 @@ __pragma__ ('ifdef', '__sform__')
             }
             else {              // Key is a string
                 var attr = undefined;
-                var idx = key.indexOf ('.');
+                var idx = ("" + key) .indexOf ('.');    // ??? Why is conversion to string suddenly needed?
                 if (idx != -1) {
                     attr = key.substring (idx + 1);
                     key = key.substring (0, idx);
                 }
                 else {
-                    idx = key.indexOf ('[');
+                    idx = ("" + key) .indexOf ('[');    // ??? Why is conversion to string suddenly needed?
                     if (idx != -1) {
                         attr = key.substring (idx + 1).slice (0, -1);
                         key = key.substring (0, idx);
@@ -1528,7 +1556,7 @@ __pragma__ ('ifdef', '__sform__')
                 else {
                     for (var index = 0; index < args.length; index++) {
                         // Find first 'dict' that has that key and the right field
-                        if (typeof args [index] == 'object' && args [index][key] !== undefined) {
+                        if (typeof args [index] == 'object' && args [index] != null && args [index][key] !== undefined) {   // Why is check for null suddenly needed?
                             // Return that field field
                             if (attr) {
                                 value = args [index][key][attr];
@@ -1620,7 +1648,15 @@ String.prototype.lower = function () {
 };
 
 String.prototype.py_replace = function (old, aNew, maxreplace) {
-    return this.split (old, maxreplace) .join (aNew);
+    if (maxreplace === undefined || maxreplace < 0) {
+        return this.split(old).join(aNew);
+    } else if (maxreplace === 0) {
+        return this;
+    } else {
+        const pre = this.split(old, maxreplace).join(aNew);
+        const rest = this.slice(this.split(old, maxreplace).join(old).length + 1)
+        return pre.concat(rest.length>0 ? aNew : '', rest);
+    }
 };
 
 String.prototype.lstrip = function () {
@@ -1682,16 +1718,20 @@ String.prototype.py_split = function (sep, maxsplit) {  // Combination of genera
     }
 };
 
-String.prototype.startswith = function (prefix) {
+String.prototype.startswith = function (prefix, start=0, end) {
+    if (end === undefined) {end = this.length}
+    const str = this.slice(start, end)
+
     if (prefix instanceof Array) {
-        for (var i=0;i<prefix.length;i++) {
-            if (this.indexOf (prefix [i]) == 0)
+        for (let i=0;i<prefix.length;i++) {
+            if (str.indexOf (prefix [i]) === 0)
                 return true;
         }
-    } else
-        return this.indexOf (prefix) == 0;
+    } else {
+        return str.indexOf(prefix) === 0;
+    }
     return false;
-};
+}
 
 String.prototype.strip = function () {
     return this.trim ();

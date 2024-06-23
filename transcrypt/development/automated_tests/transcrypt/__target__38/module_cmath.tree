@@ -1,0 +1,1304 @@
+file: Module 
+	body: list 
+		element: ImportFrom 
+			module: str = org.transcrypt.stubs.browser
+			names: list 
+				element: alias 
+					name: str = __pragma__
+					asname: NoneType = None
+			level: int = 0
+		element: ImportFrom 
+			module: str = cmath
+			names: list 
+				element: alias 
+					name: str = *
+					asname: NoneType = None
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = twoPi
+					ctx: Store 
+			value: BinOp 
+				left: Constant 
+					value: int = 2
+					kind: NoneType = None
+				op: Mult 
+				right: Name 
+					id: str = pi
+					ctx: Load 
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = nDecs
+					ctx: Store 
+			value: Constant 
+				value: int = 5
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Constant 
+						value: str = opov
+						kind: NoneType = None
+				keywords: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = phase
+									ctx: Load 
+								args: list 
+									element: BinOp 
+										left: Constant 
+											value: int = 1
+											kind: NoneType = None
+										op: Add 
+										right: Constant 
+											value: complex = 1j
+											kind: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aPolar
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = polar
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Constant 
+									value: int = 3
+									kind: NoneType = None
+								op: Add 
+								right: Constant 
+									value: complex = 5j
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Subscript 
+										value: Name 
+											id: str = aPolar
+											ctx: Load 
+										slice: Index 
+											value: Constant 
+												value: int = 0
+												kind: NoneType = None
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Subscript 
+								value: Name 
+									id: str = aPolar
+									ctx: Load 
+								slice: Index 
+									value: Constant 
+										value: int = 1
+										kind: NoneType = None
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aRect
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = rect
+							ctx: Load 
+						args: list 
+							element: Starred 
+								value: Name 
+									id: str = aPolar
+									ctx: Load 
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aRect
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aRect
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anExp
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = exp
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: UnaryOp 
+									op: USub 
+									operand: Constant 
+										value: float = 2.2
+										kind: NoneType = None
+								op: Sub 
+								right: Constant 
+									value: complex = 3.3j
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExp
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExp
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aLog
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = log
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anExp
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLog
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLog
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anExp10
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = aLog
+							ctx: Load 
+						op: Pow 
+						right: Constant 
+							value: int = 10
+							kind: NoneType = None
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExp10
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExp10
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aLog10
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = log10
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anExp10
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLog10
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLog10
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anExpRect
+							ctx: Store 
+					value: BinOp 
+						left: Name 
+							id: str = aLog
+							ctx: Load 
+						op: Pow 
+						right: Name 
+							id: str = aRect
+							ctx: Load 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExpRect
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anExpRect
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aLogRect
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = log
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anExpRect
+								ctx: Load 
+							element: Name 
+								id: str = aRect
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLogRect
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aLogRect
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aSqrt
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = sqrt
+							ctx: Load 
+						args: list 
+							element: Constant 
+								value: complex = 1j
+								kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSqrt
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSqrt
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = sqrt
+									ctx: Load 
+								args: list 
+									element: Constant 
+										value: int = 4
+										kind: NoneType = None
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anotherSqrt
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = sqrt
+							ctx: Load 
+						args: list 
+							element: UnaryOp 
+								op: USub 
+								operand: Constant 
+									value: int = 4
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anotherSqrt
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anotherSqrt
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAsin
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = asin
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Constant 
+									value: int = 1
+									kind: NoneType = None
+								op: Add 
+								right: Constant 
+									value: complex = 2j
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAsin
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAsin
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAcos
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = acos
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: UnaryOp 
+									op: USub 
+									operand: Constant 
+										value: int = 2
+										kind: NoneType = None
+								op: Add 
+								right: Constant 
+									value: complex = 3j
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAcos
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAcos
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAtan
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = atan
+							ctx: Load 
+						args: list 
+							element: BinOp 
+								left: Constant 
+									value: int = 3
+									kind: NoneType = None
+								op: Sub 
+								right: Constant 
+									value: complex = 4j
+									kind: NoneType = None
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAtan
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAtan
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aSin
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = sin
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAsin
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSin
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSin
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aCos
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = cos
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAcos
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aCos
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aCos
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aTan
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = tan
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAtan
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aTan
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aTan
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAsinh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = asinh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aCos
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAsinh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAsinh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAcosh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = acosh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aSin
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAcosh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAcosh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = anAtanh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = atanh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = aTan
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAtanh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = anAtanh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+									element: Name 
+										id: str = nDecs
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aSinh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = sinh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAsinh
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSinh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aSinh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aCosh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = cosh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAcosh
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aCosh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aCosh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = aTanh
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = tanh
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = anAtanh
+								ctx: Load 
+						keywords: list 
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aTanh
+											ctx: Load 
+										attr: str = real
+										ctx: Load 
+								keywords: list 
+							element: Call 
+								func: Name 
+									id: str = round
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = aTanh
+											ctx: Load 
+										attr: str = imag
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

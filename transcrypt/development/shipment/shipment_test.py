@@ -9,6 +9,10 @@ import traceback
 import selenium
 import selenium.webdriver.chrome.options
 import pathlib
+import subprocess
+
+from selenium.webdriver.common.by import By
+
 
 # ======== Command args singleton
 
@@ -23,6 +27,7 @@ class CommandArgs:
         self.argParser.add_argument ('-b', '--blind', help = 'don\'t start browser', action = 'store_true')
         
         self.argParser.add_argument ('-u', '--unattended', help = 'unattended mode', action = 'store_true')
+        self.argParser.add_argument ('-t', '--transcom', help = 'transpile command') 
 
         self.__dict__.update (self.argParser.parse_args () .__dict__)
         
@@ -41,9 +46,10 @@ class BrowserController:
             self.options.add_argument ('--no-sandbox')        # Bypass OS security model
             self.options.add_argument ('--disable-gpu')       # Applicable to windows OS only
             self.options.add_argument ('disable-infobars')
-            self.options.add_argument ('--disable-extensions')    
+            self.options.add_argument ('--disable-extensions')
+            self.options.add_argument ('--disable-web-security')
                 
-        self.webDriver = selenium.webdriver.Chrome (chrome_options = self.options)
+        self.webDriver = selenium.webdriver.Chrome (options = self.options)
         self.nrOfTabs = 0
         
     def waitForNewTab (self):
@@ -51,7 +57,6 @@ class BrowserController:
             time.sleep (0.5)
         self.nrOfTabs = len (self.webDriver.window_handles)
                 
-        
     def open (self, url, run):
         print (f'Browser controller is opening URL: {url}')
     
@@ -81,7 +86,7 @@ class BrowserController:
 
         if run:
             while (True):
-                self.message = self.webDriver.find_element_by_id ('message')
+                self.message = self.webDriver.find_element(By.ID, 'message')
                 if 'failed' in self.message.text or 'succeeded' in self.message.text:
                     break
                 time.sleep (0.5)
@@ -121,26 +126,37 @@ pythonServerUrl = host + pythonServerPort
 parcelServerUrl = host + parcelServerPort
 nodeServerUrl = host + nodeServerPort
 
-transpileCommand = 'transcrypt' if commandArgs.inst else 'run_transcrypt'
-                
 shipDir = os.path.dirname (os.path.abspath (__file__)) .replace ('\\', '/')
 appRootDir = '/'.join  (shipDir.split ('/')[ : -2])
 
-print (f'\nApplication root directory: {appRootDir}\n')
+transpileCommand = commandArgs.transcom if commandArgs.transcom else 'ts' if commandArgs.inst else f'/{appRootDir}/ts'              
 
+print (f'\nApplication root directory: {appRootDir}\n')
 
 def getAbsPath (relPath):
     return '{}/{}'.format (appRootDir, relPath)
 
 os.system ('cls' if os.name == 'nt' else 'clear')
+os.system (f'killall node')
         
 # ---- Start an http server in the Transcryp/transcrypt directory
 
+print (appRootDir)
+
 if not commandArgs.blind:
+    # command = f'python -m http.server --directory {appRootDir}'
+    command = f'python3 -m http.server --directory {appRootDir}'
+
     if commandArgs.unattended:
-        os.system (f'python -m http.server --directory {appRootDir} &')
+        os.system (f'{command} &')
     else:
-        os.system (f'start python -m http.server --directory {appRootDir}')
+        os.system (f'konsole --new-tab --hold -e "bash -ic \'{command}\'"  &')
+
+    '''
+    If 'Address already in use' do:
+        ps -fA | grep python
+        kill <process number>
+    '''
 
 # ---- Allow visual check of all command line options
 
@@ -148,7 +164,7 @@ os.system (f'{transpileCommand} -h')
    
 # ======== Individual test function
 
-def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = False, parcelJs = False, build = True, pause = 0, needsAttention = False):
+def test (relSourcePrepath, run, extraSwitches, outputPrename = '', nodeJs = False, parcelJs = False, build = True, pause = 0, needsAttention = False):
     if commandArgs.unattended and needsAttention:
         return  # This test shouldn't be done, since it can't run unattended
             
@@ -164,15 +180,14 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     moduleName = sourcePrepathSplit [-1]
     targetDir = f'{sourceDir}/__target__'
     targetPrepath = f'{targetDir}/{moduleName}'
-    messagePrepath = f'{targetDir}/{messagePrename}'
+    outputPath = f'{targetDir}/{outputPrename}.out'
     
     # ---- If there are relevant console messages of the compilation process,
     #       like with the static typechecking tests, write them into a file that can be served for a visual check
     
     if not os.path.exists (targetDir):
-        os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen here
-    redirect = f' > {messagePrepath}.out' if messagePrename else ''
-    
+        os.makedirs (targetDir) # Transcrypt will make targetDir too late, so it has to happen heree
+
     # ---- Default switches
     
     defaultSwitches = '-da -sf -de -m -n '
@@ -191,10 +206,22 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
     if parcelJs:
         origDir = os.getcwd ()
         os.chdir (sourceDir)
-        os.system (f'start cmd /k node test {parcelServerPort}')
+        os.system (f'node test {parcelServerPort} &')
         os.chdir (origDir)
     else:
-        os.system (f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}{redirect}')
+        command = f'{transpileCommand} {defaultSwitches}{extraSwitches}{sourcePrepath}'
+        if outputPrename:
+            '''
+            Calling subprocess.check_output while outputFile opened in __target__ folder
+            fails without raising an exception, probably a bug in Python.
+            So we use variable 'output' as intermediate storage.
+            '''
+            output = subprocess.check_output (command, universal_newlines = True, shell = True)
+            with open (outputPath, 'w') as outputFile:
+                print (output, file = outputFile)
+        else:
+            subprocess.run (command, shell = True)
+        
     
     # ---- If it has to run on node, apply rollup to obtain monolith, since node doesn't support named imports and exports
     
@@ -208,10 +235,12 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
             time.sleep (20)
             url = parcelServerUrl
         elif nodeJs:
-            os.system (f'start cmd /k node {targetPrepath}.bundle.js {nodeServerPort}')
+            os.system (f'chmod 777 {targetPrepath}.bundle.js')
+            os.system (f'node {targetPrepath}.bundle.js {nodeServerPort} &')
             time.sleep (5)
             url = nodeServerUrl
         else:
+            time.sleep (5)
             url = f'{pythonServerUrl}/{relSourcePrepath}.html'
             
         success = browserController.open (url, run)
@@ -226,18 +255,20 @@ def test (relSourcePrepath, run, extraSwitches, messagePrename = '', nodeJs = Fa
 for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('development/automated_tests/hello/autotest', True, switches)
     test ('development/automated_tests/transcrypt/autotest', True, switches + '-c -xr -xg ')
+
     test ('development/automated_tests/time/autotest', True, switches, needsAttention = True)
     test ('development/automated_tests/re/autotest', True, switches)
     
     test ('development/manual_tests/async_await/test', False, switches)
     test ('development/manual_tests/import_export_aliases/test', False, switches + '-am ')
     test ('development/manual_tests/module_random/module_random', False, switches)
-    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', messagePrename = 'static_types')
+    test ('development/manual_tests/static_types/static_types', False, switches + '-ds -dc ', outputPrename = 'static_types')
     test ('development/manual_tests/transcrypt_and_python_results_differ/results', False, switches)
     test ('development/manual_tests/transcrypt_only/transcrypt_only', False, switches)
-    
+
+    # test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)  # ??? Must be before nodejs_demo, why?  # BROKEN - needs update to Parcel V2
     test ('demos/nodejs_demo/nodejs_demo', False, switches, nodeJs = True)
-    test ('demos/parcel_demo/test_shipment', False, switches, parcelJs = True)
+
     test ('demos/terminal_demo/terminal_demo', False, switches, needsAttention = True)  
     test ('demos/hello/hello', False, switches, needsAttention = False)
     test ('demos/jquery_demo/jquery_demo', False, switches)
@@ -255,7 +286,7 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('demos/turtle_demos/mondrian', False, switches, pause = 2)
     test ('demos/turtle_demos/mandala', False, switches, pause = 2)
     
-    # test ('demos/cyclejs_demo/cyclejs_demo', False, switches)
+    # test ('demos/cyclejs_demo/cyclejs_demo', False, switches)     # Broken
     test ('demos/cyclejs_demo/cyclejs_http_demo', False, switches)
     test ('demos/cyclejs_demo/component_demos/isolated_bmi_slider/bmi', False, switches)
     test ('demos/cyclejs_demo/component_demos/labeled_slider/labeled_slider', False, switches)
@@ -268,8 +299,8 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
     test ('tutorials/baseline/bl_042_for_nested/for_nested', False, switches)
     test ('tutorials/baseline/bl_045_while_simple/while_simple', False, switches, needsAttention = True)
 
-    test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', messagePrename = 'static_typing')
-    
+    test ('tutorials/static_typing/static_typing', False, switches + '-c -ds ', outputPrename = 'static_typing')
+
     if relSourcePrepathsOfErrors:
         print ('\n\n!!!!!!!!!!!!!!!!!!!!\n')
         for relSourcePrepathOfError in relSourcePrepathsOfErrors:
@@ -295,3 +326,4 @@ for switches in (('', '-f ') if commandArgs.fcall else ('',)):
                 
         print ('\nSHIPMENT TEST SUCCEEDED\n')
         sys.exit (0)
+        

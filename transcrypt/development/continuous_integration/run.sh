@@ -22,4 +22,4 @@ export PATH=$PATH:./transcrypt
 
 # Run the shipment test
 
-python ./transcrypt/development/shipment/shipment_test.py --unattended
+python ./transcrypt/development/shipment/shipment_test.py --unattended --transcom ts_travis

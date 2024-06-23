@@ -1,0 +1,22 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = f
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Constant 
+						value: str = London is the town for me
+
+						kind: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

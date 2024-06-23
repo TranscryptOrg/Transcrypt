@@ -1,0 +1,446 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = run
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = autoTester
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = squares
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Name 
+								id: str = i
+								ctx: Load 
+							op: Mult 
+							right: Name 
+								id: str = i
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = i
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Constant 
+											value: int = 10
+											kind: NoneType = None
+									keywords: list 
+								ifs: list 
+									element: BinOp 
+										left: Name 
+											id: str = i
+											ctx: Load 
+										op: Mod 
+										right: Constant 
+											value: int = 2
+											kind: NoneType = None
+								is_async: int = 0
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = squares
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tuples
+							ctx: Store 
+					value: ListComp 
+						elt: Tuple 
+							elts: list 
+								element: Name 
+									id: str = x
+									ctx: Load 
+								element: Name 
+									id: str = y
+									ctx: Load 
+								element: Name 
+									id: str = z
+									ctx: Load 
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Constant 
+											value: int = 100
+											kind: NoneType = None
+										element: Constant 
+											value: int = 200
+											kind: NoneType = None
+										element: Constant 
+											value: int = 300
+											kind: NoneType = None
+										element: Constant 
+											value: int = 400
+											kind: NoneType = None
+										element: Constant 
+											value: int = 500
+											kind: NoneType = None
+										element: Constant 
+											value: int = 600
+											kind: NoneType = None
+										element: Constant 
+											value: int = 700
+											kind: NoneType = None
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+							element: comprehension 
+								target: Name 
+									id: str = y
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Constant 
+											value: int = 10
+											kind: NoneType = None
+										element: Constant 
+											value: int = 20
+											kind: NoneType = None
+										element: Constant 
+											value: int = 30
+											kind: NoneType = None
+										element: Constant 
+											value: int = 40
+											kind: NoneType = None
+										element: Constant 
+											value: int = 50
+											kind: NoneType = None
+										element: Constant 
+											value: int = 60
+											kind: NoneType = None
+										element: Constant 
+											value: int = 70
+											kind: NoneType = None
+									ctx: Load 
+								ifs: list 
+									element: Compare 
+										left: Constant 
+											value: int = 20
+											kind: NoneType = None
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = y
+												ctx: Load 
+											element: Constant 
+												value: int = 60
+												kind: NoneType = None
+								is_async: int = 0
+							element: comprehension 
+								target: Name 
+									id: str = z
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Constant 
+											value: int = 1
+											kind: NoneType = None
+										element: Constant 
+											value: int = 2
+											kind: NoneType = None
+										element: Constant 
+											value: int = 3
+											kind: NoneType = None
+										element: Constant 
+											value: int = 4
+											kind: NoneType = None
+										element: Constant 
+											value: int = 5
+											kind: NoneType = None
+										element: Constant 
+											value: int = 6
+											kind: NoneType = None
+										element: Constant 
+											value: int = 7
+											kind: NoneType = None
+									ctx: Load 
+								ifs: list 
+									element: Compare 
+										left: Constant 
+											value: int = 200
+											kind: NoneType = None
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = x
+												ctx: Load 
+											element: Constant 
+												value: int = 600
+												kind: NoneType = None
+									element: Compare 
+										left: Constant 
+											value: int = 2
+											kind: NoneType = None
+										ops: list 
+											element: Lt 
+											element: Lt 
+										comparators: list 
+											element: Name 
+												id: str = z
+												ctx: Load 
+											element: Constant 
+												value: int = 6
+												kind: NoneType = None
+								is_async: int = 0
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tuples
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = tricky
+							ctx: Store 
+					value: ListComp 
+						elt: Tuple 
+							elts: list 
+								element: BinOp 
+									left: Constant 
+										value: int = 2
+										kind: NoneType = None
+									op: Mult 
+									right: Name 
+										id: str = x
+										ctx: Load 
+								element: BinOp 
+									left: Constant 
+										value: int = 3
+										kind: NoneType = None
+									op: Mult 
+									right: Name 
+										id: str = y
+										ctx: Load 
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Tuple 
+									elts: list 
+										element: Name 
+											id: str = x
+											ctx: Store 
+										element: Name 
+											id: str = y
+											ctx: Store 
+									ctx: Store 
+								iter: Tuple 
+									elts: list 
+										element: Tuple 
+											elts: list 
+												element: Constant 
+													value: int = 10
+													kind: NoneType = None
+												element: Constant 
+													value: int = 11
+													kind: NoneType = None
+											ctx: Load 
+										element: Tuple 
+											elts: list 
+												element: Constant 
+													value: int = 20
+													kind: NoneType = None
+												element: Constant 
+													value: int = 21
+													kind: NoneType = None
+											ctx: Load 
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = tricky
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = nested
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Constant 
+								value: int = 2
+								kind: NoneType = None
+							op: Mult 
+							right: Name 
+								id: str = x
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: ListComp 
+									elt: BinOp 
+										left: Name 
+											id: str = x
+											ctx: Load 
+										op: Mult 
+										right: Name 
+											id: str = x
+											ctx: Load 
+									generators: list 
+										element: comprehension 
+											target: Name 
+												id: str = x
+												ctx: Store 
+											iter: Call 
+												func: Name 
+													id: str = range
+													ctx: Load 
+												args: list 
+													element: Constant 
+														value: int = 3
+														kind: NoneType = None
+												keywords: list 
+											ifs: list 
+											is_async: int = 0
+								ifs: list 
+								is_async: int = 0
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = nested
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = a
+							ctx: Store 
+					value: Constant 
+						value: int = 100
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = x
+							ctx: Store 
+					value: Constant 
+						value: int = 5
+						kind: NoneType = None
+					type_comment: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = scopeTest
+							ctx: Store 
+					value: ListComp 
+						elt: BinOp 
+							left: Name 
+								id: str = x
+								ctx: Load 
+							op: Add 
+							right: Name 
+								id: str = a
+								ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = range
+										ctx: Load 
+									args: list 
+										element: Constant 
+											value: int = 5
+											kind: NoneType = None
+									keywords: list 
+								ifs: list 
+								is_async: int = 0
+					type_comment: NoneType = None
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = x
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = autoTester
+								ctx: Load 
+							attr: str = check
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = scopeTest
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

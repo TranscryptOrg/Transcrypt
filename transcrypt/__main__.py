@@ -1,6 +1,6 @@
 # ====== Legal notices
 #
-# Copyright 2014, 2015, 2016 Jacques de Hooge, GEATEC engineering, www.geatec.com
+# Copyright 2014 - 2023 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,21 +30,12 @@ modulesDir = '{}/modules'.format (transpilerDir)                                
 # Use / rather than \ pervasively
 sys.path = [item.replace ('\\', '/') for item in sys.path]
 
-'''
-# Leave out Transcrypt dir to prevent importing modules root if there's a module by that name
-# This is needed for CPython and it won't hurt for Transcrypt 
-try:
-    sys.path.remove (transpilerDir)
-except:
-    pass
-'''
-
 # Unload org from a packages dir, if it happens to be there in the CPython installation
 sys.modules.pop ('org', None)   
 
 # Transcrypt needs to find modulesDir before CPython modules, so it will favor Transcrypt modules
 candidateTranspilationDirs = [modulesDir] + sys.path
-lowerSkipExtensions = ('.zip', '/dlls', '/lib', '/python37')    # !!! Generalize to all platforms and Python versions
+lowerSkipExtensions = ('.zip', '/dlls', '/lib', '/python37', '/python38', '/python39')    # !!! Generalize to all platforms and Python versions
 
 transpilationDirs = []
 for candidateTranspilationDir in candidateTranspilationDirs:
@@ -55,8 +46,8 @@ for candidateTranspilationDir in candidateTranspilationDirs:
     else:
         transpilationDirs.append (candidateTranspilationDir)
 
-# The following imports are need by Transcrypt itself, not by transpiled or executed user code
-# The following imports will either reload the previously unloaded org or load org from different location
+# The following imports are needed by Transcrypt itself, not by transpiled or executed user code
+# They will either reload the previously unloaded org or load org from different location
 # CPython needs to find modulesDir after CPython modules, so it will favor CPython modules
 sys.path.append (modulesDir)      
 from org.transcrypt import utils
@@ -107,7 +98,7 @@ def main ():
                 utils.log (True, '{}\n\n', bar)
                 
         if utils.commandArgs.star:
-            webbrowser.open ('https://github.com/qquick/Transcrypt')
+            webbrowser.open ('https://github.com/TranscryptOrg/Transcrypt')
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already

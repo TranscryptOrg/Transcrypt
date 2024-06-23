@@ -1,0 +1,21 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = anA
+					ctx: Store 
+			value: Constant 
+				value: str = a
+				kind: NoneType = None
+			type_comment: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = aB
+					ctx: Store 
+			value: Constant 
+				value: str = b
+				kind: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 

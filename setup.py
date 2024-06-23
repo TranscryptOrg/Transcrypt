@@ -1,9 +1,8 @@
 import os
 import sys
+from setuptools import setup
 
 sys.path.append ('transcrypt/modules/org/transcrypt')
-
-from setuptools import setup
 
 def read (*paths):
 	with open (os.path.join (*paths), 'r') as aFile:
@@ -11,16 +10,17 @@ def read (*paths):
 
 setup (
 	name = 'Transcrypt',
-	version = '3.7.16',
+	version = '3.9.2',
 	description = 'Python to JavaScript transpiler, supporting multiple inheritance and generating lean, highly readable code',
 	long_description = (
 		read ('README.rst')
 	),
-	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django'],
-	url = 'http://www.transcrypt.org',	
+	long_description_content_type = 'text/x-rst',
+	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django', 'flask', 'react'],
+	url = 'https://www.transcrypt.org',
 	license = 'Apache 2.0',
 	author = 'Jacques de Hooge',
-	author_email = 'jacques.de.hooge@qquick.org',
+	author_email = 'info@transcrypt.org',
 	packages = ['transcrypt'],
 	install_requires = [
 		'mypy'
@@ -38,6 +38,6 @@ setup (
 		'License :: OSI Approved :: Apache Software License',
 		'Topic :: Software Development :: Libraries :: Python Modules',
 		'Operating System :: OS Independent',
-		'Programming Language :: Python :: 3.7',
+		'Programming Language :: Python :: 3.9',
 	],
 )

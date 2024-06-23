@@ -10,10 +10,7 @@ import classes
 import complex_numbers
 import conditional_expressions
 import control_structures
-
-if __pragma__ ('defined', '__py3.7__'):
-    import dashed_numbers
-
+import dashed_numbers
 import data_classes
 import data_structures
 import decorators

@@ -13,7 +13,7 @@ for fixedSeed in (False, True):
 
     output ('------ {} ------'.format ('fixed seed' if fixedSeed else 'auto seed'))
         
-    output ('--- randint ---')
+    output ('--- randint in [10, 20] ---')
     for i in range (20):
         output (randint (10, 20))
 

@@ -1,0 +1,47 @@
+file: Module 
+	body: list 
+		element: FunctionDef 
+			name: str = normalize
+			args: arguments 
+				posonlyargs: list 
+				args: list 
+					element: arg 
+						arg: str = form
+						annotation: NoneType = None
+						type_comment: NoneType = None
+					element: arg 
+						arg: str = unistr
+						annotation: NoneType = None
+						type_comment: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Call 
+						func: Attribute 
+							value: Attribute 
+								value: Attribute 
+									value: Name 
+										id: str = String
+										ctx: Load 
+									attr: str = prototype
+									ctx: Load 
+								attr: str = normalize
+								ctx: Load 
+							attr: str = call
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = unistr
+								ctx: Load 
+							element: Name 
+								id: str = form
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+			type_comment: NoneType = None
+	type_ignores: list 
