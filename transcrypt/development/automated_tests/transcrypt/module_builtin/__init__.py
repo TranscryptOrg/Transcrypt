@@ -123,6 +123,16 @@ def run (autoTester):
     autoTester.check(replace_test.replace("c", "x", 2))
     autoTester.check(replace_test.replace("c", "x", 10))
 
+    autoTester.check(bin(42))
+    autoTester.check(oct(42))
+    autoTester.check(hex(42))
+    autoTester.check(bin(0))
+    autoTester.check(oct(0))
+    autoTester.check(hex(0))
+    autoTester.check(bin(-42))
+    autoTester.check(oct(-42))
+    autoTester.check(hex(-42))
+
     string_test = "abcdefghijkl"
     autoTester.check(string_test.startswith(""))
     autoTester.check(string_test.startswith("abcd"))
