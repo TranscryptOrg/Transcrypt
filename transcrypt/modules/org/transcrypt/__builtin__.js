@@ -937,8 +937,12 @@ export function sum (iterable) {
 }
 
 // Enumerate method, returning a zipped list
-export function enumerate (iterable) {
-    return zip (range (len (iterable)), iterable);
+export function enumerate(iterable, start = 0) {
+    if (start.hasOwnProperty("__kwargtrans__")) {
+        // start was likely passed in as kwarg
+        start = start['start'];
+    }
+    return zip(range(start, len(iterable) + start), iterable);
 }
 
 // Shallow and deepcopy
@@ -1641,7 +1645,15 @@ String.prototype.lower = function () {
 };
 
 String.prototype.py_replace = function (old, aNew, maxreplace) {
-    return this.split (old, maxreplace) .join (aNew);
+    if (maxreplace === undefined || maxreplace < 0) {
+        return this.split(old).join(aNew);
+    } else if (maxreplace === 0) {
+        return this;
+    } else {
+        const pre = this.split(old, maxreplace).join(aNew);
+        const rest = this.slice(this.split(old, maxreplace).join(old).length + 1)
+        return pre.concat(rest.length>0 ? aNew : '', rest);
+    }
 };
 
 String.prototype.lstrip = function () {
