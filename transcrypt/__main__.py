@@ -1,6 +1,6 @@
 # ====== Legal notices
 #
-# Copyright 2014, 2015, 2016 Jacques de Hooge, GEATEC engineering, www.geatec.com
+# Copyright 2014 - 2023 Jacques de Hooge, GEATEC engineering, www.geatec.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ def main ():
                 utils.log (True, '{}\n\n', bar)
                 
         if utils.commandArgs.star:
-            webbrowser.open ('https://github.com/qquick/Transcrypt')
+            webbrowser.open ('https://github.com/TranscryptOrg/Transcrypt')
             
         if not utils.commandArgs.source:
             return setExitCode (exitSourceNotGiven) # Should never be here, dealth with by command arg checks already

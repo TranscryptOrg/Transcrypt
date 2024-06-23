@@ -1,3 +1,6 @@
+# ====== IDE Settings
+.idea/
+
 # ====== File extensions anywhere
 *.nogit
 *.pyc
@@ -15,6 +18,7 @@ __pycache__/
 dist/
 build/
 node_modules/
+venv/
 
 # ======== Directories at specific locations
 transcrypt/docs/sphinx/_build/
