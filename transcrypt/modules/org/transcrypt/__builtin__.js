@@ -1412,14 +1412,17 @@ String.prototype.capitalize = function () {
     return this.charAt (0).toUpperCase () + this.slice (1);
 };
 
-String.prototype.endswith = function (suffix) {
+String.prototype.endswith = function (suffix, start=0, end) {
+    if (end === undefined) {end = this.length}
+    const str = this.slice(start, end)
+
     if (suffix instanceof Array) {
         for (var i=0;i<suffix.length;i++) {
-            if (this.slice (-suffix[i].length) == suffix[i])
+            if (str.slice (-suffix[i].length) === suffix[i])
                 return true;
         }
     } else
-        return suffix == '' || this.slice (-suffix.length) == suffix;
+        return suffix === '' || str.slice (-suffix.length) === suffix;
     return false;
 };
 
@@ -1715,16 +1718,20 @@ String.prototype.py_split = function (sep, maxsplit) {  // Combination of genera
     }
 };
 
-String.prototype.startswith = function (prefix) {
+String.prototype.startswith = function (prefix, start=0, end) {
+    if (end === undefined) {end = this.length}
+    const str = this.slice(start, end)
+
     if (prefix instanceof Array) {
-        for (var i=0;i<prefix.length;i++) {
-            if (this.indexOf (prefix [i]) == 0)
+        for (let i=0;i<prefix.length;i++) {
+            if (str.indexOf (prefix [i]) === 0)
                 return true;
         }
-    } else
-        return this.indexOf (prefix) == 0;
+    } else {
+        return str.indexOf(prefix) === 0;
+    }
     return false;
-};
+}
 
 String.prototype.strip = function () {
     return this.trim ();
