@@ -7,8 +7,6 @@ prune build
 prune dist
 prune transcrypt.egg-info
 prune venv
-prune transcrypt/ts
-prune transcrypt/ts.bat
 prune transcrypt/ts_travis
 prune transcrypt/development/attic
 prune transcrypt/development/docs
