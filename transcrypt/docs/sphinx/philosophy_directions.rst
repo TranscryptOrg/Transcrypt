@@ -39,7 +39,7 @@ If these developers are confronted with the need to develop a new, large, comple
 Other developers
 ~~~~~~~~~~~~~~~~
 
-In this group will be experienced developers who are familiar with C++, C, C#, Java or any other language. But it also includes students of any kind, being serious about a professional IT carreer, but not yet there.
+In this group will be experienced developers who are familiar with C++, C, C#, Java or any other language. But it also includes students of any kind, being serious about a professional IT career, but not yet there.
 
 Programming for the web may be new to them, and rather than following the lowest common denominator, they may just as well enter this new world the proper way, respecting the constitution of software design: modularity and thin interfaces, learning to balance loose coupling against internal cohesion.
 
@@ -50,7 +50,7 @@ How to best serve this target audience
 --------------------------------------
 
 The main point, as with any design, is the willingness to let go of dogmaticism in favor of a good balance.
-Starting out from the fact that Transcypt should be 100% CPython compatible would be very clear and unambigous, and in that sense attractive.
+Starting out from the fact that Transcrypt should be 100% CPython compatible would be very clear and unambiguous, and in that sense attractive.
 However with current technology it's also completely off-limits for any viable real world development, directly competing with JavaScript in the area of speed and compactness.
 Users of web applications don't care about technology.
 If they have to wait for more than two seconds for a page to load, many of them zap.
@@ -61,18 +61,18 @@ And developers don't care about purism. They cannot afford to paint themselves i
 It's completely agreed that having native CPython in the browser would be great.
 But having JavaScript in between, even as asm.js, unfortunately makes it impractical.
 
-It's completely agreed that many Python developers would like all of their familiar libraries to be avaible.
+It's completely agreed that many Python developers would like all of their familiar libraries to be available.
 But the fact that most of them are written in C, makes it equally impractical, since they would load at snail speed in a browser.
 Apart from that, for viable web development, unimpeded access to JavaScript libraries is far more important.
 
 One alternative is to wait from the browser manufacturers to support descents to pure, true assembler, or at least C or C++.
 Given the fact that Java was kicked out because of security concerns, it is unlikely that a language without array boundary checks would be allowed in.
-And if such checks were added it would be rather slow, though not unuseable per se.
+And if such checks were added it would be rather slow, though not unusable per se.
 
-If ever a fast, compact, browser-native CPython implementation gets developed, with seamless access to the huge investment represented by existing JavaScript libraries, converting from Transcrypt to it will be a snap compared to conversion from JavaScript. So actually Transcrypt, because of its proximity to CPython, is very future-proof, whereas all types of 'better JavaScript' or propietary languages are not. What matters to Transcrypt developers is not Transcrypt's future, but Python's future, which is bright without restriction.
+If ever a fast, compact, browser-native CPython implementation gets developed, with seamless access to the huge investment represented by existing JavaScript libraries, converting from Transcrypt to it will be a snap compared to conversion from JavaScript. So actually Transcrypt, because of its proximity to CPython, is very future-proof, whereas all types of 'better JavaScript' or proprietary languages are not. What matters to Transcrypt developers is not Transcrypt's future, but Python's future, which is bright without restriction.
 
 Transcrypt strikes a careful balance between completely implementing CPython including this last 10% which will cause 90% of the bloat on one hand, and being too much restricted by JavaScript's shortcomings without necessity on the other. This balance e.g. means that Python's 'eval' and 'exec' (not to be confused with JavaScript's) are out, and multiple inheritance and selective operator overloading are in.
-It means that Transcrypt's and JavaScript's type system are unified, compact, fast and interoperable, rather than stricktly separated, bulky, slow and requiring conversion.
+It means that Transcrypt's and JavaScript's type system are unified, compact, fast and interoperable, rather than strictly separated, bulky, slow and requiring conversion.
 
 **In short: Transcrypt serves its target audience by allowing them to develop fast, compact, future-proof web applications on clients and servers in one stable, well-established language, running on any platform, minimizing lifecycle costs. Not as a promise, but now.**
 
@@ -88,12 +88,12 @@ Syntactically speaking, Python isn't as simple as it may seem. Using indentation
 
 And then there's the matter of distribution. Transcrypt is just another Python application, available from PyPi like any other, requiring Python like any other. And its library modules can be distributed via PyPi or any of its successors. It is very well possible to write 'pure Python modules' that run both under CPython and Transcrypt. But the importance of this is, apart from some fundamental modules, limited. For use in the browser, the enormous amount of 'actually existing' JavaScript libraries are far more interesting. And they can be loaded the JavaScript way, either on the fly from a content distribution network, or via 'require'.
 
-Finally there's the efficiency of development of Transcypt itself. Transcrypt was written because programming in Python was very much preferred over programming in JavaScript. So why on earth then would JavaScript be preferred over Python in writing it...
+Finally there's the efficiency of development of Transcrypt itself. Transcrypt was written because programming in Python was very much preferred over programming in JavaScript. So why on earth then would JavaScript be preferred over Python in writing it...
 
-Why does Transcrypt blend Python datatypes with JavaScript datatypes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Why does Transcrypt blend Python data types with JavaScript data types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The answer can be short: Compactness, speed and interoperability on the library front. Being able e.g. to interpret {'color': 'red', 'size': 'medium'} both as a JavaScript object and as a Python dictionary save lots of conversions, library encapsulation layers and counterintuitive restrictions. It minize code size and maximizes speed of data exchange between JavaScript and Python. Crucial to making it work is the identifier aliasing mechanism. It facilitates carefree use of Python keywords and identifiers, solving any name clashes with their JavaScript counterparts, now and in the future. It doesn't matter that both Python and JavaScript have a 'strip' method for strings that do different things. Using 'strip' in Python will translate to 'py_strip' and JavaScript's native 'strip' method can be used from Python under the name 'js_strip'.
+The answer can be short: Compactness, speed and interoperability on the library front. Being able e.g. to interpret {'color': 'red', 'size': 'medium'} both as a JavaScript object and as a Python dictionary save lots of conversions, library encapsulation layers and counterintuitive restrictions. It minimize code size and maximizes speed of data exchange between JavaScript and Python. Crucial to making it work is the identifier aliasing mechanism. It facilitates carefree use of Python keywords and identifiers, solving any name clashes with their JavaScript counterparts, now and in the future. It doesn't matter that both Python and JavaScript have a 'strip' method for strings that do different things. Using 'strip' in Python will translate to 'py_strip' and JavaScript's native 'strip' method can be used from Python under the name 'js_strip'.
 
 Why are certain Python constructions supported as a local (or global) option rather than by default
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

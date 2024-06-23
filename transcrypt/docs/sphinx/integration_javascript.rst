@@ -50,7 +50,7 @@ Mixed examples
 Example: Pong
 -------------
 
-In using the fabric.js JavaScript library this for example, the only thing differing from plain JavaScipt is that *new <constructor>* is replaced by *__new__ (<constructor>)*.
+In using the fabric.js JavaScript library this for example, the only thing differing from plain JavaScript is that *new <constructor>* is replaced by *__new__ (<constructor>)*.
 
 .. _code_pong:
 
@@ -68,9 +68,9 @@ There are three ways to integrate Transcrypt applications with existing JavaScri
 
 1. The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.
 
-2. Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distibution this is done for the *fabric* module, that encapsulates *fabric.js* and is imported in the Pong example. In this way the global namespace stays clean.
+2. Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distribution this is done for the *fabric* module, that encapsulates *fabric.js* and is imported in the Pong example. In this way the global namespace stays clean.
 
-3. The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was desiged to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
+3. The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was designed to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
 
 In most cases this approach 2 strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
 
@@ -80,14 +80,14 @@ In most cases this approach 2 strikes a good balance between effort and yield. A
 	:tab-width: 4
 	:caption: The encapsulation layer for fabric.js
 	
-Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the *fabric.js* by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcryp will minify it for you on the fly.
+Note that __pragma__ ('js', <skeletoncode>, includes = [<file1>, <file2>, ..]) is used to achieve the encapsulation. It replaces the {} by the respective contents of the files. The *fabric* module is part of the download. Note that not all facilities were included in customizing fabric.js. You can drop-in replace the *fabric.js* by another customized version without changing anything. Preferably download a development version, since that enables easy debugging. Transcrypt will minify it for you on the fly.
 
 Minification
 ~~~~~~~~~~~~
 
 Minification is currently performed by the Google closure compiler, that's also part of the distribution. Currently closures ADVANCED_OPTIMIZATIONS switch breaks the working *strict* code, however, so the SIMPLE_OPTIMIZATIONS switch is used by default.
 
-As can be seen from the listings of the Pong example, even the non-minified *pong.js* module is only slightly larger than *pong.py*. This is despite the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kargs')* and *__pragma__ ('nokwargs')*. The minified but not treeshaked Transcrypt runtime is slightly above 40 kB. The *fabric.js* library on the other hand occupies 180 kB. From this example it becomes clear that Transcrypt is extremely lightweight.
+As can be seen from the listings of the Pong example, even the non-minified *pong.js* module is only slightly larger than *pong.py*. This is despite the expensive keyword arguments mechanism that is activated for the *reset* function, using *__pragma__ ('kwargs')* and *__pragma__ ('nokwargs')*. The minified but not treeshaked Transcrypt runtime is slightly above 40 kB. The *fabric.js* library on the other hand occupies 180 kB. From this example it becomes clear that Transcrypt is extremely lightweight.
 
 Example: jQuery
 ---------------
@@ -140,7 +140,7 @@ N.B.2 For native behaviour, e.g. no visible address bar, the app must indeed be 
 Example: D3.js
 --------------
 
-The *D3.js* graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Trancrypt, leading to applications that are easy to understand and maintain.
+The *D3.js* graphics library offers animation by data driven DOM manipulation. It combines well with class based object oriented programming as supported by Transcrypt, leading to applications that are easy to understand and maintain.
 
 +--------------------------------------------------------+-------------------------------------------------------------------+
 | .. literalinclude:: ../../demos/d3js_demo/d3js_demo.py | .. literalinclude:: ../../demos/d3js_demo/__target__/d3js_demo.js |
