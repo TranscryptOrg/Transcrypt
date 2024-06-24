@@ -3,9 +3,10 @@ global-exclude *.pyc .gitignore workspace.*
 
 prune .git
 prune .idea
+prune .mypy_cache
 prune build
 prune dist
-prune transcrypt.egg-info
+prune Transcrypt.egg-info
 prune venv
 
 prune transcrypt/development/attic
