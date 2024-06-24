@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Transcrypt'
-copyright = u'2016, Jacques de Hooge'
+copyright = u'2014-2024, Jacques de Hooge'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -236,7 +236,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Transcrypt', u'Transcrypt Documentation',
-   u'Jacques de Hooge', 'Transcrypt', 'One line description of project.',
+   u'Jacques de Hooge', 'Transcrypt', 'Python to JavaScript transpiler.',
    'Miscellaneous'),
 ]
 
