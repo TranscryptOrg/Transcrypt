@@ -56,6 +56,7 @@ if __pragma__ ('defined', '__sform__'):
 
 import truthyness
 import tuple_assignment
+import transducers
 
 autoTester = org.transcrypt.autotester.AutoTester ()
 autoTester.run (arguments, 'arguments')
@@ -113,5 +114,6 @@ if __pragma__ ('defined', '__sform__'):
  
 autoTester.run (truthyness, 'truthyness')
 autoTester.run (tuple_assignment, 'tuple_assignment')
+autoTester.run (transducers, 'transducers')
 
 autoTester.done ()
