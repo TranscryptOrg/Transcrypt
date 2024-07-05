@@ -123,7 +123,6 @@ def sorted (iterable, key = None, reverse = False):
 #__pragma__ ('nokwargs')
 
 def map (func, *iterables):
-    # return [func (item) for item in iterable]
     return [func(*items) for items in zip(*iterables)]
 
 def filter (func, iterable):

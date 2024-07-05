@@ -14,9 +14,18 @@ def canonizeStringList (stringList):
 def run (autoTester):
     autoTester.check ('min', min (-1.1, -1, -3))
     autoTester.check ('max', max (-1.1, -1, -3))
+    autoTester.check ('max', max ([-1.1, -1, -3]))
+    autoTester.check ('max', max ((-1.1, -1, -3)))
+    autoTester.check ('max', max ('abc', 'ABC', 'xyz', 'XYZ'))
+    autoTester.check ('max', max ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]))
+    autoTester.check ('max', max (['abc', 'ABC', 'xyz', 'XYZ']))
+    autoTester.check ('max', autoTester.expectException(lambda: max ([])))
+    autoTester.check ('max', max ([], default='zzz'))
     autoTester.check ('abs', abs (-1), abs (1), abs (0), abs (-0.1), abs (0.1))
+
     autoTester.check ('ord', ord ('a'), ord ('e´'[0]))  # This is the 2 codepoint version
-    
+    autoTester.check ('chr', chr (97), chr (122), chr (65), chr (90))  # a z A Z
+
     autoTester.check ('round',
         round (4.006),
         round (4.006, 2),
@@ -104,21 +113,23 @@ def run (autoTester):
             '<br>'
         )
 
-    autoTester.check("".isalpha())
-    autoTester.check("123".isalpha())
-    autoTester.check("abc".isalpha())
-    autoTester.check("abc123".isalpha())
+    autoTester.check("isalpha",
+                     "".isalpha(),
+                     "123".isalpha(),
+                     "abc".isalpha(),
+                     "abc123".isalpha(),
+                     )
 
     enumerate_list = ['a', 'b', 'c', 'd', 'e']
     # JS does not have tuples so coerce  to list of lists
-    autoTester.check(
+    autoTester.check("enumerate",
         [list(item) for item in enumerate(enumerate_list)],
         [list(item) for item in enumerate(enumerate_list, 1)],
         [list(item) for item in enumerate(enumerate_list, start=2)]
     )
 
     replace_test = "abcabcabcabc"
-    autoTester.check(
+    autoTester.check("replace",
         replace_test.replace("c", "x"),
         replace_test.replace("c", "x", -1),
         replace_test.replace("c", "x", 0),
@@ -127,7 +138,7 @@ def run (autoTester):
         replace_test.replace("c", "x", 10),
     )
 
-    autoTester.check(
+    autoTester.check("bin-oct-hex",
         bin(42),
         oct(42),
         hex(42),
@@ -140,7 +151,8 @@ def run (autoTester):
     )
 
     string_test = "abcdefghijkl"
-    autoTester.check(string_test.startswith(""),
+    autoTester.check("startswith",
+        string_test.startswith(""),
         string_test.startswith("abcd"),
         string_test.startswith("efgh"),
         string_test.startswith("efgh", 2),
@@ -157,7 +169,7 @@ def run (autoTester):
         string_test.startswith(("abc", "defgh"), 3, 6),
     )
 
-    autoTester.check(
+    autoTester.check("endswith",
         string_test.endswith(""),
         string_test.endswith("ijkl"),
         string_test.endswith("efgh"),

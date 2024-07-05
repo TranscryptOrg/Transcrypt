@@ -553,7 +553,7 @@ export function py_typeof (anObject) {
         }
     }
     else {
-        return (    // Odly, the braces are required here
+        return (    // Oddly, the braces are required here
             aType == 'boolean' ? bool :
             aType == 'string' ? str :
             aType == 'number' ? (anObject % 1 == 0 ? int : float) :
@@ -667,10 +667,38 @@ export function ord (aChar) {
     return aChar.charCodeAt (0);
 };
 
-// Maximum of n numbers
-export function max (nrOrSeq) {
-    return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);       
-};
+// Maximum of n values
+export function max (...args) {
+    // Assume no kwargs
+    let dflt = undefined;
+    function key(x) {return x}
+
+    if (args.length > 0) {
+        if (args[args.length-1] && args[args.length-1].hasOwnProperty ("__kwargtrans__")) {
+            const kwargs = args[args.length - 1];
+            args = args.slice(0, -1);
+            if (kwargs.hasOwnProperty('key')) key = kwargs['key'];
+            if (kwargs.hasOwnProperty('py_default')) dflt = kwargs['py_default'];
+        }
+    }
+
+    if (args.length === 0) throw TypeError("expected at least 1 argument, got 0", new Error ());
+    if (args.length > 1 && dflt !== undefined) throw TypeError("Cannot specify a default with multiple positional arguments", new Error ());
+    if (args.length === 1){
+        if (Object.prototype.toString.call(args[0]) === '[object Array]'){
+            args = args[0];
+        } else {
+            throw TypeError("object is not iterable", new Error());
+        }
+    }
+    if (args === null || args.length === 0){
+        if (dflt === undefined) throw ValueError ("max() arg is an empty sequence", new Error ());
+        return dflt
+    }
+
+    return args.reduce((max_val, cur_val) => key(cur_val) > key(max_val) ? cur_val : max_val);
+    // return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);
+}
 
 // Minimum of n numbers
 export function min (nrOrSeq) {
