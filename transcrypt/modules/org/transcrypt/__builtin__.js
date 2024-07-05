@@ -667,8 +667,7 @@ export function ord (aChar) {
     return aChar.charCodeAt (0);
 };
 
-// Maximum of n values
-export function max (...args) {
+function min_max (f_compare, ...args) {
     // Assume no kwargs
     let dflt = undefined;
     function key(x) {return x}
@@ -677,33 +676,37 @@ export function max (...args) {
         if (args[args.length-1] && args[args.length-1].hasOwnProperty ("__kwargtrans__")) {
             const kwargs = args[args.length - 1];
             args = args.slice(0, -1);
-            if (kwargs.hasOwnProperty('key')) key = kwargs['key'];
             if (kwargs.hasOwnProperty('py_default')) dflt = kwargs['py_default'];
+            if (kwargs.hasOwnProperty('key')) key = kwargs['key'];
+            if (Object.prototype.toString.call(key) !== '[object Function]') throw TypeError("object is not callable", new Error());
         }
     }
 
     if (args.length === 0) throw TypeError("expected at least 1 argument, got 0", new Error ());
     if (args.length > 1 && dflt !== undefined) throw TypeError("Cannot specify a default with multiple positional arguments", new Error ());
     if (args.length === 1){
-        if (Object.prototype.toString.call(args[0]) === '[object Array]'){
-            args = args[0];
-        } else {
-            throw TypeError("object is not iterable", new Error());
-        }
+        if (Object.prototype.toString.call(args[0]) !== '[object Array]') throw TypeError("object is not iterable", new Error());
+        args = args[0];
     }
     if (args === null || args.length === 0){
-        if (dflt === undefined) throw ValueError ("max() arg is an empty sequence", new Error ());
+        if (dflt === undefined) throw ValueError ("arg is an empty sequence", new Error ());
         return dflt
     }
 
-    return args.reduce((max_val, cur_val) => key(cur_val) > key(max_val) ? cur_val : max_val);
+    return args.reduce((max_val, cur_val) => f_compare(key(cur_val), key(max_val)) ? cur_val : max_val);
+}
+
+// Maximum of n values
+export function max (...args) {
+    return min_max(function (a, b){return a > b}, ...args)
     // return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);
 }
 
 // Minimum of n numbers
-export function min (nrOrSeq) {
-    return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);       
-};
+export function min (...args) {
+    return min_max(function (a, b){return a < b}, ...args)
+    // return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);
+}
 
 // Integer to binary
 export function bin (nbr) {

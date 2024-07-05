@@ -12,15 +12,36 @@ def canonizeStringList (stringList):
     return [canonizeString (aString) for aString in stringList]
 
 def run (autoTester):
-    autoTester.check ('min', min (-1.1, -1, -3))
-    autoTester.check ('max', max (-1.1, -1, -3))
-    autoTester.check ('max', max ([-1.1, -1, -3]))
-    autoTester.check ('max', max ((-1.1, -1, -3)))
-    autoTester.check ('max', max ('abc', 'ABC', 'xyz', 'XYZ'))
-    autoTester.check ('max', max ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]))
-    autoTester.check ('max', max (['abc', 'ABC', 'xyz', 'XYZ']))
-    autoTester.check ('max', autoTester.expectException(lambda: max ([])))
-    autoTester.check ('max', max ([], default='zzz'))
+    autoTester.check ('min',
+                      min (-1.1, -1, -3),
+                      min ([-1.1, -1, -3]),
+                      min ((-1.1, -1, -3)),
+                      min ('abc', 'ABC', 'xyz', 'XYZ'),
+                      min ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]),
+                      min (['abc', 'ABC', 'xyz', 'XYZ']),
+                      min([5,6,7,8,9],[1,2,3,4],key=len),
+                      min([[5,6,7,8,9],[1,2,3,4]],default=[1,1,1],key=len),
+                      min ([], default='zzz'),
+                      )
+
+    autoTester.check ('max',
+                      max (-1.1, -1, -3),
+                      max ([-1.1, -1, -3]),
+                      max ((-1.1, -1, -3)),
+                      max ('abc', 'ABC', 'xyz', 'XYZ'),
+                      max ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]),
+                      max (['abc', 'ABC', 'xyz', 'XYZ']),
+                      max([5,6,7,8,9],[1,2,3,4],key=len),
+                      max([[5,6,7,8,9],[1,2,3,4]],default=[1,1,1],key=len),
+                      max ([], default='zzz'),
+                      )
+    # autoTester.check ('max', autoTester.expectException(lambda: max () ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max (1,2,3,4, default=5) ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max (default=5)))
+    # autoTester.check ('max', autoTester.expectException(lambda: max ([])))
+    # autoTester.check ('max', autoTester.expectException(lambda: max([5,6,7,8,9],[1,2,3,4],default=[1,1,1],key=len) ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max ([4, 5, 'xyz', 'XYZ']) ))
+
     autoTester.check ('abs', abs (-1), abs (1), abs (0), abs (-0.1), abs (0.1))
 
     autoTester.check ('ord', ord ('a'), ord ('e´'[0]))  # This is the 2 codepoint version
