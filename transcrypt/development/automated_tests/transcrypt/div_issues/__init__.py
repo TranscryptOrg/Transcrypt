@@ -264,16 +264,6 @@ def run (autoTester):
     autoTester.check (filter_word ('_in_', 'kind'))
     autoTester.check (filter_word ('min_', 'kind'))
 
-    autoTester.check ('Issue 306')
-    dict_306 = {'Abraham': 'Lincoln', 'Barack': 'O\'Bama', 'Thomas': 'Jefferson'}
-    results = []
-    try:
-        while True:
-            results.append (dict_306.popitem ())
-    except Exception as exception:
-        autoTester.check (sorted (results))
-        autoTester.check ('That\'s it')
-
     autoTester.check ('Issue 314')
     try:
         autoTester.check (int (float (123)))

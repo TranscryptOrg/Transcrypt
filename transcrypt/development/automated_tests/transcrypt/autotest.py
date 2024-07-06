@@ -38,6 +38,7 @@ import module_cmath
 if __pragma__ ('defined', 'undefined'):
     import module_collections
 
+import module_copy
 import module_datetime
 import module_itertools
 import module_math
@@ -96,6 +97,7 @@ autoTester.run (module_cmath, 'module_cmath')
 if __pragma__ ('defined', 'undefined'):
     autoTester.run (module_collections, 'module_collections')
 
+autoTester.run (module_copy, 'module_copy')
 autoTester.run (module_datetime, 'module_datetime')
 autoTester.run (module_itertools, 'module_itertools')
 autoTester.run (module_math, 'module_math')

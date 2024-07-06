@@ -686,9 +686,9 @@ function min_max (f_compare, ...args) {
     if (args.length > 1 && dflt !== undefined) throw TypeError("Cannot specify a default with multiple positional arguments", new Error ());
     if (args.length === 1){
         if (Object.prototype.toString.call(args[0]) !== '[object Array]') throw TypeError("object is not iterable", new Error());
-        args = args[0];
+        args = args[0];  // Passed in arg is itself an iterable
     }
-    if (args === null || args.length === 0){
+    if (args.length === 0){
         if (dflt === undefined) throw ValueError ("arg is an empty sequence", new Error ());
         return dflt
     }
@@ -699,13 +699,11 @@ function min_max (f_compare, ...args) {
 // Maximum of n values
 export function max (...args) {
     return min_max(function (a, b){return a > b}, ...args)
-    // return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);
 }
 
 // Minimum of n numbers
 export function min (...args) {
     return min_max(function (a, b){return a < b}, ...args)
-    // return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);
 }
 
 // Integer to binary
@@ -978,35 +976,35 @@ export function enumerate(iterable, start = 0) {
 
 // Shallow and deepcopy
 
-export function copy (anObject) {
-    if (anObject == null || typeof anObject == "object") {
-        return anObject;
-    }
-    else {
-        var result = {};
-        for (var attrib in obj) {
-            if (anObject.hasOwnProperty (attrib)) {
-                result [attrib] = anObject [attrib];
-            }
-        }
-        return result;
-    }
-}
-
-export function deepcopy (anObject) {
-    if (anObject == null || typeof anObject == "object") {
-        return anObject;
-    }
-    else {
-        var result = {};
-        for (var attrib in obj) {
-            if (anObject.hasOwnProperty (attrib)) {
-                result [attrib] = deepcopy (anObject [attrib]);
-            }
-        }
-        return result;
-    }
-}
+// export function copy (anObject) {
+//     if (anObject == null || typeof anObject == "object") {
+//         return anObject;
+//     }
+//     else {
+//         var result = {};
+//         for (var attrib in obj) {
+//             if (anObject.hasOwnProperty (attrib)) {
+//                 result [attrib] = anObject [attrib];
+//             }
+//         }
+//         return result;
+//     }
+// }
+//
+// export function deepcopy (anObject) {
+//     if (anObject == null || typeof anObject == "object") {
+//         return anObject;
+//     }
+//     else {
+//         var result = {};
+//         for (var attrib in obj) {
+//             if (anObject.hasOwnProperty (attrib)) {
+//                 result [attrib] = deepcopy (anObject [attrib]);
+//             }
+//         }
+//         return result;
+//     }
+// }
 
 // List extensions to Array
 

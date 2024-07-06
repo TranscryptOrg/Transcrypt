@@ -5,8 +5,9 @@
 #__pragma__ ('js', '{}', __include__ ('org/transcrypt/__builtin__.js'))
 
 #__pragma__ ('skip')
-copy = Math = __typeof__ = __repr__ = document = console = window = 0
+Math = __typeof__ = __repr__ = document = console = window = 0
 #__pragma__ ('noskip')
+from copy import copy as _copy
 
 #__pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs investigation
 #__pragma__ ('nokwargs')
@@ -102,30 +103,30 @@ class RuntimeWarning (Warning):
     
 #__pragma__ ('kwargs')
 
-def __sort__ (iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
+def __sort__(iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
     if key:
         iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1) # JavaScript sort, case '==' is irrelevant for sorting
     else:
-        iterable.sort ()                                            # JavaScript sort
+        iterable.sort (lambda a, b: 1 if a > b else -1)                                            # JavaScript sort
         
     if reverse:
         iterable.reverse ()
         
-def sorted (iterable, key = None, reverse = False):
+def sorted(iterable, key = None, reverse = False):
     if type (iterable) == dict:
-        result = copy (iterable.keys ()) 
+        result = _copy (iterable.keys ())
     else:       
-        result = copy (iterable)
+        result = _copy (iterable)
         
     __sort__ (result, key, reverse)
     return result
 
 #__pragma__ ('nokwargs')
 
-def map (func, *iterables):
+def map(func, *iterables):
     return [func(*items) for items in zip(*iterables)]
 
-def filter (func, iterable):
+def filter(func, iterable):
     if func == None:
         func = bool
     return [item for item in iterable if func (item)]

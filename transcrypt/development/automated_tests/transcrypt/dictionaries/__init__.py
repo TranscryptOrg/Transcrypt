@@ -89,7 +89,6 @@ def run (autoTester):
     autoTester.check (tel.pop ('foo', None))
 
     # Check compound keys (issue 281)
-    
     d = {}
     d ['a'] = 3777
     d [(1, 2)] = 4777
@@ -101,7 +100,16 @@ def run (autoTester):
     d [(1, 2)] = 4777
     autoTester.check (d ['a'], d [(1, 2)])
     __pragma__ ('noopov')
-    
+
+    # Check dict.popitem (issue 306)
+    dict_306 = {'Abraham': 'Lincoln', 'Barack': 'O\'Bama', 'Thomas': 'Jefferson'}
+    results = []
+    try:
+        while True:
+            results.append (list(dict_306.popitem ()))
+    except Exception as exception:
+        autoTester.check (sorted (results))
+
     # Check exceptions
     knights = {'robin': 'the brave', 'gallahad': 'the pure'}
     autoTester.check (
