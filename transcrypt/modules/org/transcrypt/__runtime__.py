@@ -103,23 +103,29 @@ class RuntimeWarning (Warning):
     
 #__pragma__ ('kwargs')
 
-def __sort__(iterable, key = None, reverse = False):               # Used by py_sort, can deal with kwargs
+def _sort(iterable, key = None, reverse = False):                # Used by py_sort and sorted, can deal with kwargs
     if key:
         iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1) # JavaScript sort, case '==' is irrelevant for sorting
     else:
-        iterable.sort (lambda a, b: 1 if a > b else -1)                                            # JavaScript sort
-        
+        iterable.sort (lambda a, b: 1 if a > b else -1)             # JavaScript sort -  key needed to properly sort non-string values
+
     if reverse:
         iterable.reverse ()
-        
-def sorted(iterable, key = None, reverse = False):
-    if type (iterable) == dict:
-        result = _copy (iterable.keys ())
-    else:       
-        result = _copy (iterable)
-        
-    __sort__ (result, key, reverse)
+
+
+def sorted(iterable, *, key=None, reverse=False):
+    if type(iterable) == dict:
+        result = _copy(iterable.keys())
+    else:
+        result = _copy(iterable)
+
+    _sort(result, key, reverse)
     return result
+
+
+# Used by py_sort
+def __sort__(iterable, *, key=None, reverse=False):
+    _sort(iterable, key, reverse)
 
 #__pragma__ ('nokwargs')
 

@@ -1,5 +1,5 @@
-export function __copy(isDeep, obj) {
-    var result;
+function __copy(isDeep, obj) {
+    let result;
 
     // Handle primitives
     if (obj === null || typeof obj !== "object") return obj;
@@ -14,7 +14,7 @@ export function __copy(isDeep, obj) {
     // Handle Array
     if (obj instanceof Array) {
         result = [];
-        for (var i = 0, len = obj.length; i < len; i++) {
+        for (let i = 0, len = obj.length; i < len; i++) {
             result[i] = isDeep ? __copy(isDeep, obj[i]) : obj[i];
         }
         return result;
@@ -23,7 +23,7 @@ export function __copy(isDeep, obj) {
     // Handle Object
     if (obj instanceof Object) {
         result = {};
-        for (var attr in obj) {
+        for (let attr in obj) {
             if (obj.hasOwnProperty(attr)) result[attr] = isDeep ? __copy(isDeep, obj[attr]) : obj[attr];
         }
         return result;
