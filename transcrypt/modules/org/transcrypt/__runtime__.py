@@ -104,10 +104,21 @@ class RuntimeWarning (Warning):
 #__pragma__ ('kwargs')
 
 def _sort(iterable, key = None, reverse = False):                # Used by py_sort and sorted, can deal with kwargs
+    # if len(iterable) == 0:
+    #     return
+    #
+    # # Make sure iterable value types can be compared --> imperfect implementation not worth bloating the runtime?
+    # num_types = ('int', 'float', 'bool')
+    # t_first_val = type(iterable[0]).__name__
+    # t = num_types if t_first_val in num_types else tuple([t_first_val])
+    # for v in iterable:
+    #     if type(v).__name__ not in t:
+    #         raise TypeError(f"'<' not supported between instances of {type(iterable[0]).__name__} and {type(v).__name__}", None)
+
     if key:
-        iterable.sort (lambda a, b: 1 if key (a) > key (b) else -1) # JavaScript sort, case '==' is irrelevant for sorting
+        iterable.sort (lambda a, b: -1 if key (a) < key (b) else 1) # JavaScript sort, case '==' is irrelevant for sorting
     else:
-        iterable.sort (lambda a, b: 1 if a > b else -1)             # JavaScript sort -  key needed to properly sort non-string values
+        iterable.sort (lambda a, b: -1 if a < b else 1)             # JavaScript sort -  key needed to properly sort non-string values
 
     if reverse:
         iterable.reverse ()

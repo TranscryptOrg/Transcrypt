@@ -1,4 +1,4 @@
-function __copy(isDeep, obj) {
+function _copy(isDeep, obj) {
     let result;
 
     // Handle primitives
@@ -15,7 +15,7 @@ function __copy(isDeep, obj) {
     if (obj instanceof Array) {
         result = [];
         for (let i = 0, len = obj.length; i < len; i++) {
-            result[i] = isDeep ? __copy(isDeep, obj[i]) : obj[i];
+            result[i] = isDeep ? _copy(isDeep, obj[i]) : obj[i];
         }
         return result;
     }
@@ -24,7 +24,7 @@ function __copy(isDeep, obj) {
     if (obj instanceof Object) {
         result = {};
         for (let attr in obj) {
-            if (obj.hasOwnProperty(attr)) result[attr] = isDeep ? __copy(isDeep, obj[attr]) : obj[attr];
+            if (obj.hasOwnProperty(attr)) result[attr] = isDeep ? _copy(isDeep, obj[attr]) : obj[attr];
         }
         return result;
     }
@@ -33,9 +33,9 @@ function __copy(isDeep, obj) {
 }
 
 export function copy(obj) {
-    return __copy(false, obj);
+    return _copy(false, obj);
 }
 
 export function deepcopy(obj) {
-    return __copy(true, obj);
+    return _copy(true, obj);
 }
