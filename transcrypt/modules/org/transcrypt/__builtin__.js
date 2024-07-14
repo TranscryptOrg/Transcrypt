@@ -1020,14 +1020,58 @@ list.__bases__ = [object];
 Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
 Array.prototype.__getslice__ = function (start, stop, step) {
+    if (step === null) {
+        step = 1;
+    }
+    if (start === null) {
+        start = (step < 0 ? -1 : 0);
+    }
+    if (start < 0) {
+        start = Math.max(this.length + start, 0);
+    }
+    if (start > this.length) {
+        start = this.length - 1;
+    }
+
+    if (stop === null) {
+        stop = (step < 0 ? -(this.length + 1) : this.length);
+    }
+    if (stop < 0) {
+        stop = Math.max(this.length + stop, (step < 0 ? -1 : 0));
+    }
+    if (stop > this.length) {
+        stop = this.length;
+    }
+
+    if (step === 1) {
+        return Array.prototype.slice.call(this, start, stop);
+    }
+
+    let result = list ([]);
+    if (step > 0) {
+        for (let index = start; index < stop; index += step) {
+            result.push (this [index]);
+        }
+    }
+    else if (step < 0) {
+        console.log("start:", start, "stop:", stop, "step:", step);
+        for (let index = start; index > stop; index += step) {
+            result.push (this [index]);
+        }
+    }
+    else {
+        throw ValueError ("slice step cannot be zero", new Error ());
+    }
+
+    return result;
+};
+
+Array.prototype.__setslice__ = function (start, stop, step, source) {
     if (start === null) {
         start = 0;
     }
     else if (start < 0) {
         start = Math.max(this.length + start, 0);
-    }
-    else if (start > this.length) {
-        start = this.length;
     }
 
     if (stop === null) {
@@ -1036,48 +1080,8 @@ Array.prototype.__getslice__ = function (start, stop, step) {
     else if (stop < 0) {
         stop = Math.max(this.length + stop, 0);
     }
-    else if (stop > this.length) {
-        stop = this.length;
-    }
 
-    if (step === null) {
-        step = 1;
-    }
-    if (step === 1) {
-        return Array.prototype.slice.call(this, start, stop);
-    }
-    if (step === 0) {
-        throw ValueError ("slice step cannot be zero", new Error ());
-    }
-
-    let result = list ([]);
-    if (step > 0) {
-        for (let index = start; index < stop; index += step) {
-            result.push (this [index]);
-        }
-    } else {
-        [ start, stop ] = [ stop - 1, start -1 ]
-        for (let index = start; index > stop; index += step) {
-            result.push (this [index]);
-        }
-    }
-
-    return result;
-};
-
-Array.prototype.__setslice__ = function (start, stop, step, source) {
-    if (start < 0) {
-        start = this.length + start;
-    }
-
-    if (stop == null) {
-        stop = this.length;
-    }
-    else if (stop < 0) {
-        stop = this.length + stop;
-    }
-
-    if (step == null) { // Assign to 'ordinary' slice, replace subsequence
+    if (step === null || step === 1) { // Assign to 'ordinary' slice, replace subsequence
         Array.prototype.splice.apply (this, [start, stop - start] .concat (source));
     }
     else {              // Assign to extended slice, replace designated items one by one

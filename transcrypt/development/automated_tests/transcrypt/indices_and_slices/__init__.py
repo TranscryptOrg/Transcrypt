@@ -21,3 +21,32 @@ def run (autoTester):
     
     aList [ : : 2] = [x + 0.001 for x in range (10) if x % 2]
     autoTester.check (aList)
+
+    aList = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    autoTester.check(aList)
+    autoTester.check(aList[:])
+    autoTester.check(aList[::-1])
+    autoTester.check(aList[-1:-8:-1])
+    autoTester.check(aList[::2])
+    autoTester.check(aList[::-2])
+    autoTester.check(aList[:4:1])
+    autoTester.check(aList[:4:-1])
+    autoTester.check(aList[4:])
+    autoTester.check(aList[4::])
+    autoTester.check(aList[4::1])
+    autoTester.check(aList[4::-1])
+    autoTester.check(aList[1:4])
+    autoTester.check(aList[1:4:1])
+    autoTester.check(aList[1:4:2])
+    autoTester.check(aList[1:4:-2])
+    autoTester.check(aList[4:1:-2])
+    autoTester.check(aList[4:1])
+    autoTester.check(aList[-1:-4])
+    autoTester.check(aList[-4:-1])
+    autoTester.check(aList[-4:-1:2])
+    autoTester.check(aList[-4:-1:-2])
+    autoTester.check(aList[9:-9:1])
+    autoTester.check(aList[-9:9:1])
+    autoTester.check(aList[9:-9:-1])
+    autoTester.check(aList[-9:9:-1])
+

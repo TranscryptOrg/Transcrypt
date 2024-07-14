@@ -3282,7 +3282,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 self.emit ('.__getslice__ (')
 
             if node.slice.lower == None:
-                self.emit ('0')
+                # self.emit ('0')
+                self.emit ('null')
             else:
                 self.visit (node.slice.lower)
             self.emit (', ')
