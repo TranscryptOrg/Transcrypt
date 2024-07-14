@@ -1020,27 +1020,46 @@ list.__bases__ = [object];
 Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
 
 Array.prototype.__getslice__ = function (start, stop, step) {
-    if (start < 0) {
-        start = this.length + start;
+    if (start === null) {
+        start = 0;
+    }
+    else if (start < 0) {
+        start = Math.max(this.length + start, 0);
+    }
+    else if (start > this.length) {
+        start = this.length;
     }
 
-    if (stop == null) {
+    if (stop === null) {
         stop = this.length;
     }
     else if (stop < 0) {
-        stop = this.length + stop;
+        stop = Math.max(this.length + stop, 0);
     }
     else if (stop > this.length) {
         stop = this.length;
     }
 
-    if (step == 1) {
+    if (step === null) {
+        step = 1;
+    }
+    if (step === 1) {
         return Array.prototype.slice.call(this, start, stop);
+    }
+    if (step === 0) {
+        throw ValueError ("slice step cannot be zero", new Error ());
     }
 
     let result = list ([]);
-    for (let index = start; index < stop; index += step) {
-        result.push (this [index]);
+    if (step > 0) {
+        for (let index = start; index < stop; index += step) {
+            result.push (this [index]);
+        }
+    } else {
+        [ start, stop ] = [ stop - 1, start -1 ]
+        for (let index = start; index > stop; index += step) {
+            result.push (this [index]);
+        }
     }
 
     return result;
