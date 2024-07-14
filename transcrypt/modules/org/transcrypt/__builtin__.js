@@ -1028,18 +1028,15 @@ Array.prototype.__getslice__ = function (start, stop, step) {
     }
     if (start < 0) {
         start = Math.max(this.length + start, 0);
-    }
-    if (start > this.length) {
-        start = this.length - 1;
+    } else if (start > this.length) {
+        start = this.length > 0 ? this.length - 1 : 0;
     }
 
     if (stop === null) {
-        stop = (step < 0 ? -(this.length + 1) : this.length);
-    }
-    if (stop < 0) {
-        stop = Math.max(this.length + stop, (step < 0 ? -1 : 0));
-    }
-    if (stop > this.length) {
+        stop = (step < 0 && this.length > 0 ? -1 : this.length);
+    } else if (stop < 0) {
+        stop = Math.max(this.length + stop, (step < 0 && this.length > 0 ? -1 : 0));
+    } else if (stop > this.length) {
         stop = this.length;
     }
 
@@ -1052,14 +1049,11 @@ Array.prototype.__getslice__ = function (start, stop, step) {
         for (let index = start; index < stop; index += step) {
             result.push (this [index]);
         }
-    }
-    else if (step < 0) {
-        console.log("start:", start, "stop:", stop, "step:", step);
+    } else if (step < 0) {
         for (let index = start; index > stop; index += step) {
             result.push (this [index]);
         }
-    }
-    else {
+    } else {
         throw ValueError ("slice step cannot be zero", new Error ());
     }
 
@@ -1483,26 +1477,44 @@ String.prototype.find = function (sub, start) {
 };
 
 String.prototype.__getslice__ = function (start, stop, step) {
+    if (step === null) {
+        step = 1;
+    }
+    if (start === null) {
+        start = (step < 0 ? -1 : 0);
+    }
     if (start < 0) {
-        start = this.length + start;
+        start = Math.max(this.length + start, 0);
+    } else if (start > this.length) {
+        start = this.length > 0 ? this.length + (step < 0 ? -1 : 0) : 0;
     }
 
-    if (stop == null) {
+    if (stop === null) {
+        stop = (step < 0 && this.length > 0 ? -1 : this.length);
+    } else if (stop < 0) {
+        stop = Math.max(this.length + stop, (step < 0 && this.length > 0 ? -1 : 0));
+    } else if (stop > this.length) {
         stop = this.length;
     }
-    else if (stop < 0) {
-        stop = this.length + stop;
+
+    if (step === 1) {
+        return this.substring (start, (start > stop ? start : stop));
     }
 
-    var result = '';
-    if (step == 1) {
-        result = this.substring (start, stop);
-    }
-    else {
+    let result = '';
+    if (step > 0) {
         for (var index = start; index < stop; index += step) {
             result = result.concat (this.charAt(index));
         }
+    } else if (step < 0) {
+        for (var index = start; index > stop; index += step) {
+            result = result.concat (this.charAt(index));
+        }
     }
+    else {
+        throw ValueError ("slice step cannot be zero", new Error ());
+    }
+
     return result;
 };
 
