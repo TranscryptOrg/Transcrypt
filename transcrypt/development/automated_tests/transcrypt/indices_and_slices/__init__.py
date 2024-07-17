@@ -1,3 +1,5 @@
+from copy import copy
+
 def run (autoTester):
     # Right hand side slices
     all = range (32)
@@ -26,6 +28,7 @@ def run (autoTester):
     for aList in allLists:
         autoTester.check(aList)
         autoTester.check(aList[:])
+        autoTester.check(aList[None:None])
         autoTester.check(aList[::])
         autoTester.check(aList[::-1])
         autoTester.check(aList[-1:-8:-1])
@@ -52,4 +55,71 @@ def run (autoTester):
         autoTester.check(aList[9:-9:-1])
         autoTester.check(aList[-9:9:-1])
         autoTester.check(aList[-9:9:-1])
+        autoTester.check('zero step slice', autoTester.expectException(lambda: print(aList[::0])))
+
+
+    sample_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+
+    aList = copy(sample_list)
+    aList[1:3] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[1:1] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[:] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[1:5] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[1:5] = 'xyz'
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[0:5:2] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    def aTest1(test_list):
+        test_list[1:5:2] = ['x', 'y', 'z']  # ValueError: attempt to assign sequence of size 3 to extended slice of size 2
+    autoTester.check('Invalid slice assignment', autoTester.expectException(lambda: aTest1(aList)))
+
+    aList = copy(sample_list)
+    aList[5:2:-1] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[5:0:-2] = ['x', 'y', 'z']
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[1:5] = []
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    aList[1:5:1] = []
+    autoTester.check(aList)
+
+    aList = copy(sample_list)
+    def aTest3(test_list):
+        test_list[5:1:-1] = []  # ValueError: attempt to assign sequence of size 0 to extended slice of size 4
+    autoTester.check('Invalid slice assignment', autoTester.expectException(lambda: aTest3(aList)))
+
+    def aTest4(test_list):
+        test_list[5:1:-1] = ['x', 'y', 'z']  # ValueError: attempt to assign sequence of size 3 to extended slice of size 2
+    autoTester.check('Invalid slice assignment', autoTester.expectException(lambda: aTest4(aList)))
+
+    # aList = copy(sample_list)
+    # aList[1:5:-1] = []
+    # autoTester.check(aList)
+
+    # aList = copy(sample_list)
+    # def aTest2(test_list):
+    #     test_list[0:5:-1] = ['x', 'y', 'z']  # ValueError: attempt to assign sequence of size 3 to extended slice of size 0
+    # autoTester.check('Invalid slice assignment', autoTester.expectException(lambda: aTest2(aList)))
 
