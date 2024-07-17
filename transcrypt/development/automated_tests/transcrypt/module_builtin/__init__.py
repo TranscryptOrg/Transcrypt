@@ -12,11 +12,41 @@ def canonizeStringList (stringList):
     return [canonizeString (aString) for aString in stringList]
 
 def run (autoTester):
-    autoTester.check ('min', min (-1.1, -1, -3))
-    autoTester.check ('max', max (-1.1, -1, -3))
+    autoTester.check ('min',
+                      min (-1.1, -1, -3),
+                      min ([-1.1, -1, -3]),
+                      min ((-1.1, -1, -3)),
+                      min ('abc', 'ABC', 'xyz', 'XYZ'),
+                      min ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]),
+                      min (['abc', 'ABC', 'xyz', 'XYZ']),
+                      min([5,6,7,8,9],[1,2,3,4],key=len),
+                      min([[5,6,7,8,9],[1,2,3,4]],default=[1,1,1],key=len),
+                      min ([], default='zzz'),
+                      )
+
+    autoTester.check ('max',
+                      max (-1.1, -1, -3),
+                      max ([-1.1, -1, -3]),
+                      max ((-1.1, -1, -3)),
+                      max ('abc', 'ABC', 'xyz', 'XYZ'),
+                      max ('abc', 'ABC', 'xyz', 'XYZ', key=lambda v: v[1]),
+                      max (['abc', 'ABC', 'xyz', 'XYZ']),
+                      max([5,6,7,8,9],[1,2,3,4],key=len),
+                      max([[5,6,7,8,9],[1,2,3,4]],default=[1,1,1],key=len),
+                      max ([], default='zzz'),
+                      )
+    # autoTester.check ('max', autoTester.expectException(lambda: max () ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max (1,2,3,4, default=5) ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max (default=5)))
+    # autoTester.check ('max', autoTester.expectException(lambda: max ([])))
+    # autoTester.check ('max', autoTester.expectException(lambda: max([5,6,7,8,9],[1,2,3,4],default=[1,1,1],key=len) ))
+    # autoTester.check ('max', autoTester.expectException(lambda: max ([4, 5, 'xyz', 'XYZ']) ))
+
     autoTester.check ('abs', abs (-1), abs (1), abs (0), abs (-0.1), abs (0.1))
+
     autoTester.check ('ord', ord ('a'), ord ('e´'[0]))  # This is the 2 codepoint version
-    
+    autoTester.check ('chr', chr (97), chr (122), chr (65), chr (90))  # a z A Z
+
     autoTester.check ('round',
         round (4.006),
         round (4.006, 2),
@@ -104,63 +134,75 @@ def run (autoTester):
             '<br>'
         )
 
-    autoTester.check("".isalpha())
-    autoTester.check("123".isalpha())
-    autoTester.check("abc".isalpha())
-    autoTester.check("abc123".isalpha())
+    autoTester.check("isalpha",
+                     "".isalpha(),
+                     "123".isalpha(),
+                     "abc".isalpha(),
+                     "abc123".isalpha(),
+                     )
 
     enumerate_list = ['a', 'b', 'c', 'd', 'e']
     # JS does not have tuples so coerce  to list of lists
-    autoTester.check([list(item) for item in enumerate(enumerate_list)])
-    autoTester.check([list(item) for item in enumerate(enumerate_list, 1)])
-    autoTester.check([list(item) for item in enumerate(enumerate_list, start=2)])
+    autoTester.check("enumerate",
+        [list(item) for item in enumerate(enumerate_list)],
+        [list(item) for item in enumerate(enumerate_list, 1)],
+        [list(item) for item in enumerate(enumerate_list, start=2)]
+    )
 
     replace_test = "abcabcabcabc"
-    autoTester.check(replace_test.replace("c", "x"))
-    autoTester.check(replace_test.replace("c", "x", -1))
-    autoTester.check(replace_test.replace("c", "x", 0))
-    autoTester.check(replace_test.replace("c", "x", 1))
-    autoTester.check(replace_test.replace("c", "x", 2))
-    autoTester.check(replace_test.replace("c", "x", 10))
+    autoTester.check("replace",
+        replace_test.replace("c", "x"),
+        replace_test.replace("c", "x", -1),
+        replace_test.replace("c", "x", 0),
+        replace_test.replace("c", "x", 1),
+        replace_test.replace("c", "x", 2),
+        replace_test.replace("c", "x", 10),
+    )
 
-    autoTester.check(bin(42))
-    autoTester.check(oct(42))
-    autoTester.check(hex(42))
-    autoTester.check(bin(0))
-    autoTester.check(oct(0))
-    autoTester.check(hex(0))
-    autoTester.check(bin(-42))
-    autoTester.check(oct(-42))
-    autoTester.check(hex(-42))
+    autoTester.check("bin-oct-hex",
+        bin(42),
+        oct(42),
+        hex(42),
+        bin(0),
+        oct(0),
+        hex(0),
+        bin(-42),
+        oct(-42),
+        hex(-42),
+    )
 
     string_test = "abcdefghijkl"
-    autoTester.check(string_test.startswith(""))
-    autoTester.check(string_test.startswith("abcd"))
-    autoTester.check(string_test.startswith("efgh"))
-    autoTester.check(string_test.startswith("efgh", 2))
-    autoTester.check(string_test.startswith("efgh", 4))
-    autoTester.check(string_test.startswith("abcd", 0, 3))
-    autoTester.check(string_test.startswith("abcd", 0, 5))
-    autoTester.check(string_test.startswith("efgh", 4, -2))
-    autoTester.check(string_test.startswith("efgh", 4, -6))
-    autoTester.check(string_test.startswith(("abc",)))
-    autoTester.check(string_test.startswith(("abc", "de", "gh")))
-    autoTester.check(string_test.startswith(("abc", "de", "gh"), 2))
-    autoTester.check(string_test.startswith(("abc", "de", "gh"), 3))
-    autoTester.check(string_test.startswith(("abc", "defgh"), 3, 9))
-    autoTester.check(string_test.startswith(("abc", "defgh"), 3, 6))
+    autoTester.check("startswith",
+        string_test.startswith(""),
+        string_test.startswith("abcd"),
+        string_test.startswith("efgh"),
+        string_test.startswith("efgh", 2),
+        string_test.startswith("efgh", 4),
+        string_test.startswith("abcd", 0, 3),
+        string_test.startswith("abcd", 0, 5),
+        string_test.startswith("efgh", 4, -2),
+        string_test.startswith("efgh", 4, -6),
+        string_test.startswith(("abc",)),
+        string_test.startswith(("abc", "de", "gh")),
+        string_test.startswith(("abc", "de", "gh"), 2),
+        string_test.startswith(("abc", "de", "gh"), 3),
+        string_test.startswith(("abc", "defgh"), 3, 9),
+        string_test.startswith(("abc", "defgh"), 3, 6),
+    )
 
-    autoTester.check(string_test.endswith(""))
-    autoTester.check(string_test.endswith("ijkl"))
-    autoTester.check(string_test.endswith("efgh"))
-    autoTester.check(string_test.endswith("efgh", 2))
-    autoTester.check(string_test.endswith("abcd", 0, 3))
-    autoTester.check(string_test.endswith("abcd", 0, 4))
-    autoTester.check(string_test.endswith("efgh", 4, -2))
-    autoTester.check(string_test.endswith("efgh", 4, -4))
-    autoTester.check(string_test.endswith(("ijkl",)))
-    autoTester.check(string_test.endswith(("abc", "de", "gh")))
-    autoTester.check(string_test.endswith(("abc", "de", "gh"), 3, -4))
-    autoTester.check(string_test.endswith(("abc", "de", "gh"), -6, -4))
-    autoTester.check(string_test.endswith(("abc", "defgh"), -3, 8))
-    autoTester.check(string_test.endswith(("abc", "defgh"), -9, 8))
+    autoTester.check("endswith",
+        string_test.endswith(""),
+        string_test.endswith("ijkl"),
+        string_test.endswith("efgh"),
+        string_test.endswith("efgh", 2),
+        string_test.endswith("abcd", 0, 3),
+        string_test.endswith("abcd", 0, 4),
+        string_test.endswith("efgh", 4, -2),
+        string_test.endswith("efgh", 4, -4),
+        string_test.endswith(("ijkl",)),
+        string_test.endswith(("abc", "de", "gh")),
+        string_test.endswith(("abc", "de", "gh"), 3, -4),
+        string_test.endswith(("abc", "de", "gh"), -6, -4),
+        string_test.endswith(("abc", "defgh"), -3, 8),
+        string_test.endswith(("abc", "defgh"), -9, 8),
+    )

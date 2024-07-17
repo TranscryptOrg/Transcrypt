@@ -40,10 +40,6 @@ def run (autoTester):
     autoTester.check (s [2:])
     autoTester.check (s [::2])
     
-    autoTester.check ('Pull 59')
-    autoTester.check (list (filter (lambda x: x % 2 == 0, range (10))))
-    autoTester.check (list (map (lambda x: x*x, range (0, 31, 3))))
-    
     autoTester.check ('Pull 561')
     def brackets (word):
         autoTester.check ('sideeffect')

@@ -50,8 +50,31 @@ def run (autoTester):
     check (floor (3.5))
     check (ceil (3.5))
     check (trunc (3.5))
-    
-    check (isnan (3))
-    check (isnan (nan))
+
+    # Format float since python adds .0 and JS does not
+    autoTester.check('{0:g}'.format(copysign(42.0, 99.0)))
+    autoTester.check('{0:g}'.format(copysign(-42, 99.0)))
+    autoTester.check('{0:g}'.format(copysign(42, -99.0)))
+    autoTester.check('{0:g}'.format(copysign(-42.0, -99.0)))
+
+    autoTester.check(
+        isclose(2.123456, 2.123457),
+        isclose(2.12, 2.123457),
+        isclose(2.1234567891, 2.1234567892),
+        isclose(2.1, 2, rel_tol=0.05),
+        isclose(2.15, 2, rel_tol=0.05),
+        isclose(1, 1),
+        isclose(1, 1.000000002),
+        isclose(1, 1.0000000002),
+        isclose(1.0, 1.02, rel_tol=0.02),
+        isclose(1.0, 1.02, rel_tol=0.0, abs_tol=0.02),
+        isclose(0.000000001, 0.0, rel_tol=0.000000001),
+        isclose(0.000000001, 0.0, rel_tol=0.0, abs_tol=0.000000000999),
+        isclose(0.000000001, 0.0, rel_tol=0.0, abs_tol=0.000000001),
+        isclose(0.0, 0.000000001, rel_tol=0.0, abs_tol=0.000000001),
+    )
+
+    autoTester.check (isnan (3))
+    autoTester.check (isnan (nan))
     
     

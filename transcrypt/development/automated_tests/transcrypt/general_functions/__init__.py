@@ -35,12 +35,36 @@ def run (autoTester):
         autoTester.check (len (collection))
 
     autoTester.check ('sort and sorted<br>')
-    a = [1, 5, 3, 2, -1]
+    a = [11, 7, 23, 4, -1]
     b = ['sun', 'earth', 'moon']
-    
+    c = [{'name': 'Defg', 'qty': 99}, {'name': 'Abcd', 'qty': 42}, {'name': 'Hijk', 'qty': 11}]
+    d = [[21, 19, 54], [22, 7, 12, 37]]
+
+    autoTester.check (a)
     autoTester.check (sorted (a))
+    autoTester.check (a)
+    autoTester.check (sorted (a, key=str))
+    autoTester.check (sorted (a, key=int))
     autoTester.check (sorted (b))
-    
+
+    autoTester.check (sorted(c, key=lambda k: k['qty']))
+    autoTester.check (sorted(c, key=lambda k: k['name']))
+    autoTester.check (sorted(c, key=lambda k: k['name'], reverse=True))
+
+    autoTester.check (sorted(d))
+    autoTester.check (sorted(d, key=sum))
+
+    # Make sure sorted is doing a proper shallow copy (issue 866)
+    e = sorted(d)
+    autoTester.check(e)
+    d[1][1] = 9
+    autoTester.check(d)
+    autoTester.check(e)
+    d[1] = [22,14,36]
+    autoTester.check(d)
+    autoTester.check(e)
+
+
     a.sort ()
     autoTester.check (a)
     
@@ -53,6 +77,9 @@ def run (autoTester):
     a.sort (reverse = True)
     autoTester.check (a)
     
+    a.sort (key=int)
+    autoTester.check (a)
+
     b.sort (reverse = True)
     autoTester.check (b)
     

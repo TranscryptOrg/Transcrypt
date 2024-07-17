@@ -553,7 +553,7 @@ export function py_typeof (anObject) {
         }
     }
     else {
-        return (    // Odly, the braces are required here
+        return (    // Oddly, the braces are required here
             aType == 'boolean' ? bool :
             aType == 'string' ? str :
             aType == 'number' ? (anObject % 1 == 0 ? int : float) :
@@ -667,15 +667,44 @@ export function ord (aChar) {
     return aChar.charCodeAt (0);
 };
 
-// Maximum of n numbers
-export function max (nrOrSeq) {
-    return arguments.length == 1 ? Math.max (...nrOrSeq) : Math.max (...arguments);       
-};
+function min_max (f_compare, ...args) {
+    // Assume no kwargs
+    let dflt = undefined;
+    function key(x) {return x}
+
+    if (args.length > 0) {
+        if (args[args.length-1] && args[args.length-1].hasOwnProperty ("__kwargtrans__")) {
+            const kwargs = args[args.length - 1];
+            args = args.slice(0, -1);
+            if (kwargs.hasOwnProperty('py_default')) dflt = kwargs['py_default'];
+            if (kwargs.hasOwnProperty('key')) key = kwargs['key'];
+            if (Object.prototype.toString.call(key) !== '[object Function]') throw TypeError("object is not callable", new Error());
+        }
+    }
+
+    if (args.length === 0) throw TypeError("expected at least 1 argument, got 0", new Error ());
+    if (args.length > 1 && dflt !== undefined) throw TypeError("Cannot specify a default with multiple positional arguments", new Error ());
+    if (args.length === 1){
+        if (Object.prototype.toString.call(args[0]) !== '[object Array]') throw TypeError("object is not iterable", new Error());
+        args = args[0];  // Passed in arg is itself an iterable
+    }
+    if (args.length === 0){
+        if (dflt === undefined) throw ValueError ("arg is an empty sequence", new Error ());
+        return dflt
+    }
+
+    return args.reduce((max_val, cur_val) => f_compare(key(cur_val), key(max_val)) ? cur_val : max_val);
+}
+
+// Maximum of n values
+export function max (...args) {
+    return min_max(function (a, b){return a > b}, ...args)
+}
 
 // Minimum of n numbers
-export function min (nrOrSeq) {
-    return arguments.length == 1 ? Math.min (...nrOrSeq) : Math.min (...arguments);       
-};
+export function min (...args) {
+    return min_max(function (a, b){return a < b}, ...args)
+}
 
 // Integer to binary
 export function bin (nbr) {
@@ -947,35 +976,35 @@ export function enumerate(iterable, start = 0) {
 
 // Shallow and deepcopy
 
-export function copy (anObject) {
-    if (anObject == null || typeof anObject == "object") {
-        return anObject;
-    }
-    else {
-        var result = {};
-        for (var attrib in obj) {
-            if (anObject.hasOwnProperty (attrib)) {
-                result [attrib] = anObject [attrib];
-            }
-        }
-        return result;
-    }
-}
-
-export function deepcopy (anObject) {
-    if (anObject == null || typeof anObject == "object") {
-        return anObject;
-    }
-    else {
-        var result = {};
-        for (var attrib in obj) {
-            if (anObject.hasOwnProperty (attrib)) {
-                result [attrib] = deepcopy (anObject [attrib]);
-            }
-        }
-        return result;
-    }
-}
+// export function copy (anObject) {
+//     if (anObject == null || typeof anObject == "object") {
+//         return anObject;
+//     }
+//     else {
+//         var result = {};
+//         for (var attrib in obj) {
+//             if (anObject.hasOwnProperty (attrib)) {
+//                 result [attrib] = anObject [attrib];
+//             }
+//         }
+//         return result;
+//     }
+// }
+//
+// export function deepcopy (anObject) {
+//     if (anObject == null || typeof anObject == "object") {
+//         return anObject;
+//     }
+//     else {
+//         var result = {};
+//         for (var attrib in obj) {
+//             if (anObject.hasOwnProperty (attrib)) {
+//                 result [attrib] = deepcopy (anObject [attrib]);
+//             }
+//         }
+//         return result;
+//     }
+// }
 
 // List extensions to Array
 

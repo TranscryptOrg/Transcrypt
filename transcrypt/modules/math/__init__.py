@@ -50,6 +50,14 @@ floor = Math.floor
 ceil = Math.ceil
 trunc = Math.trunc
 
+def copysign (x, y):
+    return x if Math.sign(x) == Math.sign(y) else -x
+
+#__pragma__ ('kwargs')
+def isclose (a, b, rel_tol=1e-09, abs_tol=0.0):
+    return Math.abs(a-b) <= Math.max(rel_tol * Math.max(Math.abs(a), Math.abs(b)), abs_tol)
+#__pragma__ ('nokwargs')
+
 isnan = js_isNaN
 
 inf = js_Infinity
