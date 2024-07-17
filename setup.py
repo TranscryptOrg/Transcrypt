@@ -10,7 +10,7 @@ def read (*paths):
 
 setup (
 	name = 'Transcrypt',
-	version = '3.9.3',
+	version = '3.9.4',
 	description = 'Python to JavaScript transpiler, supporting multiple inheritance and generating lean, highly readable code',
 	long_description = (
 		read ('README.rst')
