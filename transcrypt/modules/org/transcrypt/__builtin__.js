@@ -1028,7 +1028,7 @@ Array.prototype.__getslice__ = function (start, stop, step) {
     }
     if (start < 0) {
         start = Math.max(this.length + start, 0);
-    } else if (start > this.length) {
+    } else if (start > this.length || (start === this.length && step < 0)) {
         start = this.length > 0 ? this.length - 1 : 0;
     }
 
@@ -1061,28 +1061,50 @@ Array.prototype.__getslice__ = function (start, stop, step) {
 };
 
 Array.prototype.__setslice__ = function (start, stop, step, source) {
-    if (start === null) {
-        start = 0;
+    if (step === null) {
+        step = 1;
     }
-    else if (start < 0) {
+    if (start === null) {
+        start = (step < 0 ? -1 : 0);
+    }
+    if (start < 0) {
         start = Math.max(this.length + start, 0);
+    } else if (start > this.length || (start === this.length && step < 0)) {
+        start = this.length > 0 ? this.length - 1 : 0;
     }
 
     if (stop === null) {
+        stop = (step < 0 && this.length > 0 ? -1 : this.length);
+    } else if (stop < 0) {
+        stop = Math.max(this.length + stop, (step < 0 && this.length > 0 ? -1 : 0));
+    } else if (stop > this.length) {
         stop = this.length;
     }
-    else if (stop < 0) {
-        stop = Math.max(this.length + stop, 0);
-    }
 
-    if (step === null || step === 1) { // Assign to 'ordinary' slice, replace subsequence
-        Array.prototype.splice.apply (this, [start, stop - start] .concat (source));
+    if (step === 1) { // Assign to 'ordinary' slice, replace subsequence
+        Array.prototype.splice.apply (this, [start, stop - start] .concat (Array.from(source)));
     }
-    else {              // Assign to extended slice, replace designated items one by one
-        let sourceIndex = 0;
-        for (let targetIndex = start; targetIndex < stop; targetIndex += step) {
-            this [targetIndex] = source [sourceIndex++];
+    else {
+        // Validate assignment is valid based on Python's size rules
+        const seq_len = Math.ceil((stop - start) / step)
+        if((source.length > 0 || seq_len > 0) && (seq_len !== source.length)){
+            // throw ValueError ("Invalid slice assignment", new Error ());
+            throw ValueError ("attempt to assign sequence of size " + source.length + " to extended slice of size " + seq_len, new Error ());
         }
+        // Assign to extended slice, replace designated items one by one
+        let sourceIndex = 0;
+        if (step > 0) {
+            for (let targetIndex = start; targetIndex < stop; targetIndex += step) {
+                this [targetIndex] = source [sourceIndex++];
+            }
+        } else if (step < 0) {
+            for (let targetIndex = start; targetIndex > stop; targetIndex += step) {
+                this [targetIndex] = source [sourceIndex++];
+            }
+        } else {
+            throw ValueError ("slice step cannot be zero", new Error ());
+        }
+
     }
 };
 
