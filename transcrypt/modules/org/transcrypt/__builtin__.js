@@ -1924,8 +1924,24 @@ function __update__ (aDict) {
 
 function __copy__ () {
     let dNew = {};
-    for (var attrib in this) {
+    for (let attrib in this) {
         dNew[attrib] = this[attrib];
+    }
+    return dict(dNew);
+}
+
+function __fromkeys__ (iterable, defVal) {
+    if(iterable === undefined){
+        throw TypeError("fromkeys expected at least 1 argument, got 0")
+    }
+    if ( !(['[object Array]', '[object String]'].includes(Object.prototype.toString.call(iterable))) ) {
+        throw TypeError("object is not iterable", new Error());
+    }
+
+    if(defVal === undefined) defVal = null;
+    let dNew = {};
+    for (let idx= 0; idx < iterable.length; idx++) {
+        dNew[iterable[idx]] = defVal;
     }
     return dict(dNew);
 }
@@ -1950,19 +1966,19 @@ function __dsetitem__ (aKey, aValue) {
 }
 
 export function dict (objectOrPairs) {
-    var instance = {};
+    let instance = {};
     if (!objectOrPairs || objectOrPairs instanceof Array) { // It's undefined or an array of pairs
         if (objectOrPairs) {
-            for (var index = 0; index < objectOrPairs.length; index++) {
-                var pair = objectOrPairs [index];
-                if ( !(pair instanceof Array) || pair.length != 2) {
+            for (let index = 0; index < objectOrPairs.length; index++) {
+                const pair = objectOrPairs [index];
+                if ( !(pair instanceof Array) || pair.length !== 2) {
                     throw ValueError(
                         "dict update sequence element #" + index +
                         " has length " + pair.length +
                         "; 2 is required", new Error());
                 }
-                var key = pair [0];
-                var val = pair [1];
+                const key = pair [0];
+                let val = pair [1];
                 if (!(objectOrPairs instanceof Array) && objectOrPairs instanceof Object) {
                      // User can potentially pass in an object
                      // that has a hierarchy of objects. This
@@ -1980,14 +1996,14 @@ export function dict (objectOrPairs) {
     }
     else {
         if (isinstance (objectOrPairs, dict)) {
-            // Passed object is a dict already so we need to be a little careful
+            // Passed object is a dict already, so we need to be a little careful
             // N.B. - this is a shallow copy per python std - so
             // it is assumed that children have already become
             // python objects at some point.
             
-            var aKeys = objectOrPairs.py_keys ();
-            for (var index = 0; index < aKeys.length; index++ ) {
-                var key = aKeys [index];
+            const aKeys = objectOrPairs.py_keys ();
+            for (let index = 0; index < aKeys.length; index++ ) {
+                const key = aKeys [index];
                 instance [key] = objectOrPairs [key];
             }
         } else if (objectOrPairs instanceof Object) {
@@ -2002,7 +2018,7 @@ export function dict (objectOrPairs) {
         }
     }
 
-    // Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
+    // Transcrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
     // So dict literals rather than bare Object literals will be passed to JavaScript libraries
     // Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
     // So the properties of a dict should be non-enumerable
@@ -2021,6 +2037,7 @@ export function dict (objectOrPairs) {
     __setproperty__ (instance, 'py_update', {value: __update__, enumerable: false});
     __setproperty__ (instance, 'py_copy', {value: __copy__, enumerable: false});
     __setproperty__ (instance, 'py_values', {value: __values__, enumerable: false});
+    __setproperty__ (instance, 'py_fromkeys', {value: __fromkeys__, enumerable: false});
     __setproperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
     __setproperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices
     return instance;
@@ -2028,6 +2045,7 @@ export function dict (objectOrPairs) {
 
 dict.__name__ = 'dict';
 dict.__bases__ = [object];
+dict.py_fromkeys = __fromkeys__
 
 // Docstring setter
 

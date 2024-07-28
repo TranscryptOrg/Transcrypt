@@ -35,11 +35,11 @@ def run (autoTester):
                       max([[5,6,7,8,9],[1,2,3,4]],default=[1,1,1],key=len),
                       max ([], default='zzz'),
                       )
-    # autoTester.check ('max', autoTester.expectException(lambda: max () ))
-    # autoTester.check ('max', autoTester.expectException(lambda: max (1,2,3,4, default=5) ))
-    # autoTester.check ('max', autoTester.expectException(lambda: max (default=5)))
-    # autoTester.check ('max', autoTester.expectException(lambda: max ([])))
-    # autoTester.check ('max', autoTester.expectException(lambda: max([5,6,7,8,9],[1,2,3,4],default=[1,1,1],key=len) ))
+    autoTester.check ('max', autoTester.expectException(lambda: max () ))
+    autoTester.check ('max', autoTester.expectException(lambda: max (1,2,3,4, default=5) ))
+    autoTester.check ('max', autoTester.expectException(lambda: max (default=5)))
+    autoTester.check ('max', autoTester.expectException(lambda: max ([])))
+    autoTester.check ('max', autoTester.expectException(lambda: max([5,6,7,8,9],[1,2,3,4],default=[1,1,1],key=len) ))
     # autoTester.check ('max', autoTester.expectException(lambda: max ([4, 5, 'xyz', 'XYZ']) ))  # exception not currently implemented
 
     autoTester.check ('abs', abs (-1), abs (1), abs (0), abs (-0.1), abs (0.1))

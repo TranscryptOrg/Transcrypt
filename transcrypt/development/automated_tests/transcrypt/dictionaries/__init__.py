@@ -122,6 +122,17 @@ def run (autoTester):
     d5 = d4.copy()
     autoTester.check(d5)
 
+    autoTester.check(dict.fromkeys(['b', 'c', 'a']))
+    autoTester.check(dict.fromkeys(['b', 'c', 'a'], '42'))
+    autoTester.check(dict.fromkeys('bca'))
+    autoTester.check(d1.fromkeys('bca'))
+    autoTester.check(d1.fromkeys(['b', 'c', 'a']))
+    autoTester.check(d1.fromkeys(['b', 'c', 'a'], '42'))
+    autoTester.check({}.fromkeys(['b', 'c', 'a']))
+
+    autoTester.check ("not iterable", autoTester.expectException ( lambda: dict.fromkeys(42) ))
+    autoTester.check ("missing argument", autoTester.expectException ( lambda: dict.fromkeys() ))
+
     # Check pop of None value (issue 827)
     a = {'hello': None}
     value = a.pop('hello', '<DEFAULT>')

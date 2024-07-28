@@ -174,7 +174,9 @@ class AutoTester:
         try:
             func()
             return("no exception")
-        except Exception as exc:
+        except Exception:
+            return("exception")
+        except object:  # required to catch some JS exceptions in the browser
             return("exception")
 
     def throwToError(self, func):
