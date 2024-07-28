@@ -1922,6 +1922,14 @@ function __update__ (aDict) {
     }
 }
 
+function __copy__ () {
+    let dNew = {};
+    for (var attrib in this) {
+        dNew[attrib] = this[attrib];
+    }
+    return dict(dNew);
+}
+
 function __values__ () {
     var values = [];
     for (var attrib in this) {
@@ -2011,6 +2019,7 @@ export function dict (objectOrPairs) {
     __setproperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
     __setproperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
     __setproperty__ (instance, 'py_update', {value: __update__, enumerable: false});
+    __setproperty__ (instance, 'py_copy', {value: __copy__, enumerable: false});
     __setproperty__ (instance, 'py_values', {value: __values__, enumerable: false});
     __setproperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
     __setproperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices

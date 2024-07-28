@@ -103,6 +103,25 @@ def run (autoTester):
         autoTester.expectException ( lambda: tel.popitem() )
     )
 
+    d1 = {'c': 2, 'a': 3, 'd': 4, 'b': 1}
+    autoTester.check(d1)
+    d2 = d1.copy()
+    autoTester.check(d2)
+    d1['a'] = 5
+    d2['c'] = 6
+    autoTester.check(d1)
+    autoTester.check(d2)
+    d1['d'] = [3, 1, 2]
+    autoTester.check(d1)
+    d3 = d1.copy()
+    autoTester.check(d3)
+    d3['d'][1] = 9
+    autoTester.check(d1)
+    autoTester.check(d3)
+    d4 = {}
+    d5 = d4.copy()
+    autoTester.check(d5)
+
     # Check pop of None value (issue 827)
     a = {'hello': None}
     value = a.pop('hello', '<DEFAULT>')

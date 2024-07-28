@@ -577,6 +577,8 @@ class Generator (ast.NodeVisitor):
             ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealt with separately in visit_Call
             ('TypeError', 'py_TypeError'),          ('js_TypeError', 'TypeError'),
             ('update', 'py_update'),                ('js_update', 'update'),
+            ('copy', 'py_copy'),
+            ('deepcopy', 'py_deepcopy'),
             ('values', 'py_values'),                ('js_values', 'values'),
             ('reversed', 'py_reversed'),            ('js_reversed', 'reversed'),
             ('setdefault', 'py_setdefault'),        ('js_setdefault', 'setdefault'),
