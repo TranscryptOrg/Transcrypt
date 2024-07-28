@@ -146,3 +146,37 @@ def run (autoTester):
     def aTest7(test_list):
         test_list[7:0:0] = ['x', 'y', 'z']  # ValueError: slice step cannot be zero
     autoTester.check('zero step slice', autoTester.expectException(lambda: aTest7(aList)))
+
+    aList = ['a', 'b', 'c']
+    aList.remove('b')
+    autoTester.check(aList)
+    aList.remove('a')
+    autoTester.check(aList)
+    autoTester.check('not in list', autoTester.expectException(lambda: aList.remove('d')))
+    autoTester.check(aList)
+    aList.remove('c')
+    autoTester.check(aList)
+    autoTester.check('not in list', autoTester.expectException(lambda: aList.remove('c')))
+    autoTester.check(aList)
+
+    aList = ['a', 'b', 'c', 'd', 'e', 'f']
+    aList.pop(2)
+    autoTester.check(aList)
+    aList.pop(0)
+    autoTester.check(aList)
+    aList.pop(-3)
+    autoTester.check(aList)
+    aList.pop(-1)
+    autoTester.check(aList)
+    autoTester.check('out of range', autoTester.expectException(lambda: aList.pop(-3)))
+    autoTester.check('out of range', autoTester.expectException(lambda: aList.pop(3)))
+    aList.pop()
+    autoTester.check(aList)
+    aList.pop()
+    autoTester.check(aList)
+    autoTester.check('empty list', autoTester.expectException(lambda: aList.pop()))
+
+    # Check pop of empty list (issue 854)
+    autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(-1)))
+    autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(0)))
+    autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(1)))

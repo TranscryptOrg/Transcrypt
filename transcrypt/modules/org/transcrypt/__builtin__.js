@@ -1150,8 +1150,8 @@ Array.prototype.insert = function (index, element) {
 
 Array.prototype.remove = function (element) {
     let index = this.indexOf (element);
-    if (index == -1) {
-        throw ValueError ("list.remove(x): x not in list", new Error ());
+    if (index === -1) {
+        throw ValueError("list.remove(x): x not in list", new Error ());
     }
     this.splice (index, 1);
 };
@@ -1161,11 +1161,18 @@ Array.prototype.index = function (element) {
 };
 
 Array.prototype.py_pop = function (index) {
-    if (index == undefined) {
+    if(this.length === 0){
+        throw IndexError("pop from empty list", new Error())
+    }
+    if (index === undefined) {
         return this.pop ();  // Remove last element
     }
     else {
-        return this.splice (index, 1) [0];
+        const idx = index < 0 ? this.length + index : index
+        if(this[idx] === undefined){
+            throw IndexError("pop index out of range", new Error())
+        }
+        return this.splice (idx, 1) [0];
     }
 };
 
