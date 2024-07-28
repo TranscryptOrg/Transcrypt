@@ -61,18 +61,30 @@ In using the fabric.js JavaScript library this for example, the only thing diffe
 +----------------------------------------------+---------------------------------------------------------+
 
 
-Three ways of integration with JavaScript libraries
+Four ways of integration with JavaScript libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are three ways to integrate Transcrypt applications with existing JavaScript libraries.
+There are four ways to integrate Transcrypt applications with existing JavaScript libraries.
 
-1. The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do.
+1. The simplest way is to use the library as is, without any encapsulation. In this way all symbols of that library will be in the global namespace. While many JavaScript programmers don't seem to mind that, many Python programmers do. For example, in the Terminal demo, the JavaScript module is imported using a *<script>* tag in the HTML header:
+
+.. literalinclude:: ../../demos/terminal_demo/terminal_demo.html
+	:tab-width: 4
+	:caption: terminal_demo.html
+	:lines: 1-5,10-12
 
 2. Another way is to encapsulate the JavaScript library as a whole in a Transcrypt module. In the distribution this is done for the *fabric* module, that encapsulates *fabric.js* and is imported in the Pong example. In this way the global namespace stays clean.
 
-3. The third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was designed to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
+3. A third way is to write a complete Pythonic API for the JavaScript library. This is overkill in most cases and makes it harder to keep up with new versions of the library. Note that Transcrypt was designed to make seamless cooperation between Transcrypt and JavaScript libraries possible without any glue code.
 
-In most cases this approach 2 strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
+4. The fourth way is one of the most convenient, but it only works if you are using something like Webpack or Parcel to process and bundle the JavaScript files. In that case, you can use the Node *require()* function to dynamically load JavaScript libraries into the namespace.
+
+.. literalinclude:: ../../demos/nodejs_demo/nodejs_demo.py
+	:tab-width: 4
+	:caption: nodejs_demo.py
+	:lines: 3-7,16-22
+
+In most cases, approach 2 strikes a good balance between effort and yield. As can be seen below, the effort involved is minimal.
 
 .. _code_encaps_fabric:
 
