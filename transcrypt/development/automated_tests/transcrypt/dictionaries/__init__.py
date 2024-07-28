@@ -79,14 +79,34 @@ def run (autoTester):
         
     tel = {'guido': 123}
     tel.update({'edsger': 42})
+    autoTester.check (tel)
     autoTester.check (tel.setdefault ('linus', 456))
     autoTester.check (tel ['linus'])
     autoTester.check (tel.setdefault ('guido', 789))
+    autoTester.check (tel.setdefault ('dennis', None))
+    autoTester.check (tel.setdefault ('brian'))
+    autoTester.check (tel)
     autoTester.check (tel.pop ('guido', 1))
     autoTester.check (tel.pop ('guido', 1))
     autoTester.check (tel.pop ('edsger', 2))
     autoTester.check (tel.pop ('foo', 'bar'))
     autoTester.check (tel.pop ('foo', None))
+    autoTester.check (tel.get ('baz', 111))
+    autoTester.check (tel.get ('baz'))
+    autoTester.check (tel.get ('baz', None))
+    autoTester.check (tel)
+    autoTester.check (tel.popitem())
+    autoTester.check (tel.popitem())
+    autoTester.check (tel.popitem())
+    autoTester.check (tel)
+    autoTester.check ("dictionary is empty",
+        autoTester.expectException ( lambda: tel.popitem() )
+    )
+
+    # Check pop of None value (issue 827)
+    a = {'hello': None}
+    value = a.pop('hello', '<DEFAULT>')
+    autoTester.check('value = ', value, '; a = ', a)
 
     # Check compound keys (issue 281)
     d = {}

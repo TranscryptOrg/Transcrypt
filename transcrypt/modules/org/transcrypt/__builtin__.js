@@ -1875,25 +1875,25 @@ function __clear__ () {
 
 function __getdefault__ (aKey, aDefault) {  // Each Python object already has a function called __get__, so we call this one __getdefault__
     var result = this [aKey];
-    if (result == undefined) {
+    if (result === undefined) {
         result = this ['py_' + aKey]
     }
-    return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
+    return result === undefined ? (aDefault === undefined ? null : aDefault) : result;
 }
 
 function __setdefault__ (aKey, aDefault) {
     var result = this [aKey];
-    if (result != undefined) {
+    if (result !== undefined) {
         return result;
     }
-    var val = aDefault == undefined ? null : aDefault;
+    var val = aDefault === undefined ? null : aDefault;
     this [aKey] = val;
     return val;
 }
 
 function __pop__ (aKey, aDefault) {
     var result = this [aKey];
-    if (result != undefined) {
+    if (result !== undefined) {
         delete this [aKey];
         return result;
     } else {
@@ -1906,11 +1906,12 @@ function __pop__ (aKey, aDefault) {
 }
 
 function __popitem__ () {
-    var aKey = Object.keys (this) [0];
-    if (aKey == null) {
+    const aKeys = Object.keys (this);
+    if (aKeys.length === 0) {
         throw KeyError ("popitem(): dictionary is empty", new Error ());
     }
-    var result = tuple ([aKey, this [aKey]]);
+    const aKey = aKeys[aKeys.length - 1]
+    const result = tuple ([aKey, this [aKey]]);
     delete this [aKey];
     return result;
 }
