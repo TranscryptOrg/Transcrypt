@@ -1476,7 +1476,7 @@ class datetime(date):
                 dst = _time.daylight and localtm[8] > 0
                 gmtoff = -(_time.altzone if dst else _time.timezone)
                 if delta == timedelta(seconds=gmtoff):
-                    tz = timezone(delta, _time.tzname[dst])
+                    tz = timezone(delta, _time.tzname[1 if dst else 0])
                 else:
                     tz = timezone(delta)
                 # __pragma__('noopov')
