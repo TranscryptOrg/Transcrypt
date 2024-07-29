@@ -1,3 +1,4 @@
+from org.transcrypt.stubs.browser import __pragma__
 from copy import copy
 
 def run (autoTester):
@@ -180,3 +181,18 @@ def run (autoTester):
     autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(-1)))
     autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(0)))
     autoTester.check('empty list', autoTester.expectException(lambda: aList.pop(1)))
+
+    # Check for invalid list index (issue 637)
+    allLists = [['a', 'b', 'c'], 'abc']
+    for aList in allLists:
+        __pragma__('opov')
+        autoTester.check('valid index', autoTester.expectException(lambda: aList[1]))
+        autoTester.check(aList[1])
+        autoTester.check('valid index', autoTester.expectException(lambda: aList[-2]))
+        autoTester.check(aList[-2])
+        autoTester.check('invalid index', autoTester.expectException(lambda: aList[3]))
+        autoTester.check('invalid index', autoTester.expectException(lambda: aList[-4]))
+        __pragma__('noopov')
+        autoTester.check(aList[1])
+        # autoTester.check('invalid index', autoTester.expectException(lambda: aList[-4]))  # test differs from CPython without opov
+

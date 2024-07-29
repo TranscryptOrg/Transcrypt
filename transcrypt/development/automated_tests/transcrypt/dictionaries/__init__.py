@@ -148,6 +148,7 @@ def run (autoTester):
     d = {}
     d ['a'] = 3777
     d [(1, 2)] = 4777
+    # autoTester.check (d)  # Test fails - JS only supports string keys
     autoTester.check (d ['a'], d [(1, 2)])
     __pragma__ ('noopov')
 
