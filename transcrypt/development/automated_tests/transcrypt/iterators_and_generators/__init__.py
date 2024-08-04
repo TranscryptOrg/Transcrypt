@@ -136,4 +136,8 @@ def run (autoTester):
     m = mainCoroutine ()
     for i in range (5):
         m.send (None)
-        
+
+
+    gen3 = iter(range(2))
+    autoTester.check('next', next(gen3), next(gen3), next(gen3, 8), next(gen3, 9))
+    autoTester.check('StopIteration', autoTester.expectException(lambda: next(gen3)))

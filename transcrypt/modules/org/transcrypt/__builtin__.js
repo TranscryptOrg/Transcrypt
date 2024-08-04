@@ -834,20 +834,22 @@ export function py_iter (iterable) {                   // Alias for Python's ite
     return result;
 }
 
-export function py_next (iterator) {               // Called only in a Python context, could receive Python or JavaScript iterator
+export function py_next (iterator, value) {               // Called only in a Python context, could receive Python or JavaScript iterator
     try {                                   // Primarily assume Python iterator, for max speed
         var result = iterator.__next__ ();
     }
     catch (exception) {                     // JavaScript iterators are the exception here
         var result = iterator.next ();
         if (result.done) {
+            if(!(value === undefined)) return value
             throw StopIteration (new Error ());
         }
         else {
             return result.value;
         }
     }
-    if (result == undefined) {
+    if (result === undefined) {
+        if(!(value === undefined)) return value
         throw StopIteration (new Error ());
     }
     else {
