@@ -43,6 +43,7 @@ def run (autoTester):
     # autoTester.check ('max', autoTester.expectException(lambda: max ([4, 5, 'xyz', 'XYZ']) ))  # exception not currently implemented
 
     autoTester.check ('abs', abs (-1), abs (1), abs (0), abs (-0.1), abs (0.1))
+    autoTester.check ('pow', pow (2, 2), pow(0, 0), pow(1, 0), pow(2, 1), f"{pow(4, 0.5):g}")
 
     autoTester.check ('ord', ord ('a'), ord ('e´'[0]))  # This is the 2 codepoint version
     autoTester.check ('chr', chr (97), chr (122), chr (65), chr (90))  # a z A Z

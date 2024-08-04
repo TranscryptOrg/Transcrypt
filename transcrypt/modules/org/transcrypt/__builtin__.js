@@ -2103,7 +2103,7 @@ export function __pow__ (a, b) {
     }
 };
 
-export var pow = __pow__;   // Make available as builin under usual name
+export var pow = __pow__;   // Make available as builtin under usual name
 
 __pragma__ ('ifndef', '__xtiny__')    
 

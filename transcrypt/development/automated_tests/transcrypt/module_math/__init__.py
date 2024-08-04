@@ -77,4 +77,10 @@ def run (autoTester):
     autoTester.check (isnan (3))
     autoTester.check (isnan (nan))
     
-    
+    # from issue #529 regarding returned type for pow()
+    autoTester.check('2 ** 2 = {}'.format(2 ** 2))
+    autoTester.check('2.0 ** 2 = {:g}'.format(2.0 ** 2))  # type limitation: JS outputs int instead of float
+    autoTester.check('math.pow(2, 2) = {:g}'.format(pow(2, 2)))  # type limitation: JS outputs int instead of float
+    autoTester.check('math.pow(3, 2.9) = {}'.format(pow(3, 2.9)))
+    autoTester.check('math.pow(3, 2.0) = {:g}'.format(pow(3, 2.0)))  # type limitation: JS outputs int instead of float
+    autoTester.check('math.pow(3.1, 2.0) = {}'.format(pow(3.1, 2.0)))
