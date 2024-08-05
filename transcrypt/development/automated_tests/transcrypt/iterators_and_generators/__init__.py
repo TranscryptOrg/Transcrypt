@@ -23,8 +23,8 @@ class Iterator:
     def __iter__ (self):
         return self
         
-def exhaustableGenerator (i):
-    for i in range (5):
+def exhaustableGenerator (n):
+    for i in range (n):
         yield 2 * i
 
 def run (autoTester):
@@ -63,7 +63,15 @@ def run (autoTester):
         autoTester.check ('[4]')
         for n in iterable:
             autoTester.check (n)
-            
+
+    # issue #618
+    for iterable in iterables:
+        autoTester.check('[5]')
+        for i, n in enumerate(iterable):
+            toto = str(i) + '-' + str(n)
+            autoTester.check(toto)
+
+
     # BEGIN issue 196: for loop over iter (), runs OK but needs JavaScript 6. This should be clearly in the docs.
             
     a = 0
@@ -139,5 +147,5 @@ def run (autoTester):
 
 
     gen3 = iter(range(2))
-    autoTester.check('next', next(gen3), next(gen3), next(gen3, 8), next(gen3, 9))
+    autoTester.check('next', next(gen3), next(gen3), next(gen3, 8), next(gen3, 9), next(gen3, None))
     autoTester.check('StopIteration', autoTester.expectException(lambda: next(gen3)))

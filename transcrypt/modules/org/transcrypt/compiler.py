@@ -551,6 +551,7 @@ class Generator (ast.NodeVisitor):
                                                     ('js_conjugate', 'conjugate'),
             ('default', 'py_default'),
             ('del', 'py_del'),                      ('js_del', 'del'),
+            ('enumerate', 'py_enumerate'),
             ('false', 'py_false'),
                                                     ('js_from', 'from'),
             ('get', 'py_get'),                      ('js_get', 'get'),

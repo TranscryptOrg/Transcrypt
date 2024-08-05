@@ -860,6 +860,7 @@ export function py_next (iterator, value) {               // Called only in a Py
 export function __PyIterator__ (iterable) {
     this.iterable = iterable;
     this.index = 0;
+    this.__len__ = function () {return iterable.length};
 }
 
 __PyIterator__.prototype.__next__ = function() {
@@ -967,46 +968,19 @@ export function sum (iterable) {
     return result;
 }
 
-// Enumerate method, returning a zipped list
-export function enumerate(iterable, start = 0) {
+
+function* __enumerate__ (iterable, start=0) {
     if (start.hasOwnProperty("__kwargtrans__")) {
         // start was likely passed in as kwarg
         start = start['start'];
     }
-    return zip(range(start, len(iterable) + start), iterable);
+    let n = start
+    for (const item of iterable) {
+        yield [n, item]
+        n += 1
+    }
 }
-
-// Shallow and deepcopy
-
-// export function copy (anObject) {
-//     if (anObject == null || typeof anObject == "object") {
-//         return anObject;
-//     }
-//     else {
-//         var result = {};
-//         for (var attrib in obj) {
-//             if (anObject.hasOwnProperty (attrib)) {
-//                 result [attrib] = anObject [attrib];
-//             }
-//         }
-//         return result;
-//     }
-// }
-//
-// export function deepcopy (anObject) {
-//     if (anObject == null || typeof anObject == "object") {
-//         return anObject;
-//     }
-//     else {
-//         var result = {};
-//         for (var attrib in obj) {
-//             if (anObject.hasOwnProperty (attrib)) {
-//                 result [attrib] = deepcopy (anObject [attrib]);
-//             }
-//         }
-//         return result;
-//     }
-// }
+export var py_enumerate = __enumerate__;  // Exporting a generator function in JS may be problematic but it allows enumerate to be lazy
 
 // List extensions to Array
 
