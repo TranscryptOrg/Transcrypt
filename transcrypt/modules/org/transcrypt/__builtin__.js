@@ -1115,6 +1115,10 @@ Array.prototype.py_clear = function () {
     this.length = 0;
 };
 
+Array.prototype.py_copy = function () {
+    return this.slice();
+};
+
 Array.prototype.extend = function (aList) {
     this.push.apply (this, aList);
 };

@@ -61,6 +61,20 @@ def run (autoTester):
 
     sample_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 
+    autoTester.check("old:", sample_list)
+    new1 = sample_list.copy()
+    autoTester.check("new1:", new1)
+    new2 = sample_list[:]
+    autoTester.check("new2:", new2)
+    new3 = list(sample_list)
+    autoTester.check("new3:", new3)
+    # new4 = [*sample_list]  # Does not work properly
+    # autoTester.check("new4:", new4)
+    new1[1] = 'x'
+    new2[2] = 'y'
+    new3[3] = 'z'
+    autoTester.check("updated:", sample_list, new1, new2, new3)
+
     aList = copy(sample_list)
     aList[1:3] = ['x', 'y', 'z']
     autoTester.check(aList)
