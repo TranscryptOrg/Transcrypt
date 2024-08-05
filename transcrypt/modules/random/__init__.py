@@ -32,10 +32,12 @@ def _random_integer ():
 
 def seed (x = int (_bitmask3 * Math.random ())):
     global _array
+    global _index
     global _bitmask1
     _array [0] = x
     for i in  range (1, 624):
         _array [i] = ((1812433253 * _array [i - 1]) ^ ((_array [i - 1] >> 30) + i)) & _bitmask1
+    _index = 0
 
 def randint (a, b):
     return a + _random_integer () % (b - a + 1)
