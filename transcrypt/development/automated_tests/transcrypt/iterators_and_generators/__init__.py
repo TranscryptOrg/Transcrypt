@@ -64,6 +64,15 @@ def run (autoTester):
         for n in iterable:
             autoTester.check (n)
 
+    iterables = [['a', 'b', 'c', 'd', 'e'], 'abcde', ('a', 'b', 'c', 'd', 'e')]
+    for iterable in iterables:
+        # JS does not have tuples so coerce  to list of lists
+        autoTester.check("enumerate",
+            [list(item) for item in enumerate(iterable)],
+            [list(item) for item in enumerate(iterable, 1)],
+            [list(item) for item in enumerate(iterable, start=2)]
+        )
+
     # issue #618
     for iterable in iterables:
         autoTester.check('[5]')

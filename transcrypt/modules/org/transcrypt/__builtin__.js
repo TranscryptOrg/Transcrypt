@@ -968,7 +968,6 @@ export function sum (iterable) {
     return result;
 }
 
-
 function* __enumerate__ (iterable, start=0) {
     if (start.hasOwnProperty("__kwargtrans__")) {
         // start was likely passed in as kwarg
