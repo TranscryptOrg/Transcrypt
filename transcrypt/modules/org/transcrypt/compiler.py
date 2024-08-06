@@ -2061,7 +2061,7 @@ class Generator (ast.NodeVisitor):
         if self.allowDocAttribs:
             docString = ast.get_docstring (node)
             if docString:
-               self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
+               self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n ').replace('\'', '\\\''))
 
         # Deal with data class var assigns, a flavor of special class var assigns
         if isDataClass: # Constructor + params have to be generated, no real class vars, just syntactically
@@ -2747,7 +2747,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             if self.allowDocAttribs:
                 docString = ast.get_docstring (node)
                 if docString:
-                    self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n '))
+                    self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n ').replace('\'', '\\\''))
 
 
             if decorate:
@@ -3102,7 +3102,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         # Insert docstring at hoist location, further hoists are PRE(!)pended
         if self.allowDocAttribs and docString:
-            self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n'))
+            self.emit ('export var __doc__ = \'{}\';\n', docString.replace ('\n', '\\n').replace ('\'', '\\\''))
 
         '''
         Make the globals () function work as well as possible in conjunction with JavaScript 6 modules rather than closures
