@@ -295,7 +295,7 @@ int.__name__ = 'int';
 int.__bases__ = [object];
 
 __pragma__ ('ifdef', '__sform__')
-Number.prototype.__format__ = function (fmt_spec) {
+function _number__format__ (fmt_spec) {
     if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
         return this.toString ();
     }
@@ -534,6 +534,7 @@ Number.prototype.__format__ = function (fmt_spec) {
     }
     return val;
 };
+__setproperty__ (Number.prototype, '__format__', { value: _number__format__ });
 __pragma__ ('endif')
    
 export function bool (any) {     // Always truly returns a bool, rather than something truthy or falsy
@@ -1013,13 +1014,14 @@ export function list (iterable) {                                      // All su
     // Sort is the normal JavaScript sort, Python sort is a non-member function
     return instance;
 }
-Array.prototype.__class__ = list;   // All arrays are lists (not only if constructed by the list ctor), unless constructed otherwise
 list.__name__ = 'list';
 list.__bases__ = [object];
 
-Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
+const _listmethods = {};
 
-Array.prototype.__getslice__ = function (start, stop, step) {
+_listmethods.__iter__ = function () {return new __PyIterator__ (this);};
+
+_listmethods.__getslice__ = function (start, stop, step) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -1046,7 +1048,7 @@ Array.prototype.__getslice__ = function (start, stop, step) {
     return result;
 };
 
-Array.prototype.__setslice__ = function (start, stop, step, source) {
+_listmethods.__setslice__ = function (start, stop, step, source) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -1069,7 +1071,7 @@ Array.prototype.__setslice__ = function (start, stop, step, source) {
     }
 };
 
-Array.prototype.__repr__ = function () {
+_listmethods.__repr__ = function () {
     if (this.__class__ == set && !this.length) {
         return 'set()';
     }
@@ -1091,25 +1093,25 @@ Array.prototype.__repr__ = function () {
     return result;
 };
 
-Array.prototype.__str__ = Array.prototype.__repr__;
+_listmethods.__str__ = _listmethods.__repr__;
 
-Array.prototype.append = function (element) {
+_listmethods.append = function (element) {
     this.push (element);
 };
 
-Array.prototype.py_clear = function () {
+_listmethods.py_clear = function () {
     this.length = 0;
 };
 
-Array.prototype.extend = function (aList) {
+_listmethods.extend = function (aList) {
     this.push.apply (this, aList);
 };
 
-Array.prototype.insert = function (index, element) {
+_listmethods.insert = function (index, element) {
     this.splice (index, 0, element);
 };
 
-Array.prototype.remove = function (element) {
+_listmethods.remove = function (element) {
     let index = this.indexOf (element);
     if (index == -1) {
         throw ValueError ("list.remove(x): x not in list", new Error ());
@@ -1117,11 +1119,11 @@ Array.prototype.remove = function (element) {
     this.splice (index, 1);
 };
 
-Array.prototype.index = function (element) {
+_listmethods.index = function (element) {
     return this.indexOf (element);
 };
 
-Array.prototype.py_pop = function (index) {
+_listmethods.py_pop = function (index) {
     if (index == undefined) {
         return this.pop ();  // Remove last element
     }
@@ -1130,18 +1132,18 @@ Array.prototype.py_pop = function (index) {
     }
 };
 
-Array.prototype.py_sort = function () {
+_listmethods.py_sort = function () {
     __sort__.apply  (null, [this].concat ([] .slice.apply (arguments)));    // Can't work directly with arguments
     // Python params: (iterable, key = None, reverse = False)
     // py_sort is called with the Transcrypt kwargs mechanism, and just passes the params on to __sort__
     // __sort__ is def'ed with the Transcrypt kwargs mechanism
 };
 
-Array.prototype.__add__ = function (aList) {
+_listmethods.__add__ = function (aList) {
     return list (this.concat (aList));
 };
 
-Array.prototype.__mul__ = function (scalar) {
+_listmethods.__mul__ = function (scalar) {
     let result = this;
     for (let i = 1; i < scalar; i++) {
         result = result.concat (this);
@@ -1149,13 +1151,22 @@ Array.prototype.__mul__ = function (scalar) {
     return result;
 };
 
-Array.prototype.__rmul__ = Array.prototype.__mul__;
+_listmethods.__rmul__ = _listmethods.__mul__;
+
+// All Arrays are lists, whether they were created with list() or not
+__setproperty__ (Array.prototype, '__class__', { value: list, writable: true });
+// Assign 'list' methods to Array.prototype
+for (let [key, value] of Object.entries (_listmethods)) {
+    __setproperty__ (Array.prototype, key, { value });
+}
 
 // Tuple extensions to Array
 
 export function tuple (iterable) {
     let instance = iterable ? [] .slice.apply (iterable) : [];
-    instance.__class__ = tuple; // Not all arrays are tuples
+    // Not all Arrays are tuples, so we set __class__ here on the instance
+    // (not on Array.prototype as we did with list)
+    __setproperty__ (instance, '__class__', { value: tuple, writable: true });
     return instance;
 }
 tuple.__name__ = 'tuple';
@@ -1171,13 +1182,17 @@ export function set (iterable) {
             instance.add (iterable [index]);
         }
     }
-    instance.__class__ = set;   // Not all arrays are sets
+    // Not all arrays are sets, so we set __class__ here on the instance
+    // (not on Array.prototype as we did with list)
+    __setproperty__ (instance, '__class__', { value: set, writable: true });
     return instance;
 }
 set.__name__ = 'set';
 set.__bases__ = [object];
 
-Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
+const _setmethods = {};
+
+_setmethods.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
 // Since sorting is lex, compare has to be lex. This also allows for mixed lists
 
     element += '';
@@ -1203,20 +1218,20 @@ Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into
     return -1;
 };
 
-Array.prototype.add = function (element) {
+_setmethods.add = function (element) {
     if (this.indexOf (element) == -1) { // Avoid duplicates in set
         this.push (element);
     }
 };
 
-Array.prototype.discard = function (element) {
+_setmethods.discard = function (element) {
     var index = this.indexOf (element);
     if (index != -1) {
         this.splice (index, 1);
     }
 };
 
-Array.prototype.isdisjoint = function (other) {
+_setmethods.isdisjoint = function (other) {
     this.sort ();
     for (let i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) != -1) {
@@ -1226,7 +1241,7 @@ Array.prototype.isdisjoint = function (other) {
     return true;
 };
 
-Array.prototype.issuperset = function (other) {
+_setmethods.issuperset = function (other) {
     this.sort ();
     for (let i = 0; i < other.length; i++) {
         if (this.__bindexOf__ (other [i]) == -1) {
@@ -1236,11 +1251,11 @@ Array.prototype.issuperset = function (other) {
     return true;
 };
 
-Array.prototype.issubset = function (other) {
+_setmethods.issubset = function (other) {
     return set (other.slice ()) .issuperset (this); // Sort copy of 'other', not 'other' itself, since it may be an ordered sequence
 };
 
-Array.prototype.union = function (other) {
+_setmethods.union = function (other) {
     let result = set (this.slice () .sort ());
     for (let i = 0; i < other.length; i++) {
         if (result.__bindexOf__ (other [i]) == -1) {
@@ -1250,7 +1265,7 @@ Array.prototype.union = function (other) {
     return result;
 };
 
-Array.prototype.intersection = function (other) {
+_setmethods.intersection = function (other) {
     this.sort ();
     let result = set ();
     for (let i = 0; i < other.length; i++) {
@@ -1261,7 +1276,7 @@ Array.prototype.intersection = function (other) {
     return result;
 };
 
-Array.prototype.difference = function (other) {
+_setmethods.difference = function (other) {
     let sother = set (other.slice () .sort ());
     let result = set ();
     for (let i = 0; i < this.length; i++) {
@@ -1272,11 +1287,11 @@ Array.prototype.difference = function (other) {
     return result;
 };
 
-Array.prototype.symmetric_difference = function (other) {
+_setmethods.symmetric_difference = function (other) {
     return this.union (other) .difference (this.intersection (other));
 };
 
-Array.prototype.py_update = function () {   // O (n)
+_setmethods.py_update = function () {   // O (n)
     let updated = [] .concat.apply (this.slice (), arguments) .sort ();
     this.py_clear ();
     for (let i = 0; i < updated.length; i++) {
@@ -1286,7 +1301,7 @@ Array.prototype.py_update = function () {   // O (n)
     }
 };
 
-Array.prototype.__eq__ = function (other) { // Also used for list
+_setmethods.__eq__ = function (other) { // Also used for list
     if (this.length != other.length) {
         return false;
     }
@@ -1302,11 +1317,11 @@ Array.prototype.__eq__ = function (other) { // Also used for list
     return true;
 };
 
-Array.prototype.__ne__ = function (other) { // Also used for list
+_setmethods.__ne__ = function (other) { // Also used for list
     return !this.__eq__ (other);
 };
 
-Array.prototype.__le__ = function (other) {
+_setmethods.__le__ = function (other) {
     if (this.__class__ == set) {
         return this.issubset (other);
     }
@@ -1323,7 +1338,7 @@ Array.prototype.__le__ = function (other) {
     }
 };
 
-Array.prototype.__ge__ = function (other) {
+_setmethods.__ge__ = function (other) {
     if (this.__class__ == set) {
         return this.issuperset (other);
     }
@@ -1340,7 +1355,7 @@ Array.prototype.__ge__ = function (other) {
     }
 };
 
-Array.prototype.__lt__ = function (other) {
+_setmethods.__lt__ = function (other) {
     return (
         this.__class__ == set ?
         this.issubset (other) && !this.issuperset (other) :
@@ -1348,13 +1363,18 @@ Array.prototype.__lt__ = function (other) {
     );
 };
 
-Array.prototype.__gt__ = function (other) {
+_setmethods.__gt__ = function (other) {
     return (
         this.__class__ == set ?
         this.issuperset (other) && !this.issubset (other) :
         !this.__le__ (other)
     );
 };
+
+// Assign 'set' methods to Array.prototype
+for (let [key, value] of Object.entries (_setmethods)) {
+    __setproperty__ (Array.prototype, key, { value });
+}
 
 // Byte array extensions
 
@@ -1385,15 +1405,16 @@ export function bytearray (bytable, encoding) {
 
 export var bytes = bytearray;
 
+const _bytearraymethods = {};
 
-Uint8Array.prototype.__add__ = function (aBytes) {
+_bytearraymethods.__add__ = function (aBytes) {
     let result = new Uint8Array (this.length + aBytes.length);
     result.set (this);
     result.set (aBytes, this.length);
     return result;
 };
 
-Uint8Array.prototype.__mul__ = function (scalar) {
+_bytearraymethods.__mul__ = function (scalar) {
     let result = new Uint8Array (scalar * this.length);
     for (let i = 0; i < scalar; i++) {
         result.set (this, i * this.length);
@@ -1401,7 +1422,12 @@ Uint8Array.prototype.__mul__ = function (scalar) {
     return result;
 };
 
-Uint8Array.prototype.__rmul__ = Uint8Array.prototype.__mul__;
+_bytearraymethods.__rmul__ = _bytearraymethods.__mul__;
+
+// Assign 'bytearray' methods to Uint8Array.prototype
+for (let [key, value] of Object.entries (_bytearraymethods)) {
+    __setproperty__ (Uint8Array.prototype, key, { value });
+}
 
 // String extensions
 
@@ -1423,25 +1449,26 @@ export function str (stringable) {
     }
 };
 
-String.prototype.__class__ = str;   // All strings are str
 str.__name__ = 'str';
 str.__bases__ = [object];
 
-String.prototype.__iter__ = function () {new __PyIterator__ (this);};
+const _strmethods = {};
 
-String.prototype.__repr__ = function () {
+_strmethods.__iter__ = function () {new __PyIterator__ (this);};
+
+_strmethods.__repr__ = function () {
     return (this.indexOf ('\'') == -1 ? '\'' + this + '\'' : '"' + this + '"') .py_replace ('\t', '\\t') .py_replace ('\n', '\\n');
 };
 
-String.prototype.__str__ = function () {
+_strmethods.__str__ = function () {
     return this;
 };
 
-String.prototype.capitalize = function () {
+_strmethods.capitalize = function () {
     return this.charAt (0).toUpperCase () + this.slice (1);
 };
 
-String.prototype.endswith = function (suffix, start=0, end) {
+_strmethods.endswith = function (suffix, start=0, end) {
     if (end === undefined) {end = this.length}
     const str = this.slice(start, end)
 
@@ -1455,11 +1482,11 @@ String.prototype.endswith = function (suffix, start=0, end) {
     return false;
 };
 
-String.prototype.find = function (sub, start) {
+_strmethods.find = function (sub, start) {
     return this.indexOf (sub, start);
 };
 
-String.prototype.__getslice__ = function (start, stop, step) {
+_strmethods.__getslice__ = function (start, stop, step) {
     if (start < 0) {
         start = this.length + start;
     }
@@ -1484,7 +1511,7 @@ String.prototype.__getslice__ = function (start, stop, step) {
 };
 
 __pragma__ ('ifdef', '__sform__')
-String.prototype.__format__ = function (fmt_spec) {
+_strmethods.__format__ = function (fmt_spec) {
     if (fmt_spec == undefined || fmt_spec.strip ().length == 0) {
         return this.valueOf ();
     }
@@ -1631,52 +1658,51 @@ __pragma__ ('else')
             }
         });
 __pragma__ ('endif')
-    });},
-    enumerable: true
+    });}
 });
 
-String.prototype.isalnum = function () {
+_strmethods.isalnum = function () {
     return /^[0-9a-zA-Z]{1,}$/.test(this)
 }
 
-String.prototype.isalpha = function () {
+_strmethods.isalpha = function () {
     return /^[a-zA-Z]{1,}$/.test(this)
 }
 
-String.prototype.isdecimal = function () {
+_strmethods.isdecimal = function () {
     return /^[0-9]{1,}$/.test(this)
 }
 
-String.prototype.isdigit = function () {
+_strmethods.isdigit = function () {
     return this.isdecimal()
 }
 
-String.prototype.islower = function () {
+_strmethods.islower = function () {
     return /^[a-z]{1,}$/.test(this)
 }
 
-String.prototype.isupper = function () {
+_strmethods.isupper = function () {
     return /^[A-Z]{1,}$/.test(this)
 }
 
-String.prototype.isspace = function () {
+_strmethods.isspace = function () {
     return /^[\s]{1,}$/.test(this)
 }
 
-String.prototype.isnumeric = function () {
+_strmethods.isnumeric = function () {
     return !isNaN (parseFloat (this)) && isFinite (this);
 };
 
-String.prototype.join = function (strings) {
+_strmethods.join = function (strings) {
     strings = Array.from (strings); // Much faster than iterating through strings char by char
     return strings.join (this);
 };
 
-String.prototype.lower = function () {
+_strmethods.lower = function () {
     return this.toLowerCase ();
 };
 
-String.prototype.py_replace = function (old, aNew, maxreplace) {
+_strmethods.py_replace = function (old, aNew, maxreplace) {
     if (maxreplace === undefined || maxreplace < 0) {
         return this.split(old).join(aNew);
     } else if (maxreplace === 0) {
@@ -1688,15 +1714,15 @@ String.prototype.py_replace = function (old, aNew, maxreplace) {
     }
 };
 
-String.prototype.lstrip = function () {
+_strmethods.lstrip = function () {
     return this.replace (/^\s*/g, '');
 };
 
-String.prototype.rfind = function (sub, start) {
+_strmethods.rfind = function (sub, start) {
     return this.lastIndexOf (sub, start);
 };
 
-String.prototype.rsplit = function (sep, maxsplit) {    // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+_strmethods.rsplit = function (sep, maxsplit) {    // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
     if (sep == undefined || sep == null) {
         sep = /\s+/;
         var stripped = this.strip ();
@@ -1720,11 +1746,11 @@ String.prototype.rsplit = function (sep, maxsplit) {    // Combination of genera
     }
 };
 
-String.prototype.rstrip = function () {
+_strmethods.rstrip = function () {
     return this.replace (/\s*$/g, '');
 };
 
-String.prototype.py_split = function (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
+_strmethods.py_split = function (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
     if (sep == undefined || sep == null) {
         sep = /\s+/;
         var stripped = this.strip ();
@@ -1747,7 +1773,7 @@ String.prototype.py_split = function (sep, maxsplit) {  // Combination of genera
     }
 };
 
-String.prototype.startswith = function (prefix, start=0, end) {
+_strmethods.startswith = function (prefix, start=0, end) {
     if (end === undefined) {end = this.length}
     const str = this.slice(start, end)
 
@@ -1762,15 +1788,15 @@ String.prototype.startswith = function (prefix, start=0, end) {
     return false;
 }
 
-String.prototype.strip = function () {
+_strmethods.strip = function () {
     return this.trim ();
 };
 
-String.prototype.upper = function () {
+_strmethods.upper = function () {
     return this.toUpperCase ();
 };
 
-String.prototype.__mul__ = function (scalar) {
+_strmethods.__mul__ = function (scalar) {
     var result = '';
     for (var i = 0; i < scalar; i++) {
         result = result + this;
@@ -1778,15 +1804,24 @@ String.prototype.__mul__ = function (scalar) {
     return result;
 };
 
-String.prototype.__rmul__ = String.prototype.__mul__;
+_strmethods.__rmul__ = _strmethods.__mul__;
+
+// All Strings are strs, whether they were created with str() or not
+__setproperty__ (String.prototype, '__class__', { value: str, writable: true });
+// Assign 'str' methods to String.prototype
+for (let [key, value] of Object.entries (_strmethods)) {
+    __setproperty__ (String.prototype, key, { value });
+}
 
 // Dict extensions to object
 
-function __contains__ (element) {
+const _dictmethods = {};
+
+_dictmethods.__contains__ = function (element) {
     return this.hasOwnProperty (element);
 }
 
-function __keys__ () {
+_dictmethods.py_keys = function () {
     var keys = [];
     for (var attrib in this) {
         if (!__specialattrib__ (attrib)) {
@@ -1796,7 +1831,15 @@ function __keys__ () {
     return keys;
 }
 
-function __items__ () {
+_dictmethods.__iter__ = function () {
+    return new __PyIterator__ (this.py_keys ());
+}
+
+_dictmethods[Symbol.iterator] = function () {
+    return new __JsIterator__ (this.py_keys ());
+}
+
+_dictmethods.py_items = function () {
     var items = [];
     for (var attrib in this) {
         if (!__specialattrib__ (attrib)) {
@@ -1806,17 +1849,17 @@ function __items__ () {
     return items;
 }
 
-function __del__ (key) {
+_dictmethods.py_del = function (key) {
     delete this [key];
 }
 
-function __clear__ () {
+_dictmethods.py_clear = function () {
     for (var attrib in this) {
         delete this [attrib];
     }
 }
 
-function __getdefault__ (aKey, aDefault) {  // Each Python object already has a function called __get__, so we call this one __getdefault__
+_dictmethods.py_get = function (aKey, aDefault) {
     var result = this [aKey];
     if (result == undefined) {
         result = this ['py_' + aKey]
@@ -1824,7 +1867,7 @@ function __getdefault__ (aKey, aDefault) {  // Each Python object already has a 
     return result == undefined ? (aDefault == undefined ? null : aDefault) : result;
 }
 
-function __setdefault__ (aKey, aDefault) {
+_dictmethods.py_setdefault = function (aKey, aDefault) {
     var result = this [aKey];
     if (result != undefined) {
         return result;
@@ -1834,7 +1877,7 @@ function __setdefault__ (aKey, aDefault) {
     return val;
 }
 
-function __pop__ (aKey, aDefault) {
+_dictmethods.py_pop = function (aKey, aDefault) {
     var result = this [aKey];
     if (result != undefined) {
         delete this [aKey];
@@ -1848,7 +1891,7 @@ function __pop__ (aKey, aDefault) {
     return aDefault;
 }
 
-function __popitem__ () {
+_dictmethods.py_popitem = function () {
     var aKey = Object.keys (this) [0];
     if (aKey == null) {
         throw KeyError ("popitem(): dictionary is empty", new Error ());
@@ -1858,13 +1901,13 @@ function __popitem__ () {
     return result;
 }
 
-function __update__ (aDict) {
+_dictmethods.py_update = function (aDict) {
     for (var aKey in aDict) {
         this [aKey] = aDict [aKey];
     }
 }
 
-function __values__ () {
+_dictmethods.py_values = function () {
     var values = [];
     for (var attrib in this) {
         if (!__specialattrib__ (attrib)) {
@@ -1872,19 +1915,24 @@ function __values__ () {
         }
     }
     return values;
-
 }
 
-function __dgetitem__ (aKey) {
+_dictmethods.__getitem__ = function (aKey) {
     return this [aKey];
 }
 
-function __dsetitem__ (aKey, aValue) {
+_dictmethods.__setitem__ = function (aKey, aValue) {
     this [aKey] = aValue;
 }
 
+__setproperty__ (dict.prototype, '__class__', { value: dict, writable: true });
+// Assign 'dict' methods to dict.prototype
+for (let [key, value] of Object.entries (_dictmethods)) {
+    __setproperty__ (dict.prototype, key, { value });
+}
+
 export function dict (objectOrPairs) {
-    var instance = {};
+    var instance = Object.create (dict.prototype);
     if (!objectOrPairs || objectOrPairs instanceof Array) { // It's undefined or an array of pairs
         if (objectOrPairs) {
             for (var index = 0; index < objectOrPairs.length; index++) {
@@ -1926,7 +1974,7 @@ export function dict (objectOrPairs) {
             }
         } else if (objectOrPairs instanceof Object) {
             // Passed object is a JavaScript object but not yet a dict, don't copy it
-            instance = objectOrPairs;
+            Object.assign (instance, objectOrPairs);
         } else {
             // We have already covered Array so this indicates
             // that the passed object is not a js object - i.e.
@@ -1935,27 +1983,6 @@ export function dict (objectOrPairs) {
             throw ValueError ("Invalid type of object for dict creation", new Error ());
         }
     }
-
-    // Trancrypt interprets e.g. {aKey: 'aValue'} as a Python dict literal rather than a JavaScript object literal
-    // So dict literals rather than bare Object literals will be passed to JavaScript libraries
-    // Some JavaScript libraries call all enumerable callable properties of an object that's passed to them
-    // So the properties of a dict should be non-enumerable
-    __setproperty__ (instance, '__class__', {value: dict, enumerable: false, writable: true});
-    __setproperty__ (instance, '__contains__', {value: __contains__, enumerable: false});
-    __setproperty__ (instance, 'py_keys', {value: __keys__, enumerable: false});
-    __setproperty__ (instance, '__iter__', {value: function () {new __PyIterator__ (this.py_keys ());}, enumerable: false});
-    __setproperty__ (instance, Symbol.iterator, {value: function () {new __JsIterator__ (this.py_keys ());}, enumerable: false});
-    __setproperty__ (instance, 'py_items', {value: __items__, enumerable: false});
-    __setproperty__ (instance, 'py_del', {value: __del__, enumerable: false});
-    __setproperty__ (instance, 'py_clear', {value: __clear__, enumerable: false});
-    __setproperty__ (instance, 'py_get', {value: __getdefault__, enumerable: false});
-    __setproperty__ (instance, 'py_setdefault', {value: __setdefault__, enumerable: false});
-    __setproperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
-    __setproperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
-    __setproperty__ (instance, 'py_update', {value: __update__, enumerable: false});
-    __setproperty__ (instance, 'py_values', {value: __values__, enumerable: false});
-    __setproperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily
-    __setproperty__ (instance, '__setitem__', {value: __dsetitem__, enumerable: false});    // trigger overloading to deal with slices
     return instance;
 }
 
@@ -1970,7 +1997,7 @@ function __setdoc__ (docString) {
 }
 
 // Python classes, methods and functions are all translated to JavaScript functions
-__setproperty__ (Function.prototype, '__setdoc__', {value: __setdoc__, enumerable: false});
+__setproperty__ (Function.prototype, '__setdoc__', {value: __setdoc__});
 
 // General operator overloading, only the ones that make most sense in matrix and complex operations
 
