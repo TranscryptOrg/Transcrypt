@@ -8,7 +8,7 @@ Python in the browser, precompiled for speed: https://www.transcrypt.org
 - Precompiled into highly readable, efficient JavaScript, downloads kB's rather than MB's
 - Multiple inheritance, optional operator overloading, metaclasses, async/await, properties, decorators, hierarchical modules etc.
 - Seamless integration with the universe of high-quality web-oriented JavaScript libraries, rather than the desktop-oriented Python ones
-- Pure Python 3.9 syntax, using Python's native parser
+- Pure Python 3 syntax, using Python's native parser
 - Debug directly from Python sourcecode, through integrated sourcemaps
 - Generates JavaScript for humans, resembling the Python source line by line, optionally annotated with source line numbers
 - Lightning fast JavaScript 6 code: call caching, for-loop optimization, in-line JavaScript etc.
@@ -18,8 +18,6 @@ Python in the browser, precompiled for speed: https://www.transcrypt.org
 - Apache 2.0 license
 - Pip-install and go!
 
-Latest stable release: Berlin
-=============================
 
 `>>> GET STARTED! <https://www.transcrypt.org/#hello>`__
 ========================================================
@@ -47,7 +45,7 @@ Main differences with CPython
 License
 =======
 
-Copyright 2014 - 2023 Jacques de Hooge, GEATEC engineering, www.geatec.com
+Copyright 2014 - 2025 Jacques de Hooge, GEATEC engineering, www.geatec.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -75,7 +73,7 @@ At the same time the need was felt to keep a very firm grip on code quality, esp
 
 Everything under ../transcrypt/modules/org/transcrypt plus the file ../transcrypt/\_\_main\_\_.py is considered to be part of Transcrypt's core.
 A major design goal is to keep the core small and fast. This means that some CPython facilities were deliberately left out or simplified.
-Core development is still mainly done by Jacques, but with the input of many great ideas submitted as issues.
+Core development is still mainly done by the Transcrypt maintainer, but with the input of many great ideas submitted as issues.
 If you want to improve something in the core, this is best initiated by first opening an issue for it.
 Opening a pull request directly can lead to disappointment, although all effort is made to take good ideas seriously.
 
@@ -89,15 +87,15 @@ The design goal again is: better 90% complete, fast, small, and reliable, than 1
 If you contribute a library, please also contribute an autotest (see docs) and some documentation for it.
 The supported platforms are Windows and Linux (and, with that, OSX).
 
-While being open and respectful to any good ideas, the final say as to what gets in and what doesn't, is with Jacques.
+While being open and respectful to any good ideas, the final say as to what gets in and what doesn't, is with the maintainer of Transcrypt.
 So this is a dictatorial rather than a democratic project.
-Being a sailer himself, Jacques values the notion of having one captain on a ship.
+Being a sailer himself, the creator of Transcrypt valued the notion of having one captain on a ship.
 The captain doesn't own the ship, but he serves the passengers by consulting with the crew and plotting one stable course.
 
-Another possibility to contribute libraries to Transcrypt is by submitting them as separate packages to PyPi.
+Another possibility to contribute libraries to Transcrypt is by submitting them as separate packages to PyPI.
 In that case be sure to add the keyword Transcrypt to allow people to find your package.
 Making your package pip-installable will also help it to catch on.
-Contributing packages via PyPi of course means total freedom for the developer.
+Contributing packages via PyPI of course means total freedom for the developer.
 
 Deployment testing
 ========================
@@ -108,20 +106,3 @@ Each release is preceded by at least the following tests:
 - Automated compilation of the manual tests, human exercising of the resulting applications and a visual check of the results.
 - Automated compilation of the demo's, human exercising of the resulting applications and a visual check of the results.
 - A documentation build, followed by a visual sample check.
-
-What's new in the latest commits
-================================
-
-- Code generator adapted to Python 3.9 parser
-- Updated README and packaging configuration
-
-Known bugs in latest commits
-============================
-
-None
-
-Other packages you might like
-=============================
-
-- Numscrypt - port of a microscopic part of NumPy to Transcrypt, using JavaScript typed arrays: https://github.com/QQuick/Numscrypt
-- SimPyLC - PLC simulator with Arduino code generation: https://github.com/QQuick/SimPyLC
