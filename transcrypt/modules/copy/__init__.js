@@ -1,3 +1,5 @@
+var __name__ = 'copy';
+
 function _copy(isDeep, obj) {
     let result;
 
