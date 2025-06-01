@@ -19,6 +19,7 @@ setup (
 	keywords = ['python', 'javascript', 'transpiler', 'compiler', 'browser', 'web', 'multiple inheritance', 'transcrypt', 'django', 'flask', 'react'],
 	url = 'https://www.transcrypt.org',
 	license = 'Apache 2.0',
+	license_files = 'LICENSE',
 	author = 'Jacques de Hooge',
 	author_email = 'info@transcrypt.org',
 	packages = ['transcrypt'],
