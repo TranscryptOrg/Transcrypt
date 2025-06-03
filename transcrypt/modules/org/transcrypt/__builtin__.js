@@ -1115,7 +1115,7 @@ Array.prototype.py_clear = function () {
     this.length = 0;
 };
 
-Array.prototype.py_copy = function () {
+Array.prototype.copy = function () {
     return this.slice();
 };
 
@@ -2034,7 +2034,7 @@ export function dict (objectOrPairs) {
     __setproperty__ (instance, 'py_pop', {value: __pop__, enumerable: false});
     __setproperty__ (instance, 'py_popitem', {value: __popitem__, enumerable: false});
     __setproperty__ (instance, 'py_update', {value: __update__, enumerable: false});
-    __setproperty__ (instance, 'py_copy', {value: __copy__, enumerable: false});
+    __setproperty__ (instance, 'copy', {value: __copy__, enumerable: false});
     __setproperty__ (instance, 'py_values', {value: __values__, enumerable: false});
     __setproperty__ (instance, 'py_fromkeys', {value: __fromkeys__, enumerable: false});
     __setproperty__ (instance, '__getitem__', {value: __dgetitem__, enumerable: false});    // Needed since compound keys necessarily

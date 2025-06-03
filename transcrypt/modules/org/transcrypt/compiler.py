@@ -578,8 +578,8 @@ class Generator (ast.NodeVisitor):
             ('type', 'py_metatype'),                ('js_type', 'type'),    # Only for the type metaclass, the type operator is dealt with separately in visit_Call
             ('TypeError', 'py_TypeError'),          ('js_TypeError', 'TypeError'),
             ('update', 'py_update'),                ('js_update', 'update'),
-            ('copy', 'py_copy'),                    ('js_copy', 'copy'),
-            ('deepcopy', 'py_deepcopy'),            ('js_deepcopy', 'deepcopy'),
+            # ('copy', 'py_copy'),                    ('js_copy', 'copy'),  # This alias interferes with importing the copy module when the --alimod option is enabled
+            # ('deepcopy', 'py_deepcopy'),            ('js_deepcopy', 'deepcopy'),
             ('values', 'py_values'),                ('js_values', 'values'),
             ('fromkeys', 'py_fromkeys'),
             ('reversed', 'py_reversed'),            ('js_reversed', 'reversed'),
@@ -714,7 +714,7 @@ class Generator (ast.NodeVisitor):
             # Leave system dunder names unchanged
             return qualifiedId
         else:
-            # Filter the rest, trying all aliases sucessively
+            # Filter the rest, trying all aliases successively
             for alias in self.aliases:
 
                 # Replace non-adjacent and odd adjacent matches, turning __<alias [0]>__ into =<alias [1]>=

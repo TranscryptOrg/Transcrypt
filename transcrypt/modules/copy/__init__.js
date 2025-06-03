@@ -34,10 +34,10 @@ function _copy(isDeep, obj) {
     throw new Error("Copy not implemented for type ".concat(Object.prototype.toString.call(obj)));
 }
 
-export function py_copy(obj) {
+export function copy(obj) {
     return _copy(false, obj);
 }
 
-export function py_deepcopy(obj) {
+export function deepcopy(obj) {
     return _copy(true, obj);
 }
