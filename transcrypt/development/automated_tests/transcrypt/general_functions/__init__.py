@@ -54,6 +54,8 @@ def run (autoTester):
     autoTester.check (sorted(d))
     autoTester.check (sorted(d, key=sum))
 
+    autoTester.check (sorted({'b': 2, 'e': 5, 'a': 1, 'd': 4, 'c': 3}))
+
     # Make sure sorted is doing a proper shallow copy (issue 866)
     e = sorted(d)
     autoTester.check(e)

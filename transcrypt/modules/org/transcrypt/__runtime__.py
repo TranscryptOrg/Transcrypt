@@ -7,7 +7,6 @@
 #__pragma__ ('skip')
 Math = __typeof__ = __repr__ = document = console = window = 0
 #__pragma__ ('noskip')
-from copy import copy as _copy
 
 #__pragma__ ('notconv')  # !!! tconv gives a problem with __terminal__, needs investigation
 #__pragma__ ('nokwargs')
@@ -126,9 +125,9 @@ def _sort(iterable, key = None, reverse = False):                # Used by py_so
 
 def sorted(iterable, *, key=None, reverse=False):
     if type(iterable) == dict:
-        result = _copy(iterable.keys())
+        result = iterable.keys()
     else:
-        result = _copy(iterable)
+        result = iterable[:]  # Make a copy
 
     _sort(result, key, reverse)
     return result
