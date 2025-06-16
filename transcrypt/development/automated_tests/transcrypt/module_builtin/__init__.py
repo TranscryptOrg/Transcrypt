@@ -216,3 +216,7 @@ def run (autoTester):
         string_test.endswith(("abc", "defgh"), -3, 8),
         string_test.endswith(("abc", "defgh"), -9, 8),
     )
+
+    autoTester.check('<br><br>enumerate')
+    for i, v in enumerate([1, 2, '3', 4, 5]):
+        autoTester.check(f'{i}: {v}')
