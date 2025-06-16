@@ -1,3 +1,11 @@
+print("Expected Output:")
+
+print(10, 11, 12, 13, 14, 150, 10, 11, 12, 13, 14, 151, 10, 11, 12, 13, 14, 152, 10, 11, 12, 13, 14, 153, sep='\n')  #__: skip
+# __pragma__ ('ecom')
+#?print (0, 1, 2, 3, 4, 50, 0, 1, 2, 3, 4, 52, sep='\n')
+# __pragma__ ('noecom')
+print('\n\nTest output:')
+
 # __pragma__ ('ecom') # ===================================================================
 
 # --- Executed only by Transcrypt ---
