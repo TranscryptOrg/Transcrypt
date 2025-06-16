@@ -979,7 +979,7 @@ function* __enumerate__ (iterable, start=0) {
         n += 1
     }
 }
-export var py_enumerate = __enumerate__;  // Exporting a generator function in JS may be problematic but it allows enumerate to be lazy
+export var enumerate = __enumerate__;  // Exporting a generator function in JS may be problematic but it allows enumerate to be lazy
 
 // List extensions to Array
 
