@@ -1,6 +1,7 @@
 import sys
 
-mypyPath = 'D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/org/transcrypt/type_check/mypy-master-0.4.7'
+# mypyPath = 'D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/modules/org/transcrypt/type_check/mypy-master-0.4.7'
+mypyPath = '../../modules/org/transcrypt/type_check/mypy-master-0.4.7'
 sys.path.insert (0, mypyPath)   # Prepend, to favor it over CPython's mypy installation
 
 from mypy import api
