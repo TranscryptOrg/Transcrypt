@@ -92,7 +92,7 @@ def _local_time_tuple(jd):
             ,jd.getHours()
             ,jd.getMinutes()
             ,jd.getSeconds()
-            ,jd.getDay() - 1 if jd.getDay() > 0 else 6
+            ,(jd.getDay() - 1) if jd.getDay() > 0 else 6
             ,_day_of_year(jd, True)
             ,_daylight_in_effect(jd)
             ,jd.getMilliseconds() # not in use by the pub API
@@ -107,7 +107,7 @@ def _utc_time_tuple(jd):
             ,jd.getUTCHours()
             ,jd.getUTCMinutes()
             ,jd.getUTCSeconds()
-            ,jd.getUTCDay() - 1
+            ,(jd.getUTCDay() - 1) if jd.getUTCDay() > 0 else 6
             ,_day_of_year(jd, False)
             ,0 # is dst for utc: 0
             ,jd.getUTCMilliseconds()
@@ -115,31 +115,8 @@ def _utc_time_tuple(jd):
     return res
 
 def _day_of_year(jd, local):
-    # check if jd hours are ahead of UTC less than the offset to it:
-    day_offs = 0
-    if jd.getHours() + jd.getTimezoneOffset() * 60 / 3600 < 0:
-        day_offs = -1
-    was = jd.getTime()
-    cur = jd.setHours(23)
-    jd.setUTCDate(1)
-    jd.setUTCMonth(0)
-    jd.setUTCHours(0)
-    jd.setUTCMinutes(0)
-    jd.setUTCSeconds(0)
-    res = round((cur - jd) / 86400000 )
-    #res = round(((jd.setHours(23) - new Date(jd.getYear(), 0, 1, 0, 0, 0)
-    #                 ) / 1000 / 60 / 60 / 24))
-    if not local:
-        res += day_offs
-
-    if res == 0:
-        res = 365
-        jd.setTime(jd.getTime() - 86400)
-        last_year = jd.getUTCFullYear()
-        if _is_leap(last_year):
-            res = 366
-    jd.setTime(was)
-    return res
+    ref_date = Date.UTC(jd.getFullYear(), jd.getMonth(), jd.getDate()) if local else jd  # Convert to UTC date if local
+    return Math.floor((ref_date - Date.UTC(jd.getFullYear(), 0, 0)) / 86400000)  # 24 * 60 * 60 * 1000
 
 def _is_leap(year):
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
