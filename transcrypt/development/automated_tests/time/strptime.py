@@ -25,14 +25,14 @@ import time
 # should be safe.
 
 def run (autoTester):
-    def check(t, fmt):
-        s = tuple(time.strptime(t, fmt))
-        autoTester.check(' '.join([t, '[', fmt, '] = ']), s)
+    def check(t, fmt=None):
+        s = tuple(time.strptime(t)) if fmt is None else tuple(time.strptime(t, fmt))
+        autoTester.check(' '.join([t, '[', '' if fmt is None else fmt, '] = ']), s)
 
     check('jan .1.1902'               , '%b .%d.%Y')
     check('3112199912:00:00pm'         , '%d%m%Y%H:%M:%S%p')
-    check('FEb .1.1902'               , '%b .%d.%Y')
     check('M1.1.1901'                  , 'M%m.%d.%Y')
+    check('FEb .1.1902'               , '%b .%d.%Y')
     check('2.1.1900'                   , '%m.%d.%Y')
     check('6.1.2000'                   , '%m.%d.%Y')
     check('nov .1.1900'                , '%b .%d.%Y')
@@ -44,3 +44,4 @@ def run (autoTester):
     check('TueJul18 19:32:11 2016'     , '%a%b%d %H:%M:%S %Y')
     check('TueJul1819:32x112016'       , '%a%b%d%H:%Mx%S%Y')
     check('TueJul1819:32xx112016'      , '%a%b%d%H:%Mxx%S%Y')
+    check('tue jul 11 19:32:11 2016')

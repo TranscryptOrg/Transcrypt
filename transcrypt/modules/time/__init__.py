@@ -54,11 +54,10 @@ for i in range(7):
 # build the locale's months names
 __months = []
 __months_long = []
-__d = __new__(Date(946681200000.0)) # 1.1.2000
+__d = __new__(Date(946771200000))  # 2000-01-02 (make sure this works in different time zones at different times
 for i in range(12):
     for l, s in ((__months, 'short'), (__months_long, 'long')):
-        l.append(__d.toLocaleString(__language,
-                                        {'month': s}).lower())
+        l.append(__d.toLocaleString(__language, {'month': s}).lower())
     __d.setMonth(__d.getMonth() + 1)
 
 
@@ -449,12 +448,8 @@ def strptime(string, format):
                 t[-1] = 0
 
     # get day of year, costing us an object, to stay safe:
-    __date = __new__(Date(0))
-    __date.setUTCFullYear( t[0] )
-    __date.setUTCMonth(t[1] -1 )
-    __date.setUTCDate( t[2] )
-    __date.setUTCHours(t[3])
-    t[7] = _day_of_year(__date, True)   # JdeH y2018m08d21: Added actual parameter True, needed to match CPython 3.7, somehow not needed with 3.6
+    __date = __new__(Date(Date.UTC(t[0], t[1]-1, t[2], '12')))
+    t[7] = _day_of_year(__date, False)
     if not have_weekday:
         t[6] = __date.getUTCDay() -1
 
