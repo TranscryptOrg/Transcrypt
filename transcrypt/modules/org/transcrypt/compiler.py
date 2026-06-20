@@ -93,7 +93,7 @@ class Program:
             project = {}
 
         # Reset everything in case of a build or a command args change
-        self.optionsChanged = utils.commandArgs.projectOptions != project.get ('options')
+        self.optionsChanged = project and utils.commandArgs.projectOptions != project.get ('options')
         if utils.commandArgs.build or self.optionsChanged:
             shutil.rmtree (self.targetDir, ignore_errors = True)
 
