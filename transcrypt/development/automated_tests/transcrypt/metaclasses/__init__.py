@@ -6,17 +6,17 @@ class UppercaserMeta (type):
                                     # Using bare {} as attribs parameter to __new__ avoids dict attributes masking regular attributes
                                     # For more flexibility use __pragma__ ('js', '{}', '''...''')
         upperAttribs = {}
-        
+
         for attribKey in attribs:   # Translates to 'for (var attribKey in attribs)' by virtue of __pragma__ ('jsiter'), to iterate over the attributes of a bare JavaScript {}
             upperAttribs [attribKey if  attribKey.startswith ('__') else attribKey.upper ()] = attribs [attribKey]
-            
+
         __pragma__ ('nojsiter')
-            
+
         return type.__new__ (meta, name, bases, upperAttribs)
 
 class Uppercaser (metaclass = UppercaserMeta):
     pass
-    
+
 class Animal (Uppercaser):
     class Thoughts:
         quantity = 7
@@ -37,23 +37,40 @@ class Plant (Uppercaser):
 
     def grow (self):
         return 'Grow'
-        
+
 class Stone:
     class Thoughts:
         quantity = 5
 
     color = 'Gray'
-    
+
     def be (self):
         return ('Being')
+
+
+class Mixin:
+    pass
+
+
+class Car(Mixin, Uppercaser):
+    class Thoughts:
+        quantity = 4
+
+    color = 'red'
+
+    def drive(self):
+        return "drive"
+
 
 def run (autoTester):
     animal = Animal ()
     autoTester.check (animal.THOUGHTS.quantity, Animal.COLOR, animal.COLOR, animal.MOVE ())
-    
+
     plant = Plant ()
     autoTester.check (plant.THOUGHTS.quantity, Plant.COLOR, plant.COLOR, plant.GROW ())
-    
+
     stone = Stone ()
     autoTester.check (stone.Thoughts.quantity, Stone.color, stone.color, stone.be ())
-    
+
+    car = Car()
+    autoTester.check (car.THOUGHTS.quantity, Car.COLOR, car.COLOR, car.DRIVE ())

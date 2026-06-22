@@ -39,19 +39,77 @@ export function __globals__ (anObject) {
 }
 */
 
-// Partial implementation of super () .<methodName> (<params>)
-export function __super__ (aClass, methodName) {
-    // Lean and fast, no C3 linearization, only call first implementation encountered
-    // Will allow __super__ ('<methodName>') (self, <params>) rather than only <className>.<methodName> (self, <params>)
-    for (let base of aClass.__bases__) {
-        if (methodName in base) {
-           return base [methodName];
+function build_mro(aClass) {
+    let done = {}
+    let result = [];
+    function iterate_bases(bases) {
+        for(var i = bases.length-1; i >= 0; i--) {
+            let base = bases[i];
+            let key = base.__name__+"-"+base.__module__;
+            if (! (key in done)) {
+                iterate_bases(base.__bases__)
+                done[key] = true;
+                result.unshift(base);
+            }
         }
     }
-
-    throw new Exception ('Superclass method not found');    // !!! Improve!
+    iterate_bases(aClass.__bases__);
+    return result;
 }
-    
+
+function make_mro(cls) {
+  if (! cls.__mro__) {
+      Object.defineProperty(cls, "__mro__", {value: build_mro(cls), configurable: false});
+  }
+  return cls.__mro__;
+}
+
+function create_next_super(cls) {
+  var mro = make_mro(cls);
+  var index = 0;
+  return function(methodName) {
+      while(index < mro.length) {
+          let base = mro[index++];
+          if (methodName in base.__class_attribs__)
+              return base;
+      }
+      throw new Exception ('Superclass method not found');    // !!! Improve!
+  }
+}
+
+// Partial implementation of super () .<methodName> (<params>)
+export function __super__ (aClass, methodName, self) {
+    let context = this;
+    if (!context || !context.__next_super__) {
+        let next_super = null;
+        let cls = self.__class__ ? self.__class__ : self;
+        if (cls !== aClass) {
+            // we have to decide which mro to use
+            let long_chain = create_next_super(cls);
+            if (long_chain(methodName) === aClass)
+                next_super = long_chain
+            else
+                next_super = create_next_super(aClass);
+        }
+        else
+            next_super = create_next_super(aClass);
+
+        if (context) {
+          context = new Proxy(context, {
+             get: function (target, prop) {
+                if (prop === "__next_super__")
+                    return next_super;
+                return Reflect.get(...arguments);
+              }});
+          }
+          else {
+              context = {__next_super__: next_super};
+          }
+    }
+
+    return context.__next_super__(methodName)[methodName].bind(context);
+}
+
 // Python property installer function, no member since that would bloat classes
 export function property (getter, setter) {  // Returns a property descriptor rather than a property
     if (!setter) {  // ??? Make setter optional instead of dummy?
@@ -123,7 +181,7 @@ export function __withblock__ (manager, statements) {
         statements ();
         manager.close ();
     }
-};  
+};
 
 // Manipulating attributes by name
 
@@ -140,8 +198,15 @@ export function setattr (obj, name, value) {
     obj [name] = value; // Will not work in combination with static retrieval of aliased attributes, too expensive
 };
 
-export function getattr (obj, name) {
-    return name in obj ? obj [name] : obj ['py_' + name];
+export function getattr (obj, name, default_) {
+  if (default_ === undefined)
+      return name in obj ? obj [name] : obj ['py_' + name];
+  try {
+      return name in obj ? obj [name] : default_;
+  }
+  catch (exception) {
+  }
+  return default_;
 };
 
 export function hasattr (obj, name) {
@@ -233,28 +298,28 @@ export function __k__ (keyed, key) {  //  Check existence of dict key via retrie
 
 // If the target object is somewhat true, return it. Otherwise return false.
 // Try to follow Python conventions of truthyness
-export function __t__ (target) { 
+export function __t__ (target) {
     return (
         // Avoid invalid checks
         target === undefined || target === null ? false :
-        
+
         // Take a quick shortcut if target is a simple type
         ['boolean', 'number'] .indexOf (typeof target) >= 0 ? target :
-        
+
         // Use __bool__ (if present) to decide if target is true
         target.__bool__ instanceof Function ? (target.__bool__ () ? target : false) :
-        
+
         // There is no __bool__, use __len__ (if present) instead
         target.__len__ instanceof Function ?  (target.__len__ () !== 0 ? target : false) :
-        
+
         // There is no __bool__ and no __len__, declare Functions true.
         // Python objects are transpiled into instances of Function and if
         // there is no __bool__ or __len__, the object in Python is true.
         target instanceof Function ? target :
-        
+
         // Target is something else, compute its len to decide
         len (target) !== 0 ? target :
-        
+
         // When all else fails, declare target as false
         false
     );
@@ -312,7 +377,7 @@ Number.prototype.__format__ = function (fmt_spec) {
     var val = this.valueOf ();
     var is_negative = val < 0;
     val = Math.abs (val);
-    
+
     function pad (s, width, fill, align) {
         if (fill == undefined) {
             fill = ' ';
@@ -347,7 +412,7 @@ Number.prototype.__format__ = function (fmt_spec) {
                 throw ValueError ("Invalid align type: '" + align + "'", new Error ());
         }
     };
-    
+
     function format_float (val) {
         if (val.indexOf ('e+') == -1 && (ftype == 'g' || ftype == 'G')) {
             var parts = val.py_split ('.');
@@ -363,7 +428,7 @@ Number.prototype.__format__ = function (fmt_spec) {
         }
         return val;
     };
-           
+
     if (fmt_spec.endswith (['b', 'c', 'd', 'e', 'E', 'f', 'F', 'g', 'G', 'n', 'o', 'x', 'X', '%'])) {
         ftype = fmt_spec [fmt_spec.length - 1];
         fmt_spec = fmt_spec.slice (0, -1);
@@ -375,7 +440,7 @@ Number.prototype.__format__ = function (fmt_spec) {
         ftype = Number.isInteger (val) ? 'd' : 'g';
         g_default = true;
     }
-    
+
     var parts = fmt_spec.split ('.');
     fmt_spec = parts [0];
     precision = parts [1];
@@ -417,7 +482,7 @@ Number.prototype.__format__ = function (fmt_spec) {
             fill = fmt_spec [0];
         }
     }
-    
+
     if (isNaN (val)) {
         val = 'nan';
     }
@@ -535,12 +600,15 @@ Number.prototype.__format__ = function (fmt_spec) {
     return val;
 };
 __pragma__ ('endif')
-   
+
 export function bool (any) {     // Always truly returns a bool, rather than something truthy or falsy
     return !!__t__ (any);
 };
 bool.__name__ = 'bool';         // So it can be used as a type with a name
 bool.__bases__ = [int];
+
+
+export var FunctionType = {__name__: "function", __module__: "builtins", __bases__: [object]};
 
 export function py_typeof (anObject) {
     var aType = typeof anObject;
@@ -552,6 +620,9 @@ export function py_typeof (anObject) {
             return aType;
         }
     }
+    else if (aType == 'function') {
+      return FunctionType;
+    }
     else {
         return (    // Oddly, the braces are required here
             aType == 'boolean' ? bool :
@@ -561,6 +632,25 @@ export function py_typeof (anObject) {
         );
     }
 };
+
+var pid_counter = 0
+
+export function py_id (anObject) {
+  var pid = anObject.py_identifier
+  if (pid) {
+      return pid;
+  }
+
+  var aType = typeof anObject;
+  if (aType == 'object') {
+      pid = anObject.py_identifier = "__po" + pid_counter;
+      pid_counter++;
+  }
+  else {
+    pid = anObject.toString();
+  }
+  return pid;
+}
 
 export function issubclass (aClass, classinfo) {
     if (classinfo instanceof Array) {   // Assume in most cases it isn't, then making it recursive rather than two functions saves a call
@@ -590,7 +680,7 @@ export function issubclass (aClass, classinfo) {
             return false;
         }
     }
-    catch (exception) {     // Using issubclass on primitives assumed rare 
+    catch (exception) {     // Using issubclass on primitives assumed rare
         return aClass == classinfo || classinfo == object;
     }
 };
@@ -782,7 +872,7 @@ export function format (value, fmt_spec) {
             }
         default:
             return str (value).__format__ (fmt_spec);
-    }        
+    }
 }
 __pragma__ ('endif')
 
@@ -1202,6 +1292,21 @@ export function set (iterable) {
 set.__name__ = 'set';
 set.__bases__ = [object];
 
+
+export function frozenset (iterable) {
+    let instance = [];
+    if (iterable) {
+        for (let index = 0; index < iterable.length; index++) {
+            instance.add (iterable [index]);
+        }
+    }
+    instance.__class__ = frozenset;   // Not all arrays are sets
+    return instance;
+}
+frozenset.__name__ = 'frozenset';
+frozenset.__bases__ = [object];
+
+
 Array.prototype.__bindexOf__ = function (element) { // Used to turn O (n^2) into O (n log n)
 // Since sorting is lex, compare has to be lex. This also allows for mixed lists
 
@@ -1535,7 +1640,7 @@ String.prototype.__format__ = function (fmt_spec) {
     var align = '<';
     var fill = ' ';
     var val = this.valueOf ();
-    
+
     function pad (s, width, fill, align) {
         var len = s.length;
         var c = width - len;
@@ -1621,7 +1726,7 @@ __pragma__ ('ifdef', '__sform__')
                         key = key.substring (0, idx);
                     }
                 }
-                    
+
                 if ((key == +key) && attr && args [key] !== undefined) {
                     value = args [key][attr];
                 }
@@ -1634,7 +1739,7 @@ __pragma__ ('ifdef', '__sform__')
                                 value = args [index][key][attr];
                             }
                             else {
-                                value = args [index][key]; 
+                                value = args [index][key];
                             }
                             break;
                         }
@@ -1731,7 +1836,14 @@ String.prototype.py_replace = function (old, aNew, maxreplace) {
     }
 };
 
-String.prototype.lstrip = function () {
+String.prototype.lstrip = function (chars) {
+    if (chars) {
+        var start = 0;
+        while (chars.indexOf (this[start]) >= 0) {
+            start += 1;
+        }
+        return this.slice (start);
+    }
     return this.replace (/^\s*/g, '');
 };
 
@@ -1763,8 +1875,15 @@ String.prototype.rsplit = function (sep, maxsplit) {    // Combination of genera
     }
 };
 
-String.prototype.rstrip = function () {
-    return this.replace (/\s*$/g, '');
+String.prototype.rstrip = function (chars) {
+  if (chars) {
+      var end = this.length - 1;
+      while (chars.indexOf (this[end]) >= 0) {
+          end -= 1;
+      }
+      return this.slice (0, end + 1);
+  }
+  return this.replace (/\s*$/g, '');
 };
 
 String.prototype.py_split = function (sep, maxsplit) {  // Combination of general whitespace sep and positive maxsplit neither supported nor checked, expensive and rare
@@ -1818,7 +1937,10 @@ String.prototype.startswith = function (prefix, start=0, end) {
     return false;
 }
 
-String.prototype.strip = function () {
+String.prototype.strip = function (chars) {
+    if (chars) {
+        return this.lstrip (chars).rstrip (chars);
+    }
     return this.trim ();
 };
 
@@ -1984,7 +2106,7 @@ export function dict (objectOrPairs) {
                      // checks to make sure that these objects
                      // get converted to dict objects instead of
                      // leaving them as js objects.
-                     
+
                      if (!isinstance (objectOrPairs, dict)) {
                          val = dict (val);
                      }
@@ -2012,7 +2134,7 @@ export function dict (objectOrPairs) {
             // We have already covered Array so this indicates
             // that the passed object is not a js object - i.e.
             // it is an int or a string, which is invalid.
-            
+
             throw ValueError ("Invalid type of object for dict creation", new Error ());
         }
     }
@@ -2097,7 +2219,7 @@ export function __pow__ (a, b) {
 
 export var pow = __pow__;   // Make available as builtin under usual name
 
-__pragma__ ('ifndef', '__xtiny__')    
+__pragma__ ('ifndef', '__xtiny__')
 
 export function __neg__ (a) {
     if (typeof a == 'object' && '__neg__' in a) {
@@ -2195,10 +2317,10 @@ export function __sub__ (a, b) {
 // Overloaded binary bitwise
 
 export function __lshift__ (a, b) {
-    if (typeof a == 'object' && '__lshift__' in a) {
+    if (a && typeof a == 'object' && '__lshift__' in a) {
         return a.__lshift__ (b);
     }
-    else if (typeof b == 'object' && '__rlshift__' in b) {
+    else if (b && typeof b == 'object' && '__rlshift__' in b) {
         return b.__rlshift__ (a);
     }
     else {
@@ -2207,10 +2329,10 @@ export function __lshift__ (a, b) {
 };
 
 export function __rshift__ (a, b) {
-    if (typeof a == 'object' && '__rshift__' in a) {
+    if (a && typeof a == 'object' && '__rshift__' in a) {
         return a.__rshift__ (b);
     }
-    else if (typeof b == 'object' && '__rrshift__' in b) {
+    else if (b && typeof b == 'object' && '__rrshift__' in b) {
         return b.__rrshift__ (a);
     }
     else {
@@ -2219,10 +2341,10 @@ export function __rshift__ (a, b) {
 };
 
 export function __or__ (a, b) {
-    if (typeof a == 'object' && '__or__' in a) {
+    if (a && typeof a == 'object' && '__or__' in a) {
         return a.__or__ (b);
     }
-    else if (typeof b == 'object' && '__ror__' in b) {
+    else if (b && typeof b == 'object' && '__ror__' in b) {
         return b.__ror__ (a);
     }
     else {
@@ -2231,10 +2353,10 @@ export function __or__ (a, b) {
 };
 
 export function __xor__ (a, b) {
-    if (typeof a == 'object' && '__xor__' in a) {
+    if (a && typeof a == 'object' && '__xor__' in a) {
         return a.__xor__ (b);
     }
-    else if (typeof b == 'object' && '__rxor__' in b) {
+    else if (b && typeof b == 'object' && '__rxor__' in b) {
         return b.__rxor__ (a);
     }
     else {
@@ -2243,10 +2365,10 @@ export function __xor__ (a, b) {
 };
 
 export function __and__ (a, b) {
-    if (typeof a == 'object' && '__and__' in a) {
+    if (a && typeof a == 'object' && '__and__' in a) {
         return a.__and__ (b);
     }
-    else if (typeof b == 'object' && '__rand__' in b) {
+    else if (b && typeof b == 'object' && '__rand__' in b) {
         return b.__rand__ (a);
     }
     else {
@@ -2257,8 +2379,11 @@ export function __and__ (a, b) {
 // Overloaded binary compare
 
 export function __eq__ (a, b) {
-    if (typeof a == 'object' && '__eq__' in a) {
+    if (a && typeof a == 'object' && '__eq__' in a) {
         return a.__eq__ (b);
+    }
+    else if (b && typeof b == 'object' && '__eq__' in b) {
+        return b.__eq__ (a);
     }
     else {
         return a == b;
@@ -2266,8 +2391,11 @@ export function __eq__ (a, b) {
 };
 
 export function __ne__ (a, b) {
-    if (typeof a == 'object' && '__ne__' in a) {
+    if (a && typeof a == 'object' && '__ne__' in a) {
         return a.__ne__ (b);
+    }
+    else if (b && typeof b == 'object' && '__ne__' in b) {
+        return b.__ne__ (a);
     }
     else {
         return a != b
@@ -2275,7 +2403,7 @@ export function __ne__ (a, b) {
 };
 
 export function __lt__ (a, b) {
-    if (typeof a == 'object' && '__lt__' in a) {
+    if (a && typeof a == 'object' && '__lt__' in a) {
         return a.__lt__ (b);
     }
     else {
@@ -2284,7 +2412,7 @@ export function __lt__ (a, b) {
 };
 
 export function __le__ (a, b) {
-    if (typeof a == 'object' && '__le__' in a) {
+    if (a && typeof a == 'object' && '__le__' in a) {
         return a.__le__ (b);
     }
     else {
@@ -2293,7 +2421,7 @@ export function __le__ (a, b) {
 };
 
 export function __gt__ (a, b) {
-    if (typeof a == 'object' && '__gt__' in a) {
+    if (a && typeof a == 'object' && '__gt__' in a) {
         return a.__gt__ (b);
     }
     else {
@@ -2302,7 +2430,7 @@ export function __gt__ (a, b) {
 };
 
 export function __ge__ (a, b) {
-    if (typeof a == 'object' && '__ge__' in a) {
+    if (a && typeof a == 'object' && '__ge__' in a) {
         return a.__ge__ (b);
     }
     else {
@@ -2480,7 +2608,7 @@ export function __ior__ (a, b) {
         return a |= b;
     }
 };
-    
+
 export function __ixor__ (a, b) {
     if (typeof a == 'object' && '__ixor__' in a) {
         return a.__ixor__ (b);
@@ -2525,7 +2653,7 @@ export function __getitem__ (container, key) {                           // Slic
         return result;
     }
     else {
-        return container [key];                                         // Container must support bare JavaScript brackets          
+        return container [key];                                         // Container must support bare JavaScript brackets
         /*
         If it turns out keychecks really have to be supported here, the following will work
         return __k__ (container, key);

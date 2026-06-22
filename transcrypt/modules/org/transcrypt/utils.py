@@ -17,17 +17,17 @@ defaultJavaScriptVersion = 5
 
 class CommandArgsError (BaseException):
     pass
-    
+
 class CommandArgsExit (BaseException):
     pass
-    
+
 class ArgumentParser (argparse.ArgumentParser):
     def error (self, message):
         self.print_help (sys.stdout)
         if message:
             log (True, '\nError: {}\n', message)
         raise CommandArgsError ()
-        
+
     def exit (self, status = 0, message = None):
         if message:
             log (True, 'Exit: {}', message)
@@ -36,7 +36,7 @@ class ArgumentParser (argparse.ArgumentParser):
 class CommandArgs:
     def parse (self):
         self.argParser = ArgumentParser ()
-        
+
         self.argParser.add_argument ('source', nargs='?', help = ".py file containing source code of main module")
         self.argParser.add_argument ('-a', '--anno', help = "annotate target files that were compiled from Python with source file names and source line numbers", action = 'store_true')
         self.argParser.add_argument ('-am', '--alimod', help = "use aliasing for module paths", action = 'store_true')
@@ -68,7 +68,7 @@ class CommandArgs:
         self.argParser.add_argument ('-od', '--outdir', help = 'override output directory (default = __target__)')
         self.argParser.add_argument ('-p', '--parent', nargs = '?', help = "object that will hold application, default is window. Use -p .none to generate orphan application, e.g. for use in node.js")
         self.argParser.add_argument ('-r', '--run', help = "run source file rather than compiling it", action = 'store_true')
-        self.argParser.add_argument ('-s', '--symbols', nargs ='?', help = "names, joined by $, separately passed to main module in __symbols__ variable")
+        self.argParser.add_argument ('-s', '--symbols', nargs ='?', help = "names, joined by $, separately passed to main module in __symbols__ variable", action="append")
         self.argParser.add_argument ('-sf', '--sform', help = "enable support for string formatting mini language", action = 'store_true')
         self.argParser.add_argument ('-t', '--tconv', help = "enable automatic conversion to truth value by default. Disadvised, since it will result in a conversion for each boolean. Preferably use __pragma__ ('tconv') and __pragma__ (\'notconv\') to enable automatic conversion locally", action = 'store_true')
         self.argParser.add_argument ('-u', '--unit', nargs='?', help = "compile to units rather than to monolithic application. Use -u .auto to autogenerate dynamically loadable native JavaScript modules, one per Python module. Use -u .run to generate the loader and the staticcally loadable runtime unit. Use -u .com to generate a statically loadable component unit.")
@@ -76,38 +76,38 @@ class CommandArgs:
         self.argParser.add_argument ('-x', '--x', help = "reserved for extended options")
         self.argParser.add_argument ('-xr', '--xreex', help = "re-export all imported names", action = 'store_true')
         self.argParser.add_argument ('-xg', '--xglobs', help = "allow use of the 'globals' function", action = 'store_true')
-        self.argParser.add_argument ('-xp', '--xpath', nargs = '?', help = "additional module search paths, joined by $, #'s will be replaced by spaces")
+        self.argParser.add_argument ('-xp', '--xpath', nargs = '?', help = "additional module search paths, joined by $, #'s will be replaced by spaces", action="append")
         self.argParser.add_argument ('-xt', '--xtiny', help = "generate tiny version of runtime, a.o. lacking support for implicit and explicit operator overloading. Use only if generated code can be validated, since it will introduce semantic alterations in edge cases", action = 'store_true')
         self.argParser.add_argument ('-*', '--star', help = "Like it? Grow it! Go to GitHub and then click [* Star]", action = 'store_true')
-        
+
         self.projectOptions = self.argParser.parse_args () .__dict__
         self.__dict__.update (self.projectOptions)
-        
+
         # Signal invalid switches
-        
+
         def logAndExit (message):
             log (True, message)
             sys.exit (1)
-        
+
         invalidCombi = 'Invalid combination of options'
-        
+
         if not (self.license or self.star or self.source):
             logAndExit (self.argParser.format_usage () .capitalize ())
         elif self.map and self.unit:
-            logAndExit ('{}: -m / --map and -u / --unit'.format (invalidCombi))   
+            logAndExit ('{}: -m / --map and -u / --unit'.format (invalidCombi))
         elif self.parent and self.unit == '.com':
             logAndExit ('{}: -p / --parent and -u / --unit .com'.format (invalidCombi))
         elif self.parent == '.export' and self.esv and int (self.esv) < 6:
-            logAndExit ('{}: -p / --parent .export and -e / --esv < 6'.format (invalidCombi))        
+            logAndExit ('{}: -p / --parent .export and -e / --esv < 6'.format (invalidCombi))
         elif self.unit == '.auto' and self.esv and int (self.esv) < 6:
             logAndExit ('{}: -u / --unit .auto and -e / --esv < 6'.format (invalidCombi))
-        
+
         # Set dependent switches
-        
+
         # (for future use)
-            
+
         # Correcting line counts for source map
-            
+
         global extraLines
         extraLines = [
             # Make identifier __pragma__ known to static checker
@@ -115,57 +115,57 @@ class CommandArgs:
             # __ pragma__ ('<all>') in JavaScript requires it to remain a function, as it was in the core
             # It can't be skipped, since it has to precede __pragma__ ('skip'), to make the checker accept that
             'def __pragma__ (): pass',
-        
+
             # Make __include__ known to the static checker
-            '__pragma__ (\'skip\')',            
-            '__new__ = __include__ = 0',    
+            '__pragma__ (\'skip\')',
+            '__new__ = __include__ = 0',
             '__pragma__ (\'noskip\')',
             ''
         ] if commandArgs.dcheck else []
         global nrOfExtraLines
         nrOfExtraLines = max (len (extraLines) - 1, 0)  # Last line only serves to force linefeed
         extraLines = '\n'.join (extraLines)
-        
+
 commandArgs = CommandArgs ()
-   
+
 def create (path, binary = False):
     for i in range (10):
         try:
             os.makedirs (os.path.dirname (path), exist_ok = True)
-            
+
             if binary:
                 return open (path, 'wb')
             else:
                 return open (path, 'w', encoding = 'utf-8')
-                
+
             if i > 0:
                 log (True, f'Created {path} at attempt {i + 1}')
-                
+
         except:
             time.sleep (0.5)
     else:
         raise Error (f'Failed to create {path}')
-        
+
 
 def tryRemove (filePath):
     try:
         os.remove (filePath)
     except:
         pass
-    
+
 def formatted (*args):  # args [0] is string, args [1 : ] are format params
     try:
         return str (args [0]) .format (*args [1 : ])
     except IndexError:  # Tuple index out of range in format tuple
         return ' '.join (args)
-   
+
 logFileName = 'transcrypt.log'  # ... Use envir.transpiler_name
-   
+
 try:
     os.remove (logFileName)
 except: # Assume logfile doesn't yet exist
     pass
-   
+
 def log (always, *args):
     if always or commandArgs.verbose:
         print (formatted (*args), end = '')
@@ -173,15 +173,15 @@ def log (always, *args):
             if commandArgs.dlog:
                 with open (logFileName, 'a') as logFile:
                     logFile.write (formatted (*args))
-         
+
         except: # Assume too early, commandArgs not yet set
             pass
-            
+
 program = None
 def setProgram (aProgram):
     global program
     program = aProgram
-         
+
 class Error (Exception):
     # First error encountered counts, for all fields, because it's closest to the cause of trouble
     # One error at a time, just like Python, clear and simple
@@ -191,14 +191,14 @@ class Error (Exception):
         self.lineNr = lineNr - nrOfExtraLines
         self.message = message
         # The name of the module and of its import trail is known from the import stack, so no need to pass it as a parameter
-        
-    def set (self, lineNr = 0, message = ''):          
+
+    def set (self, lineNr = 0, message = ''):
         if not self.lineNr:
             self.lineNr = lineNr - nrOfExtraLines
-            
+
         if not self.message:
             self.message = message
-            
+
     def __str__ (self):
         result = 'Error while compiling (offending file last):'
 
@@ -209,15 +209,15 @@ class Error (Exception):
             except:
                 sourcePath = '<unknown>'
             result += '\n\tFile \'{}\', line {}, at import of:'.format (sourcePath, importRecord [1])
-        
+
         # After that, report the module and line that caused the error
 #        result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .sourcePath), self.lineNr)
         result += '\n\tFile \'{}\', line {}, namely:'.format (str (program.importStack [-1][0] .name), self.lineNr)
-        
+
         # And, lastly, report the error message
         result += '\n\t{}'.format (self.message)
         return result
-        
+
 def enhanceException (exception, **kwargs):
     # If not all required info, such as a line number, is available at the location where the exception was raised,
     # it is enhanced later on by adding this missing info at the earliest occasion
@@ -227,7 +227,7 @@ def enhanceException (exception, **kwargs):
         result = exception
     else:
         result = Error (**kwargs)
-    
+
     if commandArgs.dextex:
         print ('''
     Exception of class {0} enhanced at:
@@ -240,7 +240,7 @@ def enhanceException (exception, **kwargs):
     '''.format (exception.__class__, *inspect.stack () [1][1:-1], kwargs, result))
 
     raise result from None
-        
+
 def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, refuseIfAppearsMinified = False):
     '''
     - Honor ifdefs
@@ -250,24 +250,24 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
 
     if refuseIfAppearsMinified and code [0] != '/':
         return None
-    
+
     stripComments = False
-        
+
     def stripSingleLineComments (line):
         pos = line.find ('//')
         return (line if pos < 0 else line [ : pos]) .rstrip ()
 
     passStack = []
 
-    def passable (targetLine):        
+    def passable (targetLine):
         # Has to count, since comments may be inside ifdefs
-        
+
         nonlocal stripComments
-        
+
         def __pragma__ (name, *args):   # Will be called below by executing the stripped line of source code
 
             nonlocal stripComments
-        
+
             if name == 'stripcomments':
                 stripComments = mayStripComments
             if name == 'ifdef':
@@ -296,47 +296,47 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
             return False                # Skip line anyhow, independent of passStack
         else:
             return all (passStack)      # Skip line only if not in passing state according to passStack
-    
+
     passableLines = [line for line in code.split ('\n') if passable (line)]
-    
+
     if stripComments:
         passableLines = [commentlessLine for commentlessLine in [stripSingleLineComments (line) for line in passableLines] if commentlessLine]
-        
+
     result = Any (
         digestedCode = '\n'.join (passableLines),
         nrOfLines = len (passableLines),
         exportedNames = [],
         importedModuleNames = []
     )
-    
+
     namesPattern = re.compile ('({.*})')
     pathPattern = re.compile ('([\'|\"].*[\'|\"])')
     wordPattern = re.compile (r'[\w/*$]+')  # /S matches too much, e.g. { and }  ??? Is this OK in all cases? Scrutinize code below...
     for line in passableLines:
         words = wordPattern.findall (line)
-        
+
         if words:
             if mayRemoveAnnotations and words [0] == '/*':  # If line starts with an annotation
                 words = words [3 : ]                        # Remove the annotation before looking for export / import keywords
-                
-            if words:    
+
+            if words:
                 if words [0] == 'export':
                     # Deducing exported names from JavaScript is needed to facilitate * import by other modules
-                    
+
                     if words [1] in {'var', 'function'}:
                         # Export prefix:    "export var ... or export function ..."
-                        
+
                         result.exportedNames.append (words [2])
                     else:
-                        # Transit export:   "export {p, q, r, s};"  
-                        
+                        # Transit export:   "export {p, q, r, s};"
+
                         # Find exported names as "{p, q, r, s}"
                         match = namesPattern.search (line)
-                        
+
                         # Substitute to become "{'p', 'q', 'r', 's'}" and use that set to extend the exported names list
                         if match:
                             result.exportedNames.extend (eval (wordPattern.sub (lambda nameMatch: f'\'{nameMatch.group ()}\'', match.group (1))))
-                         
+
                 elif words [0] == 'import':
                     # Deducing imported modules from JavaScript is needed to provide the right modules to JavaScript-only modules
                     # They may have an explicit import list for unqualified access or an import * for qualified access
@@ -344,12 +344,10 @@ def digestJavascript (code, symbols, mayStripComments, mayRemoveAnnotations, ref
                     # It can be a path without extension, allowing both .py and .js files as imported modules
                     #
                     # - Unqualified import:   "import {p, q as Q, r, s as S} from '<relative module path>'"
-                    # - Qualified import:     "import * from '<relative module path>'"  
-                    
+                    # - Qualified import:     "import * from '<relative module path>'"
+
                     match = pathPattern.search (line)
                     if match:
                         result.importedModuleNames.append (eval (match.group (1)) [2:-3])
-                        
-    return result
 
-    
+    return result

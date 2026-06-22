@@ -71,10 +71,10 @@ class Program:
 
         # Set paths
         self.sourcePrepath = os.path.abspath (utils.commandArgs.source) .replace ('\\', '/')
-        
+
         self.sourceDir = '/'.join (self.sourcePrepath.split ('/') [ : -1])
         self.mainModuleName = self.sourcePrepath.split ('/') [-1]
-        
+
         if utils.commandArgs.outdir:
             if os.path.isabs (utils.commandArgs.outdir):
                 self.targetDir = utils.commandArgs.outdir.replace ('\\', '/')
@@ -82,7 +82,7 @@ class Program:
                 self.targetDir = f'{self.sourceDir}/{utils.commandArgs.outdir}'.replace ('\\', '/')
         else:
             self.targetDir = f'{self.sourceDir}/__target__'.replace ('\\', '/')
-        
+
         self.projectPath = f'{self.targetDir}/{self.mainModuleName}.project'
 
         # Load the most recent project metadata
@@ -381,7 +381,7 @@ class Module:
             # This function turns comment-like pragma's into regular ones, both for multi-line and single-line pragma's
             # It changes rather than regenerates the sourcecode, since tokenize/untokenize will mess up formatting
             # Single line pragma's are always comment-like and will be turned into multi-line function-like pragma's
-            # Also in this function executable comments are converted to normal code 
+            # Also in this function executable comments are converted to normal code
 
             # Tokenize the source code, to be able to recognize comments easily
             tokens = tokenize.tokenize (io.BytesIO (sourceCode.encode ('utf-8')) .readline)
@@ -396,16 +396,16 @@ class Module:
                 if tokenType == tokenize.COMMENT:
                     strippedComment = tokenString [1 : ] .lstrip ()
                     if  strippedComment.startswith ('__pragma__'):
-                    
+
                        # Remember line index of multi-line pragma, like: # __pragma__ (...
                         pragmaCommentLineIndices.append (startRowColumn [0] - 1)
                     elif strippedComment.replace (' ', '') .replace ('\t', '') .startswith ('__:'):
-                    
+
                         # Remember line index of single-line pragma, like: <some code> # __: ...
                         shortPragmaCommentLineIndices.append (startRowColumn [0] - 1)
                 if tokenType == tokenize.NAME and tokenString == '__pragma__':
                     pragmaIndex = tokenIndex
-                    
+
                 if tokenIndex - pragmaIndex == 2:
                     pragmaKind = tokenString [1:-1]
                     if pragmaKind == 'ecom':
@@ -415,20 +415,20 @@ class Module:
 
             # Convert original, non-tokenized sourcecode to a list of lines
             sourceLines = sourceCode.split ('\n')
-            
+
             # Use line indices of multi-line function-like ecom / noecom pragma's to transform these lines into executable comment switches
             for ecomPragmaLineIndex in ecomPragmaLineIndices:
                 sourceLines [ecomPragmaLineIndex] = ecom
             for noecomPragmaLineIndex in noecomPragmaLineIndices:
                 sourceLines [noecomPragmaLineIndex] = noecom
-                        
+
             # Use line indices of multi-line comment-like pragma singles to transform these into function-like pragma singles (which often turn out te be part of a matching pair)
             allowExecutableComments = utils.commandArgs.ecom
             for pragmaCommentLineIndex in pragmaCommentLineIndices:
                 indentation, separator, tail = sourceLines [pragmaCommentLineIndex] .partition ('#')
                 pragma, separator, comment = tail.partition ('#')
                 pragma = pragma.replace (' ', '') .replace ('\t', '')
-                
+
                 # Turn appropriate lines into executable comment switches
                 if "('ecom')" in pragma or '("ecom")' in pragma:
                     allowExecutableComments = True
@@ -445,17 +445,17 @@ class Module:
                 strippedHead = head.lstrip ()
                 indent = head [ : len (head) - len (strippedHead)]
                 pragmaName = tail.replace (' ', '') .replace ('\t', '') [3:]
-                
+
                 # Turn appropriate lines into executable comment switches
                 if pragmaName == 'ecom':
-                    sourceLines [pragmaCommentLineIndex] = ecom             
+                    sourceLines [pragmaCommentLineIndex] = ecom
                 elif pragmaName == 'noecom':
-                    sourceLines [pragmaCommentLineIndex] = noecom                
+                    sourceLines [pragmaCommentLineIndex] = noecom
                 elif pragmaName.startswith ('no'):
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'{}\')' .format (indent, pragmaName, head, pragmaName [2:])    # Correct!
                 else:
                     sourceLines [shortPragmaCommentLineIndex] = '{}__pragma__ (\'{}\'); {}; __pragma__ (\'no{}\')' .format (indent, pragmaName, head, pragmaName)
-                    
+
             # Switch executable comments on c.q. off and turn executable comments into normal code lines for Transcrypt (as opposed to CPython)
             uncommentedSourceLines = []
             for sourceLine in sourceLines:
@@ -469,7 +469,7 @@ class Module:
                         uncommentedSourceLines.append (sourceLine.replace ('#?', '', 1) if lStrippedSourceLine.startswith ('#?') else sourceLine)
                 else:
                     uncommentedSourceLines.append (sourceLine)
-                    
+
             # Return joined lines, to be used for parsing
             return '\n'.join (uncommentedSourceLines)
 
@@ -478,7 +478,7 @@ class Module:
 
             with tokenize.open (self.sourcePath) as sourceFile:
                 self.sourceCode = utils.extraLines + sourceFile.read ()
-                
+
             self.parseTree = ast.parse (pragmasFromComments (self.sourceCode))
 
             for node in ast.walk (self.parseTree):
@@ -767,6 +767,7 @@ class Generator (ast.NodeVisitor):
         self.scopes.append (utils.Any (
             node = node,
             nonlocals = set (),
+            locals_ = set (),
             containsYield = False
         ))
 
@@ -1161,15 +1162,17 @@ class Generator (ast.NodeVisitor):
                     self.emit (')')
                 else:
                     if type (target) == ast.Name:
-                        if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
+                        scope = self.getScope ()
+                        if type (scope.node) == ast.ClassDef and target.id != self.getTemp ('left'):
                             self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]))) # The target is a class attribute
-                        elif target.id in self.getScope () .nonlocals:
+                        elif target.id in scope .nonlocals or target.id in scope.locals_:
                             pass
                         else:
-                            if type (self.getScope () .node) == ast.Module: # Redundant but regular
+                            if type (scope.node) == ast.Module: # Redundant but regular
                                 if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.allOwnNames:
                                     self.emit ('export ')
                             self.emit ('var ')
+                        scope.locals_ .add (target.id)  # Add to locals, so it can be used in the function body
                     self.visit (target)
                     self.emit (' = ')
                     self.visit (value)
@@ -1479,7 +1482,21 @@ class Generator (ast.NodeVisitor):
 
             # type () function
             if node.func.id == 'type':
-                self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
+                if len(node.args) > 1:
+                    self.emit ('__class__ (')
+                    for i, a in enumerate(node.args):
+                        if i:
+                            self.emit (', ')
+                        self.visit (a)
+                    self.emit (')')
+                else:
+                    self.emit ('py_typeof (')   # Don't use general alias, since this is the type operator, not the type metaclass
+                    self.visit (node.args [0])
+                    self.emit (')')
+                return
+
+            elif node.func.id == 'id':
+                self.emit('py_id (')
                 self.visit (node.args [0])
                 self.emit (')')
                 return
@@ -1757,7 +1774,7 @@ class Generator (ast.NodeVisitor):
                     ast.Call (
                         func = ast.Call (
                             func = ast.Name (
-                                id = '__super__',
+                                id = '__super__.bind(this)',
                                 ctx = ast.Load
                             ),
                             args = [
@@ -1767,6 +1784,10 @@ class Generator (ast.NodeVisitor):
                                 ),
                                 ast.Constant (
                                     value = node.func.attr  # <methodName>
+                                ),
+                                ast.Name (
+                                    id = 'self',
+                                    ctx = ast.Load
                                 )
                             ],
                             keywords = []
@@ -2387,14 +2408,14 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
 
         if len (node.comparators) > 1:
             self.emit(')')
-            
+
     def visit_Constant (self, node):
         if type (node.value) == str:
             self.emit ('{}', repr (node.s)) # Use repr (node.s) as second, rather than first parameter, since node.s may contain {}
         elif type (node.value) == bytes:
-            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))            
+            self.emit ('bytes (\'{}\')', node.s.decode ('ASCII'))
         elif type (node.value) == complex:
-            self.emit ('complex (0, {})'.format (node.n.imag))           
+            self.emit ('complex (0, {})'.format (node.n.imag))
         elif type (node.value) in {float, int}:
             self.emit ('{}'.format (node.n))
         else:
@@ -2593,6 +2614,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_FunctionDef (self, node, anAsync = False):
         def emitScopedBody ():
             self.inscope (node)
+            self.getScope () .locals_.update(a.arg for a in node.args.args)
             self.emitBody (node.body)
             self.dedent ()
             if self.getScope (ast.AsyncFunctionDef if anAsync else ast.FunctionDef) .containsYield:
@@ -2624,6 +2646,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             isClassMethod = False
             isStaticMethod = False
             isProperty = False
+            keep_name = False
             getter = '__get__'
 
             if node.decorator_list:
@@ -2679,6 +2702,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         self.emit ('{}: ', self.filterId (nodeName))
                     else:
                         self.emit ('get {} () {{return {} (this, ', self.filterId (nodeName), getter)
+                        keep_name = True
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')
@@ -2711,7 +2735,8 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                         if isStaticMethod:
                             self.emit ('get {} () {{return {}function', self.filterId (nodeName), 'async ' if anAsync else '')
                         else:
-                            self.emit ('get {} () {{return {} (this, {}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
+                            keep_name = True
+                            self.emit ('get {} () {{return {} (this, ({}function', self.filterId (nodeName), getter, 'async ' if anAsync else '')
                 elif isGlobal:
                     if type (node.parentNode) == ast.Module and not nodeName in self.allOwnNames:
                         self.emit ('export ')
@@ -2720,7 +2745,6 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                     self.emit ('var {} = {}function', self.filterId (nodeName), 'async ' if anAsync else '')
 
             yieldStarIndex = self.fragmentIndex
-
             self.emit (' ')
 
             skipFirstArg = jsCall and not (not isMethod or isStaticMethod or isProperty)
@@ -2753,9 +2777,13 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                 if docString:
                     self.emit (' .__setdoc__ (\'{}\')', docString.replace ('\n', '\\n').replace('\'', '\\\''))
 
-
             if decorate:
                 self.emit (')' * decoratorsUsed)
+                if keep_name:
+                    self.emit (', "{}"', self.filterId (nodeName))
+
+            elif keep_name:
+                self.emit ('), "{}"', self.filterId (nodeName))
 
             if isMethod:
                 if not jsCall:
@@ -2896,7 +2924,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
         node = importHoistMemo.node
         self.adaptLineNrString (node)               # If it isn't (again) obtained from the node, the memoed version will be used
 
-        if node.module.startswith (self.stubsName):
+        if node.module is not None and node.module.startswith (self.stubsName):
             return
 
         '''
@@ -2919,6 +2947,20 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
             self.module.program.searchedModulePaths = []                                    # If none of the possibilities below succeeds, report all searched paths
             namePairs = []
             facilityImported = False
+
+            if node.level:
+                # from ..foo.bar import a
+                module_name = self.module.name.split(".")
+                if self.module.sourcePrename == "__init__":
+                    module_name.append("__init__")
+
+                module_name = module_name[:-node.level]
+                if node.module is not None:
+                    module_name.append(node.module)
+                module_name = ".".join(module_name)
+            else:
+                module_name = node.module
+
             for index, alias in enumerate (node.names):
                 if alias.name == '*':                                                       # * Never refers to modules, only to facilities in modules
                     if len (node.names) > 1:
@@ -2926,21 +2968,21 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
                             lineNr = self.lineNr,
                             message = '\n\tCan\'t import module \'{}\''.format (alias.name)
                         )
-                    module = self.useModule (node.module)
+                    module = self.useModule (module_name)
                     for aName in module.exportedNames:
                         namePairs.append (utils.Any (name = aName, asName = None))
                 else:
                     try:                                                                    # Try if alias denotes a module, in that case don't do the 'if namepairs' part
-                        module = self.useModule ('{}.{}'.format (node.module, alias.name))  # So, attempt to use alias as a module
+                        module = self.useModule ('{}.{}'.format (module_name, alias.name))  # So, attempt to use alias as a module
                         self.emit ('import * as {} from \'{}\';\n', self.filterId (alias.asname) if alias.asname else self.filterId (alias.name), module.importRelPath) # Modules too can have asName
                         self.allImportedNames.add (alias.asname or alias.name)              # Add import to allImportedNames of this module
                     except:                                                                 # It's a facility rather than a module
-                        module = self.useModule (node.module)
+                        module = self.useModule (module_name)
                         namePairs.append (utils.Any (name = alias.name, asName = alias.asname))
                         facilityImported = True
 
             if facilityImported:                                                        # At least one alias denoted a facility rather than a module
-                module = self.useModule (node.module)                                   # Use module that contains it
+                module = self.useModule (module_name)                                   # Use module that contains it
                 namePairs.append (utils.Any (name = alias.name, asName = alias.asname))
 
             # This part should only be done for facilities inside modules, and indeed they are the only ones adding namePairs

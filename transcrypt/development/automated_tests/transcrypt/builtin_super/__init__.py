@@ -7,7 +7,7 @@ def run (autoTester):
         def __init__ (self, a, b):
             self.a = a
             self.b = b
-            
+
     class A (R):
         def __init__ (self, a, b, c):
             super () .__init__ (a, b)
@@ -15,10 +15,10 @@ def run (autoTester):
 
         def f (self, x, y):
             show ('A.f:', x, y, self.a, self.b, self.c)
-            
+
         def g (self, x, y):
             show ('A.g:', x, y)
-            
+
     class B (R):
         def __init__ (self, a, b, d):
             super () .__init__ (a, b)
@@ -26,29 +26,29 @@ def run (autoTester):
 
         def f (self, x, y):
             show ('B.f:', x, y, self.a, self.b, self.d)
-            
+
         def h (self, x, y):
             show ('A.h:', x, y, self.a, self.b, self.d)
 
     class C (A):
         def __init__ (self, a, b, c):
             super () .__init__ (a, b, c)
-        
+
         def f (self, x, y):
             super () .f (x, y)
             show ('C.f:', x, y, self.a, self.b, self.c)
-            
+
     class D (B):
         def __init__ (self, a, b, d):
             super () .__init__ (a, b, d)
-        
+
         def f (self, x, y):
             super () .f (x, y)
             show ('D.f:', x, y, self.a, self.b, self.d)
-            
+
     # Diamond inheritance, use super () only to call exactly one target method via unique path.
     # In case of multiple target methods or multiple paths, don't use super (), but refer to ancestor classes explicitly instead
-    class E (C, D):        
+    class E (C, D):
         def __init__ (self, a, b, c, d):
             R.__init__ (self, a, b) # Inherited via multiple legs of a diamond, so call explicitly
             self.c = c              # Could also have used C.__init__, but symmetry preferred
@@ -59,15 +59,15 @@ def run (autoTester):
             C.f (self, x, y)        # Ambiguous part of diamond, don't use super ()
             D.f (self, x, y)        # Ambiguous part of diamond, don't use super ()
             show ('E.f:', x, y, self.a, self.b, self.c, self.d)
-            
+
         def g (self, x, y):
             super () .g (x, y)      # Unique, using super () is OK
             show ('E.g:', x, y, self.a, self.b, self.c, self.d)
-            
+
         def h (self, x, y):
             super () .h (x, y)      # Unique, using super () is OK
             show ('E.h:', x, y, self.a, self.b, self.c, self.d)
-           
+
     rr = R (100, 200)
 
     show ('--1--')
@@ -100,3 +100,70 @@ def run (autoTester):
     e.f (715, 815)
     e.g (725, 825)
     e.h (735, 835)
+
+    run_chain_test(autoTester)
+
+
+def run_chain_test(autoTester):
+    class Z:
+        def __init__(self, call_order):
+            call_order.append("Z")
+            super().__init__(call_order)
+
+    class X(Z):
+        def __init__(self, call_order):
+            call_order.append("X")
+            super().__init__(call_order)
+
+    class Y:
+        def __init__(self, call_order):
+            call_order.append("Y")
+            super().__init__()
+
+    class W(X, Y):
+        def __init__(self, call_order):
+            call_order.append("W")
+            super().__init__(call_order)
+
+    class U(W):
+        def __init__(self, call_order):
+            call_order.append("U")
+            super().__init__(call_order)
+
+    call_order = []
+    U(call_order)
+    autoTester.check(call_order)
+
+    class Mixin:
+        def plugin(self, call_order):
+            call_order.append("Mixin")
+            super().plugin(call_order)
+
+    class Base:
+        def __init__(self, call_order):
+            call_order.append("Base")
+
+        def plugin(self, call_order):
+            call_order.append("Base")
+
+    class Child(Mixin, Base):
+        pass
+
+    class GrandChild(Child):
+        pass
+
+    call_order = []
+    mixed = Child(call_order)
+    autoTester.check (call_order)
+
+    call_order = []
+    mixed.plugin(call_order)
+    autoTester.check (call_order)
+
+    call_order = []
+    mixed = GrandChild(call_order)
+    autoTester.check (call_order)
+
+    call_order = []
+    mixed.plugin(call_order)
+    autoTester.check (call_order)
