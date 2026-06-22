@@ -767,6 +767,7 @@ class Generator (ast.NodeVisitor):
         self.scopes.append (utils.Any (
             node = node,
             nonlocals = set (),
+            locals_ = set (),
             containsYield = False
         ))
 
@@ -1161,15 +1162,17 @@ class Generator (ast.NodeVisitor):
                     self.emit (')')
                 else:
                     if type (target) == ast.Name:
-                        if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
+                        scope = self.getScope ()
+                        if type (scope.node) == ast.ClassDef and target.id != self.getTemp ('left'):
                             self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]))) # The target is a class attribute
-                        elif target.id in self.getScope () .nonlocals:
+                        elif target.id in scope .nonlocals or target.id in scope.locals_:
                             pass
                         else:
-                            if type (self.getScope () .node) == ast.Module: # Redundant but regular
+                            if type (scope.node) == ast.Module: # Redundant but regular
                                 if hasattr (node, 'parentNode') and type (node.parentNode) == ast.Module and not target.id in self.allOwnNames:
                                     self.emit ('export ')
                             self.emit ('var ')
+                        scope.locals_ .add (target.id)  # Add to locals, so it can be used in the function body
                     self.visit (target)
                     self.emit (' = ')
                     self.visit (value)
@@ -2593,6 +2596,7 @@ return list (selfFields).''' + comparatorName + '''(list (otherFields));
     def visit_FunctionDef (self, node, anAsync = False):
         def emitScopedBody ():
             self.inscope (node)
+            self.getScope () .locals_.update(a.arg for a in node.args.args)
             self.emitBody (node.body)
             self.dedent ()
             if self.getScope (ast.AsyncFunctionDef if anAsync else ast.FunctionDef) .containsYield:
