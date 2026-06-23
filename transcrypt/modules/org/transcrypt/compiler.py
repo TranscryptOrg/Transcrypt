@@ -1024,7 +1024,7 @@ class Generator (ast.NodeVisitor):
                 self.emit ('if (typeof {0} == \'undefined\' || ({0} != null && {0}.hasOwnProperty ("__kwargtrans__"))) {{;\n', self.filterId (arg.arg))
 
                 self.indent ()
-                self.emit ('var {} = ', self.filterId (arg.arg))
+                self.emit ('{} = ', self.filterId (arg.arg))
                 self.visit (expr)
                 self.emit (';\n')
                 self.dedent ()
@@ -1164,6 +1164,8 @@ class Generator (ast.NodeVisitor):
                         if type (self.getScope () .node) == ast.ClassDef and target.id != self.getTemp ('left'):
                             self.emit ('{}.'.format ('.'.join ([scope.node.name for scope in self.getAdjacentClassScopes ()]))) # The target is a class attribute
                         elif target.id in self.getScope () .nonlocals:
+                            pass
+                        elif (fnscope := self.getScope(ast.FunctionDef, ast.AsyncFunctionDef)) and target.id in [a.arg for a in fnscope.node.args.args]:
                             pass
                         else:
                             if type (self.getScope () .node) == ast.Module: # Redundant but regular
