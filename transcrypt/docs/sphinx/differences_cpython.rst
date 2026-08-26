@@ -26,6 +26,8 @@ Differences due to interoperability with JavaScript and JavaScript libraries
 
 - Python objects, functions and methods and their JavaScript counterparts can in general be mixed freely without special syntax.
 - To be able to use JSON-like syntax in configuring JavaScript libraries, Transcrypt dicts are in fact JavaScript objects. Attribute keys that may denote a number are interpreted as such, all others are interpreted as strings.
+- Python's arbitrary precision integers are mapped onto JavaScript numbers, which are IEEE 754 doubles. Integer values are exact up to 2\*\*53 - 1 and lose precision silently above that.
+- The *int* function truncates to a signed 32 bit integer, so it returns a wrong value for arguments outside -2\*\*31 ... 2\*\*31 - 1, e.g. *int (4294967296)* returns 0. The bitwise operators &, \|, ^, << and >> have the same 32 bit range, since JavaScript defines them that way. Floor division // is not affected, since it compiles to *Math.floor*.
 - Any amount of literal JavaScript can be included in-line or from a separate file using :ref:`\_\_pragma\_\_ ('js', ..., ...) <pragma_js>`.
 - The *print* function can be used to print to a DOM element or to the browser console.
 - The methods *console.dir* and *console.log* are also available when programming for the browser, as are in fact all JavaScript facilities, including the complete DOM-manipulation API.
