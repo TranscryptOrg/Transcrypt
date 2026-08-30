@@ -235,6 +235,43 @@ def checkMatchWithNamedGroups(test, flags = 0):
         m = r.match("adfs;")
         test.check(m)
 
+def checkGroupsInCharClass(test, flags = 0):
+    """ Parentheses inside a character class don't open a capture group
+    """
+    r = re.compile(r"(?P<key>[a-z()]+) = (?P<value>[\d()]+)", flags)
+    test.check(r.groups)
+    d = r.groupindex
+    __pragma__('skip')
+    d = convertMappingDict(d)
+    __pragma__('noskip')
+    test.check( d )
+
+    m = r.search("a(b)c = 4(2)")
+    test.check( m.groups() )
+    test.check( m.group("key") )
+    test.check( m.group("value") )
+
+    r = re.compile(r"[(](\w+)[)][^()]*", flags)
+    test.check(r.groups)
+    test.check( r.search("(abc)def").groups() )
+
+def checkClosingBracketInCharClass(test, flags = 0):
+    """ A ']' right behind the '[' or its negating '^' is a literal one
+    """
+    r = re.compile(r"[]x]+", flags)
+    test.check( r.findall("]x]a") )
+
+    r = re.compile(r"[^]x]+", flags)
+    test.check( r.findall("]x]ab") )
+
+    r = re.compile(r"a[]](\w)", flags)
+    test.check(r.groups)
+    test.check( r.search("a]b").groups() )
+
+    # without a second one the class stays unterminated
+    test.check(test.expectException( lambda: re.compile(r"[]", flags) ))
+    test.check(test.expectException( lambda: re.compile(r"[^]", flags) ))
+
 def checkMatchWithGroups(test, flags = 0):
     rgx = re.compile(r'(\w)(\w)(\w)?', flags)
     test.check(rgx.pattern)

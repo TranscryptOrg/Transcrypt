@@ -15,6 +15,9 @@ MAX_SHIFTREDUCE_LOOPS = 1000
 
 stringFlags = 'aiLmsux'
 
+# A '[' directly behind one of these tokens is a literal one
+LITERAL_BRACKET_TOKENS = ('\\', '(?#')
+
 # Represents a regex group (e.g /()/, /(?:)/ /(?=), etc).
 # `start` and `end` is the index of the groups start and end token in the token list.
 class Group:
@@ -162,11 +165,40 @@ class Token:
         return self.name + paras
 
 
+# Translates the character class up to the closing ']' of an already shifted '['.
+# Returns the class as a string and the queue with the remaining characters.
+# An unterminated class is consumed as a whole, leaving the error to JS.
+def translateCharClass(queue):
+    idx = 0
+    while idx < len(queue):
+        if queue[idx] == '\\':
+            idx += 2
+        # '[]]' and '[^]]' are valid literals within a Python character class,
+        # JS lacks that rule and would end the class at this ']'
+        elif queue[idx] == ']' and (idx == 0 or (idx == 1 and queue[0] == '^')):
+            queue.insert(idx, '\\')
+            idx += 2
+        elif queue[idx] == ']':
+            idx += 1
+            break
+        else:
+            idx += 1
+
+    return ''.join(queue[:idx]), queue[idx:]
+
+
 def shift(stack, queue):
     done = not bool(queue)
     if not done:
-        stack.append(Token(queue[0], [], True))
+        char = queue[0]
         queue = queue[1:]
+        prevTokenName = stack[len(stack) - 1].name if stack else ''
+        # A character class becomes a single token, its content is no regex
+        if char == '[' and prevTokenName not in LITERAL_BRACKET_TOKENS:
+            charClass, queue = translateCharClass(queue)
+            stack.append(Token('[' + charClass))
+        else:
+            stack.append(Token(char, [], True))
     return stack, queue, done
 
 
@@ -217,9 +249,6 @@ def shiftReduce(stack, queue, namedGroups, flags):
                 s1.paras.append(s0.name)
 
         stack = stack[:-1]
-
-    elif s1.name == '[' and s0.name == '^':
-        stack[-2:] = [Token('[^')]
 
     elif s1.name == '(' and s0.name == '?':
         stack[-2:] = [Token('(?')]
