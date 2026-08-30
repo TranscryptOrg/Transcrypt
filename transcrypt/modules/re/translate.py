@@ -173,9 +173,11 @@ def translateCharClass(queue):
     while idx < len(queue):
         if queue[idx] == '\\':
             idx += 2
-        # '[]]' and '[^]]' are valid literals within a Python character class
+        # '[]]' and '[^]]' are valid literals within a Python character class,
+        # JS lacks that rule and would end the class at this ']'
         elif queue[idx] == ']' and (idx == 0 or (idx == 1 and queue[0] == '^')):
-            idx += 1
+            queue.insert(idx, '\\')
+            idx += 2
         elif queue[idx] == ']':
             idx += 1
             break

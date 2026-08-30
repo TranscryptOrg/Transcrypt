@@ -255,6 +255,23 @@ def checkGroupsInCharClass(test, flags = 0):
     test.check(r.groups)
     test.check( r.search("(abc)def").groups() )
 
+def checkClosingBracketInCharClass(test, flags = 0):
+    """ A ']' right behind the '[' or its negating '^' is a literal one
+    """
+    r = re.compile(r"[]x]+", flags)
+    test.check( r.findall("]x]a") )
+
+    r = re.compile(r"[^]x]+", flags)
+    test.check( r.findall("]x]ab") )
+
+    r = re.compile(r"a[]](\w)", flags)
+    test.check(r.groups)
+    test.check( r.search("a]b").groups() )
+
+    # without a second one the class stays unterminated
+    test.check(test.expectException( lambda: re.compile(r"[]", flags) ))
+    test.check(test.expectException( lambda: re.compile(r"[^]", flags) ))
+
 def checkMatchWithGroups(test, flags = 0):
     rgx = re.compile(r'(\w)(\w)(\w)?', flags)
     test.check(rgx.pattern)
